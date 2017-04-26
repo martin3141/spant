@@ -1,0 +1,48 @@
+Package: spant
+Type: Package
+Title: MR Spectroscopy Analysis Tools
+Version: 0.1.0
+Date: 2017-04-26
+Authors@R: person("Martin", "Wilson", email = "martin@pipegrep.co.uk",
+                  role = c("cre","aut"))
+Description: Tools for reading, visualising and processing Magnetic Resonance
+    Spectroscopy data.
+License: GPL-3
+RoxygenNote: 6.0.1
+Roxygen: list(markdown = TRUE, roclets = c("rd", "namespace", "collate"))
+LazyData: yes
+Depends:
+    R (>= 2.10)
+Imports:
+    abind,
+    plyr,
+    foreach,
+    pracma,
+    stringr,
+    complexplus,
+    signal,
+    matrixcalc,
+    minpack.lm,
+    nnls,
+    utils,
+    graphics,
+    grDevices,
+    smoother,
+    svd
+Suggests:
+    oro.nifti,
+    MASS,
+    fastICA,
+    fields,
+    mmand,
+    ptw,
+    tkrplot,
+    viridis,
+    RNifti,
+    RNiftyReg,
+    neurobase,
+    knitr,
+    magrittr,
+    rmarkdown
+VignetteBuilder:
+    knitr

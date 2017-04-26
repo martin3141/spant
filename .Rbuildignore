@@ -1,0 +1,10 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^cran-comments\.md$
+^TODO\.md$
+^README\.md$
+^README\.Rmd$
+^README-.*\.png$
+^batch_analysis\.R$
+^ica\.R$
+^interactive_plotting\.R$
