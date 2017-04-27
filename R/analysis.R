@@ -554,7 +554,6 @@ test_varpro <- function() {
   mrs_data <- read_mrs(fname,format = "spar_sdat")
   mrs_data <- hsvd_filt(mrs_data)
   mrs_data <- align(mrs_data, 2.01)
-  mrs_data_crop <- crop_spec(mrs_data)
   acq_paras <- get_acq_paras(mrs_data)
   basis <- sim_basis_1h_brain_press(acq_paras, xlim = c(4.0,0))
   fit_opts <- varpro_opts()
