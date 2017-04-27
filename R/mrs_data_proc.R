@@ -495,6 +495,7 @@ get_seg_ind <- function(scale, start, end) {
 }
 
 # TODO add crop FID function
+#' @export
 crop_spec <- function(mrs_data, xlim = c(4,0.5), scale = "ppm") {
   # needs to be a fd operation
   if (!is_fd(mrs_data)) {

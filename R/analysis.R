@@ -554,10 +554,12 @@ test_varpro <- function() {
   mrs_data <- read_mrs(fname,format = "spar_sdat")
   mrs_data <- hsvd_filt(mrs_data)
   mrs_data <- align(mrs_data, 2.01)
+  mrs_data_crop <- crop_spec(mrs_data)
   acq_paras <- get_acq_paras(mrs_data)
-  basis <- sim_basis_1h_brain_press(acq_paras, xlim = c(4,0))
-  fit <- fit_mrs(mrs_data, basis)
-  plot(fit, xlim = c(6,0))
+  basis <- sim_basis_1h_brain_press(acq_paras, xlim = c(4.0,0))
+  fit_opts <- varpro_opts()
+  fit <- fit_mrs(mrs_data, basis, opts = fit_opts)
+  plot(fit, xlim = c(4,0.5))
   system.time(replicate(10, fit_mrs(mrs_data, basis)))
 }
 
@@ -645,7 +647,7 @@ varpro_3_para <- function(mrs_data, basis, opts = NULL) {
   
   diags <- data.frame(phase = res$par[1] * 180 / pi, damping = res$par[2],
                       shift = res$par[3], res$deviance, res$niter, res$info, 
-                      res$deviance, res$message)
+                      res$message)
   
   list(amps = amps, crlbs = t(rep(NA, length(amps))), diags = diags, fit = fit)
 }
@@ -880,7 +882,7 @@ varpro_3_para_fn <- function(par, y, basis, t, nstart, sc_res = FALSE) {
 #' @examples
 #' varpro_opts(nstart = 20)
 #' @export
-varpro_opts <- function(nstart = 10, init_g_damping = 2, maxiters = 200,
+varpro_opts <- function(nstart = 20, init_g_damping = 2, maxiters = 200,
                         max_shift = 5, max_g_damping = 5, max_ind_damping = 5,
                         anal_jac = TRUE, bl_smth_pts = 80) {
   
@@ -908,7 +910,7 @@ varpro_opts <- function(nstart = 10, init_g_damping = 2, maxiters = 200,
 #' @examples
 #' varpro_opts(nstart = 20)
 #' @export
-varpro_3_para_opts <- function(nstart = 10, init_damping = 2, maxiters = 200,
+varpro_3_para_opts <- function(nstart = 20, init_damping = 2, maxiters = 200,
                         max_shift = 5, max_damping = 5, anal_jac = FALSE,
                         bl_smth_pts = 80) {
   

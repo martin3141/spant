@@ -9,7 +9,7 @@
 \item global frequency shift.
 }}
 \usage{
-varpro_3_para_opts(nstart = 10, init_damping = 2, maxiters = 200,
+varpro_3_para_opts(nstart = 20, init_damping = 2, maxiters = 200,
   max_shift = 5, max_damping = 5, anal_jac = FALSE, bl_smth_pts = 80)
 }
 \arguments{
