@@ -764,8 +764,7 @@ varpro_anal_jac <- function(par, y, basis, t, nstart) {
   y_real <- c(Re(y[nstart:Npts]), Im(y[nstart:Npts]))
   basis_real <- rbind(Re(basis_mod[nstart:Npts,]), Im(basis_mod[nstart:Npts,]))
   
-  #ahat <- nnls::nnls(basis_real, y_real)$x
-  ahat <- MASS::ginv(basis_real) %*% y_real
+  ahat <- nnls::nnls(basis_real, y_real)$x
   
   unmod_basis_real <- basis_real %*% ahat
   unmod_basis_cplx <- basis_mod %*% ahat
@@ -783,25 +782,14 @@ varpro_anal_jac <- function(par, y, basis, t, nstart) {
   
   # individual shifts and dampings
   for (n in 1:Nbasis) {
-    #adj_basis <- basis_mod
-    #adj_basis[,n] <- -adj_basis[,n]*2i*pi*t
-    #adj_basis_comb <- adj_basis %*% ahat 
-    #adj_basis_comb <- unmod_basis_cplx - ahat[n]*basis_mod[,n] - ahat[n]*basis_mod[,n]*2i*pi*t
-    
-    adj_basis_comb <- unmod_basis_cplx - ahat[n] * basis_mod[,n] *
-                      (1 + 2i * pi * t)
+    adj_basis_comb <- -basis_mod[,n] * 2i * pi * t * ahat[n]
     
     shift_jac_real_temp <- c(Re(adj_basis_comb[nstart:Npts]),
                              Im(adj_basis_comb[nstart:Npts]))
     
     shift_jac[((n - 1) * res_size + 1):(n * res_size)] <- shift_jac_real_temp
     
-    adj_basis <- basis_mod
-    adj_basis[,n] <- -adj_basis[,n]*pi*t
-    adj_basis_comb <- adj_basis %*% ahat 
-    
-    #adj_basis_comb <- unmod_basis_cplx - ahat[n]*basis_mod[,n] - ahat[n]*basis_mod[,n]*pi*t
-    #adj_basis_comb <- unmod_basis_cplx - ahat[n] * basis_mod[,n] * (1 + pi * t)
+    adj_basis_comb <- basis_mod[,n] * pi * t * ahat[n]
     
     lw_jac_real_temp <- c(Re(adj_basis_comb[nstart:Npts]),
                           Im(adj_basis_comb[nstart:Npts]))
@@ -812,36 +800,6 @@ varpro_anal_jac <- function(par, y, basis, t, nstart) {
   c(phase_jac_real, g_lw_jac_real, shift_jac, lw_jac)
 }
     
-# varpro_num_jac <- function(par, y, basis, t, nstart) {
-#   numDeriv::jacobian(varpro_num_jac_eval, par, method="simple", side=NULL, method.args=list(), y, basis, t, nstart)
-# }
-
-# varpro_num_jac_eval <- function(par, y, basis, t, nstart) {
-#   Npts <- length(y)
-#   Nbasis <- dim(basis)[2]
-#   
-#   # apply phase to y
-#   y <- y*exp(1i*(par[1]))
-#   
-#   # apply global broadening term to basis
-#   basis_mod <- basis * matrix(exp(-t*t*lw2beta(par[2])),ncol=ncol(basis),nrow=nrow(basis),byrow=F)
-#   
-#   # apply shift and lb terms to basis
-#   t_mat <- matrix(t, nrow=Npts, ncol=Nbasis)
-#   freq_vec <- 2i*pi*par[3:(2+Nbasis)]
-#   lb_vec <- lw2alpha(par[(3+Nbasis):(2+2*Nbasis)])
-#   freq_lb_mat <- matrix(freq_vec-lb_vec, nrow=Npts, ncol=Nbasis, byrow=TRUE) 
-#   basis_mod <- basis_mod * exp(t_mat * freq_lb_mat)
-#   
-#   y_real <- c(Re(y[nstart:Npts]),Im(y[nstart:Npts]))
-#   basis_real <- rbind(Re(basis_mod[nstart:Npts,]),Im(basis_mod[nstart:Npts,]))
-#   ahat <- nnls::nnls(basis_real, y_real)$x
-#   
-#   res <- y_real - basis_real %*% ahat
-#   
-#   res
-# }
-  
 varpro_fn <- function(par, y, basis, t, nstart, sc_res = FALSE) {
   Npts <- length(y)
   Nbasis <- dim(basis)[2]
@@ -980,9 +938,6 @@ varpro_3_para_anal_jac <- function(par, y, basis, t, nstart) {
   y_real <- c(Re(y[nstart:Npts]), Im(y[nstart:Npts]))
   basis_real <- rbind(Re(basis_mod[nstart:Npts,]), Im(basis_mod[nstart:Npts,]))
   ahat <- nnls::nnls(basis_real, y_real)$x
-  #ahat <- MASS::ginv(basis_real) %*% y_real
-  
-  
 
   unmod_basis_real <- basis_real %*% ahat
   unmod_basis_cplx <- basis_mod %*% ahat
