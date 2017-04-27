@@ -783,13 +783,13 @@ varpro_anal_jac <- function(par, y, basis, t, nstart) {
   
   # individual shifts and dampings
   for (n in 1:Nbasis) {
-    adj_basis <- basis_mod
-    adj_basis[,n] <- -adj_basis[,n]*2i*pi*t
-    adj_basis_comb <- adj_basis %*% ahat 
+    #adj_basis <- basis_mod
+    #adj_basis[,n] <- -adj_basis[,n]*2i*pi*t
+    #adj_basis_comb <- adj_basis %*% ahat 
     #adj_basis_comb <- unmod_basis_cplx - ahat[n]*basis_mod[,n] - ahat[n]*basis_mod[,n]*2i*pi*t
     
-    #adj_basis_comb <- unmod_basis_cplx - ahat[n] * basis_mod[,n] *
-    #                  (1 + 2i * pi * t)
+    adj_basis_comb <- unmod_basis_cplx - ahat[n] * basis_mod[,n] *
+                      (1 + 2i * pi * t)
     
     shift_jac_real_temp <- c(Re(adj_basis_comb[nstart:Npts]),
                              Im(adj_basis_comb[nstart:Npts]))
