@@ -62,7 +62,7 @@ print(mrs_data)
 plot(mrs_data, xlim = c(5, 0.5))
 ```
 
-![](README-useage-1.png)
+![](README-import-1.png)
 
 ``` r
 # apply water filter and align to tNAA resonance

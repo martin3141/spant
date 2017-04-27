@@ -41,7 +41,7 @@ devtools::install_github("martin3141/spant")
 ```
 
 ## Usage
-```{r useage, message = FALSE}
+```{r import, message = FALSE}
 library(spant)
 fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
 
