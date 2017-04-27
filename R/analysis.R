@@ -81,7 +81,7 @@ fit_mrs <- function(mrs_data, basis, method = 'VARPRO', opts = NULL,
                                .paropts = list(.inorder = TRUE),
                                .progress = "text", .inform = FALSE)
     
-  } else if (method == "VARPRO_3_PARA") {
+  } else if (method == "VARPRO_3P") {
     # put data into TD
     if (is_fd(mrs_data)) {
       mrs_data <- fd2td(mrs_data)
@@ -581,8 +581,8 @@ varpro_3_para <- function(mrs_data, basis, opts = NULL) {
   ctrl <- minpack.lm::nls.lm.control()
   ctrl$maxiter = opts$maxiters
   # do the fit
-  lower <- c(-180, 0, -opts$max_shift)
-  upper <- c(180, opts$max_damping, opts$max_shift)
+  lower <- c(-pi, 0, -opts$max_shift)
+  upper <- c(pi, opts$max_damping, opts$max_shift)
   
   if (opts$anal_jac) {
     res <- minpack.lm::nls.lm(par, lower, upper, varpro_3_para_fn,
@@ -631,20 +631,20 @@ varpro_3_para <- function(mrs_data, basis, opts = NULL) {
   
   RESID <- Y - YHAT
   
-  data <- vec2mrs_data(Y, fd = TRUE)
   offset <- max(Re(Y)) - min(Re(RESID))
   resid <- vec2mrs_data(RESID + offset, fd = TRUE)
   
   amps <- data.frame(t(ahat))
   colnames(amps) <- basis$names
   
-  fit <- data.frame(PPMScale = ppm(data, N = Npts * 2), Data = Re(Y),
+  fit <- data.frame(PPMScale = ppm(mrs_data, N = Npts * 2), Data = Re(Y),
                     Fit = Re(YHAT), Baseline = Re(BL))
   
   class(fit) <- "fit_table"
   
-  diags <- data.frame(res$deviance, res$niter, res$info, res$deviance,
-                      res$message)
+  diags <- data.frame(phase = res$par[1] * 180 / pi, damping = res$par[2],
+                      shift = res$par[3], res$deviance, res$niter, res$info, 
+                      res$deviance, res$message)
   
   list(amps = amps, crlbs = t(rep(NA, length(amps))), diags = diags, fit = fit)
 }
@@ -670,8 +670,8 @@ varpro <- function(mrs_data, basis, opts = NULL) {
   ctrl <- minpack.lm::nls.lm.control()
   ctrl$maxiter = opts$maxiters
   # do the fit
-  lower <- c(-180, 0, rep(-opts$max_shift, Nbasis), rep(0, Nbasis))
-  upper <- c(180, opts$max_g_damping, rep(opts$max_shift, Nbasis),
+  lower <- c(-pi, 0, rep(-opts$max_shift, Nbasis), rep(0, Nbasis))
+  upper <- c(pi, opts$max_g_damping, rep(opts$max_shift, Nbasis),
              rep(opts$max_ind_damping, Nbasis))
   
   if (opts$anal_jac) {
@@ -722,14 +722,13 @@ varpro <- function(mrs_data, basis, opts = NULL) {
   
   RESID <- Y - YHAT
   
-  data <- vec2mrs_data(Y, fd = TRUE)
   offset <- max(Re(Y)) - min(Re(RESID))
   resid <- vec2mrs_data(RESID + offset, fd = TRUE)
   
   amps <- data.frame(t(ahat))
   colnames(amps) <- basis$names
   
-  fit <- data.frame(PPMScale = ppm(data, N = Npts * 2), Data = Re(Y),
+  fit <- data.frame(PPMScale = ppm(mrs_data, N = Npts * 2), Data = Re(Y),
                     Fit = Re(YHAT), Baseline = Re(BL))
   
   class(fit) <- "fit_table"
@@ -940,6 +939,7 @@ varpro_opts <- function(nstart = 10, init_g_damping = 2, maxiters = 200,
 #' term - measured in Hz.
 #' @param maxiters Maximum number of lemar iterations to perform.
 #' @param max_shift Maximum global shift allowed, measured in Hz.
+#' @param max_damping Maximum damping allowed, FWHM measured in Hz.
 #' @param anal_jac Option to use the analytic or numerical Jacobian (logical).
 #' @param bl_smth_pts Number of data points to use in the baseline smoothing
 #' calculation.

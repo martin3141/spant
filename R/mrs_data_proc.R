@@ -266,6 +266,10 @@ fp_mag <- function(mrs_data) {
   abind::adrop(Mod(mrs_data$data[,,,,,, 1, drop = F]), 7)
 }
 
+#' Return the phase of the first data point in the time-domain.
+#' @param mrs_data MRS data.
+#' @return Phase values in degrees.
+#' @export
 fp_phase <- function(mrs_data) {
   # needs to be a time-domain operation
   if (is_fd(mrs_data)) {
@@ -409,6 +413,10 @@ N <- function(mrs_data) {
   dim(mrs_data$data)[7]
 }
 
+#' Return the number of dynamic scans in an MRS dataset.
+#' @param mrs_data MRS data.
+#' @return Number of dynamic scans
+#' @export
 dyns <- function(mrs_data) {
   dim(mrs_data$data)[5]
 }
