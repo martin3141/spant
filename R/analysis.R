@@ -502,6 +502,7 @@ get_corr_factor <- function(te, tr, B0, gm_vol, wm_vol, csf_vol) {
   return(corr_factor)
 }
 
+#' @export
 int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "real") {
   
   if (!is_fd(mrs_data)) {
@@ -763,6 +764,7 @@ varpro_anal_jac <- function(par, y, basis, t, nstart) {
   y_real <- c(Re(y[nstart:Npts]), Im(y[nstart:Npts]))
   basis_real <- rbind(Re(basis_mod[nstart:Npts,]), Im(basis_mod[nstart:Npts,]))
   ahat <- nnls::nnls(basis_real, y_real)$x
+  print(sum(abs(ahat)))
   
   unmod_basis_real <- basis_real %*% ahat
   unmod_basis_cplx <- basis_mod %*% ahat

@@ -37,7 +37,30 @@ pipe_mpress_gaba <- function(mrs_data, TE1 = 35, TE2 = 35) {
   # simulate a brain basis set
   acq_paras <- get_acq_paras(mrs_data)
   basis <- sim_basis_1h_brain_press(acq_paras = acq_paras, TE1 = TE1, TE2 = TE2)
-  fit <- fit_mrs(mean_aligned, basis, method = "VARPRO")
+  fit <- fit_mrs(mean_aligned, basis, method = "VARPRO_3P")
   
-  list(shifts = shifts, fit = fit)
+  mean_phase <- fit$results$phase
+  
+  mean_aligned <- phase(mean_aligned, mean_phase)
+  
+  mrs_data_aligned <- phase(mrs_data_aligned, mean_phase)
+  
+  mean_odd_dyns <- hsvd_filt(mean_dyns(get_odd_dyns(mrs_data_aligned)))
+  mean_even_dyns <- hsvd_filt(mean_dyns(get_even_dyns(mrs_data_aligned)))
+  
+  odd_int <- as.numeric(int_spec(mean_odd_dyns, xlim = c(1.9, 2.1)))
+  even_int <- as.numeric(int_spec(mean_even_dyns, xlim = c(1.9, 2.1)))
+  
+  if (odd_int > even_int) {
+    ed_on  <- mean_even_dyns
+    ed_off <- mean_odd_dyns 
+  } else {
+    ed_on  <- mean_odd_dyns
+    ed_off <- mean_even_dyns
+  }
+  
+  ed_off_fit <- fit_mrs(ed_off, basis, method = "VARPRO",
+                        opts = varpro_opts(anal_jac = TRUE))
+  
+  list(shifts = shifts, ed_off_fit = ed_off_fit, ed_on = ed_on, ed_off = ed_off)
 }
