@@ -763,8 +763,9 @@ varpro_anal_jac <- function(par, y, basis, t, nstart) {
   t_cut <- c(t[nstart:Npts], t[nstart:Npts])
   y_real <- c(Re(y[nstart:Npts]), Im(y[nstart:Npts]))
   basis_real <- rbind(Re(basis_mod[nstart:Npts,]), Im(basis_mod[nstart:Npts,]))
-  ahat <- nnls::nnls(basis_real, y_real)$x
-  print(sum(abs(ahat)))
+  
+  #ahat <- nnls::nnls(basis_real, y_real)$x
+  ahat <- MASS::ginv(basis_real) %*% y_real
   
   unmod_basis_real <- basis_real %*% ahat
   unmod_basis_cplx <- basis_mod %*% ahat
@@ -782,25 +783,25 @@ varpro_anal_jac <- function(par, y, basis, t, nstart) {
   
   # individual shifts and dampings
   for (n in 1:Nbasis) {
-    #adj_basis <- basis_mod
-    #adj_basis[,n] <- -adj_basis[,n]*2i*pi*t
-    #adj_basis_comb <- adj_basis %*% ahat 
+    adj_basis <- basis_mod
+    adj_basis[,n] <- -adj_basis[,n]*2i*pi*t
+    adj_basis_comb <- adj_basis %*% ahat 
     #adj_basis_comb <- unmod_basis_cplx - ahat[n]*basis_mod[,n] - ahat[n]*basis_mod[,n]*2i*pi*t
     
-    adj_basis_comb <- unmod_basis_cplx - ahat[n] * basis_mod[,n] *
-                      (1 + 2i * pi * t)
+    #adj_basis_comb <- unmod_basis_cplx - ahat[n] * basis_mod[,n] *
+    #                  (1 + 2i * pi * t)
     
     shift_jac_real_temp <- c(Re(adj_basis_comb[nstart:Npts]),
                              Im(adj_basis_comb[nstart:Npts]))
     
     shift_jac[((n - 1) * res_size + 1):(n * res_size)] <- shift_jac_real_temp
     
-    #adj_basis <- basis_mod
-    #adj_basis[,n] <- -adj_basis[,n]*pi*t
-    #adj_basis_comb <- adj_basis %*% ahat 
+    adj_basis <- basis_mod
+    adj_basis[,n] <- -adj_basis[,n]*pi*t
+    adj_basis_comb <- adj_basis %*% ahat 
     
     #adj_basis_comb <- unmod_basis_cplx - ahat[n]*basis_mod[,n] - ahat[n]*basis_mod[,n]*pi*t
-    adj_basis_comb <- unmod_basis_cplx - ahat[n] * basis_mod[,n] * (1 + pi * t)
+    #adj_basis_comb <- unmod_basis_cplx - ahat[n] * basis_mod[,n] * (1 + pi * t)
     
     lw_jac_real_temp <- c(Re(adj_basis_comb[nstart:Npts]),
                           Im(adj_basis_comb[nstart:Npts]))
@@ -979,6 +980,9 @@ varpro_3_para_anal_jac <- function(par, y, basis, t, nstart) {
   y_real <- c(Re(y[nstart:Npts]), Im(y[nstart:Npts]))
   basis_real <- rbind(Re(basis_mod[nstart:Npts,]), Im(basis_mod[nstart:Npts,]))
   ahat <- nnls::nnls(basis_real, y_real)$x
+  #ahat <- MASS::ginv(basis_real) %*% y_real
+  
+  
 
   unmod_basis_real <- basis_real %*% ahat
   unmod_basis_cplx <- basis_mod %*% ahat
