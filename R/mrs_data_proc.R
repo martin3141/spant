@@ -934,7 +934,7 @@ hsvd_filt_vec <- function(fid, fs, region = c(-30,30), comps = 50,
 hsvd <- function(y, fs, K = 50, propack = TRUE, fast_hank = TRUE) {
   N <- length(y)
   L <- floor(0.5 * N)
-  M <- N + 1 - L
+  # M <- N + 1 - L
   
   # scale the input vector to keep things stable
   sc_factor <- max(Mod(y))
@@ -950,8 +950,17 @@ hsvd <- function(y, fs, K = 50, propack = TRUE, fast_hank = TRUE) {
   
   if (propack)  {
     # K1 formulation
-    H <- rbind(cbind(Re(H), Im(H)), cbind(-Im(H), Re(H)))
-    svd_res <- svd::propack.svd(H, neig = K)
+    H_real <- rbind(cbind(Re(H), -Im(H)), cbind(Im(H), Re(H)))
+    #H_real <- matrix(, 2*nrow(H), 2*ncol(H))
+    #H_real[seq(1, 2*nrow(H), 2), seq(1, 2*ncol(H), 2)] <- Re(H)
+    #H_real[seq(2, 2*nrow(H), 2), seq(1, 2*ncol(H), 2)] <- -Im(H)
+    #H_real[seq(2, 2*nrow(H), 2), seq(2, 2*ncol(H), 2)] <- Re(H)
+    #H_real[seq(1, 2*nrow(H), 2), seq(2, 2*ncol(H), 2)] <- Im(H)
+    svd_res <- svd::propack.svd(H_real, neig = (K))
+    #svd_res <- svd::trlan.svd(H_real, neig = K)
+    #svd_res$u <- svd_res$u[1:(nrow(H)/2),1:(ncol(H)/2)] - 1i*svd_res$u[(nrow(H)/2):nrow(H),1:(ncol(H)/2)]
+    #svd_res <- svd(H_real)
+    #svd_res$u <- svd_res$u
   } else {
     svd_res <- svd(H)
   }
