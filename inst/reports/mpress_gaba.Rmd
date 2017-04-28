@@ -1,0 +1,34 @@
+---
+title: "spant MEGA-PRESS GABA analysis report"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(spant)
+```
+
+## Edited spectrum
+```{r ed_spec, echo = FALSE}
+plot(zf(anal_results$ed_gaba), xlim = c(4,0.5))
+```
+
+## Frequency drift
+```{r freq_drift, echo = FALSE}
+plot(res$shifts, xlab = "Dynamic", ylab = "Frequency shift (Hz)")
+```
+
+## Edit-off spectrum
+```{r ed_off_spec, echo = FALSE}
+plot(zf(anal_results$ed_off), xlim = c(4,0.5))
+```
+
+## Edit-on spectrum
+```{r ed_on_spec, echo = FALSE}
+plot(zf(anal_results$ed_on), xlim = c(4,0.5))
+```
+
+## Edit-off fit
+```{r ed_off_fit, echo = FALSE}
+plot(anal_results$ed_off_fit, xlim = c(4,0.5))
+```

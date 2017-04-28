@@ -4,7 +4,7 @@
 \alias{hsvd_filt}
 \title{HSVD based signal filter.}
 \usage{
-hsvd_filt(mrs_data, xlim = c(-30, 30), comps = 50, propack = TRUE)
+hsvd_filt(mrs_data, xlim = c(-30, 30), comps = 50, propack = FALSE)
 }
 \arguments{
 \item{mrs_data}{MRS data to be filtered.}

@@ -1,5 +1,12 @@
 #' @export
-pipe_mpress_gaba <- function(mrs_data, TE1 = 35, TE2 = 35) {
+gen_mpress_gaba_report <- function(...) {
+  anal_results <- pipe_mpress_gaba(...)
+  rep_file <- system.file("reports", "mpress_gaba.Rmd", package = "spant")
+  rmarkdown::render(rep_file, output_dir = "~")
+}
+
+#' @export
+pipe_mpress_gaba <- function(mrs_data, TE1 = 30, TE2 = 40) {
   dynamics <- dyns(mrs_data)
   
   # guess the phasing of the acquisition scheme
@@ -59,8 +66,11 @@ pipe_mpress_gaba <- function(mrs_data, TE1 = 35, TE2 = 35) {
     ed_off <- mean_even_dyns
   }
   
+  ed_gaba <- ed_on - ed_off
+  
   ed_off_fit <- fit_mrs(ed_off, basis, method = "VARPRO",
                         opts = varpro_opts(anal_jac = TRUE))
   
-  list(shifts = shifts, ed_off_fit = ed_off_fit, ed_on = ed_on, ed_off = ed_off)
+  list(shifts = shifts, ed_off_fit = ed_off_fit, ed_on = ed_on, ed_off = ed_off,
+       ed_gaba = ed_gaba)
 }
