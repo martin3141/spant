@@ -911,17 +911,19 @@ td_conv_filt <- function(mrs_data, K = 25, ext = 1) {
 #' @param xlim Frequency range in Hz to filter.
 #' @param comps Number of Lorentzian components to use for modelling.
 #' @export
-hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 50) {
-  # TODO, region defn in ppm and allow multiple region selection
+hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 50, propack = TRUE) {
+# TODO, region defn in ppm and allow multiple region selection
   if (is_fd(mrs_data)) {
       mrs_data <- fd2td(mrs_data)
   }
   apply_mrs(mrs_data, 7, hsvd_filt_vec, fs = fs(mrs_data), region = xlim,
-            comps = comps)
+            comps = comps, propack)
 }
 
-hsvd_filt_vec <- function(fid, fs, region = c(-30,30), comps = 50) {
-  hsvd_res <- hsvd(fid, fs, K = comps)  
+hsvd_filt_vec <- function(fid, fs, region = c(-30,30), comps = 50, 
+                          propack = TRUE) {
+  
+  hsvd_res <- hsvd(fid, fs, K = comps, propack)  
   idx <- (hsvd_res$reson_table$frequency < region[2]) &
          (hsvd_res$reson_table$frequency > region[1] )
   model <- rowSums(hsvd_res$basis[,idx])
@@ -929,7 +931,7 @@ hsvd_filt_vec <- function(fid, fs, region = c(-30,30), comps = 50) {
 }
 
 # TODO add option to remove -ve dampings
-hsvd <- function(y, fs, K = 50, fast_hank = TRUE) {
+hsvd <- function(y, fs, K = 50, propack = TRUE, fast_hank = TRUE) {
   N <- length(y)
   L <- floor(0.5 * N)
   M <- N + 1 - L
@@ -946,7 +948,13 @@ hsvd <- function(y, fs, K = 50, fast_hank = TRUE) {
     H <- pracma::hankel(y[1:L], y[L:N])
   }
   
-  svd_res <- svd(H)
+  if (propack)  {
+    # K1 formulation
+    H <- rbind(cbind(Re(H), Im(H)), cbind(-Im(H), Re(H)))
+    svd_res <- svd::propack.svd(H, neig = K)
+  } else {
+    svd_res <- svd(H)
+  }
   
   # construct H of rank K
   Uk <- svd_res$u[,1:K]
