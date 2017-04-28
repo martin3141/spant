@@ -32,3 +32,13 @@ plot(zf(anal_results$ed_on), xlim = c(4,0.5))
 ```{r ed_off_fit, echo = FALSE}
 plot(anal_results$ed_off_fit, xlim = c(4,0.5))
 ```
+
+<style type="text/css">
+.table {
+    width: 30%;
+}
+</style>
+
+```{r table, echo = FALSE}
+knitr::kable(col.names=c("Amplitude"),t(anal_results$ed_off_fit$results[6:20]),format="markdown")
+```
