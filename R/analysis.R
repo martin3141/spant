@@ -298,7 +298,7 @@ lcmodel_fit <- function(element, temp_mrs, basis_file, opts) {
   #lcm_control.write("lps=7\n")            # output a ps plot
   #lcm_control.write("filps='"+ps_f+"'\n") # ps plot filename
   cat("neach=999\n")                       # plot all metabs
-  cat("nsimul=11\n")                       # default is 13 which includes Gua 
+  #cat("nsimul=11\n")                       # default is 13 which includes Gua 
                                            # and the -CrCH2 signal
   for (opt in opts) { # append any extra options
     cat(paste0(opt, "\n"))

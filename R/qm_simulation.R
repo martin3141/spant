@@ -214,7 +214,7 @@ sim_basis_1h_brain_press <- function(acq_paras = get_def_acq_paras(),
                                      TE1 = 0.01, TE2 = 0.02) {
   
   if (class(acq_paras) == "mrs_data") {
-    acq_paras <- get_acq_paras(mrs_data)
+    acq_paras <- get_acq_paras(acq_paras)
   }
   
   sim_basis(get_1h_brain_basis_paras(ft = acq_paras$ft, lcm_compat = lcm_compat), 
