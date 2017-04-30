@@ -202,16 +202,20 @@ get_1h_brain_basis_paras <- function(ft, metab_lw = 2, lcm_ver = FALSE) {
 
 #' Simulate a basis-set suitable for 1H brain MRS analysis acquired with a PRESS 
 #' sequence. Note, ideal pulses are assumed.
-#' @param acq_paras List of acquistion parameters. See
+#' @param acq_paras List of acquistion parameters or an mrs_data object. See
 #' \code{\link{get_def_acq_paras}}
 #' @param xlim Range of frequencies to simulate in ppm.
 #' @param TE1 TE1 of PRESS sequence (TE = TE1 + TE2).
 #' @param TE2 TE2 of PRESS sequence.
 #' @return Basis object.
 #' @export
-sim_basis_1h_brain_press <- function(acq_paras = get_def_acq_paras(), 
+sim_basis_1h_brain_press <- function(acq_paras = get_def_acq_paras(),
                                      xlim = c(0.5, 4.2), TE1 = 0.01,
                                      TE2 = 0.02) {
+  
+  if (class(acq_paras) == "mrs_data") {
+    acq_paras <- get_acq_paras(mrs_data)
+  }
   
   sim_basis(get_1h_brain_basis_paras(ft = acq_paras$ft), press_ideal, 
             fs = acq_paras$fs, N = acq_paras$N, ref = acq_paras$ref,

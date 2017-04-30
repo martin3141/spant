@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2017-04-27" />
+<meta name="date" content="2017-04-30" />
 
 <title>Introduction to spant</title>
 
@@ -68,7 +68,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">Introduction to spant</h1>
-<h4 class="date"><em>2017-04-27</em></h4>
+<h4 class="date"><em>2017-04-30</em></h4>
 
 
 
@@ -108,11 +108,8 @@ mrs_proc &lt;-<span class="st"> </span><span class="kw">align</span>(mrs_proc, <
 </div>
 <div id="basis-simulation" class="section level2">
 <h2>Basis simulation</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get the data acquistion paramters</span>
-acq_paras &lt;-<span class="st"> </span><span class="kw">get_acq_paras</span>(mrs_proc)
-
-<span class="co"># simulate a typical basis set for short TE brain analysis</span>
-basis &lt;-<span class="st"> </span><span class="kw">sim_basis_1h_brain_press</span>(acq_paras)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># simulate a typical basis set for short TE brain analysis</span>
+basis &lt;-<span class="st"> </span><span class="kw">sim_basis_1h_brain_press</span>(mrs_proc)
 
 <span class="co"># output basis info</span>
 <span class="kw">print</span>(basis)</code></pre></div>

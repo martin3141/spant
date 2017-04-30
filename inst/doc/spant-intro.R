@@ -22,11 +22,8 @@ mrs_proc <- align(mrs_proc, 2.01)
 plot(mrs_proc, xlim = c(5, 0.5))
 
 ## ----basis_sim, message = FALSE------------------------------------------
-# get the data acquistion paramters
-acq_paras <- get_acq_paras(mrs_proc)
-
 # simulate a typical basis set for short TE brain analysis
-basis <- sim_basis_1h_brain_press(acq_paras)
+basis <- sim_basis_1h_brain_press(mrs_proc)
 
 # output basis info
 print(basis)
