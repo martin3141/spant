@@ -32,18 +32,40 @@
   invisible()
 }
 
-#' Set the path to the TARQUIN command-line program.
-#' @param path Path to binary.
+#' Check the TARQUIN binary can be run
 #' @export
-set_tqn_path <- function(path) {
-  options(spant.tqn_cmd = path)
+check_tqn <- function() {
+  result <- tryCatch({
+    sys_res <- suppressWarnings(system(getOption("spant.tqn_cmd"),
+                                       intern = TRUE, ignore.stderr = TRUE))
+  }, error = function(e) {
+    return(NA)
+  })
+  
+  if (!is.na(result[1])) {
+    sys_res <- suppressWarnings(system(getOption("spant.tqn_cmd"),
+                                       intern = TRUE, ignore.stderr = TRUE))
+    
+    tqn_ver <- strsplit(sys_res[2],"\\s+")[[1]][6]
+    cat(paste("TARQUIN version",tqn_ver ,"was found successfully."))
+  } else {
+    stop("TARQUIN software is not functioning with the following command setting:\n", 
+          getOption("spant.tqn_cmd"), "\nTry changing the path with the 'set_tqn_cmd' function.")
+  }
 }
 
-#' Set the path to the LCModel command-line program.
-#' @param path Path to binary.
+#' Set the command to run the TARQUIN command-line program.
+#' @param cmd Path to binary.
 #' @export
-set_lcm_path <- function(path) {
-  options(spant.lcm_cmd = path)
+set_tqn_cmd <- function(cmd) {
+  options(spant.tqn_cmd = cmd)
+}
+
+#' Set the command to run the LCModel command-line program.
+#' @param cmd Path to binary.
+#' @export
+set_lcm_cmd <- function(cmd) {
+  options(spant.lcm_cmd = cmd)
 }
 
 #' Return a list of the default acquisition parameters.
