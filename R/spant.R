@@ -24,7 +24,7 @@
     spant.def_N   = 1024,
     spant.def_ref = 4.65,
     spant.tqn_cmd = "tarquin",
-    spant.lcm_cmd = "lcmodel" 
+    spant.lcm_cmd = file.path(Sys.getenv("HOME"), ".lcmodel", "bin", "lcmodel") 
   )
   toset <- !(names(op.spant) %in% names(op))
   if (any(toset)) options(op.spant[toset])
@@ -53,6 +53,19 @@ check_tqn <- function() {
           getOption("spant.tqn_cmd"), "\nTry changing the path with the 'set_tqn_cmd' function.")
   }
 }
+
+#' Check LCModel can be run
+#' @export
+check_lcm <- function() {
+  if (file.exists(getOption("spant.lcm_cmd"))) {
+    cat("LCModel program sucessfully found.") 
+  } else {
+    stop("LCModel program not found in the following location:\n", 
+          getOption("spant.lcm_cmd"),
+         "\nif in a non-standard location try changing with the 'set_lcm_cmd' function.")
+  }
+}
+
 
 #' Set the command to run the TARQUIN command-line program.
 #' @param cmd Path to binary.
