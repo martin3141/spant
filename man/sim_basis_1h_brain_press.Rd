@@ -6,10 +6,10 @@
 sequence. Note, ideal pulses are assumed.}
 \usage{
 sim_basis_1h_brain_press(acq_paras = get_def_acq_paras(), xlim = c(0.5,
-  4.2), TE1 = 0.01, TE2 = 0.02)
+  4.2), lcm_compat = FALSE, TE1 = 0.01, TE2 = 0.02)
 }
 \arguments{
-\item{acq_paras}{List of acquistion parameters. See
+\item{acq_paras}{List of acquistion parameters or an mrs_data object. See
 \code{\link{get_def_acq_paras}}}
 
 \item{xlim}{Range of frequencies to simulate in ppm.}

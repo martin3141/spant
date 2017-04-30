@@ -155,8 +155,8 @@ get_spin_num <- function(nucleus) {
   spin_lookup$spin[matches]
 }
 
-get_1h_brain_basis_paras <- function(ft, metab_lw = 2, lcm_ver = FALSE) {
-  if (!lcm_ver) {
+get_1h_brain_basis_paras <- function(ft, metab_lw = 2, lcm_compat = FALSE) {
+  if (!lcm_compat) {
     m_cr_ch2 <- get_m_cr_ch2_paras(metab_lw)
   }
   ala <- get_ala_paras(metab_lw)
@@ -170,7 +170,7 @@ get_1h_brain_basis_paras <- function(ft, metab_lw = 2, lcm_ver = FALSE) {
   gpc <- get_gpc_paras(metab_lw)
   ins <- get_ins_paras(metab_lw)
   lac <- get_lac_paras(metab_lw)
-  if (!lcm_ver) {
+  if (!lcm_compat) {
     lip09 <- get_lip09_paras(ft)
     lip13a <- get_lip13a_paras(ft)
     lip13b <- get_lip13b_paras(ft)
@@ -188,7 +188,7 @@ get_1h_brain_basis_paras <- function(ft, metab_lw = 2, lcm_ver = FALSE) {
   sins <- get_sins_paras(metab_lw)
   tau <- get_tau_paras(metab_lw)
   
-  if (!lcm_ver) {
+  if (!lcm_compat) {
     basis_list <- list(m_cr_ch2, ala, asp, cr, gaba, glc, gln, gsh, glu, gpc,
                        ins, lac, lip09, lip13a, lip13b, lip20, mm09, mm12, mm14,
                        mm17, mm20, naa, naag, pch, pcr, sins, tau)
@@ -210,16 +210,18 @@ get_1h_brain_basis_paras <- function(ft, metab_lw = 2, lcm_ver = FALSE) {
 #' @return Basis object.
 #' @export
 sim_basis_1h_brain_press <- function(acq_paras = get_def_acq_paras(),
-                                     xlim = c(0.5, 4.2), TE1 = 0.01,
-                                     TE2 = 0.02) {
+                                     xlim = c(0.5, 4.2), lcm_compat = FALSE, 
+                                     TE1 = 0.01, TE2 = 0.02) {
   
   if (class(acq_paras) == "mrs_data") {
     acq_paras <- get_acq_paras(mrs_data)
   }
   
-  sim_basis(get_1h_brain_basis_paras(ft = acq_paras$ft), press_ideal, 
-            fs = acq_paras$fs, N = acq_paras$N, ref = acq_paras$ref,
-            ft = acq_paras$ft, xlim = xlim, TE1 = TE1, TE2 = TE2)
+  sim_basis(get_1h_brain_basis_paras(ft = acq_paras$ft, lcm_compat = lcm_compat), 
+                                     press_ideal, fs = acq_paras$fs, 
+                                     N = acq_paras$N, ref = acq_paras$ref,
+                                     ft = acq_paras$ft, xlim = xlim, TE1 = TE1,
+                                     TE2 = TE2)
 }
 
 get_mol_para_list_names <- function(mol_para_list) {
