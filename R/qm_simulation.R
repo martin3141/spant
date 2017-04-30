@@ -155,8 +155,10 @@ get_spin_num <- function(nucleus) {
   spin_lookup$spin[matches]
 }
 
-get_1h_brain_basis_paras <- function(ft, metab_lw = 2) {
-  m_cr_ch2 <- get_m_cr_ch2_paras(metab_lw)
+get_1h_brain_basis_paras <- function(ft, metab_lw = 2, lcm_ver = FALSE) {
+  if (!lcm_ver) {
+    m_cr_ch2 <- get_m_cr_ch2_paras(metab_lw)
+  }
   ala <- get_ala_paras(metab_lw)
   asp <- get_asp_paras(metab_lw)
   cr <- get_cr_paras(metab_lw)
@@ -168,15 +170,17 @@ get_1h_brain_basis_paras <- function(ft, metab_lw = 2) {
   gpc <- get_gpc_paras(metab_lw)
   ins <- get_ins_paras(metab_lw)
   lac <- get_lac_paras(metab_lw)
-  lip09 <- get_lip09_paras(ft)
-  lip13a <- get_lip13a_paras(ft)
-  lip13b <- get_lip13b_paras(ft)
-  lip20 <- get_lip20_paras(ft)
-  mm09 <- get_mm09_paras(ft)
-  mm12 <- get_mm12_paras(ft)
-  mm14 <- get_mm14_paras(ft)
-  mm17 <- get_mm17_paras(ft)
-  mm20 <- get_mm20_paras(ft)
+  if (!lcm_ver) {
+    lip09 <- get_lip09_paras(ft)
+    lip13a <- get_lip13a_paras(ft)
+    lip13b <- get_lip13b_paras(ft)
+    lip20 <- get_lip20_paras(ft)
+    mm09 <- get_mm09_paras(ft)
+    mm12 <- get_mm12_paras(ft)
+    mm14 <- get_mm14_paras(ft)
+    mm17 <- get_mm17_paras(ft)
+    mm20 <- get_mm20_paras(ft)
+  }
   naa <- get_naa_paras(metab_lw)
   naag <- get_naag_paras(metab_lw)
   pch <- get_pch_paras(metab_lw)
@@ -184,9 +188,15 @@ get_1h_brain_basis_paras <- function(ft, metab_lw = 2) {
   sins <- get_sins_paras(metab_lw)
   tau <- get_tau_paras(metab_lw)
   
-  basis_list <- list(m_cr_ch2, ala, asp, cr, gaba, glc, gln, gsh, glu, gpc, ins,
-                     lac, lip09, lip13a, lip13b, lip20, mm09, mm12, mm14, mm17,
-                     mm20, naa, naag, pch, pcr, sins, tau)
+  if (!lcm_ver) {
+    basis_list <- list(m_cr_ch2, ala, asp, cr, gaba, glc, gln, gsh, glu, gpc,
+                       ins, lac, lip09, lip13a, lip13b, lip20, mm09, mm12, mm14,
+                       mm17, mm20, naa, naag, pch, pcr, sins, tau)
+  } else {
+    basis_list <- list(ala, asp, cr, gaba, glc, gln, gsh, glu, gpc, ins, lac,
+                       naa, naag, pch, pcr, sins, tau)
+  }
+  
   basis_list
 }
 
