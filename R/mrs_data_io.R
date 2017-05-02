@@ -327,9 +327,19 @@ read_spar_sdat <- function(fname) {
                              stringsAsFactors = FALSE)
                     
   N <- as.integer(paras$V2[which(paras$V1 == "samples")])
-  fs <- as.integer(paras$V2[which(paras$V1 == "sample_frequency")])
-  ft <- as.integer(paras$V2[which(paras$V1 == "synthesizer_frequency")])
   rows <- as.integer(paras$V2[which(paras$V1 == "rows")])
+  ft <- as.numeric(paras$V2[which(paras$V1 == "synthesizer_frequency")])
+  fs <- as.numeric(paras$V2[which(paras$V1 == "sample_frequency")])
+  te <- as.numeric(paras$V2[which(paras$V1 == "echo_time")]) * 1e-3
+  ap_oc <- as.numeric(paras$V2[which(paras$V1 == "ap_off_center")])
+  lr_oc <- as.numeric(paras$V2[which(paras$V1 == "lr_off_center")])
+  cc_oc <- as.numeric(paras$V2[which(paras$V1 == "cc_off_center")])
+  ap_an <- as.numeric(paras$V2[which(paras$V1 == "ap_angulation")])
+  lr_an <- as.numeric(paras$V2[which(paras$V1 == "lr_angulation")])
+  cc_an <- as.numeric(paras$V2[which(paras$V1 == "cc_angulation")])
+  ap_size <- as.numeric(paras$V2[which(paras$V1 == "ap_size")])
+  lr_size <- as.numeric(paras$V2[which(paras$V1 == "lr_size")])
+  cc_size <- as.numeric(paras$V2[which(paras$V1 == "cc_size")])
   
   data_vec <- read_sdat(sdat)
   data <- array(data_vec,dim = c(1, 1, 1, 1, N, 1, rows)) # TODO update for MRSI
