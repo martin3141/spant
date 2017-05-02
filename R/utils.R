@@ -37,5 +37,5 @@ rotate_vec <- function(vec_in, ax, theta) {
   rotate_mat[3, 2] = ax[3] * ax[2] * (1 - ct) + ax[1] * st
   rotate_mat[3, 3] = ct + ax[3] * ax[3] * (1 - ct)
   vec_out <- rotate_mat %*% vec_in
-  vec_out / sum((vec_out)^2)
+  as.numeric(vec_out / sum((vec_out) ^ 2))
 }

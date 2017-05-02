@@ -340,6 +340,18 @@ read_spar_sdat <- function(fname) {
   ap_size <- as.numeric(paras$V2[which(paras$V1 == "ap_size")])
   lr_size <- as.numeric(paras$V2[which(paras$V1 == "lr_size")])
   cc_size <- as.numeric(paras$V2[which(paras$V1 == "cc_size")])
+  sli_thick <- as.numeric(paras$V2[which(paras$V1 == "slice_thickness")])
+  pe_fov <- as.numeric(paras$V2[which(paras$V1 == "phase_encoding_fov")])
+  cols <- as.numeric(paras$V2[which(paras$V1 == "dim2_pnts")])
+  rows <- as.numeric(paras$V2[which(paras$V1 == "dim3_pnts")])
+  cols <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim2_pnts")])
+  rows <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim3_pnts")])
+  
+  # Not used but may be useful some day...
+  # slices <- as.numeric(paras$V2[which(paras$V1 == "nr_of_slices_for_multislice")])
+  # avs <- as.integer(paras$V2[which(paras$V1 == "averages")])
+  # dim1_pts <- as.numeric(paras$V2[which(paras$V1 == "dim1_pnts")])
+  # dim1_pts <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim1_pnts")])
   
   true_row   <- c(1,0,0)
   true_col   <- c(0,1,0)
@@ -356,15 +368,26 @@ read_spar_sdat <- function(fname) {
   pos_vec <- c(lr_oc, ap_oc, cc_oc)
   
   data_vec <- read_sdat(sdat)
-  # TODO update for MRSI
+  
+  # TODO update dims for MRSI
   data <- array(data_vec,dim = c(1, 1, 1, 1, N, 1, rows)) 
   data = aperm(data,c(1, 2, 3, 4, 7, 6, 5))
   
-  row_dim <- ap_size
-  col_dim <- lr_size
-  slice_dim <- cc_size
+  # SVS or MRSI?
+  if ((rows == 1) & (cols == 1)) {
+    row_dim   <- lr_size
+    col_dim   <- ap_size
+    slice_dim <- cc_size
+  } else {
+    row_dim   <- pe_fov / cols
+    col_dim   <- pe_fov / cols
+    slice_dim <- sli_thick
+    pos_vec <- (pos_vec - col_ori * row_dim * 0.5 * (rows - 1) - 
+                row_ori * col_dim * 0.5 * (cols - 1))
+  }
+  
   res <- c(NA, row_dim, col_dim, slice_dim, 1, NA, 1 / fs)
-  ref <- 4.65 # TODO change to default setting
+  ref <- get_def_acq_paras()$ref
   
   # freq domain vector
   freq_domain <- rep(FALSE, 7)
