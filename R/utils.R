@@ -23,11 +23,10 @@ hilbert <- function(x) {
   stats::fft(y, inverse = TRUE) / n
 }
 
-#' @export
 rotate_vec <- function(vec_in, ax, theta) {
   ct <- cos(theta)
   st <- sin(theta)
-  rotate_mat <- matrix(nrow=3, ncol=3)
+  rotate_mat <- matrix(nrow = 3, ncol = 3)
   rotate_mat[1, 1] = ct + ax[1] * ax[1] * (1 - ct)
   rotate_mat[1, 2] = ax[1] * ax[2] * (1 - ct) - ax[3] * st
   rotate_mat[1, 3] = ax[1] * ax[3] * (1 - ct) + ax[2] * st
@@ -40,20 +39,3 @@ rotate_vec <- function(vec_in, ax, theta) {
   vec_out <- rotate_mat %*% vec_in
   vec_out / sum((vec_out)^2)
 }
-
-#def rotate_vec(vec_in, ax, theta):
-#  ct = np.cos(theta)
-#  st = np.sin(theta)
-#  rotate_mat = np.zeros([3,3])
-#  rotate_mat[0, 0] = ct + ax[0] * ax[0] * (1 - ct)
-#  rotate_mat[0, 1] = ax[0] * ax[1] * (1 - ct) - ax[2] * st
-#  rotate_mat[0, 2] = ax[0] * ax[2] * (1 - ct) + ax[1] * st
-#  rotate_mat[1, 0] = ax[1] * ax[0] * (1 - ct) + ax[2] * st
-#  rotate_mat[1, 1] = ct + ax[1] * ax[1] * (1 - ct)
-#  rotate_mat[1, 2] = ax[1] * ax[2] * (1 - ct) - ax[0] * st
-#  rotate_mat[2, 0] = ax[2] * ax[0] * (1 - ct) - ax[1] * st
-#  rotate_mat[2, 1] = ax[2] * ax[1] * (1 - ct) + ax[0] * st
-#  rotate_mat[2, 2] = ct + ax[2] * ax[2] * (1 - ct)
-#  vec_out = np.dot(rotate_mat, vec_in)
-#  return vec_out / np.linalg.norm(vec_out)
-

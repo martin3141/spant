@@ -341,25 +341,36 @@ read_spar_sdat <- function(fname) {
   lr_size <- as.numeric(paras$V2[which(paras$V1 == "lr_size")])
   cc_size <- as.numeric(paras$V2[which(paras$V1 == "cc_size")])
   
+  true_row   <- c(1,0,0)
+  true_col   <- c(0,1,0)
+  true_slice <- c(0,0,1)
+  
+  row_ori <- rotate_vec(true_row, true_slice, cc_an * pi / 180)
+  row_ori <- rotate_vec(row_ori, true_col, ap_an * pi / 180)
+  row_ori <- rotate_vec(row_ori, true_row, lr_an * pi / 180)
+  
+  col_ori <- rotate_vec(true_col, true_slice, cc_an * pi / 180)
+  col_ori <- rotate_vec(col_ori, true_col, ap_an * pi / 180)
+  col_ori <- rotate_vec(col_ori, true_row, lr_an * pi / 180)
+  
+  pos_vec <- c(lr_oc, ap_oc, cc_oc)
+  
   data_vec <- read_sdat(sdat)
-  data <- array(data_vec,dim = c(1, 1, 1, 1, N, 1, rows)) # TODO update for MRSI
+  # TODO update for MRSI
+  data <- array(data_vec,dim = c(1, 1, 1, 1, N, 1, rows)) 
   data = aperm(data,c(1, 2, 3, 4, 7, 6, 5))
   
-  # TODO
-  row_dim <- NA
-  col_dim <- NA
-  slice_dim <- NA
+  row_dim <- ap_size
+  col_dim <- lr_size
+  slice_dim <- cc_size
   res <- c(NA, row_dim, col_dim, slice_dim, 1, NA, 1 / fs)
   ref <- 4.65 # TODO change to default setting
-  row_vec <- NA
-  col_vec <- NA
-  pos_vec <- NA
   
   # freq domain vector
   freq_domain <- rep(FALSE, 7)
   
   mrs_data <- list(ft = ft, data = data, resolution = res, te = te, ref = ref, 
-                   row_vec = row_vec, col_vec = col_vec, pos_vec = pos_vec, 
+                   row_vec = row_ori, col_vec = col_ori, pos_vec = pos_vec, 
                    freq_domain = freq_domain)
   
   class(mrs_data) <- "mrs_data"
