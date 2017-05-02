@@ -350,8 +350,7 @@ read_spar_sdat <- function(fname) {
   col_dim <- NA
   slice_dim <- NA
   res <- c(NA, row_dim, col_dim, slice_dim, 1, NA, 1 / fs)
-  te <- NA
-  ref <- 4.65
+  ref <- 4.65 # TODO change to default setting
   row_vec <- NA
   col_vec <- NA
   pos_vec <- NA
