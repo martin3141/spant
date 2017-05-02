@@ -327,7 +327,7 @@ read_spar_sdat <- function(fname) {
                              stringsAsFactors = FALSE)
                     
   N <- as.integer(paras$V2[which(paras$V1 == "samples")])
-  rows <- as.integer(paras$V2[which(paras$V1 == "rows")])
+  dyns <- as.integer(paras$V2[which(paras$V1 == "rows")])
   ft <- as.numeric(paras$V2[which(paras$V1 == "synthesizer_frequency")])
   fs <- as.numeric(paras$V2[which(paras$V1 == "sample_frequency")])
   te <- as.numeric(paras$V2[which(paras$V1 == "echo_time")]) * 1e-3
@@ -347,11 +347,12 @@ read_spar_sdat <- function(fname) {
   cols <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim2_pnts")])
   rows <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim3_pnts")])
   
-  # Not used but may be useful some day...
+  # May be useful...
   # slices <- as.numeric(paras$V2[which(paras$V1 == "nr_of_slices_for_multislice")])
   # avs <- as.integer(paras$V2[which(paras$V1 == "averages")])
   # dim1_pts <- as.numeric(paras$V2[which(paras$V1 == "dim1_pnts")])
   # dim1_pts <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim1_pnts")])
+  # nuc <- as.numeric(paras$V2[which(paras$V1 == "nucleus")])
   
   true_row   <- c(1,0,0)
   true_col   <- c(0,1,0)
@@ -370,7 +371,7 @@ read_spar_sdat <- function(fname) {
   data_vec <- read_sdat(sdat)
   
   # TODO update dims for MRSI
-  data <- array(data_vec,dim = c(1, 1, 1, 1, N, 1, rows)) 
+  data <- array(data_vec,dim = c(1, 1, 1, 1, N, 1, dyns)) 
   data = aperm(data,c(1, 2, 3, 4, 7, 6, 5))
   
   # SVS or MRSI?
