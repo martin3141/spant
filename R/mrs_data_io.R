@@ -400,3 +400,68 @@ read_spar_sdat <- function(fname) {
   class(mrs_data) <- "mrs_data"
   mrs_data
 }
+
+#' @export
+read_list_data <- function(fname) {
+  # generate matching data and list files
+  ext <- stringr::str_sub(fname, -5)
+  name <- stringr::str_sub(fname, 1, -6)
+  
+  if ( ext == ".list" ) {
+    list <- fname
+    data <- paste0(name, ".data")
+  } else if ( ext == ".data" ) {
+    data <- fname
+    list <- paste0(name, ".list")
+  } else {
+    stop("Incorrect file extension.")
+  }
+  
+  # check both files exist
+  if (!file.exists(list)) {
+    cat(list)
+    stop("list file not found.")
+  } else if (!file.exists(data)) {
+    cat(data)
+    stop("data file not found.")
+  }
+  
+  # read list file as text
+  txt <- as.array(readLines(list))
+  
+  N_txt <- ".    0    0    0  F-resolution"
+  N_ind <- which(apply(txt, 1, startsWith, N_txt))
+  N <- as.numeric(strsplit(txt[N_ind], ":")[[1]][2])
+  
+  data_ind_start_txt <- "# === START OF DATA VECTOR INDEX"
+  data_ind_start <- which(apply(txt, 1, startsWith, data_ind_start_txt))
+  data_ind_end_txt <- "# === END OF DATA VECTOR INDEX"
+  data_ind_end <- which(apply(txt, 1, startsWith, data_ind_end_txt))
+  data_ind_tab <- read.table(text = txt[(data_ind_start + 3):(data_ind_end - 1)])
+  col_names <- strsplit(txt[data_ind_start + 2], "\\s+")[[1]][2:22]
+  colnames(data_ind_tab) <- col_names
+  
+  fid_num <- nrow(data_ind_tab)
+  chans <- max(data_ind_tab$chan) + 1
+  w_ref_inds <- which(data_ind_tab$typ == "STD" & data_ind_tab$mix == 1)
+  metab_inds <- which(data_ind_tab$typ == "STD" & data_ind_tab$mix == 0)
+  
+  w_ref_N <- length(w_ref_inds) 
+  w_ref_start <- (w_ref_inds[1] - 1) * N + 1
+  w_ref_end   <- w_ref_inds[w_ref_N] * N
+  
+  metab_N <- length(metab_inds) 
+  metab_start <- (metab_inds[1] - 1) * N + 1
+  metab_end   <- metab_inds[metab_N] * N
+  
+  raw_vec <- readBin(data, what = "double", n = 2 * N * (fid_num), size = 4,
+                     endian = "little")
+  
+  cplx_vec <- raw_vec[c(TRUE, FALSE)] - 1i * raw_vec[c(FALSE, TRUE)]
+  
+  w_ref_data <- cplx_vec[w_ref_start:w_ref_end]
+  dim(w_ref_data) <- c(N, chans, w_ref_N/chans)
+  
+  metab_data <- cplx_vec[metab_start:metab_end] 
+  dim(metab_data) <- c(N, chans, metab_N/chans)
+}
