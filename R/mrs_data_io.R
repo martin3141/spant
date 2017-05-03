@@ -402,7 +402,7 @@ read_spar_sdat <- function(fname) {
 }
 
 #' @export
-read_list_data <- function(fname) {
+read_list_data <- function(fname, ft = 127e6, fs = 2000, ref = 4.65) {
   # generate matching data and list files
   ext <- stringr::str_sub(fname, -5)
   name <- stringr::str_sub(fname, 1, -6)
@@ -443,12 +443,12 @@ read_list_data <- function(fname) {
   
   fid_num <- nrow(data_ind_tab)
   chans <- max(data_ind_tab$chan) + 1
-  w_ref_inds <- which(data_ind_tab$typ == "STD" & data_ind_tab$mix == 1)
+  ref_inds <- which(data_ind_tab$typ == "STD" & data_ind_tab$mix == 1)
   metab_inds <- which(data_ind_tab$typ == "STD" & data_ind_tab$mix == 0)
   
-  w_ref_N <- length(w_ref_inds) 
-  w_ref_start <- (w_ref_inds[1] - 1) * N + 1
-  w_ref_end   <- w_ref_inds[w_ref_N] * N
+  ref_N <- length(ref_inds) 
+  ref_start <- (ref_inds[1] - 1) * N + 1
+  ref_end   <- ref_inds[ref_N] * N
   
   metab_N <- length(metab_inds) 
   metab_start <- (metab_inds[1] - 1) * N + 1
@@ -459,9 +459,30 @@ read_list_data <- function(fname) {
   
   cplx_vec <- raw_vec[c(TRUE, FALSE)] - 1i * raw_vec[c(FALSE, TRUE)]
   
-  w_ref_data <- cplx_vec[w_ref_start:w_ref_end]
-  dim(w_ref_data) <- c(N, chans, w_ref_N/chans)
+  ref_data <- cplx_vec[ref_start:ref_end]
+  dim(ref_data) <- c(N, chans, ref_N/chans, 1, 1, 1, 1)
+  ref_data <- aperm(ref_data, c(7,6,5,4,3,2,1))
   
-  metab_data <- cplx_vec[metab_start:metab_end] 
-  dim(metab_data) <- c(N, chans, metab_N/chans)
+  metab_data <- cplx_vec[metab_start:metab_end]
+  dim(metab_data) <- c(N, chans, metab_N/chans, 1, 1, 1, 1)
+  metab_data <- aperm(metab_data, c(7,6,5,4,3,2,1))
+  
+  #res <- rep(NA, 7)
+  res <- c(NA, NA, NA, NA, 1, NA, 1 / fs)
+  
+  # freq domain vector vector
+  freq_domain <- rep(FALSE, 7)
+  
+  metab_mrs <- list(ft = ft, data = metab_data, resolution = res, te = NA,
+                   ref = ref, row_vec = NA, col_vec = NA,
+                   pos_vec = NA, freq_domain = freq_domain)
+  class(metab_mrs) <- "mrs_data"
+  
+  
+  ref_mrs <- list(ft = ft, data = ref_data, resolution = res, te = NA,
+                   ref = ref, row_vec = NA, col_vec = NA,
+                   pos_vec = NA, freq_domain = freq_domain)
+  class(ref_mrs) <- "mrs_data"
+  
+  list(metab_mrs = metab_mrs, ref_mrs = ref_mrs)
 }
