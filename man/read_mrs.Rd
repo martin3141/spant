@@ -10,7 +10,7 @@ read_mrs(fname, format)
 \item{fname}{The filename of the dpt format MRS data.}
 
 \item{format}{A string describing the data format. May be one of the
-following : "spar_sdat", "dpt".}
+following : "spar_sdat", "rda", "list_data", "dpt".}
 }
 \value{
 An MRS data object.
