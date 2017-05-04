@@ -486,3 +486,32 @@ read_list_data <- function(fname, ft = 127e6, fs = 2000, ref = 4.65) {
   
   list(metab_mrs = metab_mrs, ref_mrs = ref_mrs)
 }
+
+#' @export
+read_rda <- function(fname) {
+  con = file(fname, "r")
+  n = 1
+  while (TRUE) {
+    line = readLines(con, n = 1)
+    if (startsWith(line, ">>> End of header <<<")) {
+      data_pos <- seek(con)
+      break
+    }
+    n = n + 1
+  }
+  
+  # go back to the start
+  seek(con, 0)
+  txt <- read.delim(con, sep = ":", nrows = (n - 2), header = FALSE,
+                    strip.white = TRUE, stringsAsFactors = FALSE,
+                    comment.char = ">")
+  close(con)
+  
+  # open in binary mode
+  con <- file(fname, "rb")
+  # skip the text bit
+  seek(con, data_pos, "start", rw = "rb")
+  raw_vec <- readBin(con, what = "double", n = 1024*2, size = 8, endian = "little")
+  close(con)
+  
+}
