@@ -14,6 +14,9 @@ sim_basis_1h_brain_press(acq_paras = get_def_acq_paras(), xlim = c(0.5,
 
 \item{xlim}{Range of frequencies to simulate in ppm.}
 
+\item{lcm_compat}{Exclude lipid and MM signals for use with default LCModel
+options.}
+
 \item{TE1}{TE1 of PRESS sequence (TE = TE1 + TE2).}
 
 \item{TE2}{TE2 of PRESS sequence.}

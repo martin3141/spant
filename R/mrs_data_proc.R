@@ -910,6 +910,7 @@ td_conv_filt <- function(mrs_data, K = 25, ext = 1) {
 #' @param mrs_data MRS data to be filtered.
 #' @param xlim Frequency range in Hz to filter.
 #' @param comps Number of Lorentzian components to use for modelling.
+#' @param propack Option to use PROPACK SVD (logical).
 #' @export
 hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 50, propack = FALSE) {
 # TODO, region defn in ppm and allow multiple region selection

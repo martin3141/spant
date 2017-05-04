@@ -205,6 +205,8 @@ get_1h_brain_basis_paras <- function(ft, metab_lw = 2, lcm_compat = FALSE) {
 #' @param acq_paras List of acquistion parameters or an mrs_data object. See
 #' \code{\link{get_def_acq_paras}}
 #' @param xlim Range of frequencies to simulate in ppm.
+#' @param lcm_compat Exclude lipid and MM signals for use with default LCModel
+#' options.
 #' @param TE1 TE1 of PRESS sequence (TE = TE1 + TE2).
 #' @param TE2 TE2 of PRESS sequence.
 #' @return Basis object.

@@ -348,8 +348,8 @@ read_spar_sdat <- function(fname) {
   pe_fov <- as.numeric(paras$V2[which(paras$V1 == "phase_encoding_fov")])
   cols <- as.numeric(paras$V2[which(paras$V1 == "dim2_pnts")])
   rows <- as.numeric(paras$V2[which(paras$V1 == "dim3_pnts")])
-  cols <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim2_pnts")])
-  rows <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim3_pnts")])
+  #cols <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim2_pnts")])
+  #rows <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim3_pnts")])
   
   # May be useful...
   # slices <- as.numeric(paras$V2[which(paras$V1 == "nr_of_slices_for_multislice")])
@@ -441,7 +441,7 @@ read_list_data <- function(fname, ft = 127e6, fs = 2000, ref = 4.65) {
   data_ind_start <- which(apply(txt, 1, startsWith, data_ind_start_txt))
   data_ind_end_txt <- "# === END OF DATA VECTOR INDEX"
   data_ind_end <- which(apply(txt, 1, startsWith, data_ind_end_txt))
-  data_ind_tab <- read.table(text = txt[(data_ind_start + 3):(data_ind_end - 1)])
+  data_ind_tab <- utils::read.table(text = txt[(data_ind_start + 3):(data_ind_end - 1)])
   col_names <- strsplit(txt[data_ind_start + 2], "\\s+")[[1]][2:22]
   colnames(data_ind_tab) <- col_names
   
@@ -505,7 +505,7 @@ read_rda <- function(fname) {
   
   # go back to the start
   seek(con, 0)
-  txt <- read.delim(con, sep = ":", nrows = (n - 2), header = FALSE,
+  txt <- utils::read.delim(con, sep = ":", nrows = (n - 2), header = FALSE,
                     strip.white = TRUE, stringsAsFactors = FALSE,
                     comment.char = ">")
   close(con)
