@@ -2,18 +2,24 @@
 #' @param fname The filename of the dpt format MRS data.
 #' @param format A string describing the data format. May be one of the 
 #' following : "spar_sdat", "rda", "list_data", "dpt".
+#' @param ft Transmitter frequency in Hz (required for list_data format).
+#' @param fs Sampling frequency in Hz (required for list_data format).
+#' @param ref Reference value for ppm scale (required for list_data format).
 #' @return An MRS data object.
 #' @examples
 #' fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
 #' mrs_data <- read_mrs(fname, format = "spar_sdat")
 #' print(mrs_data)
 #' @export
-read_mrs <- function(fname, format) {
+read_mrs <- function(fname, format, ft = NULL, fs = NULL, ref = NULL) {
   if (format == "spar_sdat") {
     return(read_spar_sdat(fname))
   } else if (format == "rda") {
     return(read_rda(fname))
   } else if (format == "list_data") {
+    if (is.null(ft)) stop("Please specify ft parameter for list_data format")
+    if (is.null(fs)) stop("Please specify fs parameter for list_data format")
+    if (is.null(ref)) stop("Please specify ref parameter for list_data format")
     return(read_list_data(fname))
   } else if (format == "dpt") {
     return(read_mrs_dpt(fname))
@@ -405,8 +411,7 @@ read_spar_sdat <- function(fname) {
   mrs_data
 }
 
-#' @export
-read_list_data <- function(fname, ft = 127e6, fs = 2000, ref = 4.65) {
+read_list_data <- function(fname, ft, fs, ref) {
   # generate matching data and list files
   ext <- stringr::str_sub(fname, -5)
   name <- stringr::str_sub(fname, 1, -6)

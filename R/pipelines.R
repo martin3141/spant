@@ -1,11 +1,9 @@
-#' @export
 gen_mpress_gaba_report <- function(...) {
   anal_results <- pipe_mpress_gaba(...)
   rep_file <- system.file("reports", "mpress_gaba.Rmd", package = "spant")
   rmarkdown::render(rep_file, output_dir = "~")
 }
 
-#' @export
 pipe_mpress_gaba <- function(mrs_data, TE1 = 30, TE2 = 40) {
   dynamics <- dyns(mrs_data)
   

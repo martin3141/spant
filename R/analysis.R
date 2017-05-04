@@ -503,6 +503,12 @@ get_corr_factor <- function(te, tr, B0, gm_vol, wm_vol, csf_vol) {
   return(corr_factor)
 }
 
+#' Integrate a spectral region.
+#' @param mrs_data MRS data.
+#' @param xlim Spectral range to be integrated.
+#' @param scale Units of xlim, can be : "ppm", "Hz" or "points".
+#' @param mode Spectral mode, can be : "real", "imag" or "abs".
+#' @return An array of integral values.
 #' @export
 int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "real") {
   

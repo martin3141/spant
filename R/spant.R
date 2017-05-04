@@ -95,7 +95,7 @@ get_def_acq_paras <- function() {
 }
 
 #' Set the default acquisition parameters.
-#' @param ft Trasmitter frequency in Hz.
+#' @param ft Transmitter frequency in Hz.
 #' @param fs Sampling frequency in Hz.
 #' @param N Number of data points in the spectral dimension.
 #' @param ref Reference value for ppm scale.

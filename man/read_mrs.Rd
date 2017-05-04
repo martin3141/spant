@@ -4,13 +4,19 @@
 \alias{read_mrs}
 \title{Read MRS data from a file.}
 \usage{
-read_mrs(fname, format)
+read_mrs(fname, format, ft = NULL, fs = NULL, ref = NULL)
 }
 \arguments{
 \item{fname}{The filename of the dpt format MRS data.}
 
 \item{format}{A string describing the data format. May be one of the
 following : "spar_sdat", "rda", "list_data", "dpt".}
+
+\item{ft}{Transmitter frequency in Hz (required for list_data format).}
+
+\item{fs}{Sampling frequency in Hz (required for list_data format).}
+
+\item{ref}{Reference value for ppm scale (required for list_data format).}
 }
 \value{
 An MRS data object.

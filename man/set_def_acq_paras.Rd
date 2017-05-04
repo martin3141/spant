@@ -9,7 +9,7 @@ set_def_acq_paras(ft = getOption("spant.def_ft"),
   ref = getOption("spant.def_ref"))
 }
 \arguments{
-\item{ft}{Trasmitter frequency in Hz.}
+\item{ft}{Transmitter frequency in Hz.}
 
 \item{fs}{Sampling frequency in Hz.}
 
