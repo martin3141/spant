@@ -493,7 +493,7 @@ read_list_data <- function(fname, ft, fs, ref) {
                    pos_vec = NA, freq_domain = freq_domain)
   class(ref_mrs) <- "mrs_data"
   
-  list(metab_mrs = metab_mrs, ref_mrs = ref_mrs)
+  list(metab = metab_mrs, ref = ref_mrs)
 }
 
 read_rda <- function(fname) {

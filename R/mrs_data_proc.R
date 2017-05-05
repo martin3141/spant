@@ -1204,5 +1204,5 @@ comb_coils_wref <- function(metab_mrs, ref_mrs, scale = TRUE) {
   }
   metab_mrs_ps <- sum_coils(metab_mrs_ps)
   
-  list(metab_mrs = metab_mrs_ps, ref_mrs = ref_mrs_ps)
+  list(metab = metab_mrs_ps, ref = ref_mrs_ps)
 }
