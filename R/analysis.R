@@ -625,6 +625,13 @@ varpro_3_para <- function(mrs_data, basis, opts = NULL) {
   ahat <- nnls::nnls(basis_real, y_real)$x
   
   yhat <- basis_mod %*% ahat
+  amat <- matrix(ahat, nrow = Npts, ncol = Nbasis, byrow = TRUE)
+  basis_sc <- basis_mod * amat
+  zero_mat <- matrix(0, nrow = Npts, ncol = Nbasis)
+  basis_sc <- rbind(basis_sc, zero_mat)
+  BASIS_SC <- apply(basis_sc, 2, ft_shift)
+  basis_frame <- as.data.frame(Re(BASIS_SC), row.names = NA)
+  colnames(basis_frame) <- basis$names
   
   # zero pad
   yhat <- c(yhat, rep(0, Npts))
@@ -648,6 +655,8 @@ varpro_3_para <- function(mrs_data, basis, opts = NULL) {
   
   fit <- data.frame(PPMScale = ppm(mrs_data, N = Npts * 2), Data = Re(Y),
                     Fit = Re(YHAT), Baseline = Re(BL))
+  
+  fit <- cbind(fit, basis_frame)
   
   class(fit) <- "fit_table"
   
@@ -717,6 +726,14 @@ varpro <- function(mrs_data, basis, opts = NULL) {
   
   yhat <- basis_mod %*% ahat
   
+  amat <- matrix(ahat, nrow = Npts, ncol = Nbasis, byrow = TRUE)
+  basis_sc <- basis_mod * amat
+  zero_mat <- matrix(0, nrow = Npts, ncol = Nbasis)
+  basis_sc <- rbind(basis_sc, zero_mat)
+  BASIS_SC <- apply(basis_sc, 2, ft_shift)
+  basis_frame <- as.data.frame(Re(BASIS_SC), row.names = NA)
+  colnames(basis_frame) <- basis$names
+  
   # zero pad
   yhat <- c(yhat, rep(0, Npts))
   YHAT <- ft_shift(as.vector(yhat))
@@ -739,6 +756,8 @@ varpro <- function(mrs_data, basis, opts = NULL) {
   
   fit <- data.frame(PPMScale = ppm(mrs_data, N = Npts * 2), Data = Re(Y),
                     Fit = Re(YHAT), Baseline = Re(BL))
+
+  fit <- cbind(fit, basis_frame)
   
   class(fit) <- "fit_table"
   
