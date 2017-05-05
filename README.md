@@ -11,7 +11,7 @@ spant provides a full suite of tools to build automated anaysis pipelines for Ma
 -   Raw data import/export.
 -   Flexable data types to support single voxel, dynamic and spectroscopic imaging data types.
 -   Publication quality plotting.
--   Extensive set of pre-processing steps (phasing, zero-filling, HSVD filtering...)
+-   Extensive set of pre-processing steps (phasing, coil-combination, zero-filling, HSVD filtering...)
 -   Quantum mechanical based simulation for experimental design and basis-set generation.
 -   Set of metabolite, macromolecule and lipid parameters for typical brain analyses.
 -   VARPRO based fitting and interfaces for TARQUIN and LCModel for metabolite quantitation.
@@ -52,7 +52,7 @@ print(mrs_data)
 #> X,Y,Z dimensions        : 1x1x1
 #> Dynamics                : 1
 #> Coils                   : 1
-#> Voxel resolution (mm)   : NAxNAxNA
+#> Voxel resolution (mm)   : 20x20x20
 #> Sampling frequency (Hz) : 2000
 #> Contains referece data  : FALSE
 #> Spectral domain         : FALSE

@@ -15,7 +15,7 @@ comb_coils_wref(metab_mrs, ref_mrs, scale = TRUE)
 (logical).}
 }
 \value{
-Data with coil elements combined.
+MRS data list with coil elements combined.
 }
 \description{
 Elements are phased and optionally scaled prior to summation.
