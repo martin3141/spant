@@ -783,7 +783,11 @@ bc <- function(mrs_data, lambda, p) {
 #' @return Mean dynamic data.
 #' @export
 mean_dyns <- function(mrs_data) {
-  return(apply_mrs(mrs_data, 5, mean))
+  mrs_data$data <- aperm(mrs_data$data, c(5,1,2,3,4,6,7))
+  mrs_data$data <- colMeans(mrs_data$data)
+  new_dim <- dim(mrs_data$data)
+  dim(mrs_data$data) <- c(new_dim[1:4],1,new_dim[5:6])
+  mrs_data
 }
 
 #' Calculate the pairwise means across a dynamic data set.
@@ -800,7 +804,11 @@ mean_dyn_pairs <- function(mrs_data) {
 #' @return Sum of data dynamics.
 #' @export
 sum_dyns <- function(mrs_data) {
-  return(apply_mrs(mrs_data, 5, sum))
+  mrs_data$data <- aperm(mrs_data$data, c(5,1,2,3,4,6,7))
+  mrs_data$data <- colSums(mrs_data$data)
+  new_dim <- dim(mrs_data$data)
+  dim(mrs_data$data) <- c(new_dim[1:4],1,new_dim[5:6])
+  mrs_data
 }
 
 #' Calculate the sum across reciever coil elements.
@@ -808,7 +816,11 @@ sum_dyns <- function(mrs_data) {
 #' @return Sum across coil elements.
 #' @export
 sum_coils <- function(mrs_data) {
-  return(apply_mrs(mrs_data, 6, sum))
+  mrs_data$data <- aperm(mrs_data$data, c(6,1,2,3,4,5,7))
+  mrs_data$data <- colSums(mrs_data$data)
+  new_dim <- dim(mrs_data$data)
+  dim(mrs_data$data) <- c(new_dim[1:5],1,new_dim[6])
+  mrs_data
 }
 
 cplx_median <- function(input) {
@@ -1143,6 +1155,7 @@ zp_vec <- function(vector, n) {
 #' @param scale Option to rescale coil elements based on the first data point
 #' (logical).
 #' @return MRS data list with coil elements combined.
+#' @export
 comb_coils_wref <- function(metab_mrs, ref_mrs, scale = TRUE) {
   # get the first dynamic of the water ref data
   first_ref <- get_dyns(ref_mrs, 1)
@@ -1165,6 +1178,7 @@ comb_coils_wref <- function(metab_mrs, ref_mrs, scale = TRUE) {
     ref_mrs_ps <- ref_mrs
     ref_mrs_ps$data <- ref_mrs$data * exp(-1i * ang) * scale_f
   } else {
+    ref_mrs_ps <- ref_mrs
     ref_mrs_ps$data <- ref_mrs$data * exp(-1i * ang)
   }
   
@@ -1185,6 +1199,7 @@ comb_coils_wref <- function(metab_mrs, ref_mrs, scale = TRUE) {
     metab_mrs_ps <- metab_mrs
     metab_mrs_ps$data <- metab_mrs$data * exp(-1i * ang) * scale_f
   } else {
+    metab_mrs_ps <- metab_mrs
     metab_mrs_ps$data <- metab_mrs$data * exp(-1i * ang)
   }
   metab_mrs_ps <- sum_coils(metab_mrs_ps)
