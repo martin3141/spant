@@ -256,6 +256,20 @@ fp_phase_correct <- function(mrs_data, ret_phase = FALSE) {
   }
 }
 
+#' Return the first time-domain data point.
+#' @param mrs_data MRS data.
+#' @return First time-domain data point.
+#' @export
+get_fp <- function(mrs_data) {
+  # needs to be a time-domain operation
+  if (is_fd(mrs_data)) {
+    mrs_data <- fd2td(mrs_data)
+  }
+  
+  # drop the chem shift dimension
+  mrs_data$data[,,,,,, 1, drop = F]
+}
+
 fp_mag <- function(mrs_data) {
   # needs to be a time-domain operation
   if (is_fd(mrs_data)) {
@@ -789,6 +803,14 @@ sum_dyns <- function(mrs_data) {
   return(apply_mrs(mrs_data, 5, sum))
 }
 
+#' Calculate the sum across reciever coil elements.
+#' @param mrs_data MRS data split across reciever coil elements.
+#' @return Sum across coil elements.
+#' @export
+sum_coils <- function(mrs_data) {
+  return(apply_mrs(mrs_data, 6, sum))
+}
+
 cplx_median <- function(input) {
   stats::median(Re(input)) + stats::median(Im(input)) * 1i
 }
@@ -1111,4 +1133,61 @@ zp_vec <- function(vector, n) {
   start_pt <- pracma::ceil((n - length(vector)) / 2) + 1
   zp_vec[start_pt:(start_pt + length(vector) - 1)] <- vector
   zp_vec
+}
+
+#' Combine coil data based on the first data point of a reference signal.
+#' 
+#' Elements are phased and optionally scaled prior to summation.
+#' @param metab_mrs MRS data containing metabolite data.
+#' @param ref_mrs MRS data containing reference data.
+#' @param scale Option to rescale coil elements based on the first data point
+#' (logical).
+#' @return MRS data list with coil elements combined.
+comb_coils_wref <- function(metab_mrs, ref_mrs, scale = TRUE) {
+  # get the first dynamic of the water ref data
+  first_ref <- get_dyns(ref_mrs, 1)
+  fp <- get_fp(first_ref)
+  phi <- Arg(fp)
+  amp <- Mod(fp)
+  
+  # phase and scale w ref data
+  ref_dims <- dim(ref_mrs$data)
+  
+  ang <- rep(phi, prod(ref_dims[-6]))
+  dim(ang) <- c(ref_dims[c(6, 2, 3, 4, 5, 1, 7)])
+  ang <- aperm(ang, c(6, 2, 3, 4, 5, 1, 7))
+  
+  if (scale) {
+    scale_f <- rep(amp, prod(ref_dims[-6]))
+    dim(scale_f) <- c(ref_dims[c(6, 2, 3, 4, 5, 1, 7)])
+    scale_f <- aperm(scale_f, c(6, 2, 3, 4, 5, 1, 7))
+    
+    ref_mrs_ps <- ref_mrs
+    ref_mrs_ps$data <- ref_mrs$data * exp(-1i * ang) * scale_f
+  } else {
+    ref_mrs_ps$data <- ref_mrs$data * exp(-1i * ang)
+  }
+  
+  ref_mrs_ps <- sum_coils(ref_mrs_ps)
+  
+  # phase and scale metab data
+  metab_dims <- dim(metab_mrs$data)
+  
+  ang <- rep(phi, prod(metab_dims[-6]))
+  dim(ang) <- c(metab_dims[c(6, 2, 3, 4, 5, 1, 7)])
+  ang <- aperm(ang, c(6, 2, 3, 4, 5, 1, 7))
+  
+  if (scale) {
+    scale_f <- rep(amp, prod(metab_dims[-6]))
+    dim(scale_f) <- c(metab_dims[c(6, 2, 3, 4, 5, 1, 7)])
+    scale_f <- aperm(scale_f, c(6, 2, 3, 4, 5, 1, 7))
+    
+    metab_mrs_ps <- metab_mrs
+    metab_mrs_ps$data <- metab_mrs$data * exp(-1i * ang) * scale_f
+  } else {
+    metab_mrs_ps$data <- metab_mrs$data * exp(-1i * ang)
+  }
+  metab_mrs_ps <- sum_coils(metab_mrs_ps)
+  
+  list(metab_mrs = metab_mrs_ps, ref_mrs = ref_mrs_ps)
 }

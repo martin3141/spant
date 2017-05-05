@@ -24,23 +24,24 @@ print.mrs_data <- function(x, ...) {
   cat(paste(c("Reference freq. (PPM)   : ", x$ref, "\n")), sep = "")
 }
 
-# TODO add xlim para, Mod option
+# TODO add Mod option
 #' @export
-image.mrs_data <- function(x, mode = "real", ...) { 
+image.mrs_data <- function(x, mode = "real", xlim = NULL, ...) { 
   if (!is_fd(x)) {
     x <- td2fd(x)
   }
   
-  xlim = c(4, 0.5)
   x_scale <- ppm(x)
   
-  #xlim=c(100, 400)
-  #x_scale <- hz(mrs_data)
+  if (is.null(xlim)) {
+    xlim <- c(x_scale[1], x_scale[N(x)])
+  }
+  
+  par(mar = c(3.7, 3.7, 1, 1)) # margins
   
   x_inds <- get_seg_ind(x_scale, xlim[1], xlim[2])
   subset <- x_inds[1]:x_inds[2]
   plot_data <- Re(t(x$data[1, 1, 1, 1, , 1, subset]))
-  #plot_data <- Mod(t(mrs_data$data[1, 1, 1, 1, , 1,subset]))
   
   graphics::image(x_scale[subset][length(subset):1], (1:dyns(x)),
                   plot_data[length(subset):1,], xlim = xlim,

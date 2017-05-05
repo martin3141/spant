@@ -20,7 +20,7 @@ read_mrs <- function(fname, format, ft = NULL, fs = NULL, ref = NULL) {
     if (is.null(ft)) stop("Please specify ft parameter for list_data format")
     if (is.null(fs)) stop("Please specify fs parameter for list_data format")
     if (is.null(ref)) stop("Please specify ref parameter for list_data format")
-    return(read_list_data(fname))
+    return(read_list_data(fname, ft, fs, ref))
   } else if (format == "dpt") {
     return(read_mrs_dpt(fname))
   } else {
