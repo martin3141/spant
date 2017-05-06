@@ -7,12 +7,12 @@ plot.fit_table <- function(x, xlim = c(4, 0.5), plt_title = FALSE,
   graphics::par("xaxs" = "i", "yaxs" = "i") # tight axes limits
   
   if ( plt_title == FALSE ) {
-    graphics::par(mar = c(3.7, 1.2, 1.2, 1.2)) # space around the plot
+    graphics::par(mar = c(3.5, 1.2, 1.2, 1.2)) # space around the plot
   } else {
-    graphics::par(mar = c(3.7, 1.2, 2, 1.2)) # space around the plot
+    graphics::par(mar = c(3.5, 1.2, 2, 1.2)) # space around the plot
   }
   
-  graphics::par(mgp = c(2.2, 0.7, 0)) # distance between axes and labels
+  graphics::par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
   
   if (xlim[1] > xlim[2]) {
     ind <- x$PPMScale < xlim[1] & x$PPMScale > xlim[2]

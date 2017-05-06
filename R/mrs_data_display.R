@@ -26,7 +26,8 @@ print.mrs_data <- function(x, ...) {
 
 #' @export
 image.mrs_data <- function(x, mode = "real", xlim = NULL, col = NULL, 
-                           dim = "dyn", ...) { 
+                           dim = "dyn", x_pos = NA, y_pos = NA, z_pos = NA,
+                           dyn = 1, coil = 1, ...) { 
   if (!is_fd(x)) {
     x <- td2fd(x)
   }
@@ -43,28 +44,42 @@ image.mrs_data <- function(x, mode = "real", xlim = NULL, col = NULL,
   x_inds <- get_seg_ind(x_scale, xlim[1], xlim[2])
   subset <- x_inds[1]:x_inds[2]
   
+  data_dim <- dim(x$data)
+  
+  if (is.na(x_pos)) {
+    x_pos <- as.integer(data_dim[2] / 2) + 1
+  }
+  
+  if (is.na(y_pos)) {
+    y_pos <- as.integer(data_dim[3] / 2) + 1
+  }
+  
+  if (is.na(z_pos)) {
+    z_pos <- as.integer(data_dim[4] / 2) + 1
+  }
+  
   if (dim == "dyn") {
-    plot_data <- t(x$data[1, 1, 1, 1, , 1, subset])
-    yN <- dim(x$data)[5]
+    plot_data <- t(x$data[1, x_pos, y_pos, y_pos, , coil, subset])
+    yN <- data_dim[5]
     y_title = "Dynamic"
-  } else if (dim == "row") {
-    plot_data <- t(x$data[1, , 1, 1, 1, 1, subset])
-    yN <- dim(x$data)[2]
-    y_title = "Row"
-  } else if (dim == "col") {
-    plot_data <- t(x$data[1, 1, , 1, 1, 1, subset])
-    yN <- dim(x$data)[3]
-    y_title = "Col"
-  } else if (dim == "slice") {
-    plot_data <- t(x$data[1, 1, 1, , 1, 1, subset])
-    yN <- dim(x$data)[4]
-    y_title = "Slice"
+  } else if (dim == "x") {
+    plot_data <- t(x$data[1, , y_pos, z_pos, dyn, coil, subset])
+    yN <- data_dim[2]
+    y_title = "x position"
+  } else if (dim == "y") {
+    plot_data <- t(x$data[1, x_pos, , z_pos, dyn, coil, subset])
+    yN <- data_dim[3]
+    y_title = "y position"
+  } else if (dim == "z") {
+    plot_data <- t(x$data[1, x_pos, y_pos, , dyn, coil, subset])
+    yN <- data_dim[4]
+    y_title = "z position"
   } else if (dim == "coil") {
-    plot_data <- t(x$data[1, 1, 1, 1, 1, , subset])
-    yN <- dim(x$data)[5]
+    plot_data <- t(x$data[1, x_pos, y_pos, z_pos, dyn, , subset])
+    yN <- data_dim[5]
     y_title = "Coil"
   } else {
-    stop("Unrecognised dim value. Should be one of: dyn, row, col, slice, coil")
+    stop("Unrecognised dim value. Should be one of: dyn, x, y, z, coil")
   } 
   
   if (mode == "real") {
@@ -102,7 +117,9 @@ stackplot <- function(x, ...) {
 # TODO make consistant with plot
 #' @export
 stackplot.mrs_data <- function(x, mode = "real", xlim = NULL,
-                               x_offset = 5, dim = "dyn", ...) {
+                               x_offset = 5, dim = "dyn", x_pos = NA, 
+                               y_pos = NA, z_pos = NA, dyn = 1, coil = 1, ...) {
+  
   if (!is_fd(x)) {
     x <- td2fd(x)
   }
@@ -116,27 +133,44 @@ stackplot.mrs_data <- function(x, mode = "real", xlim = NULL,
   if (is.null(xlim)) {
     xlim <- c(x_scale[1], x_scale[N(x)])
   }
+  data_dim <- dim(x$data)
+  
+  if (is.na(x_pos)) {
+    x_pos <- as.integer(data_dim[2] / 2) + 1
+  }
+  
+  if (is.na(y_pos)) {
+    y_pos <- as.integer(data_dim[3] / 2) + 1
+  }
+  
+  if (is.na(z_pos)) {
+    z_pos <- as.integer(data_dim[4] / 2) + 1
+  }
   
   x_inds <- get_seg_ind(x_scale, xlim[1], xlim[2])
   subset <- x_inds[1]:x_inds[2]
-  
   if (dim == "dyn") {
-    plot_data <- t(x$data[1, 1, 1, 1, , 1, subset])
-    yN <- dim(x$data)[5]
-  } else if (dim == "row") {
-    plot_data <- t(x$data[1, , 7, 1, 1, 1, subset])
-    yN <- dim(x$data)[2]
-  } else if (dim == "col") {
-    plot_data <- t(x$data[1, 7, , 1, 1, 1, subset])
-    yN <- dim(x$data)[3]
-  } else if (dim == "slice") {
-    plot_data <- t(x$data[1, 1, 1, , 1, 1, subset])
-    yN <- dim(x$data)[4]
+    plot_data <- t(x$data[1, x_pos, y_pos, y_pos, , coil, subset])
+    yN <- data_dim[5]
+    y_title = "Dynamic"
+  } else if (dim == "x") {
+    plot_data <- t(x$data[1, , y_pos, z_pos, dyn, coil, subset])
+    yN <- data_dim[2]
+    y_title = "x position"
+  } else if (dim == "y") {
+    plot_data <- t(x$data[1, x_pos, , z_pos, dyn, coil, subset])
+    yN <- data_dim[3]
+    y_title = "y position"
+  } else if (dim == "z") {
+    plot_data <- t(x$data[1, x_pos, y_pos, , dyn, coil, subset])
+    yN <- data_dim[4]
+    y_title = "z position"
   } else if (dim == "coil") {
-    plot_data <- t(x$data[1, 1, 1, 1, 1, , subset])
-    yN <- dim(x$data)[5]
+    plot_data <- t(x$data[1, x_pos, y_pos, z_pos, dyn, , subset])
+    yN <- data_dim[5]
+    y_title = "Coil"
   } else {
-    stop("Unrecognised dim value. Should be one of: dyn, row, col, slice, coil")
+    stop("Unrecognised dim value. Should be one of: dyn, x, y, z, coil")
   } 
   
   if (mode == "real") {
