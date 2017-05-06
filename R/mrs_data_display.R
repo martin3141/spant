@@ -24,9 +24,9 @@ print.mrs_data <- function(x, ...) {
   cat(paste(c("Reference freq. (PPM)   : ", x$ref, "\n")), sep = "")
 }
 
-# TODO add dim option
 #' @export
-image.mrs_data <- function(x, mode = "real", xlim = NULL, col = NULL, ...) { 
+image.mrs_data <- function(x, mode = "real", xlim = NULL, col = NULL, 
+                           dim = "dyn", ...) { 
   if (!is_fd(x)) {
     x <- td2fd(x)
   }
@@ -42,7 +42,30 @@ image.mrs_data <- function(x, mode = "real", xlim = NULL, col = NULL, ...) {
   
   x_inds <- get_seg_ind(x_scale, xlim[1], xlim[2])
   subset <- x_inds[1]:x_inds[2]
-  plot_data <- t(x$data[1, 1, 1, 1, , 1, subset])
+  
+  if (dim == "dyn") {
+    plot_data <- t(x$data[1, 1, 1, 1, , 1, subset])
+    yN <- dim(x$data)[5]
+    y_title = "Dynamic"
+  } else if (dim == "row") {
+    plot_data <- t(x$data[1, , 1, 1, 1, 1, subset])
+    yN <- dim(x$data)[2]
+    y_title = "Row"
+  } else if (dim == "col") {
+    plot_data <- t(x$data[1, 1, , 1, 1, 1, subset])
+    yN <- dim(x$data)[3]
+    y_title = "Col"
+  } else if (dim == "slice") {
+    plot_data <- t(x$data[1, 1, 1, , 1, 1, subset])
+    yN <- dim(x$data)[4]
+    y_title = "Slice"
+  } else if (dim == "coil") {
+    plot_data <- t(x$data[1, 1, 1, 1, 1, , subset])
+    yN <- dim(x$data)[5]
+    y_title = "Coil"
+  } else {
+    stop("Unrecognised dim value. Should be one of: dyn, row, col, slice, coil")
+  } 
   
   if (mode == "real") {
     plot_data <- Re(plot_data)
@@ -62,9 +85,9 @@ image.mrs_data <- function(x, mode = "real", xlim = NULL, col = NULL, ...) {
     }
   }
   
-  graphics::image(x_scale[subset][length(subset):1], (1:dyns(x)),
+  graphics::image(x_scale[subset][length(subset):1], (1:yN),
                   plot_data[length(subset):1,], xlim = xlim,
-                  xlab = "Frequency (ppm)", ylab = "Dynamic", 
+                  xlab = "Frequency (ppm)", ylab = y_title, 
                   col = col, ...)
 }
 
@@ -79,7 +102,7 @@ stackplot <- function(x, ...) {
 # TODO make consistant with plot
 #' @export
 stackplot.mrs_data <- function(x, mode = "real", xlim = NULL,
-                               x_offset = 5, ...) {
+                               x_offset = 5, dim = "dyn", ...) {
   if (!is_fd(x)) {
     x <- td2fd(x)
   }
@@ -96,7 +119,25 @@ stackplot.mrs_data <- function(x, mode = "real", xlim = NULL,
   
   x_inds <- get_seg_ind(x_scale, xlim[1], xlim[2])
   subset <- x_inds[1]:x_inds[2]
-  plot_data <- t(x$data[1, 1, 1, 1,, 1, subset])
+  
+  if (dim == "dyn") {
+    plot_data <- t(x$data[1, 1, 1, 1, , 1, subset])
+    yN <- dim(x$data)[5]
+  } else if (dim == "row") {
+    plot_data <- t(x$data[1, , 7, 1, 1, 1, subset])
+    yN <- dim(x$data)[2]
+  } else if (dim == "col") {
+    plot_data <- t(x$data[1, 7, , 1, 1, 1, subset])
+    yN <- dim(x$data)[3]
+  } else if (dim == "slice") {
+    plot_data <- t(x$data[1, 1, 1, , 1, 1, subset])
+    yN <- dim(x$data)[4]
+  } else if (dim == "coil") {
+    plot_data <- t(x$data[1, 1, 1, 1, 1, , subset])
+    yN <- dim(x$data)[5]
+  } else {
+    stop("Unrecognised dim value. Should be one of: dyn, row, col, slice, coil")
+  } 
   
   if (mode == "real") {
     plot_data <- Re(plot_data)
