@@ -23,6 +23,10 @@ hilbert <- function(x) {
   stats::fft(y, inverse = TRUE) / n
 }
 
+is.installed <- function(mypkg) {
+  is.element(mypkg, utils::installed.packages()[,1]) 
+}
+
 rotate_vec <- function(vec_in, ax, theta) {
   ct <- cos(theta)
   st <- sin(theta)

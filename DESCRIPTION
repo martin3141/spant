@@ -38,6 +38,7 @@ Suggests:
     ptw,
     tkrplot,
     viridisLite,
+    viridis,
     RNifti,
     RNiftyReg,
     neurobase,

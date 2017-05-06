@@ -53,7 +53,6 @@ image.mrs_data <- function(x, mode = "real", xlim = NULL, col = NULL, ...) {
   }
   
   if (is.null(col)) {
-    is.installed <- function(mypkg) is.element(mypkg, installed.packages()[,1]) 
     if (is.installed("viridis")) {
       col <- viridis::viridis(64)
     } else if (is.installed("viridisLite")) {
