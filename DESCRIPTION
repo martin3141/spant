@@ -37,7 +37,7 @@ Suggests:
     mmand,
     ptw,
     tkrplot,
-    viridis,
+    viridisLite,
     RNifti,
     RNiftyReg,
     neurobase,

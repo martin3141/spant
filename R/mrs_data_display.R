@@ -24,9 +24,9 @@ print.mrs_data <- function(x, ...) {
   cat(paste(c("Reference freq. (PPM)   : ", x$ref, "\n")), sep = "")
 }
 
-# TODO add Mod option
+# TODO add dim option
 #' @export
-image.mrs_data <- function(x, mode = "real", xlim = NULL, ...) { 
+image.mrs_data <- function(x, mode = "real", xlim = NULL, col = NULL, ...) { 
   if (!is_fd(x)) {
     x <- td2fd(x)
   }
@@ -37,16 +37,36 @@ image.mrs_data <- function(x, mode = "real", xlim = NULL, ...) {
     xlim <- c(x_scale[1], x_scale[N(x)])
   }
   
-  par(mar = c(3.7, 3.7, 1, 1)) # margins
+  par(mar = c(3.5, 3.5, 1, 1)) # margins
+  par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
   
   x_inds <- get_seg_ind(x_scale, xlim[1], xlim[2])
   subset <- x_inds[1]:x_inds[2]
-  plot_data <- Re(t(x$data[1, 1, 1, 1, , 1, subset]))
+  plot_data <- t(x$data[1, 1, 1, 1, , 1, subset])
+  
+  if (mode == "real") {
+    plot_data <- Re(plot_data)
+  } else if (mode == "imag") {
+    plot_data <- Im(plot_data)
+  } else if (mode == "abs") {
+    plot_data <- Mod(plot_data)
+  }
+  
+  if (is.null(col)) {
+    is.installed <- function(mypkg) is.element(mypkg, installed.packages()[,1]) 
+    if (is.installed("viridis")) {
+      col <- viridis::viridis(64)
+    } else if (is.installed("viridisLite")) {
+      col <- viridisLite::viridis(64)
+    } else {
+     col <- grDevices::heat.colors(64)
+    }
+  }
   
   graphics::image(x_scale[subset][length(subset):1], (1:dyns(x)),
                   plot_data[length(subset):1,], xlim = xlim,
                   xlab = "Frequency (ppm)", ylab = "Dynamic", 
-                  col = grDevices::gray.colors(64), ...)
+                  col = col, ...)
 }
 
 #' Produce a plot with multiple traces.
@@ -66,8 +86,8 @@ stackplot.mrs_data <- function(x, mode = "real", xlim = NULL,
   }
   
   par("xaxs" = "i") # tight axes limits
-  par(mgp = c(2.2, 0.7, 0)) # distance between axes and labels
-  par(mar = c(3.7, 1, 1, 1)) # margins
+  par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
+  par(mar = c(3.5, 1, 1, 1)) # margins
   
   x_scale <- ppm(x)
   
@@ -77,7 +97,15 @@ stackplot.mrs_data <- function(x, mode = "real", xlim = NULL,
   
   x_inds <- get_seg_ind(x_scale, xlim[1], xlim[2])
   subset <- x_inds[1]:x_inds[2]
-  plot_data <- Re(t(x$data[1, 1, 1, 1,, 1, subset]))
+  plot_data <- t(x$data[1, 1, 1, 1,, 1, subset])
+  
+  if (mode == "real") {
+    plot_data <- Re(plot_data)
+  } else if (mode == "imag") {
+    plot_data <- Im(plot_data)
+  } else if (mode == "abs") {
+    plot_data <- Mod(plot_data)
+  }
   
   max_val <- max(abs(plot_data))
   x_offset_vec <- 0:(ncol(plot_data) - 1) * max_val * x_offset / 100
@@ -158,13 +186,13 @@ plot.mrs_data <- function(x, fd = TRUE, scale = NULL, xlim = NULL,
     plot_data <- Mod(plot_data)
   }
   
-  par(mgp = c(2.2, 0.7, 0)) # distance between axes and labels
+  par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
   if (yscale) {
-    par(mar = c(3.7, 3.7, 1, 1))
+    par(mar = c(3.5, 3.5, 1, 1))
     plot(x_scale[subset], plot_data[subset],type = 'l',xlim = xlim, xlab = xlab,
          ylab = "Intensity (au)", ...)
   } else {
-    par(mar = c(3.7, 1, 1, 1))
+    par(mar = c(3.5, 1, 1, 1))
     plot(x_scale[subset], plot_data[subset], type = 'l', xlim = xlim,
          xlab = xlab, yaxt = "n", ylab = "", ...)
   }
