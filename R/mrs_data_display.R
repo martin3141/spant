@@ -117,14 +117,14 @@ stackplot <- function(x, ...) {
 # TODO make consistant with plot
 #' @export
 stackplot.mrs_data <- function(x, mode = "real", xlim = NULL,
-                               x_offset = 5, dim = "dyn", x_pos = NA, 
+                               y_offset = 5, dim = "dyn", x_pos = NA, 
                                y_pos = NA, z_pos = NA, dyn = 1, coil = 1, ...) {
   
   if (!is_fd(x)) {
     x <- td2fd(x)
   }
   
-  par("xaxs" = "i") # tight axes limits
+  #par("xaxs" = "i") # tight axes limits
   par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
   par(mar = c(3.5, 1, 1, 1)) # margins
   
@@ -182,16 +182,30 @@ stackplot.mrs_data <- function(x, mode = "real", xlim = NULL,
   }
   
   max_val <- max(abs(plot_data))
-  x_offset_vec <- 0:(ncol(plot_data) - 1) * max_val * x_offset / 100
-  x_offset_mat <- matrix(x_offset_vec, nrow = nrow(plot_data),
+  y_offset_vec <- 0:(ncol(plot_data) - 1) * max_val * y_offset / 100
+  y_offset_mat <- matrix(y_offset_vec, nrow = nrow(plot_data),
                          ncol = ncol(plot_data), byrow = TRUE)
   
-  plot_data <- plot_data + x_offset_mat
+  plot_data <- plot_data + y_offset_mat
   
-  graphics::matplot(x_scale[subset][length(subset):1],
-                    plot_data[length(subset):1,], type = "l", xlim = xlim,
+  x_scale_mat <- matrix(x_scale[subset], nrow = nrow(plot_data),
+                        ncol = ncol(plot_data), byrow = FALSE)
+  
+  x_offset_mat <- matrix((0:(ncol(plot_data) - 1) / 100), 
+                         nrow = nrow(plot_data), ncol = ncol(plot_data),
+                         byrow = TRUE)
+  
+  #x_scale_mat <- x_scale_mat + x_offset_mat
+  
+  graphics::matplot(x_scale_mat[length(subset):1,],
+                    plot_data[length(subset):1,], type = "l", 
                     lty = 1, col = 1, xlab = "Frequency (PPM)", ylab = "",
-                    yaxt = "n", ...)
+                    yaxt = "n", xlim = rev(range(x_scale_mat)), ...)
+  
+  #graphics::matplot(x_scale[subset][length(subset):1],
+  #                  plot_data[length(subset):1,], type = "l", xlim = xlim,
+  #                  lty = 1, col = 1, xlab = "Frequency (PPM)", ylab = "",
+  #                  yaxt = "n", ...)
   
   abline(a = par("usr")[3], b = 0, lw = 2.0) # looks better for bty="n"
   
