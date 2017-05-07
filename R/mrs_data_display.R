@@ -116,7 +116,7 @@ stackplot <- function(x, ...) {
 
 # TODO make consistant with plot
 #' @export
-stackplot.mrs_data <- function(x, mode = "real", xlim = NULL,
+stackplot.mrs_data <- function(x, mode = "real", xlim = NULL, x_offset = 0,
                                y_offset = 5, dim = "dyn", x_pos = NA, 
                                y_pos = NA, z_pos = NA, dyn = 1, coil = 1, ...) {
   
@@ -191,11 +191,12 @@ stackplot.mrs_data <- function(x, mode = "real", xlim = NULL,
   x_scale_mat <- matrix(x_scale[subset], nrow = nrow(plot_data),
                         ncol = ncol(plot_data), byrow = FALSE)
   
-  x_offset_mat <- matrix((0:(ncol(plot_data) - 1) / 100), 
+  x_offset_mat <- matrix((0:(ncol(plot_data) - 1) * 
+                          (xlim[2] - xlim[1]) * x_offset / 100), 
                          nrow = nrow(plot_data), ncol = ncol(plot_data),
                          byrow = TRUE)
   
-  #x_scale_mat <- x_scale_mat + x_offset_mat
+  x_scale_mat <- x_scale_mat + x_offset_mat
   
   graphics::matplot(x_scale_mat[length(subset):1,],
                     plot_data[length(subset):1,], type = "l", 
