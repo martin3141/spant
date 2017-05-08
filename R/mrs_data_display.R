@@ -201,14 +201,17 @@ stackplot.mrs_data <- function(x, mode = "real", xlim = NULL, x_offset = 0,
   graphics::matplot(x_scale_mat[length(subset):1,],
                     plot_data[length(subset):1,], type = "l", 
                     lty = 1, col = 1, xlab = "Frequency (PPM)", ylab = "",
-                    yaxt = "n", xlim = rev(range(x_scale_mat)), ...)
+                    yaxt = "n", xaxt = "n", xlim = rev(range(x_scale_mat)),
+                    bty = "n", ...)
+  
+  axis(1, pretty(xlim))
   
   #graphics::matplot(x_scale[subset][length(subset):1],
   #                  plot_data[length(subset):1,], type = "l", xlim = xlim,
   #                  lty = 1, col = 1, xlab = "Frequency (PPM)", ylab = "",
   #                  yaxt = "n", ...)
   
-  abline(a = par("usr")[3], b = 0, lw = 2.0) # looks better for bty="n"
+  #abline(a = par("usr")[3], b = 0, lw = 2.0) # looks better for bty="n"
   
   #matplot(x_scale[subset][length(subset):1])
           #, (1:dyns(mrs_data)), plot_data[length(subset):1,],
