@@ -493,6 +493,7 @@ pts <- function(mrs_data) {
   seq(from = 1, to = N(mrs_data))  
 }
 
+#' @export
 seconds <- function(mrs_data) {
   fs <- fs(mrs_data)
   seq(from = 0, to = (N(mrs_data) - 1)/fs, by = 1 / fs)
