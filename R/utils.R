@@ -47,8 +47,8 @@ rotate_vec <- function(vec_in, ax, theta) {
 # From : http://mathworld.wolfram.com/LeastSquaresFittingExponential.html
 #' @export
 measure_lorentz_amp <- function(y, t, start_pnt = 10, end_pnt = 50) {
-  # crop to time region
-  y <- y[start_pnt:end_pnt]
+  # crop to time region and take Mod
+  y <- Mod(y[start_pnt:end_pnt])
   t <- t[start_pnt:end_pnt]
   
   a <- sum((t ^ 2) * y) * sum(y * log(y)) -  sum(t * y) * sum(t * y * log(y))
