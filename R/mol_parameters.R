@@ -1,3 +1,4 @@
+#' @export
 get_uncoupled_mol <- function(name, chem_shift, nucleus, scale_factor, lw, lg) {
   j_coupling_mat <- matrix(0, 1, 1)
   spin_groups <- vector("list", length(chem_shift))

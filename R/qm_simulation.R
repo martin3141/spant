@@ -234,7 +234,8 @@ get_mol_para_list_names <- function(mol_para_list) {
   names 
 }
 
-sim_basis <- function(mol_list, pul_seq = pulse_acquire, ft = 128e6, ref = 4.65, 
+#' @export
+sim_basis <- function(mol_list, pul_seq = pulse_acquire, ft = 127.8e6, ref = 4.65, 
                       fs = 2000, N = 1024, xlim = NULL, ...) {
   
   basis_mrs_data <- sim_zeros(ft = ft, ref = ref, fs = fs, N = N,
@@ -248,7 +249,7 @@ sim_basis <- function(mol_list, pul_seq = pulse_acquire, ft = 128e6, ref = 4.65,
   mrs_data2basis(basis_mrs_data, names = names)
 }
 
-sim_mol <- function(mol, pul_seq = pulse_acquire, ft = 128e6, ref = 4.65, 
+sim_mol <- function(mol, pul_seq = pulse_acquire, ft = 127.8e6, ref = 4.65, 
                     fs = 2000, N = 1024, xlim = NULL, ...) {
   # create empty fid
   mrs_data <- sim_zeros(fs = fs, N = N, ft = ft, ref = ref)

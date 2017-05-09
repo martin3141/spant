@@ -237,7 +237,11 @@ tarquin_fit <- function(element, temp_mrs, basis_file, opts) {
               "--basis_lcm", basis_file, "--output_csv", result_csv_f,
               "--output_fit", result_fit_f, paste(opts, collapse = " "))
   
-  res = system(cmd, intern = TRUE, ignore.stderr = TRUE, ignore.stdout = TRUE)
+  
+  # This one doesn't work on windows for some reason.
+  #res = system(cmd, intern = TRUE, ignore.stderr = TRUE, ignore.stdout = TRUE)
+  
+  res = system(cmd, intern = TRUE, ignore.stderr = TRUE)
   
   if (!file.exists(result_csv_f)) {
     print(res)

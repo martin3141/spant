@@ -181,13 +181,14 @@ mat2mrs_data <- function(mat, fs = 2000, ft = 128e6, ref = 4.65, fd = FALSE) {
   return(mrs_data)
 }
 
-sim_noise <- function(sd = 0.1, fs = 2000, ft = 128e6, N = 1024, ref = 4.65) {
+#' @export
+sim_noise <- function(sd = 0.1, fs = 2000, ft = 127.8e6, N = 1024, ref = 4.65) {
   # generate data in TD
   vec <- stats::rnorm(N, 0, sd) + 1i*stats::rnorm(N, 0, sd)
   vec2mrs_data(vec, fs = fs, ft = ft, ref = ref)
 }
 
-sim_zeros <- function(fs = 2000, ft = 128e6, N = 1024, ref = 4.65, dyns = 1) {
+sim_zeros <- function(fs = 2000, ft = 127.8e6, N = 1024, ref = 4.65, dyns = 1) {
   vec <- rep(0, N) * 1i
   vec2mrs_data(vec, fs = fs, ft = ft, ref = ref, dyns = dyns)
 }
@@ -386,6 +387,7 @@ td2fd <- function(mrs_data) {
 }
 
 # freq-domain to time-domain
+#' @export
 fd2td <- function(mrs_data) {
   mrs_data <- ift(mrs_data, 7)
   mrs_data$freq_domain[7] = FALSE
@@ -725,7 +727,8 @@ inv_even_dyns <- function(mrs_data) {
 
 #' @export
 combine_metab_ref <- function(metab, ref) {
-  abind::abind(metab$data, ref$data, along = 1)
+  metab$data <- abind::abind(metab$data, ref$data, along = 1)
+  metab
 }
 
 #' @export

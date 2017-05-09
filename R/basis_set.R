@@ -216,6 +216,7 @@ write_basis <- function(basis, basis_file) {
   sink()
 }
   
+#' @export
 basis2mrs_data <- function(basis) {
   mat2mrs_data(basis$data, fs = basis$fs, ft = basis$ft, ref = basis$ref, 
                fd = TRUE)
