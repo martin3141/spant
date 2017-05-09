@@ -493,6 +493,7 @@ pts <- function(mrs_data) {
   seq(from = 1, to = N(mrs_data))  
 }
 
+#' @export
 seconds <- function(mrs_data) {
   fs <- fs(mrs_data)
   seq(from = 0, to = (N(mrs_data) - 1)/fs, by = 1 / fs)
@@ -609,6 +610,19 @@ get_fwhm <- function(mrs_data) {
   fwhm_ppm <- fwhm$data * fs(mrs_data) / N(mrs_data) / mrs_data$ft * 1e6
   
   abind::adrop(fwhm_ppm, 7)
+}
+
+#' @export
+get_td_amp <- function(mrs_data, nstart = 10, nend = 50) {
+  
+  if (is_fd(mrs_data)) {
+      mrs_data <- fd2td(mrs_data)
+  }
+  t <- seconds(mrs_data)
+  amps <- apply_mrs(mrs_data, 7, measure_lorentz_amp, t, nstart, nend)$data
+  
+  abind::adrop(amps, 7)
+  amps
 }
 
 calc_fwhm <- function(mrs_data) {
