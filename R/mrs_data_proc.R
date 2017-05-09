@@ -734,6 +734,11 @@ get_ref <- function(mrs_data) {
   mrs_data
 }
 
+#' @export
+get_metab <- function(mrs_data) {
+  mrs_data$data <- mrs_data$data[1,,,,,,,drop = FALSE]
+  mrs_data
+}
 
 #' Append MRS data across the dynamic dimension.
 #' @param ... MRS data objects.
