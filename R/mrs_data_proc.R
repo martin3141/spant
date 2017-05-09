@@ -709,9 +709,17 @@ inv_even_dyns <- function(mrs_data) {
   return(mrs_data)
 }
 
+#' @export
 combine_metab_ref <- function(metab, ref) {
   abind::abind(metab$data, ref$data, along = 1)
 }
+
+#' @export
+get_ref <- function(mrs_data) {
+  mrs_data$data <- mrs_data$data[2,,,,,,,drop = FALSE]
+  mrs_data
+}
+
 
 #' Append MRS data across the dynamic dimension.
 #' @param ... MRS data objects.
