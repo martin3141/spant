@@ -1,3 +1,11 @@
+#' Generate a mol_parameters object for a simple spin system with one resonance.
+#' @param name Name of the molecule.
+#' @param chem_shift Chemical shift of the resonance (PPM).
+#' @param nucleus Nucleus (1H, 31P...).
+#' @param scale_factor Multiplicative scaling factor.
+#' @param lw Line width in Hz.
+#' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1).
+#' @return A mol_parameters object.
 #' @export
 get_uncoupled_mol <- function(name, chem_shift, nucleus, scale_factor, lw, lg) {
   j_coupling_mat <- matrix(0, 1, 1)

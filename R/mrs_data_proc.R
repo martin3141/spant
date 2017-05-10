@@ -181,6 +181,13 @@ mat2mrs_data <- function(mat, fs = 2000, ft = 128e6, ref = 4.65, fd = FALSE) {
   return(mrs_data)
 }
 
+#' Simulate a time-domain mrs_data object containing simulated Gaussian noise.
+#' @param sd standard deviation of the noise.
+#' @param fs Sampling frequency in Hz.
+#' @param ft Transmitter frequency in Hz.
+#' @param N Number of data points in the spectral dimension.
+#' @param ref Reference value for ppm scale.
+#' @return mrs_data object.
 #' @export
 sim_noise <- function(sd = 0.1, fs = 2000, ft = 127.8e6, N = 1024, ref = 4.65) {
   # generate data in TD
@@ -379,14 +386,19 @@ is_fd <- function(mrs_data) {
   mrs_data$freq_domain[7]
 }
 
-# time-domain to freq-domain
+#' Transform time-domain data to the frequency-domain.
+#' @param mrs_data MRS data in time-domain representation.
+#' @return MRS data in frequency-domain representation.
+#' @export
 td2fd <- function(mrs_data) {
   mrs_data <- ft(mrs_data, 7)
   mrs_data$freq_domain[7] = TRUE
   return(mrs_data)
 }
 
-# freq-domain to time-domain
+#' Transform frequency-domain data to the time-domain.
+#' @param mrs_data MRS data in frequency-domain representation.
+#' @return MRS data in time-domain representation.
 #' @export
 fd2td <- function(mrs_data) {
   mrs_data <- ift(mrs_data, 7)
@@ -495,7 +507,9 @@ pts <- function(mrs_data) {
   seq(from = 1, to = N(mrs_data))  
 }
 
-#' @export
+#' Return a time scale vector to match the FID of an MRS data object.
+#' @param mrs_data MRS data.
+#' @return A time scale vector in units of seconds.
 seconds <- function(mrs_data) {
   fs <- fs(mrs_data)
   seq(from = 0, to = (N(mrs_data) - 1)/fs, by = 1 / fs)
@@ -614,6 +628,12 @@ get_fwhm <- function(mrs_data) {
   abind::adrop(fwhm_ppm, 7)
 }
 
+#' Return an array of amplitudes derrived from fitting the initial points in the
+#' time domain and extrapolating back to t=0.
+#' @param mrs_data MRS data.
+#' @param nstart The first data point to fit.
+#' @param nend The last data point to fit.
+#' @return An array of amplitudes.
 #' @export
 get_td_amp <- function(mrs_data, nstart = 10, nend = 50) {
   
@@ -725,18 +745,29 @@ inv_even_dyns <- function(mrs_data) {
   return(mrs_data)
 }
 
+
+#' Combine a reference and metabolite mrs_data object.
+#' @param metab metabolite mrs_data object.
+#' @param ref reference mrs_data object.
+#' @return Combined metabolite and reference mrs_data object.
 #' @export
 combine_metab_ref <- function(metab, ref) {
   metab$data <- abind::abind(metab$data, ref$data, along = 1)
   metab
 }
 
+#' Extract the reference component from an mrs_data object.
+#' @param mrs_data MRS data.
+#' @return Reference component.
 #' @export
 get_ref <- function(mrs_data) {
   mrs_data$data <- mrs_data$data[2,,,,,,,drop = FALSE]
   mrs_data
 }
 
+#' Extract the metabolite component from an mrs_data object.
+#' @param mrs_data MRS data.
+#' @return Metabolite component.
 #' @export
 get_metab <- function(mrs_data) {
   mrs_data$data <- mrs_data$data[1,,,,,,,drop = FALSE]

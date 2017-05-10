@@ -983,3 +983,27 @@ varpro_3_para_anal_jac <- function(par, y, basis, t, nstart) {
 
   c(phase_jac_real, g_lw_jac_real, shift_jac_real)
 }
+
+#' Apply water reference scaling to a ftting results object to yield metabolite 
+#' quantities in units of mM.
+#' @param result A result object generated from fitting.
+#' @param ref_data Water refernce MRS data object.
+#' @param w_att Water attenuation factor (default = 0.7).
+#' @param w_conc Assumed water concentration (default = 35880).
+#' @return A result object with a results_ws data table added.
+#' @export
+apply_water_scaling <- function(result, ref_data, w_att = 0.7, w_conc = 35880) {
+  
+  w_amp <- as.numeric(get_td_amp(ref_data))
+  
+  result$results$w_amp = w_amp
+  
+  amp_cols = result$amp_cols
+  ws_cols <- 6:(5 + amp_cols * 2)
+  
+  result$results_ws <- result$results
+  result$results_ws[, ws_cols] <- (result$results_ws[, ws_cols] * w_att * 
+                                   w_conc / w_amp)
+  
+  result
+}

@@ -216,12 +216,22 @@ write_basis <- function(basis, basis_file) {
   sink()
 }
   
+#' Convert a basis object to an mrs_data object - where basis signals are spread
+#' across the dynamic dimension.
+#' @param basis Basis set object.
+#' @return An mrs_data object with basis signals spread across the dynamic dimension.
 #' @export
 basis2mrs_data <- function(basis) {
   mat2mrs_data(basis$data, fs = basis$fs, ft = basis$ft, ref = basis$ref, 
                fd = TRUE)
 }
 
+#' Convert an mrs_data object to basis object - where basis signals are spread
+#' across the dynamic dimension in the MRS data.
+#' @param mrs_data An mrs_data object with basis signals spread across the dynamic dimension.
+#' @param names A list of names corresponding to basis signals.
+#' @return Basis set object.
+#' @export
 mrs_data2basis <- function(mrs_data, names) {
   # transform to FD
   if (!is_fd(mrs_data)) {

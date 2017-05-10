@@ -234,6 +234,16 @@ get_mol_para_list_names <- function(mol_para_list) {
   names 
 }
 
+#' Simulate a basis set object.
+#' @param mol_list a list of mol_parameter objects.
+#' @param pul_seq A pulse sequence function to use.
+#' @param ft Transmitter frequency in Hz.
+#' @param ref Reference value for ppm scale.
+#' @param fs Sampling frequency in Hz.
+#' @param N Number of data points in the spectral dimension.
+#' @param xlim A ppm range limiting signals to be simulated.
+#' @param ... Extra parameters to pass to the pulse sequence function.
+#' @return A basis object.
 #' @export
 sim_basis <- function(mol_list, pul_seq = pulse_acquire, ft = 127.8e6, ref = 4.65, 
                       fs = 2000, N = 1024, xlim = NULL, ...) {
