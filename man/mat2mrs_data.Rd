@@ -2,7 +2,7 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{mat2mrs_data}
 \alias{mat2mrs_data}
-\title{Convert a matrix (with dynamics in the row dimension and spectral points in
+\title{Convert a matrix (with spectral points in the row dimension and dynamics in
 the column dimensions) into a mrs_data object.}
 \usage{
 mat2mrs_data(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
@@ -20,6 +20,6 @@ mat2mrs_data(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
 \item{fd}{Flag to indicate if the matrix is in the frequency domain (logical).}
 }
 \description{
-Convert a matrix (with dynamics in the row dimension and spectral points in
+Convert a matrix (with spectral points in the row dimension and dynamics in
 the column dimensions) into a mrs_data object.
 }
