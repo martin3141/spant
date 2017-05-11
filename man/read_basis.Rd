@@ -4,7 +4,7 @@
 \alias{read_basis}
 \title{Read a basis file in LCModel .basis format.}
 \usage{
-read_basis(basis_file, ref = 4.65)
+read_basis(basis_file, ref = def_ref())
 }
 \arguments{
 \item{basis_file}{Path to basis file.}

@@ -88,10 +88,38 @@ set_lcm_cmd <- function(cmd) {
 #' * N Number of data points in the spectral dimension.
 #' * ref Reference value for ppm scale.
 #' @export
-get_def_acq_paras <- function() {
+def_acq_paras <- function() {
   op <- options()
   list(ft = op$spant.def_ft, fs = op$spant.def_fs, N = op$spant.def_N,
       ref = op$spant.def_ref)
+}
+
+#' Return the default reference value for ppm scale.
+#' @return Reference value for ppm scale.
+#' @export
+def_ref <- function() {
+  options()$spant.def_ref
+}
+
+#' Return the default sampling frequency in Hz.
+#' @return Sampling frequency in Hz.
+#' @export
+def_fs <- function() {
+  options()$spant.def_fs
+}
+
+#' Return the default transmitter frequency in Hz.
+#' @return Trasmitter frequency in Hz.
+#' @export
+def_ft <- function() {
+  options()$spant.def_ft
+}
+
+#' Return the default number of data points in the spectral dimension.
+#' @return Number of data points in the spectral dimension.
+#' @export
+def_N <- function() {
+  options()$spant.def_N
 }
 
 #' Set the default acquisition parameters.

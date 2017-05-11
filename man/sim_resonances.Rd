@@ -5,7 +5,7 @@
 \title{Simulate a MRS data object containing a set of simulated resonances.}
 \usage{
 sim_resonances(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
-  freq_ppm = TRUE, acq_paras = get_def_acq_paras())
+  freq_ppm = TRUE, acq_paras = def_acq_paras())
 }
 \arguments{
 \item{freq}{Resonance frequency.}
@@ -22,7 +22,7 @@ sim_resonances(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
 Hz are assumed.}
 
 \item{acq_paras}{List of acquistion parameters. See
-\code{\link{get_def_acq_paras}}}
+\code{\link{def_acq_paras}}}
 }
 \value{
 MRS data object.

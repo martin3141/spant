@@ -7,13 +7,13 @@
 #' @param freq_ppm Frequencies are given in ppm units if set to TRUE, otherwise
 #' Hz are assumed.
 #' @param acq_paras List of acquistion parameters. See
-#' \code{\link{get_def_acq_paras}}
+#' \code{\link{def_acq_paras}}
 #' @return MRS data object.
 #' @examples
 #' sim_data <- sim_resonances(freq = 2, lw = 5)
 #' @export
 sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0, 
-                           freq_ppm = TRUE, acq_paras = get_def_acq_paras()) {
+                           freq_ppm = TRUE, acq_paras = def_acq_paras()) {
   
   # TODO check this works for vectors
   #if ((sum(lg > 1) + sum(lg < 0)) > 0) {
@@ -81,7 +81,8 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
 }
 
 sim_resonances_fast <- function(freq = 0, amp = 1, freq_ppm = TRUE,
-                                N = 1024, fs = 2000, ft = 128e6, ref = 4.65) {
+                                N = def_N(), fs = def_fs(), ft = def_ft(),
+                                ref = def_ref()) {
   
   sig_n <- length(freq)
   if (sig_n != length(amp)) {
@@ -115,8 +116,9 @@ sim_resonances_fast <- function(freq = 0, amp = 1, freq_ppm = TRUE,
   return(mrs_data)
 }
 
-sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE, N = 1024, 
-                                 fs = 2000, ft = 128e6, ref = 4.65) {
+sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
+                                 N = def_N(), fs = def_fs(), ft = def_ft(), 
+                                 ref = def_ref()) {
   
   sig_n <- length(freq)
   if (sig_n != length(amp)) {
@@ -155,8 +157,8 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE, N = 1024,
   return(mrs_data)
 }
 
-vec2mrs_data <- function(vec, fs = 2000, ft = 128e6, ref = 4.65, dyns = 1,
-                         fd = FALSE) {
+vec2mrs_data <- function(vec, fs = def_fs(), ft = def_ft(), ref = def_ref(),
+                         dyns = 1, fd = FALSE) {
   
   data <- array(vec, dim = c(length(vec), dyns))
   data <- aperm(data,c(2, 1))
@@ -170,7 +172,9 @@ vec2mrs_data <- function(vec, fs = 2000, ft = 128e6, ref = 4.65, dyns = 1,
   return(mrs_data)
 }
 
-mat2mrs_data <- function(mat, fs = 2000, ft = 128e6, ref = 4.65, fd = FALSE) {
+mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
+                         fd = FALSE) {
+  
   data <- array(t(mat), dim = c(1, 1, 1, 1, ncol(mat), 1, nrow(mat)))
   res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
   mrs_data <- list(ft = ft, data = data, resolution = res, te = 0, ref = ref, 
@@ -189,13 +193,17 @@ mat2mrs_data <- function(mat, fs = 2000, ft = 128e6, ref = 4.65, fd = FALSE) {
 #' @param ref Reference value for ppm scale.
 #' @return mrs_data object.
 #' @export
-sim_noise <- function(sd = 0.1, fs = 2000, ft = 127.8e6, N = 1024, ref = 4.65) {
+sim_noise <- function(sd = 0.1, fs = def_fs(), ft = def_ft(), N = def_N(),
+                      ref = def_ref()) {
+  
   # generate data in TD
   vec <- stats::rnorm(N, 0, sd) + 1i*stats::rnorm(N, 0, sd)
   vec2mrs_data(vec, fs = fs, ft = ft, ref = ref)
 }
 
-sim_zeros <- function(fs = 2000, ft = 127.8e6, N = 1024, ref = 4.65, dyns = 1) {
+sim_zeros <- function(fs = def_fs(), ft = def_ft(), N = def_N(),
+                      ref = def_ref(), dyns = 1) {
+  
   vec <- rep(0, N) * 1i
   vec2mrs_data(vec, fs = fs, ft = ft, ref = ref, dyns = dyns)
 }

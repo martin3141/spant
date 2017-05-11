@@ -4,7 +4,8 @@
 \alias{sim_noise}
 \title{Simulate a time-domain mrs_data object containing simulated Gaussian noise.}
 \usage{
-sim_noise(sd = 0.1, fs = 2000, ft = 127800000, N = 1024, ref = 4.65)
+sim_noise(sd = 0.1, fs = def_fs(), ft = def_ft(), N = def_N(),
+  ref = def_ref())
 }
 \arguments{
 \item{sd}{standard deviation of the noise.}

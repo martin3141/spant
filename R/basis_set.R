@@ -38,8 +38,8 @@ write_basis_tqn <- function(basis_file, metab_data, opts = NULL) {
 #' write_basis_tqn('test.basis',mrs_data,c("--echo","0.04"))
 #' }
 #' @export
-sim_basis_tqn <- function(fs = 2000, ft = 128e6, N = 1024, ref = 4.65, 
-                          opts = NULL) {
+sim_basis_tqn <- function(fs = def_fs(), ft = def_ft(), N = def_N(),
+                          ref = def_ref(), opts = NULL) {
   
   metab_data <- sim_zeros(fs = fs, ft = ft, N = N, ref = ref)
   
@@ -98,7 +98,7 @@ stackplot.basis_set <- function(x, ...) {
 #' @param ref Assumed ppm reference value.
 #' @return Basis object.
 #' @export
-read_basis <- function(basis_file, ref = 4.65) {
+read_basis <- function(basis_file, ref = def_ref()) {
   con  <- file(basis_file, open = "r")
   names <- vector()
   data <- vector()

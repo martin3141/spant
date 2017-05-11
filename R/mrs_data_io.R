@@ -398,7 +398,7 @@ read_spar_sdat <- function(fname) {
   }
   
   res <- c(NA, row_dim, col_dim, slice_dim, 1, NA, 1 / fs)
-  ref <- get_def_acq_paras()$ref
+  ref <- def_acq_paras()$ref
   
   # freq domain vector
   freq_domain <- rep(FALSE, 7)
@@ -540,7 +540,7 @@ read_rda <- function(fname) {
   data <- aperm(data, c(7,2,3,4,5,6,1))
   
   res <- c(NA, rows, cols, slices, 1, NA, 1 / fs)
-  ref <- get_def_acq_paras()$ref
+  ref <- def_acq_paras()$ref
   row_ori = NA
   col_ori = NA
   pos_vec = NA

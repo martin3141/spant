@@ -203,7 +203,7 @@ get_1h_brain_basis_paras <- function(ft, metab_lw = 2, lcm_compat = FALSE) {
 #' Simulate a basis-set suitable for 1H brain MRS analysis acquired with a PRESS 
 #' sequence. Note, ideal pulses are assumed.
 #' @param acq_paras List of acquistion parameters or an mrs_data object. See
-#' \code{\link{get_def_acq_paras}}
+#' \code{\link{def_acq_paras}}
 #' @param xlim Range of frequencies to simulate in ppm.
 #' @param lcm_compat Exclude lipid and MM signals for use with default LCModel
 #' options.
@@ -211,7 +211,7 @@ get_1h_brain_basis_paras <- function(ft, metab_lw = 2, lcm_compat = FALSE) {
 #' @param TE2 TE2 of PRESS sequence.
 #' @return Basis object.
 #' @export
-sim_basis_1h_brain_press <- function(acq_paras = get_def_acq_paras(),
+sim_basis_1h_brain_press <- function(acq_paras = def_acq_paras(),
                                      xlim = c(0.5, 4.2), lcm_compat = FALSE, 
                                      TE1 = 0.01, TE2 = 0.02) {
   
@@ -245,8 +245,9 @@ get_mol_para_list_names <- function(mol_para_list) {
 #' @param ... Extra parameters to pass to the pulse sequence function.
 #' @return A basis object.
 #' @export
-sim_basis <- function(mol_list, pul_seq = pulse_acquire, ft = 127.8e6, ref = 4.65, 
-                      fs = 2000, N = 1024, xlim = NULL, ...) {
+sim_basis <- function(mol_list, pul_seq = pulse_acquire, ft = def_ft(),
+                      ref = def_ref(), fs = def_fs(), N = def_N(),
+                      xlim = NULL, ...) {
   
   basis_mrs_data <- sim_zeros(ft = ft, ref = ref, fs = fs, N = N,
                               dyns = length(mol_list))
@@ -259,8 +260,9 @@ sim_basis <- function(mol_list, pul_seq = pulse_acquire, ft = 127.8e6, ref = 4.6
   mrs_data2basis(basis_mrs_data, names = names)
 }
 
-sim_mol <- function(mol, pul_seq = pulse_acquire, ft = 127.8e6, ref = 4.65, 
-                    fs = 2000, N = 1024, xlim = NULL, ...) {
+sim_mol <- function(mol, pul_seq = pulse_acquire, ft = def_ft(), 
+                    ref = def_ref(), fs = def_fs(), N = def_N(),
+                    xlim = NULL, ...) {
   # create empty fid
   mrs_data <- sim_zeros(fs = fs, N = N, ft = ft, ref = ref)
   for (group in mol$spin_groups) {
