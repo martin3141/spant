@@ -186,16 +186,16 @@ array2mrs_data <- function(data_array, fs = def_fs(), ft = def_ft(),
   return(mrs_data)
 }
 
-#' Convert mrs_data object to a matrix, with dynamics in the row dimension
-#' and spectal points in the column dimension.
+#' Convert mrs_data object to a matrix, with spectral points in the row dimension
+#' and dynamics in the column dimension.
 #' @param mrs_data MRS data object.
 #' @return A matrix.
 #' @export
 mrs_data2mat <- function(mrs_data) {
-  as.matrix(mrs_data$data[1,1,1,1,,1,])
+  t(as.matrix(mrs_data$data[1,1,1,1,,1,]))
 }
 
-#' Convert a matrix (with dynamics in the row dimension and spectral points in
+#' Convert a matrix (with spectral points in the row dimension and dynamics in
 #' the column dimensions) into a mrs_data object.
 #' @param mat The data matrix.
 #' @param fs Sampling frequency in Hz.
