@@ -133,6 +133,8 @@ stackplot.mrs_data <- function(x, mode = "real", xlim = NULL, x_offset = 0,
   if (is.null(xlim)) {
     xlim <- c(x_scale[1], x_scale[N(x)])
   }
+  xlim <- sort(xlim)
+  
   data_dim <- dim(x$data)
   
   if (is.na(x_pos)) {

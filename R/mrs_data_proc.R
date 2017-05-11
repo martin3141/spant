@@ -172,6 +172,20 @@ vec2mrs_data <- function(vec, fs = def_fs(), ft = def_ft(), ref = def_ref(),
   return(mrs_data)
 }
 
+array2mrs_data <- function(data_array, fs = def_fs(), ft = def_ft(),
+                           ref = def_ref(), fd = FALSE) {
+  
+  if (length(dim(data_array)) != 7) stop("Incorrect number of dimensions.")
+  
+  res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
+  mrs_data <- list(ft = ft, data = data_array, resolution = res, te = 0,
+                   ref = ref, row_vec = c(1,0,0), col_vec = c(0,1,0),
+                   pos_vec = c(0,0,0), freq_domain = c(rep(FALSE, 6), fd))
+  
+  class(mrs_data) <- "mrs_data"
+  return(mrs_data)
+}
+
 mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
                          fd = FALSE) {
   
@@ -191,21 +205,26 @@ mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
 #' @param ft Transmitter frequency in Hz.
 #' @param N Number of data points in the spectral dimension.
 #' @param ref Reference value for ppm scale.
+#' @param dyns Number of dynamic scans to generate.
 #' @return mrs_data object.
 #' @export
 sim_noise <- function(sd = 0.1, fs = def_fs(), ft = def_ft(), N = def_N(),
-                      ref = def_ref()) {
-  
+                      ref = def_ref(), dyns = 1) {
+ 
+  data_pts <- dyns * N 
   # generate data in TD
-  vec <- stats::rnorm(N, 0, sd) + 1i*stats::rnorm(N, 0, sd)
-  vec2mrs_data(vec, fs = fs, ft = ft, ref = ref)
+  vec <- stats::rnorm(data_pts, 0, sd) + 1i*stats::rnorm(data_pts, 0, sd)
+  data_array <- array(vec, dim = c(1, 1, 1, 1, dyns, 1, N))
+  array2mrs_data(data_array, fs = fs, ft = ft, ref = ref)
 }
 
 sim_zeros <- function(fs = def_fs(), ft = def_ft(), N = def_N(),
                       ref = def_ref(), dyns = 1) {
   
-  vec <- rep(0, N) * 1i
-  vec2mrs_data(vec, fs = fs, ft = ft, ref = ref, dyns = dyns)
+  data_pts <- dyns * N 
+  vec <- rep(0, data_pts) * 1i
+  data_array <- array(vec, dim = c(1, 1, 1, 1, dyns, 1, N))
+  array2mrs_data(data_array, fs = fs, ft = ft, ref = ref)
 }
 
 apply_mrs <- function(mrs_data, dims, fun, ..., data_only = FALSE) {
