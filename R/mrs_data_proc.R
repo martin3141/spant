@@ -782,6 +782,7 @@ get_metab <- function(mrs_data) {
   mrs_data
 }
 
+
 #' Append MRS data across the dynamic dimension.
 #' @param ... MRS data objects.
 #' @return A single MRS data object with the input objects concatenated together.
@@ -1274,4 +1275,25 @@ comb_coils_wref <- function(metab_mrs, ref_mrs, scale = TRUE) {
   metab_mrs_ps <- sum_coils(metab_mrs_ps)
   
   list(metab = metab_mrs_ps, ref = ref_mrs_ps)
+}
+
+#' Replicate a scan in the dynamic dimension.
+#' @param mrs_data MRS data to be replicated.
+#' @param times Number of times to replicate.
+#' @return Replicated data object.
+#' @export
+rep_dyn <- function(mrs_data, times) {
+  orig_dim <- dim(mrs_data$data)
+  new_dim <- orig_dim
+  new_dim[5] <- new_dim[5] * times
+  # make the dynamic dimension (5th) the last
+  rep_data <- aperm(mrs_data$data, c(1,2,3,4,6,7,5))
+  # duplicate the data
+  rep_data <- rep(rep_data, times)
+  # set the new dimesnions
+  dim(rep_data) <- new_dim[c(1,2,3,4,6,7,5)]
+  # reorder
+  rep_data <- aperm(rep_data, c(1,2,3,4,7,5,6))
+  mrs_data$data <- rep_data
+  mrs_data
 }
