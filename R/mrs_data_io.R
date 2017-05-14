@@ -555,3 +555,18 @@ read_rda <- function(fname) {
   class(mrs_data) <- "mrs_data"
   mrs_data
 }
+
+#' @export
+read_pv_method <- function(fname) {
+  lines <- read.delim(fname, sep = "=", header = FALSE, stringsAsFactors = FALSE)
+  reps <- as.integer(get_para_val(lines, "##$PVM_NRepetitions"))
+  N <- as.integer(get_para_val(lines, "##$PVM_DigNp"))
+  fs <- as.double(get_para_val(lines, "##$PVM_DigSw"))
+  shift <- as.integer(get_para_val(lines, "##$PVM_DigShift"))
+  ft_str <- lines$V1[1 + which(lines$V1 == "##$PVM_FrqRef")]
+  ft <- as.double(strsplit(ft_str, " ")[[1]][1]) * 1e6
+}
+
+get_para_val <- function(lines, name_str) {
+  lines$V2[which(lines$V1 == name_str)]
+}
