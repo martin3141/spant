@@ -557,14 +557,32 @@ read_rda <- function(fname) {
 }
 
 #' @export
-read_pv_method <- function(fname) {
-  lines <- read.delim(fname, sep = "=", header = FALSE, stringsAsFactors = FALSE)
+read_paravis_raw <- function(fname) {
+  # find the method file in the same directory
+  method_fname <- file.path(dirname(fname), "method")
+  
+  if (!file.exists(method_fname)) {
+    cat(method_fname)
+    stop("method file not found.")
+  }
+  
+  # read paramters
+  lines <- read.delim(method_fname, sep = "=", header = FALSE, 
+                      stringsAsFactors = FALSE)
+  
   reps <- as.integer(get_para_val(lines, "##$PVM_NRepetitions"))
   N <- as.integer(get_para_val(lines, "##$PVM_DigNp"))
   fs <- as.double(get_para_val(lines, "##$PVM_DigSw"))
   shift <- as.integer(get_para_val(lines, "##$PVM_DigShift"))
   ft_str <- lines$V1[1 + which(lines$V1 == "##$PVM_FrqRef")]
   ft <- as.double(strsplit(ft_str, " ")[[1]][1]) * 1e6
+  
+  # read the raw data file 
+  fbytes <- file.size(fname)
+  Npts <- fbytes / 4
+  raw_vec <- readBin(fname, "int", size = 4, n = Npts)
+  cplx_vec <- raw_vec[c(TRUE, FALSE)] - 1i * raw_vec[c(FALSE, TRUE)]
+  cplx_vec
 }
 
 get_para_val <- function(lines, name_str) {
