@@ -1,7 +1,7 @@
 #' Read MRS data from a file.
 #' @param fname The filename of the dpt format MRS data.
 #' @param format A string describing the data format. May be one of the 
-#' following : "spar_sdat", "rda", "list_data", "dpt".
+#' following : "spar_sdat", "rda", "list_data", "paravis", dpt".
 #' @param ft Transmitter frequency in Hz (required for list_data format).
 #' @param fs Sampling frequency in Hz (required for list_data format).
 #' @param ref Reference value for ppm scale (required for list_data format).
@@ -23,6 +23,8 @@ read_mrs <- function(fname, format, ft = NULL, fs = NULL, ref = NULL) {
     return(read_list_data(fname, ft, fs, ref))
   } else if (format == "dpt") {
     return(read_mrs_dpt(fname))
+  } else if (format == "paravis") {
+    return(read_paravis_raw(fname))
   } else {
     stop("Unrecognised file format.")
   }
@@ -556,7 +558,6 @@ read_rda <- function(fname) {
   mrs_data
 }
 
-#' @export
 read_paravis_raw <- function(fname) {
   # find the method file in the same directory
   method_fname <- file.path(dirname(fname), "method")
@@ -567,22 +568,51 @@ read_paravis_raw <- function(fname) {
   }
   
   # read paramters
-  lines <- read.delim(method_fname, sep = "=", header = FALSE, 
+  lines <- utils::read.delim(method_fname, sep = "=", header = FALSE, 
                       stringsAsFactors = FALSE)
   
   reps <- as.integer(get_para_val(lines, "##$PVM_NRepetitions"))
+  avgs <- as.integer(get_para_val(lines, "##$PVM_NAverages"))
+  dynamics <- reps * avgs
   N <- as.integer(get_para_val(lines, "##$PVM_DigNp"))
   fs <- as.double(get_para_val(lines, "##$PVM_DigSw"))
   shift <- as.integer(get_para_val(lines, "##$PVM_DigShift"))
+  coils <- as.integer(get_para_val(lines, "##$PVM_EncNReceivers"))
   ft_str <- lines$V1[1 + which(lines$V1 == "##$PVM_FrqRef")]
   ft <- as.double(strsplit(ft_str, " ")[[1]][1]) * 1e6
+  te <- as.double(get_para_val(lines, "##$PVM_EchoTime")) / 1e3
   
+  expected_Npts <- dynamics * N * 2 * coils
+    
   # read the raw data file 
   fbytes <- file.size(fname)
   Npts <- fbytes / 4
+  
+  if (Npts != expected_Npts) warning("Unexpected number of data points.")
+  
   raw_vec <- readBin(fname, "int", size = 4, n = Npts)
-  cplx_vec <- raw_vec[c(TRUE, FALSE)] - 1i * raw_vec[c(FALSE, TRUE)]
-  cplx_vec
+  data <- raw_vec[c(TRUE, FALSE)] - 1i * raw_vec[c(FALSE, TRUE)]
+  
+  dim(data) <- c(N, coils, dynamics, 1, 1, 1, 1)
+  data <- aperm(data, c(7,6,5,4,3,2,1))
+  
+  # remove dig filtering artifact
+  data <- abind::abind(data[,,,,,,(shift + 1):N,drop = FALSE], 
+                       data[,,,,,,1:shift,drop = FALSE], along = 7)
+  
+  res <- c(NA, NA, NA, NA, 1, NA, 1 / fs)
+  
+  # freq domain vector vector
+  freq_domain <- rep(FALSE, 7)
+
+  ref <- def_acq_paras()$ref
+  
+  mrs_data <- list(ft = ft, data = data, resolution = res, te = te,
+                   ref = ref, row_vec = NA, col_vec = NA,
+                   pos_vec = NA, freq_domain = freq_domain)
+  
+  class(mrs_data) <- "mrs_data"
+  mrs_data
 }
 
 get_para_val <- function(lines, name_str) {

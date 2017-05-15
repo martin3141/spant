@@ -896,6 +896,26 @@ mean_dyns <- function(mrs_data) {
   mrs_data
 }
 
+#' Calculate the mean of adjacent dynamic scans.
+#' @param mrs_data Dynamic MRS data.
+#' @param block_size Number of adjacent dynamics scans to average over.
+#' @return Dynamic data averaged in blocks.
+#' @export
+mean_dyn_blocks <- function(mrs_data, block_size) {
+  
+  if ((dyns(mrs_data) %% block_size) != 0) {
+    warning("Block size does not fit into the number of dynamics without truncation.")
+  }
+  
+  new_dyns <-  floor(dyns(mrs_data) / block_size)
+  mrs_out <- get_dyns(mrs_data, seq(1,new_dyns*block_size, block_size))
+  for (n in 2:block_size) {
+    mrs_out <- mrs_out + get_dyns(mrs_data, seq(n,new_dyns*block_size, block_size))
+  }
+  
+  mrs_out / block_size
+}
+
 #' Calculate the pairwise means across a dynamic data set.
 #' @param mrs_data Dynamic MRS data.
 #' @return Mean dynamic data of adjacent dynamic pairs.
@@ -1255,21 +1275,29 @@ zp_vec <- function(vector, n) {
 
 #' Combine coil data based on the first data point of a reference signal.
 #' 
-#' Elements are phased and optionally scaled prior to summation.
+#' Elements are phased and optionally scaled prior to summation. Where a 
+#' reference signal is not given, the mean dynamic signal will be used
+#' instead.
 #' @param metab_mrs MRS data containing metabolite data.
-#' @param ref_mrs MRS data containing reference data.
+#' @param ref_mrs MRS data containing reference data (optional).
 #' @param scale Option to rescale coil elements based on the first data point
 #' (logical).
-#' @return MRS data list with coil elements combined.
+#' @return MRS data with coil elements combined.
 #' @export
-comb_coils_wref <- function(metab_mrs, ref_mrs, scale = TRUE) {
-  # get the first dynamic of the water ref data
+comb_coils <- function(metab_mrs, ref_mrs = NULL, scale = TRUE) {
+  metab_only <- FALSE
+  if (is.null(ref_mrs)) {
+    ref_mrs <- mean_dyns(metab_mrs)
+    metab_only <- TRUE
+  }
+  
+  # get the first dynamic of the ref data
   first_ref <- get_dyns(ref_mrs, 1)
   fp <- get_fp(first_ref)
   phi <- Arg(fp)
   amp <- Mod(fp)
   
-  # phase and scale w ref data
+  # phase and scale ref data
   ref_dims <- dim(ref_mrs$data)
   
   ang <- rep(phi, prod(ref_dims[-6]))
@@ -1310,7 +1338,11 @@ comb_coils_wref <- function(metab_mrs, ref_mrs, scale = TRUE) {
   }
   metab_mrs_ps <- sum_coils(metab_mrs_ps)
   
-  list(metab = metab_mrs_ps, ref = ref_mrs_ps)
+  if (metab_only) {
+    return(metab_mrs_ps)
+  } else {
+    return(list(metab = metab_mrs_ps, ref = ref_mrs_ps))
+  }
 }
 
 #' Replicate a scan in the dynamic dimension.
