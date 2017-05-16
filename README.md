@@ -3,6 +3,8 @@
 spant
 =====
 
+[![Travis Build Status](https://travis-ci.org/martin3141/spant.svg?branch=master)](https://travis-ci.org/martin3141/spant) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant)
+
 Overview
 --------
 
