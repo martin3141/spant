@@ -55,3 +55,15 @@ measure_lorentz_amp <- function(y, t, start_pnt = 10, end_pnt = 50) {
   A <- exp(a)
   A
 }
+
+#' Perform a polynomial fit, subtract and return the standard deviation of the
+#' residuals.
+#' @param y an array.
+#' @param degree polynomial degree.
+#' @return the standard deviation of the fit residuals.
+#' @export
+calc_sd_poly <- function(y, degree = 1) {
+  x <- 1:length(y)
+  model <- stats::lm(y ~ poly(x, degree))
+  stats::sd(model$residual)
+}

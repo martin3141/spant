@@ -481,6 +481,10 @@ dim.mrs_data <- function(x) {
   dim(x$data)
 }
 
+#' Return the number of data points in an MRS dataset.
+#' @param mrs_data MRS data.
+#' @return Number of data points.
+#' @export
 N <- function(mrs_data) {
   dim(mrs_data$data)[7]
 }
