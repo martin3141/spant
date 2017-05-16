@@ -29,7 +29,7 @@ install.packages("spant")
 Or the the development version from GitHub (requires `devtools` package):
 
 ``` r
-# install.packages("devtools")
+install.packages("devtools")
 devtools::install_github("martin3141/spant")
 ```
 
