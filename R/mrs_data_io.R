@@ -596,9 +596,16 @@ read_paravis_raw <- function(fname) {
   dim(data) <- c(N, coils, dynamics, 1, 1, 1, 1)
   data <- aperm(data, c(7,6,5,4,3,2,1))
   
-  # remove dig filtering artifact
-  data <- abind::abind(data[,,,,,,(shift + 1):N,drop = FALSE], 
-                       data[,,,,,,1:shift,drop = FALSE], along = 7)
+  # move dig. filter guff to end of the FID (the Bruker way of doing things?)
+  #data <- abind::abind(data[,,,,,,(shift + 1):N,drop = FALSE], 
+  #                     data[,,,,,,1:shift,drop = FALSE], along = 7)
+  
+  filt_pts <- data[,,,,,,shift:1,drop = FALSE]
+  second_part <- data[,,,,,,(shift + 1):N, drop = FALSE]
+  data <- second_part 
+  data[,,,,,,1:shift] <- data[,,,,,,1:shift, drop = FALSE] - filt_pts
+  data <- abind::abind(data[,,,,,,,drop = FALSE], 
+                       array(0, dim = dim(filt_pts)), along = 7)
   
   res <- c(NA, NA, NA, NA, 1, NA, 1 / fs)
   
