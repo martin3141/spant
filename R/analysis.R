@@ -19,10 +19,11 @@
 #' Provencher SW. Estimation of metabolite concentrations from localized in vivo
 #' proton NMR spectra. Magn Reson Med 1993;30:672-679.
 #' 
-#' @param mrs_data An MRS data object.
+#' @param metab Metabolite data.
 #' @param basis A basis class object or character vector to basis file in 
 #' LCModel .basis format.
 #' @param method 'VARPRO', 'TARQUIN' or 'LCMODEL'
+#' @param w_ref Water reference data for concentration scaling (optional).
 #' @param opts Options to pass to the analysis method.
 #' @param parallel Perform analysis in parallel (TRUE or FALSE)
 #' @param cores Number of cores to use for parallel analysis.
@@ -32,10 +33,10 @@
 #' svs <- read_mrs(fname, format="spar_sdat")
 #' \dontrun{
 #' basis <- sim_basis_1h_brain_press(svs)
-#' fit_result <- fit_mrs(svs, basis)
+#' fit_result <- fit_mrs(metab, basis)
 #' }
 #' @export
-fit_mrs <- function(mrs_data, basis, method = 'VARPRO', opts = NULL, 
+fit_mrs <- function(metab, basis, method = 'VARPRO', w_ref = NULL, opts = NULL, 
                     parallel = FALSE, cores = 4) {
   
   if (class(basis) == "basis_set") {
@@ -56,8 +57,8 @@ fit_mrs <- function(mrs_data, basis, method = 'VARPRO', opts = NULL,
   
   if (method == "VARPRO") {
     # put data into TD
-    if (is_fd(mrs_data)) {
-      mrs_data <- fd2td(mrs_data)
+    if (is_fd(metab)) {
+      metab <- fd2td(metab)
     }
     
     # read basis into memory if a file
@@ -69,14 +70,14 @@ fit_mrs <- function(mrs_data, basis, method = 'VARPRO', opts = NULL,
       opts <- varpro_opts()
     }
     
-    temp_mrs <- mrs_data
+    temp_mrs <- metab
     temp_mrs$data = temp_mrs$data[1, 1, 1, 1, 1, 1,]
     dim(temp_mrs$data) <- c(1, 1, 1, 1, 1, 1, length(temp_mrs$data))
   
-    #result_list <- apply(mrs_data$data, c(2,3,4,5,6), varpro_fit, temp_mrs, 
+    #result_list <- apply(metab$data, c(2,3,4,5,6), varpro_fit, temp_mrs, 
     #                     basis, opts)
     
-    result_list <- plyr::alply(mrs_data$data, c(2, 3, 4, 5, 6), varpro_fit, 
+    result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6), varpro_fit, 
                                temp_mrs, basis, opts, 
                                .parallel = parallel, 
                                .paropts = list(.inorder = TRUE),
@@ -84,8 +85,8 @@ fit_mrs <- function(mrs_data, basis, method = 'VARPRO', opts = NULL,
     
   } else if (method == "VARPRO_3P") {
     # put data into TD
-    if (is_fd(mrs_data)) {
-      mrs_data <- fd2td(mrs_data)
+    if (is_fd(metab)) {
+      metab <- fd2td(metab)
     }
     
     # read basis into memory if a file
@@ -97,14 +98,14 @@ fit_mrs <- function(mrs_data, basis, method = 'VARPRO', opts = NULL,
       opts <- varpro_3_para_opts()
     }
     
-    temp_mrs <- mrs_data
+    temp_mrs <- metab
     temp_mrs$data = temp_mrs$data[1, 1, 1, 1, 1, 1,]
     dim(temp_mrs$data) <- c(1, 1, 1, 1, 1, 1, length(temp_mrs$data))
   
-    #result_list <- apply(mrs_data$data, c(2,3,4,5,6), varpro_fit, temp_mrs, 
+    #result_list <- apply(metab$data, c(2,3,4,5,6), varpro_fit, temp_mrs, 
     #                     basis, opts)
     
-    result_list <- plyr::alply(mrs_data$data, c(2, 3, 4, 5, 6),
+    result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6),
                                varpro_3_para_fit, temp_mrs, basis, opts, 
                                .parallel = parallel, 
                                .paropts = list(.inorder = TRUE),
@@ -112,18 +113,23 @@ fit_mrs <- function(mrs_data, basis, method = 'VARPRO', opts = NULL,
     
     
   } else if (method == "TARQUIN") {
+    # combine metab and w_ref data together
+    if (!is.null(w_ref)) {
+      metab <- combine_metab_ref(metab, w_ref)
+    }
+    
     # write basis object (if specified) to file
     basis_file <- tempfile(fileext = ".basis")
     write_basis(basis, basis_file)
     
-    temp_mrs <- mrs_data
+    temp_mrs <- metab
     temp_mrs$data = temp_mrs$data[1, 1, 1, 1, 1, 1,]
     dim(temp_mrs$data) <- c(1, 1, 1, 1, 1, 1, length(temp_mrs$data))
   
-    #result_list <- apply(mrs_data$data, c(2,3,4,5,6), tarquin_fit, temp_mrs, 
+    #result_list <- apply(metab$data, c(2,3,4,5,6), tarquin_fit, temp_mrs, 
     #                     basis_file, opts)
     
-    result_list <- plyr::alply(mrs_data$data, c(2, 3, 4, 5, 6), tarquin_fit, 
+    result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6), tarquin_fit, 
                                temp_mrs, basis_file, opts, 
                                .parallel = parallel, 
                                .paropts = list(.inorder = TRUE),
@@ -132,15 +138,20 @@ fit_mrs <- function(mrs_data, basis, method = 'VARPRO', opts = NULL,
                          #.paropts = list(.options.snow=snowopts),
                          #.paropts = list(.export="N",.packages="spant"),
   } else if (method == "LCMODEL") {
+    # combine metab and w_ref data together
+    if (!is.null(w_ref)) {
+      metab <- combine_metab_ref(metab, w_ref)
+    }
+    
     # write basis object (if specified) to file
     basis_file <- tempfile(fileext = ".basis")
     write_basis(basis, basis_file)
     
-    temp_mrs <- mrs_data
+    temp_mrs <- metab
     temp_mrs$data = temp_mrs$data[1, 1, 1, 1, 1, 1,]
     dim(temp_mrs$data) <- c(1, 1, 1, 1, 1, 1, length(temp_mrs$data))
     
-    result_list <- plyr::alply(mrs_data$data, c(2,3,4,5,6), lcmodel_fit, 
+    result_list <- plyr::alply(metab$data, c(2,3,4,5,6), lcmodel_fit, 
                                temp_mrs, basis_file, opts,
                                .parallel = parallel, 
                                .paropts = list(.inorder = TRUE),
@@ -186,7 +197,7 @@ fit_mrs <- function(mrs_data, basis, method = 'VARPRO', opts = NULL,
   fits <- result_list[seq(from = 4, by = res_n, length.out = fit_num)]
   
   out <- list(results = cbind(labs, amps, crlbs, diags), fits = fits, 
-              data = mrs_data, amp_cols = ncol(amps))
+              data = metab, amp_cols = ncol(amps))
   
   class(out) <- "analysis_results"
   return(out)

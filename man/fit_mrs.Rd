@@ -4,16 +4,18 @@
 \alias{fit_mrs}
 \title{Perform a fit based analysis of MRS data.}
 \usage{
-fit_mrs(mrs_data, basis, method = "VARPRO", opts = NULL, parallel = FALSE,
-  cores = 4)
+fit_mrs(metab, basis, method = "VARPRO", w_ref = NULL, opts = NULL,
+  parallel = FALSE, cores = 4)
 }
 \arguments{
-\item{mrs_data}{An MRS data object.}
+\item{metab}{Metabolite data.}
 
 \item{basis}{A basis class object or character vector to basis file in
 LCModel .basis format.}
 
 \item{method}{'VARPRO', 'TARQUIN' or 'LCMODEL'}
+
+\item{w_ref}{Water reference data for concentration scaling (optional).}
 
 \item{opts}{Options to pass to the analysis method.}
 
@@ -50,6 +52,6 @@ fname <- system.file("extdata","philips_spar_sdat_WS.SDAT",package="spant")
 svs <- read_mrs(fname, format="spar_sdat")
 \dontrun{
 basis <- sim_basis_1h_brain_press(svs)
-fit_result <- fit_mrs(svs, basis)
+fit_result <- fit_mrs(metab, basis)
 }
 }
