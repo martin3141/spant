@@ -4,7 +4,16 @@ language: R
 sudo: false
 cache: packages
 
-env:
-  global:
-  - _R_CHECK_FORCE_SUGGESTS_=FALSE
-  - MAKEFLAGS="-j 2"
+warnings_are_errors: true
+
+bioc_required: yes
+use_bioc: yes
+r_check_args: --as-cran
+
+r:
+  - release
+  
+# env:
+#   global:
+#   - _R_CHECK_FORCE_SUGGESTS_=FALSE
+#   - MAKEFLAGS="-j 2"
