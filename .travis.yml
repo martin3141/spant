@@ -12,7 +12,15 @@ r_check_args: --as-cran
 
 r:
   - release
-  
+
+addons:
+  apt:
+    packages:
+    - tk 
+    - tk-dev
+    - tcl 
+    - tcl-dev
+
 # env:
 #   global:
 #   - _R_CHECK_FORCE_SUGGESTS_=FALSE
