@@ -1369,3 +1369,21 @@ rep_dyn <- function(mrs_data, times) {
   mrs_data$data <- rep_data
   mrs_data
 }
+
+#' Estimate the standard deviation of the noise from a segment of an mrs_data object.
+#' @param mrs_data MRS data object.
+#' @param n The number of data points (taken from the end of array) to use in the estimation.
+#' @param offset The number of final points to exclude from the calculation.
+#' @param p_order Polynomial order to fit to the data before estimating the standard deviation.
+#' @return Standard deviation array.
+#' @export
+est_noise_sd <- function(mrs_data, n = 100, offset = 100, p_order = 2) {
+  apply_mrs(mrs_data, 7, est_noise_sd_vec, n, offset, p_order, data_only = TRUE)
+}
+
+est_noise_sd_vec <- function(x, n = 100, offset = 100, p_order = 2) {
+  N <- length(x)
+  seg <- Re(x[(N - offset - n + 1):(N - offset)])
+  lm_res <- stats::lm(seg ~ poly(1:n, p_order))
+  stats::sd(lm_res$residual)
+}
