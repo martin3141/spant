@@ -4,13 +4,15 @@
 \alias{ecc}
 \title{Apply eddy current correction using the Klose method:}
 \usage{
-ecc(mrs_data)
+ecc(metab, ref)
 }
 \arguments{
-\item{mrs_data}{MRS data including a reference dataset.}
+\item{metab}{MRS data to be corrected.}
+
+\item{ref}{Reference dataset.}
 }
 \value{
-Corrected data.
+Corrected data in the time domain.
 }
 \description{
 In vivo proton spectroscopy in presence of eddy currents.
