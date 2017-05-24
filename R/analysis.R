@@ -49,6 +49,16 @@ fit_mrs <- function(metab, basis, method = 'VARPRO', w_ref = NULL, opts = NULL,
     stop("Error, specified basis is not the correct data type.")
   }
   
+  # put data into TD
+  if (is_fd(metab)) {
+    metab <- fd2td(metab)
+  }
+  if (!is.null(w_ref)) {
+    if (is_fd(w_ref)) {
+      w_ref <- fd2td(w_ref)
+    }
+  }
+  
   #if (parallel) { registerDoSNOW(makeCluster(cores, type="SOCK")) }
   #if (parallel) { doMC::registerDoMC(cores=cores) }
   
@@ -56,11 +66,6 @@ fit_mrs <- function(metab, basis, method = 'VARPRO', w_ref = NULL, opts = NULL,
   method <- toupper(method)
   
   if (method == "VARPRO") {
-    # put data into TD
-    if (is_fd(metab)) {
-      metab <- fd2td(metab)
-    }
-    
     # read basis into memory if a file
     if (is.character(basis)) {
       basis <- read_basis(basis)
@@ -84,11 +89,6 @@ fit_mrs <- function(metab, basis, method = 'VARPRO', w_ref = NULL, opts = NULL,
                                .progress = "text", .inform = FALSE)
     
   } else if (method == "VARPRO_3P") {
-    # put data into TD
-    if (is_fd(metab)) {
-      metab <- fd2td(metab)
-    }
-    
     # read basis into memory if a file
     if (is.character(basis)) {
       basis <- read_basis(basis)
@@ -113,6 +113,17 @@ fit_mrs <- function(metab, basis, method = 'VARPRO', w_ref = NULL, opts = NULL,
     
     
   } else if (method == "TARQUIN") {
+    
+    if (dyns(w_ref) > 1) {
+      w_ref <- mean_dyns(w_ref)
+      warning("Using the mean reference signal for water scaling.")
+    }
+    
+    # repeat the refernce signal to match the number of dynamics
+    if (dyns(metab) > 1) {
+      w_ref <- rep_dyn(w_ref, dyns(metab))
+    }
+    
     # combine metab and w_ref data together
     if (!is.null(w_ref)) {
       metab <- combine_metab_ref(metab, w_ref)
@@ -138,6 +149,16 @@ fit_mrs <- function(metab, basis, method = 'VARPRO', w_ref = NULL, opts = NULL,
                          #.paropts = list(.options.snow=snowopts),
                          #.paropts = list(.export="N",.packages="spant"),
   } else if (method == "LCMODEL") {
+    if (dyns(w_ref) > 1) {
+      w_ref <- mean_dyns(w_ref)
+      warning("Using the mean reference signal for water scaling.")
+    }
+    
+    # repeat the reference signal to match the number of dynamics
+    if (dyns(metab) > 1) {
+      w_ref <- rep_dyn(w_ref, dyns(metab))
+    }
+    
     # combine metab and w_ref data together
     if (!is.null(w_ref)) {
       metab <- combine_metab_ref(metab, w_ref)
