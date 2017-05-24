@@ -1216,14 +1216,32 @@ ecc_ref <- function(mrs_data) {
 #' Klose U.
 #' Magn Reson Med. 1990 Apr;14(1):26-30.
 #' 
-#' @param mrs_data MRS data including a reference dataset.
-#' @return Corrected data.
+#' @param metab MRS data to be corrected.
+#' @param ref Reference dataset.
+#' @return Corrected data in the time domain.
 #' @export
-ecc <- function(mrs_data) {
-  if (is_fd(mrs_data)) {
-      mrs_data <- fd2td(mrs_data)
+ecc <- function(metab, ref) {
+  if (is_fd(metab)) {
+      metab <- fd2td(metab)
   }
-  apply_mrs(mrs_data, c(1,7), ecc_2d_array)
+  
+  if (is_fd(ref)) {
+      ref <- fd2td(ref)
+  }
+  
+  if (dyns(ref) > 1) {
+    ref <- mean_dyns(ref)
+    warning("Using the mean reference signal for ECC.")
+  }
+  
+  # repeat the refernce signal to match the number of dynamics
+  if (dyns(metab) > 1) {
+    ref <- rep_dyn(ref, dyns(metab))
+  }
+  
+  mrs_data <- combine_metab_ref(metab, ref)
+  ecc_data <- apply_mrs(mrs_data, c(1,7), ecc_2d_array)
+  get_metab(ecc_data)
 }
 
 #' Apodise MRSI data in the x-y direction with a k-space hamming filter.
@@ -1296,8 +1314,13 @@ comb_coils <- function(metab_mrs, ref_mrs = NULL, scale = TRUE) {
   }
   
   # get the first dynamic of the ref data
-  first_ref <- get_dyns(ref_mrs, 1)
-  fp <- get_fp(first_ref)
+  # first_ref <- get_dyns(ref_mrs, 1)
+  # fp <- get_fp(first_ref)
+  
+  # get the dynamic mean of the ref data
+  mean_ref <- mean_dyns(ref_mrs)
+  fp <- get_fp(mean_ref)
+  
   phi <- Arg(fp)
   amp <- Mod(fp)
   
