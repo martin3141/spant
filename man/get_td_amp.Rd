@@ -2,7 +2,7 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{get_td_amp}
 \alias{get_td_amp}
-\title{Return an array of amplitudes derrived from fitting the initial points in the
+\title{Return an array of amplitudes derived from fitting the initial points in the
 time domain and extrapolating back to t=0.}
 \usage{
 get_td_amp(mrs_data, nstart = 10, nend = 50)
@@ -18,6 +18,6 @@ get_td_amp(mrs_data, nstart = 10, nend = 50)
 An array of amplitudes.
 }
 \description{
-Return an array of amplitudes derrived from fitting the initial points in the
+Return an array of amplitudes derived from fitting the initial points in the
 time domain and extrapolating back to t=0.
 }

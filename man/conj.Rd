@@ -2,7 +2,7 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{conj}
 \alias{conj}
-\title{Conjuate MRS data.}
+\title{Conjugate MRS data.}
 \usage{
 conj(mrs_data)
 }
@@ -13,5 +13,5 @@ conj(mrs_data)
 Conjugated data
 }
 \description{
-Conjuate MRS data.
+Conjugate MRS data.
 }

@@ -10,7 +10,7 @@ zf(mrs_data, factor = 2)
 \item{mrs_data}{MRS data.}
 
 \item{factor}{Zero-filling factor, factor of 2 returns a dataset with
-twice the orignal data points.}
+twice the original data points.}
 }
 \value{
 Zero-filled data.

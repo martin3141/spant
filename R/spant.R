@@ -83,7 +83,7 @@ set_lcm_cmd <- function(cmd) {
 
 #' Return a list of the default acquisition parameters.
 #' @return A list containing the following elements:
-#' * ft Trasmitter frequency in Hz.
+#' * ft Transmitter frequency in Hz.
 #' * fs Sampling frequency in Hz.
 #' * N Number of data points in the spectral dimension.
 #' * ref Reference value for ppm scale.
@@ -109,7 +109,7 @@ def_fs <- function() {
 }
 
 #' Return the default transmitter frequency in Hz.
-#' @return Trasmitter frequency in Hz.
+#' @return Transmitter frequency in Hz.
 #' @export
 def_ft <- function() {
   options()$spant.def_ft

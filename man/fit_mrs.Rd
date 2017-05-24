@@ -28,11 +28,11 @@ MRS analysis object.
 }
 \description{
 Note that TARQUIN and LCModel require these packages to be installed, and
-the functions set_tqn_path and set_lcm_path (respectivly) need to be used
+the functions set_tqn_path and set_lcm_path (respectively) need to be used
 to specify the location of these software packages.
 }
 \details{
-Fitting approaches decribed in the following references:
+Fitting approaches described in the following references:
 VARPRO
 van der Veen JW, de Beer R, Luyten PR, van Ormondt D. Accurate quantification
 of in vivo 31P NMR signals using the variable projection method and prior

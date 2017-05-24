@@ -2,7 +2,7 @@
 % Please edit documentation in R/analysis.R
 \name{read_lcm_coord}
 \alias{read_lcm_coord}
-\title{Read an LCModel formatted coord file contaning fit information.}
+\title{Read an LCModel formatted coord file containing fit information.}
 \usage{
 read_lcm_coord(coord_f)
 }
@@ -10,9 +10,9 @@ read_lcm_coord(coord_f)
 \item{coord_f}{Path to the coord file.}
 }
 \value{
-A list containg a table of fit point and results structure contaning
+A list containing a table of fit point and results structure containing
 signal amplitudes, errors and fitting diagnostics.
 }
 \description{
-Read an LCModel formatted coord file contaning fit information.
+Read an LCModel formatted coord file containing fit information.
 }

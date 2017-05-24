@@ -202,7 +202,7 @@ get_1h_brain_basis_paras <- function(ft, metab_lw = 2, lcm_compat = FALSE) {
 
 #' Simulate a basis-set suitable for 1H brain MRS analysis acquired with a PRESS 
 #' sequence. Note, ideal pulses are assumed.
-#' @param acq_paras List of acquistion parameters or an mrs_data object. See
+#' @param acq_paras List of acquisition parameters or an mrs_data object. See
 #' \code{\link{def_acq_paras}}
 #' @param xlim Range of frequencies to simulate in ppm.
 #' @param lcm_compat Exclude lipid and MM signals for use with default LCModel

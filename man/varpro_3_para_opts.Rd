@@ -19,7 +19,7 @@ points.}
 \item{init_damping}{Starting value for the global Gaussian line-broadening
 term - measured in Hz.}
 
-\item{maxiters}{Maximum number of lemar iterations to perform.}
+\item{maxiters}{Maximum number of levmar iterations to perform.}
 
 \item{max_shift}{Maximum global shift allowed, measured in Hz.}
 

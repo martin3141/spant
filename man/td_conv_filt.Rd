@@ -11,7 +11,7 @@ td_conv_filt(mrs_data, K = 25, ext = 1)
 
 \item{K}{window width in data points.}
 
-\item{ext}{point seperation for linear extrapolation.}
+\item{ext}{point separation for linear extrapolation.}
 }
 \description{
 Time-domain convolution based filter described by:

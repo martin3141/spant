@@ -21,7 +21,7 @@ sim_resonances(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
 \item{freq_ppm}{Frequencies are given in ppm units if set to TRUE, otherwise
 Hz are assumed.}
 
-\item{acq_paras}{List of acquistion parameters. See
+\item{acq_paras}{List of acquisition parameters. See
 \code{\link{def_acq_paras}}}
 }
 \value{

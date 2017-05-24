@@ -2,16 +2,16 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{sum_coils}
 \alias{sum_coils}
-\title{Calculate the sum across reciever coil elements.}
+\title{Calculate the sum across receiver coil elements.}
 \usage{
 sum_coils(mrs_data)
 }
 \arguments{
-\item{mrs_data}{MRS data split across reciever coil elements.}
+\item{mrs_data}{MRS data split across receiver coil elements.}
 }
 \value{
 Sum across coil elements.
 }
 \description{
-Calculate the sum across reciever coil elements.
+Calculate the sum across receiver coil elements.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{get_acq_paras}
 \alias{get_acq_paras}
-\title{Return acquisiton parameters from a MRS data object.}
+\title{Return acquisition parameters from a MRS data object.}
 \usage{
 get_acq_paras(mrs_data)
 }
@@ -13,5 +13,5 @@ get_acq_paras(mrs_data)
 A list of acquisition parameters.
 }
 \description{
-Return acquisiton parameters from a MRS data object.
+Return acquisition parameters from a MRS data object.
 }

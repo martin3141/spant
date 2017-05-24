@@ -9,7 +9,7 @@ def_acq_paras()
 \value{
 A list containing the following elements:
 \itemize{
-\item ft Trasmitter frequency in Hz.
+\item ft Transmitter frequency in Hz.
 \item fs Sampling frequency in Hz.
 \item N Number of data points in the spectral dimension.
 \item ref Reference value for ppm scale.

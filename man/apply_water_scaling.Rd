@@ -2,7 +2,7 @@
 % Please edit documentation in R/analysis.R
 \name{apply_water_scaling}
 \alias{apply_water_scaling}
-\title{Apply water reference scaling to a ftting results object to yield metabolite
+\title{Apply water reference scaling to a fitting results object to yield metabolite
 quantities in units of mM.}
 \usage{
 apply_water_scaling(result, ref_data, w_att = 0.7, w_conc = 35880)
@@ -10,7 +10,7 @@ apply_water_scaling(result, ref_data, w_att = 0.7, w_conc = 35880)
 \arguments{
 \item{result}{A result object generated from fitting.}
 
-\item{ref_data}{Water refernce MRS data object.}
+\item{ref_data}{Water reference MRS data object.}
 
 \item{w_att}{Water attenuation factor (default = 0.7).}
 
@@ -20,6 +20,6 @@ apply_water_scaling(result, ref_data, w_att = 0.7, w_conc = 35880)
 A result object with a results_ws data table added.
 }
 \description{
-Apply water reference scaling to a ftting results object to yield metabolite
+Apply water reference scaling to a fitting results object to yield metabolite
 quantities in units of mM.
 }

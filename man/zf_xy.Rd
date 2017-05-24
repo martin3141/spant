@@ -10,7 +10,7 @@ zf_xy(mrs_data, factor = 2)
 \item{mrs_data}{MRSI data.}
 
 \item{factor}{Zero-filling factor, factor of 2 returns a dataset with
-twice the orignal points in the x-y directions.}
+twice the original points in the x-y directions.}
 }
 \value{
 Zero-filled data.

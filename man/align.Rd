@@ -12,7 +12,7 @@ align(mrs_data, ref_peak = 4.65, zf_factor = 2, lb = 2, max_shift = 20,
 
 \item{ref_peak}{A reference frequency in ppm units.}
 
-\item{zf_factor}{Zero filling factor to increase aligment resolution.}
+\item{zf_factor}{Zero filling factor to increase alignment resolution.}
 
 \item{lb}{Line broadening to apply to the reference signal.}
 

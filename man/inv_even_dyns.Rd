@@ -10,7 +10,7 @@ inv_even_dyns(mrs_data)
 \item{mrs_data}{Dynamic MRS data.}
 }
 \value{
-Dynamic MRS data with inveted even numbered scans.
+Dynamic MRS data with inverted even numbered scans.
 }
 \description{
 Invert even numbered dynamic scans starting from 1 (2,4,6...).

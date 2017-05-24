@@ -6,7 +6,7 @@
 #' @param phase Phase in degrees.
 #' @param freq_ppm Frequencies are given in ppm units if set to TRUE, otherwise
 #' Hz are assumed.
-#' @param acq_paras List of acquistion parameters. See
+#' @param acq_paras List of acquisition parameters. See
 #' \code{\link{def_acq_paras}}
 #' @return MRS data object.
 #' @examples
@@ -265,7 +265,7 @@ apply_mrs <- function(mrs_data, dims, fun, ..., data_only = FALSE) {
 #' Apply phasing parameters to MRS data.
 #' @param mrs_data MRS data.
 #' @param zero_order Zero'th order phase term in degrees.
-#' @param first_order First order (frequency dependant) phase term in ms.
+#' @param first_order First order (frequency dependent) phase term in ms.
 #' @return MRS data with applied phase parameters.
 #' @export
 phase <- function(mrs_data, zero_order, first_order = 0) {
@@ -346,7 +346,7 @@ fp_phase <- function(mrs_data) {
   abind::adrop(Arg(mrs_data$data[,,,,,, 1, drop = F]), 7) * 180 / pi
 }
 
-#' Conjuate MRS data.
+#' Conjugate MRS data.
 #' @param mrs_data input data
 #' @return Conjugated data
 #' @export
@@ -387,7 +387,7 @@ lb <- function(mrs_data, lb, lg = 1) {
 #' Zero-fill MRS data in the time domain.
 #' @param mrs_data MRS data.
 #' @param factor Zero-filling factor, factor of 2 returns a dataset with
-#' twice the orignal data points.
+#' twice the original data points.
 #' @return Zero-filled data.
 #' @export
 zf <- function(mrs_data, factor = 2) {
@@ -461,7 +461,7 @@ recon_imag <- function(mrs_data) {
   return(mrs_data)
 }
 
-#' Return acquisiton parameters from a MRS data object.
+#' Return acquisition parameters from a MRS data object.
 #' @param mrs_data MRS data.
 #' @return A list of acquisition parameters.
 #' @export
@@ -614,7 +614,7 @@ crop_spec <- function(mrs_data, xlim = c(4,0.5), scale = "ppm") {
 #' Align spectra to a reference frequency using a convolution based method.
 #' @param mrs_data Data to be aligned.
 #' @param ref_peak A reference frequency in ppm units.
-#' @param zf_factor Zero filling factor to increase aligment resolution.
+#' @param zf_factor Zero filling factor to increase alignment resolution.
 #' @param lb Line broadening to apply to the reference signal.
 #' @param max_shift Maximum allowable shift in Hz.
 #' @param ret_df Return frequency shifts in addition to aligned data (logical).
@@ -676,7 +676,7 @@ get_fwhm <- function(mrs_data) {
   abind::adrop(fwhm_ppm, 7)
 }
 
-#' Return an array of amplitudes derrived from fitting the initial points in the
+#' Return an array of amplitudes derived from fitting the initial points in the
 #' time domain and extrapolating back to t=0.
 #' @param mrs_data MRS data.
 #' @param nstart The first data point to fit.
@@ -775,7 +775,7 @@ get_even_dyns <- function(mrs_data) {
 
 #' Invert odd numbered dynamic scans starting from 1 (1,3,5...).
 #' @param mrs_data Dynamic MRS data.
-#' @return Dynamic MRS data with inveted odd numbered scans.
+#' @return Dynamic MRS data with inverted odd numbered scans.
 #' @export
 inv_odd_dyns <- function(mrs_data) {
   subset <- seq(1, dyns(mrs_data), 2)
@@ -785,7 +785,7 @@ inv_odd_dyns <- function(mrs_data) {
 
 #' Invert even numbered dynamic scans starting from 1 (2,4,6...).
 #' @param mrs_data Dynamic MRS data.
-#' @return Dynamic MRS data with inveted even numbered scans.
+#' @return Dynamic MRS data with inverted even numbered scans.
 #' @export
 inv_even_dyns <- function(mrs_data) {
   subset <- seq(2, dyns(mrs_data), 2)
@@ -941,8 +941,8 @@ sum_dyns <- function(mrs_data) {
   mrs_data
 }
 
-#' Calculate the sum across reciever coil elements.
-#' @param mrs_data MRS data split across reciever coil elements.
+#' Calculate the sum across receiver coil elements.
+#' @param mrs_data MRS data split across receiver coil elements.
 #' @return Sum across coil elements.
 #' @export
 sum_coils <- function(mrs_data) {
@@ -1053,7 +1053,7 @@ td_conv_filt_vec <- function(fid, K = 25, ext = 1)
 #' 
 #' @param mrs_data MRS data to be filtered.
 #' @param K window width in data points.
-#' @param ext point seperation for linear extrapolation.
+#' @param ext point separation for linear extrapolation.
 #' @export
 td_conv_filt <- function(mrs_data, K = 25, ext = 1) {
   if (is_fd(mrs_data)) {
@@ -1265,7 +1265,7 @@ apodise_xy <- function(mrs_data) {
 #' Zero-fill MRSI data in the k-space x-y direction.
 #' @param mrs_data MRSI data.
 #' @param factor Zero-filling factor, factor of 2 returns a dataset with
-#' twice the orignal points in the x-y directions.
+#' twice the original points in the x-y directions.
 #' @return Zero-filled data.
 #' @export
 zf_xy <- function(mrs_data, factor = 2) {
