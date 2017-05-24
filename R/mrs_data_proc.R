@@ -1313,6 +1313,14 @@ comb_coils <- function(metab_mrs, ref_mrs = NULL, scale = TRUE) {
     metab_only <- TRUE
   }
   
+  if (is_fd(metab_mrs)) {
+      metab <- fd2td(metab)
+  }
+  
+  if (is_fd(ref_mrs)) {
+      ref <- fd2td(ref)
+  }
+  
   # get the first dynamic of the ref data
   # first_ref <- get_dyns(ref_mrs, 1)
   # fp <- get_fp(first_ref)
