@@ -1,3 +1,5 @@
+# spant 0.3.0
+
 # spant 0.2.0
 * Added Siemens RDA format reader.
 * Added Philips "list data" format reader.
