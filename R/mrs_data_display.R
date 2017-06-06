@@ -1,27 +1,26 @@
+#' Print a summary of key mrs_data parameters.
 #' @export
 print.mrs_data <- function(x, ...) {
-  cat("MRS data parameters\n")
-  cat("-------------------------------\n")
-  # next line only works for 1H, add nucleus option?
-  #cat(paste(c("Field strength (Tesla)  : ",
-  #             sprintf("%.1f",x$ft/42.58e6),"\n")),sep="")
-  cat(paste(c("Trans. freq (MHz)       : ", x$ft * 1e-6, "\n")), sep = "")
+  cat("MRS Data Parameters\n")
+  cat("----------------------------------\n")
+  cat(paste(c("Trans. freq (MHz)       : ", round(x$ft * 1e-6, 4), "\n")), sep = "")
   cat(paste(c("FID data points         : ", dim(x$data)[7], "\n")), sep = "")
   cat(paste(c("X,Y,Z dimensions        : ", dim(x$data)[2], "x", dim(x$data)[3],
               "x", dim(x$data)[4], "\n")), sep = "")
-  
   cat(paste(c("Dynamics                : ", dim(x$data)[5], "\n")), sep = "")
   cat(paste(c("Coils                   : ", dim(x$data)[6], "\n")) ,sep = "")
   cat(paste(c("Voxel resolution (mm)   : ", x$resolution[2],
               "x", x$resolution[3], "x", x$resolution[4], "\n")), sep = "")
   cat(paste(c("Sampling frequency (Hz) : ",
               1 / x$resolution[7], "\n")), sep = "")
-  
-  cat(paste(c("Contains referece data  : ",
-              dim(x$data)[1] == 2, "\n")), sep = "")
-  
+  cat(paste(c("Reference freq. (ppm)   : ", x$ref, "\n")), sep = "")
   cat(paste(c("Spectral domain         : ", x$freq_domain[7], "\n")), sep = "")
-  cat(paste(c("Reference freq. (PPM)   : ", x$ref, "\n")), sep = "")
+  
+  # next line only works for 1H, add nucleus option?
+  #cat(paste(c("Field strength (Tesla)  : ",
+  #             sprintf("%.1f",x$ft/42.58e6),"\n")),sep="")
+  #cat(paste(c("Contains referece data  : ",
+  #            dim(x$data)[1] == 2, "\n")), sep = "")
 }
 
 #' @export
