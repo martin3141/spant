@@ -2,10 +2,15 @@
 % Please edit documentation in R/mrs_data_display.R
 \name{print.mrs_data}
 \alias{print.mrs_data}
-\title{Print a summary of key mrs_data parameters.}
+\title{Print a summary of mrs_data parameters.}
 \usage{
 \method{print}{mrs_data}(x, ...)
 }
+\arguments{
+\item{x}{mrs_data object.}
+
+\item{...}{further arguments.}
+}
 \description{
-Print a summary of key mrs_data parameters.
+Print a summary of mrs_data parameters.
 }

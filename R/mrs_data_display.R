@@ -1,4 +1,6 @@
-#' Print a summary of key mrs_data parameters.
+#' Print a summary of mrs_data parameters.
+#' @param x mrs_data object.
+#' @param ... further arguments.
 #' @export
 print.mrs_data <- function(x, ...) {
   cat("MRS Data Parameters\n")
