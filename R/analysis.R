@@ -601,7 +601,7 @@ test_varpro <- function() {
   basis <- sim_basis_1h_brain_press(acq_paras, xlim = c(4.0,0))
   fit_opts <- varpro_opts()
   fit <- fit_mrs(mrs_data, basis, opts = fit_opts)
-  plot(fit, xlim = c(4,0.5))
+  graphics::plot(fit, xlim = c(4,0.5))
   system.time(replicate(10, fit_mrs(mrs_data, basis)))
 }
 

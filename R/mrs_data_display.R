@@ -25,6 +25,7 @@ print.mrs_data <- function(x, ...) {
   #            dim(x$data)[1] == 2, "\n")), sep = "")
 }
 
+#' TODO document.
 #' @export
 image.mrs_data <- function(x, mode = "real", xlim = NULL, col = NULL, 
                            dim = "dyn", x_pos = NA, y_pos = NA, z_pos = NA,
@@ -39,8 +40,8 @@ image.mrs_data <- function(x, mode = "real", xlim = NULL, col = NULL,
     xlim <- c(x_scale[1], x_scale[N(x)])
   }
   
-  par(mar = c(3.5, 3.5, 1, 1)) # margins
-  par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
+  graphics::par(mar = c(3.5, 3.5, 1, 1)) # margins
+  graphics::par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
   
   x_inds <- get_seg_ind(x_scale, xlim[1], xlim[2])
   subset <- x_inds[1]:x_inds[2]
@@ -115,7 +116,7 @@ stackplot <- function(x, ...) {
   UseMethod("stackplot", x)
 }
 
-# TODO make consistant with plot
+#' TODO make consistant with plot and document.
 #' @export
 stackplot.mrs_data <- function(x, mode = "real", xlim = NULL, x_offset = 0,
                                y_offset = 5, dim = "dyn", x_pos = NA, 
@@ -126,8 +127,8 @@ stackplot.mrs_data <- function(x, mode = "real", xlim = NULL, x_offset = 0,
   }
   
   #par("xaxs" = "i") # tight axes limits
-  par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
-  par(mar = c(3.5, 1, 1, 1)) # margins
+  graphics::par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
+  graphics::par(mar = c(3.5, 1, 1, 1)) # margins
   
   x_scale <- ppm(x)
   
@@ -222,12 +223,12 @@ stackplot.mrs_data <- function(x, mode = "real", xlim = NULL, x_offset = 0,
         #col=gray.colors(64), ...)
 }
 
-#' @importFrom graphics par plot abline text                   
+#' TODO document.
 #' @export
 plot.mrs_data <- function(x, fd = TRUE, scale = NULL, xlim = NULL,
-                          yscale = FALSE, mode = "real", x_pos = 1, y_pos = 1,
-                          z_pos = 1, dyn = 1, coil = 1, ref = 1, label = "", 
-                          ...) {
+                          yscale = FALSE, mode = "real", dyn = 1, x_pos = 1,
+                          y_pos = 1, z_pos = 1, coil = 1, ref = 1, lwd = NULL, 
+                          bty = NULL, label = "", ...) {
   
   # convert to the correct domain for plotting
   if (fd & !is_fd(x)) {
@@ -236,7 +237,15 @@ plot.mrs_data <- function(x, fd = TRUE, scale = NULL, xlim = NULL,
     x <- fd2td(x)
   }
   
-  if ( fd ) {
+  if (is.null(lwd)) {
+    lwd <- 1.5
+  }
+  
+  if (is.null(bty)) {
+    bty <- "o"
+  }
+  
+  if (fd) {
     xlab <- "Chemical Shift"  
   } else {
     xlab <- "Time"  
@@ -269,8 +278,8 @@ plot.mrs_data <- function(x, fd = TRUE, scale = NULL, xlim = NULL,
   x_inds <- get_seg_ind(x_scale, xlim[1], xlim[2])
   subset <- x_inds[1]:x_inds[2]
   
-  #par("xaxs" = "i", "yaxs"="i") # tight axes limits
-  par("xaxs" = "i") # tight axes limits
+  #graphics::par("xaxs" = "i", "yaxs"="i") # tight axes limits
+  graphics::par("xaxs" = "i") # tight axes limits
   plot_data <- x$data[ref, x_pos, y_pos, z_pos, dyn, coil,]
   
   if (mode == "real") {
@@ -281,23 +290,27 @@ plot.mrs_data <- function(x, fd = TRUE, scale = NULL, xlim = NULL,
     plot_data <- Mod(plot_data)
   }
   
-  par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
+  graphics::par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
   if (yscale) {
-    par(mar = c(3.5, 3.5, 1, 1))
-    plot(x_scale[subset], plot_data[subset],type = 'l',xlim = xlim, xlab = xlab,
-         ylab = "Intensity (au)", ...)
+    graphics::par(mar = c(3.5, 3.5, 1, 1))
+    graphics::plot(x_scale[subset], plot_data[subset],type = 'l',xlim = xlim, 
+                   xlab = xlab, ylab = "Intensity (au)", lwd = lwd,
+                   bty = bty, ...)
   } else {
-    par(mar = c(3.5, 1, 1, 1))
-    plot(x_scale[subset], plot_data[subset], type = 'l', xlim = xlim,
-         xlab = xlab, yaxt = "n", ylab = "", ...)
+    graphics::par(mar = c(3.5, 1, 1, 1))
+    graphics::plot(x_scale[subset], plot_data[subset], type = 'l', xlim = xlim,
+         xlab = xlab, yaxt = "n", ylab = "", lwd = lwd, bty = bty, ...)
   }
-  abline(a = par("usr")[3], b = 0, lw = 2.0) # looks better for bty="n"
+  
+  if (bty == "n") {
+    graphics::abline(a = graphics::par("usr")[3], b = 0, lwd = 1.0) 
+  }
   
   if (!is.null(label)) {
     max_dp <- max(plot_data[subset])
-    par(xpd = T)
-    text(xlim[1],max_dp * 1.03, label, cex = 2.5)
-    par(xpd = F) 
+    graphics::par(xpd = T)
+    graphics::text(xlim[1],max_dp * 1.03, label, cex = 2.5)
+    graphics::par(xpd = F) 
   }
 }
 
