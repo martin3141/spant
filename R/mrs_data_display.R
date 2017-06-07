@@ -25,9 +25,23 @@ print.mrs_data <- function(x, ...) {
   #            dim(x$data)[1] == 2, "\n")), sep = "")
 }
 
-#' TODO document.
+#' Image plot method for objects of class mrs_data.
+#' @param x object of class mrs_data.
+#' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
+#' @param mode representation of the complex numbers to be plotted, can be one
+#' of: "real", "imag" or "abs".
+#' @param col Colour map to use, defaults to viridis if the package is 
+#' available.
+#' @param dim the dimension to display on the y-axis, can be one of: "dyn", "x",
+#' "y", "z" or "coil".
+#' @param x_pos the x index to plot.
+#' @param y_pos the y index to plot.
+#' @param z_pos the z index to plot.
+#' @param dyn the dynamic index to plot.
+#' @param coil the coil element number to plot.
+#' @param ... other arguments to pass to the plot method.
 #' @export
-image.mrs_data <- function(x, mode = "real", xlim = NULL, col = NULL, 
+image.mrs_data <- function(x, xlim = NULL, mode = "real", col = NULL, 
                            dim = "dyn", x_pos = NA, y_pos = NA, z_pos = NA,
                            dyn = 1, coil = 1, ...) { 
   if (!is_fd(x)) {
@@ -116,9 +130,24 @@ stackplot <- function(x, ...) {
   UseMethod("stackplot", x)
 }
 
-#' TODO make consistant with plot and document.
+#' Stackplot plotting method for objects of class mrs_data.
+#' @param x object of class mrs_data.
+#' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
+#' @param mode representation of the complex numbers to be plotted, can be one
+#' of: "real", "imag" or "abs".
+#' @param x_offset seperate plots in the x-axis direction by this value. 
+#' Default value is 0.
+#' @param y_offset seperate plots in the y-axis direction by this value.
+#' @param dim the dimension to stack in the y-axis direction, can be one of: 
+#' "dyn", "x", "y", "z" or "coil".
+#' @param x_pos the x index to plot.
+#' @param y_pos the y index to plot.
+#' @param z_pos the z index to plot.
+#' @param dyn the dynamic index to plot.
+#' @param coil the coil element number to plot.
+#' @param ... other arguments to pass to the matplot method.
 #' @export
-stackplot.mrs_data <- function(x, mode = "real", xlim = NULL, x_offset = 0,
+stackplot.mrs_data <- function(x, xlim = NULL, mode = "real", x_offset = 0,
                                y_offset = 5, dim = "dyn", x_pos = NA, 
                                y_pos = NA, z_pos = NA, dyn = 1, coil = 1, ...) {
   
@@ -223,11 +252,29 @@ stackplot.mrs_data <- function(x, mode = "real", xlim = NULL, x_offset = 0,
         #col=gray.colors(64), ...)
 }
 
-#' TODO document.
+#' Plotting method for objects of class mrs_data.
+#' @param x object of class mrs_data.
+#' @param fd display data in the frequency-domain (default), or time-domain 
+#' (logical).
+#' @param x_units the units to use for the x-axis, can be one of: "ppm", "hz", 
+#' "points" or "seconds".
+#' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
+#' @param y_scale option to display the y-axis values (logical).
+#' @param mode representation of the complex numbers to be plotted, can be one
+#' of: "real", "imag" or "abs".
+#' @param dyn the dynamic index to plot.
+#' @param x_pos the x index to plot.
+#' @param y_pos the y index to plot.
+#' @param z_pos the z index to plot.
+#' @param coil the coil element number to plot.
+#' @param lwd plot linewidth.
+#' @param bty option to draw a box around the plot. See ?par.
+#' @param label character string to add to the top left of the plot window.
+#' @param ... other arguments to pass to the plot method.
 #' @export
-plot.mrs_data <- function(x, fd = TRUE, scale = NULL, xlim = NULL,
-                          yscale = FALSE, mode = "real", dyn = 1, x_pos = 1,
-                          y_pos = 1, z_pos = 1, coil = 1, ref = 1, lwd = NULL, 
+plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
+                          y_scale = FALSE, mode = "real", dyn = 1, x_pos = 1,
+                          y_pos = 1, z_pos = 1, coil = 1, lwd = NULL, 
                           bty = NULL, label = "", ...) {
   
   # convert to the correct domain for plotting
@@ -251,22 +298,22 @@ plot.mrs_data <- function(x, fd = TRUE, scale = NULL, xlim = NULL,
     xlab <- "Time"  
   }
   
-  if (is.null(scale) & fd) {
-    scale = "ppm"
-  } else if (is.null(scale) & !fd) {
-    scale = "seconds"
+  if (is.null(x_units) & fd) {
+    x_units = "ppm"
+  } else if (is.null(x_units) & !fd) {
+    x_units = "seconds"
   }
   
-  if ( scale == "ppm" ) {
+  if ( x_units == "ppm" ) {
     x_scale <- ppm(x)
     xlab <- paste(xlab, "(ppm)")
-  } else if (scale == "hz") {
+  } else if (x_units == "hz") {
     x_scale <- hz(x)
     xlab <- paste(xlab, "(Hz)")
-  } else if (scale == "points") {
+  } else if (x_units == "points") {
     x_scale <- pts(x)
     xlab <- paste(xlab, "(Data Points)")
-  } else if (scale == "seconds") {
+  } else if (x_units == "seconds") {
     x_scale <- seconds(x)
     xlab <- paste(xlab, "(s)")
   }
@@ -280,7 +327,7 @@ plot.mrs_data <- function(x, fd = TRUE, scale = NULL, xlim = NULL,
   
   #graphics::par("xaxs" = "i", "yaxs"="i") # tight axes limits
   graphics::par("xaxs" = "i") # tight axes limits
-  plot_data <- x$data[ref, x_pos, y_pos, z_pos, dyn, coil,]
+  plot_data <- x$data[1, x_pos, y_pos, z_pos, dyn, coil,]
   
   if (mode == "real") {
     plot_data <- Re(plot_data)
@@ -291,7 +338,7 @@ plot.mrs_data <- function(x, fd = TRUE, scale = NULL, xlim = NULL,
   }
   
   graphics::par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
-  if (yscale) {
+  if (y_scale) {
     graphics::par(mar = c(3.5, 3.5, 1, 1))
     graphics::plot(x_scale[subset], plot_data[subset],type = 'l',xlim = xlim, 
                    xlab = xlab, ylab = "Intensity (au)", lwd = lwd,
