@@ -1,4 +1,5 @@
 # spant 0.3.0
+* Documentation updates for plotting methods.
 
 # spant 0.2.0
 * Added Siemens RDA format reader.

@@ -220,7 +220,7 @@ fit_mrs <- function(metab, basis, method = 'VARPRO', w_ref = NULL, opts = NULL,
   out <- list(results = cbind(labs, amps, crlbs, diags), fits = fits, 
               data = metab, amp_cols = ncol(amps))
   
-  class(out) <- "analysis_results"
+  class(out) <- "fit_result"
   return(out)
 }
 

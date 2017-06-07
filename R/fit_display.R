@@ -1,4 +1,3 @@
-
 #' @export
 plot.fit_table <- function(x, xlim = c(4, 0.5), plt_title = FALSE,
                            data_only = FALSE, label=NULL, 
@@ -60,8 +59,11 @@ plot.fit_table <- function(x, xlim = c(4, 0.5), plt_title = FALSE,
   
 }
 
+#' Print a summary of an object of class fit_result.
+#' @param x fit_result object.
+#' @param ... further arguments.
 #' @export
-print.analysis_results <- function(x, ...) {
+print.fit_result <- function(x, ...) {
   print(x$data)
 }
 
@@ -74,8 +76,12 @@ output_csv <- function(analysis, fname, pvc=FALSE) {
   }
 }
 
+#' Plot the fitting results of an object of class fit_result.
+#' @param x fit_result object.
+#' @param n index to the fit number to display.
+#' @param ... further arguments.
 #' @export
-plot.analysis_results <- function(x, n = NA, ...) {
+plot.fit_result <- function(x, n = NA, ...) {
   if ( is.na(n) && length(x$fits) > 1 ) {
     warning("Fit number not specified, plotting the first one.")
     n = 1

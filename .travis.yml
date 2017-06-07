@@ -12,20 +12,22 @@ r_check_args: --as-cran
 
 r:
   - release
-
-addons:
-  apt:
-    packages:
-    - tk 
-    - tk-dev
-    - tcl 
-    - tcl-dev
-
-# added on 7 Jun 2016 as workaround for https://github.com/travis-ci/travis-ci/issues/7863
+  
+# tlmgr line added on 7 Jun 2016 as workaround for:
+# https://github.com/travis-ci/travis-ci/issues/7863
 before_install:
   - tlmgr install xkeyval
+  - sudo apt-get install tk -y
+  - sudo apt-get install tk-dev -y
+  - sudo apt-get install tcl -y
+  - sudo apt-get install tcl-dev -y
 
-# env:
-#   global:
-#   - _R_CHECK_FORCE_SUGGESTS_=FALSE
-#   - MAKEFLAGS="-j 2"
+# the following didn't seem to fix the neurocondutor test fails
+#addons:
+#  apt:
+#    packages:
+#    - tk 
+#    - tk-dev
+#    - tcl 
+#    - tcl-dev
+
