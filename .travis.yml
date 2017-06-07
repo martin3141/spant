@@ -13,6 +13,8 @@ r_check_args: --as-cran
 r:
   - release
   
+sudo: required
+
 # tlmgr line added on 7 Jun 2016 as workaround for:
 # https://github.com/travis-ci/travis-ci/issues/7863
 before_install:
