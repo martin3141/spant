@@ -25,6 +25,115 @@ print.mrs_data <- function(x, ...) {
   #            dim(x$data)[1] == 2, "\n")), sep = "")
 }
 
+#' Plotting method for objects of class mrs_data.
+#' @param x object of class mrs_data.
+#' @param fd display data in the frequency-domain (default), or time-domain 
+#' (logical).
+#' @param x_units the units to use for the x-axis, can be one of: "ppm", "hz", 
+#' "points" or "seconds".
+#' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
+#' @param y_scale option to display the y-axis values (logical).
+#' @param mode representation of the complex numbers to be plotted, can be one
+#' of: "real", "imag" or "abs".
+#' @param dyn the dynamic index to plot.
+#' @param x_pos the x index to plot.
+#' @param y_pos the y index to plot.
+#' @param z_pos the z index to plot.
+#' @param coil the coil element number to plot.
+#' @param lwd plot linewidth.
+#' @param bty option to draw a box around the plot. See ?par.
+#' @param label character string to add to the top left of the plot window.
+#' @param ... other arguments to pass to the plot method.
+#' @export
+plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
+                          y_scale = FALSE, mode = "real", dyn = 1, x_pos = 1,
+                          y_pos = 1, z_pos = 1, coil = 1, lwd = NULL, 
+                          bty = NULL, label = "", ...) {
+  
+  # convert to the correct domain for plotting
+  if (fd & !is_fd(x)) {
+    x <- td2fd(x)
+  } else if (!fd & is_fd(x)) {
+    x <- fd2td(x)
+  }
+  
+  if (is.null(lwd)) {
+    lwd <- 1.5
+  }
+  
+  if (is.null(bty)) {
+    bty <- "o"
+  }
+  
+  if (fd) {
+    xlab <- "Chemical Shift"  
+  } else {
+    xlab <- "Time"  
+  }
+  
+  if (is.null(x_units) & fd) {
+    x_units = "ppm"
+  } else if (is.null(x_units) & !fd) {
+    x_units = "seconds"
+  }
+  
+  if ( x_units == "ppm" ) {
+    x_scale <- ppm(x)
+    xlab <- paste(xlab, "(ppm)")
+  } else if (x_units == "hz") {
+    x_scale <- hz(x)
+    xlab <- paste(xlab, "(Hz)")
+  } else if (x_units == "points") {
+    x_scale <- pts(x)
+    xlab <- paste(xlab, "(Data Points)")
+  } else if (x_units == "seconds") {
+    x_scale <- seconds(x)
+    xlab <- paste(xlab, "(s)")
+  }
+  
+  if (is.null(xlim)) {
+    xlim <- c(x_scale[1], x_scale[N(x)])
+  }
+  
+  x_inds <- get_seg_ind(x_scale, xlim[1], xlim[2])
+  subset <- x_inds[1]:x_inds[2]
+  
+  #graphics::par("xaxs" = "i", "yaxs"="i") # tight axes limits
+  graphics::par("xaxs" = "i") # tight axes limits
+  plot_data <- x$data[1, x_pos, y_pos, z_pos, dyn, coil,]
+  
+  if (mode == "real") {
+    plot_data <- Re(plot_data)
+  } else if (mode == "imag") {
+    plot_data <- Im(plot_data)
+  } else if (mode == "abs") {
+    plot_data <- Mod(plot_data)
+  }
+  
+  graphics::par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
+  if (y_scale) {
+    graphics::par(mar = c(3.5, 3.5, 1, 1))
+    graphics::plot(x_scale[subset], plot_data[subset],type = 'l',xlim = xlim, 
+                   xlab = xlab, ylab = "Intensity (au)", lwd = lwd,
+                   bty = bty, ...)
+  } else {
+    graphics::par(mar = c(3.5, 1, 1, 1))
+    graphics::plot(x_scale[subset], plot_data[subset], type = 'l', xlim = xlim,
+         xlab = xlab, yaxt = "n", ylab = "", lwd = lwd, bty = bty, ...)
+  }
+  
+  if (bty == "n") {
+    graphics::abline(a = graphics::par("usr")[3], b = 0, lwd = 1.0) 
+  }
+  
+  if (!is.null(label)) {
+    max_dp <- max(plot_data[subset])
+    graphics::par(xpd = T)
+    graphics::text(xlim[1],max_dp * 1.03, label, cex = 2.5)
+    graphics::par(xpd = F) 
+  }
+}
+
 #' Image plot method for objects of class mrs_data.
 #' @param x object of class mrs_data.
 #' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
@@ -252,114 +361,6 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "real", x_offset = 0,
         #col=gray.colors(64), ...)
 }
 
-#' Plotting method for objects of class mrs_data.
-#' @param x object of class mrs_data.
-#' @param fd display data in the frequency-domain (default), or time-domain 
-#' (logical).
-#' @param x_units the units to use for the x-axis, can be one of: "ppm", "hz", 
-#' "points" or "seconds".
-#' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
-#' @param y_scale option to display the y-axis values (logical).
-#' @param mode representation of the complex numbers to be plotted, can be one
-#' of: "real", "imag" or "abs".
-#' @param dyn the dynamic index to plot.
-#' @param x_pos the x index to plot.
-#' @param y_pos the y index to plot.
-#' @param z_pos the z index to plot.
-#' @param coil the coil element number to plot.
-#' @param lwd plot linewidth.
-#' @param bty option to draw a box around the plot. See ?par.
-#' @param label character string to add to the top left of the plot window.
-#' @param ... other arguments to pass to the plot method.
-#' @export
-plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
-                          y_scale = FALSE, mode = "real", dyn = 1, x_pos = 1,
-                          y_pos = 1, z_pos = 1, coil = 1, lwd = NULL, 
-                          bty = NULL, label = "", ...) {
-  
-  # convert to the correct domain for plotting
-  if (fd & !is_fd(x)) {
-    x <- td2fd(x)
-  } else if (!fd & is_fd(x)) {
-    x <- fd2td(x)
-  }
-  
-  if (is.null(lwd)) {
-    lwd <- 1.5
-  }
-  
-  if (is.null(bty)) {
-    bty <- "o"
-  }
-  
-  if (fd) {
-    xlab <- "Chemical Shift"  
-  } else {
-    xlab <- "Time"  
-  }
-  
-  if (is.null(x_units) & fd) {
-    x_units = "ppm"
-  } else if (is.null(x_units) & !fd) {
-    x_units = "seconds"
-  }
-  
-  if ( x_units == "ppm" ) {
-    x_scale <- ppm(x)
-    xlab <- paste(xlab, "(ppm)")
-  } else if (x_units == "hz") {
-    x_scale <- hz(x)
-    xlab <- paste(xlab, "(Hz)")
-  } else if (x_units == "points") {
-    x_scale <- pts(x)
-    xlab <- paste(xlab, "(Data Points)")
-  } else if (x_units == "seconds") {
-    x_scale <- seconds(x)
-    xlab <- paste(xlab, "(s)")
-  }
-  
-  if (is.null(xlim)) {
-    xlim <- c(x_scale[1], x_scale[N(x)])
-  }
-  
-  x_inds <- get_seg_ind(x_scale, xlim[1], xlim[2])
-  subset <- x_inds[1]:x_inds[2]
-  
-  #graphics::par("xaxs" = "i", "yaxs"="i") # tight axes limits
-  graphics::par("xaxs" = "i") # tight axes limits
-  plot_data <- x$data[1, x_pos, y_pos, z_pos, dyn, coil,]
-  
-  if (mode == "real") {
-    plot_data <- Re(plot_data)
-  } else if (mode == "imag") {
-    plot_data <- Im(plot_data)
-  } else if (mode == "abs") {
-    plot_data <- Mod(plot_data)
-  }
-  
-  graphics::par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
-  if (y_scale) {
-    graphics::par(mar = c(3.5, 3.5, 1, 1))
-    graphics::plot(x_scale[subset], plot_data[subset],type = 'l',xlim = xlim, 
-                   xlab = xlab, ylab = "Intensity (au)", lwd = lwd,
-                   bty = bty, ...)
-  } else {
-    graphics::par(mar = c(3.5, 1, 1, 1))
-    graphics::plot(x_scale[subset], plot_data[subset], type = 'l', xlim = xlim,
-         xlab = xlab, yaxt = "n", ylab = "", lwd = lwd, bty = bty, ...)
-  }
-  
-  if (bty == "n") {
-    graphics::abline(a = graphics::par("usr")[3], b = 0, lwd = 1.0) 
-  }
-  
-  if (!is.null(label)) {
-    max_dp <- max(plot_data[subset])
-    graphics::par(xpd = T)
-    graphics::text(xlim[1],max_dp * 1.03, label, cex = 2.5)
-    graphics::par(xpd = F) 
-  }
-}
 
 plot_slice_map <- function(data, lower = NULL, upper = NULL, mask_map = NULL,
                            mask_cutoff = 20, interp = 16, slice = 1, dyn = 1,

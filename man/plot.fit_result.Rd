@@ -2,17 +2,28 @@
 % Please edit documentation in R/fit_display.R
 \name{plot.fit_result}
 \alias{plot.fit_result}
-\title{Plot the fitting results of an object of class fit_result.}
+\title{Plot the fitting results of an object of class \code{fit_result}.}
 \usage{
-\method{plot}{fit_result}(x, n = NA, ...)
+\method{plot}{fit_result}(x, xlim = c(4, 0.5), plt_title = FALSE,
+  data_only = FALSE, label = NULL, plot_sigs = NULL, n = NA, ...)
 }
 \arguments{
 \item{x}{fit_result object.}
 
+\item{xlim}{the range of values to display on the x-axis, eg xlim = c(4,1).}
+
+\item{plt_title}{title to add to the plot.}
+
+\item{data_only}{display only the processed data (logical).}
+
+\item{label}{character string to add to the top left of the plot window.}
+
+\item{plot_sigs}{a character vector of signal names to add to the plot.}
+
 \item{n}{index to the fit number to display.}
 
-\item{...}{further arguments.}
+\item{...}{further arguments to plot method.}
 }
 \description{
-Plot the fitting results of an object of class fit_result.
+Plot the fitting results of an object of class \code{fit_result}.
 }

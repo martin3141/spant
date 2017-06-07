@@ -2,15 +2,15 @@
 % Please edit documentation in R/fit_display.R
 \name{print.fit_result}
 \alias{print.fit_result}
-\title{Print a summary of an object of class fit_result.}
+\title{Print a summary of an object of class \code{fit_result}.}
 \usage{
 \method{print}{fit_result}(x, ...)
 }
 \arguments{
-\item{x}{fit_result object.}
+\item{x}{\code{fit_result} object.}
 
 \item{...}{further arguments.}
 }
 \description{
-Print a summary of an object of class fit_result.
+Print a summary of an object of class \code{fit_result}.
 }

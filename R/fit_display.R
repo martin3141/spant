@@ -1,7 +1,25 @@
+#' Plot the fitting results of an object of class \code{fit_result}.
+#' @param x fit_result object.
+#' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
+#' @param plt_title title to add to the plot.
+#' @param data_only display only the processed data (logical).
+#' @param label character string to add to the top left of the plot window.
+#' @param plot_sigs a character vector of signal names to add to the plot.
+#' @param n index to the fit number to display.
+#' @param ... further arguments to plot method.
 #' @export
-plot.fit_table <- function(x, xlim = c(4, 0.5), plt_title = FALSE,
+plot.fit_result <- function(x, xlim = c(4, 0.5), plt_title = FALSE,
                            data_only = FALSE, label=NULL, 
-                           plot_sigs = NULL, ...) {
+                           plot_sigs = NULL, n = NA, ...) {
+  
+  if ( is.na(n) && length(x$fits) > 1 ) {
+    warning("Fit number n not specified, plotting the first one.")
+    n = 1
+  }
+  
+  if ( is.na(n)) {n = 1} # SVS case
+  
+  x <- x$fits[[n]]
   
   graphics::par("xaxs" = "i", "yaxs" = "i") # tight axes limits
   
@@ -20,10 +38,9 @@ plot.fit_table <- function(x, xlim = c(4, 0.5), plt_title = FALSE,
     ind <- x$PPMScale < xlim[2] & x$PPMScale > xlim[1]
   }
   
-  if (data_only)
-  {
-    max_dp <- max(table$Data[ind])
-    min_dp <- min(table$Data[ind])
+  if (data_only) {
+    max_dp <- max(x$Data[ind])
+    min_dp <- min(x$Data[ind])
     marg = (max_dp - min_dp) * 0.02
     graphics::plot(x$PPMScale, x$Data, type = 'l', xlim = xlim, 
          ylim = c(min_dp - marg, max_dp + marg), yaxt = "n", ylab = "",
@@ -59,8 +76,8 @@ plot.fit_table <- function(x, xlim = c(4, 0.5), plt_title = FALSE,
   
 }
 
-#' Print a summary of an object of class fit_result.
-#' @param x fit_result object.
+#' Print a summary of an object of class \code{fit_result}.
+#' @param x \code{fit_result} object.
 #' @param ... further arguments.
 #' @export
 print.fit_result <- function(x, ...) {
@@ -74,22 +91,6 @@ output_csv <- function(analysis, fname, pvc=FALSE) {
   } else {
     utils::write.csv(analysis$results, fname, quote = FALSE, row.names = FALSE)
   }
-}
-
-#' Plot the fitting results of an object of class fit_result.
-#' @param x fit_result object.
-#' @param n index to the fit number to display.
-#' @param ... further arguments.
-#' @export
-plot.fit_result <- function(x, n = NA, ...) {
-  if ( is.na(n) && length(x$fits) > 1 ) {
-    warning("Fit number not specified, plotting the first one.")
-    n = 1
-  }
-  
-  if ( is.na(n)) {n = 1} # SVS case
-  
-  graphics::plot(x$fits[[n]], ...)
 }
 
 plot_slice <- function(analysis, name) {
