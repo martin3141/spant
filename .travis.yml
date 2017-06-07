@@ -21,6 +21,10 @@ addons:
     - tcl 
     - tcl-dev
 
+# added on 7 Jun 2016 as workaround for https://github.com/travis-ci/travis-ci/issues/7863
+before_install:
+  - tlmgr install xkeyval
+
 # env:
 #   global:
 #   - _R_CHECK_FORCE_SUGGESTS_=FALSE

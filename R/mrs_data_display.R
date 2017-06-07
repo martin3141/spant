@@ -1,7 +1,6 @@
-# Print a summary of mrs_data parameters.
-# @param x mrs_data object.
-# @param ... further arguments.
-
+#' Print a summary of mrs_data parameters.
+#' @param x mrs_data object.
+#' @param ... further arguments.
 #' @export
 print.mrs_data <- function(x, ...) {
   cat("MRS Data Parameters\n")
@@ -26,22 +25,21 @@ print.mrs_data <- function(x, ...) {
   #            dim(x$data)[1] == 2, "\n")), sep = "")
 }
 
-# Image plot method for objects of class mrs_data.
-# @param x object of class mrs_data.
-# @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
-# @param mode representation of the complex numbers to be plotted, can be one
-# of: "real", "imag" or "abs".
-# @param col Colour map to use, defaults to viridis if the package is 
-# available.
-# @param dim the dimension to display on the y-axis, can be one of: "dyn", "x",
-# "y", "z" or "coil".
-# @param x_pos the x index to plot.
-# @param y_pos the y index to plot.
-# @param z_pos the z index to plot.
-# @param dyn the dynamic index to plot.
-# @param coil the coil element number to plot.
-# @param ... other arguments to pass to the plot method.
-
+#' Image plot method for objects of class mrs_data.
+#' @param x object of class mrs_data.
+#' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
+#' @param mode representation of the complex numbers to be plotted, can be one
+#' of: "real", "imag" or "abs".
+#' @param col Colour map to use, defaults to viridis if the package is 
+#' available.
+#' @param dim the dimension to display on the y-axis, can be one of: "dyn", "x",
+#' "y", "z" or "coil".
+#' @param x_pos the x index to plot.
+#' @param y_pos the y index to plot.
+#' @param z_pos the z index to plot.
+#' @param dyn the dynamic index to plot.
+#' @param coil the coil element number to plot.
+#' @param ... other arguments to pass to the plot method.
 #' @export
 image.mrs_data <- function(x, xlim = NULL, mode = "real", col = NULL, 
                            dim = "dyn", x_pos = NA, y_pos = NA, z_pos = NA,
@@ -132,23 +130,22 @@ stackplot <- function(x, ...) {
   UseMethod("stackplot", x)
 }
 
-# Stackplot plotting method for objects of class mrs_data.
-# @param x object of class mrs_data.
-# @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
-# @param mode representation of the complex numbers to be plotted, can be one
-# of: "real", "imag" or "abs".
-# @param x_offset seperate plots in the x-axis direction by this value. 
-# Default value is 0.
-# @param y_offset seperate plots in the y-axis direction by this value.
-# @param dim the dimension to stack in the y-axis direction, can be one of: 
-# "dyn", "x", "y", "z" or "coil".
-# @param x_pos the x index to plot.
-# @param y_pos the y index to plot.
-# @param z_pos the z index to plot.
-# @param dyn the dynamic index to plot.
-# @param coil the coil element number to plot.
-# @param ... other arguments to pass to the matplot method.
-
+#' Stackplot plotting method for objects of class mrs_data.
+#' @param x object of class mrs_data.
+#' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
+#' @param mode representation of the complex numbers to be plotted, can be one
+#' of: "real", "imag" or "abs".
+#' @param x_offset seperate plots in the x-axis direction by this value. 
+#' Default value is 0.
+#' @param y_offset seperate plots in the y-axis direction by this value.
+#' @param dim the dimension to stack in the y-axis direction, can be one of: 
+#' "dyn", "x", "y", "z" or "coil".
+#' @param x_pos the x index to plot.
+#' @param y_pos the y index to plot.
+#' @param z_pos the z index to plot.
+#' @param dyn the dynamic index to plot.
+#' @param coil the coil element number to plot.
+#' @param ... other arguments to pass to the matplot method.
 #' @export
 stackplot.mrs_data <- function(x, xlim = NULL, mode = "real", x_offset = 0,
                                y_offset = 5, dim = "dyn", x_pos = NA, 
@@ -255,26 +252,25 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "real", x_offset = 0,
         #col=gray.colors(64), ...)
 }
 
-# Plotting method for objects of class mrs_data.
-# @param x object of class mrs_data.
-# @param fd display data in the frequency-domain (default), or time-domain 
-# (logical).
-# @param x_units the units to use for the x-axis, can be one of: "ppm", "hz", 
-# "points" or "seconds".
-# @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
-# @param y_scale option to display the y-axis values (logical).
-# @param mode representation of the complex numbers to be plotted, can be one
-# of: "real", "imag" or "abs".
-# @param dyn the dynamic index to plot.
-# @param x_pos the x index to plot.
-# @param y_pos the y index to plot.
-# @param z_pos the z index to plot.
-# @param coil the coil element number to plot.
-# @param lwd plot linewidth.
-# @param bty option to draw a box around the plot. See ?par.
-# @param label character string to add to the top left of the plot window.
-# @param ... other arguments to pass to the plot method.
-
+#' Plotting method for objects of class mrs_data.
+#' @param x object of class mrs_data.
+#' @param fd display data in the frequency-domain (default), or time-domain 
+#' (logical).
+#' @param x_units the units to use for the x-axis, can be one of: "ppm", "hz", 
+#' "points" or "seconds".
+#' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
+#' @param y_scale option to display the y-axis values (logical).
+#' @param mode representation of the complex numbers to be plotted, can be one
+#' of: "real", "imag" or "abs".
+#' @param dyn the dynamic index to plot.
+#' @param x_pos the x index to plot.
+#' @param y_pos the y index to plot.
+#' @param z_pos the z index to plot.
+#' @param coil the coil element number to plot.
+#' @param lwd plot linewidth.
+#' @param bty option to draw a box around the plot. See ?par.
+#' @param label character string to add to the top left of the plot window.
+#' @param ... other arguments to pass to the plot method.
 #' @export
 plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
                           y_scale = FALSE, mode = "real", dyn = 1, x_pos = 1,

@@ -47,18 +47,17 @@ mrs_data <- read_mrs(fname, format = "spar_sdat")
 
 # output basic data structure
 print(mrs_data)
-#> MRS data parameters
-#> -------------------------------
-#> Trans. freq (MHz)       : 127.786142
+#> MRS Data Parameters
+#> ----------------------------------
+#> Trans. freq (MHz)       : 127.7861
 #> FID data points         : 1024
 #> X,Y,Z dimensions        : 1x1x1
 #> Dynamics                : 1
 #> Coils                   : 1
 #> Voxel resolution (mm)   : 20x20x20
 #> Sampling frequency (Hz) : 2000
-#> Contains referece data  : FALSE
+#> Reference freq. (ppm)   : 4.65
 #> Spectral domain         : FALSE
-#> Reference freq. (PPM)   : 4.65
 
 # plot data in the frequency domain
 plot(mrs_data, xlim = c(5, 0.5))
