@@ -4,9 +4,9 @@
 \alias{stackplot.mrs_data}
 \title{Stackplot plotting method for objects of class mrs_data.}
 \usage{
-\method{stackplot}{mrs_data}(x, xlim = NULL, mode = "real", x_offset = 0,
-  y_offset = 5, dim = "dyn", x_pos = NA, y_pos = NA, z_pos = NA,
-  dyn = 1, coil = 1, ...)
+\method{stackplot}{mrs_data}(x, xlim = NULL, mode = "real", col = NULL,
+  x_offset = 0, y_offset = 5, dim = "dyn", x_pos = NULL, y_pos = NULL,
+  z_pos = NULL, dyn = 1, coil = 1, ...)
 }
 \arguments{
 \item{x}{object of class mrs_data.}
@@ -15,6 +15,8 @@
 
 \item{mode}{representation of the complex numbers to be plotted, can be one
 of: "real", "imag" or "abs".}
+
+\item{col}{set the colour of the line, eg col = rgb(1,0,0,0.5).}
 
 \item{x_offset}{seperate plots in the x-axis direction by this value.
 Default value is 0.}

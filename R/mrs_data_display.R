@@ -151,8 +151,8 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
 #' @param ... other arguments to pass to the plot method.
 #' @export
 image.mrs_data <- function(x, xlim = NULL, mode = "real", col = NULL, 
-                           dim = "dyn", x_pos = NA, y_pos = NA, z_pos = NA,
-                           dyn = 1, coil = 1, ...) { 
+                           dim = "dyn", x_pos = NULL, y_pos = NULL,
+                           z_pos = NULL, dyn = 1, coil = 1, ...) { 
   if (!is_fd(x)) {
     x <- td2fd(x)
   }
@@ -171,15 +171,15 @@ image.mrs_data <- function(x, xlim = NULL, mode = "real", col = NULL,
   
   data_dim <- dim(x$data)
   
-  if (is.na(x_pos)) {
+  if (is.null(x_pos)) {
     x_pos <- as.integer(data_dim[2] / 2) + 1
   }
   
-  if (is.na(y_pos)) {
+  if (is.null(y_pos)) {
     y_pos <- as.integer(data_dim[3] / 2) + 1
   }
   
-  if (is.na(z_pos)) {
+  if (is.null(z_pos)) {
     z_pos <- as.integer(data_dim[4] / 2) + 1
   }
   
@@ -201,7 +201,7 @@ image.mrs_data <- function(x, xlim = NULL, mode = "real", col = NULL,
     y_title = "z position"
   } else if (dim == "coil") {
     plot_data <- t(x$data[1, x_pos, y_pos, z_pos, dyn, , subset])
-    yN <- data_dim[5]
+    yN <- data_dim[6]
     y_title = "Coil"
   } else {
     stop("Unrecognised dim value. Should be one of: dyn, x, y, z, coil")
@@ -244,6 +244,7 @@ stackplot <- function(x, ...) {
 #' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
 #' @param mode representation of the complex numbers to be plotted, can be one
 #' of: "real", "imag" or "abs".
+#' @param col set the colour of the line, eg col = rgb(1,0,0,0.5).
 #' @param x_offset seperate plots in the x-axis direction by this value. 
 #' Default value is 0.
 #' @param y_offset seperate plots in the y-axis direction by this value.
@@ -256,12 +257,17 @@ stackplot <- function(x, ...) {
 #' @param coil the coil element number to plot.
 #' @param ... other arguments to pass to the matplot method.
 #' @export
-stackplot.mrs_data <- function(x, xlim = NULL, mode = "real", x_offset = 0,
-                               y_offset = 5, dim = "dyn", x_pos = NA, 
-                               y_pos = NA, z_pos = NA, dyn = 1, coil = 1, ...) {
+stackplot.mrs_data <- function(x, xlim = NULL, mode = "real", col = NULL, 
+                               x_offset = 0, y_offset = 5, dim = "dyn", 
+                               x_pos = NULL, y_pos = NULL, z_pos = NULL, 
+                               dyn = 1, coil = 1, ...) {
   
   if (!is_fd(x)) {
     x <- td2fd(x)
+  }
+  
+  if (is.null(col)) {
+    col <- 1
   }
   
   #par("xaxs" = "i") # tight axes limits
@@ -277,15 +283,15 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "real", x_offset = 0,
   
   data_dim <- dim(x$data)
   
-  if (is.na(x_pos)) {
+  if (is.null(x_pos)) {
     x_pos <- as.integer(data_dim[2] / 2) + 1
   }
   
-  if (is.na(y_pos)) {
+  if (is.null(y_pos)) {
     y_pos <- as.integer(data_dim[3] / 2) + 1
   }
   
-  if (is.na(z_pos)) {
+  if (is.null(z_pos)) {
     z_pos <- as.integer(data_dim[4] / 2) + 1
   }
   
@@ -342,7 +348,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "real", x_offset = 0,
   
   graphics::matplot(x_scale_mat[length(subset):1,],
                     plot_data[length(subset):1,], type = "l", 
-                    lty = 1, col = 1, xlab = "Frequency (PPM)", ylab = "",
+                    lty = 1, col = col, xlab = "Frequency (PPM)", ylab = "",
                     yaxt = "n", xaxt = "n", xlim = rev(range(x_scale_mat)),
                     bty = "n", ...)
   

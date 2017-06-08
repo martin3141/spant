@@ -1297,16 +1297,18 @@ zp_vec <- function(vector, n) {
 
 #' Combine coil data based on the first data point of a reference signal.
 #' 
-#' Elements are phased and optionally scaled prior to summation. Where a 
+#' By default, elements are phased and scaled prior to summation. Where a 
 #' reference signal is not given, the mean dynamic signal will be used
 #' instead.
 #' @param metab_mrs MRS data containing metabolite data.
 #' @param ref_mrs MRS data containing reference data (optional).
-#' @param scale Option to rescale coil elements based on the first data point
+#' @param scale option to rescale coil elements based on the first data point
 #' (logical).
-#' @return MRS data with coil elements combined.
+#' @param sum_coils sum the coil elements as a final step (logical).
+#' @return MRS data.
 #' @export
-comb_coils <- function(metab_mrs, ref_mrs = NULL, scale = TRUE) {
+comb_coils <- function(metab_mrs, ref_mrs = NULL, scale = TRUE,
+                       sum_coils = TRUE) {
   metab_only <- FALSE
   if (is.null(ref_mrs)) {
     ref_mrs <- mean_dyns(metab_mrs)
@@ -1371,7 +1373,10 @@ comb_coils <- function(metab_mrs, ref_mrs = NULL, scale = TRUE) {
     metab_mrs_ps <- metab_mrs
     metab_mrs_ps$data <- metab_mrs$data * exp(-1i * ang)
   }
-  metab_mrs_ps <- sum_coils(metab_mrs_ps)
+  
+  if (sum_coils == TRUE) {
+    metab_mrs_ps <- sum_coils(metab_mrs_ps)
+  }
   
   if (metab_only) {
     return(metab_mrs_ps)

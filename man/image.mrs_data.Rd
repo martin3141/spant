@@ -5,7 +5,7 @@
 \title{Image plot method for objects of class mrs_data.}
 \usage{
 \method{image}{mrs_data}(x, xlim = NULL, mode = "real", col = NULL,
-  dim = "dyn", x_pos = NA, y_pos = NA, z_pos = NA, dyn = 1,
+  dim = "dyn", x_pos = NULL, y_pos = NULL, z_pos = NULL, dyn = 1,
   coil = 1, ...)
 }
 \arguments{
