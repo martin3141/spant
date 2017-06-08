@@ -4,12 +4,15 @@
 \alias{comb_coils}
 \title{Combine coil data based on the first data point of a reference signal.}
 \usage{
-comb_coils(metab_mrs, ref_mrs = NULL, scale = TRUE, sum_coils = TRUE)
+comb_coils(metab_mrs, ref_mrs = NULL, noise_mrs = NULL, scale = TRUE,
+  sum_coils = TRUE)
 }
 \arguments{
 \item{metab_mrs}{MRS data containing metabolite data.}
 
 \item{ref_mrs}{MRS data containing reference data (optional).}
+
+\item{noise_mrs}{MRS data from a noise scan (optional).}
 
 \item{scale}{option to rescale coil elements based on the first data point
 (logical).}

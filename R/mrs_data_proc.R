@@ -1302,13 +1302,15 @@ zp_vec <- function(vector, n) {
 #' instead.
 #' @param metab_mrs MRS data containing metabolite data.
 #' @param ref_mrs MRS data containing reference data (optional).
+#' @param noise_mrs MRS data from a noise scan (optional).
 #' @param scale option to rescale coil elements based on the first data point
 #' (logical).
 #' @param sum_coils sum the coil elements as a final step (logical).
 #' @return MRS data.
 #' @export
-comb_coils <- function(metab_mrs, ref_mrs = NULL, scale = TRUE,
-                       sum_coils = TRUE) {
+comb_coils <- function(metab_mrs, ref_mrs = NULL, noise_mrs = NULL, 
+                       scale = TRUE, sum_coils = TRUE) {
+  
   metab_only <- FALSE
   if (is.null(ref_mrs)) {
     ref_mrs <- mean_dyns(metab_mrs)
@@ -1333,6 +1335,10 @@ comb_coils <- function(metab_mrs, ref_mrs = NULL, scale = TRUE,
   
   phi <- Arg(fp)
   amp <- Mod(fp)
+  
+  if (!is.null(noise_mrs)) {
+    amp <- amp / (calc_coil_noise_sd(noise_mrs) ^ 2)
+  }
   
   # phase and scale ref data
   ref_dims <- dim(ref_mrs$data)
@@ -1422,4 +1428,26 @@ est_noise_sd_vec <- function(x, n = 100, offset = 100, p_order = 2) {
   seg <- Re(x[(N - offset - n + 1):(N - offset)])
   lm_res <- stats::lm(seg ~ poly(1:n, p_order))
   stats::sd(lm_res$residual)
+}
+
+#' Calculate the noise correlation between coil elements.
+#' @param noise_data \code{mrs_data} object with one FID for each coil element.
+#' @return Correlation matrix.
+#' @export
+calc_coil_noise_cor <- function(noise_data) {
+  cplx_data <- drop(noise_data$data)
+  # concat real and imag parts
+  real_data <- cbind(Re(cplx_data), Im(cplx_data))
+  stats::cor(t(real_data))
+}
+
+#' Calculate the noise stanard deviation for each coil element.
+#' @param noise_data \code{mrs_data} object with one FID for each coil element.
+#' @return array of standard deviations.
+#' @export
+calc_coil_noise_sd <- function(noise_data) {
+  cplx_data <- drop(noise_data$data)
+  # concat real and imag parts
+  real_data <- cbind(Re(cplx_data), Im(cplx_data))
+  apply(real_data, 1, stats::sd)
 }

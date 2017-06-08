@@ -456,6 +456,7 @@ read_list_data <- function(fname, ft, fs, ref) {
   chans <- max(data_ind_tab$chan) + 1
   ref_inds <- which(data_ind_tab$typ == "STD" & data_ind_tab$mix == 1)
   metab_inds <- which(data_ind_tab$typ == "STD" & data_ind_tab$mix == 0)
+  noise_inds <- which(data_ind_tab$typ == "NOI" & data_ind_tab$mix == 0)
   
   ref_N <- length(ref_inds) 
   ref_start <- (ref_inds[1] - 1) * N + 1
@@ -464,6 +465,10 @@ read_list_data <- function(fname, ft, fs, ref) {
   metab_N <- length(metab_inds) 
   metab_start <- (metab_inds[1] - 1) * N + 1
   metab_end   <- metab_inds[metab_N] * N
+  
+  noise_N <- length(noise_inds) 
+  noise_start <- (noise_inds[1] - 1) * N + 1
+  noise_end   <- noise_inds[noise_N] * N
   
   raw_vec <- readBin(data, what = "double", n = 2 * N * (fid_num), size = 4,
                      endian = "little")
@@ -477,6 +482,10 @@ read_list_data <- function(fname, ft, fs, ref) {
   metab_data <- cplx_vec[metab_start:metab_end]
   dim(metab_data) <- c(N, chans, metab_N/chans, 1, 1, 1, 1)
   metab_data <- aperm(metab_data, c(7,6,5,4,3,2,1))
+  
+  noise_data <- cplx_vec[noise_start:noise_end]
+  dim(noise_data) <- c(N, chans, noise_N/chans, 1, 1, 1, 1)
+  noise_data <- aperm(noise_data, c(7,6,5,4,3,2,1))
   
   #res <- rep(NA, 7)
   res <- c(NA, NA, NA, NA, 1, NA, 1 / fs)
@@ -495,7 +504,12 @@ read_list_data <- function(fname, ft, fs, ref) {
                    pos_vec = NA, freq_domain = freq_domain)
   class(ref_mrs) <- "mrs_data"
   
-  list(metab = metab_mrs, ref = ref_mrs)
+  noise_mrs <- list(ft = ft, data = noise_data, resolution = res, te = NA,
+                   ref = ref, row_vec = NA, col_vec = NA,
+                   pos_vec = NA, freq_domain = freq_domain)
+  class(noise_mrs) <- "mrs_data"
+  
+  list(metab = metab_mrs, ref = ref_mrs, noise = noise_mrs)
 }
 
 read_rda <- function(fname) {

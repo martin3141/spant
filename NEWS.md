@@ -1,4 +1,7 @@
 # spant 0.3.0
+* Philips "list data" also now reads noise scans.
+* calc_coil_noise_cor, calc_coil_noise_sd functions added to aid coil 
+combination.
 * Documentation updates for plotting methods.
 
 # spant 0.2.0
