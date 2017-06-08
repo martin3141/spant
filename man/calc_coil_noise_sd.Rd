@@ -2,7 +2,7 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{calc_coil_noise_sd}
 \alias{calc_coil_noise_sd}
-\title{Calculate the noise stanard deviation for each coil element.}
+\title{Calculate the noise standard deviation for each coil element.}
 \usage{
 calc_coil_noise_sd(noise_data)
 }
@@ -13,5 +13,5 @@ calc_coil_noise_sd(noise_data)
 array of standard deviations.
 }
 \description{
-Calculate the noise stanard deviation for each coil element.
+Calculate the noise standard deviation for each coil element.
 }

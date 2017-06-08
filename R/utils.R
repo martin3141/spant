@@ -23,6 +23,18 @@ hilbert <- function(x) {
   stats::fft(y, inverse = TRUE) / n
 }
 
+re_max <- function(x) {
+  max(Re(x))
+}
+
+re_mean <- function(x) {
+  mean(Re(x))
+}
+
+re_sd <- function(x) {
+  stats::sd(Re(x))
+}
+
 is.installed <- function(mypkg) {
   is.element(mypkg, utils::installed.packages()[,1]) 
 }

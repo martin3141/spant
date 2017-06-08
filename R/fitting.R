@@ -113,10 +113,11 @@ fit_mrs <- function(metab, basis, method = 'VARPRO', w_ref = NULL, opts = NULL,
     
     
   } else if (method == "TARQUIN") {
-    
-    if (dyns(w_ref) > 1) {
-      w_ref <- mean_dyns(w_ref)
-      warning("Using the mean reference signal for water scaling.")
+    if (!is.null(w_ref)) { 
+      if (dyns(w_ref) > 1) {
+        w_ref <- mean_dyns(w_ref)
+        warning("Using the mean reference signal for water scaling.")
+      }
     }
     
     # repeat the refernce signal to match the number of dynamics
@@ -149,9 +150,11 @@ fit_mrs <- function(metab, basis, method = 'VARPRO', w_ref = NULL, opts = NULL,
                          #.paropts = list(.options.snow=snowopts),
                          #.paropts = list(.export="N",.packages="spant"),
   } else if (method == "LCMODEL") {
-    if (dyns(w_ref) > 1) {
-      w_ref <- mean_dyns(w_ref)
-      warning("Using the mean reference signal for water scaling.")
+    if (!is.null(w_ref)) { 
+      if (dyns(w_ref) > 1) {
+        w_ref <- mean_dyns(w_ref)
+        warning("Using the mean reference signal for water scaling.")
+      }
     }
     
     # repeat the reference signal to match the number of dynamics

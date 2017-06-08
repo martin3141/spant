@@ -2,7 +2,7 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{ecc}
 \alias{ecc}
-\title{Apply eddy current correction using the Klose method:}
+\title{Eddy current correction.}
 \usage{
 ecc(metab, ref)
 }
@@ -15,6 +15,9 @@ ecc(metab, ref)
 Corrected data in the time domain.
 }
 \description{
+Apply eddy current correction using the Klose method.
+}
+\details{
 In vivo proton spectroscopy in presence of eddy currents.
 Klose U.
 Magn Reson Med. 1990 Apr;14(1):26-30.

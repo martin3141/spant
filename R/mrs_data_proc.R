@@ -573,20 +573,28 @@ get_seg_ind <- function(scale, start, end) {
   c(st_ind, end_ind)
 }
 
-crop_spec <- function(mrs_data, xlim = c(4,0.5), scale = "ppm") {
+#' Crop \code{mrs_data} object based on a frequency range.
+#' @param mrs_data MRS data.
+#' @param xlim the range of values to crop in the spectral dimension 
+#' xlim = c(4,1).
+#' @param x_units the units to use for the x-axis, can be one of: "ppm", "hz" or 
+#' "points".
+#' @return cropped \code{mrs_data} object.
+#' @export
+crop_spec <- function(mrs_data, xlim = c(4,0.5), x_units = "ppm") {
   # needs to be a fd operation
   if (!is_fd(mrs_data)) {
       mrs_data <- td2fd(mrs_data)
   }
   
-  if (scale == "ppm") {
+  if (x_units == "ppm") {
     x_scale <- ppm(mrs_data)
   } else if (scale == "hz") {
     x_scale <- hz(mrs_data)
   } else if (scale == "points") {
     x_scale <- pts(mrs_data)
-  } else if (scale == "seconds") {
-    x_scale <- seconds(mrs_data)
+  } else {
+    stop("Error, scale not recognised.")
   }
   
   if (is.null(xlim)) {
@@ -1210,7 +1218,9 @@ ecc_ref <- function(mrs_data) {
   apply_mrs(mrs_data, 7, ecc_1d_array)
 }
 
-#' Apply eddy current correction using the Klose method:
+#' Eddy current correction.
+#' 
+#' Apply eddy current correction using the Klose method.
 #' 
 #' In vivo proton spectroscopy in presence of eddy currents.
 #' Klose U.
@@ -1441,7 +1451,7 @@ calc_coil_noise_cor <- function(noise_data) {
   stats::cor(t(real_data))
 }
 
-#' Calculate the noise stanard deviation for each coil element.
+#' Calculate the noise standard deviation for each coil element.
 #' @param noise_data \code{mrs_data} object with one FID for each coil element.
 #' @return array of standard deviations.
 #' @export
@@ -1450,4 +1460,40 @@ calc_coil_noise_sd <- function(noise_data) {
   # concat real and imag parts
   real_data <- cbind(Re(cplx_data), Im(cplx_data))
   apply(real_data, 1, stats::sd)
+}
+
+#' Calculate the spectral SNR.
+#' 
+#' SNR is defined as the maximum signal value divided by 2 times the standard 
+#' deviation of the noise.
+#' 
+#' The mean noise value is subtracted from the maximum signal value to reduce DC
+#' offset bias. A polynomial detrending fit (second order by default) is applied 
+#' to the noise region before the noise stanard deviation is estimated.
+#' 
+#' @param mrs_data an object of class \code{mrs_data}.
+#' @param sig_region a ppm region to define where the maximum signal value
+#' should be estimated.
+#' @param noise_region a ppm region to defined where the noise level should be 
+#' estimated.
+#' @param p_order polynomial order to fit to the noise region before estimating 
+#' the standard deviation.
+#' @return an array of SNR values.
+#' @export
+calc_spec_snr <- function(mrs_data, sig_region = c(4,0.5), 
+                          noise_region = c(-0.5,-2.5), p_order = 2) {
+  
+  sig_data <- crop_spec(mrs_data, sig_region)
+  noise_data <- crop_spec(mrs_data, noise_region)
+  
+  max_sig <- apply_mrs(sig_data, 7, re_max, data_only = TRUE)
+  noise_mean <- apply_mrs(noise_data, 7, re_mean, data_only = TRUE)
+  max_sig <- max_sig - noise_mean
+  
+  #noise_sd <- apply_mrs(noise_data, 7, re_sd, data_only = TRUE)
+  
+  noise_sd <- est_noise_sd(noise_data, offset = 0, n = N(noise_data), 
+                           p_order = p_order)
+  
+  max_sig / (2 * noise_sd)
 }
