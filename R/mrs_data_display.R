@@ -58,7 +58,7 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
   }
   
   if (is.null(lwd)) {
-    lwd <- 1.5
+    lwd <- 1.2
   }
   
   if (is.null(bty)) {

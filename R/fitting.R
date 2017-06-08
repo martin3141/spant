@@ -33,7 +33,7 @@
 #' svs <- read_mrs(fname, format="spar_sdat")
 #' \dontrun{
 #' basis <- sim_basis_1h_brain_press(svs)
-#' fit_result <- fit_mrs(metab, basis)
+#' fit_result <- fit_mrs(svs, basis)
 #' }
 #' @export
 fit_mrs <- function(metab, basis, method = 'VARPRO', w_ref = NULL, opts = NULL, 
