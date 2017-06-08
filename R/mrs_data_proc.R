@@ -1300,48 +1300,48 @@ zp_vec <- function(vector, n) {
 #' By default, elements are phased and scaled prior to summation. Where a 
 #' reference signal is not given, the mean dynamic signal will be used
 #' instead.
-#' @param metab_mrs MRS data containing metabolite data.
-#' @param ref_mrs MRS data containing reference data (optional).
-#' @param noise_mrs MRS data from a noise scan (optional).
+#' @param metab MRS data containing metabolite data.
+#' @param ref MRS data containing reference data (optional).
+#' @param noise MRS data from a noise scan (optional).
 #' @param scale option to rescale coil elements based on the first data point
 #' (logical).
 #' @param sum_coils sum the coil elements as a final step (logical).
 #' @return MRS data.
 #' @export
-comb_coils <- function(metab_mrs, ref_mrs = NULL, noise_mrs = NULL, 
+comb_coils <- function(metab, ref = NULL, noise = NULL, 
                        scale = TRUE, sum_coils = TRUE) {
   
   metab_only <- FALSE
-  if (is.null(ref_mrs)) {
-    ref_mrs <- mean_dyns(metab_mrs)
+  if (is.null(ref)) {
+    ref <- mean_dyns(metab)
     metab_only <- TRUE
   }
   
-  if (is_fd(metab_mrs)) {
+  if (is_fd(metab)) {
       metab <- fd2td(metab)
   }
   
-  if (is_fd(ref_mrs)) {
+  if (is_fd(ref)) {
       ref <- fd2td(ref)
   }
   
   # get the first dynamic of the ref data
-  # first_ref <- get_dyns(ref_mrs, 1)
+  # first_ref <- get_dyns(ref, 1)
   # fp <- get_fp(first_ref)
   
   # get the dynamic mean of the ref data
-  mean_ref <- mean_dyns(ref_mrs)
+  mean_ref <- mean_dyns(ref)
   fp <- get_fp(mean_ref)
   
   phi <- Arg(fp)
   amp <- Mod(fp)
   
-  if (!is.null(noise_mrs)) {
-    amp <- amp / (calc_coil_noise_sd(noise_mrs) ^ 2)
+  if (!is.null(noise)) {
+    amp <- amp / (calc_coil_noise_sd(noise) ^ 2)
   }
   
   # phase and scale ref data
-  ref_dims <- dim(ref_mrs$data)
+  ref_dims <- dim(ref$data)
   
   ang <- rep(phi, prod(ref_dims[-6]))
   dim(ang) <- c(ref_dims[c(6, 2, 3, 4, 5, 1, 7)])
@@ -1352,17 +1352,17 @@ comb_coils <- function(metab_mrs, ref_mrs = NULL, noise_mrs = NULL,
     dim(scale_f) <- c(ref_dims[c(6, 2, 3, 4, 5, 1, 7)])
     scale_f <- aperm(scale_f, c(6, 2, 3, 4, 5, 1, 7))
     
-    ref_mrs_ps <- ref_mrs
-    ref_mrs_ps$data <- ref_mrs$data * exp(-1i * ang) * scale_f
+    ref_ps <- ref
+    ref_ps$data <- ref$data * exp(-1i * ang) * scale_f
   } else {
-    ref_mrs_ps <- ref_mrs
-    ref_mrs_ps$data <- ref_mrs$data * exp(-1i * ang)
+    ref_ps <- ref
+    ref_ps$data <- ref$data * exp(-1i * ang)
   }
   
-  ref_mrs_ps <- sum_coils(ref_mrs_ps)
+  ref_ps <- sum_coils(ref_ps)
   
   # phase and scale metab data
-  metab_dims <- dim(metab_mrs$data)
+  metab_dims <- dim(metab$data)
   
   ang <- rep(phi, prod(metab_dims[-6]))
   dim(ang) <- c(metab_dims[c(6, 2, 3, 4, 5, 1, 7)])
@@ -1373,21 +1373,21 @@ comb_coils <- function(metab_mrs, ref_mrs = NULL, noise_mrs = NULL,
     dim(scale_f) <- c(metab_dims[c(6, 2, 3, 4, 5, 1, 7)])
     scale_f <- aperm(scale_f, c(6, 2, 3, 4, 5, 1, 7))
     
-    metab_mrs_ps <- metab_mrs
-    metab_mrs_ps$data <- metab_mrs$data * exp(-1i * ang) * scale_f
+    metab_ps <- metab
+    metab_ps$data <- metab$data * exp(-1i * ang) * scale_f
   } else {
-    metab_mrs_ps <- metab_mrs
-    metab_mrs_ps$data <- metab_mrs$data * exp(-1i * ang)
+    metab_ps <- metab
+    metab_ps$data <- metab$data * exp(-1i * ang)
   }
   
   if (sum_coils == TRUE) {
-    metab_mrs_ps <- sum_coils(metab_mrs_ps)
+    metab_ps <- sum_coils(metab_ps)
   }
   
   if (metab_only) {
-    return(metab_mrs_ps)
+    return(metab_ps)
   } else {
-    return(list(metab = metab_mrs_ps, ref = ref_mrs_ps))
+    return(list(metab = metab_ps, ref = ref_ps))
   }
 }
 
