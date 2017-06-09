@@ -944,9 +944,9 @@ varpro_3_para_fn <- function(par, y, basis, t, nstart, sc_res = FALSE) {
 #' calculation.
 #' @return List of options.
 #' @examples
-#' varpro_opts(nstart = 20)
+#' varpro_opts(nstart = 10)
 #' @export
-varpro_opts <- function(nstart = 10, init_g_damping = 2, maxiters = 200,
+varpro_opts <- function(nstart = 20, init_g_damping = 2, maxiters = 200,
                         max_shift = 5, max_g_damping = 5, max_ind_damping = 5,
                         anal_jac = TRUE, bl_smth_pts = 80) {
   
@@ -972,9 +972,9 @@ varpro_opts <- function(nstart = 10, init_g_damping = 2, maxiters = 200,
 #' calculation.
 #' @return List of options.
 #' @examples
-#' varpro_opts(nstart = 20)
+#' varpro_opts(nstart = 10)
 #' @export
-varpro_3_para_opts <- function(nstart = 10, init_damping = 2, maxiters = 200,
+varpro_3_para_opts <- function(nstart = 20, init_damping = 2, maxiters = 200,
                         max_shift = 5, max_damping = 5, anal_jac = FALSE,
                         bl_smth_pts = 80) {
   
