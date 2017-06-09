@@ -3,6 +3,7 @@
 * calc_coil_noise_cor, calc_coil_noise_sd functions added to aid coil 
 combination.
 * Documentation updates for plotting methods.
+* Added some simulation methods to userland.
 
 # spant 0.2.0
 * Added Siemens RDA format reader.
