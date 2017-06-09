@@ -1,4 +1,22 @@
-#' Generate a mol_parameters object for a simple spin system with one resonance.
+#' Get a \code{mol_parameters} object for a named molecule.
+#' @param name the name of the molecule.
+#' @param ... aguments to pass to molecule definition function.
+#' @export
+get_mol_paras <- function(name, ...) {
+  get(paste("get_", tolower(name), "_paras", sep = ""))(...)
+}
+
+#' Return a character array of names that may be used with the 
+#' \code{get_mol_paras} funtion.
+#' @return a character array of names.
+#' @export
+get_mol_names <- function() {
+  funs <- ls(getNamespace("spant"), all.names = TRUE)
+  funs <- funs[!funs %in% c("get_mol_paras")]
+  sub("_paras", "", sub("get_", "", funs[grep("get_.*_paras", funs)]))
+}
+
+#' Generate a \code{mol_parameters} object for a simple spin system with one resonance.
 #' @param name Name of the molecule.
 #' @param chem_shift Chemical shift of the resonance (PPM).
 #' @param nucleus Nucleus (1H, 31P...).

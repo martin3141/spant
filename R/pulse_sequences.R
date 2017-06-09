@@ -1,5 +1,11 @@
-pulse_acquire <- function(spin_params, B0, offset) {
-  sys <- spin_sys(spin_params, B0, offset)
+#' Simple pulse and acquire seqeunce with ideal pulses.
+#' @param spin_params spin system definition.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @return a list of resonance amplitudes and frequencies.
+#' @export
+pulse_acquire <- function(spin_params, ft, ref) {
+  sys <- spin_sys(spin_params, ft, ref)
   
   sys$rho <- gen_F(sys, "z")
    
@@ -12,10 +18,18 @@ pulse_acquire <- function(spin_params, B0, offset) {
   # acquire
   acquire(sys, detect = "1H")
 }
+
+#' PRESS seqeunce with ideal pulses.
+#' @param spin_params spin system definition.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @param TE1 TE1 sequence parameter in seconds.
+#' @param TE2 TE2 sequence parameter in seconds.
+#' @return a list of resonance amplitudes and frequencies.
+#' @export
+press_ideal <- function(spin_params, ft, ref, TE1, TE2) {
   
-press_ideal <- function(spin_params, B0, offset, TE1, TE2) {
-  
-  sys <- spin_sys(spin_params, B0, offset)
+  sys <- spin_sys(spin_params, ft, ref)
   sys$rho <- -gen_F(sys, "y", "1H")
   
   # apply delay
@@ -64,8 +78,15 @@ press_ideal <- function(spin_params, B0, offset, TE1, TE2) {
   acquire(sys,detect = "1H")
 }
 
-spin_echo_ideal <- function(spin_params, B0, offset, TE) {
-  sys <- spin_sys(spin_params, B0, offset)
+#' Spin echo seqeunce with ideal pulses.
+#' @param spin_params spin system definition.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @param TE echo time in seconds.
+#' @return a list of resonance amplitudes and frequencies.
+#' @export
+spin_echo_ideal <- function(spin_params, ft, ref, TE) {
+  sys <- spin_sys(spin_params, ft, ref)
   
   sys$rho <- gen_F(sys, "z")
    

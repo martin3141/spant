@@ -836,7 +836,12 @@ get_metab <- function(mrs_data) {
 #' @return A single MRS data object with the input objects concatenated together.
 #' @export
 append_dyns <- function(...) {
-  x <- list(...)
+  # make a list if not one already
+  if (!is.list(...)) {
+    x <- list(...)
+  } else {
+    x <- list(...)[[1]]
+  }
   
   first_dataset <- x[[1]]
   

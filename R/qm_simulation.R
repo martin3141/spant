@@ -1,4 +1,4 @@
-spin_sys <- function(spin_params, B0, offset) {
+spin_sys <- function(spin_params, ft, ref) {
   # TODO checks on input
   
   # force uppercase
@@ -8,7 +8,7 @@ spin_sys <- function(spin_params, B0, offset) {
   
   # calculate the Hamiltonian
   H_mat <- H(spin_num, spin_params$nucleus, spin_params$chem_shift, 
-             spin_params$j_coupling_mat, B0, offset)
+             spin_params$j_coupling_mat, ft, ref)
   
   # perform a symmetric eigenvalue decomposition
   res <- eigen(H_mat, symmetric = TRUE) 
@@ -17,7 +17,7 @@ spin_sys <- function(spin_params, B0, offset) {
        H_mat = H_mat, H_eig_vals = res$values, H_eig_vecs = res$vectors)
 }
 
-H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, B0, offset) {
+H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, ft, ref) {
   basis_size <- prod(spin_n * 2 + 1)
   H_mat <- matrix(0, basis_size, basis_size)
   
@@ -25,7 +25,7 @@ H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, B0, offset) {
   for (n in (1:length(spin_n))) {
     # Convert chem shift to angular freq and apply to Iz
     H_mat <- H_mat + gen_I(n, spin_n, "z") * 
-             ((-chem_shift[n] + offset) * B0 * 1e-6)
+             ((-chem_shift[n] + ref) * ft * 1e-6)
   }
   
   # Find non-zero elements of j_coupling_mat
@@ -235,7 +235,7 @@ get_mol_para_list_names <- function(mol_para_list) {
 }
 
 #' Simulate a basis set object.
-#' @param mol_list a list of mol_parameter objects.
+#' @param mol_list a list of \code{mol_parameter} objects.
 #' @param pul_seq A pulse sequence function to use.
 #' @param ft Transmitter frequency in Hz.
 #' @param ref Reference value for ppm scale.
@@ -260,6 +260,17 @@ sim_basis <- function(mol_list, pul_seq = pulse_acquire, ft = def_ft(),
   mrs_data2basis(basis_mrs_data, names = names)
 }
 
+#' Simulate a \code{mol_parameter} object.
+#' @param mol a \code{mol_parameter} object.
+#' @param pul_seq A pulse sequence function to use.
+#' @param ft Transmitter frequency in Hz.
+#' @param ref Reference value for ppm scale.
+#' @param fs Sampling frequency in Hz.
+#' @param N Number of data points in the spectral dimension.
+#' @param xlim A ppm range limiting signals to be simulated.
+#' @param ... Extra parameters to pass to the pulse sequence function.
+#' @return An \code{mrs_data} object.
+#' @export
 sim_mol <- function(mol, pul_seq = pulse_acquire, ft = def_ft(), 
                     ref = def_ref(), fs = def_fs(), N = def_N(),
                     xlim = NULL, ...) {

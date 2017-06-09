@@ -2,7 +2,7 @@
 % Please edit documentation in R/mol_parameters.R
 \name{get_uncoupled_mol}
 \alias{get_uncoupled_mol}
-\title{Generate a mol_parameters object for a simple spin system with one resonance.}
+\title{Generate a \code{mol_parameters} object for a simple spin system with one resonance.}
 \usage{
 get_uncoupled_mol(name, chem_shift, nucleus, scale_factor, lw, lg)
 }
@@ -23,5 +23,5 @@ get_uncoupled_mol(name, chem_shift, nucleus, scale_factor, lw, lg)
 A mol_parameters object.
 }
 \description{
-Generate a mol_parameters object for a simple spin system with one resonance.
+Generate a \code{mol_parameters} object for a simple spin system with one resonance.
 }
