@@ -3,10 +3,8 @@ get_svs_voi <- function(mrs_data, mrsi_data = NA) {
   affine <- get_mrs_affine(mrs_data)
   raw_data <- array(1, c(mrs_data$resolution[2:4]))
   nifti_data <- RNifti::retrieveNifti(raw_data)
-  #RNifti::sform(nifti_data) <- structure(affine, code = 2L)
-  RNifti::`sform<-`(nifti_data,structure(affine, code = 2L))
-  #RNifti::pixunits(nifti_data) <- c("mm")
-  affine[1:3, 4] = c(50, 50, 50)
+  #RNifti::`sform<-`(nifti_data,structure(affine, code = 2L))
+  RNifti::sform(nifti_data) <- structure(affine, code = 2L)
   return(nifti_data)
 }
 
