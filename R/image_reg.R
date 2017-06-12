@@ -1,44 +1,49 @@
 #' @export
-get_svs_voi <- function(mrs_data) {
+get_svs_voi <- function(mrs_data, target_mri = NA) {
   affine <- get_mrs_affine(mrs_data)
   raw_data <- array(1, c(mrs_data$resolution[2:4]))
-  nifti_data <- RNifti::retrieveNifti(raw_data)
-  #RNifti::`sform<-`(nifti_data, structure(affine, code = 2L))
-  RNifti::sform(nifti_data) <- structure(affine, code = 2L)
-  return(nifti_data)
+  voi <- RNifti::retrieveNifti(raw_data)
+  voi <- RNifti::`sform<-`(voi, structure(affine, code = 2L))
+  
+  if (is.na(target_mri)) {
+    warning("Target MRI data has not been specified.")  
+  } else {
+    voi <- resample_voi(voi, target_mri)
+  }
+  
+  voi  
 }
 
 #' @export
-resample_svi_voi <- function(svs_voi, mri) {
-  reg_res <- RNiftyReg::niftyreg.linear(svs_voi, mri, nLevels = 0, 
+resample_voi <- function(voi, mri) {
+  reg_res <- RNiftyReg::niftyreg.linear(voi, mri, nLevels = 0, 
                                         interpolation = 0, init = diag(4))$image
 }
 
 #' @export
-plot_svs_overlay <- function(mrs_data, mri_data) {
-  voi <- get_svs_voi(mrs_data)
-  # resample to match the mri
-  res_mrs <- resample_svi_voi(voi, mri_data)
+plot_svs_overlay <- function(svs_voi, mri_data) {
+  # TODO check the image orientation etc is the same
   # get the centre of gravity coords
-  vox_inds <- get_vox_cog(res_mrs)
+  vox_inds <- get_voi_cog(svs_voi)
   plot_col <- add_alpha(grDevices::heat.colors(10), 0.4)
-  neurobase::ortho2(oro.nifti::nifti(mri_data), oro.nifti::nifti(res_mrs),
+  neurobase::ortho2(oro.nifti::nifti(mri_data), oro.nifti::nifti(svs_voi),
                     xyz = vox_inds, col.y = plot_col, zlim.y = c(1, 2))
 }
 
 #' @export
-plot_svs_overlay_seg <- function(mrs_data, mri_data) {
-  voi <- get_svs_voi(mrs_data)
-  res_mrs <- resample_svi_voi(voi, mri_data)
-  vox_inds <- get_vox_cog(res_mrs)
-  pvs <- get_vox_seg(res_mrs, mri_data)
+plot_svs_overlay_seg <- function(svs_voi, mri_data) {
+  # TODO check the image orientation etc is the same
+  # get the centre of gravity coords
+  vox_inds <- get_voi_cog(svs_voi)
+  
+  pvs <- get_voi_seg(svs_voi, mri_data)
   table <- paste("WM\t\t=  ", sprintf("%.1f", pvs[["WM"]]), "%\nGM\t\t=  ", 
                  sprintf("%.1f", pvs[["GM"]]), "%\nCSF\t=  ", 
                  sprintf("%.1f", pvs[["CSF"]]), "%\nOther\t=  ", 
                  sprintf("%.1f", pvs[["Other"]]),'%', sep = "")
   
   plot_col <- add_alpha(grDevices::heat.colors(10), 0.4)
-  neurobase::ortho2(oro.nifti::nifti(mri_data), oro.nifti::nifti(res_mrs),
+  neurobase::ortho2(oro.nifti::nifti(mri_data), oro.nifti::nifti(svs_voi),
                     xyz = vox_inds, col.y = plot_col, zlim.y = c(1, 2))
   
   graphics::par(xpd = NA)
@@ -71,8 +76,8 @@ get_mrs_affine <- function(mrs_data) {
 #' @export
 get_vox_pvcs <- function(mrs_data, seg_mri) {
   mrs_nii <- get_svs_voi(mrs_data)
-  res_mrs <- resample_svi_voi(mrs_nii, seg_mri)
-  pvs <- get_vox_seg(res_mrs, seg_mri)
+  res_mrs <- resample_voi(mrs_nii, seg_mri)
+  pvs <- get_voi_seg(res_mrs, seg_mri)
   return(pvs)  
 }
 
@@ -99,14 +104,13 @@ apply_pvc <- function(result, pvcs, tr){
   return(result)
 }
 
-get_vox_cog <- function(vox_data) {
-  as.integer(colMeans(which(vox_data == 1, arr.ind = TRUE)))
+get_voi_cog <- function(voi) {
+  as.integer(colMeans(which(voi == 1, arr.ind = TRUE)))
 }
 
-get_vox_seg <- function(vox_data, seg_data) {
-  vox_num = sum(vox_data)
-  vals <- seg_data[vox_data == 1]
+get_voi_seg <- function(voi, seg_data) {
+  vals <- seg_data[voi == 1]
   pvs <- summary(factor(vals, levels = c(0, 1, 2, 3), 
-        labels = c("Other", "CSF", "GM", "WM"))) / sum(vox_data) * 100
+        labels = c("Other", "CSF", "GM", "WM"))) / sum(voi) * 100
   return(pvs)
 }
