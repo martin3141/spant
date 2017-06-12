@@ -1,26 +1,17 @@
 #' @export
-get_svs_voi <- function(mrs_data, mrsi_data = NA) {
+get_svs_voi <- function(mrs_data) {
   affine <- get_mrs_affine(mrs_data)
   raw_data <- array(1, c(mrs_data$resolution[2:4]))
   nifti_data <- RNifti::retrieveNifti(raw_data)
-  #RNifti::`sform<-`(nifti_data,structure(affine, code = 2L))
+  #RNifti::`sform<-`(nifti_data, structure(affine, code = 2L))
   RNifti::sform(nifti_data) <- structure(affine, code = 2L)
   return(nifti_data)
 }
 
 #' @export
-resample_svi_voi <- function(svs_voi, target) {
-  reg_res <- RNiftyReg::niftyreg.linear(svs_voi, target, nLevels = 0, 
+resample_svi_voi <- function(svs_voi, mri) {
+  reg_res <- RNiftyReg::niftyreg.linear(svs_voi, mri, nLevels = 0, 
                                         interpolation = 0, init = diag(4))$image
-}
-
-# stolen from the interweb
-add_alpha <- function(col, alpha = 1){
-  if (missing(col))
-    stop("Please provide a vector of colours.")
-  apply(sapply(col, grDevices::col2rgb) / 255, 2, 
-        function(x) 
-          grDevices::rgb(x[1], x[2], x[3], alpha = alpha))  
 }
 
 #' @export
@@ -53,11 +44,9 @@ plot_svs_overlay_seg <- function(mrs_data, mri_data) {
   graphics::par(xpd = NA)
   graphics::text(x = 0.55, y = 0.12, labels = c(table), col = "white", pos = 4, 
                  cex = 1.5)
-  x = 1
 }
 
 # generate an sform affine for nifti generation
-#' @export
 get_mrs_affine <- function(mrs_data) {
   # l1 norm
   col_vec <- mrs_data$col_vec/sqrt(sum(mrs_data$col_vec ^ 2))
@@ -110,12 +99,10 @@ apply_pvc <- function(result, pvcs, tr){
   return(result)
 }
 
-#' @export
 get_vox_cog <- function(vox_data) {
   as.integer(colMeans(which(vox_data == 1, arr.ind = TRUE)))
 }
 
-#' @export
 get_vox_seg <- function(vox_data, seg_data) {
   vox_num = sum(vox_data)
   vals <- seg_data[vox_data == 1]

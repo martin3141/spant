@@ -100,3 +100,11 @@ crossprod_3d <- function(x, y, i = 1:3) {
   return(x[Index3D(i + 1)] * y[Index3D(i + 2)] -
             x[Index3D(i + 2)] * y[Index3D(i + 1)])
 }
+
+# stolen from the interweb
+add_alpha <- function(col, alpha = 1) {
+  if (missing(col))
+    stop("Please provide a vector of colours.")
+  apply(sapply(col, grDevices::col2rgb) / 255, 2, 
+        function(x) grDevices::rgb(x[1], x[2], x[3], alpha = alpha))  
+}
