@@ -1,3 +1,7 @@
+#' Generate a SVS acquisition volume from an \code{mrs_data} object.
+#' @param mrs_data MRS data.
+#' @param target_mri optional image data to match the intended volume space.
+#' @return volume data as a nifti object.
 #' @export
 get_svs_voi <- function(mrs_data, target_mri) {
   affine <- get_mrs_affine(mrs_data)
@@ -13,41 +17,51 @@ get_svs_voi <- function(mrs_data, target_mri) {
   voi  
 }
 
+#' Resample a VOI to match a target image space.
+#' @param voi volume data as a nifti object.
+#' @param mri image data as a nifti object.
+#' @return volume data as a nifti object.
 #' @export
 resample_voi <- function(voi, mri) {
   reg_res <- RNiftyReg::niftyreg.linear(voi, mri, nLevels = 0, 
                                         interpolation = 0, init = diag(4))$image
 }
 
+#' Plot a volume as an image overlay.
 #' @export
-plot_svs_overlay <- function(svs_voi, mri_data) {
+#' @param voi volume data as a nifti object.
+#' @param mri image data as a nifti object.
+plot_voi_overlay <- function(voi, mri) {
   # check the image orientation etc is the same
-  check_geom(svs_voi, mri_data)
+  check_geom(voi, mri)
   
   # get the centre of gravity coords
-  vox_inds <- get_voi_cog(svs_voi)
+  vox_inds <- get_voi_cog(voi)
   plot_col <- add_alpha(grDevices::heat.colors(10), 0.4)
-  mri_oro <- neurobase::robust_window(oro.nifti::nifti(mri_data))
-  neurobase::ortho2(mri_oro, oro.nifti::nifti(svs_voi), xyz = vox_inds, 
+  mri_oro <- neurobase::robust_window(oro.nifti::nifti(mri))
+  neurobase::ortho2(mri_oro, oro.nifti::nifti(voi), xyz = vox_inds, 
                     col.y = plot_col, zlim.y = c(1, 2))
 }
 
+#' Plot a volume as an overlay on a segmented brain volume.
+#' @param voi volume data as a nifti object.
+#' @param mri_seg segmented brain volume as a nifti object.
 #' @export
-plot_svs_overlay_seg <- function(svs_voi, seg_data) {
+plot_voi_overlay_seg <- function(voi, mri_seg) {
   # check the image orientation etc is the same
-  check_geom(svs_voi, seg_data)
+  check_geom(voi, mri_seg)
   
   # get the centre of gravity coords
-  vox_inds <- get_voi_cog(svs_voi)
+  vox_inds <- get_voi_cog(voi)
   
-  pvs <- get_voi_seg(svs_voi, seg_data)
+  pvs <- get_voi_seg(voi, mri_seg)
   table <- paste("WM\t\t=  ", sprintf("%.1f", pvs[["WM"]]), "%\nGM\t\t=  ", 
                  sprintf("%.1f", pvs[["GM"]]), "%\nCSF\t=  ", 
                  sprintf("%.1f", pvs[["CSF"]]), "%\nOther\t=  ", 
                  sprintf("%.1f", pvs[["Other"]]),'%', sep = "")
   
   plot_col <- add_alpha(grDevices::heat.colors(10), 0.4)
-  neurobase::ortho2(oro.nifti::nifti(seg_data), oro.nifti::nifti(svs_voi),
+  neurobase::ortho2(oro.nifti::nifti(mri_seg), oro.nifti::nifti(voi),
                     xyz = vox_inds, col.y = plot_col, zlim.y = c(1, 2))
   
   graphics::par(xpd = NA)
@@ -56,8 +70,8 @@ plot_svs_overlay_seg <- function(svs_voi, seg_data) {
 }
 
 #' @export
-apply_pvc <- function(result, pvcs, tr){
-  te = result$data$te
+apply_pvc <- function(result, pvcs, tr, te){
+  #te = result$data$te
   B0 = round(result$data$ft / 42.58e6,1)
   corr_factor <- get_corr_factor(te, tr, B0, pvcs[["GM"]], pvcs[["WM"]],
                                  pvcs[["CSF"]])
@@ -77,11 +91,14 @@ apply_pvc <- function(result, pvcs, tr){
   return(result)
 }
 
-#' @export
-get_voi_seg <- function(voi, seg_data) {
+#' Return the white matter, gray matter and CSF composition of a volume.
+#' @param voi volume data as a nifti object.
+#' @param mri_seg segmented brain volume as a nifti object.
+#' @return a vector of partial volumes expressed as percetages.
+get_voi_seg <- function(voi, mri_seg) {
   # check the image orientation etc is the same
-  check_geom(voi, seg_data)
-  vals <- seg_data[voi == 1]
+  check_geom(voi, mri_seg)
+  vals <- mri_seg[voi == 1]
   pvs <- summary(factor(vals, levels = c(0, 1, 2, 3), 
         labels = c("Other", "CSF", "GM", "WM"))) / sum(voi) * 100
   return(pvs)
@@ -111,9 +128,9 @@ get_mrs_affine <- function(mrs_data) {
 
 # check two nifti images are in the same space
 check_geom <- function(a, b) {
-  eq_xform <- identical(xform(a), xform(b))
+  eq_xform <- identical(RNifti::xform(a), RNifti::xform(b))
   eq_dim <- identical(dim(a), dim(b))
-  eq_pix_dim <- identical(pixdim(a), pixdim(b))
+  eq_pix_dim <- identical(RNifti::pixdim(a), RNifti::pixdim(b))
   
   if ( !eq_xform | !eq_dim | !eq_pix_dim ) {
     stop("Inconsistant image geometry.")

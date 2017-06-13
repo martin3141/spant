@@ -16,6 +16,13 @@ To learn more about spant, start with the vignettes:
 For a full list of functions:
 \code{help(package=spant,help_type="html")}
 }
+\seealso{
+Useful links:
+\itemize{
+  \item Report bugs at \url{https://github.com/martin3141/spant/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Martin Wilson \email{martin@pipegrep.co.uk}
 

@@ -1,4 +1,6 @@
 # spant 0.3.0
+* Added functions for registering and visualising SVS volumes on images and 
+performing partial volume correction.
 * Philips "list data" also now reads noise scans.
 * calc_coil_noise_cor, calc_coil_noise_sd functions added to aid coil 
 combination.
