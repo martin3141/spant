@@ -69,32 +69,41 @@ plot_voi_overlay_seg <- function(voi, mri_seg) {
                  cex = 1.5)
 }
 
+#' Apply partial volume correction to a fitting result object.
+#' @param fit_result a \code{fit_result} object to apply partial volume 
+#' correction.
+#' @param p_vols a numeric vector of partial volumes.
+#' @param tr the MRS TR.
+#' @param te the MRS TE.
+#' @return a \code{fit_result} object with an added results table: 
+#' "results_pvc".
 #' @export
-apply_pvc <- function(result, pvcs, tr, te){
+apply_pvc <- function(fit_result, p_vols, tr, te){
   #te = result$data$te
-  B0 = round(result$data$ft / 42.58e6,1)
-  corr_factor <- get_corr_factor(te, tr, B0, pvcs[["GM"]], pvcs[["WM"]],
-                                 pvcs[["CSF"]])
+  B0 = round(fit_result$data$ft / 42.58e6,1)
+  corr_factor <- get_corr_factor(te, tr, B0, p_vols[["GM"]], p_vols[["WM"]],
+                                 p_vols[["CSF"]])
   
-  amp_cols = result$amp_cols
+  amp_cols = fit_result$amp_cols
   default_factor = 35880 * 0.7
-  result$results$GM_vol = pvcs[["GM"]]
-  result$results$WM_vol = pvcs[["WM"]]
-  result$results$CSF_vol = pvcs[["CSF"]]
-  result$results$Other_vol = pvcs[["Other"]]
-  result$results_pvc <- result$results
+  fit_result$results$GM_vol = p_vols[["GM"]]
+  fit_result$results$WM_vol = p_vols[["WM"]]
+  fit_result$results$CSF_vol = p_vols[["CSF"]]
+  fit_result$results$Other_vol = p_vols[["Other"]]
+  fit_result$results_pvc <- fit_result$results
   
   # append tables with %GM, %WM, %CSF and %Other
   pvc_cols <- 6:(5 + amp_cols * 2)
-  result$results_pvc[, pvc_cols] <- result$results_pvc[, pvc_cols] /
+  fit_result$results_pvc[, pvc_cols] <- fit_result$results_pvc[, pvc_cols] /
                                     default_factor * corr_factor
-  return(result)
+  return(fit_result)
 }
 
 #' Return the white matter, gray matter and CSF composition of a volume.
 #' @param voi volume data as a nifti object.
 #' @param mri_seg segmented brain volume as a nifti object.
 #' @return a vector of partial volumes expressed as percetages.
+#' @export
 get_voi_seg <- function(voi, mri_seg) {
   # check the image orientation etc is the same
   check_geom(voi, mri_seg)

@@ -13,7 +13,7 @@ fit_mrs(metab, basis, method = "VARPRO", w_ref = NULL, opts = NULL,
 \item{basis}{A basis class object or character vector to basis file in
 LCModel .basis format.}
 
-\item{method}{'VARPRO', 'TARQUIN' or 'LCMODEL'}
+\item{method}{'VARPRO', 'VARPRO_3P', 'TARQUIN' or 'LCMODEL'}
 
 \item{w_ref}{Water reference data for concentration scaling (optional).}
 
