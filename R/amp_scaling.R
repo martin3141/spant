@@ -47,7 +47,7 @@ scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7,
   amp_cols = fit_result$amp_cols
   ws_cols <- 6:(5 + amp_cols * 2)
   
-  fit_result$res_tab_molar <- fit_result$results
+  fit_result$res_tab_molar <- fit_result$res_tab
   fit_result$res_tab_molar[, ws_cols] <- (fit_result$res_tab_molar[, ws_cols] * w_att * 
                                    w_conc / w_amp)
   

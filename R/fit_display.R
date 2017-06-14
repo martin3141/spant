@@ -73,7 +73,6 @@ plot.fit_result <- function(x, xlim = c(4, 0.5), plt_title = FALSE,
   for (sig in plot_sigs) {
     graphics::lines(x$PPMScale, x[sig][[1]] + x$Baseline, col = "blue")
   }
-  
 }
 
 #' Print a summary of an object of class \code{fit_result}.

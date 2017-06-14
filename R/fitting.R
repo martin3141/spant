@@ -631,6 +631,36 @@ varpro_3_para <- function(mrs_data, basis, opts = NULL) {
   amps <- data.frame(t(ahat))
   colnames(amps) <- basis$names
   
+  # create some common metabolite combinations
+  if (("NAA" %in% colnames(amps)) & ("NAAG" %in% colnames(amps))) {
+    amps['TNAA'] <- amps['NAA'] + amps['NAAG']
+  }
+  
+  if (("PCh" %in% colnames(amps)) & ("GPC" %in% colnames(amps))) {
+    amps['TCho'] <- amps['PCh'] + amps['GPC']
+  }
+  
+  if (("Cr" %in% colnames(amps)) & ("PCr" %in% colnames(amps))) {
+    amps['TCr'] <- amps['Cr'] + amps['PCr']
+  }
+  
+  if (("Glu" %in% colnames(amps)) & ("Gln" %in% colnames(amps))) {
+    amps['Glx'] <- amps['Glu'] + amps['Gln']
+  }
+  
+  if (("Lip09" %in% colnames(amps)) & ("MM09" %in% colnames(amps))) {
+    amps['TLM09'] <- amps['Lip09'] + amps['MM09']
+  }
+  
+  if (("Lip13a" %in% colnames(amps)) & ("Lip13b" %in% colnames(amps)) & 
+        ("MM12" %in% colnames(amps)) & ("MM14" %in% colnames(amps))) {
+    amps["TLM13"] <- amps["Lip13a"] + amps["Lip13b"] + amps["MM12"] + amps["MM14"]
+  }
+  
+  if (("Lip20" %in% colnames(amps)) & ("MM20" %in% colnames(amps))) {
+    amps['TLM20'] <- amps['Lip20'] + amps['MM20']
+  }
+  
   fit <- data.frame(PPMScale = ppm(mrs_data, N = Npts * 2), Data = Re(Y),
                     Fit = Re(YHAT), Baseline = Re(BL))
   
@@ -741,6 +771,36 @@ varpro <- function(mrs_data, basis, opts = NULL) {
   
   diags <- data.frame(res$deviance, res$niter, res$info, res$deviance,
                       res$message)
+  
+  # create some common metabolite combinations
+  if (("NAA" %in% colnames(amps)) & ("NAAG" %in% colnames(amps))) {
+    amps['TNAA'] <- amps['NAA'] + amps['NAAG']
+  }
+  
+  if (("PCh" %in% colnames(amps)) & ("GPC" %in% colnames(amps))) {
+    amps['TCho'] <- amps['PCh'] + amps['GPC']
+  }
+  
+  if (("Cr" %in% colnames(amps)) & ("PCr" %in% colnames(amps))) {
+    amps['TCr'] <- amps['Cr'] + amps['PCr']
+  }
+  
+  if (("Glu" %in% colnames(amps)) & ("Gln" %in% colnames(amps))) {
+    amps['Glx'] <- amps['Glu'] + amps['Gln']
+  }
+  
+  if (("Lip09" %in% colnames(amps)) & ("MM09" %in% colnames(amps))) {
+    amps['TLM09'] <- amps['Lip09'] + amps['MM09']
+  }
+  
+  if (("Lip13a" %in% colnames(amps)) & ("Lip13b" %in% colnames(amps)) & 
+        ("MM12" %in% colnames(amps)) & ("MM14" %in% colnames(amps))) {
+    amps["TLM13"] <- amps["Lip13a"] + amps["Lip13b"] + amps["MM12"] + amps["MM14"]
+  }
+  
+  if (("Lip20" %in% colnames(amps)) & ("MM20" %in% colnames(amps))) {
+    amps['TLM20'] <- amps['Lip20'] + amps['MM20']
+  }
   
   list(amps = amps, crlbs = t(rep(NA, length(amps))), diags = diags, fit = fit)
 }
