@@ -4,7 +4,7 @@
 #' @param p_vols a numeric vector of partial volumes.
 #' @param te the MRS TE.
 #' @param tr the MRS TR.
-#' @return A \code{fit_result} object with a results_molal_pvc data table added.
+#' @return A \code{fit_result} object with a res_tab_molal_pvc data table added.
 #' @export
 scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr){
   B0 = round(fit_result$data$ft / 42.58e6,1)
@@ -14,17 +14,17 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr){
   amp_cols = fit_result$amp_cols
   
   w_amp <- as.numeric(get_td_amp(ref_data))
-  fit_result$results$w_amp = w_amp
+  fit_result$res_tab$w_amp = w_amp
   
-  fit_result$results$GM_vol = p_vols[["GM"]]
-  fit_result$results$WM_vol = p_vols[["WM"]]
-  fit_result$results$CSF_vol = p_vols[["CSF"]]
-  fit_result$results$Other_vol = p_vols[["Other"]]
-  fit_result$results_molal_pvc <- fit_result$results
+  fit_result$res_tab$GM_vol = p_vols[["GM"]]
+  fit_result$res_tab$WM_vol = p_vols[["WM"]]
+  fit_result$res_tab$CSF_vol = p_vols[["CSF"]]
+  fit_result$res_tab$Other_vol = p_vols[["Other"]]
+  fit_result$res_tab_molal_pvc <- fit_result$res_tab
   
   # append tables with %GM, %WM, %CSF and %Other
   pvc_cols <- 6:(5 + amp_cols * 2)
-  fit_result$results_molal_pvc[, pvc_cols] <- fit_result$results_molal_pvc[, pvc_cols] *
+  fit_result$res_tab_molal_pvc[, pvc_cols] <- fit_result$res_tab_molal_pvc[, pvc_cols] *
                                               corr_factor / w_amp
   return(fit_result)
 }
@@ -35,20 +35,20 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr){
 #' @param ref_data Water reference MRS data object.
 #' @param w_att Water attenuation factor (default = 0.7).
 #' @param w_conc Assumed water concentration (default = 35880).
-#' @return A \code{fit_result} object with a results_molar data table added.
+#' @return A \code{fit_result} object with a res_tab_molar data table added.
 #' @export
 scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, 
                                  w_conc = 35880) {
   
   w_amp <- as.numeric(get_td_amp(ref_data))
   
-  fit_result$results$w_amp = w_amp
+  fit_result$res_tab$w_amp = w_amp
   
   amp_cols = fit_result$amp_cols
   ws_cols <- 6:(5 + amp_cols * 2)
   
-  fit_result$results_molar <- fit_result$results
-  fit_result$results_molar[, ws_cols] <- (fit_result$results_molar[, ws_cols] * w_att * 
+  fit_result$res_tab_molar <- fit_result$results
+  fit_result$res_tab_molar[, ws_cols] <- (fit_result$res_tab_molar[, ws_cols] * w_att * 
                                    w_conc / w_amp)
   
   fit_result
@@ -57,19 +57,38 @@ scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7,
 #' Scale metabolite amplitudes as a ratio to the unsupressed water amplitude.
 #' @param fit_result a result object generated from fitting.
 #' @param ref_data a water reference MRS data object.
-#' @return a \code{fit_result} object with a results_water_ratio data table added.
+#' @return a \code{fit_result} object with a res_tab_water_ratio data table added.
 #' @export
 scale_amp_water_ratio <- function(fit_result, ref_data) {
   
   w_amp <- as.numeric(get_td_amp(ref_data))
   
-  fit_result$results$w_amp = w_amp
+  fit_result$res_tab$w_amp = w_amp
   
   amp_cols = fit_result$amp_cols
   ws_cols <- 6:(5 + amp_cols * 2)
   
-  fit_result$results_water_ratio <- fit_result$results
-  fit_result$results_water_ratio[, ws_cols] <- (fit_result$results_water_ratio[, ws_cols] / w_amp)
+  fit_result$res_tab_water_ratio <- fit_result$res_tab
+  fit_result$res_tab_water_ratio[, ws_cols] <- (fit_result$res_tab_water_ratio[, ws_cols] / w_amp)
+  
+  fit_result
+}
+
+#' Scale fitted amplitudes to a ratio of signal amplitude.
+#' @param fit_result a result object generated from fitting.
+#' @param name the signal name to use as a denominator (usually, "TCr" or 
+#' "TNAA").
+#' @return a \code{fit_result} object with a res_tab_ratio data table added.
+#' @export
+scale_amp_ratio <- function(fit_result, name) {
+  
+  ratio_amp <- as.numeric(fit_result$res_tab[name])
+  
+  amp_cols = fit_result$amp_cols
+  ws_cols <- 6:(5 + amp_cols * 2)
+  
+  fit_result$res_tab_ratio <- fit_result$res_tab
+  fit_result$res_tab_ratio[, ws_cols] <- (fit_result$res_tab_ratio[, ws_cols] / ratio_amp)
   
   fit_result
 }
@@ -145,7 +164,7 @@ get_corr_factor <- function(te, tr, B0, gm_vol, wm_vol, csf_vol) {
 #' @param te the MRS TE.
 #' @param tr the MRS TR.
 #' @return a \code{fit_result} object with an added results table: 
-#' "results_molal_pvc".
+#' "res_tab_molal_pvc".
 #' @export
 apply_pvc <- function(fit_result, p_vols, te, tr){
   #te = result$data$te
@@ -155,15 +174,15 @@ apply_pvc <- function(fit_result, p_vols, te, tr){
   
   amp_cols = fit_result$amp_cols
   default_factor = 35880 * 0.7
-  fit_result$results$GM_vol = p_vols[["GM"]]
-  fit_result$results$WM_vol = p_vols[["WM"]]
-  fit_result$results$CSF_vol = p_vols[["CSF"]]
-  fit_result$results$Other_vol = p_vols[["Other"]]
-  fit_result$results_molal_pvc <- fit_result$results
+  fit_result$res_tab$GM_vol = p_vols[["GM"]]
+  fit_result$res_tab$WM_vol = p_vols[["WM"]]
+  fit_result$res_tab$CSF_vol = p_vols[["CSF"]]
+  fit_result$res_tab$Other_vol = p_vols[["Other"]]
+  fit_result$res_tab_molal_pvc <- fit_result$res_tab
   
   # append tables with %GM, %WM, %CSF and %Other
   pvc_cols <- 6:(5 + amp_cols * 2)
-  fit_result$results_molal_pvc[, pvc_cols] <- fit_result$results_molal_pvc[, pvc_cols] /
+  fit_result$res_tab_molal_pvc[, pvc_cols] <- fit_result$res_tab_molal_pvc[, pvc_cols] /
                                     default_factor * corr_factor
   return(fit_result)
 }

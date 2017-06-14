@@ -19,7 +19,7 @@ correction.}
 }
 \value{
 a \code{fit_result} object with an added results table:
-"results_molal_pvc".
+"res_tab_molal_pvc".
 }
 \description{
 Convert default LCM/TARQUIN concentration scaling to molal units with partial

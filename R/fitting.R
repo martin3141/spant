@@ -220,7 +220,7 @@ fit_mrs <- function(metab, basis, method = 'VARPRO', w_ref = NULL, opts = NULL,
   diags = plyr::ldply(df_list_diags, data.frame)[-1]
   fits <- result_list[seq(from = 4, by = res_n, length.out = fit_num)]
   
-  out <- list(results = cbind(labs, amps, crlbs, diags), fits = fits, 
+  out <- list(res_tab = cbind(labs, amps, crlbs, diags), fits = fits, 
               data = metab, amp_cols = ncol(amps))
   
   class(out) <- "fit_result"
@@ -284,10 +284,10 @@ tarquin_fit <- function(element, temp_mrs, basis_file, opts) {
     stop("Error loading data with above TARQUIN command.")
   }
   
-  results <- read_tqn_result(result_csv_f)
+  res_tab <- read_tqn_result(result_csv_f)
   fit <- read_tqn_fit(result_fit_f)
   
-  return(append(results,list(fit = fit, metab_file = metab_file, 
+  return(append(res_tab,list(fit = fit, metab_file = metab_file, 
                              ref_file = ref_file, result_csv_f = result_csv_f, 
                              result_fit_f = result_fit_f)))  
 }
@@ -358,10 +358,10 @@ lcmodel_fit <- function(element, temp_mrs, basis_file, opts) {
   }
   
   coord_res <- read_lcm_coord(coord_f)
-  results <- coord_res$results
+  res_tab <- coord_res$results
   fit <- coord_res$fit
   
-  return(append(results,list(fit = fit, metab_file = metab_file, 
+  return(append(res_tab, list(fit = fit, metab_file = metab_file, 
                              ref_file = ref_file, coord_f = coord_f, 
                              control_f = control_f)))  
 }
@@ -447,13 +447,13 @@ read_lcm_coord <- function(coord_f) {
   crlbs <- amps*crlbs/100
   crlbs[max_crlbs] = Inf
   row.names(crlbs) <- "1"
-  results <- list(amps = amps, crlbs = crlbs, diags = diags)
+  res_tab <- list(amps = amps, crlbs = crlbs, diags = diags)
   
   data_lines <- ceiling(points/10)
   #print(data_lines)
   n <- 0
   colnames <- vector()
-  fit_table_list <- list()
+  fit_tab_list <- list()
   repeat {
     header_line <- line_reader[data_start + n * (data_lines + 1)]
     if ( endsWith(header_line,"lines in following diagnostic table:") ) {break}
@@ -463,7 +463,7 @@ read_lcm_coord <- function(coord_f) {
                                                     nrows = data_lines,
                                                     fill = T))))
     
-    fit_table_list <- c(fit_table_list, list(data))
+    fit_tab_list <- c(fit_tab_list, list(data))
     colnames <- c(colnames, name)
     n = n + 1
   }
@@ -471,13 +471,13 @@ read_lcm_coord <- function(coord_f) {
   colnames[2] = "Data"
   colnames[3] = "Fit"
   colnames[4] = "Baseline"
-  names(fit_table_list) <- colnames
-  fit_table <- stats::na.omit(as.data.frame(fit_table_list))
-  fit_table$Fit <- fit_table$Fit - fit_table$Baseline
-  fit_table[5:ncol(fit_table)] <- fit_table[5:ncol(fit_table)] - fit_table$Baseline 
-  class(fit_table) <- "fit_table"
+  names(fit_tab_list) <- colnames
+  fit_tab <- stats::na.omit(as.data.frame(fit_tab_list))
+  fit_tab$Fit <- fit_tab$Fit - fit_tab$Baseline
+  fit_tab[5:ncol(fit_tab)] <- fit_tab[5:ncol(fit_tab)] - fit_tab$Baseline 
+  class(fit_tab) <- "fit_table"
   
-  return(list(fit = fit_table, results = results))
+  return(list(fit = fit_tab, res_tab = res_tab))
 }
 
 

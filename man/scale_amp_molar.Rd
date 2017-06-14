@@ -17,7 +17,7 @@ scale_amp_molar(fit_result, ref_data, w_att = 0.7, w_conc = 35880)
 \item{w_conc}{Assumed water concentration (default = 35880).}
 }
 \value{
-A \code{fit_result} object with a results_molar data table added.
+A \code{fit_result} object with a res_tab_molar data table added.
 }
 \description{
 Apply water reference scaling to a fitting results object to yield metabolite

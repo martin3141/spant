@@ -12,7 +12,7 @@ scale_amp_water_ratio(fit_result, ref_data)
 \item{ref_data}{a water reference MRS data object.}
 }
 \value{
-a \code{fit_result} object with a results_water_ratio data table added.
+a \code{fit_result} object with a res_tab_water_ratio data table added.
 }
 \description{
 Scale metabolite amplitudes as a ratio to the unsupressed water amplitude.
