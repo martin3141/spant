@@ -81,7 +81,7 @@ plot.fit_result <- function(x, xlim = c(4, 0.5), plt_title = FALSE,
 #' @param ... further arguments.
 #' @export
 print.fit_result <- function(x, ...) {
-  print(x$data)
+  print(x$res_tab)
 }
 
 output_csv <- function(analysis, fname, pvc=FALSE) {
