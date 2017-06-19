@@ -397,7 +397,7 @@ read_tqn_result <- function(result_f, remove_rcs=TRUE) {
 #' @export
 read_tqn_fit <- function(fit_f) {
   fit <- utils::read.csv(fit_f, skip = 1)
-  class(fit) <- "fit_table"
+  class(fit) <- c("fit_table", "data.frame")
   return(fit)
 }
 
@@ -475,7 +475,7 @@ read_lcm_coord <- function(coord_f) {
   fit_tab <- stats::na.omit(as.data.frame(fit_tab_list))
   fit_tab$Fit <- fit_tab$Fit - fit_tab$Baseline
   fit_tab[5:ncol(fit_tab)] <- fit_tab[5:ncol(fit_tab)] - fit_tab$Baseline 
-  class(fit_tab) <- "fit_table"
+  class(fit_tab) <- c("fit_table", "data.frame")
   
   return(list(fit = fit_tab, res_tab = res_tab))
 }
@@ -666,7 +666,7 @@ varpro_3_para <- function(mrs_data, basis, opts = NULL) {
   
   fit <- cbind(fit, basis_frame)
   
-  class(fit) <- "fit_table"
+  class(fit) <- c("fit_table", "data.frame")
   
   diags <- data.frame(phase = res$par[1] * 180 / pi, damping = res$par[2],
                       shift = res$par[3], res$deviance, res$niter, res$info, 
@@ -767,7 +767,7 @@ varpro <- function(mrs_data, basis, opts = NULL) {
 
   fit <- cbind(fit, basis_frame)
   
-  class(fit) <- "fit_table"
+  class(fit) <- c("fit_table", "data.frame")
   
   diags <- data.frame(res$deviance, res$niter, res$info, res$deviance,
                       res$message)

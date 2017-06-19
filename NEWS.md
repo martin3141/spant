@@ -1,4 +1,5 @@
 # spant 0.3.0
+* Added stackplot method for fit objects.
 * Added functions for registering and visualising SVS volumes on images and 
 performing partial volume correction.
 * Philips "list data" also now reads noise scans.
