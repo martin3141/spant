@@ -245,9 +245,9 @@ stackplot <- function(x, ...) {
 #' @param mode representation of the complex numbers to be plotted, can be one
 #' of: "real", "imag" or "abs".
 #' @param col set the colour of the line, eg col = rgb(1,0,0,0.5).
-#' @param x_offset seperate plots in the x-axis direction by this value. 
+#' @param x_offset separate plots in the x-axis direction by this value. 
 #' Default value is 0.
-#' @param y_offset seperate plots in the y-axis direction by this value.
+#' @param y_offset separate plots in the y-axis direction by this value.
 #' @param dim the dimension to stack in the y-axis direction, can be one of: 
 #' "dyn", "x", "y", "z" or "coil".
 #' @param x_pos the x index to plot.

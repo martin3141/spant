@@ -3,7 +3,7 @@
 \name{get_mol_names}
 \alias{get_mol_names}
 \title{Return a character array of names that may be used with the
-\code{get_mol_paras} funtion.}
+\code{get_mol_paras} function.}
 \usage{
 get_mol_names()
 }
@@ -12,5 +12,5 @@ a character array of names.
 }
 \description{
 Return a character array of names that may be used with the
-\code{get_mol_paras} funtion.
+\code{get_mol_paras} function.
 }

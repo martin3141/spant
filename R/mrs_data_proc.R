@@ -1474,7 +1474,7 @@ calc_coil_noise_sd <- function(noise_data) {
 #' 
 #' The mean noise value is subtracted from the maximum signal value to reduce DC
 #' offset bias. A polynomial detrending fit (second order by default) is applied 
-#' to the noise region before the noise stanard deviation is estimated.
+#' to the noise region before the noise standard deviation is estimated.
 #' 
 #' @param mrs_data an object of class \code{mrs_data}.
 #' @param sig_region a ppm region to define where the maximum signal value

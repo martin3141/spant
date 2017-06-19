@@ -2,7 +2,7 @@
 % Please edit documentation in R/pulse_sequences.R
 \name{press_ideal}
 \alias{press_ideal}
-\title{PRESS seqeunce with ideal pulses.}
+\title{PRESS sequence with ideal pulses.}
 \usage{
 press_ideal(spin_params, ft, ref, TE1, TE2)
 }
@@ -21,5 +21,5 @@ press_ideal(spin_params, ft, ref, TE1, TE2)
 a list of resonance amplitudes and frequencies.
 }
 \description{
-PRESS seqeunce with ideal pulses.
+PRESS sequence with ideal pulses.
 }

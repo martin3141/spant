@@ -79,7 +79,7 @@ plot.fit_result <- function(x, xlim = c(4, 0.5), plt_title = FALSE,
 #' individual basis set components shown.
 #' @param x fit_result object.
 #' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
-#' @param y_offset seperate basis signals in the y-axis direction by this value.
+#' @param y_offset separate basis signals in the y-axis direction by this value.
 #' @param plt_title title to add to the plot.
 #' @param n index to the fit number to display.
 #' @param ... further arguments to plot method.

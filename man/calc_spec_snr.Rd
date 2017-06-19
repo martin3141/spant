@@ -29,5 +29,5 @@ deviation of the noise.
 \details{
 The mean noise value is subtracted from the maximum signal value to reduce DC
 offset bias. A polynomial detrending fit (second order by default) is applied
-to the noise region before the noise stanard deviation is estimated.
+to the noise region before the noise standard deviation is estimated.
 }

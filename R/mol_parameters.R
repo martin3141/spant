@@ -1,13 +1,13 @@
 #' Get a \code{mol_parameters} object for a named molecule.
 #' @param name the name of the molecule.
-#' @param ... aguments to pass to molecule definition function.
+#' @param ... arguments to pass to molecule definition function.
 #' @export
 get_mol_paras <- function(name, ...) {
   get(paste("get_", tolower(name), "_paras", sep = ""))(...)
 }
 
 #' Return a character array of names that may be used with the 
-#' \code{get_mol_paras} funtion.
+#' \code{get_mol_paras} function.
 #' @return a character array of names.
 #' @export
 get_mol_names <- function() {

@@ -1,4 +1,4 @@
-#' Simple pulse and acquire seqeunce with ideal pulses.
+#' Simple pulse and acquire sequence with ideal pulses.
 #' @param spin_params spin system definition.
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.
@@ -19,7 +19,7 @@ pulse_acquire <- function(spin_params, ft, ref) {
   acquire(sys, detect = "1H")
 }
 
-#' PRESS seqeunce with ideal pulses.
+#' PRESS sequence with ideal pulses.
 #' @param spin_params spin system definition.
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.
@@ -78,7 +78,7 @@ press_ideal <- function(spin_params, ft, ref, TE1, TE2) {
   acquire(sys,detect = "1H")
 }
 
-#' Spin echo seqeunce with ideal pulses.
+#' Spin echo sequence with ideal pulses.
 #' @param spin_params spin system definition.
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.

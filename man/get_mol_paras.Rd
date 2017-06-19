@@ -9,7 +9,7 @@ get_mol_paras(name, ...)
 \arguments{
 \item{name}{the name of the molecule.}
 
-\item{...}{aguments to pass to molecule definition function.}
+\item{...}{arguments to pass to molecule definition function.}
 }
 \description{
 Get a \code{mol_parameters} object for a named molecule.

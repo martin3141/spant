@@ -13,7 +13,7 @@ individual basis set components shown.}
 
 \item{xlim}{the range of values to display on the x-axis, eg xlim = c(4,1).}
 
-\item{y_offset}{seperate basis signals in the y-axis direction by this value.}
+\item{y_offset}{separate basis signals in the y-axis direction by this value.}
 
 \item{plt_title}{title to add to the plot.}
 
