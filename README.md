@@ -111,7 +111,7 @@ fit_res <- fit_mrs(mrs_proc, basis)
   |=================================================================| 100%
 
 # plot the fit estimate, residual and baseline
-plot(fit_res)
+plot(fit_res, xlim = c(4, 0.5))
 ```
 
 ![](README-fitting-1.png)

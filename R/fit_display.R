@@ -8,18 +8,22 @@
 #' @param n index to the fit number to display.
 #' @param ... further arguments to plot method.
 #' @export
-plot.fit_result <- function(x, xlim = c(4, 0.5), plt_title = FALSE,
+plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
                            data_only = FALSE, label=NULL, 
-                           plot_sigs = NULL, n = NA, ...) {
+                           plot_sigs = NULL, n = NULL, ...) {
   
-  if ( is.na(n) && length(x$fits) > 1 ) {
+  if (is.null(n) && length(x$fits) > 1 ) {
     warning("Fit number n not specified, plotting the first one.")
     n = 1
   }
   
-  if ( is.na(n)) {n = 1} # SVS case
+  if (is.null(n)) {n = 1} # SVS case
   
   x <- x$fits[[n]]
+  
+  if (is.null(xlim)) {
+    xlim <- rev(range(x$PPMScale))
+  }
   
   graphics::par("xaxs" = "i", "yaxs" = "i") # tight axes limits
   
@@ -84,17 +88,22 @@ plot.fit_result <- function(x, xlim = c(4, 0.5), plt_title = FALSE,
 #' @param n index to the fit number to display.
 #' @param ... further arguments to plot method.
 #' @export
-stackplot.fit_result <- function(x, xlim = c(4, 0.5), y_offset = 0.04, 
-                                 plt_title = FALSE, n = NA, ...) {
+stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0.04, 
+                                 plt_title = FALSE, n = NULL, ...) {
   
-  if ( is.na(n) && length(x$fits) > 1 ) {
+  if ( is.null(n) && length(x$fits) > 1 ) {
     warning("Fit number n not specified, plotting the first one.")
     n = 1
   }
   
-  if ( is.na(n)) {n = 1} # SVS case
+  if ( is.null(n)) {n = 1} # SVS case
   
   x <- x$fits[[n]]
+  
+  if (is.null(xlim)) {
+    xlim <- rev(range(x$PPMScale))
+  }
+  
   
   graphics::par("xaxs" = "i", "yaxs" = "i") # tight axes limits
   

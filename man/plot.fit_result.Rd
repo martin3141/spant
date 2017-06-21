@@ -4,8 +4,8 @@
 \alias{plot.fit_result}
 \title{Plot the fitting results of an object of class \code{fit_result}.}
 \usage{
-\method{plot}{fit_result}(x, xlim = c(4, 0.5), plt_title = FALSE,
-  data_only = FALSE, label = NULL, plot_sigs = NULL, n = NA, ...)
+\method{plot}{fit_result}(x, xlim = NULL, plt_title = FALSE,
+  data_only = FALSE, label = NULL, plot_sigs = NULL, n = NULL, ...)
 }
 \arguments{
 \item{x}{fit_result object.}

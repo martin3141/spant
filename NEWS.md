@@ -1,3 +1,6 @@
+# spant 0.4.0
+* Fit plots now default to the full spectral range unless xlim is specified.
+
 # spant 0.3.0
 * Added stackplot method for fit objects.
 * Added functions for registering and visualising SVS volumes on images and 

@@ -5,8 +5,8 @@
 \title{Plot the fitting results of an object of class \code{fit_result} with
 individual basis set components shown.}
 \usage{
-\method{stackplot}{fit_result}(x, xlim = c(4, 0.5), y_offset = 0.04,
-  plt_title = FALSE, n = NA, ...)
+\method{stackplot}{fit_result}(x, xlim = NULL, y_offset = 0.04,
+  plt_title = FALSE, n = NULL, ...)
 }
 \arguments{
 \item{x}{fit_result object.}
