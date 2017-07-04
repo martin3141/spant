@@ -2,7 +2,7 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{get_seg_ind}
 \alias{get_seg_ind}
-\title{Get the indices of data points lying between two values.}
+\title{Get the indices of data points lying between two values (end > x > start).}
 \usage{
 get_seg_ind(scale, start, end)
 }
@@ -17,5 +17,5 @@ get_seg_ind(scale, start, end)
 a set of indices.
 }
 \description{
-Get the indices of data points lying between two values.
+Get the indices of data points lying between two values (end > x > start).
 }

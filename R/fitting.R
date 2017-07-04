@@ -506,8 +506,7 @@ int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "real") {
     xlim <- c(x_scale[1], x_scale[N(mrs_data)])
   }
   
-  x_inds <- get_seg_ind(x_scale, xlim[1], xlim[2])
-  subset <- x_inds[1]:x_inds[2]
+  subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
   
   data_arr <- mrs_data$data[,,,,,, subset, drop = F]
   

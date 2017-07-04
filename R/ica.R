@@ -19,8 +19,7 @@ mrs_ica <- function(mrs_data, n, xlim = NULL, scale = "ppm", mode = "real",
     xlim <- c(x_scale[1], x_scale[N(mrs_data)])
   }
   
-  x_inds <- get_seg_ind(x_scale, xlim[1], xlim[2])
-  subset <- x_inds[1]:x_inds[2]
+  subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
   
   old_dim <- dim(mrs_data)
   new_dim <- c(1 * old_dim[2] * old_dim[3] * length(slice) * old_dim[5] *
