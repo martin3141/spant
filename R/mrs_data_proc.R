@@ -523,6 +523,14 @@ hz <- function(mrs_data, fs = NULL, N = NULL) {
   seq(from = -fs / 2, to = fs / 2 - fs / N, length.out = N)
 }
 
+#' Return the ppm scale of an MRS dataset.
+#' @param mrs_data MRS data.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @param fs sampline frequency in Hz.
+#' @param N number of data points in the spectral dimension.
+#' @return ppm scale.
+#' @export
 ppm <- function(mrs_data, ft = NULL, ref = NULL, fs= NULL, N = NULL) {
   if (is.null(ft)) {
     ft <- mrs_data$ft
@@ -618,7 +626,7 @@ crop_spec <- function(mrs_data, xlim = c(4,0.5), x_units = "ppm") {
   mrs_data$data <- mrs_data$data[,,,,,, subset, drop = F]
   
   # update ref TODO +1 may only be needed in some cases?
-  new_ppm = old_ppm[which.min(abs(hz(mrs_data))) + x_inds[1] + 1]
+  new_ppm = old_ppm[which.min(abs(hz(mrs_data))) + subset[1] + 1]
   mrs_data$ref <- new_ppm
     
   mrs_data
