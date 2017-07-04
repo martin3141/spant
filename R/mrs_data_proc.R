@@ -571,20 +571,19 @@ seconds <- function(mrs_data) {
   seq(from = 0, to = (N(mrs_data) - 1)/fs, by = 1 / fs)
 }
 
-#' Get the indices of data points lying between two values.
+#' Get the indices of data points lying between two values (end > x > start).
 #' @param scale the full list of values.
 #' @param start the smallest value in the subset.
 #' @param end the largest value in the subset.
 #' @return a set of indices.
 #' @export
 get_seg_ind <- function(scale, start, end) {
-  st_ind  <- sum(scale <= start)  
-  end_ind <- sum(scale <= end)  
-  if ( scale[1] > scale[2] ) {
-    st_ind  <- length(scale) - st_ind + 1
-    end_ind <- length(scale) - end_ind + 1
+  if (start > end) {
+    tmp <- end
+    end <- start
+    start <- tmp
   }
-  st_ind:end_ind
+  which(scale >= start & scale <= end)
 }
 
 #' Crop \code{mrs_data} object based on a frequency range.
