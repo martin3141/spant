@@ -563,6 +563,12 @@ seconds <- function(mrs_data) {
   seq(from = 0, to = (N(mrs_data) - 1)/fs, by = 1 / fs)
 }
 
+#' Get the indices of data points lying between two values.
+#' @param scale the full list of values.
+#' @param start the smallest value in the subset.
+#' @param end the largest value in the subset.
+#' @return a set of indices.
+#' @export
 get_seg_ind <- function(scale, start, end) {
   st_ind  <- sum(scale <= start)  
   end_ind <- sum(scale <= end)  
@@ -570,7 +576,7 @@ get_seg_ind <- function(scale, start, end) {
     st_ind  <- length(scale) - st_ind + 1
     end_ind <- length(scale) - end_ind + 1
   }
-  c(st_ind, end_ind)
+  st_ind:end_ind
 }
 
 #' Crop \code{mrs_data} object based on a frequency range.
@@ -601,8 +607,7 @@ crop_spec <- function(mrs_data, xlim = c(4,0.5), x_units = "ppm") {
     xlim <- c(x_scale[1], x_scale[N(mrs_data)])
   }
   
-  x_inds <- get_seg_ind(x_scale, xlim[1], xlim[2])
-  subset <- x_inds[1]:x_inds[2]
+  subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
   
   old_ppm <- ppm(mrs_data)
   
