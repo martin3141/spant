@@ -566,6 +566,7 @@ pts <- function(mrs_data) {
 #' Return a time scale vector to match the FID of an MRS data object.
 #' @param mrs_data MRS data.
 #' @return A time scale vector in units of seconds.
+#' @export
 seconds <- function(mrs_data) {
   fs <- fs(mrs_data)
   seq(from = 0, to = (N(mrs_data) - 1)/fs, by = 1 / fs)

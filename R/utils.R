@@ -1,14 +1,49 @@
 beta2lw <- function(beta) {2 * (-beta * log(0.5)) ^ 0.5 / pi}
 
+#' Covert a linewidth in Hz to an equivalent beta value in the time-domain ie:
+#' x * exp(-i * t * t * beta).
+#' @param lw linewidth in Hz.
+#' @return beta value.
+#' @export
 lw2beta <- function(lw) {(lw * pi / 2) ^ 2 / (-log(0.5))}
 
 alpha2lw <- function(alpha) {alpha / pi}
 
 lw2alpha <- function(lw) {lw * pi}
 
+#' Perform a fft and ffshift on a vector.
+#' @param vec_in vector input.
+#' @return output vector.
+#' @export
 ft_shift <- function(vec_in) {pracma::fftshift(stats::fft(vec_in))}
 
+#' Perform an iffshift and ifft on a vector.
+#' @param vec_in vector input.
+#' @return output vector.
+#' @export
 ift_shift <- function(vec_in) {pracma::ifft(pracma::ifftshift(vec_in))}
+
+#' Perform a fft and fftshift on a matrix with each column replaced by its 
+#' shifted fft.
+#' @param mat_in matrix input.
+#' @return output matrix.
+#' @export
+ft_shift_mat <- function(mat_in) {
+  mat_in_ft = stats::mvfft(mat_in)
+  mvfftshift(mat_in_ft)
+}
+
+#' Perform a fftshift on a matrix, with each column replaced by its shifted 
+#' result.
+#' @param x matrix input.
+#' @return output matrix.
+#' @export
+mvfftshift <- function(x) {
+  m <- NROW(x)
+  p <- ceiling(m/2)
+  idx <- c((p + 1):m, 1:p)
+  x[idx,]
+}
 
 hilbert <- function(x) {
   x <- Re(x)
