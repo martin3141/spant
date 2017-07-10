@@ -1,4 +1,5 @@
 # spant 0.4.0
+* MRSI support added to Philips SPAR/SDAT data.
 * Fit plots now default to the full spectral range unless xlim is specified.
 
 # spant 0.3.0

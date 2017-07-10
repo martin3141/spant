@@ -766,8 +766,17 @@ rm_dyns <- function(mrs_data, subset) {
   mrs_data
 }
 
-get_voxel <- function(mrs_data, x = 1, y = 1, z = 1, ref = 1, coil = 1) {
-  mrs_data$data <- mrs_data$data[ref, x, y, z, coil,,, drop = FALSE]
+#' Return a single voxel from a larger mrs dataset.
+#' @param mrs_data MRS data.
+#' @param x_pos the x index to plot.
+#' @param y_pos the y index to plot.
+#' @param z_pos the z index to plot.
+#' @param dyn the dynamic index to plot.
+#' @param coil the coil element number to plot.
+#' @return MRS data.
+#' @export
+get_voxel <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1, dyn = 1, coil = 1) {
+  mrs_data$data <- mrs_data$data[1, x_pos, y_pos, z_pos, dyn, coil, , drop = FALSE]
   return(mrs_data)
 }
 

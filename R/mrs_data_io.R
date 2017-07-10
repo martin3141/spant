@@ -338,7 +338,8 @@ read_spar_sdat <- function(fname) {
                              header = FALSE, strip.white = TRUE,
                              stringsAsFactors = FALSE)
                     
-  N <- as.integer(paras$V2[which(paras$V1 == "samples")])
+  #N <- as.integer(paras$V2[which(paras$V1 == "samples")])
+  N <- as.numeric(paras$V2[which(paras$V1 == "dim1_pnts")])
   dyns <- as.integer(paras$V2[which(paras$V1 == "rows")])
   ft <- as.numeric(paras$V2[which(paras$V1 == "synthesizer_frequency")])
   fs <- as.numeric(paras$V2[which(paras$V1 == "sample_frequency")])
@@ -356,6 +357,7 @@ read_spar_sdat <- function(fname) {
   pe_fov <- as.numeric(paras$V2[which(paras$V1 == "phase_encoding_fov")])
   cols <- as.numeric(paras$V2[which(paras$V1 == "dim2_pnts")])
   rows <- as.numeric(paras$V2[which(paras$V1 == "dim3_pnts")])
+  slices <- as.numeric(paras$V2[which(paras$V1 == "nr_of_slices_for_multislice")])
   #cols <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim2_pnts")])
   #rows <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim3_pnts")])
   
@@ -382,22 +384,24 @@ read_spar_sdat <- function(fname) {
   
   data_vec <- read_sdat(sdat)
   
-  # TODO update dims for MRSI
-  data <- array(data_vec,dim = c(1, 1, 1, 1, N, 1, dyns)) 
-  data = aperm(data,c(1, 2, 3, 4, 7, 6, 5))
-  
   # SVS or MRSI?
   if ((rows == 1) & (cols == 1)) {
     row_dim   <- lr_size
     col_dim   <- ap_size
     slice_dim <- cc_size
   } else {
+    dyns <- 1
     row_dim   <- pe_fov / cols
     col_dim   <- pe_fov / cols
     slice_dim <- sli_thick
     pos_vec <- (pos_vec - col_ori * row_dim * 0.5 * (rows - 1) - 
                 row_ori * col_dim * 0.5 * (cols - 1))
   }
+  
+  #data <- array(data_vec,dim = c(1, cols, rows, slices, N, 1, dyns)) 
+  data <- array(data_vec,dim = c(N, cols, rows, slices, dyns, 1, 1)) 
+  data = aperm(data,c(6, 2, 3, 4, 5, 7, 1))
+  
   
   res <- c(NA, row_dim, col_dim, slice_dim, 1, NA, 1 / fs)
   ref <- def_acq_paras()$ref
