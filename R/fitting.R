@@ -36,7 +36,7 @@
 #' fit_result <- fit_mrs(svs, basis)
 #' }
 #' @export
-fit_mrs <- function(metab, basis, method = 'VARPRO', w_ref = NULL, opts = NULL, 
+fit_mrs <- function(metab, basis, method = 'VARPRO_3P', w_ref = NULL, opts = NULL, 
                     parallel = FALSE, cores = 4) {
   
   if (class(basis) == "basis_set") {
@@ -94,19 +94,10 @@ fit_mrs <- function(metab, basis, method = 'VARPRO', w_ref = NULL, opts = NULL,
       basis <- read_basis(basis)
     }
     
-    if (is.null(opts)) {
-      opts <- varpro_3_para_opts()
-    }
-    
-    temp_mrs <- metab
-    temp_mrs$data = temp_mrs$data[1, 1, 1, 1, 1, 1,]
-    dim(temp_mrs$data) <- c(1, 1, 1, 1, 1, 1, length(temp_mrs$data))
-  
-    #result_list <- apply(metab$data, c(2,3,4,5,6), varpro_fit, temp_mrs, 
-    #                     basis, opts)
+    acq_paras <- get_acq_paras(metab)
     
     result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6),
-                               varpro_3_para_fit, temp_mrs, basis, opts, 
+                               varpro_3_para, acq_paras, basis, opts, 
                                .parallel = parallel, 
                                .paropts = list(.inorder = TRUE),
                                .progress = "text", .inform = FALSE)
@@ -546,10 +537,140 @@ test_varpro <- function() {
   system.time(replicate(10, fit_mrs(mrs_data, basis)))
 }
 
-varpro_3_para <- function(mrs_data, basis, opts = NULL) {
+varpro_3_para_old <- function(mrs_data, basis, opts = NULL) {
   # use default fitting opts if not specified 
   if (is.null(opts)) {
       opts <- varpro_opts()
+  }
+  
+  # convert basis from FD to TD
+  basis_td <- apply(basis$data, 2, ift_shift)
+  
+  y <- drop(mrs_data$data)
+  Npts <- length(y)
+  Nbasis <- dim(basis$data)[2]
+  
+  # phase, global damping, global shift
+  par <- c(0, opts$init_damping, 0)
+           
+  t <- seconds(mrs_data)  
+  # lm control options
+  ctrl <- minpack.lm::nls.lm.control()
+  ctrl$maxiter = opts$maxiters
+  # do the fit
+  lower <- c(-pi, 0, -opts$max_shift)
+  upper <- c(pi, opts$max_damping, opts$max_shift)
+  
+  if (opts$anal_jac) {
+    res <- minpack.lm::nls.lm(par, lower, upper, varpro_3_para_fn,
+                              varpro_3_para_anal_jac, ctrl, y, basis_td, t,
+                              opts$nstart)
+  } else {
+    res <- minpack.lm::nls.lm(par, lower, upper, varpro_3_para_fn, NULL, ctrl, y,
+                              basis_td, t, opts$nstart)
+  }
+  
+  # apply phase to y
+  y <- y * exp(1i * (res$par[1]))
+  
+  # apply global broadening term to basis
+  basis_mod <- basis_td * matrix(exp(-t * t * lw2beta(res$par[2])),
+                                 ncol = ncol(basis_td), nrow = nrow(basis_td),
+                                 byrow = FALSE)
+  
+  # apply shift terms to basis
+  t_mat <- matrix(t, nrow = Npts, ncol = Nbasis)
+  freq_vec <- 2i * pi * rep(res$par[3], Nbasis)
+  freq_mat <- matrix(freq_vec, nrow = Npts, ncol = Nbasis, byrow = TRUE)
+ 
+  basis_mod <- basis_mod * exp(t_mat * freq_mat)
+  
+  # get ahat
+  y_real <- c(Re(y[opts$nstart:Npts]), Im(y[opts$nstart:Npts]))
+  basis_real <- rbind(Re(basis_mod[opts$nstart:Npts,]),
+                      Im(basis_mod[opts$nstart:Npts,]))
+  
+  ahat <- nnls::nnls(basis_real, y_real)$x
+  
+  yhat <- basis_mod %*% ahat
+  amat <- matrix(ahat, nrow = Npts, ncol = Nbasis, byrow = TRUE)
+  basis_sc <- basis_mod * amat
+  zero_mat <- matrix(0, nrow = Npts, ncol = Nbasis)
+  basis_sc <- rbind(basis_sc, zero_mat)
+  BASIS_SC <- apply(basis_sc, 2, ft_shift)
+  basis_frame <- as.data.frame(Re(BASIS_SC), row.names = NA)
+  colnames(basis_frame) <- basis$names
+  
+  # zero pad
+  yhat <- c(yhat, rep(0, Npts))
+  YHAT <- ft_shift(as.vector(yhat))
+  
+  # zero pad
+  y <- c(y, rep(0, Npts))
+  Y <- ft_shift(y)
+  resid <- Y - YHAT
+  
+  BL <- smoother::smth.gaussian(Re(resid), opts$bl_smth_pts, tails = TRUE) + 
+        1i * smoother::smth.gaussian(Im(resid), opts$bl_smth_pts, tails = TRUE)
+  
+  RESID <- Y - YHAT
+  
+  offset <- max(Re(Y)) - min(Re(RESID))
+  resid <- vec2mrs_data(RESID + offset, fd = TRUE)
+  
+  amps <- data.frame(t(ahat))
+  colnames(amps) <- basis$names
+  
+  # create some common metabolite combinations
+  if (("NAA" %in% colnames(amps)) & ("NAAG" %in% colnames(amps))) {
+    amps['TNAA'] <- amps['NAA'] + amps['NAAG']
+  }
+  
+  if (("PCh" %in% colnames(amps)) & ("GPC" %in% colnames(amps))) {
+    amps['TCho'] <- amps['PCh'] + amps['GPC']
+  }
+  
+  if (("Cr" %in% colnames(amps)) & ("PCr" %in% colnames(amps))) {
+    amps['TCr'] <- amps['Cr'] + amps['PCr']
+  }
+  
+  if (("Glu" %in% colnames(amps)) & ("Gln" %in% colnames(amps))) {
+    amps['Glx'] <- amps['Glu'] + amps['Gln']
+  }
+  
+  if (("Lip09" %in% colnames(amps)) & ("MM09" %in% colnames(amps))) {
+    amps['TLM09'] <- amps['Lip09'] + amps['MM09']
+  }
+  
+  if (("Lip13a" %in% colnames(amps)) & ("Lip13b" %in% colnames(amps)) & 
+        ("MM12" %in% colnames(amps)) & ("MM14" %in% colnames(amps))) {
+    amps["TLM13"] <- amps["Lip13a"] + amps["Lip13b"] + amps["MM12"] + amps["MM14"]
+  }
+  
+  if (("Lip20" %in% colnames(amps)) & ("MM20" %in% colnames(amps))) {
+    amps['TLM20'] <- amps['Lip20'] + amps['MM20']
+  }
+  
+  fit <- data.frame(PPMScale = ppm(mrs_data, N = Npts * 2), Data = Re(Y),
+                    Fit = Re(YHAT), Baseline = Re(BL))
+  
+  fit <- cbind(fit, basis_frame)
+  
+  class(fit) <- c("fit_table", "data.frame")
+  
+  diags <- data.frame(phase = res$par[1] * 180 / pi, damping = res$par[2],
+                      shift = res$par[3], res$deviance, res$niter, res$info, 
+                      res$message)
+  
+  list(amps = amps, crlbs = t(rep(NA, length(amps))), diags = diags, fit = fit)
+}
+
+varpro_3_para <- function(y, acq_paras, basis, opts = NULL) {
+  mrs_data <- vec2mrs_data(y, fs = acq_paras$fs, ft = acq_paras$ft, ref = acq_paras$ref)
+  
+  # use default fitting opts if not specified 
+  if (is.null(opts)) {
+      opts <- varpro_3_para_opts()
   }
   
   # convert basis from FD to TD
