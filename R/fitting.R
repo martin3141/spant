@@ -77,19 +77,13 @@ fit_mrs <- function(metab, basis, method = 'VARPRO_3P', w_ref = NULL, opts = NUL
       basis <- read_basis(basis)
     }
     
-    if (is.null(opts)) {
-      opts <- varpro_opts()
-    }
-    
-    temp_mrs <- metab
-    temp_mrs$data = temp_mrs$data[1, 1, 1, 1, 1, 1,]
-    dim(temp_mrs$data) <- c(1, 1, 1, 1, 1, 1, length(temp_mrs$data))
-  
-    #result_list <- apply(metab$data, c(2,3,4,5,6), varpro_fit, temp_mrs, 
+    #result_list <- apply(metab$data, c(2,3,4,5,6), varpro, acq_paras, 
     #                     basis, opts)
     
-    result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6), varpro_fit, 
-                               temp_mrs, basis, opts, 
+    acq_paras <- get_acq_paras(metab)
+    
+    result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6), varpro, 
+                               acq_paras, basis, opts, 
                                .parallel = parallel, 
                                .paropts = list(.inorder = TRUE),
                                .progress = "text", .inform = FALSE)
@@ -238,12 +232,6 @@ fit_mrs <- function(metab, basis, method = 'VARPRO_3P', w_ref = NULL, opts = NUL
   
   class(out) <- "fit_result"
   return(out)
-}
-
-varpro_fit <- function(element, temp_mrs, basis, opts) {
-  metab <- temp_mrs
-  metab$data[1, 1, 1, 1, 1, 1,] <- element
-  varpro(metab, basis, opts)
 }
 
 tarquin_fit <- function(element, temp_mrs, basis_file, opts) {
@@ -487,73 +475,10 @@ read_lcm_coord <- function(coord_f) {
   return(list(fit = fit_tab, res_tab = res_tab))
 }
 
-
-#' Integrate a spectral region.
-#' @param mrs_data MRS data.
-#' @param xlim Spectral range to be integrated.
-#' @param scale Units of xlim, can be : "ppm", "Hz" or "points".
-#' @param mode Spectral mode, can be : "real", "imag" or "abs".
-#' @return An array of integral values.
-#' @export
-int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "real") {
+varpro <- function(y, acq_paras, basis, opts = NULL) {
+  mrs_data <- vec2mrs_data(y, fs = acq_paras$fs, ft = acq_paras$ft, 
+                           ref = acq_paras$ref)
   
-  if (!is_fd(mrs_data)) {
-    mrs_data <- td2fd(mrs_data)
-  }
-    
-  if ( scale == "ppm" ) {
-    x_scale <- ppm(mrs_data)
-  } else if (scale == "hz") {
-    x_scale <- hz(mrs_data)
-  } else if (scale == "points") {
-    x_scale <- pts(mrs_data)
-  }
-  
-  if (is.null(xlim)) {
-    xlim <- c(x_scale[1], x_scale[N(mrs_data)])
-  }
-  
-  subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
-  
-  data_arr <- mrs_data$data[,,,,,, subset, drop = F]
-  
-  if (mode == "real") {
-    data_arr <- Re(data_arr)
-  } else if (mode == "imag") {
-    data_arr <- Im(data_arr)
-  } else if (mode == "abs") {
-    data_arr <- Mod(data_arr)
-  }
-  
-  apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
-}
-
-crop_range <- function(map, lower, upper) {
-  # TODO check upper > lower and both are >0<1
-  map_range <- range(map, na.rm = TRUE)
-  #upper_lim <- map_range[1]+upper/100*(map_range[2] - map_range[1])
-  #lower_lim <- map_range[1]+lower/100*(map_range[2] - map_range[1])
-  upper_lim <- upper
-  lower_lim <- lower
-  map <- ifelse(map > upper_lim, upper_lim,map)  
-  ifelse(map < lower_lim, lower_lim, map)  
-}
-
-test_varpro <- function() {
-  # real data 
-  fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
-  mrs_data <- read_mrs(fname,format = "spar_sdat")
-  mrs_data <- hsvd_filt(mrs_data)
-  mrs_data <- align(mrs_data, 2.01)
-  acq_paras <- get_acq_paras(mrs_data)
-  basis <- sim_basis_1h_brain_press(acq_paras, xlim = c(4.0,0))
-  fit_opts <- varpro_opts()
-  fit <- fit_mrs(mrs_data, basis, opts = fit_opts)
-  graphics::plot(fit, xlim = c(4,0.5))
-  system.time(replicate(10, fit_mrs(mrs_data, basis)))
-}
-
-varpro <- function(mrs_data, basis, opts = NULL) {
   # use default fitting opts if not specified 
   if (is.null(opts)) {
       opts <- varpro_opts()
@@ -579,10 +504,10 @@ varpro <- function(mrs_data, basis, opts = NULL) {
              rep(opts$max_ind_damping, Nbasis))
   
   if (opts$anal_jac) {
-    res <- minpack.lm::nls.lm(par, lower, upper, varpro_fn, varpro_anal_jac,
+    res <- minpack.lm::nls.lm(par, lower, upper, varpro_obj, varpro_anal_jac,
                               ctrl, y, basis_td, t, opts$nstart)
   } else {
-    res <- minpack.lm::nls.lm(par, lower, upper, varpro_fn, NULL, ctrl, y,
+    res <- minpack.lm::nls.lm(par, lower, upper, varpro_obj, NULL, ctrl, y,
                               basis_td, t, opts$nstart)
   }
   
@@ -743,7 +668,7 @@ varpro_anal_jac <- function(par, y, basis, t, nstart) {
   c(phase_jac_real, g_lw_jac_real, shift_jac, lw_jac)
 }
     
-varpro_fn <- function(par, y, basis, t, nstart, sc_res = FALSE) {
+varpro_obj <- function(par, y, basis, t, nstart, sc_res = FALSE) {
   Npts <- length(y)
   Nbasis <- dim(basis)[2]
   
@@ -775,8 +700,6 @@ varpro_fn <- function(par, y, basis, t, nstart, sc_res = FALSE) {
   res
 }
 
-
-
 #' Return a list of options for VARPRO based fitting.
 #' @param nstart Position in the time-domain to start fitting, units of data
 #' points.
@@ -806,7 +729,8 @@ varpro_opts <- function(nstart = 20, init_g_damping = 2, maxiters = 200,
 }
 
 varpro_3_para <- function(y, acq_paras, basis, opts = NULL) {
-  mrs_data <- vec2mrs_data(y, fs = acq_paras$fs, ft = acq_paras$ft, ref = acq_paras$ref)
+  mrs_data <- vec2mrs_data(y, fs = acq_paras$fs, ft = acq_paras$ft, 
+                           ref = acq_paras$ref)
   
   # use default fitting opts if not specified 
   if (is.null(opts)) {
@@ -1028,3 +952,16 @@ varpro_3_para_anal_jac <- function(par, y, basis, t, nstart) {
   c(phase_jac_real, g_lw_jac_real, shift_jac_real)
 }
 
+test_varpro <- function() {
+  # real data 
+  fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
+  mrs_data <- read_mrs(fname,format = "spar_sdat")
+  mrs_data <- hsvd_filt(mrs_data)
+  mrs_data <- align(mrs_data, 2.01)
+  acq_paras <- get_acq_paras(mrs_data)
+  basis <- sim_basis_1h_brain_press(acq_paras, xlim = c(4.0,0))
+  fit_opts <- varpro_opts()
+  fit <- fit_mrs(mrs_data, basis, opts = fit_opts)
+  graphics::plot(fit, xlim = c(4,0.5))
+  system.time(replicate(10, fit_mrs(mrs_data, basis)))
+}

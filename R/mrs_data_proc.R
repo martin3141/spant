@@ -1524,3 +1524,43 @@ calc_spec_snr <- function(mrs_data, sig_region = c(4,0.5),
   
   max_sig / (2 * noise_sd)
 }
+
+#' Integrate a spectral region.
+#' @param mrs_data MRS data.
+#' @param xlim Spectral range to be integrated.
+#' @param scale Units of xlim, can be : "ppm", "Hz" or "points".
+#' @param mode Spectral mode, can be : "real", "imag" or "abs".
+#' @return An array of integral values.
+#' @export
+int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "real") {
+  
+  if (!is_fd(mrs_data)) {
+    mrs_data <- td2fd(mrs_data)
+  }
+    
+  if ( scale == "ppm" ) {
+    x_scale <- ppm(mrs_data)
+  } else if (scale == "hz") {
+    x_scale <- hz(mrs_data)
+  } else if (scale == "points") {
+    x_scale <- pts(mrs_data)
+  }
+  
+  if (is.null(xlim)) {
+    xlim <- c(x_scale[1], x_scale[N(mrs_data)])
+  }
+  
+  subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
+  
+  data_arr <- mrs_data$data[,,,,,, subset, drop = F]
+  
+  if (mode == "real") {
+    data_arr <- Re(data_arr)
+  } else if (mode == "imag") {
+    data_arr <- Im(data_arr)
+  } else if (mode == "abs") {
+    data_arr <- Mod(data_arr)
+  }
+  
+  apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
+}

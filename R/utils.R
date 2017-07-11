@@ -143,3 +143,14 @@ add_alpha <- function(col, alpha = 1) {
   apply(sapply(col, grDevices::col2rgb) / 255, 2, 
         function(x) grDevices::rgb(x[1], x[2], x[3], alpha = alpha))  
 }
+
+crop_range <- function(map, lower, upper) {
+  # TODO check upper > lower and both are >0<1
+  map_range <- range(map, na.rm = TRUE)
+  #upper_lim <- map_range[1]+upper/100*(map_range[2] - map_range[1])
+  #lower_lim <- map_range[1]+lower/100*(map_range[2] - map_range[1])
+  upper_lim <- upper
+  lower_lim <- lower
+  map <- ifelse(map > upper_lim, upper_lim,map)  
+  ifelse(map < lower_lim, lower_lim, map)  
+}
