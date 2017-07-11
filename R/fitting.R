@@ -63,9 +63,9 @@ fit_mrs <- function(metab, basis, method = 'VARPRO_3P', w_ref = NULL, opts = NUL
   #if (parallel) { doMC::registerDoMC(cores=cores) }
   
   # force uppercase for matching
-  method <- toupper(method)
+  METHOD <- toupper(method)
   
-  if (method == "VARPRO") {
+  if (METHOD == "VARPRO") {
     # read basis into memory if a file
     if (is.character(basis)) {
       basis <- read_basis(basis)
@@ -88,7 +88,7 @@ fit_mrs <- function(metab, basis, method = 'VARPRO_3P', w_ref = NULL, opts = NUL
                                .paropts = list(.inorder = TRUE),
                                .progress = "text", .inform = FALSE)
     
-  } else if (method == "VARPRO_3P") {
+  } else if (METHOD == "VARPRO_3P") {
     # read basis into memory if a file
     if (is.character(basis)) {
       basis <- read_basis(basis)
@@ -103,7 +103,7 @@ fit_mrs <- function(metab, basis, method = 'VARPRO_3P', w_ref = NULL, opts = NUL
                                .progress = "text", .inform = FALSE)
     
     
-  } else if (method == "TARQUIN") {
+  } else if (METHOD == "TARQUIN") {
     if (!is.null(w_ref)) { 
       if (dyns(w_ref) > 1) {
         w_ref <- mean_dyns(w_ref)
@@ -140,7 +140,7 @@ fit_mrs <- function(metab, basis, method = 'VARPRO_3P', w_ref = NULL, opts = NUL
     
                          #.paropts = list(.options.snow=snowopts),
                          #.paropts = list(.export="N",.packages="spant"),
-  } else if (method == "LCMODEL") {
+  } else if (METHOD == "LCMODEL") {
     if (!is.null(w_ref)) { 
       if (dyns(w_ref) > 1) {
         w_ref <- mean_dyns(w_ref)
@@ -171,8 +171,24 @@ fit_mrs <- function(metab, basis, method = 'VARPRO_3P', w_ref = NULL, opts = NUL
                                .parallel = parallel, 
                                .paropts = list(.inorder = TRUE),
                                .progress = "text", .inform = FALSE)
+  } else if (exists(method)) {
+    message(paste("Using custom fit method :", method))
+    
+    # read basis into memory if a file
+    if (is.character(basis)) {
+      basis <- read_basis(basis)
+    }
+    
+    acq_paras <- get_acq_paras(metab)
+    
+    result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6),
+                               get(method), acq_paras, basis, opts, 
+                               .parallel = parallel, 
+                               .paropts = list(.inorder = TRUE),
+                               .progress = "text", .inform = FALSE)
+    
   } else {
-    stop(paste('Error, unsupported fit method : ', method))
+    stop(paste('Fit method not found : ', method))
   }
   
   # combine fit results into dataframe and fits into a list
