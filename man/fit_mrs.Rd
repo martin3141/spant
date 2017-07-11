@@ -4,7 +4,7 @@
 \alias{fit_mrs}
 \title{Perform a fit based analysis of MRS data.}
 \usage{
-fit_mrs(metab, basis, method = "VARPRO", w_ref = NULL, opts = NULL,
+fit_mrs(metab, basis, method = "VARPRO_3P", w_ref = NULL, opts = NULL,
   parallel = FALSE, cores = 4)
 }
 \arguments{

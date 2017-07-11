@@ -224,12 +224,6 @@ varpro_fit <- function(element, temp_mrs, basis, opts) {
   varpro(metab, basis, opts)
 }
 
-varpro_3_para_fit <- function(element, temp_mrs, basis, opts) {
-  metab <- temp_mrs
-  metab$data[1, 1, 1, 1, 1, 1,] <- element
-  varpro_3_para(metab, basis, opts)
-}
-
 tarquin_fit <- function(element, temp_mrs, basis_file, opts) {
   metab <- temp_mrs
   # write the metabolite data to file
