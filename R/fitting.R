@@ -952,16 +952,16 @@ varpro_3_para_anal_jac <- function(par, y, basis, t, nstart) {
   c(phase_jac_real, g_lw_jac_real, shift_jac_real)
 }
 
-test_varpro <- function() {
+test_fit <- function(method = "VARPRO_3P", n = 10, preproc = TRUE) {
   # real data 
   fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
-  mrs_data <- read_mrs(fname,format = "spar_sdat")
-  mrs_data <- hsvd_filt(mrs_data)
-  mrs_data <- align(mrs_data, 2.01)
-  acq_paras <- get_acq_paras(mrs_data)
-  basis <- sim_basis_1h_brain_press(acq_paras, xlim = c(4.0,0))
-  fit_opts <- varpro_opts()
-  fit <- fit_mrs(mrs_data, basis, opts = fit_opts)
+  mrs_data <- read_mrs(fname, format = "spar_sdat")
+  if (preproc) {
+    mrs_data <- hsvd_filt(mrs_data)
+    mrs_data <- align(mrs_data, 2.01)
+  }
+  basis <- sim_basis_1h_brain_press(mrs_data)
+  fit <- fit_mrs(mrs_data, basis, method = method)
   graphics::plot(fit, xlim = c(4,0.5))
-  system.time(replicate(10, fit_mrs(mrs_data, basis)))
+  system.time(replicate(n, fit_mrs(mrs_data, basis, method = method)))
 }
