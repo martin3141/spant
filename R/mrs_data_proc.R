@@ -153,10 +153,21 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
                    row_vec = c(1,0,0), col_vec = c(0,1,0), pos_vec = c(0,0,0), 
                    freq_domain = rep(FALSE, 7))
   
+  print(res$par)
+  
   class(mrs_data) <- "mrs_data"
   return(mrs_data)
 }
 
+#' Convert a vector into a mrs_data object.
+#' @param vec the data vector.
+#' @param fs sampling frequency in Hz.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @param dyns replicate the data across the dynamic dimension.
+#' @param fd flag to indicate if the matrix is in the frequency domain (logical).
+#' @return mrs_data object.
+#' @export
 vec2mrs_data <- function(vec, fs = def_fs(), ft = def_ft(), ref = def_ref(),
                          dyns = 1, fd = FALSE) {
   
@@ -202,6 +213,7 @@ mrs_data2mat <- function(mrs_data) {
 #' @param ft Transmitter frequency in Hz.
 #' @param ref Reference value for ppm scale.
 #' @param fd Flag to indicate if the matrix is in the frequency domain (logical).
+#' @return mrs_data object.
 #' @export
 mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
                          fd = FALSE) {
