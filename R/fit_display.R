@@ -10,14 +10,19 @@
 #' @export
 plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
                            data_only = FALSE, label=NULL, 
-                           plot_sigs = NULL, n = NULL, ...) {
+                           plot_sigs = NULL, dyn = 1, x_pos = 1,
+                           y_pos = 1, z_pos = 1, coil = 1, ...) {
   
-  if (is.null(n) && length(x$fits) > 1 ) {
-    warning("Fit number n not specified, plotting the first one.")
-    n = 1
-  }
+  #if (is.null(n) && length(x$fits) > 1 ) {
+  #  warning("Fit number n not specified, plotting the first one.")
+  #  n = 1
+  #}
   
-  if (is.null(n)) {n = 1} # SVS case
+  #if (is.null(n)) {n = 1} # SVS case
+  #n <- which(rowSums(data.matrix(x$res_tab[,1:5]) == c(x_pos,y_pos,z_pos,dyn,coil)) == 5)
+  
+  # TODO other inds
+  n <- as.numeric(row.names(subset(res$res_tab, X==x_pos & Y==y_pos)))
   
   x <- x$fits[[n]]
   

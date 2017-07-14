@@ -5,7 +5,8 @@
 \title{Plot the fitting results of an object of class \code{fit_result}.}
 \usage{
 \method{plot}{fit_result}(x, xlim = NULL, plt_title = FALSE,
-  data_only = FALSE, label = NULL, plot_sigs = NULL, n = NULL, ...)
+  data_only = FALSE, label = NULL, plot_sigs = NULL, dyn = 1,
+  x_pos = 1, y_pos = 1, z_pos = 1, coil = 1, ...)
 }
 \arguments{
 \item{x}{fit_result object.}
@@ -20,9 +21,9 @@
 
 \item{plot_sigs}{a character vector of signal names to add to the plot.}
 
-\item{n}{index to the fit number to display.}
-
 \item{...}{further arguments to plot method.}
+
+\item{n}{index to the fit number to display.}
 }
 \description{
 Plot the fitting results of an object of class \code{fit_result}.
