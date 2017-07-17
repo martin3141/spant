@@ -10,18 +10,21 @@
 #' @param y_pos the y index to plot.
 #' @param z_pos the z index to plot.
 #' @param coil the coil element number to plot.
+#' @param n single index element to plot (overides other indices when given).
 #' @param ... further arguments to plot method.
 #' @export
 plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
-                           data_only = FALSE, label=NULL, 
+                           data_only = FALSE, label = NULL, 
                            plot_sigs = NULL, dyn = 1, x_pos = 1,
-                           y_pos = 1, z_pos = 1, coil = 1, ...) {
+                           y_pos = 1, z_pos = 1, coil = 1, n = NULL, ...) {
   
-  ind <- (x$res_tab$X == x_pos) & (x$res_tab$Y == y_pos) & 
-         (x$res_tab$Z == z_pos) & (x$res_tab$Dynamic == dyn) &
-         (x$res_tab$Coil == coil) 
-  
-  n <- which(ind)
+  if (is.null(n)) {
+    ind <- (x$res_tab$X == x_pos) & (x$res_tab$Y == y_pos) & 
+           (x$res_tab$Z == z_pos) & (x$res_tab$Dynamic == dyn) &
+           (x$res_tab$Coil == coil) 
+    
+    n <- which(ind)
+  }
   
   x <- x$fits[[n]]
   
@@ -94,18 +97,22 @@ plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
 #' @param y_pos the y index to plot.
 #' @param z_pos the z index to plot.
 #' @param coil the coil element number to plot.
+#' @param n single index element to plot (overides other indices when given).
 #' @param ... further arguments to plot method.
 #' @export
-stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0.04, 
+stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0.04,
                                  plt_title = FALSE, dyn = 1, x_pos = 1,
-                                 y_pos = 1, z_pos = 1, coil = 1, ...) {
+                                 y_pos = 1, z_pos = 1, coil = 1,
+                                 n = NULL, ...) {
   
   
-  ind <- (x$res_tab$X == x_pos) & (x$res_tab$Y == y_pos) & 
-         (x$res_tab$Z == z_pos) & (x$res_tab$Dynamic == dyn) &
-         (x$res_tab$Coil == coil) 
-  
-  n <- which(ind)
+  if (is.null(n)) {
+    ind <- (x$res_tab$X == x_pos) & (x$res_tab$Y == y_pos) & 
+           (x$res_tab$Z == z_pos) & (x$res_tab$Dynamic == dyn) &
+           (x$res_tab$Coil == coil) 
+    
+    n <- which(ind)
+  }
   
   x <- x$fits[[n]]
   
