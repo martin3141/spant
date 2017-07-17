@@ -5,7 +5,11 @@
 #' @param data_only display only the processed data (logical).
 #' @param label character string to add to the top left of the plot window.
 #' @param plot_sigs a character vector of signal names to add to the plot.
-#' @param n index to the fit number to display.
+#' @param dyn the dynamic index to plot.
+#' @param x_pos the x index to plot.
+#' @param y_pos the y index to plot.
+#' @param z_pos the z index to plot.
+#' @param coil the coil element number to plot.
 #' @param ... further arguments to plot method.
 #' @export
 plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
@@ -13,16 +17,15 @@ plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
                            plot_sigs = NULL, dyn = 1, x_pos = 1,
                            y_pos = 1, z_pos = 1, coil = 1, ...) {
   
-  #if (is.null(n) && length(x$fits) > 1 ) {
-  #  warning("Fit number n not specified, plotting the first one.")
-  #  n = 1
-  #}
+  ind <- (x$res_tab$X == x_pos) & (x$res_tab$Y == y_pos) & 
+         (x$res_tab$Z == z_pos) & (x$res_tab$Dynamic == dyn) &
+         (x$res_tab$Coil == coil) 
   
-  #if (is.null(n)) {n = 1} # SVS case
-  #n <- which(rowSums(data.matrix(x$res_tab[,1:5]) == c(x_pos,y_pos,z_pos,dyn,coil)) == 5)
+  n <- which(ind)
   
   # TODO other inds
-  n <- as.numeric(row.names(subset(res$res_tab, X==x_pos & Y==y_pos)))
+  #n <- as.numeric(row.names(subset(x$res_tab, X == x_pos & Y == y_pos & 
+   #                                Z == z_pos & Dynamic == dyn & Coil == coil)))
   
   x <- x$fits[[n]]
   

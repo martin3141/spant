@@ -21,9 +21,17 @@
 
 \item{plot_sigs}{a character vector of signal names to add to the plot.}
 
-\item{...}{further arguments to plot method.}
+\item{dyn}{the dynamic index to plot.}
 
-\item{n}{index to the fit number to display.}
+\item{x_pos}{the x index to plot.}
+
+\item{y_pos}{the y index to plot.}
+
+\item{z_pos}{the z index to plot.}
+
+\item{coil}{the coil element number to plot.}
+
+\item{...}{further arguments to plot method.}
 }
 \description{
 Plot the fitting results of an object of class \code{fit_result}.
