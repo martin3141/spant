@@ -23,10 +23,6 @@ plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
   
   n <- which(ind)
   
-  # TODO other inds
-  #n <- as.numeric(row.names(subset(x$res_tab, X == x_pos & Y == y_pos & 
-   #                                Z == z_pos & Dynamic == dyn & Coil == coil)))
-  
   x <- x$fits[[n]]
   
   if (is.null(xlim)) {
@@ -93,25 +89,29 @@ plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
 #' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
 #' @param y_offset separate basis signals in the y-axis direction by this value.
 #' @param plt_title title to add to the plot.
-#' @param n index to the fit number to display.
+#' @param dyn the dynamic index to plot.
+#' @param x_pos the x index to plot.
+#' @param y_pos the y index to plot.
+#' @param z_pos the z index to plot.
+#' @param coil the coil element number to plot.
 #' @param ... further arguments to plot method.
 #' @export
 stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0.04, 
-                                 plt_title = FALSE, n = NULL, ...) {
+                                 plt_title = FALSE, dyn = 1, x_pos = 1,
+                                 y_pos = 1, z_pos = 1, coil = 1, ...) {
   
-  if ( is.null(n) && length(x$fits) > 1 ) {
-    warning("Fit number n not specified, plotting the first one.")
-    n = 1
-  }
   
-  if ( is.null(n)) {n = 1} # SVS case
+  ind <- (x$res_tab$X == x_pos) & (x$res_tab$Y == y_pos) & 
+         (x$res_tab$Z == z_pos) & (x$res_tab$Dynamic == dyn) &
+         (x$res_tab$Coil == coil) 
+  
+  n <- which(ind)
   
   x <- x$fits[[n]]
   
   if (is.null(xlim)) {
     xlim <- rev(range(x$PPMScale))
   }
-  
   
   graphics::par("xaxs" = "i", "yaxs" = "i") # tight axes limits
   

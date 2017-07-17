@@ -6,7 +6,8 @@
 individual basis set components shown.}
 \usage{
 \method{stackplot}{fit_result}(x, xlim = NULL, y_offset = 0.04,
-  plt_title = FALSE, n = NULL, ...)
+  plt_title = FALSE, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
+  coil = 1, ...)
 }
 \arguments{
 \item{x}{fit_result object.}
@@ -17,7 +18,15 @@ individual basis set components shown.}
 
 \item{plt_title}{title to add to the plot.}
 
-\item{n}{index to the fit number to display.}
+\item{dyn}{the dynamic index to plot.}
+
+\item{x_pos}{the x index to plot.}
+
+\item{y_pos}{the y index to plot.}
+
+\item{z_pos}{the z index to plot.}
+
+\item{coil}{the coil element number to plot.}
 
 \item{...}{further arguments to plot method.}
 }
