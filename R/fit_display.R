@@ -171,7 +171,15 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0.04,
 #' @param ... further arguments.
 #' @export
 print.fit_result <- function(x, ...) {
-  print(x$res_tab)
+  print(summary(x$res_tab))
+}
+
+#' Print fit coordinates from a single index.
+#' @param n fit index.
+#' @param fit_res \code{fit_result} object.
+#' @export
+n2coord <- function(n, fit_res) {
+  print(fit_res$res_tab[n, 1:5])
 }
 
 output_csv <- function(analysis, fname, pvc=FALSE) {
