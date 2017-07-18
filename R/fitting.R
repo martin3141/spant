@@ -227,7 +227,10 @@ fit_mrs <- function(metab, basis, method = 'VARPRO_3P', w_ref = NULL, opts = NUL
   diags = plyr::ldply(df_list_diags, data.frame)[-1]
   fits <- result_list[seq(from = 4, by = res_n, length.out = fit_num)]
   
-  out <- list(res_tab = cbind(labs, amps, crlbs, diags), fits = fits, 
+  res_tab <- cbind(labs, amps, crlbs, diags)
+  res_tab[, 1:5] <- sapply(res_tab[, 1:5], as.numeric)
+  
+  out <- list(res_tab = res_tab, fits = fits, 
               data = metab, amp_cols = ncol(amps))
   
   class(out) <- "fit_result"
