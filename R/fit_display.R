@@ -210,8 +210,18 @@ output_csv <- function(analysis, fname, pvc=FALSE) {
   }
 }
 
-plot_slice <- function(analysis, name) {
-  result_map <- analysis$results[[name]]
-  dim(result_map) <- dim(analysis$data$data)[2:6]
-  graphics::image(result_map[,, 1, 1, 1])
+#' Plot a 2D slice from an MRSI fit result object.
+#' @param fit_res \code{fit_result} object.
+#' @param name name of the quantity to plot, eg "TNAA".
+#' @param slice slice to plot in the z direction.
+#' @param interp interpolation factor.
+#' @export
+plot_slice <- function(fit_res, name, slice = 1, interp = 16) {
+  result_map <- fit_res$res_tab[[name]]
+  dim(result_map) <- dim(fit_res$data$data)[2:6]
+  col <- viridisLite::viridis(64)
+  plot_map <- result_map[,, slice, 1, 1]
+  plot_map <- mmand::rescale(plot_map, interp, mmand::mnKernel())
+  fields::image.plot(plot_map, col = col, useRaster = T, 
+                     asp = 1, axes = F, legend.shrink = 0.8)
 }
