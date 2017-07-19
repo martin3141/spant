@@ -29,7 +29,10 @@ ift_shift <- function(vec_in) {pracma::ifft(pracma::ifftshift(vec_in))}
 #' @return output matrix.
 #' @export
 ft_shift_mat <- function(mat_in) {
-  mat_in_ft = stats::mvfft(mat_in)
+  mat_in_ft = stats::mvfft(mat_in) # 33s
+  #p <- fftw::planFFT(NROW(mat_in),effort=1)
+  #mat_in_ft = apply(mat_in,2,fftw::FFT,p) # 34s
+  #mat_in_ft = fftwtools::mvfftw(mat_in) # 35s
   mvfftshift(mat_in_ft)
 }
 
