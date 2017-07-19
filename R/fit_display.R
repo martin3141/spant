@@ -214,14 +214,23 @@ output_csv <- function(analysis, fname, pvc=FALSE) {
 #' @param fit_res \code{fit_result} object.
 #' @param name name of the quantity to plot, eg "TNAA".
 #' @param slice slice to plot in the z direction.
+#' @param zlim range of values to plot.
 #' @param interp interpolation factor.
 #' @export
-plot_slice <- function(fit_res, name, slice = 1, interp = 16) {
+plot_slice <- function(fit_res, name, slice = 1, zlim = NULL, interp = 16) {
   result_map <- fit_res$res_tab[[name]]
   dim(result_map) <- dim(fit_res$data$data)[2:6]
   col <- viridisLite::viridis(64)
   plot_map <- result_map[,, slice, 1, 1]
   plot_map <- mmand::rescale(plot_map, interp, mmand::mnKernel())
-  fields::image.plot(plot_map, col = col, useRaster = T, 
-                     asp = 1, axes = F, legend.shrink = 0.8)
+  
+  if (is.null(zlim)) { 
+    fields::image.plot(plot_map, col = col, useRaster = T, 
+                       asp = 1, axes = F, legend.shrink = 0.8)
+  } else {
+    plot_map <- crop_range(plot_map, zlim[1], zlim[2])
+    breaks <- seq(from = zlim[1], to = zlim[2], length.out = 65)
+    fields::image.plot(plot_map, col = col, useRaster = T, 
+                       asp = 1, axes = F, legend.shrink = 0.8, breaks = breaks)
+  }
 }

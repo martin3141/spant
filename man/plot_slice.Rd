@@ -4,7 +4,7 @@
 \alias{plot_slice}
 \title{Plot a 2D slice from an MRSI fit result object.}
 \usage{
-plot_slice(fit_res, name, slice = 1, interp = 16)
+plot_slice(fit_res, name, slice = 1, zlim = NULL, interp = 16)
 }
 \arguments{
 \item{fit_res}{\code{fit_result} object.}
@@ -12,6 +12,8 @@ plot_slice(fit_res, name, slice = 1, interp = 16)
 \item{name}{name of the quantity to plot, eg "TNAA".}
 
 \item{slice}{slice to plot in the z direction.}
+
+\item{zlim}{range of values to plot.}
 
 \item{interp}{interpolation factor.}
 }
