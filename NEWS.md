@@ -2,6 +2,7 @@
 * MRSI support added for Philips SPAR/SDAT data.
 * Fit plots now default to the full spectral range unless xlim is specified.
 * Fit plots allow the x, y, z, coil, dynamic indices to be specified.
+* Added the option to subtract the baseline from fit plots.
 
 # spant 0.3.0
 * Added stackplot method for fit objects.

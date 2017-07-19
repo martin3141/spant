@@ -6,7 +6,8 @@
 \usage{
 \method{plot}{fit_result}(x, xlim = NULL, plt_title = FALSE,
   data_only = FALSE, label = NULL, plot_sigs = NULL, dyn = 1,
-  x_pos = 1, y_pos = 1, z_pos = 1, coil = 1, n = NULL, ...)
+  x_pos = 1, y_pos = 1, z_pos = 1, coil = 1, n = NULL,
+  sub_bl = FALSE, ...)
 }
 \arguments{
 \item{x}{fit_result object.}
@@ -32,6 +33,8 @@
 \item{coil}{the coil element number to plot.}
 
 \item{n}{single index element to plot (overides other indices when given).}
+
+\item{sub_bl}{subtract the baseline from the data and fit (logical).}
 
 \item{...}{further arguments to plot method.}
 }

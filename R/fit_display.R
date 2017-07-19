@@ -11,12 +11,14 @@
 #' @param z_pos the z index to plot.
 #' @param coil the coil element number to plot.
 #' @param n single index element to plot (overides other indices when given).
+#' @param sub_bl subtract the baseline from the data and fit (logical).
 #' @param ... further arguments to plot method.
 #' @export
 plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
                            data_only = FALSE, label = NULL, 
                            plot_sigs = NULL, dyn = 1, x_pos = 1,
-                           y_pos = 1, z_pos = 1, coil = 1, n = NULL, ...) {
+                           y_pos = 1, z_pos = 1, coil = 1, n = NULL,
+                           sub_bl = FALSE, ...) {
   
   if (is.null(n)) {
     ind <- (x$res_tab$X == x_pos) & (x$res_tab$Y == y_pos) & 
@@ -64,6 +66,11 @@ plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
     }
     
   } else {
+    if (sub_bl) {
+      x$Data <- x$Data - x$Baseline
+      x$Baseline <- rep(0,length(x$Baseline))
+    }
+    
     fit_line <- x$Fit + x$Baseline
     max_dp <- max(x$Data[ind],fit_line[ind])
     min_dp <- min(x$Data[ind],fit_line[ind],x$Baseline[ind])
@@ -76,7 +83,9 @@ plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
          ylim = c(min_dp,max_dp + res_range), yaxt = "n", ylab = "",
          xlab = "Chemical Shift (ppm)", ...)
     graphics::lines(x$PPMScale, fit_line, col = 'Red', lw = 2)
-    graphics::lines(x$PPMScale, x$Baseline)
+    if (!sub_bl) {
+      graphics::lines(x$PPMScale, x$Baseline)
+    }
     graphics::lines(x$PPMScale, res + offset)
     graphics::abline(h = max_dp)
   }
@@ -98,12 +107,13 @@ plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
 #' @param z_pos the z index to plot.
 #' @param coil the coil element number to plot.
 #' @param n single index element to plot (overides other indices when given).
+#' @param sub_bl subtract the baseline from the data and fit (logical).
 #' @param ... further arguments to plot method.
 #' @export
 stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0.04,
                                  plt_title = FALSE, dyn = 1, x_pos = 1,
                                  y_pos = 1, z_pos = 1, coil = 1,
-                                 n = NULL, ...) {
+                                 n = NULL, sub_bl = FALSE, ...) {
   
   
   if (is.null(n)) {
@@ -137,6 +147,11 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0.04,
     ind <- x$PPMScale < xlim[2] & x$PPMScale > xlim[1]
   }
   
+  if (sub_bl) {
+    x$Data <- x$Data - x$Baseline
+    x$Baseline <- rep(0,length(x$Baseline))
+  }
+  
   fit_line <- x$Fit + x$Baseline
   max_dp <- max(x$Data[ind],fit_line[ind])
   min_dp <- min(x$Data[ind],fit_line[ind],x$Baseline[ind])
@@ -157,7 +172,11 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0.04,
        ylim = c(min_basis - basis_yoff, max_dp + res_range), yaxt = "n", ylab = "",
        xlab = "Chemical Shift (ppm)", ...)
   graphics::lines(x$PPMScale, fit_line, col = 'Red', lw = 2)
-  graphics::lines(x$PPMScale, x$Baseline)
+  
+  if (!sub_bl) {
+    graphics::lines(x$PPMScale, x$Baseline)
+  }
+  
   graphics::lines(x$PPMScale, res + offset)
   graphics::abline(h = max_dp)
   

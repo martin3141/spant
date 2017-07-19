@@ -7,7 +7,7 @@ individual basis set components shown.}
 \usage{
 \method{stackplot}{fit_result}(x, xlim = NULL, y_offset = 0.04,
   plt_title = FALSE, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
-  coil = 1, n = NULL, ...)
+  coil = 1, n = NULL, sub_bl = FALSE, ...)
 }
 \arguments{
 \item{x}{fit_result object.}
@@ -29,6 +29,8 @@ individual basis set components shown.}
 \item{coil}{the coil element number to plot.}
 
 \item{n}{single index element to plot (overides other indices when given).}
+
+\item{sub_bl}{subtract the baseline from the data and fit (logical).}
 
 \item{...}{further arguments to plot method.}
 }
