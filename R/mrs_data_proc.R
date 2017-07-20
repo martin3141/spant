@@ -544,25 +544,25 @@ hz <- function(mrs_data, fs = NULL, N = NULL) {
 #' @return ppm scale.
 #' @export
 ppm <- function(mrs_data, ft = NULL, ref = NULL, fs= NULL, N = NULL) {
-  if (is.null(ft)) {
-    ft <- mrs_data$ft
-  }
-  
-  if (is.null(ref)) {
+   if (is.null(ft)) {
+     ft <- mrs_data$ft
+   }
+   
+   if (is.null(ref)) {
     ref <- mrs_data$ref
-  }
-  
-  if (is.null(fs)) {
-    fs <- fs(mrs_data)
-  }
-  
-  if (is.null(N)) {
-    N <- N(mrs_data)
-  }
-  
+   }
+   
+   if (is.null(fs)) {
+     fs <- fs(mrs_data)
+   }
+   
+   if (is.null(N)) {
+     N <- N(mrs_data)
+   }
+   
   -hz(fs = fs, N = N) / mrs_data$ft * 1e6 + mrs_data$ref
 }
-
+  
 hz2ppm <- function(hz_in, ft, ref) {
   ref - hz_in / ft * 1e6
 }

@@ -491,3 +491,7 @@ test_fit <- function(method = "VARPRO_3P", n = 10, preproc = TRUE) {
   graphics::plot(fit, xlim = c(4,0.5))
   system.time(replicate(n, fit_mrs(mrs_data, basis, method = method)))
 }
+
+dim.fit_result <- function(x) {
+  dim(x$data$data)
+}

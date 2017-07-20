@@ -1,14 +1,19 @@
+#' @export
 plot_slice_map_inter <- function(map, mrs_data, xlim = NULL, slice = 1, 
                                  mask_map = NULL, upper = NULL, lower = NULL,
                                  denom = NULL, mask_cutoff = 20, interp = 16) {
   
   assign("plot_env", new.env(hash = T), envir = baseenv())
   
-  x_scale <- ppm(mrs_data)
-  if (is.null(xlim)) {
-    xlim <- c(x_scale[1], x_scale[N(mrs_data)])
+  if (class(mrs_data) == "mrs_data") {
+    x_scale <- ppm(mrs_data)
+  } else {
+    x_scale <- mrs_data$fits[[1]]$PPMScale
   }
   
+  if (is.null(xlim)) {
+    xlim <- c(x_scale[1], x_scale[length(x_scale)])
+  }
   
   plot_env$xlim <- xlim
   plot_env$slice <- slice
@@ -117,5 +122,6 @@ plotTk <- function() {
   text = paste("X=", plot_env$x, ", Y=", plot_env$y, sep = "")
   cat(text, "\n")
   graphics::plot(plot_env$mrs_data, x_pos = plot_env$x, y_pos = plot_env$y, 
-                 z_pos = plot_env$slice, yscale = TRUE, xlim = plot_env$xlim)
+                 z_pos = plot_env$slice, xlim = plot_env$xlim)
+                 #z_pos = plot_env$slice, yscale = TRUE, xlim = plot_env$xlim)
 }

@@ -366,6 +366,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "real", col = NULL,
 }
 
 
+#' @export
 plot_slice_map <- function(data, lower = NULL, upper = NULL, mask_map = NULL,
                            mask_cutoff = 20, interp = 16, slice = 1, dyn = 1,
                            coil = 1, ref = 1, denom = NULL,

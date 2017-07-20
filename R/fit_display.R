@@ -234,3 +234,10 @@ plot_slice <- function(fit_res, name, slice = 1, zlim = NULL, interp = 16) {
                        asp = 1, axes = F, legend.shrink = 0.8, breaks = breaks)
   }
 }
+
+#' @export
+get_fit_map <- function(fit_res, name) {
+  result_map <- fit_res$res_tab[[name]]
+  dim(result_map) <- c(1, dim(fit_res$data$data)[2:6])
+  result_map
+}
