@@ -1,7 +1,7 @@
 #' @export
 plot_slice_map_inter <- function(map, mrs_data, xlim = NULL, slice = 1, 
                                  mask_map = NULL, upper = NULL, lower = NULL,
-                                 denom = NULL, mask_cutoff = 20, interp = 16) {
+                                 denom = NULL, mask_cutoff = 20, interp = 1) {
   
   assign("plot_env", new.env(hash = T), envir = baseenv())
   
@@ -75,8 +75,8 @@ onLeftClick <- function(x, y) {
   xPlotCoord <- plot_env$usrCoords[1] + (xClick - xMin) * rangeX / (xMax - xMin)
   yPlotCoord <- plot_env$usrCoords[3] + (yClick - yMin) * rangeY / (yMax - yMin)
   
-  plot_env$xPlotCoord <- xPlotCoord  
-  plot_env$yPlotCoord <- yPlotCoord  
+  #plot_env$xPlotCoord <- xPlotCoord  
+  #plot_env$yPlotCoord <- yPlotCoord  
   
   #print(xPlotCoord)
   #print(yPlotCoord)
@@ -84,6 +84,10 @@ onLeftClick <- function(x, y) {
   y_len <- dim(plot_env$mrs_data)[3]
   plot_env$x <- round(xPlotCoord * (x_len - 1)) + 1
   plot_env$y <- y_len - round(yPlotCoord*(y_len - 1))
+  
+  plot_env$xPlotCoord <- (plot_env$x - 1)  / (x_len - 1)
+  plot_env$yPlotCoord <- -(plot_env$y - y_len) / (y_len - 1)
+  
   tkrplot::tkrreplot(plot_env$win1$env$plot)
   
   #msg <- paste0("Label the point closest to these ",
@@ -106,14 +110,15 @@ plotTk <- function() {
   #image(plot_env$map_data, col = viridis::viridis(128), useRaster = T,
   #      asp = 1, axes = F)
   
+  graphics::par(mar = c(1,1,1,3))
   plot_slice_map(plot_env$map_data, slice = plot_env$slice, 
                  mask_map = plot_env$mask_map, lower = plot_env$lower,
                  upper = plot_env$upper, denom = plot_env$denom,
                  mask_cutoff = plot_env$mask_cutoff, interp = plot_env$interp,
-                 horizontal = T)
+                 horizontal = F)
   
-  graphics::points(plot_env$xPlotCoord, plot_env$yPlotCoord, col = "white",
-                   cex = 3, lw = 3)
+  graphics::points((plot_env$xPlotCoord), (plot_env$yPlotCoord), col = "white",
+                   cex = 4, lw = 3)
   
   plot_env$parPlotSize    <- graphics::par("plt")
   plot_env$parPlotSize[1] <- plot_env$parPlotSize[1] / 2 # correction for subplt

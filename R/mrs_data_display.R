@@ -368,7 +368,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "real", col = NULL,
 
 #' @export
 plot_slice_map <- function(data, lower = NULL, upper = NULL, mask_map = NULL,
-                           mask_cutoff = 20, interp = 16, slice = 1, dyn = 1,
+                           mask_cutoff = 20, interp = 1, slice = 1, dyn = 1,
                            coil = 1, ref = 1, denom = NULL,
                            horizontal = FALSE) {
   
@@ -391,18 +391,20 @@ plot_slice_map <- function(data, lower = NULL, upper = NULL, mask_map = NULL,
     data <- data / denom
   }
   
+  asp <- ncol(data) / nrow(data)
+  
   if (!is.null(lower) & !is.null(upper)) {
     data <- crop_range(data, lower, upper)
     breaks <- seq(from = lower, to = upper, length.out = 129)
     fields::image.plot(data, col = viridis::viridis(128), useRaster = T,
-                       asp = 1, axes = F, breaks = breaks,
+                       asp = asp, axes = F, breaks = breaks,
                        horizontal = horizontal)
     
     #image(data, col=viridis::viridis(128), useRaster = T, asp = 1, axes = F,
     #      breaks = breaks)
   } else {
     fields::image.plot(data, col = viridis::viridis(128), useRaster = T,
-                       asp = 1, axes = F, horizontal = horizontal)
+                       asp = asp, axes = F, horizontal = horizontal)
     
     #image(data, col = viridis::viridis(128), useRaster = T, asp = 1, axes = F)
   }
