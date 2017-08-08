@@ -155,6 +155,14 @@ get_spin_num <- function(nucleus) {
   spin_lookup$spin[matches]
 }
 
+#' Return a list of \code{mol_parameter} objects suitable for 1H brain MRS
+#' analyses.
+#' @param ft transmitter frequency in Hz.
+#' @param metab_lw linewidth of metabolite signals (Hz).
+#' @param lcm_compat when TRUE, lipid, MM and -CrCH molecules will be excluded
+#' from the output.
+#' @return list of \code{mol_parameter} objects.
+#' @export
 get_1h_brain_basis_paras <- function(ft, metab_lw = 2, lcm_compat = FALSE) {
   if (!lcm_compat) {
     m_cr_ch2 <- get_m_cr_ch2_paras(metab_lw)

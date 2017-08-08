@@ -153,10 +153,21 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
                    row_vec = c(1,0,0), col_vec = c(0,1,0), pos_vec = c(0,0,0), 
                    freq_domain = rep(FALSE, 7))
   
+  print(res$par)
+  
   class(mrs_data) <- "mrs_data"
   return(mrs_data)
 }
 
+#' Convert a vector into a mrs_data object.
+#' @param vec the data vector.
+#' @param fs sampling frequency in Hz.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @param dyns replicate the data across the dynamic dimension.
+#' @param fd flag to indicate if the matrix is in the frequency domain (logical).
+#' @return mrs_data object.
+#' @export
 vec2mrs_data <- function(vec, fs = def_fs(), ft = def_ft(), ref = def_ref(),
                          dyns = 1, fd = FALSE) {
   
@@ -202,6 +213,7 @@ mrs_data2mat <- function(mrs_data) {
 #' @param ft Transmitter frequency in Hz.
 #' @param ref Reference value for ppm scale.
 #' @param fd Flag to indicate if the matrix is in the frequency domain (logical).
+#' @return mrs_data object.
 #' @export
 mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
                          fd = FALSE) {
@@ -523,26 +535,34 @@ hz <- function(mrs_data, fs = NULL, N = NULL) {
   seq(from = -fs / 2, to = fs / 2 - fs / N, length.out = N)
 }
 
+#' Return the ppm scale of an MRS dataset.
+#' @param mrs_data MRS data.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @param fs sampline frequency in Hz.
+#' @param N number of data points in the spectral dimension.
+#' @return ppm scale.
+#' @export
 ppm <- function(mrs_data, ft = NULL, ref = NULL, fs= NULL, N = NULL) {
-  if (is.null(ft)) {
-    ft <- mrs_data$ft
-  }
-  
-  if (is.null(ref)) {
+   if (is.null(ft)) {
+     ft <- mrs_data$ft
+   }
+   
+   if (is.null(ref)) {
     ref <- mrs_data$ref
-  }
-  
-  if (is.null(fs)) {
-    fs <- fs(mrs_data)
-  }
-  
-  if (is.null(N)) {
-    N <- N(mrs_data)
-  }
-  
+   }
+   
+   if (is.null(fs)) {
+     fs <- fs(mrs_data)
+   }
+   
+   if (is.null(N)) {
+     N <- N(mrs_data)
+   }
+   
   -hz(fs = fs, N = N) / mrs_data$ft * 1e6 + mrs_data$ref
 }
-
+  
 hz2ppm <- function(hz_in, ft, ref) {
   ref - hz_in / ft * 1e6
 }
@@ -558,19 +578,25 @@ pts <- function(mrs_data) {
 #' Return a time scale vector to match the FID of an MRS data object.
 #' @param mrs_data MRS data.
 #' @return A time scale vector in units of seconds.
+#' @export
 seconds <- function(mrs_data) {
   fs <- fs(mrs_data)
   seq(from = 0, to = (N(mrs_data) - 1)/fs, by = 1 / fs)
 }
 
+#' Get the indices of data points lying between two values (end > x > start).
+#' @param scale the full list of values.
+#' @param start the smallest value in the subset.
+#' @param end the largest value in the subset.
+#' @return a set of indices.
+#' @export
 get_seg_ind <- function(scale, start, end) {
-  st_ind  <- sum(scale <= start)  
-  end_ind <- sum(scale <= end)  
-  if ( scale[1] > scale[2] ) {
-    st_ind  <- length(scale) - st_ind + 1
-    end_ind <- length(scale) - end_ind + 1
+  if (start > end) {
+    tmp <- end
+    end <- start
+    start <- tmp
   }
-  c(st_ind, end_ind)
+  which(scale >= start & scale <= end)
 }
 
 #' Crop \code{mrs_data} object based on a frequency range.
@@ -601,8 +627,7 @@ crop_spec <- function(mrs_data, xlim = c(4,0.5), x_units = "ppm") {
     xlim <- c(x_scale[1], x_scale[N(mrs_data)])
   }
   
-  x_inds <- get_seg_ind(x_scale, xlim[1], xlim[2])
-  subset <- x_inds[1]:x_inds[2]
+  subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
   
   old_ppm <- ppm(mrs_data)
   
@@ -613,7 +638,7 @@ crop_spec <- function(mrs_data, xlim = c(4,0.5), x_units = "ppm") {
   mrs_data$data <- mrs_data$data[,,,,,, subset, drop = F]
   
   # update ref TODO +1 may only be needed in some cases?
-  new_ppm = old_ppm[which.min(abs(hz(mrs_data))) + x_inds[1] + 1]
+  new_ppm = old_ppm[which.min(abs(hz(mrs_data))) + subset[1] + 1]
   mrs_data$ref <- new_ppm
     
   mrs_data
@@ -753,13 +778,27 @@ rm_dyns <- function(mrs_data, subset) {
   mrs_data
 }
 
-get_voxel <- function(mrs_data, x = 1, y = 1, z = 1, ref = 1, coil = 1) {
-  mrs_data$data <- mrs_data$data[ref, x, y, z, coil,,, drop = FALSE]
+#' Return a single voxel from a larger mrs dataset.
+#' @param mrs_data MRS data.
+#' @param x_pos the x index to plot.
+#' @param y_pos the y index to plot.
+#' @param z_pos the z index to plot.
+#' @param dyn the dynamic index to plot.
+#' @param coil the coil element number to plot.
+#' @return MRS data.
+#' @export
+get_voxel <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1, dyn = 1, coil = 1) {
+  mrs_data$data <- mrs_data$data[1, x_pos, y_pos, z_pos, dyn, coil, , drop = FALSE]
   return(mrs_data)
 }
 
-get_slice <- function(mrs_data, slice = 1, ref = 1, coil = 1) {
-  mrs_data$data <- mrs_data$data[ref,,, slice, coil,,, drop = FALSE]
+#' Return a single slice from a larger MRSI dataset.
+#' @param mrs_data MRSI data.
+#' @param z_pos the z index to extract.
+#' @return MRS data.
+#' @export
+get_slice <- function(mrs_data, z_pos) {
+  mrs_data$data <- mrs_data$data[,,,z_pos,,,, drop = FALSE]
   return(mrs_data)
 }
   
@@ -1474,7 +1513,7 @@ calc_coil_noise_sd <- function(noise_data) {
 #' 
 #' The mean noise value is subtracted from the maximum signal value to reduce DC
 #' offset bias. A polynomial detrending fit (second order by default) is applied 
-#' to the noise region before the noise stanard deviation is estimated.
+#' to the noise region before the noise standard deviation is estimated.
 #' 
 #' @param mrs_data an object of class \code{mrs_data}.
 #' @param sig_region a ppm region to define where the maximum signal value
@@ -1501,4 +1540,44 @@ calc_spec_snr <- function(mrs_data, sig_region = c(4,0.5),
                            p_order = p_order)
   
   max_sig / (2 * noise_sd)
+}
+
+#' Integrate a spectral region.
+#' @param mrs_data MRS data.
+#' @param xlim Spectral range to be integrated.
+#' @param scale Units of xlim, can be : "ppm", "Hz" or "points".
+#' @param mode Spectral mode, can be : "real", "imag" or "abs".
+#' @return An array of integral values.
+#' @export
+int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "real") {
+  
+  if (!is_fd(mrs_data)) {
+    mrs_data <- td2fd(mrs_data)
+  }
+    
+  if ( scale == "ppm" ) {
+    x_scale <- ppm(mrs_data)
+  } else if (scale == "hz") {
+    x_scale <- hz(mrs_data)
+  } else if (scale == "points") {
+    x_scale <- pts(mrs_data)
+  }
+  
+  if (is.null(xlim)) {
+    xlim <- c(x_scale[1], x_scale[N(mrs_data)])
+  }
+  
+  subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
+  
+  data_arr <- mrs_data$data[,,,,,, subset, drop = F]
+  
+  if (mode == "real") {
+    data_arr <- Re(data_arr)
+  } else if (mode == "imag") {
+    data_arr <- Im(data_arr)
+  } else if (mode == "abs") {
+    data_arr <- Mod(data_arr)
+  }
+  
+  apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
 }

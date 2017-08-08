@@ -4,8 +4,10 @@
 \alias{plot.fit_result}
 \title{Plot the fitting results of an object of class \code{fit_result}.}
 \usage{
-\method{plot}{fit_result}(x, xlim = c(4, 0.5), plt_title = FALSE,
-  data_only = FALSE, label = NULL, plot_sigs = NULL, n = NA, ...)
+\method{plot}{fit_result}(x, xlim = NULL, plt_title = FALSE,
+  data_only = FALSE, label = NULL, plot_sigs = NULL, dyn = 1,
+  x_pos = 1, y_pos = 1, z_pos = 1, coil = 1, n = NULL,
+  sub_bl = FALSE, ...)
 }
 \arguments{
 \item{x}{fit_result object.}
@@ -20,7 +22,19 @@
 
 \item{plot_sigs}{a character vector of signal names to add to the plot.}
 
-\item{n}{index to the fit number to display.}
+\item{dyn}{the dynamic index to plot.}
+
+\item{x_pos}{the x index to plot.}
+
+\item{y_pos}{the y index to plot.}
+
+\item{z_pos}{the z index to plot.}
+
+\item{coil}{the coil element number to plot.}
+
+\item{n}{single index element to plot (overides other indices when given).}
+
+\item{sub_bl}{subtract the baseline from the data and fit (logical).}
 
 \item{...}{further arguments to plot method.}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/pulse_sequences.R
 \name{pulse_acquire}
 \alias{pulse_acquire}
-\title{Simple pulse and acquire seqeunce with ideal pulses.}
+\title{Simple pulse and acquire sequence with ideal pulses.}
 \usage{
 pulse_acquire(spin_params, ft, ref)
 }
@@ -17,5 +17,5 @@ pulse_acquire(spin_params, ft, ref)
 a list of resonance amplitudes and frequencies.
 }
 \description{
-Simple pulse and acquire seqeunce with ideal pulses.
+Simple pulse and acquire sequence with ideal pulses.
 }

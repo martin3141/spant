@@ -72,7 +72,7 @@ plot_voi_overlay_seg <- function(voi, mri_seg) {
 #' Return the white matter, gray matter and CSF composition of a volume.
 #' @param voi volume data as a nifti object.
 #' @param mri_seg segmented brain volume as a nifti object.
-#' @return a vector of partial volumes expressed as percetages.
+#' @return a vector of partial volumes expressed as percentages.
 #' @export
 get_voi_seg <- function(voi, mri_seg) {
   # check the image orientation etc is the same

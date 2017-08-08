@@ -2,7 +2,7 @@
 % Please edit documentation in R/pulse_sequences.R
 \name{spin_echo_ideal}
 \alias{spin_echo_ideal}
-\title{Spin echo seqeunce with ideal pulses.}
+\title{Spin echo sequence with ideal pulses.}
 \usage{
 spin_echo_ideal(spin_params, ft, ref, TE)
 }
@@ -19,5 +19,5 @@ spin_echo_ideal(spin_params, ft, ref, TE)
 a list of resonance amplitudes and frequencies.
 }
 \description{
-Spin echo seqeunce with ideal pulses.
+Spin echo sequence with ideal pulses.
 }

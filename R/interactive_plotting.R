@@ -1,14 +1,24 @@
 plot_slice_map_inter <- function(map, mrs_data, xlim = NULL, slice = 1, 
                                  mask_map = NULL, upper = NULL, lower = NULL,
-                                 denom = NULL, mask_cutoff = 20, interp = 16) {
+                                 denom = NULL, mask_cutoff = 20, interp = 1) {
   
-  assign("plot_env", new.env(hash = T), envir = baseenv())
-  
-  x_scale <- ppm(mrs_data)
-  if (is.null(xlim)) {
-    xlim <- c(x_scale[1], x_scale[N(mrs_data)])
+  # kill any existing plots
+  if (exists("plot_env")) {
+    tcltk::tkdestroy(plot_env$win1)
   }
   
+  assign("plot_env", new.env(hash = T), envir = baseenv())
+  #assign("plot_env", new.env(hash = T), envir = globalenv())
+  
+  if (class(mrs_data) == "mrs_data") {
+    x_scale <- ppm(mrs_data)
+  } else {
+    x_scale <- mrs_data$fits[[1]]$PPMScale
+  }
+  
+  if (is.null(xlim)) {
+    xlim <- c(x_scale[1], x_scale[length(x_scale)])
+  }
   
   plot_env$xlim <- xlim
   plot_env$slice <- slice
@@ -30,10 +40,12 @@ plot_slice_map_inter <- function(map, mrs_data, xlim = NULL, slice = 1,
   plot_env$x <- 1
   plot_env$y <- 1
   
+  
   plot_env$win1 <- tcltk::tktoplevel()
   
   #plot_env$win1$env$plot <- tkrplot::tkrplot(plot_env$win1, fun = plotTk,
   #                                           hscale = 3.0, vscale = 1.5)
+  
   
   plot_env$win1$env$plot <- tkrplot::tkrplot(plot_env$win1, fun = plotTk,
                                              hscale = 2.5, vscale = 1.25)
@@ -70,8 +82,8 @@ onLeftClick <- function(x, y) {
   xPlotCoord <- plot_env$usrCoords[1] + (xClick - xMin) * rangeX / (xMax - xMin)
   yPlotCoord <- plot_env$usrCoords[3] + (yClick - yMin) * rangeY / (yMax - yMin)
   
-  plot_env$xPlotCoord <- xPlotCoord  
-  plot_env$yPlotCoord <- yPlotCoord  
+  #plot_env$xPlotCoord <- xPlotCoord  
+  #plot_env$yPlotCoord <- yPlotCoord  
   
   #print(xPlotCoord)
   #print(yPlotCoord)
@@ -79,6 +91,10 @@ onLeftClick <- function(x, y) {
   y_len <- dim(plot_env$mrs_data)[3]
   plot_env$x <- round(xPlotCoord * (x_len - 1)) + 1
   plot_env$y <- y_len - round(yPlotCoord*(y_len - 1))
+  
+  plot_env$xPlotCoord <- (plot_env$x - 1)  / (x_len - 1)
+  plot_env$yPlotCoord <- -(plot_env$y - y_len) / (y_len - 1)
+  
   tkrplot::tkrreplot(plot_env$win1$env$plot)
   
   #msg <- paste0("Label the point closest to these ",
@@ -101,14 +117,15 @@ plotTk <- function() {
   #image(plot_env$map_data, col = viridis::viridis(128), useRaster = T,
   #      asp = 1, axes = F)
   
+  graphics::par(mar = c(1,1,1,3))
   plot_slice_map(plot_env$map_data, slice = plot_env$slice, 
                  mask_map = plot_env$mask_map, lower = plot_env$lower,
                  upper = plot_env$upper, denom = plot_env$denom,
                  mask_cutoff = plot_env$mask_cutoff, interp = plot_env$interp,
-                 horizontal = T)
+                 horizontal = F)
   
-  graphics::points(plot_env$xPlotCoord, plot_env$yPlotCoord, col = "white",
-                   cex = 3, lw = 3)
+  graphics::points((plot_env$xPlotCoord), (plot_env$yPlotCoord), col = "white",
+                   cex = 4, lw = 3)
   
   plot_env$parPlotSize    <- graphics::par("plt")
   plot_env$parPlotSize[1] <- plot_env$parPlotSize[1] / 2 # correction for subplt
@@ -117,5 +134,6 @@ plotTk <- function() {
   text = paste("X=", plot_env$x, ", Y=", plot_env$y, sep = "")
   cat(text, "\n")
   graphics::plot(plot_env$mrs_data, x_pos = plot_env$x, y_pos = plot_env$y, 
-                 z_pos = plot_env$slice, yscale = TRUE, xlim = plot_env$xlim)
+                 z_pos = plot_env$slice, xlim = plot_env$xlim)
+                 #z_pos = plot_env$slice, yscale = TRUE, xlim = plot_env$xlim)
 }

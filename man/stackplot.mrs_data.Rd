@@ -18,10 +18,10 @@ of: "real", "imag" or "abs".}
 
 \item{col}{set the colour of the line, eg col = rgb(1,0,0,0.5).}
 
-\item{x_offset}{seperate plots in the x-axis direction by this value.
+\item{x_offset}{separate plots in the x-axis direction by this value.
 Default value is 0.}
 
-\item{y_offset}{seperate plots in the y-axis direction by this value.}
+\item{y_offset}{separate plots in the y-axis direction by this value.}
 
 \item{dim}{the dimension to stack in the y-axis direction, can be one of:
 "dyn", "x", "y", "z" or "coil".}

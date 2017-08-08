@@ -19,6 +19,9 @@ mat2mrs_data(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
 
 \item{fd}{Flag to indicate if the matrix is in the frequency domain (logical).}
 }
+\value{
+mrs_data object.
+}
 \description{
 Convert a matrix (with spectral points in the row dimension and dynamics in
 the column dimensions) into a mrs_data object.

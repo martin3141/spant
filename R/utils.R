@@ -1,14 +1,52 @@
 beta2lw <- function(beta) {2 * (-beta * log(0.5)) ^ 0.5 / pi}
 
+#' Covert a linewidth in Hz to an equivalent beta value in the time-domain ie:
+#' x * exp(-i * t * t * beta).
+#' @param lw linewidth in Hz.
+#' @return beta value.
+#' @export
 lw2beta <- function(lw) {(lw * pi / 2) ^ 2 / (-log(0.5))}
 
 alpha2lw <- function(alpha) {alpha / pi}
 
 lw2alpha <- function(lw) {lw * pi}
 
+#' Perform a fft and ffshift on a vector.
+#' @param vec_in vector input.
+#' @return output vector.
+#' @export
 ft_shift <- function(vec_in) {pracma::fftshift(stats::fft(vec_in))}
 
+#' Perform an iffshift and ifft on a vector.
+#' @param vec_in vector input.
+#' @return output vector.
+#' @export
 ift_shift <- function(vec_in) {pracma::ifft(pracma::ifftshift(vec_in))}
+
+#' Perform a fft and fftshift on a matrix with each column replaced by its 
+#' shifted fft.
+#' @param mat_in matrix input.
+#' @return output matrix.
+#' @export
+ft_shift_mat <- function(mat_in) {
+  mat_in_ft = stats::mvfft(mat_in) # 33s
+  #p <- fftw::planFFT(NROW(mat_in),effort=1)
+  #mat_in_ft = apply(mat_in,2,fftw::FFT,p) # 34s
+  #mat_in_ft = fftwtools::mvfftw(mat_in) # 35s
+  mvfftshift(mat_in_ft)
+}
+
+#' Perform a fftshift on a matrix, with each column replaced by its shifted 
+#' result.
+#' @param x matrix input.
+#' @return output matrix.
+#' @export
+mvfftshift <- function(x) {
+  m <- NROW(x)
+  p <- ceiling(m/2)
+  idx <- c((p + 1):m, 1:p)
+  x[idx,]
+}
 
 hilbert <- function(x) {
   x <- Re(x)
@@ -107,4 +145,15 @@ add_alpha <- function(col, alpha = 1) {
     stop("Please provide a vector of colours.")
   apply(sapply(col, grDevices::col2rgb) / 255, 2, 
         function(x) grDevices::rgb(x[1], x[2], x[3], alpha = alpha))  
+}
+
+crop_range <- function(map, lower, upper) {
+  # TODO check upper > lower and both are >0<1
+  map_range <- range(map, na.rm = TRUE)
+  #upper_lim <- map_range[1]+upper/100*(map_range[2] - map_range[1])
+  #lower_lim <- map_range[1]+lower/100*(map_range[2] - map_range[1])
+  upper_lim <- upper
+  lower_lim <- lower
+  map <- ifelse(map > upper_lim, upper_lim,map)  
+  ifelse(map < lower_lim, lower_lim, map)  
 }
