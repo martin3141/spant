@@ -1,9 +1,14 @@
-#' @export
 plot_slice_map_inter <- function(map, mrs_data, xlim = NULL, slice = 1, 
                                  mask_map = NULL, upper = NULL, lower = NULL,
                                  denom = NULL, mask_cutoff = 20, interp = 1) {
   
+  # kill any existing plots
+  if (exists("plot_env")) {
+    tcltk::tkdestroy(plot_env$win1)
+  }
+  
   assign("plot_env", new.env(hash = T), envir = baseenv())
+  #assign("plot_env", new.env(hash = T), envir = globalenv())
   
   if (class(mrs_data) == "mrs_data") {
     x_scale <- ppm(mrs_data)
@@ -35,10 +40,12 @@ plot_slice_map_inter <- function(map, mrs_data, xlim = NULL, slice = 1,
   plot_env$x <- 1
   plot_env$y <- 1
   
+  
   plot_env$win1 <- tcltk::tktoplevel()
   
   #plot_env$win1$env$plot <- tkrplot::tkrplot(plot_env$win1, fun = plotTk,
   #                                           hscale = 3.0, vscale = 1.5)
+  
   
   plot_env$win1$env$plot <- tkrplot::tkrplot(plot_env$win1, fun = plotTk,
                                              hscale = 2.5, vscale = 1.25)

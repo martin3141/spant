@@ -217,11 +217,12 @@ output_csv <- function(analysis, fname, pvc=FALSE) {
 #' @param zlim range of values to plot.
 #' @param interp interpolation factor.
 #' @export
-plot_slice <- function(fit_res, name, slice = 1, zlim = NULL, interp = 16) {
+plot_fit_slice <- function(fit_res, name, slice = 1, zlim = NULL, interp = 1) {
   result_map <- fit_res$res_tab[[name]]
   dim(result_map) <- dim(fit_res$data$data)[2:6]
   col <- viridisLite::viridis(64)
   plot_map <- result_map[,, slice, 1, 1]
+  plot_map <- pracma::fliplr(plot_map)
   plot_map <- mmand::rescale(plot_map, interp, mmand::mnKernel())
   
   if (is.null(zlim)) { 
@@ -235,7 +236,6 @@ plot_slice <- function(fit_res, name, slice = 1, zlim = NULL, interp = 16) {
   }
 }
 
-#' @export
 get_fit_map <- function(fit_res, name) {
   result_map <- fit_res$res_tab[[name]]
   dim(result_map) <- c(1, dim(fit_res$data$data)[2:6])

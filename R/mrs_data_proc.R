@@ -793,6 +793,7 @@ get_voxel <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1, dyn = 1, coil =
 }
 
 #' Return a single slice from a larger MRSI dataset.
+#' @param mrs_data MRSI data.
 #' @param z_pos the z index to extract.
 #' @return MRS data.
 #' @export
