@@ -201,13 +201,13 @@ n2coord <- function(n, fit_res) {
   print(fit_res$res_tab[n, 1:5])
 }
 
-output_csv <- function(analysis, fname, pvc=FALSE) {
-  if (pvc == TRUE) {
-    utils::write.csv(analysis$results_pvc, fname, quote = FALSE, 
-                     row.names = FALSE)
-  } else {
-    utils::write.csv(analysis$results, fname, quote = FALSE, row.names = FALSE)
-  }
+#' Write fit results table to a csv file.
+#' @param x fit results table.
+#' @param fname filename of csv file.
+#' @param pvc output PVC or raw results (logical).
+#' @export
+fit_tab2csv <- function(x, fname, pvc = FALSE) {
+  utils::write.csv(x, fname, quote = FALSE, row.names = FALSE)
 }
 
 #' Plot a 2D slice from an MRSI fit result object.

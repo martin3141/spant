@@ -344,6 +344,9 @@ lcmodel_fit <- function(element, temp_mrs, basis_file, opts) {
   cat("$END")
   sink()
   
+  # used for debugging
+  #file.copy(control_f, "~/control.file")
+  
   # run LCModel
   cmd <- paste(getOption("spant.lcm_cmd"), "<", control_f)
   res = system(cmd, intern = TRUE, ignore.stderr = TRUE, ignore.stdout = TRUE)
@@ -355,8 +358,11 @@ lcmodel_fit <- function(element, temp_mrs, basis_file, opts) {
     stop("Error with above LCMODEL command.")
   }
   
+  # used for debugging
+  #file.copy(coord_f, "~/coord.file")
+  
   coord_res <- read_lcm_coord(coord_f)
-  res_tab <- coord_res$results
+  res_tab <- coord_res$res_tab
   fit <- coord_res$fit
   
   return(append(res_tab, list(fit = fit, metab_file = metab_file, 
