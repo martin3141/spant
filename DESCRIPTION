@@ -37,7 +37,6 @@ Suggests:
     fields,
     mmand,
     ptw,
-    tkrplot,
     viridisLite,
     viridis,
     RNifti,
