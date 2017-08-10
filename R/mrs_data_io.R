@@ -386,8 +386,8 @@ read_spar_sdat <- function(fname) {
   
   # SVS or MRSI?
   if ((rows == 1) & (cols == 1)) {
-    row_dim   <- lr_size
-    col_dim   <- ap_size
+    row_dim   <- ap_size
+    col_dim   <- lr_size
     slice_dim <- cc_size
   } else {
     dyns <- 1

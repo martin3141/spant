@@ -1,4 +1,5 @@
 # spant 0.4.0
+* Bug fix for SPAR/SDAT SVS voxel dimensions.
 * MRSI support added for Philips SPAR/SDAT data.
 * Fit plots now default to the full spectral range unless xlim is specified.
 * Fit plots allow the x, y, z, coil, dynamic indices to be specified.
