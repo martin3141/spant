@@ -1542,6 +1542,39 @@ calc_spec_snr <- function(mrs_data, sig_region = c(4,0.5),
   max_sig / (2 * noise_sd)
 }
 
+# Search for the highest peak in a spectral region and return the height,
+# frequency and FWHM.
+#' @export
+calc_peak_info <- function(mrs_data, peak_region = c(4,0.5)) {
+  peak_data <- crop_spec(mrs_data, peak_region)
+  data_pts <- Re(peak_data$data)
+  
+  
+  peak_pos_n <- which.max(data_pts)
+  peak_height <- data_pts[peak_pos_n]
+  hh <- peak_height / 2
+  
+  # right side of peak
+  rs <- peak_pos_n + min(which((data_pts < hh)[peak_pos_n:length(data_pts)])) - 1
+  rs_slope <- (data_pts[rs] - data_pts[rs - 1])
+  rs_intercept <- data_pts[rs] - rs_slope * rs
+  rs_x_hh <- (hh - rs_intercept) / rs_slope
+  
+  # left side of peak
+  ls <- peak_pos_n - min(which((data_pts < hh)[peak_pos_n:1])) + 1
+  ls_slope <- (data_pts[ls + 1] - data_pts[ls])
+  ls_intercept <- data_pts[ls] - ls_slope * ls
+  ls_x_hh <- (hh - ls_intercept) / ls_slope
+  
+  fwhm <- rs_x_hh - ls_x_hh
+  
+  plot(data_pts, xlim = c(ls,rs))
+  abline(h = hh)
+  abline(v = rs_x_hh)
+  abline(v = ls_x_hh)
+  
+}
+
 #' Integrate a spectral region.
 #' @param mrs_data MRS data.
 #' @param xlim Spectral range to be integrated.
