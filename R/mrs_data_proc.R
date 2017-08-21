@@ -1546,11 +1546,15 @@ calc_spec_snr <- function(mrs_data, sig_region = c(4,0.5),
   max_sig / (2 * noise_sd)
 }
 
-# Search for the highest peak in a spectral region and return the height,
-# frequency and FWHM.
+#' Search for the highest peak in a spectral region and return the frequency,
+#' height and FWHM.
+#' @param mrs_data an object of class \code{mrs_data}.
+#' @param xlim frequency range in ppm to search for the highest peak.
+#' @param interp_f interpolation factor, defults to 4x.
+#' @return list of highest peak frequency, hight and FWHM.
 #' @export
-calc_peak_info <- function(mrs_data, peak_region = c(4,0.5), interp_f = 4) {
-  mrs_data_crop <- crop_spec(mrs_data, peak_region)
+calc_peak_info <- function(mrs_data, xlim = c(4,0.5), interp_f = 4) {
+  mrs_data_crop <- crop_spec(mrs_data, xlim)
   mrs_data_crop$data <- Mod(mrs_data_crop$data)
   res <- apply_mrs(mrs_data_crop, 7, calc_peak_info_vec, interp_f, data_only = TRUE)
   pos_n <- res[,,,,,,1, drop = FALSE]
