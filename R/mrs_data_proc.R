@@ -562,6 +562,10 @@ ppm <- function(mrs_data, ft = NULL, ref = NULL, fs= NULL, N = NULL) {
    
   -hz(fs = fs, N = N) / mrs_data$ft * 1e6 + mrs_data$ref
 }
+
+n2hz <- function(n, N, fs) {
+  -fs / 2 + (fs / N) * (n - 1)
+}
   
 hz2ppm <- function(hz_in, ft, ref) {
   ref - hz_in / ft * 1e6
@@ -1545,11 +1549,24 @@ calc_spec_snr <- function(mrs_data, sig_region = c(4,0.5),
 # Search for the highest peak in a spectral region and return the height,
 # frequency and FWHM.
 #' @export
-calc_peak_info <- function(mrs_data, peak_region = c(4,0.5)) {
-  peak_data <- crop_spec(mrs_data, peak_region)
-  data_pts <- Re(peak_data$data)
-  
-  
+calc_peak_info <- function(mrs_data, peak_region = c(4,0.5), interp_f = 4) {
+  mrs_data_crop <- crop_spec(mrs_data, peak_region)
+  mrs_data_crop$data <- Mod(mrs_data_crop$data)
+  res <- apply_mrs(mrs_data_crop, 7, calc_peak_info_vec, interp_f, data_only = TRUE)
+  pos_n <- res[,,,,,,1, drop = FALSE]
+  pos_hz <- n2hz(pos_n, N(mrs_data_crop), fs(mrs_data_crop))
+  pos_ppm <- hz2ppm(pos_hz, mrs_data_crop$ft, mrs_data_crop$ref)
+  height <- res[,,,,,,2, drop = FALSE]
+  fwhm_n <- res[,,,,,,3, drop = FALSE]
+  fwhm_hz <- fwhm_n * fs(mrs_data_crop) / N(mrs_data_crop)
+  fwhm_ppm <- fwhm_hz / mrs_data_crop$ft * 1e6 
+  list(freq = pos_ppm, height = height, fwhm = fwhm_ppm)
+}
+
+calc_peak_info_vec <- function(data_pts, interp_f) {
+  data_pts <- stats::spline(data_pts, n = interp_f * length(data_pts))
+  data_pts_x <- data_pts$x
+  data_pts <- data_pts$y
   peak_pos_n <- which.max(data_pts)
   peak_height <- data_pts[peak_pos_n]
   hh <- peak_height / 2
@@ -1566,13 +1583,14 @@ calc_peak_info <- function(mrs_data, peak_region = c(4,0.5)) {
   ls_intercept <- data_pts[ls] - ls_slope * ls
   ls_x_hh <- (hh - ls_intercept) / ls_slope
   
-  fwhm <- rs_x_hh - ls_x_hh
+  fwhm <- (rs_x_hh - ls_x_hh) / interp_f
   
-  plot(data_pts, xlim = c(ls,rs))
-  abline(h = hh)
-  abline(v = rs_x_hh)
-  abline(v = ls_x_hh)
+  #plot(data_pts, xlim = c(ls,rs))
+  #abline(h = hh)
+  #abline(v = rs_x_hh)
+  #abline(v = ls_x_hh)
   
+  array(c(data_pts_x[peak_pos_n], peak_height, fwhm))
 }
 
 #' Integrate a spectral region.
