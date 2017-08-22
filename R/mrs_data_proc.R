@@ -634,15 +634,17 @@ crop_spec <- function(mrs_data, xlim = c(4,0.5), scale = "ppm") {
   subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
   
   old_ppm <- ppm(mrs_data)
+  #old_ref <- mrs_data$ref
   
   # update fs
   mrs_data$resolution[7] <- (mrs_data$resolution[7] / length(subset) *
                              N(mrs_data))
   
   mrs_data$data <- mrs_data$data[,,,,,, subset, drop = F]
+  #print(length(subset))
   
-  # update ref TODO +1 may only be needed in some cases?
-  new_ppm = old_ppm[which.min(abs(hz(mrs_data))) + subset[1] + 1]
+  # not sure why subset[2] works better than subset[1]
+  new_ppm = (old_ppm[subset[length(subset)]] + old_ppm[subset[2]])/2
   mrs_data$ref <- new_ppm
     
   mrs_data

@@ -1,5 +1,6 @@
 # spant 0.5.0
 * Added calc_peak_info function for simple singlet analysis.
+* crop_spec function now maintains the orignal frequency scale.
 
 # spant 0.4.0
 * Bug fix for SPAR/SDAT SVS voxel dimensions.
