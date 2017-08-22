@@ -606,18 +606,18 @@ get_seg_ind <- function(scale, start, end) {
 #' Crop \code{mrs_data} object based on a frequency range.
 #' @param mrs_data MRS data.
 #' @param xlim the range of values to crop in the spectral dimension 
-#' xlim = c(4,1).
-#' @param x_units the units to use for the x-axis, can be one of: "ppm", "hz" or 
-#' "points".
+#' xlim = c(4,0.5).
+#' @param scale the units to use for the frequency scale, can be one of: "ppm", 
+#' "hz" or "points".
 #' @return cropped \code{mrs_data} object.
 #' @export
-crop_spec <- function(mrs_data, xlim = c(4,0.5), x_units = "ppm") {
+crop_spec <- function(mrs_data, xlim = c(4,0.5), scale = "ppm") {
   # needs to be a fd operation
   if (!is_fd(mrs_data)) {
       mrs_data <- td2fd(mrs_data)
   }
   
-  if (x_units == "ppm") {
+  if (scale == "ppm") {
     x_scale <- ppm(mrs_data)
   } else if (scale == "hz") {
     x_scale <- hz(mrs_data)
@@ -699,20 +699,6 @@ align <- function(mrs_data, ref_peak = 4.65, zf_factor = 2, lb = 2,
   }
 }
 
-get_fwhm <- function(mrs_data) {
-  
-  if (!is_fd(mrs_data)) {
-      mrs_data <- td2fd(mrs_data)
-  }
-  
-  fwhm <- apply_mrs(mrs_data, 7, calc_fwhm)
-  
-  # convert points to ppm
-  fwhm_ppm <- fwhm$data * fs(mrs_data) / N(mrs_data) / mrs_data$ft * 1e6
-  
-  abind::adrop(fwhm_ppm, 7)
-}
-
 #' Return an array of amplitudes derived from fitting the initial points in the
 #' time domain and extrapolating back to t=0.
 #' @param mrs_data MRS data.
@@ -730,14 +716,6 @@ get_td_amp <- function(mrs_data, nstart = 10, nend = 50) {
   
   abind::adrop(amps, 7)
   amps
-}
-
-calc_fwhm <- function(mrs_data) {
-  mrs_data <- Re(mrs_data)
-  max_pt <- which.max(mrs_data)
-  max_val <- mrs_data[max_pt]
-  gthm <- mrs_data > (max_val / 2) # greater than half max.
-  sum(gthm)
 }
 
 conv_align <- function(acq, ref, window, fs) {
@@ -1549,13 +1527,28 @@ calc_spec_snr <- function(mrs_data, sig_region = c(4,0.5),
 #' Search for the highest peak in a spectral region and return the frequency,
 #' height and FWHM.
 #' @param mrs_data an object of class \code{mrs_data}.
-#' @param xlim frequency range in ppm to search for the highest peak.
+#' @param xlim frequency range (default units of PPM) to search for the highest 
+#' peak.
 #' @param interp_f interpolation factor, defults to 4x.
-#' @return list of highest peak frequency, hight and FWHM.
+#' @param scale the units to use for the frequency scale, can be one of: "ppm", 
+#' "hz" or "points".
+#' @param mode spectral mode, can be : "real", "imag" or "abs".
+#' @return list of arrays containing the highest peak frequency, height and FWHM
+#' in units of PPM and Hz.
 #' @export
-calc_peak_info <- function(mrs_data, xlim = c(4,0.5), interp_f = 4) {
-  mrs_data_crop <- crop_spec(mrs_data, xlim)
-  mrs_data_crop$data <- Mod(mrs_data_crop$data)
+calc_peak_info <- function(mrs_data, xlim = c(4,0.5), interp_f = 4, 
+                           scale = "ppm", mode = "real") {
+  
+  mrs_data_crop <- crop_spec(mrs_data, xlim, scale)
+  
+  if (mode == "real") {
+    mrs_data_crop$data <- Re(mrs_data_crop$data)
+  } else if (mode == "imag") {
+    mrs_data_crop$data <- Im(mrs_data_crop$data)
+  } else if (mode == "abs") {
+    mrs_data_crop$data <- Mod(mrs_data_crop$data)
+  }
+  
   res <- apply_mrs(mrs_data_crop, 7, calc_peak_info_vec, interp_f, data_only = TRUE)
   pos_n <- res[,,,,,,1, drop = FALSE]
   pos_hz <- n2hz(pos_n, N(mrs_data_crop), fs(mrs_data_crop))
@@ -1564,7 +1557,8 @@ calc_peak_info <- function(mrs_data, xlim = c(4,0.5), interp_f = 4) {
   fwhm_n <- res[,,,,,,3, drop = FALSE]
   fwhm_hz <- fwhm_n * fs(mrs_data_crop) / N(mrs_data_crop)
   fwhm_ppm <- fwhm_hz / mrs_data_crop$ft * 1e6 
-  list(freq = pos_ppm, height = height, fwhm = fwhm_ppm)
+  list(freq_ppm = pos_ppm, freq_hz = pos_hz, height = height,
+       fwhm_ppm = fwhm_ppm, fwhm_hz = fwhm_hz)
 }
 
 calc_peak_info_vec <- function(data_pts, interp_f) {
@@ -1599,10 +1593,10 @@ calc_peak_info_vec <- function(data_pts, interp_f) {
 
 #' Integrate a spectral region.
 #' @param mrs_data MRS data.
-#' @param xlim Spectral range to be integrated.
-#' @param scale Units of xlim, can be : "ppm", "Hz" or "points".
-#' @param mode Spectral mode, can be : "real", "imag" or "abs".
-#' @return An array of integral values.
+#' @param xlim spectral range to be integrated.
+#' @param scale units of xlim, can be : "ppm", "Hz" or "points".
+#' @param mode spectral mode, can be : "real", "imag" or "abs".
+#' @return an array of integral values.
 #' @export
 int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "real") {
   

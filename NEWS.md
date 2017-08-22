@@ -1,3 +1,6 @@
+# spant 0.5.0
+* Added calc_peak_info function for simple singlet analysis.
+
 # spant 0.4.0
 * Bug fix for SPAR/SDAT SVS voxel dimensions.
 * MRSI support added for Philips SPAR/SDAT data.

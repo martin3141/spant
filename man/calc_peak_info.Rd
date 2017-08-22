@@ -5,17 +5,25 @@
 \title{Search for the highest peak in a spectral region and return the frequency,
 height and FWHM.}
 \usage{
-calc_peak_info(mrs_data, xlim = c(4, 0.5), interp_f = 4)
+calc_peak_info(mrs_data, xlim = c(4, 0.5), interp_f = 4, scale = "ppm",
+  mode = "real")
 }
 \arguments{
 \item{mrs_data}{an object of class \code{mrs_data}.}
 
-\item{xlim}{frequency range in ppm to search for the highest peak.}
+\item{xlim}{frequency range (default units of PPM) to search for the highest
+peak.}
 
 \item{interp_f}{interpolation factor, defults to 4x.}
+
+\item{scale}{the units to use for the frequency scale, can be one of: "ppm",
+"hz" or "points".}
+
+\item{mode}{spectral mode, can be : "real", "imag" or "abs".}
 }
 \value{
-list of highest peak frequency, hight and FWHM.
+list of arrays containing the highest peak frequency, height and FWHM
+in units of PPM and Hz.
 }
 \description{
 Search for the highest peak in a spectral region and return the frequency,
