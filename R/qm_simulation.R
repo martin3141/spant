@@ -304,7 +304,10 @@ sim_mol <- function(mol, pul_seq = pulse_acquire, ft = def_ft(),
       mrs_data <- mrs_data + (group_data * group$scale_factor)
     }
   }
-  # first pt correction
-  mrs_data$data[,,,,,,1] <- 0.5 * mrs_data$data[,,,,,,1]
+  
+  # first pt correction - shouldn't need this because already done in 
+  # sim_resonances_fast function
+  # mrs_data$data[,,,,,,1] <- 0.5 * mrs_data$data[,,,,,,1]
+  
   mrs_data
 }
