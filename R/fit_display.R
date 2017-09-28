@@ -236,6 +236,7 @@ plot_fit_slice <- function(fit_res, name, slice = 1, zlim = NULL, interp = 1) {
   }
 }
 
+#' @export
 get_fit_map <- function(fit_res, name) {
   result_map <- fit_res$res_tab[[name]]
   dim(result_map) <- c(1, dim(fit_res$data$data)[2:6])
