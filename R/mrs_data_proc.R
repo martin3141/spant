@@ -55,12 +55,15 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
                           t - (1 - lg[n]) * lw[n] * t * pi)
     
     if (lg[n] > 0) {
-      temp_data <- temp_data * exp(((lg[n] * lw[n]) ^ 2 * pi ^ 2 / 4 /
-                               log(0.5)) * (t ^ 2))
+      temp_data <- temp_data * exp(lg[n] * lw[n] ^ 2 * pi ^ 2 / 4 /
+                               log(0.5) * (t ^ 2))
     }
     
     data <- data + temp_data
   }
+  
+  # first point correction
+  data[1] <- data[1] * 0.5
   
   #if (lg < 1) {
   #  mrs_data$data = mrs_data$data*exp(-(1-lg)*lb*t*pi)
@@ -105,6 +108,9 @@ sim_resonances_fast <- function(freq = 0, amp = 1, freq_ppm = TRUE,
     data <- data + temp_data
   }
   
+  # first point correction
+  data[1] <- data[1] * 0.5
+  
   data <- array(data,dim = c(1, 1, 1, 1, 1, 1, N))
   res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
   mrs_data <- list(ft = ft, data = data, resolution = res, te = 0, ref = ref, 
@@ -146,6 +152,9 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
   #e <- matrix(expp, nrow = N, ncol = sig_n)
   #td_sig <- e ^ temp
   data <- td_sig %*% amp 
+  
+  # first point correction
+  data[1] <- data[1] * 0.5
   
   data <- array(data, dim = c(1, 1, 1, 1, 1, 1, N))
   res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
@@ -390,7 +399,7 @@ lb <- function(mrs_data, lb, lg = 1) {
   }
   
   if (lg > 0) {
-    mrs_data$data = mrs_data$data * exp(((lg * lb) ^ 2 * pi ^ 2 / 4 /
+    mrs_data$data = mrs_data$data * exp((lg * lb ^ 2 * pi ^ 2 / 4 /
                                           log(0.5)) * (t ^ 2))
   }
   return(mrs_data)
