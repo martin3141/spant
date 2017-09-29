@@ -163,7 +163,7 @@ get_spin_num <- function(nucleus) {
 #' from the output.
 #' @return list of \code{mol_parameter} objects.
 #' @export
-get_1h_brain_basis_paras <- function(ft, metab_lw = 2, lcm_compat = FALSE) {
+get_1h_brain_basis_paras <- function(ft, metab_lw = NULL, lcm_compat = FALSE) {
   if (!lcm_compat) {
     m_cr_ch2 <- get_m_cr_ch2_paras(metab_lw)
   }
