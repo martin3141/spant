@@ -51,13 +51,11 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
   
   data <- rep(0, acq_paras$N)
   for (n in 1:sig_n) {
-    temp_data <- amp[n] * exp(1i * pi * phase[n] / 180 + 2i * pi * f_hz[n] *
-                          t - (1 - lg[n]) * lw[n] * t * pi)
+    temp_data <- amp[n] * exp(1i * pi * phase[n] / 180 + 2i * pi * f_hz[n] * t)
     
-    if (lg[n] > 0) {
-      temp_data <- temp_data * exp(lg[n] * lw[n] ^ 2 * pi ^ 2 / 4 /
-                               log(0.5) * (t ^ 2))
-    }
+    # LG peak model
+    temp_data <- temp_data * ((1 - lg) * exp(-lw[n] * t * pi) + 
+                              lg * exp(-lw2beta(lw[n]) * t * t))
     
     data <- data + temp_data
   }
