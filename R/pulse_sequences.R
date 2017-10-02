@@ -19,6 +19,27 @@ pulse_acquire <- function(spin_params, ft, ref) {
   acquire(sys, detect = "1H")
 }
 
+#' Simple pulse and acquire sequence with ideal pulses.
+#' @param spin_params spin system definition.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @return a list of resonance amplitudes and frequencies.
+#' @export
+pulse_acquire_31p <- function(spin_params, ft, ref) {
+  sys <- spin_sys(spin_params, ft, ref)
+  
+  sys$rho <- gen_F(sys, "z")
+   
+  angle <- 90
+  Fx <- gen_F(sys, "x", "31P")
+  lhs_pulse <- complexplus::matexp(-Fx * 1i * angle * pi / 180)
+  rhs_pulse <- complexplus::matexp(Fx * 1i * angle * pi / 180)
+  sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
+  
+  # acquire
+  acquire(sys, detect = "31P")
+}
+
 #' PRESS sequence with ideal pulses.
 #' @param spin_params spin system definition.
 #' @param ft transmitter frequency in Hz.

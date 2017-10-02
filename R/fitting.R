@@ -62,6 +62,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL, opt
     if (!file.exists(basis)) {
       stop("Error, basis file not found.")
     }
+    basis <- read_basis(basis)
   } else {
     stop("Error, specified basis is not the correct data type.")
   }
