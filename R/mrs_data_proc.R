@@ -439,8 +439,8 @@ set_td_pts <- function(mrs_data, pts) {
   return(mrs_data)
 }
 
-# TODO should be set_ref really
-ref <- function(mrs_data, ref) {
+#' @export
+set_ref <- function(mrs_data, ref) {
   mrs_data$ref = ref
   return(mrs_data)
 }
