@@ -238,7 +238,9 @@ mrs_data2basis <- function(mrs_data, names) {
       mrs_data <- td2fd(mrs_data)
   }
   
-  data <- t(as.matrix(mrs_data$data[1, 1, 1, 1,, 1,]))
+  data <- matrix(mrs_data$data[1, 1, 1, 1,, 1,], 
+            nrow = N(mrs_data), ncol = dyns(mrs_data), byrow = TRUE)
+  
   basis_set <- list(data = data, N = N(mrs_data), fs = fs(mrs_data), 
                     ft = mrs_data$ft, names = names, ref = mrs_data$ref)
   
