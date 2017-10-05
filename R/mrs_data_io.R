@@ -368,6 +368,17 @@ read_spar_sdat <- function(fname) {
   # dim1_pts <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim1_pnts")])
   # nuc <- as.numeric(paras$V2[which(paras$V1 == "nucleus")])
   
+  # the following can be true for non localised acquisitions 
+  if (length(ap_an) == 0) ap_an <- 0
+  if (length(lr_an) == 0) lr_an <- 0
+  if (length(cc_an) == 0) cc_an <- 0
+  if (length(ap_size) == 0) ap_size <- 0
+  if (length(lr_size) == 0) lr_size <- 0
+  if (length(cc_size) == 0) cc_size <- 0
+  if (length(ap_oc) == 0) ap_oc <- 0
+  if (length(lr_oc) == 0) lr_oc <- 0
+  if (length(cc_oc) == 0) cc_oc <- 0
+  
   true_row   <- c(1,0,0)
   true_col   <- c(0,1,0)
   true_slice <- c(0,0,1)
@@ -401,7 +412,6 @@ read_spar_sdat <- function(fname) {
   #data <- array(data_vec,dim = c(1, cols, rows, slices, N, 1, dyns)) 
   data <- array(data_vec,dim = c(N, cols, rows, slices, dyns, 1, 1)) 
   data = aperm(data,c(6, 2, 3, 4, 5, 7, 1))
-  
   
   res <- c(NA, row_dim, col_dim, slice_dim, 1, NA, 1 / fs)
   ref <- def_acq_paras()$ref

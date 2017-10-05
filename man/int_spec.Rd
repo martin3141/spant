@@ -9,14 +9,14 @@ int_spec(mrs_data, xlim = NULL, scale = "ppm", mode = "real")
 \arguments{
 \item{mrs_data}{MRS data.}
 
-\item{xlim}{Spectral range to be integrated.}
+\item{xlim}{spectral range to be integrated.}
 
-\item{scale}{Units of xlim, can be : "ppm", "Hz" or "points".}
+\item{scale}{units of xlim, can be : "ppm", "Hz" or "points".}
 
-\item{mode}{Spectral mode, can be : "real", "imag" or "abs".}
+\item{mode}{spectral mode, can be : "real", "imag" or "abs".}
 }
 \value{
-An array of integral values.
+an array of integral values.
 }
 \description{
 Integrate a spectral region.

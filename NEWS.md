@@ -1,3 +1,13 @@
+# spant 0.5.0
+* A default brain PRESS basis is now simulated by the fit_mrs function when the
+basis argument isn't specified.
+* Added calc_peak_info function for simple singlet analyses.
+* crop_spec function now maintains the original frequency scale.
+* The basis set used for analyses has now been added to the fit result object.
+* Bug fix for simulating basis sets with one element.
+* lb function can now be used with basis-set objects.
+* Bug fix for spar_sdat reader for non-localised MRS.
+
 # spant 0.4.0
 * Bug fix for SPAR/SDAT SVS voxel dimensions.
 * MRSI support added for Philips SPAR/SDAT data.

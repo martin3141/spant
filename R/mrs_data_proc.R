@@ -51,16 +51,17 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
   
   data <- rep(0, acq_paras$N)
   for (n in 1:sig_n) {
-    temp_data <- amp[n] * exp(1i * pi * phase[n] / 180 + 2i * pi * f_hz[n] *
-                          t - (1 - lg[n]) * lw[n] * t * pi)
+    temp_data <- amp[n] * exp(1i * pi * phase[n] / 180 + 2i * pi * f_hz[n] * t)
     
-    if (lg[n] > 0) {
-      temp_data <- temp_data * exp(((lg[n] * lw[n]) ^ 2 * pi ^ 2 / 4 /
-                               log(0.5)) * (t ^ 2))
-    }
+    # LG peak model
+    temp_data <- temp_data * ((1 - lg) * exp(-lw[n] * t * pi) + 
+                              lg * exp(-lw2beta(lw[n]) * t * t))
     
     data <- data + temp_data
   }
+  
+  # first point correction
+  data[1] <- data[1] * 0.5
   
   #if (lg < 1) {
   #  mrs_data$data = mrs_data$data*exp(-(1-lg)*lb*t*pi)
@@ -105,6 +106,9 @@ sim_resonances_fast <- function(freq = 0, amp = 1, freq_ppm = TRUE,
     data <- data + temp_data
   }
   
+  # first point correction
+  data[1] <- data[1] * 0.5
+  
   data <- array(data,dim = c(1, 1, 1, 1, 1, 1, N))
   res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
   mrs_data <- list(ft = ft, data = data, resolution = res, te = 0, ref = ref, 
@@ -146,6 +150,9 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
   #e <- matrix(expp, nrow = N, ncol = sig_n)
   #td_sig <- e ^ temp
   data <- td_sig %*% amp 
+  
+  # first point correction
+  data[1] <- data[1] * 0.5
   
   data <- array(data, dim = c(1, 1, 1, 1, 1, 1, N))
   res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
@@ -367,14 +374,22 @@ conj <- function(mrs_data) {
     mrs_data
 }
 
-#' Apply line-broadening (apodisation) to MRS data.
-#' @param mrs_data input data
-#' @param lb amount on line-broadening in Hz
+#' Apply line-broadening (apodisation) to MRS data or basis object.
+#' @param x input mrs_data or basis_set object
+#' @param lb amount of line-broadening in Hz
 #' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1)
 #' @return line-broadened data
 #' @export
-lb <- function(mrs_data, lb, lg = 1) {
-  if ((sum(lg > 1) + sum(lg < 0)) > 0 ) {
+lb <- function(x, lb, lg = 1) UseMethod("lb")
+
+#' Apply line-broadening (apodisation) to MRS data.
+#' @param mrs_data input data
+#' @param lb amount of line-broadening in Hz
+#' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1)
+#' @return line-broadened data
+#' @export
+lb.mrs_data <- function(mrs_data, lb, lg = 1) {
+  if (lg > 1 | lg < 0) {
     cat("Error, lg values not between 0 and 1.")  
     stop()
   }
@@ -390,10 +405,20 @@ lb <- function(mrs_data, lb, lg = 1) {
   }
   
   if (lg > 0) {
-    mrs_data$data = mrs_data$data * exp(((lg * lb) ^ 2 * pi ^ 2 / 4 /
+    mrs_data$data = mrs_data$data * exp((lg * lb ^ 2 * pi ^ 2 / 4 /
                                           log(0.5)) * (t ^ 2))
   }
   return(mrs_data)
+}
+
+#' Apply line-broadening (apodisation) to a basis-set object.
+#' @param basis_set input basis-set
+#' @param lb amount of line-broadening in Hz
+#' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1)
+#' @return line-broadened data
+#' @export
+lb.basis_set <- function(basis_set, lb, lg = 1) {
+  mrs_data2basis(lb(basis2mrs_data(basis_set), lb, lg), basis_set$names)
 }
 
 #' Zero-fill MRS data in the time domain.
@@ -432,8 +457,8 @@ set_td_pts <- function(mrs_data, pts) {
   return(mrs_data)
 }
 
-# TODO should be set_ref really
-ref <- function(mrs_data, ref) {
+#' @export
+set_ref <- function(mrs_data, ref) {
   mrs_data$ref = ref
   return(mrs_data)
 }
@@ -562,6 +587,10 @@ ppm <- function(mrs_data, ft = NULL, ref = NULL, fs= NULL, N = NULL) {
    
   -hz(fs = fs, N = N) / mrs_data$ft * 1e6 + mrs_data$ref
 }
+
+n2hz <- function(n, N, fs) {
+  -fs / 2 + (fs / N) * (n - 1)
+}
   
 hz2ppm <- function(hz_in, ft, ref) {
   ref - hz_in / ft * 1e6
@@ -602,18 +631,18 @@ get_seg_ind <- function(scale, start, end) {
 #' Crop \code{mrs_data} object based on a frequency range.
 #' @param mrs_data MRS data.
 #' @param xlim the range of values to crop in the spectral dimension 
-#' xlim = c(4,1).
-#' @param x_units the units to use for the x-axis, can be one of: "ppm", "hz" or 
-#' "points".
+#' xlim = c(4,0.5).
+#' @param scale the units to use for the frequency scale, can be one of: "ppm", 
+#' "hz" or "points".
 #' @return cropped \code{mrs_data} object.
 #' @export
-crop_spec <- function(mrs_data, xlim = c(4,0.5), x_units = "ppm") {
+crop_spec <- function(mrs_data, xlim = c(4,0.5), scale = "ppm") {
   # needs to be a fd operation
   if (!is_fd(mrs_data)) {
       mrs_data <- td2fd(mrs_data)
   }
   
-  if (x_units == "ppm") {
+  if (scale == "ppm") {
     x_scale <- ppm(mrs_data)
   } else if (scale == "hz") {
     x_scale <- hz(mrs_data)
@@ -630,15 +659,17 @@ crop_spec <- function(mrs_data, xlim = c(4,0.5), x_units = "ppm") {
   subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
   
   old_ppm <- ppm(mrs_data)
+  #old_ref <- mrs_data$ref
   
   # update fs
   mrs_data$resolution[7] <- (mrs_data$resolution[7] / length(subset) *
                              N(mrs_data))
   
   mrs_data$data <- mrs_data$data[,,,,,, subset, drop = F]
+  #print(length(subset))
   
-  # update ref TODO +1 may only be needed in some cases?
-  new_ppm = old_ppm[which.min(abs(hz(mrs_data))) + subset[1] + 1]
+  # not sure why subset[2] works better than subset[1]
+  new_ppm = (old_ppm[subset[length(subset)]] + old_ppm[subset[2]])/2
   mrs_data$ref <- new_ppm
     
   mrs_data
@@ -695,20 +726,6 @@ align <- function(mrs_data, ref_peak = 4.65, zf_factor = 2, lb = 2,
   }
 }
 
-get_fwhm <- function(mrs_data) {
-  
-  if (!is_fd(mrs_data)) {
-      mrs_data <- td2fd(mrs_data)
-  }
-  
-  fwhm <- apply_mrs(mrs_data, 7, calc_fwhm)
-  
-  # convert points to ppm
-  fwhm_ppm <- fwhm$data * fs(mrs_data) / N(mrs_data) / mrs_data$ft * 1e6
-  
-  abind::adrop(fwhm_ppm, 7)
-}
-
 #' Return an array of amplitudes derived from fitting the initial points in the
 #' time domain and extrapolating back to t=0.
 #' @param mrs_data MRS data.
@@ -726,14 +743,6 @@ get_td_amp <- function(mrs_data, nstart = 10, nend = 50) {
   
   abind::adrop(amps, 7)
   amps
-}
-
-calc_fwhm <- function(mrs_data) {
-  mrs_data <- Re(mrs_data)
-  max_pt <- which.max(mrs_data)
-  max_val <- mrs_data[max_pt]
-  gthm <- mrs_data > (max_val / 2) # greater than half max.
-  sum(gthm)
 }
 
 conv_align <- function(acq, ref, window, fs) {
@@ -1542,12 +1551,79 @@ calc_spec_snr <- function(mrs_data, sig_region = c(4,0.5),
   max_sig / (2 * noise_sd)
 }
 
+#' Search for the highest peak in a spectral region and return the frequency,
+#' height and FWHM.
+#' @param mrs_data an object of class \code{mrs_data}.
+#' @param xlim frequency range (default units of PPM) to search for the highest 
+#' peak.
+#' @param interp_f interpolation factor, defults to 4x.
+#' @param scale the units to use for the frequency scale, can be one of: "ppm", 
+#' "hz" or "points".
+#' @param mode spectral mode, can be : "real", "imag" or "abs".
+#' @return list of arrays containing the highest peak frequency, height and FWHM
+#' in units of PPM and Hz.
+#' @export
+calc_peak_info <- function(mrs_data, xlim = c(4,0.5), interp_f = 4, 
+                           scale = "ppm", mode = "real") {
+  
+  mrs_data_crop <- crop_spec(mrs_data, xlim, scale)
+  
+  if (mode == "real") {
+    mrs_data_crop$data <- Re(mrs_data_crop$data)
+  } else if (mode == "imag") {
+    mrs_data_crop$data <- Im(mrs_data_crop$data)
+  } else if (mode == "abs") {
+    mrs_data_crop$data <- Mod(mrs_data_crop$data)
+  }
+  
+  res <- apply_mrs(mrs_data_crop, 7, calc_peak_info_vec, interp_f, data_only = TRUE)
+  pos_n <- res[,,,,,,1, drop = FALSE]
+  pos_hz <- n2hz(pos_n, N(mrs_data_crop), fs(mrs_data_crop))
+  pos_ppm <- hz2ppm(pos_hz, mrs_data_crop$ft, mrs_data_crop$ref)
+  height <- res[,,,,,,2, drop = FALSE]
+  fwhm_n <- res[,,,,,,3, drop = FALSE]
+  fwhm_hz <- fwhm_n * fs(mrs_data_crop) / N(mrs_data_crop)
+  fwhm_ppm <- fwhm_hz / mrs_data_crop$ft * 1e6 
+  list(freq_ppm = pos_ppm, freq_hz = pos_hz, height = height,
+       fwhm_ppm = fwhm_ppm, fwhm_hz = fwhm_hz)
+}
+
+calc_peak_info_vec <- function(data_pts, interp_f) {
+  data_pts <- stats::spline(data_pts, n = interp_f * length(data_pts))
+  data_pts_x <- data_pts$x
+  data_pts <- data_pts$y
+  peak_pos_n <- which.max(data_pts)
+  peak_height <- data_pts[peak_pos_n]
+  hh <- peak_height / 2
+  
+  # right side of peak
+  rs <- peak_pos_n + min(which((data_pts < hh)[peak_pos_n:length(data_pts)])) - 1
+  rs_slope <- (data_pts[rs] - data_pts[rs - 1])
+  rs_intercept <- data_pts[rs] - rs_slope * rs
+  rs_x_hh <- (hh - rs_intercept) / rs_slope
+  
+  # left side of peak
+  ls <- peak_pos_n - min(which((data_pts < hh)[peak_pos_n:1])) + 1
+  ls_slope <- (data_pts[ls + 1] - data_pts[ls])
+  ls_intercept <- data_pts[ls] - ls_slope * ls
+  ls_x_hh <- (hh - ls_intercept) / ls_slope
+  
+  fwhm <- (rs_x_hh - ls_x_hh) / interp_f
+  
+  #plot(data_pts, xlim = c(ls,rs))
+  #abline(h = hh)
+  #abline(v = rs_x_hh)
+  #abline(v = ls_x_hh)
+  
+  array(c(data_pts_x[peak_pos_n], peak_height, fwhm))
+}
+
 #' Integrate a spectral region.
 #' @param mrs_data MRS data.
-#' @param xlim Spectral range to be integrated.
-#' @param scale Units of xlim, can be : "ppm", "Hz" or "points".
-#' @param mode Spectral mode, can be : "real", "imag" or "abs".
-#' @return An array of integral values.
+#' @param xlim spectral range to be integrated.
+#' @param scale units of xlim, can be : "ppm", "Hz" or "points".
+#' @param mode spectral mode, can be : "real", "imag" or "abs".
+#' @return an array of integral values.
 #' @export
 int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "real") {
   

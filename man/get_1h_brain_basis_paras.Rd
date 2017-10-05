@@ -5,7 +5,7 @@
 \title{Return a list of \code{mol_parameter} objects suitable for 1H brain MRS
 analyses.}
 \usage{
-get_1h_brain_basis_paras(ft, metab_lw = 2, lcm_compat = FALSE)
+get_1h_brain_basis_paras(ft, metab_lw = NULL, lcm_compat = FALSE)
 }
 \arguments{
 \item{ft}{transmitter frequency in Hz.}

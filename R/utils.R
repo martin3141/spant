@@ -45,7 +45,7 @@ mvfftshift <- function(x) {
   m <- NROW(x)
   p <- ceiling(m/2)
   idx <- c((p + 1):m, 1:p)
-  x[idx,]
+  x[idx,,drop=FALSE]
 }
 
 hilbert <- function(x) {

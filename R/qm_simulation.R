@@ -163,7 +163,7 @@ get_spin_num <- function(nucleus) {
 #' from the output.
 #' @return list of \code{mol_parameter} objects.
 #' @export
-get_1h_brain_basis_paras <- function(ft, metab_lw = 2, lcm_compat = FALSE) {
+get_1h_brain_basis_paras <- function(ft, metab_lw = NULL, lcm_compat = FALSE) {
   if (!lcm_compat) {
     m_cr_ch2 <- get_m_cr_ch2_paras(metab_lw)
   }
@@ -304,7 +304,10 @@ sim_mol <- function(mol, pul_seq = pulse_acquire, ft = def_ft(),
       mrs_data <- mrs_data + (group_data * group$scale_factor)
     }
   }
-  # first pt correction
-  mrs_data$data[,,,,,,1] <- 0.5 * mrs_data$data[,,,,,,1]
+  
+  # first pt correction - shouldn't need this because already done in 
+  # sim_resonances_fast function
+  # mrs_data$data[,,,,,,1] <- 0.5 * mrs_data$data[,,,,,,1]
+  
   mrs_data
 }
