@@ -6,6 +6,7 @@ basis argument isn't specified.
 * The basis set used for analyses has now been added to the fit result object.
 * Bug fix for simulating basis sets with one element.
 * lb function can now be used with basis-set objects.
+* Bug fix for spar_sdat reader for non-localised MRS.
 
 # spant 0.4.0
 * Bug fix for SPAR/SDAT SVS voxel dimensions.
