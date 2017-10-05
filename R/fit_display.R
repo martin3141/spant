@@ -60,9 +60,9 @@ plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
          xlab = "Chemical Shift (ppm)", ...)
     
     if (!is.null(label)) {
-      graphics::par(xpd = T)
+      graphics::par(xpd = TRUE)
       graphics::text(xlim[1], max_dp, label, cex = 2.5)
-      graphics::par(xpd = F) 
+      graphics::par(xpd = FALSE) 
     }
     
   } else {
@@ -226,17 +226,18 @@ plot_fit_slice <- function(fit_res, name, slice = 1, zlim = NULL, interp = 1) {
   plot_map <- mmand::rescale(plot_map, interp, mmand::mnKernel())
   
   if (is.null(zlim)) { 
-    fields::image.plot(plot_map, col = col, useRaster = T, 
-                       asp = 1, axes = F, legend.shrink = 0.8)
+    fields::image.plot(plot_map, col = col, useRaster = TRUE, 
+                       asp = 1, axes = FALSE, legend.shrink = 0.8)
   } else {
     plot_map <- crop_range(plot_map, zlim[1], zlim[2])
     breaks <- seq(from = zlim[1], to = zlim[2], length.out = 65)
-    fields::image.plot(plot_map, col = col, useRaster = T, 
-                       asp = 1, axes = F, legend.shrink = 0.8, breaks = breaks)
+    fields::image.plot(plot_map, col = col, useRaster = TRUE, 
+                       asp = 1, axes = FALSE, legend.shrink = 0.8, breaks = breaks)
   }
 }
 
 #' @export
+#' @rdname plot_fit_slice
 get_fit_map <- function(fit_res, name) {
   result_map <- fit_res$res_tab[[name]]
   dim(result_map) <- c(1, dim(fit_res$data$data)[2:6])

@@ -2,9 +2,12 @@
 % Please edit documentation in R/fit_display.R
 \name{plot_fit_slice}
 \alias{plot_fit_slice}
+\alias{get_fit_map}
 \title{Plot a 2D slice from an MRSI fit result object.}
 \usage{
 plot_fit_slice(fit_res, name, slice = 1, zlim = NULL, interp = 1)
+
+get_fit_map(fit_res, name)
 }
 \arguments{
 \item{fit_res}{\code{fit_result} object.}

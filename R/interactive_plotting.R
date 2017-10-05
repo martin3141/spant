@@ -1,4 +1,5 @@
 #' @export
+#' @importFrom tkrplot tkrplot
 plot_slice_map_inter <- function(map, mrs_data, xlim = NULL, slice = 1,
                                  mask_map = NULL, upper = NULL, lower = NULL,
                                  denom = NULL, mask_cutoff = 20, interp = 1) {

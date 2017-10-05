@@ -2,9 +2,15 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{lb}
 \alias{lb}
+\alias{lb.mrs_data}
+\alias{lb.basis_set}
 \title{Apply line-broadening (apodisation) to MRS data or basis object.}
 \usage{
 lb(x, lb, lg = 1)
+
+\method{lb}{mrs_data}(x, lb, lg = 1)
+
+\method{lb}{basis_set}(x, lb, lg = 1)
 }
 \arguments{
 \item{x}{input mrs_data or basis_set object}
