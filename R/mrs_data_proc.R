@@ -374,14 +374,22 @@ conj <- function(mrs_data) {
     mrs_data
 }
 
-#' Apply line-broadening (apodisation) to MRS data.
-#' @param mrs_data input data
-#' @param lb amount on line-broadening in Hz
+#' Apply line-broadening (apodisation) to MRS data or basis object.
+#' @param x input mrs_data or basis_set object
+#' @param lb amount of line-broadening in Hz
 #' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1)
 #' @return line-broadened data
 #' @export
-lb <- function(mrs_data, lb, lg = 1) {
-  if ((sum(lg > 1) + sum(lg < 0)) > 0 ) {
+lb <- function(x, lb, lg = 1) UseMethod("lb")
+
+#' Apply line-broadening (apodisation) to MRS data.
+#' @param mrs_data input data
+#' @param lb amount of line-broadening in Hz
+#' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1)
+#' @return line-broadened data
+#' @export
+lb.mrs_data <- function(mrs_data, lb, lg = 1) {
+  if (lg > 1 | lg < 0) {
     cat("Error, lg values not between 0 and 1.")  
     stop()
   }
@@ -401,6 +409,16 @@ lb <- function(mrs_data, lb, lg = 1) {
                                           log(0.5)) * (t ^ 2))
   }
   return(mrs_data)
+}
+
+#' Apply line-broadening (apodisation) to a basis-set object.
+#' @param basis_set input basis-set
+#' @param lb amount of line-broadening in Hz
+#' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1)
+#' @return line-broadened data
+#' @export
+lb.basis_set <- function(basis_set, lb, lg = 1) {
+  mrs_data2basis(lb(basis2mrs_data(basis_set), lb, lg), basis_set$names)
 }
 
 #' Zero-fill MRS data in the time domain.
