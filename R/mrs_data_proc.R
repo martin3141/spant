@@ -393,7 +393,7 @@ lb.mrs_data <- function(x, lb, lg = 1) {
   
   # needs to be a time-domain operation
   if (is_fd(x)) {
-    mrs_data <- fd2td(x)
+    x <- fd2td(x)
   }
   t <- rep(seconds(x), each = Nspec(x))
   
