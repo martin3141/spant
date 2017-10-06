@@ -1,4 +1,5 @@
 #' @export
+#' @importFrom tkrplot tkrplot
 plot_slice_map_inter <- function(map, mrs_data, xlim = NULL, slice = 1,
                                  mask_map = NULL, upper = NULL, lower = NULL,
                                  denom = NULL, mask_cutoff = 20, interp = 1) {
@@ -10,8 +11,8 @@ plot_slice_map_inter <- function(map, mrs_data, xlim = NULL, slice = 1,
     }
   }
 
-  assign("plot_env", new.env(hash = T), envir = baseenv())
-  #assign("plot_env", new.env(hash = T), envir = globalenv())
+  assign("plot_env", new.env(hash = TRUE), envir = baseenv())
+  #assign("plot_env", new.env(hash = TRUE), envir = globalenv())
 
   if (class(mrs_data) == "mrs_data") {
     x_scale <- ppm(mrs_data)
@@ -116,14 +117,14 @@ plotTk <- function() {
   graphics::par(mfrow = c(1,2))
 
   #image(plot_env$map_data, col = viridis::viridis(128), useRaster = T,
-  #      asp = 1, axes = F)
+  #      asp = 1, axes = FALSE)
 
   graphics::par(mar = c(1,1,1,3))
   plot_slice_map(plot_env$map_data, slice = plot_env$slice,
                  mask_map = plot_env$mask_map, lower = plot_env$lower,
                  upper = plot_env$upper, denom = plot_env$denom,
                  mask_cutoff = plot_env$mask_cutoff, interp = plot_env$interp,
-                 horizontal = F)
+                 horizontal = FALSE)
 
   graphics::points((plot_env$xPlotCoord), (plot_env$yPlotCoord), col = "white",
                    cex = 4, lw = 3)

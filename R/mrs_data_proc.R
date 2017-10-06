@@ -379,46 +379,39 @@ conj <- function(mrs_data) {
 #' @param lb amount of line-broadening in Hz
 #' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1)
 #' @return line-broadened data
+#' @rdname lb
 #' @export
 lb <- function(x, lb, lg = 1) UseMethod("lb")
 
-#' Apply line-broadening (apodisation) to MRS data.
-#' @param mrs_data input data
-#' @param lb amount of line-broadening in Hz
-#' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1)
-#' @return line-broadened data
+#' @rdname lb
 #' @export
-lb.mrs_data <- function(mrs_data, lb, lg = 1) {
+lb.mrs_data <- function(x, lb, lg = 1) {
   if (lg > 1 | lg < 0) {
     cat("Error, lg values not between 0 and 1.")  
     stop()
   }
   
   # needs to be a time-domain operation
-  if (is_fd(mrs_data)) {
-    mrs_data <- fd2td(mrs_data)
+  if (is_fd(x)) {
+    mrs_data <- fd2td(x)
   }
-  t <- rep(seconds(mrs_data), each = Nspec(mrs_data))
+  t <- rep(seconds(x), each = Nspec(x))
   
   if (lg < 1) {
-    mrs_data$data = mrs_data$data * exp(-(1 - lg) * lb * t * pi)
+    x$data = x$data * exp(-(1 - lg) * lb * t * pi)
   }
   
   if (lg > 0) {
-    mrs_data$data = mrs_data$data * exp((lg * lb ^ 2 * pi ^ 2 / 4 /
+    x$data = x$data * exp((lg * lb ^ 2 * pi ^ 2 / 4 /
                                           log(0.5)) * (t ^ 2))
   }
-  return(mrs_data)
+  return(x)
 }
 
-#' Apply line-broadening (apodisation) to a basis-set object.
-#' @param basis_set input basis-set
-#' @param lb amount of line-broadening in Hz
-#' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1)
-#' @return line-broadened data
+#' @rdname lb
 #' @export
-lb.basis_set <- function(basis_set, lb, lg = 1) {
-  mrs_data2basis(lb(basis2mrs_data(basis_set), lb, lg), basis_set$names)
+lb.basis_set <- function(x, lb, lg = 1) {
+  mrs_data2basis(lb(basis2mrs_data(x), lb, lg), x$names)
 }
 
 #' Zero-fill MRS data in the time domain.
@@ -435,6 +428,7 @@ zf <- function(mrs_data, factor = 2) {
 #' appropriate.
 #' @param mrs_data MRS data.
 #' @param pts Number of data points.
+#' @param ref reference value for ppm scale.
 #' @return MRS data with pts data points.
 #' @export
 set_td_pts <- function(mrs_data, pts) {
@@ -458,6 +452,7 @@ set_td_pts <- function(mrs_data, pts) {
 }
 
 #' @export
+#' @rdname set_td_pts
 set_ref <- function(mrs_data, ref) {
   mrs_data$ref = ref
   return(mrs_data)
