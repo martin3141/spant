@@ -1,3 +1,16 @@
+#' Plot an interactive slice map from a data array where voxels can be selected
+#' to display a corresponding spectrum
+#' @param map array of values to be plotted
+#' @param mrs_data spectral data
+#' @param xlim spectral region to plot
+#' @param slice the slice index to plot
+#' @param mask_map matching map with logical values to indicate if the 
+#' corresponding values should be plotted
+#' @param upper cap on the largest values to be plotted
+#' @param lower cap on the smallest values to be plotted
+#' @param denom map to use as a denominator
+#' @param mask_cutoff minimum values to plot (as a percentage of the maximum)
+#' @param interp map interpolation factor
 #' @export
 #' @importFrom tkrplot tkrplot
 plot_slice_map_inter <- function(map, mrs_data, xlim = NULL, slice = 1,
