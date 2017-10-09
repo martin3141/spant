@@ -15,6 +15,13 @@ cache:
 
 # Adapt as necessary starting from here
 
+environment:
+  global:
+    WARNINGS_ARE_ERRORS: 1
+    USE_RTOOLS: yes
+    R_CHECK_INSTALL_ARGS: --install-args=--build --no-multiarch
+
+
 build_script:
   - travis-tool.sh install_deps
 
@@ -22,6 +29,7 @@ test_script:
   - travis-tool.sh run_tests
 
 on_failure:
+  - cat *.Rcheck/00install.out  
   - 7z a failure.zip *.Rcheck\*
   - appveyor PushArtifact failure.zip
 
@@ -37,9 +45,6 @@ artifacts:
 
   - path: '*.Rcheck\**\*.Rout'
     name: Logs
-
-  - path: '\*_*.tar.gz'
-    name: Bits
 
   - path: '\*_*.zip'
     name: Bits
