@@ -3,7 +3,9 @@
 spant
 =====
 
-[![Travis Build Status](https://travis-ci.org/martin3141/spant.svg?branch=master)](https://travis-ci.org/martin3141/spant) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant)
+[![Travis Build Status](https://travis-ci.org/martin3141/spant.svg?branch=master)](https://travis-ci.org/martin3141/spant) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/martin3141/spant?branch=master&svg=true)](https://ci.appveyor.com/project/martin3141/spant)
+
+`muschellij2` badges: [![Travis Build Status](https://travis-ci.org/muschellij2/spant.svg?branch=master)](https://travis-ci.org/muschellij2/spant) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/muschellij2/spant?branch=master&svg=true)](https://ci.appveyor.com/project/muschellij2/spant)
 
 Overview
 --------
