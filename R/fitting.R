@@ -39,6 +39,9 @@
 fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL, opts = NULL, 
                     parallel = FALSE, cores = 4) {
   
+  # start the clock
+  ptm <- proc.time()
+  
   # force uppercase for matching
   METHOD <- toupper(method)
   
@@ -245,8 +248,12 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL, opt
   res_tab <- cbind(labs, amps, crlbs, diags)
   res_tab[, 1:5] <- sapply(res_tab[, 1:5], as.numeric)
   
+  # stop the clock
+  proc_time <- proc.time() - ptm
+  
   out <- list(res_tab = res_tab, fits = fits, 
-              data = metab, basis = basis, amp_cols = ncol(amps))
+              data = metab, basis = basis, amp_cols = ncol(amps), 
+              proc_time = proc_time)
   
   class(out) <- "fit_result"
   return(out)
