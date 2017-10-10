@@ -16,9 +16,10 @@ knitr::opts_chunk$set(
 spant
 =====
 
-[![Travis Build Status](https://travis-ci.org/martin3141/spant.svg?branch=master)](https://travis-ci.org/martin3141/spant) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant) 
+[![Travis Build Status](https://travis-ci.org/martin3141/spant.svg?branch=master)](https://travis-ci.org/martin3141/spant) 
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/martin3141/spant?branch=master&svg=true)](https://ci.appveyor.com/project/martin3141/spant)
-
+[![](http://cranlogs.r-pkg.org/badges/spant)](http://cran.rstudio.com/web/packages/spant/index.html)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant) 
 
 `muschellij2` badges:
 [![Travis Build Status](https://travis-ci.org/muschellij2/spant.svg?branch=master)](https://travis-ci.org/muschellij2/spant)
@@ -40,7 +41,7 @@ Magnetic Resonance Spectroscopy (MRS) data. The following features are included:
 ## Installation
 You can install the stable version of spant from CRAN:
 ```{r cran, eval = FALSE}
-install.packages("spant")
+install.packages("spant", dependencies = TRUE)
 ```
 
 Or the the development version from GitHub (requires `devtools` package):

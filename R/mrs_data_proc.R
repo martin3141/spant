@@ -1551,7 +1551,7 @@ calc_spec_snr <- function(mrs_data, sig_region = c(4,0.5),
 #' @param mrs_data an object of class \code{mrs_data}.
 #' @param xlim frequency range (default units of PPM) to search for the highest 
 #' peak.
-#' @param interp_f interpolation factor, defults to 4x.
+#' @param interp_f interpolation factor, defaults to 4x.
 #' @param scale the units to use for the frequency scale, can be one of: "ppm", 
 #' "hz" or "points".
 #' @param mode spectral mode, can be : "real", "imag" or "abs".

@@ -26,4 +26,9 @@ Useful links:
 \author{
 \strong{Maintainer}: Martin Wilson \email{martin@pipegrep.co.uk}
 
+Other contributors:
+\itemize{
+  \item John Muschelli [contributor]
+}
+
 }

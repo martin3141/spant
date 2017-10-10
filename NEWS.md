@@ -7,6 +7,7 @@ basis argument isn't specified.
 * Bug fix for simulating basis sets with one element.
 * lb function can now be used with basis-set objects.
 * Bug fix for spar_sdat reader for non-localised MRS.
+* AppVeyor now being used to test Windows compatability - John Muschelli.
 
 # spant 0.4.0
 * Bug fix for SPAR/SDAT SVS voxel dimensions.

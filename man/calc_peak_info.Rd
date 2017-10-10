@@ -14,7 +14,7 @@ calc_peak_info(mrs_data, xlim = c(4, 0.5), interp_f = 4, scale = "ppm",
 \item{xlim}{frequency range (default units of PPM) to search for the highest
 peak.}
 
-\item{interp_f}{interpolation factor, defults to 4x.}
+\item{interp_f}{interpolation factor, defa3ults to 4x.}
 
 \item{scale}{the units to use for the frequency scale, can be one of: "ppm",
 "hz" or "points".}

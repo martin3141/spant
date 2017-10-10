@@ -1,6 +1,6 @@
 ## Test environments
 
-* Windows 7, R 3.3.2
+* Windows 7, R 3.4.2
 * Linux CentOS 6, R 3.3.3
 * OS X 10.9.5, R 3.3.2
 
