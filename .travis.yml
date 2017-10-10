@@ -16,3 +16,5 @@ r:
 # https://github.com/travis-ci/travis-ci/issues/7863
 before_install:
   - tlmgr install xkeyval
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
