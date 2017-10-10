@@ -367,8 +367,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "real", col = NULL,
 
 #' Plot a slice from a 7 dimensional array
 #' @param data 7d array of values to be plotted
-#' @param lower cap on the smallest values to be plotted
-#' @param upper cap on the largest values to be plotted
+#' @param zlim smallest and largest values to be plotted
 #' @param mask_map matching map with logical values to indicate if the 
 #' corresponding values should be plotted
 #' @param mask_cutoff minimum values to plot (as a percentage of the maximum)
@@ -380,7 +379,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "real", col = NULL,
 #' @param denom map to use as a denominator
 #' @param horizontal display the colorbar horizontally (logical)
 #' @export
-plot_slice_map <- function(data, lower = NULL, upper = NULL, mask_map = NULL,
+plot_slice_map <- function(data, zlim = NULL, mask_map = NULL,
                            mask_cutoff = 20, interp = 1, slice = 1, dyn = 1,
                            coil = 1, ref = 1, denom = NULL,
                            horizontal = FALSE) {
@@ -406,9 +405,9 @@ plot_slice_map <- function(data, lower = NULL, upper = NULL, mask_map = NULL,
   
   asp <- ncol(data) / nrow(data)
   
-  if (!is.null(lower) & !is.null(upper)) {
-    data <- crop_range(data, lower, upper)
-    breaks <- seq(from = lower, to = upper, length.out = 129)
+  if (!is.null(zlim)) {
+    data <- crop_range(data, zlim[1], zlim[2])
+    breaks <- seq(from = zlim[1], to = zlim[2], length.out = 129)
     fields::image.plot(data, col = viridis::viridis(128), useRaster = T,
                        asp = asp, axes = F, breaks = breaks,
                        horizontal = horizontal)

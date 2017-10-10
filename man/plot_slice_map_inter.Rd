@@ -5,9 +5,8 @@
 \title{Plot an interactive slice map from a data array where voxels can be selected
 to display a corresponding spectrum}
 \usage{
-plot_slice_map_inter(map, mrs_data, xlim = NULL, slice = 1,
-  mask_map = NULL, upper = NULL, lower = NULL, denom = NULL,
-  mask_cutoff = 20, interp = 1)
+plot_slice_map_inter(map, mrs_data, xlim = NULL, slice = 1, zlim = NULL,
+  mask_map = NULL, denom = NULL, mask_cutoff = 20, interp = 1)
 }
 \arguments{
 \item{map}{array of values to be plotted}
@@ -18,12 +17,10 @@ plot_slice_map_inter(map, mrs_data, xlim = NULL, slice = 1,
 
 \item{slice}{the slice index to plot}
 
+\item{zlim}{smallest and largest values to be plotted}
+
 \item{mask_map}{matching map with logical values to indicate if the
 corresponding values should be plotted}
-
-\item{upper}{cap on the largest values to be plotted}
-
-\item{lower}{cap on the smallest values to be plotted}
 
 \item{denom}{map to use as a denominator}
 

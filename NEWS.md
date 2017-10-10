@@ -1,4 +1,5 @@
 # spant 0.6.0
+* Interactive plotting function added for fit results - plot_fit_slice_inter.
 
 # spant 0.5.0
 * A default brain PRESS basis is now simulated by the fit_mrs function when the

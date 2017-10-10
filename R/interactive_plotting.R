@@ -1,22 +1,36 @@
+#' Plot a 2D slice from an MRSI fit result object
+#' @param fit_res \code{fit_result} object
+#' @param name name of the quantity to plot, eg "TNAA"
+#' @param slice slice to plot in the z direction
+#' @param zlim range of values to plot
+#' @param interp interpolation factor
+#' @export
+plot_fit_slice_inter <- function(fit_res, name, slice = 1, zlim = NULL, 
+                                 interp = 1) {
+  
+  map <- get_fit_map(fit_res, name) 
+  plot_slice_map_inter(map = map, mrs_data = fit_res, slice = slice, 
+                       interp = interp, zlim = zlim)
+}
+
 #' Plot an interactive slice map from a data array where voxels can be selected
 #' to display a corresponding spectrum
 #' @param map array of values to be plotted
 #' @param mrs_data spectral data
 #' @param xlim spectral region to plot
 #' @param slice the slice index to plot
+#' @param zlim smallest and largest values to be plotted
 #' @param mask_map matching map with logical values to indicate if the
 #' corresponding values should be plotted
-#' @param upper cap on the largest values to be plotted
-#' @param lower cap on the smallest values to be plotted
 #' @param denom map to use as a denominator
 #' @param mask_cutoff minimum values to plot (as a percentage of the maximum)
 #' @param interp map interpolation factor
 #' @export
 #' @importFrom tkrplot tkrplot
 plot_slice_map_inter <- function(map, mrs_data, xlim = NULL, slice = 1,
-                                 mask_map = NULL, upper = NULL, lower = NULL,
-                                 denom = NULL, mask_cutoff = 20, interp = 1) {
-
+                                 zlim = NULL, mask_map = NULL, denom = NULL, 
+                                 mask_cutoff = 20, interp = 1) {
+  
   # kill any existing plots
   if (exists("plot_env")) {
     if (exists("win1",plot_env)) {
@@ -40,8 +54,7 @@ plot_slice_map_inter <- function(map, mrs_data, xlim = NULL, slice = 1,
   plot_env$xlim <- xlim
   plot_env$slice <- slice
   plot_env$mask_map <- mask_map
-  plot_env$upper <- upper
-  plot_env$lower <- lower
+  plot_env$zlim <- zlim
   plot_env$denom <- denom
   plot_env$mask_cutoff <- mask_cutoff
   plot_env$interp <- interp
@@ -134,9 +147,9 @@ plotTk <- function() {
 
   graphics::par(mar = c(1,1,1,3))
   plot_slice_map(plot_env$map_data, slice = plot_env$slice,
-                 mask_map = plot_env$mask_map, lower = plot_env$lower,
-                 upper = plot_env$upper, denom = plot_env$denom,
-                 mask_cutoff = plot_env$mask_cutoff, interp = plot_env$interp,
+                 mask_map = plot_env$mask_map, zlim = plot_env$zlim,
+                 denom = plot_env$denom, mask_cutoff = plot_env$mask_cutoff, 
+                 interp = plot_env$interp,
                  horizontal = FALSE)
 
   graphics::points((plot_env$xPlotCoord), (plot_env$yPlotCoord), col = "white",

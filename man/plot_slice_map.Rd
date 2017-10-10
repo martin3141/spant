@@ -4,16 +4,14 @@
 \alias{plot_slice_map}
 \title{Plot a slice from a 7 dimensional array}
 \usage{
-plot_slice_map(data, lower = NULL, upper = NULL, mask_map = NULL,
-  mask_cutoff = 20, interp = 1, slice = 1, dyn = 1, coil = 1,
-  ref = 1, denom = NULL, horizontal = FALSE)
+plot_slice_map(data, zlim = NULL, mask_map = NULL, mask_cutoff = 20,
+  interp = 1, slice = 1, dyn = 1, coil = 1, ref = 1, denom = NULL,
+  horizontal = FALSE)
 }
 \arguments{
 \item{data}{7d array of values to be plotted}
 
-\item{lower}{cap on the smallest values to be plotted}
-
-\item{upper}{cap on the largest values to be plotted}
+\item{zlim}{smallest and largest values to be plotted}
 
 \item{mask_map}{matching map with logical values to indicate if the
 corresponding values should be plotted}
