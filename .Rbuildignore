@@ -6,7 +6,6 @@
 ^README-.*\.png$
 ^batch_analysis\.R$
 ^ica\.R$
-^interactive_plotting\.R$
 ^pipelines\.R$
 ^\.travis\.yml$
 ^appveyor\.yml$
