@@ -159,6 +159,10 @@ varpro_3_para_obj <- function(par, y, basis, t, nstart, sc_res = FALSE) {
   res
 }
 
+# following doc example gives an error:
+# @examples
+# varpro_3_para_opts(nstart = 10)
+
 #' Return a list of options for VARPRO based fitting with 3 free parameters:
 #' * zero'th order phase correction
 #' * global damping
@@ -174,8 +178,6 @@ varpro_3_para_obj <- function(par, y, basis, t, nstart, sc_res = FALSE) {
 #' @param bl_smth_pts Number of data points to use in the baseline smoothing
 #' calculation.
 #' @return List of options.
-#' @examples
-#' varpro_opts(nstart = 10)
 #' @export
 varpro_3_para_opts <- function(nstart = 20, init_damping = 2, maxiters = 200,
                         max_shift = 5, max_damping = 5, anal_jac = FALSE,

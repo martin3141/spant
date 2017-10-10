@@ -41,6 +41,3 @@ Return a list of options for VARPRO based fitting with 3 free parameters:
 \item global frequency shift.
 }
 }
-\examples{
-varpro_opts(nstart = 10)
-}
