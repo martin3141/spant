@@ -4,7 +4,7 @@
 #' #' @param mrs_data spectral data
 #' #' @param xlim spectral region to plot
 #' #' @param slice the slice index to plot
-#' #' @param mask_map matching map with logical values to indicate if the 
+#' #' @param mask_map matching map with logical values to indicate if the
 #' #' corresponding values should be plotted
 #' #' @param upper cap on the largest values to be plotted
 #' #' @param lower cap on the smallest values to be plotted

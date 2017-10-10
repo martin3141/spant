@@ -9,3 +9,4 @@
 ^interactive_plotting\.R$
 ^pipelines\.R$
 ^\.travis\.yml$
+^appveyor\.yml$
