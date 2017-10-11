@@ -487,11 +487,25 @@ read_list_data <- function(fname, ft, fs, ref) {
   raw_vec <- readBin(data, what = "double", n = 2 * N * (fid_num), size = 4,
                      endian = "little")
   
+  res <- c(NA, NA, NA, NA, 1, NA, 1 / fs)
+  
+  # freq domain vector vector
+  freq_domain <- rep(FALSE, 7)
+  
   cplx_vec <- raw_vec[c(TRUE, FALSE)] - 1i * raw_vec[c(FALSE, TRUE)]
   
-  ref_data <- cplx_vec[ref_start:ref_end]
-  dim(ref_data) <- c(N, chans, ref_N/chans, 1, 1, 1, 1)
-  ref_data <- aperm(ref_data, c(7,6,5,4,3,2,1))
+  if (is.na(ref_start)) {
+    ref_mrs <- NA
+  } else {
+    ref_data <- cplx_vec[ref_start:ref_end]
+    dim(ref_data) <- c(N, chans, ref_N/chans, 1, 1, 1, 1)
+    ref_data <- aperm(ref_data, c(7,6,5,4,3,2,1))
+    
+    ref_mrs <- list(ft = ft, data = ref_data, resolution = res, te = NA,
+                   ref = ref, row_vec = NA, col_vec = NA,
+                   pos_vec = NA, freq_domain = freq_domain)
+    class(ref_mrs) <- "mrs_data"
+  }
   
   metab_data <- cplx_vec[metab_start:metab_end]
   dim(metab_data) <- c(N, chans, metab_N/chans, 1, 1, 1, 1)
@@ -501,22 +515,13 @@ read_list_data <- function(fname, ft, fs, ref) {
   dim(noise_data) <- c(N, chans, noise_N/chans, 1, 1, 1, 1)
   noise_data <- aperm(noise_data, c(7,6,5,4,3,2,1))
   
-  #res <- rep(NA, 7)
-  res <- c(NA, NA, NA, NA, 1, NA, 1 / fs)
-  
-  # freq domain vector vector
-  freq_domain <- rep(FALSE, 7)
-  
   metab_mrs <- list(ft = ft, data = metab_data, resolution = res, te = NA,
                    ref = ref, row_vec = NA, col_vec = NA,
                    pos_vec = NA, freq_domain = freq_domain)
   class(metab_mrs) <- "mrs_data"
   
   
-  ref_mrs <- list(ft = ft, data = ref_data, resolution = res, te = NA,
-                   ref = ref, row_vec = NA, col_vec = NA,
-                   pos_vec = NA, freq_domain = freq_domain)
-  class(ref_mrs) <- "mrs_data"
+  
   
   noise_mrs <- list(ft = ft, data = noise_data, resolution = res, te = NA,
                    ref = ref, row_vec = NA, col_vec = NA,

@@ -901,7 +901,7 @@ append_dyns <- function(...) {
   }
   
   new_data <- abind::abind(x, along = 5)
-  first_dataset$data <- new_data
+  first_dataset$data <- unname(new_data)
   first_dataset
 }
 
