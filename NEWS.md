@@ -1,7 +1,7 @@
 # spant 0.6.0
 * Interactive plotting function added for fit results - plot_fit_slice_inter.
 * Bug fix for appending dynamic results.
-* Bug fix for readling list data files without reference data.
+* Bug fix for reading list data files without reference data.
 
 # spant 0.5.0
 * A default brain PRESS basis is now simulated by the fit_mrs function when the
