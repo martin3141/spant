@@ -2,16 +2,18 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{append_dyns}
 \alias{append_dyns}
-\title{Append MRS data across the dynamic dimension.}
+\title{Append MRS data across the dynamic dimension, assumes they matched across the
+other dimensions.}
 \usage{
 append_dyns(...)
 }
 \arguments{
-\item{...}{MRS data objects.}
+\item{...}{MRS data objects as arguments, or a list of MRS data objects}
 }
 \value{
-A single MRS data object with the input objects concatenated together.
+A single MRS data object with the input objects concatenated together
 }
 \description{
-Append MRS data across the dynamic dimension.
+Append MRS data across the dynamic dimension, assumes they matched across the
+other dimensions.
 }

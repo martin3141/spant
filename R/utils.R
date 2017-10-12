@@ -157,3 +157,6 @@ crop_range <- function(map, lower, upper) {
   map <- ifelse(map > upper_lim, upper_lim,map)  
   ifelse(map < lower_lim, lower_lim, map)  
 }
+
+# https://stackoverflow.com/questions/13432863/determine-level-of-nesting-in-r
+depth <- function(this) ifelse(is.list(this), 1L + max(sapply(this, depth)), 0L)

@@ -873,23 +873,21 @@ get_metab <- function(mrs_data) {
   mrs_data
 }
 
-
-#' Append MRS data across the dynamic dimension.
-#' @param ... MRS data objects.
-#' @return A single MRS data object with the input objects concatenated together.
+#' Append MRS data across the dynamic dimension, assumes they matched across the
+#' other dimensions.
+#' @param ... MRS data objects as arguments, or a list of MRS data objects
+#' @return A single MRS data object with the input objects concatenated together
 #' @export
 append_dyns <- function(...) {
-  # make a list if not one already
-  if (!is.list(...)) {
-    x <- list(...)
-  } else {
-    x <- list(...)[[1]]
-  }
+  x <- list(...)
+  
+  # were the arguments a list already? 
+  if (depth(x) == 3) x <- x[[1]]
   
   first_dataset <- x[[1]]
   
   if (is_fd(first_dataset)) {
-        first_dataset <- fd2td(first_dataset)
+    first_dataset <- fd2td(first_dataset)
   }
   
   # data needs to be in the same domain
