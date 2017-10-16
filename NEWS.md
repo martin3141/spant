@@ -5,6 +5,7 @@
 * Bug fix for append_dyns function.
 * basis2mrs_data function has been extended to allow the summation of basis
 elements and setting of individual amplitudes.
+* Added initial unit tests and automated coveralls checking.
 
 # spant 0.5.0
 * A default brain PRESS basis is now simulated by the fit_mrs function when the
