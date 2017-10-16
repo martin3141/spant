@@ -18,6 +18,9 @@ before_install:
   - tlmgr install xkeyval
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+
+r_github_packages:
+  - jimhester/covr
   
-after_deploy:
-  - if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then Rscript -e 'covr::coveralls(type = "all")'; fi
+after_success:
+  - Rscript -e 'covr::coveralls()'
