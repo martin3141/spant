@@ -4,8 +4,5 @@
 ^README\.md$
 ^README\.Rmd$
 ^README-.*\.png$
-^batch_analysis\.R$
-^ica\.R$
-^pipelines\.R$
 ^\.travis\.yml$
 ^appveyor\.yml$
