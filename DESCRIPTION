@@ -46,7 +46,8 @@ Suggests:
     neurobase,
     knitr,
     magrittr,
-    rmarkdown
+    rmarkdown,
+    covr
 VignetteBuilder:
     knitr
 Encoding: UTF-8
