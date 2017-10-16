@@ -3,6 +3,8 @@
 * Bug fix for appending dynamic results.
 * Bug fix for reading list data files without reference data.
 * Bug fix for append_dyns function.
+* basis2mrs_data function has been extended to allow the summation of basis
+elements and setting of individual amplitudes.
 
 # spant 0.5.0
 * A default brain PRESS basis is now simulated by the fit_mrs function when the
