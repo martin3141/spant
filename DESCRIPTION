@@ -47,7 +47,7 @@ Suggests:
     knitr,
     magrittr,
     rmarkdown,
-    covr
+    testthat
 VignetteBuilder:
     knitr
 Encoding: UTF-8
