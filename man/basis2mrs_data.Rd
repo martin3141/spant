@@ -5,13 +5,17 @@
 \title{Convert a basis object to an mrs_data object - where basis signals are spread
 across the dynamic dimension.}
 \usage{
-basis2mrs_data(basis)
+basis2mrs_data(basis, sum_elements = FALSE, amp = NULL)
 }
 \arguments{
-\item{basis}{Basis set object.}
+\item{basis}{basis set object.}
+
+\item{sum_elements}{return the sum of basis elements (logical)}
+
+\item{amp}{a vector of scaling factors to apply to each basis element.}
 }
 \value{
-An mrs_data object with basis signals spread across the dynamic dimension.
+an mrs_data object with basis signals spread across the dynamic dimension.
 }
 \description{
 Convert a basis object to an mrs_data object - where basis signals are spread
