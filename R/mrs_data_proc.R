@@ -546,6 +546,9 @@ dyns <- function(mrs_data) {
   dim(mrs_data$data)[5]
 }
 
+#' Return the total number of spectra in an MRS dataset.
+#' @param mrs_data MRS data.
+#' @export
 Nspec <- function(mrs_data) {
   mrs_dims <- dim(mrs_data$data)
   (mrs_dims[1] * mrs_dims[2] * mrs_dims[3] * mrs_dims[4] * mrs_dims[5] *

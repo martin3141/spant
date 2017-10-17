@@ -185,12 +185,41 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0.04,
   }
 }
 
+#' Calculate diagnostic information for object of class \code{fit_result}
+#' @param x \code{fit_result} object
+#' @param amps known metabolite amplitudes
+#' @return a dataframe of diagnostic information
+#' @export
+fit_diags <- function(x, amps = NULL) {
+  time <- as.numeric(x$proc_time[3])
+  mean_iters <- mean(x$res_tab$res.niter)
+  mean_res <- mean(x$res_tab$res.deviance)
+  if (!is.null(amps)) {
+    basis_n <- length(x$basis$names)
+    amps <- matrix(amps, nrow = nrow(x$res_tab), ncol = basis_n, byrow = TRUE)
+    mean_error <- mean(rowSums((amps - x$res_tab[6:(5 + basis_n)])^2))
+    data.frame(duration = time, mean_iters = mean_iters, mean_res = mean_res,
+               mean_error = mean_error)
+  } else {
+    data.frame(duration = time, mean_iters = mean_iters, mean_res = mean_res)
+  }
+}
+
 #' Print a summary of an object of class \code{fit_result}.
 #' @param x \code{fit_result} object.
 #' @param ... further arguments.
 #' @export
 print.fit_result <- function(x, ...) {
-  print(summary(x$res_tab))
+  cat("Fitting results\n", sep = "")
+  cat("--------------------------\n", sep = "")
+  cat("Analysis duration : ", x$proc_time[3],"s\n", sep = "")
+  #cat("Mean residual     : ", mean(x$res_tab$res.deviance),"\n", sep = "")
+  #cat("Mean iterations   : ", mean(x$res_tab$res.niter),"\n", sep = "")
+  cat("Number of spectra : ", Nspec(x$data),"\n", sep = "")
+  cat("Basis elements    : ", dim(x$basis$data)[2], "\n\n", sep = "")
+  cat("Basis names\n", sep = "")
+  cat("-------------------------------\n")
+  cat(x$basis$names, sep = ",", fill = 31)
 }
 
 #' Print fit coordinates from a single index.
