@@ -281,6 +281,23 @@ apply_mrs <- function(mrs_data, dims, fun, ..., data_only = FALSE) {
   }
 }
 
+#' Apply a frequency shift to MRS data
+#' @param mrs_data MRS data
+#' @param shift frequency shift in Hz
+#' @return frequency shifted MRS data.
+#' @export
+shift <- function(mrs_data, shift) {
+  # covert to time-domain
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+  
+  t_orig <- rep(seconds(mrs_data), each = Nspec(mrs_data))
+  t_array <- array(t_orig, dim = dim(mrs_data$data))
+  shift_array <- array(shift, dim = dim(mrs_data$data))
+  shift_array <- exp(2i * pi * t_array * shift_array)
+  mrs_data$data <- mrs_data$data * shift_array
+  return(mrs_data)
+}
+
 #' Apply phasing parameters to MRS data.
 #' @param mrs_data MRS data.
 #' @param zero_order Zero'th order phase term in degrees.
@@ -708,15 +725,14 @@ align <- function(mrs_data, ref_peak = 4.65, zf_factor = 2, lb = 2,
   shifts <- apply_mrs(mrs_data_zf, 7, conv_align, ref_data, window,
                       1/mrs_data$resolution[7], data_only = TRUE)
   
-  #return(shifts)
-  t_orig <- rep(seconds(mrs_data), each = Nspec(mrs_data))
-  t_array <- array(t_orig, dim = dim(mrs_data$data))
-  shift_array <- array(shifts, dim = dim(mrs_data$data))
-  shift_array <- exp(2i * pi * t_array * shift_array)
-  mrs_data$data <- mrs_data$data * shift_array
   if (ret_df) {
     return(list(mrs_data, abind::adrop(shifts, 7)))
   } else {
+    t_orig <- rep(seconds(mrs_data), each = Nspec(mrs_data))
+    t_array <- array(t_orig, dim = dim(mrs_data$data))
+    shift_array <- array(shifts, dim = dim(mrs_data$data))
+    shift_array <- exp(2i * pi * t_array * shift_array)
+    mrs_data$data <- mrs_data$data * shift_array
     return(mrs_data)
   }
 }
