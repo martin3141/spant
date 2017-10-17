@@ -185,26 +185,6 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0.04,
   }
 }
 
-#' Calculate diagnostic information for object of class \code{fit_result}
-#' @param x \code{fit_result} object
-#' @param amps known metabolite amplitudes
-#' @return a dataframe of diagnostic information
-#' @export
-fit_diags <- function(x, amps = NULL) {
-  time <- as.numeric(x$proc_time[3])
-  mean_iters <- mean(x$res_tab$res.niter)
-  mean_res <- mean(x$res_tab$res.deviance)
-  if (!is.null(amps)) {
-    basis_n <- length(x$basis$names)
-    amps <- matrix(amps, nrow = nrow(x$res_tab), ncol = basis_n, byrow = TRUE)
-    mean_error <- mean(rowSums((amps - x$res_tab[6:(5 + basis_n)])^2))
-    data.frame(duration = time, mean_iters = mean_iters, mean_res = mean_res,
-               mean_error = mean_error)
-  } else {
-    data.frame(duration = time, mean_iters = mean_iters, mean_res = mean_res)
-  }
-}
-
 #' Print a summary of an object of class \code{fit_result}.
 #' @param x \code{fit_result} object.
 #' @param ... further arguments.
