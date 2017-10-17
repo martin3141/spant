@@ -7,5 +7,7 @@ test_that("a full fitting pipeline works", {
   mrs_proc <- align(mrs_proc, 2.01)
   basis <- sim_basis_1h_brain_press(mrs_proc)
   fit_res <- fit_mrs(mrs_proc, basis)
+  # fit time won't be stable, so best to remove
+  fit_res$proc_time <- NULL
   expect_equal_to_reference(fit_res, "fit_res.rds")
 })
