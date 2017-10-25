@@ -283,19 +283,28 @@ apply_mrs <- function(mrs_data, dims, fun, ..., data_only = FALSE) {
 
 #' Apply a frequency shift to MRS data
 #' @param mrs_data MRS data
-#' @param shift frequency shift in Hz
+#' @param shift frequency shift (in ppm by default)
+#' @param units of the shift ("ppm" or "hz")
 #' @return frequency shifted MRS data.
 #' @export
-shift <- function(mrs_data, shift) {
+shift <- function(mrs_data, shift, units = "ppm") {
   # covert to time-domain
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
+  if (units == "hz") {
+    shift_hz <- shift
+  } else if (units == "ppm") {
+    shift_hz <- ppm2hz(shift, mrs_data$ft, 0)
+  } else {
+    stop("Error, did not recognise the units.") 
+  }
+  
   t_orig <- rep(seconds(mrs_data), each = Nspec(mrs_data))
   t_array <- array(t_orig, dim = dim(mrs_data$data))
-  shift_array <- array(shift, dim = dim(mrs_data$data))
+  shift_array <- array(shift_hz, dim = dim(mrs_data$data))
   shift_array <- exp(2i * pi * t_array * shift_array)
   mrs_data$data <- mrs_data$data * shift_array
-  return(mrs_data)
+  mrs_data
 }
 
 #' Apply phasing parameters to MRS data.
