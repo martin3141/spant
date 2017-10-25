@@ -5,7 +5,7 @@
 * Bug fix for append_dyns function.
 * basis2mrs_data function has been extended to allow the summation of basis
 elements and setting of individual amplitudes.
-* Added a shift function for manual frequency shift adjutment.
+* Added a shift function for manual frequency shift adjustment.
 * Added initial unit tests and automated coveralls checking.
 
 # spant 0.5.0
