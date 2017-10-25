@@ -445,7 +445,6 @@ zf <- function(mrs_data, factor = 2) {
 #' appropriate.
 #' @param mrs_data MRS data.
 #' @param pts Number of data points.
-#' @param ref reference value for ppm scale.
 #' @return MRS data with pts data points.
 #' @export
 set_td_pts <- function(mrs_data, pts) {
@@ -468,8 +467,10 @@ set_td_pts <- function(mrs_data, pts) {
   return(mrs_data)
 }
 
+#' Set the ppm reference value (eg ppm value at 0Hz).
+#' @param mrs_data MRS data.
+#' @param ref reference value for ppm scale.
 #' @export
-#' @rdname set_td_pts
 set_ref <- function(mrs_data, ref) {
   mrs_data$ref = ref
   return(mrs_data)

@@ -2,20 +2,15 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{set_td_pts}
 \alias{set_td_pts}
-\alias{set_ref}
 \title{Set the number of time-domain data points, truncating or zero-filling as
 appropriate.}
 \usage{
 set_td_pts(mrs_data, pts)
-
-set_ref(mrs_data, ref)
 }
 \arguments{
 \item{mrs_data}{MRS data.}
 
 \item{pts}{Number of data points.}
-
-\item{ref}{reference value for ppm scale.}
 }
 \value{
 MRS data with pts data points.
