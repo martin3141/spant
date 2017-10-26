@@ -1,3 +1,5 @@
+# spant 0.7.0
+
 # spant 0.6.0
 * Interactive plotting function added for fit results - plot_fit_slice_inter.
 * Bug fix for appending dynamic results.
