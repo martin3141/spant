@@ -1040,6 +1040,10 @@ cplx_median <- function(input) {
   stats::median(Re(input)) + stats::median(Im(input)) * 1i
 }
 
+#' Calculate the median dynamic data.
+#' @param mrs_data Dynamic MRS data.
+#' @return Median dynamic data.
+#' @export
 median_dyns <- function(mrs_data) {
   return(apply_mrs(mrs_data, 5, cplx_median))
 }
