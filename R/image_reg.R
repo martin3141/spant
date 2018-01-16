@@ -90,21 +90,24 @@ get_voi_seg <- function(voi, mri_seg) {
 #' @export
 spm_pve2categorical <- function(fname) {
   # check the file name makes sense
-  if (substr(fname,1,1) != "c") stop("Error, filename does not begin with 'c'.")
+  if (substr(basename(fname),1,1) != "c") stop("Error, filename does not begin with 'c'.")
    
-  if (!(substr(fname,2,2) %in% c("1","2","3","4","5","6"))) {
+  if (!(substr(basename(fname),2,2) %in% c("1","2","3","4","5","6"))) {
     stop("Error, filename does not follow expected pattern.")
   }
   
   # check all files are present and correct
   for (n in 1:6) {
-    substr(fname,2,2) <- as.character(n)
+    base <- basename(fname)
+    substr(base,2,2) <- as.character(n)
+    fname <- file.path(dirname(fname), base)
     if (!file.exists(fname)) stop(paste("Error, file does not exist :",fname))
   }
   
   cat("Reading segmentation images...\n")
   # read the first file 
-  substr(fname,2,2) <- "1"
+  substr(base,2,2) <- "1"
+  fname <- file.path(dirname(fname), base)
   x <- RNifti::readNifti(fname)
   
   # new structure
@@ -113,7 +116,8 @@ spm_pve2categorical <- function(fname) {
   combined[,,,1] <- x[]
   
   for (n in 2:6) {
-    substr(fname,2,2) <- as.character(n)
+    substr(base,2,2) <- as.character(n)
+    fname <- file.path(dirname(fname), base)
     x <- RNifti::readNifti(fname)
     combined[,,,n] <- x[]
   }
