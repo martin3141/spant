@@ -1,4 +1,6 @@
 # spant 0.7.0
+* Added apply_axes fn.
+* Support for reading SPM style segmentation results. (TODO)
 
 # spant 0.6.0
 * Interactive plotting function added for fit results - plot_fit_slice_inter.
