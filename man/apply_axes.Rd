@@ -11,7 +11,9 @@ apply_axes(x, axes, fun, ...)
 
 \item{axes}{a vector of axes to apply fun over}
 
-\item{function}{to be applied}
+\item{fun}{function to be applied}
+
+\item{...}{optional argments to fun}
 }
 \value{
 array
