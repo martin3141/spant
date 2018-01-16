@@ -137,7 +137,7 @@ spm_pve2categorical <- function(fname) {
   # FSL convention
   # 0 - OTHER; 1 - CSF; 2 - GM; 3 - WM 
   
-  cat("Remap to FSL convenetion...\n")
+  cat("Remap to FSL convention...\n")
   cat_fsl <- array(rep(NA, prod(new_dim[1:3])), dim = new_dim[1:3])
   cat_fsl <- ifelse(cat == 1, 2, cat_fsl)
   cat_fsl <- ifelse(cat == 2, 3, cat_fsl)
@@ -145,7 +145,8 @@ spm_pve2categorical <- function(fname) {
   cat_fsl <- ifelse(cat == 4, 0, cat_fsl)
   cat("Done\n")
   
-  cat_fsl
+  x[] <- cat_fsl
+  x
 }
 
 # generate an sform affine for nifti generation
