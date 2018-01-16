@@ -1,3 +1,53 @@
+#' Apply a function over specified array axes
+#' @param x an array
+#' @param axes a vector of axes to apply fun over
+#' @param function to be applied
+#' @return array
+#' @examples
+#' z <- array(1:1000, dim = c(10, 10, 10))
+#' a <- apply_axes(z, 3, fft)
+#' a[1,1,] == fft(z[1,1,])
+#' a <- apply_axes(z, 3, sum)
+#' a[1,1,] == sum(z[1,1,])
+#' @export
+apply_axes <- function(x, axes, fun, ...) {
+  ndim <- length(dim(x))
+  # apply apply function to each axis
+  for (axis in axes) {
+    margin <- c(1:ndim)[-axis]
+    z <- apply(x, margin, fun, ...)
+    if (length(dim(z)) != ndim) {
+      # insert the dropped dimension
+      dim(z) <- append(dim(z), 1, axis - 1)
+      x <- z
+    } else {
+      # permute back to the original order
+      perm_vec <- 2:ndim
+      perm_vec <- append(perm_vec, 1, axis - 1)
+      print(perm_vec)
+      x <- aperm(z, perm_vec)
+    }
+  }
+  x
+}
+
+# TODO
+# see rep dyn for example
+#rep_array_dim <- function(x, dim, n) {
+#  orig_dim <- dim(x)
+#  new_dim <- orig_dim
+#  new_dim[dim] <- new_dim[dim] * n
+#  # make the dynamic dimension (5th) the last
+#  z <- aperm(x, c(1,2,3,4,6,7,5))
+#  # duplicate the data
+#  z <- rep(z, n)
+#  # set the new dimesnions
+#  dim(z) <- new_dim[c(1,2,3,4,6,7,5)]
+#  # reorder
+#  aperm(z, c(1,2,3,4,7,5,6))
+#}
+
+
 #' Covert a beta value in the time-domain to an equivalent linewidth in Hz:
 #' x * exp(-i * t * t * beta)
 #' @param beta beta damping value 
