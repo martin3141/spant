@@ -85,11 +85,63 @@ get_voi_seg <- function(voi, mri_seg) {
 
 #' Convert SPM style segmentation files to a single catagorical image where
 #' the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM.
-#' @param fname the first segmentation file (eg xxxxx)
+#' @param fname any of the segmentation files (eg c1_MY_T1.nii)
 #' @return nifti object 
 #' @export
 spm_pve2categorical <- function(fname) {
-  TRUE # TODO
+  # check the file name makes sense
+  if (substr(fname,1,1) != "c") stop("Error, filename does not begin with 'c'.")
+   
+  if (!(substr(fname,2,2) %in% c("1","2","3","4","5","6"))) {
+    stop("Error, filename does not follow expected pattern.")
+  }
+  
+  # check all files are present and correct
+  for (n in 1:6) {
+    substr(fname,2,2) <- as.character(n)
+    if (!file.exists(fname)) stop(paste("Error, file does not exist :",fname))
+  }
+  
+  cat("Reading segmentation images...\n")
+  # read the first file 
+  substr(fname,2,2) <- "1"
+  x <- RNifti::readNifti(fname)
+  
+  # new structure
+  new_dim <- c(dim(x),6)
+  combined <- array(rep(NA, prod(new_dim)), dim = new_dim)
+  combined[,,,1] <- x[]
+  
+  for (n in 2:6) {
+    substr(fname,2,2) <- as.character(n)
+    x <- RNifti::readNifti(fname)
+    combined[,,,n] <- x[]
+  }
+  
+  cat("Combining segmentation images...\n")
+  # convert probabilties to catagorical
+  # combine c4, c5, c6 to improve speed
+  combined[,,,4] <- combined[,,,4] + combined[,,,5] + combined[,,,6]
+  combined <- combined[,,,1:4]
+  cat <- apply(combined, c(1,2,3), which.max) # THIS IS SLOOW
+  
+  # convert labels to FSL fast style output
+  
+  # SPM convention
+  # c1 - GM; c2 - WM; c3 - CSF; c4,c5,c6 - OTHER 
+  
+  # FSL convention
+  # 0 - OTHER; 1 - CSF; 2 - GM; 3 - WM 
+  
+  cat("Remap to FSL convenetion...\n")
+  cat_fsl <- array(rep(NA, prod(new_dim[1:3])), dim = new_dim[1:3])
+  cat_fsl <- ifelse(cat == 1, 2, cat_fsl)
+  cat_fsl <- ifelse(cat == 2, 3, cat_fsl)
+  cat_fsl <- ifelse(cat == 3, 1, cat_fsl)
+  cat_fsl <- ifelse(cat == 4, 0, cat_fsl)
+  cat("Done\n")
+  
+  cat_fsl
 }
 
 # generate an sform affine for nifti generation
