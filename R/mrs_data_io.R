@@ -1,7 +1,7 @@
 #' Read MRS data from a file.
 #' @param fname The filename of the dpt format MRS data.
 #' @param format A string describing the data format. May be one of the 
-#' following : "spar_sdat", "rda", "list_data", "paravis", dpt".
+#' following : "spar_sdat", "rda", "pfile", "list_data", "paravis", "dpt".
 #' @param ft Transmitter frequency in Hz (required for list_data format).
 #' @param fs Sampling frequency in Hz (required for list_data format).
 #' @param ref Reference value for ppm scale (required for list_data format).
@@ -16,6 +16,8 @@ read_mrs <- function(fname, format, ft = NULL, fs = NULL, ref = NULL) {
     return(read_spar_sdat(fname))
   } else if (format == "rda") {
     return(read_rda(fname))
+  } else if (format == "pfile") {
+    return(read_pfile(fname))
   } else if (format == "list_data") {
     if (is.null(ft)) stop("Please specify ft parameter for list_data format")
     if (is.null(fs)) stop("Please specify fs parameter for list_data format")
@@ -706,6 +708,67 @@ get_pfile_dict <- function(hdr_rev) {
   loc
 }
 
+# TODO test MEGA-PRESS and CSI
+read_pfile <- function(fname) {
+  # check the file size
+  fbytes <- file.size(fname)
+  
+  hdr <- read_pfile_header(fname)
+  con <- file(fname, "rb")
+  seek(con, hdr$off_data)
+  endian <- "little"
+  
+  # calculate number of data points from file size
+  Npts <- (fbytes - hdr$off_data) / 4
+  raw_pts <- readBin(con, "int", n = Npts, size = 4, endian = endian)
+  close(con)
+  
+  # calculate coil elements
+  coils <- 0
+  for (n in seq(1, 8, 2)) {
+    if ((hdr$rcv[n] != 0) || (hdr$rcv[n + 1] != 0)) {
+      coils <- coils + 1 + hdr$rcv[n + 1] - hdr$rcv[n]
+    }
+  }
+  
+  if (coils == 0) coils <- 1
+  
+  expt_pts <- coils * (hdr$nframes * hdr$nechoes + 1) * hdr$frame_size * 2
+  
+  if (expt_pts != Npts) warning("Unexpected number of data points.")
+  
+  data <- raw_pts[c(TRUE, FALSE)] + 1i * raw_pts[c(FALSE, TRUE)]
+  
+  data <- array(data, dim = c(hdr$frame_size, hdr$nechoes * hdr$nframes + 1, coils, 1, 1, 1, 1))
+  data <- aperm(data, c(7,6,5,4,2,3,1))
+  
+  # remove the empty frame at the start of each coil
+  data <- data[,,,,-1,,,drop = FALSE]
+  
+  res <- c(NA, NA, NA, NA, 1, NA, 1 / hdr$spec_width)
+  
+  # freq domain vector vector
+  freq_domain <- rep(FALSE, 7)
+
+  ref <- def_acq_paras()$ref
+  
+  mrs_data <- list(ft = hdr$ps_mps_freq / 10, data = data, resolution = res,
+                   te = hdr$te, ref = ref, row_vec = NA, col_vec = NA,
+                   pos_vec = NA, freq_domain = freq_domain)
+  
+  class(mrs_data) <- "mrs_data"
+  
+  if (hdr$rhuser19 > 0) {
+    ref_mrs <- get_dyns(mrs_data, 1:hdr$rhuser)
+    metab_mrs <- get_dyns(mrs_data, (1 + hdr$rhuser):dyns(mrs_data))
+  } else {
+    ref_mrs <- NA
+    metab_mrs <- mrs_data
+  }
+  
+  list(metab = metab_mrs, ref = ref_mrs)
+}
+  
 read_pfile_header <- function(fname) {
   endian <- "little"
   vars <- get_pfile_vars()
@@ -718,7 +781,7 @@ read_pfile_header <- function(fname) {
   vars$off_data <- readBin(con, "int", size = 4, endian = endian)
   
   seek(con, loc$nechoes)
-  vars$nechoes <- readBin(con, "int", size = 4, endian = endian)
+  vars$nechoes <- readBin(con, "int", size = 2, endian = endian)
   
   seek(con, loc$nframes)
   vars$nframes <- readBin(con, "int", size = 2, endian = endian)
@@ -759,5 +822,5 @@ read_pfile_header <- function(fname) {
   
   close(con)
   
-  vars  
+  vars
 }
