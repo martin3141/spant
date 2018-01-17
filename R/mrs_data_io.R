@@ -658,3 +658,106 @@ read_paravis_raw <- function(fname) {
 get_para_val <- function(lines, name_str) {
   lines$V2[which(lines$V1 == name_str)]
 }
+
+get_pfile_vars <- function() {
+  vars <- vector(mode = "list", length = 14)
+  names(vars) <- c("hdr_rev", "off_data", "nechoes", "nframes", "frame_size", 
+                   "rcv", "rhuser19", "spec_width", "csi_dims", "xcsi", "ycsi",
+                   "zcsi", "ps_mps_freq", "te")
+  vars
+}
+
+get_pfile_dict <- function(hdr_rev) {
+  loc <- get_pfile_vars()
+  
+  if (floor(hdr_rev) > 25) {
+    loc$hdr_rev <- 0
+    loc$off_data <- 4
+    loc$nechoes <- 146
+    loc$nframes <- 150
+    loc$frame_size <- 156
+    loc$rcv <- 264
+    loc$rhuser19 <- 356
+    loc$spec_width <- 432
+    loc$csi_dims <- 436
+    loc$xcsi <- 438
+    loc$ycsi <- 440
+    loc$zcsi <- 442
+    loc$ps_mps_freq <- 488
+    loc$te <- 1148
+  } else if ((floor(hdr_rev) > 11) && (floor(hdr_rev) < 25)) {
+    loc$hdr_rev <- 0
+    loc$off_data <- 1468
+    loc$nechoes <- 70
+    loc$nframes <- 74
+    loc$frame_size <- 80
+    loc$rcv <- 200
+    loc$rhuser19 <- 292
+    loc$spec_width <- 368
+    loc$csi_dims <- 372
+    loc$xcsi <- 374
+    loc$ycsi <- 376
+    loc$zcsi <- 378
+    loc$ps_mps_freq <- 424
+    loc$te <- 1212
+  } else {
+    stop(paste("Error, pfile version not supported :", hdr_rev))
+  }
+  loc
+}
+
+read_pfile_header <- function(fname) {
+  endian <- "little"
+  vars <- get_pfile_vars()
+  con <- file(fname, "rb")
+  vars$hdr_rev <- readBin(con, "numeric", size = 4, endian = endian)
+  
+  loc <- get_pfile_dict(vars$hdr_rev)
+  
+  seek(con, loc$off_data)
+  vars$off_data <- readBin(con, "int", size = 4, endian = endian)
+  
+  seek(con, loc$nechoes)
+  vars$nechoes <- readBin(con, "int", size = 4, endian = endian)
+  
+  seek(con, loc$nframes)
+  vars$nframes <- readBin(con, "int", size = 2, endian = endian)
+  
+  seek(con, loc$frame_size)
+  vars$frame_size <- readBin(con, "int", size = 2, signed = FALSE, 
+                             endian = endian)
+  
+  seek(con, loc$rcv)
+  vars$rcv <- readBin(con, "int", n = 8, size = 2, endian = endian)
+  
+  seek(con, loc$rhuser19)
+  vars$rhuser19 <- readBin(con, "numeric", size = 4, endian = endian)
+  
+  seek(con, loc$spec_width)
+  vars$spec_width <- readBin(con, "numeric", size = 4, endian = endian)
+  
+  seek(con, loc$csi_dims)
+  vars$csi_dims <- readBin(con, "int", size = 2, endian = endian)
+  
+  seek(con, loc$xcsi)
+  vars$xcsi <- readBin(con, "int", size = 2, endian = endian)
+  
+  seek(con, loc$ycsi)
+  vars$ycsi <- readBin(con, "int", size = 2, endian = endian)
+  
+  seek(con, loc$zcsi)
+  vars$zcsi <- readBin(con, "int", size = 2, endian = endian)
+  
+  seek(con, loc$ps_mps_freq)
+  # read as int
+  ps_mps_freq_bits <- intToBits(readBin(con, "int", size = 4, endian = endian))
+  # convert to uint
+  vars$ps_mps_freq <- sum(2^.subset(0:32, as.logical(ps_mps_freq_bits)))
+  
+  seek(con, loc$te)
+  vars$te <- readBin(con, "int", size = 4, endian = endian)
+  
+  close(con)
+  
+  vars  
+}
