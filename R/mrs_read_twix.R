@@ -70,3 +70,43 @@ read_uint64 <- function(con) {
   # an approximation by converting to double
   sum(2^.subset(0:63, as.logical(raw_bits)))
 }
+
+read_twix_txt_hdr <- function(fname, version) {
+  con <- file(fname, 'rb', encoding = "UTF-8")
+  while (TRUE) {
+    line <- readLines(con, n = 1 ,skipNul = TRUE)
+    if (startsWith(line, "ulVersion") && version == 'vb') {
+      break
+    }
+    
+    if (startsWith(line, "ulVersion") && version == 'vd') {
+      tSequenceFilename <- readLines(con, n = 1)
+      tProtocolName <- readLines(con, n = 1)
+      if ((tProtocolName != 'tProtocolName\t = \t"AdjCoilSens"\n') && (tProtocolName != 'tProtocolName\t = \t"CBU_MPRAGE_32chn"\n')) {
+        break
+      }
+    }
+  }
+  
+  vars <- vector(mode = "list", length = 5)
+  names(vars) <- c("averages", "fs", "ft", "te", "N")
+  
+  while (TRUE) {
+    line <- readLines(con, n = 1, skipNul = TRUE)
+    if (grepl("### ASCCONV END ###", line, fixed = TRUE)) {
+      break
+    } else if (startsWith(line, "lAverages")) {
+      vars$averages <- as.integer(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sRXSPEC.alDwellTime[0]")) {
+      vars$fs <- 1e9 / (as.numeric(strsplit(line, "=")[[1]][2]))
+    } else if (startsWith(line, "sTXSPEC.asNucleusInfo[0].lFrequency")) {
+      vars$ft <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "alTE[0]")) {
+      vars$te <- (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
+    } else if (startsWith(line, "sSpecPara.lVectorSize")) {
+      vars$N <- as.integer(strsplit(line, "=")[[1]][2])
+    }
+  }
+  close(con)
+  vars
+}
