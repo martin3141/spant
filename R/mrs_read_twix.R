@@ -1,4 +1,3 @@
-#' @export
 read_twix <- function(fname) {
   # check the file size
   fbytes <- file.size(fname)

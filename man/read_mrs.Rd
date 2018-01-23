@@ -10,7 +10,8 @@ read_mrs(fname, format, ft = NULL, fs = NULL, ref = NULL)
 \item{fname}{The filename of the dpt format MRS data.}
 
 \item{format}{A string describing the data format. May be one of the
-following : "spar_sdat", "rda", "pfile", "list_data", "paravis", "dpt".}
+following : "spar_sdat", "rda", "twix", "pfile", "list_data", "paravis",
+"dpt".}
 
 \item{ft}{Transmitter frequency in Hz (required for list_data format).}
 
