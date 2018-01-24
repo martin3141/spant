@@ -136,7 +136,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL, opt
     
     # combine metab and w_ref data together
     if (!is.null(w_ref)) {
-      metab <- combine_metab_ref(metab, w_ref)
+      metab <- comb_metab_ref(metab, w_ref)
     }
     
     # write basis object (if specified) to file
@@ -173,7 +173,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL, opt
     
     # combine metab and w_ref data together
     if (!is.null(w_ref)) {
-      metab <- combine_metab_ref(metab, w_ref)
+      metab <- comb_metab_ref(metab, w_ref)
     }
     
     # write basis object (if specified) to file

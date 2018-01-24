@@ -193,7 +193,7 @@ read_mrs_tqn <- function(fname, fname_ref = NA, format, id = NA, group = NA) {
   
   if (file.exists(w_fname)) {
     ref <- read_mrs_dpt(w_fname)
-    main$data <- combine_metab_ref(main, ref)
+    main$data <- comb_metab_ref(main, ref)
     #main$data <- abind::abind(main$data, ref$data, along=1)
   }
   

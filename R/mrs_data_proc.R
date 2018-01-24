@@ -879,7 +879,7 @@ inv_even_dyns <- function(mrs_data) {
 #' @param ref reference mrs_data object.
 #' @return Combined metabolite and reference mrs_data object.
 #' @export
-combine_metab_ref <- function(metab, ref) {
+comb_metab_ref <- function(metab, ref) {
   metab$data <- abind::abind(metab$data, ref$data, along = 1)
   metab
 }
@@ -1328,7 +1328,7 @@ ecc <- function(metab, ref) {
     ref <- rep_dyn(ref, dyns(metab))
   }
   
-  mrs_data <- combine_metab_ref(metab, ref)
+  mrs_data <- comb_metab_ref(metab, ref)
   ecc_data <- apply_mrs(mrs_data, c(1,7), ecc_2d_array)
   get_metab(ecc_data)
 }
