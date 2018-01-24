@@ -1,5 +1,5 @@
 # spant 0.7.0
-* Added support for Siemens TWIX SVS data.
+* Added support for Siemens ima and TWIX SVS data.
 * Added support for GE p-file SVS data.
 * Added apply_axes fn.
 * Support for reading SPM style segmentation results (spm_pve2categorical).

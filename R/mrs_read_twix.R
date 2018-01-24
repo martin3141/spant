@@ -30,7 +30,7 @@ read_twix <- function(fname) {
     Nscans <- 1
   }
   close(con)
-  vars <- read_twix_txt_hdr(fname, version)
+  vars <- read_siemens_txt_hdr(fname, version)
   
   # read data points 
   con <- file(fname, "rb")
@@ -206,7 +206,7 @@ read_twix <- function(fname) {
   mrs_data
 }
 
-read_twix_txt_hdr <- function(fname, version) {
+read_siemens_txt_hdr <- function(fname, version) {
   con <- file(fname, 'rb', encoding = "UTF-8")
   while (TRUE) {
     line <- readLines(con, n = 1 ,skipNul = TRUE)

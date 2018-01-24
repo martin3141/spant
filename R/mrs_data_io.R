@@ -1,8 +1,8 @@
 #' Read MRS data from a file.
 #' @param fname The filename of the dpt format MRS data.
 #' @param format A string describing the data format. May be one of the 
-#' following : "spar_sdat", "rda", "twix", "pfile", "list_data", "paravis",
-#' "dpt".
+#' following : "spar_sdat", "rda", "ima", "twix", "pfile", "list_data",
+#' "paravis", "dpt".
 #' @param ft Transmitter frequency in Hz (required for list_data format).
 #' @param fs Sampling frequency in Hz (required for list_data format).
 #' @param ref Reference value for ppm scale (required for list_data format).
@@ -17,6 +17,8 @@ read_mrs <- function(fname, format, ft = NULL, fs = NULL, ref = NULL) {
     return(read_spar_sdat(fname))
   } else if (format == "rda") {
     return(read_rda(fname))
+  } else if (format == "ima") {
+    return(read_ima(fname))
   } else if (format == "twix") {
     return(read_twix(fname))
   } else if (format == "pfile") {
