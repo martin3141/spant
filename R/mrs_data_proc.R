@@ -263,6 +263,13 @@ sim_zeros <- function(fs = def_fs(), ft = def_ft(), N = def_N(),
   array2mrs_data(data_array, fs = fs, ft = ft, ref = ref)
 }
 
+#' Apply a function across given dimensions of a MRS data object
+#' @param mrs_data MRS data
+#' @param dims dimensions to apply the function
+#' @param fun name of the function
+#' @param ... arguments to the function
+#' @param data_only return an array rather than an MRS data object
+#' @export
 apply_mrs <- function(mrs_data, dims, fun, ..., data_only = FALSE) {
   dims <- sort(dims)
   margins <- c(1:7)[-dims]
@@ -485,6 +492,11 @@ set_ref <- function(mrs_data, ref) {
   return(mrs_data)
 }
 
+#' Check if the chemical shift dimension of an MRS data object is in the
+#' frequency domain
+#' @param mrs_data MRS data
+#' @return logical value
+#' @export
 is_fd <- function(mrs_data) {
   mrs_data$freq_domain[7]
 }

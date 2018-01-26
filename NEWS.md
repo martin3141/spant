@@ -1,4 +1,5 @@
 # spant 0.7.0
+* Added new function for frequency drift correction.
 * Added support for Siemens ima and TWIX SVS data.
 * Added support for GE p-file SVS data.
 * Added apply_axes fn.
