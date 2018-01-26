@@ -2,9 +2,7 @@
 % Please edit documentation in R/fp_corr_td.R
 \name{fp_corr_td}
 \alias{fp_corr_td}
-\title{Frequency and phase corretion of MRS data in the time-domain. This function
-is an implementation of a method published by Jamie Near et al in MRM
-73:44-50 (2015).}
+\title{Frequency and phase corretion of MRS data in the time-domain.}
 \usage{
 fp_corr_td(mrs_data, ref = NULL, xlim = NULL, max_t = 0.2)
 }
@@ -18,8 +16,10 @@ mrs_data is used if this argument is not supplied.}
 
 \item{max_t}{truncate the FID when longer than max_t to reduce time taken}
 }
+\value{
+a list containing the corrected data; phase and shift values in units
+of degrees and Hz respectivly.
+}
 \description{
-Frequency and phase corretion of MRS data in the time-domain. This function
-is an implementation of a method published by Jamie Near et al in MRM
-73:44-50 (2015).
+An implementation of the method published by Near et al MRM 73:44-50 (2015).
 }

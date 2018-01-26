@@ -1,10 +1,14 @@
-#' Frequency and phase corretion of MRS data in the time-domain. This function
-#' is an implementation of a method published by Near et al MRM 73:44-50 (2015).
+#' Frequency and phase corretion of MRS data in the time-domain.
+#' 
+#' An implementation of the method published by Near et al MRM 73:44-50 (2015).
+#' 
 #' @param mrs_data MRS data to be corrected
 #' @param ref optional MRS data to use as a reference, the first dynamic of 
 #' mrs_data is used if this argument is not supplied.
 #' @param xlim optional frequency range to perform optimsiation.
 #' @param max_t truncate the FID when longer than max_t to reduce time taken
+#' @return a list containing the corrected data; phase and shift values in units
+#' of degrees and Hz respectivly.
 #' @export
 fp_corr_td <- function(mrs_data, ref = NULL, xlim = NULL, max_t = 0.2) {
   # align to first dynamic if ref is not given
