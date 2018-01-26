@@ -807,6 +807,18 @@ get_dyns <- function(mrs_data, subset) {
   return(mrs_data)
 }
 
+#' Interleave the first and second half of a dynamic series
+#' @param mrs_data dynamic MRS data
+#' @return interleaved data
+#' @export
+interleave_dyns <- function(mrs_data) {
+  total <- dyns(mrs_data)
+  fh <- 1:(total / 2)
+  sh <- (total / 2 + 1):total
+  new_idx <- c(rbind(fh, sh))
+  get_dyns(mrs_data, new_idx)
+}
+
 set_dyns <- function(mrs_data, subset, mrs_data_in) {
   mrs_data$data[,,,, subset,,] = mrs_data_in$data[,,,, 1,,]
   return(mrs_data)
