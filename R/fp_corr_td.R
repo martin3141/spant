@@ -49,7 +49,7 @@ fp_corr_td <- function(mrs_data, ref = NULL, xlim = NULL, max_t = 0.2) {
   mrs_data$data <- mrs_data$data * mod_array
  
   # results 
-  list(corrected = mrs_data, phase = phase, shift = shift)
+  list(corrected = mrs_data, phases = phases, shifts = shifts)
 }
 
 phase_drift_obj_fn_td <- function(par, x, ref, t) {
