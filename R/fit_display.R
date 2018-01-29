@@ -20,6 +20,8 @@ plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
                            y_pos = 1, z_pos = 1, coil = 1, n = NULL,
                            sub_bl = FALSE, ...) {
   
+  .pardefault <- graphics::par(no.readonly = T)
+  
   if (is.null(n)) {
     ind <- (x$res_tab$X == x_pos) & (x$res_tab$Y == y_pos) & 
            (x$res_tab$Z == z_pos) & (x$res_tab$Dynamic == dyn) &
@@ -93,6 +95,8 @@ plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
   for (sig in plot_sigs) {
     graphics::lines(x$PPMScale, x[sig][[1]] + x$Baseline, col = "blue")
   }
+  
+  graphics::par(.pardefault)
 }
 
 #' Plot the fitting results of an object of class \code{fit_result} with 
@@ -115,6 +119,7 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0.04,
                                  y_pos = 1, z_pos = 1, coil = 1,
                                  n = NULL, sub_bl = FALSE, ...) {
   
+  .pardefault <- graphics::par(no.readonly = T)
   
   if (is.null(n)) {
     ind <- (x$res_tab$X == x_pos) & (x$res_tab$Y == y_pos) & 
@@ -183,6 +188,8 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0.04,
   for (p in 5:ncol(x)) {
     graphics::lines(x$PPMScale, x[,p])
   }
+  
+  graphics::par(.pardefault)
 }
 
 #' Print a summary of an object of class \code{fit_result}.
