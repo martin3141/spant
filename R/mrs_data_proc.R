@@ -1707,3 +1707,21 @@ int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "real") {
   
   apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
 }
+
+
+#' Calculate the sum of squares differences between two mrs_data objects
+#' @param mrs_data mrs_data oject 
+#' @param ref reference mrs_data object to calculate diferences
+#' @param xlim spectral limits to perform calculation
+#' @return an array of the sum of squared difference values
+#' @export
+calc_spec_diff <- function(mrs_data, ref = NULL, xlim = c(4, 0.5)) {
+  # diff from mean dynamic if ref not given
+  if (is.null(ref)) ref <- mean_dyns(mrs_data)
+  
+  mrs_data_crop <- crop_spec(mrs_data, xlim)
+  ref_crop <- crop_spec(ref, xlim)
+  ref_crop <- rep_dyn(ref_crop, dyns(mrs_data))
+  res <- mrs_data_crop - ref_crop
+  apply_mrs(res, 7, cplx_sum_sq, data_only = TRUE)
+}

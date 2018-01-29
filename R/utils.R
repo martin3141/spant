@@ -162,6 +162,9 @@ measure_lorentz_amp <- function(y, t, start_pnt = 10, end_pnt = 50) {
   A
 }
 
+# return the sum of squares of a complex vector
+cplx_sum_sq <- function(x) sum(Re(x) ^ 2) + sum(Im(x) ^ 2)
+
 #' Perform a polynomial fit, subtract and return the standard deviation of the
 #' residuals.
 #' @param y an array.
