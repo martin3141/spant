@@ -54,8 +54,8 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
     temp_data <- amp[n] * exp(1i * pi * phase[n] / 180 + 2i * pi * f_hz[n] * t)
     
     # LG peak model
-    temp_data <- temp_data * ((1 - lg) * exp(-lw[n] * t * pi) + 
-                              lg * exp(-lw2beta(lw[n]) * t * t))
+    temp_data <- temp_data * ((1 - lg[n]) * exp(-lw[n] * t * pi) + 
+                              lg[n] * exp(-lw2beta(lw[n]) * t * t))
     
     data <- data + temp_data
   }
