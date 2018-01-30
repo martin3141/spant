@@ -873,7 +873,7 @@ get_fh_dyns <- function(mrs_data) {
 #' @return second half of the dynamic series
 #' @export
 get_sh_dyns <- function(mrs_data) {
-  sh <- (dyns(proc) / 2 + 1):dyns(proc)
+  sh <- (dyns(mrs_data) / 2 + 1):dyns(mrs_data)
   get_dyns(mrs_data, sh)
 }
   
