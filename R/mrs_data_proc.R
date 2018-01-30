@@ -858,6 +858,24 @@ get_slice <- function(mrs_data, z_pos) {
   mrs_data$data <- mrs_data$data[,,,z_pos,,,, drop = FALSE]
   return(mrs_data)
 }
+
+#' Return the first half of a dynamic series
+#' @param mrs_data dynamic MRS data
+#' @return first half of the dynamic series
+#' @export
+get_fh_dyns <- function(mrs_data) {
+  fh <- 1:(dyns(mrs_data) / 2)
+  get_dyns(mrs_data, fh)
+}
+
+#' Return the second half of a dynamic series
+#' @param mrs_data dynamic MRS data
+#' @return second half of the dynamic series
+#' @export
+get_sh_dyns <- function(mrs_data) {
+  sh <- (dyns(proc) / 2 + 1):dyns(proc)
+  get_dyns(mrs_data, sh)
+}
   
 #' Return odd numbered dynamic scans starting from 1 (1,3,5...).
 #' @param mrs_data Dynamic MRS data.

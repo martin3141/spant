@@ -133,6 +133,7 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
     graphics::text(xlim[1],max_dp * 1.03, label, cex = 2.5)
     graphics::par(xpd = F) 
   }
+  
   graphics::par(.pardefault)
 }
 
