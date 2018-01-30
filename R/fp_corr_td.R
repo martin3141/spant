@@ -60,8 +60,10 @@ phase_drift_obj_fn_td <- function(par, x, ref, t) {
 }
 
 optim_fp <- function(x, ref, t) {
+  ctrl <- minpack.lm::nls.lm.control()
+  ctrl$maxiter <- 100
   res <- minpack.lm::nls.lm(c(0, 0), NULL, NULL, phase_drift_obj_fn_td, 
-                            jac = NULL, control = minpack.lm::nls.lm.control(),
+                            jac = NULL, control = ctrl,
                             x, ref, t)
   
   res$par
