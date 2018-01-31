@@ -12,13 +12,13 @@ fp_corr_td(mrs_data, ref = NULL, xlim = NULL, max_t = 0.2)
 \item{ref}{optional MRS data to use as a reference, the first dynamic of
 mrs_data is used if this argument is not supplied.}
 
-\item{xlim}{optional frequency range to perform optimsiation.}
+\item{xlim}{optional frequency range to perform optimisation.}
 
 \item{max_t}{truncate the FID when longer than max_t to reduce time taken}
 }
 \value{
 a list containing the corrected data; phase and shift values in units
-of degrees and Hz respectivly.
+of degrees and Hz respectively.
 }
 \description{
 An implementation of the method published by Near et al MRM 73:44-50 (2015).

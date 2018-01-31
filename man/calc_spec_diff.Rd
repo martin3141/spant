@@ -9,7 +9,7 @@ calc_spec_diff(mrs_data, ref = NULL, xlim = c(4, 0.5))
 \arguments{
 \item{mrs_data}{mrs_data oject}
 
-\item{ref}{reference mrs_data object to calculate diferences}
+\item{ref}{reference mrs_data object to calculate differences}
 
 \item{xlim}{spectral limits to perform calculation}
 }
