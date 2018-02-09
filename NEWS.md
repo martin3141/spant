@@ -1,5 +1,5 @@
 # spant 0.8.0
-* TODO
+* Updated plotting modes to be one of : "re", "im", "abs" or "arg".
 
 # spant 0.7.0
 * Added new function for frequency drift correction.
