@@ -1,3 +1,6 @@
+# spant 0.8.0
+* TODO
+
 # spant 0.7.0
 * Added new function for frequency drift correction.
 * Added support for Siemens ima and TWIX SVS data.
