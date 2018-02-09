@@ -34,7 +34,7 @@ print.mrs_data <- function(x, ...) {
 #' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
 #' @param y_scale option to display the y-axis values (logical).
 #' @param mode representation of the complex numbers to be plotted, can be one
-#' of: "real", "imag" or "abs".
+#' of: "re", "im", "mod" or "arg".
 #' @param dyn the dynamic index to plot.
 #' @param x_pos the x index to plot.
 #' @param y_pos the y index to plot.
@@ -46,7 +46,7 @@ print.mrs_data <- function(x, ...) {
 #' @param ... other arguments to pass to the plot method.
 #' @export
 plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
-                          y_scale = FALSE, mode = "real", dyn = 1, x_pos = 1,
+                          y_scale = FALSE, mode = "re", dyn = 1, x_pos = 1,
                           y_pos = 1, z_pos = 1, coil = 1, lwd = NULL, 
                           bty = NULL, label = "", ...) {
   
@@ -91,6 +91,8 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
   } else if (x_units == "seconds") {
     x_scale <- seconds(x)
     xlab <- paste(xlab, "(s)")
+  } else {
+    stop("Invalid x_units option, should be one of : 'ppm', 'hz', 'points' or 'seconds'") 
   }
   
   if (is.null(xlim)) {
@@ -103,12 +105,16 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
   graphics::par("xaxs" = "i") # tight axes limits
   plot_data <- x$data[1, x_pos, y_pos, z_pos, dyn, coil,]
   
-  if (mode == "real") {
+  if (mode == "re") {
     plot_data <- Re(plot_data)
-  } else if (mode == "imag") {
+  } else if (mode == "im") {
     plot_data <- Im(plot_data)
-  } else if (mode == "abs") {
+  } else if (mode == "mod") {
     plot_data <- Mod(plot_data)
+  } else if (mode == "arg") {
+    plot_data <- Arg(plot_data)
+  } else {
+    stop("Invalid mode option, should be one of : 're', 'im', 'mod' or 'arg'") 
   }
   
   graphics::par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
@@ -141,7 +147,7 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
 #' @param x object of class mrs_data.
 #' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
 #' @param mode representation of the complex numbers to be plotted, can be one
-#' of: "real", "imag" or "abs".
+#' of: "re", "im", "abs" or "arg".
 #' @param col Colour map to use, defaults to viridis if the package is 
 #' available.
 #' @param dim the dimension to display on the y-axis, can be one of: "dyn", "x",
@@ -153,7 +159,7 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
 #' @param coil the coil element number to plot.
 #' @param ... other arguments to pass to the plot method.
 #' @export
-image.mrs_data <- function(x, xlim = NULL, mode = "real", col = NULL, 
+image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL, 
                            dim = "dyn", x_pos = NULL, y_pos = NULL,
                            z_pos = NULL, dyn = 1, coil = 1, ...) { 
   
@@ -212,12 +218,16 @@ image.mrs_data <- function(x, xlim = NULL, mode = "real", col = NULL,
     stop("Unrecognised dim value. Should be one of: dyn, x, y, z, coil")
   } 
   
-  if (mode == "real") {
+  if (mode == "re") {
     plot_data <- Re(plot_data)
-  } else if (mode == "imag") {
+  } else if (mode == "im") {
     plot_data <- Im(plot_data)
-  } else if (mode == "abs") {
+  } else if (mode == "mod") {
     plot_data <- Mod(plot_data)
+  } else if (mode == "arg") {
+    plot_data <- Arg(plot_data)
+  } else {
+    stop("Invalid mode option, should be one of : 're', 'im', 'mod' or 'arg'") 
   }
   
   if (is.null(col)) {
@@ -250,7 +260,7 @@ stackplot <- function(x, ...) {
 #' @param x object of class mrs_data.
 #' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
 #' @param mode representation of the complex numbers to be plotted, can be one
-#' of: "real", "imag" or "abs".
+#' of: "re", "im", "abs" or "arg".
 #' @param col set the colour of the line, eg col = rgb(1,0,0,0.5).
 #' @param x_offset separate plots in the x-axis direction by this value. 
 #' Default value is 0.
@@ -264,7 +274,7 @@ stackplot <- function(x, ...) {
 #' @param coil the coil element number to plot.
 #' @param ... other arguments to pass to the matplot method.
 #' @export
-stackplot.mrs_data <- function(x, xlim = NULL, mode = "real", col = NULL, 
+stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL, 
                                x_offset = 0, y_offset = 5, dim = "dyn", 
                                x_pos = NULL, y_pos = NULL, z_pos = NULL, 
                                dyn = 1, coil = 1, ...) {
@@ -330,12 +340,16 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "real", col = NULL,
     stop("Unrecognised dim value. Should be one of: dyn, x, y, z, coil")
   } 
   
-  if (mode == "real") {
+  if (mode == "re") {
     plot_data <- Re(plot_data)
-  } else if (mode == "imag") {
+  } else if (mode == "im") {
     plot_data <- Im(plot_data)
-  } else if (mode == "abs") {
+  } else if (mode == "mod") {
     plot_data <- Mod(plot_data)
+  } else if (mode == "arg") {
+    plot_data <- Arg(plot_data)
+  } else {
+    stop("Invalid mode option, should be one of : 're', 'im', 'mod' or 'arg'") 
   }
   
   max_val <- max(abs(plot_data))

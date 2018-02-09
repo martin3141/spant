@@ -5,7 +5,7 @@
 \title{Plotting method for objects of class mrs_data.}
 \usage{
 \method{plot}{mrs_data}(x, fd = TRUE, x_units = NULL, xlim = NULL,
-  y_scale = FALSE, mode = "real", dyn = 1, x_pos = 1, y_pos = 1,
+  y_scale = FALSE, mode = "re", dyn = 1, x_pos = 1, y_pos = 1,
   z_pos = 1, coil = 1, lwd = NULL, bty = NULL, label = "", ...)
 }
 \arguments{
@@ -22,7 +22,7 @@
 \item{y_scale}{option to display the y-axis values (logical).}
 
 \item{mode}{representation of the complex numbers to be plotted, can be one
-of: "real", "imag" or "abs".}
+of: "re", "im", "mod" or "arg".}
 
 \item{dyn}{the dynamic index to plot.}
 

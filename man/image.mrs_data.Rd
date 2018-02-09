@@ -4,7 +4,7 @@
 \alias{image.mrs_data}
 \title{Image plot method for objects of class mrs_data.}
 \usage{
-\method{image}{mrs_data}(x, xlim = NULL, mode = "real", col = NULL,
+\method{image}{mrs_data}(x, xlim = NULL, mode = "re", col = NULL,
   dim = "dyn", x_pos = NULL, y_pos = NULL, z_pos = NULL, dyn = 1,
   coil = 1, ...)
 }
@@ -14,7 +14,7 @@
 \item{xlim}{the range of values to display on the x-axis, eg xlim = c(4,1).}
 
 \item{mode}{representation of the complex numbers to be plotted, can be one
-of: "real", "imag" or "abs".}
+of: "re", "im", "abs" or "arg".}
 
 \item{col}{Colour map to use, defaults to viridis if the package is
 available.}
