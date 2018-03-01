@@ -1522,24 +1522,38 @@ comb_coils <- function(metab, ref = NULL, noise = NULL,
   }
 }
 
-#' Replicate a scan in the dynamic dimension.
-#' @param mrs_data MRS data to be replicated.
-#' @param times Number of times to replicate.
-#' @return Replicated data object.
+#' Replicate a scan in the dynamic dimension
+#' @param mrs_data MRS data to be replicated
+#' @param times Number of times to replicate
+#' @return replicated data object
 #' @export
 rep_dyn <- function(mrs_data, times) {
-  orig_dim <- dim(mrs_data$data)
-  new_dim <- orig_dim
-  new_dim[5] <- new_dim[5] * times
-  # make the dynamic dimension (5th) the last
-  rep_data <- aperm(mrs_data$data, c(1,2,3,4,6,7,5))
-  # duplicate the data
-  rep_data <- rep(rep_data, times)
-  # set the new dimesnions
-  dim(rep_data) <- new_dim[c(1,2,3,4,6,7,5)]
-  # reorder
-  rep_data <- aperm(rep_data, c(1,2,3,4,7,5,6))
-  mrs_data$data <- rep_data
+  mrs_data$data <- rep_array_dim(mrs_data$data, 5, times)
+  mrs_data
+}
+
+#' Replicate a scan over a given dimension
+#' @param mrs_data MRS data to be replicated
+#' @param x_rep number of x replications
+#' @param y_rep number of y replications
+#' @param z_rep number of z replications
+#' @param dyn_rep number of dynamic replications
+#' @param coil_rep number of coil replications
+#' @return replicated data object
+#' @export
+rep_mrs <- function(mrs_data, x_rep = 1, y_rep = 1, z_rep = 1, dyn_rep = 1,
+                    coil_rep = 1) {
+  
+  old_dims <- dim(mrs_data$data) 
+  
+  if (x_rep != 1) mrs_data$data <- rep_array_dim(mrs_data$data, 2, x_rep)
+  if (y_rep != 1) mrs_data$data <- rep_array_dim(mrs_data$data, 3, y_rep)
+  if (z_rep != 1) mrs_data$data <- rep_array_dim(mrs_data$data, 4, z_rep)
+  if (dyn_rep != 1) mrs_data$data <- rep_array_dim(mrs_data$data, 5, dyn_rep)
+  if (coil_rep != 1) mrs_data$data <- rep_array_dim(mrs_data$data, 6, coil_rep)
+  
+  if (identical(old_dims, dim(mrs_data$data))) warning("Data dimensions not changed.")
+  
   mrs_data
 }
 

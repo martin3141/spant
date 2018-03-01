@@ -32,22 +32,35 @@ apply_axes <- function(x, axes, fun, ...) {
   x
 }
 
-# TODO better to use R base replicate function for this...
-# see rep dyn for example
-#rep_array_dim <- function(x, dim, n) {
-#  orig_dim <- dim(x)
-#  new_dim <- orig_dim
-#  new_dim[dim] <- new_dim[dim] * n
-#  # make the dynamic dimension (5th) the last
-#  z <- aperm(x, c(1,2,3,4,6,7,5))
-#  # duplicate the data
-#  z <- rep(z, n)
-#  # set the new dimesnions
-#  dim(z) <- new_dim[c(1,2,3,4,6,7,5)]
-#  # reorder
-#  aperm(z, c(1,2,3,4,7,5,6))
-#}
+rep_array_dim <- function(x, rep_dim, n) {
+  dims <- length(dim(x))
+  orig_dim <- dim(x)
+  new_dim <- orig_dim
+  new_dim[rep_dim] <- new_dim[rep_dim] * n
+  # make rep_dim the last dimension
+  perm_vec <- (1:dims)[-rep_dim]
+  perm_vec <- c(perm_vec, rep_dim)
+  z <- aperm(x, perm_vec)
+  # duplicate the data
+  z <- rep(z, n)
+  # set the new dimensions
+  dim(z) <- new_dim[perm_vec]
+  # reorder
+  perm_vec <- append((1:(dims - 1)), dims, rep_dim - 1)
+  aperm(z, perm_vec)
+}
 
+#rep_array_dim <- function(x, rep_dim, n) {
+#  if (dim(x)[rep_dim] != 1) stop("Starting dimension extent does not equal one.")
+#  z <- replicate(n, x)
+#  dims <- length(dim(z))
+#  perm_vec <- 1:dims
+#  perm_vec[rep_dim] <- dims
+#  perm_vec[dims] <- rep_dim
+#  z <- aperm(z, perm_vec)
+#  # drop the last dimension
+#  abind::adrop(z, dims)
+#}
 
 #' Covert a beta value in the time-domain to an equivalent linewidth in Hz:
 #' x * exp(-i * t * t * beta)

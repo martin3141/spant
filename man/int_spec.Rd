@@ -13,7 +13,7 @@ int_spec(mrs_data, xlim = NULL, scale = "ppm", mode = "real")
 
 \item{scale}{units of xlim, can be : "ppm", "Hz" or "points".}
 
-\item{mode}{spectral mode, can be : "real", "imag" or "abs".}
+\item{mode}{spectral mode, can be : "re", "im" or "mod".}
 }
 \value{
 an array of integral values.
