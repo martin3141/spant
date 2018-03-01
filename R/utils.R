@@ -32,7 +32,7 @@ apply_axes <- function(x, axes, fun, ...) {
   x
 }
 
-# TODO
+# TODO better to use R base replicate function for this...
 # see rep dyn for example
 #rep_array_dim <- function(x, dim, n) {
 #  orig_dim <- dim(x)
