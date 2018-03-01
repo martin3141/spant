@@ -1690,7 +1690,7 @@ calc_peak_info_vec <- function(data_pts, interp_f) {
 #' @param mrs_data MRS data.
 #' @param xlim spectral range to be integrated.
 #' @param scale units of xlim, can be : "ppm", "Hz" or "points".
-#' @param mode spectral mode, can be : "real", "imag" or "abs".
+#' @param mode spectral mode, can be : "re", "im" or "mod".
 #' @return an array of integral values.
 #' @export
 int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "real") {
@@ -1715,11 +1715,11 @@ int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "real") {
   
   data_arr <- mrs_data$data[,,,,,, subset, drop = F]
   
-  if (mode == "real") {
+  if (mode == "re") {
     data_arr <- Re(data_arr)
-  } else if (mode == "imag") {
+  } else if (mode == "im") {
     data_arr <- Im(data_arr)
-  } else if (mode == "abs") {
+  } else if (mode == "mod") {
     data_arr <- Mod(data_arr)
   }
   

@@ -1,5 +1,6 @@
 # spant 0.8.0
-* Updated plotting modes to be one of : "re", "im", "abs" or "arg".
+* Updated plotting modes to be one of : "re", "im", "mod" or "arg".
+* Updated int_spec function to use "re", "im", or "mod".
 
 # spant 0.7.0
 * Added new function for frequency drift correction.
