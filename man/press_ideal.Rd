@@ -4,7 +4,7 @@
 \alias{press_ideal}
 \title{PRESS sequence with ideal pulses.}
 \usage{
-press_ideal(spin_params, ft, ref, TE1, TE2)
+press_ideal(spin_params, ft, ref, TE1 = 0.01, TE2 = 0.02)
 }
 \arguments{
 \item{spin_params}{spin system definition.}

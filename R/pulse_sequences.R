@@ -48,7 +48,7 @@ pulse_acquire_31p <- function(spin_params, ft, ref) {
 #' @param TE2 TE2 sequence parameter in seconds.
 #' @return a list of resonance amplitudes and frequencies.
 #' @export
-press_ideal <- function(spin_params, ft, ref, TE1, TE2) {
+press_ideal <- function(spin_params, ft, ref, TE1 = 0.01, TE2 = 0.02) {
   
   sys <- spin_sys(spin_params, ft, ref)
   sys$rho <- -gen_F(sys, "y", "1H")
@@ -106,7 +106,7 @@ press_ideal <- function(spin_params, ft, ref, TE1, TE2) {
 #' @param TE echo time in seconds.
 #' @return a list of resonance amplitudes and frequencies.
 #' @export
-spin_echo_ideal <- function(spin_params, ft, ref, TE) {
+spin_echo_ideal <- function(spin_params, ft, ref, TE = 0.03) {
   sys <- spin_sys(spin_params, ft, ref)
   
   sys$rho <- gen_F(sys, "z")
@@ -150,7 +150,7 @@ spin_echo_ideal <- function(spin_params, ft, ref, TE) {
 #' @param TE echo time in seconds.
 #' @return a list of resonance amplitudes and frequencies.
 #' @export
-spin_echo_ideal_31p <- function(spin_params, ft, ref, TE) {
+spin_echo_ideal_31p <- function(spin_params, ft, ref, TE = 0.03) {
   sys <- spin_sys(spin_params, ft, ref)
   
   sys$rho <- gen_F(sys, "z","31P")

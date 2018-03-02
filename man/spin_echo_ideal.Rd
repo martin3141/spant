@@ -4,7 +4,7 @@
 \alias{spin_echo_ideal}
 \title{Spin echo sequence with ideal pulses.}
 \usage{
-spin_echo_ideal(spin_params, ft, ref, TE)
+spin_echo_ideal(spin_params, ft, ref, TE = 0.03)
 }
 \arguments{
 \item{spin_params}{spin system definition.}
