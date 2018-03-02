@@ -236,6 +236,7 @@ depth <- function(this) ifelse(is.list(this), 1L + max(sapply(this, depth)), 0L)
 #' Simulate MRS data with a similar appearance to normal brain (by default).
 #' @param acq_paras list of acquisition parameters or an mrs_data object. See
 #' \code{\link{def_acq_paras}}
+#' @param type type of spectrum, only "normal" is implemented currently.
 #' @param pul_seq pulse sequence function to use
 #' @param xlim range of frequencies to simulate in ppm
 #' @param full_output when FALSE (default) only output the simualted MRS data.
@@ -246,9 +247,9 @@ depth <- function(this) ifelse(is.list(this), 1L + max(sapply(this, depth)), 0L)
 #' @param ... extra parameters to pass to the pulse sequence function.
 #' @return see full_output option
 #' @export
-sim_brain_1h <- function(acq_paras = def_acq_paras(), pul_seq = press_ideal, 
-                         xlim = c(0.5, 4.2), full_output = FALSE, amps = NULL, 
-                         ...) {
+sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal",
+                         pul_seq = press_ideal, xlim = c(0.5, 4.2), 
+                         full_output = FALSE, amps = NULL,  ...) {
   
   brain_basis_paras <- get_1h_brain_basis_paras(ft = acq_paras$ft)
   
@@ -257,12 +258,16 @@ sim_brain_1h <- function(acq_paras = def_acq_paras(), pul_seq = press_ideal,
                      xlim = xlim, ...)
   
   if (is.null(amps)) {
-    amps <- c(0.000000000, 0.009799548, 0.072152490, 0.077845526, 0.045575002, 
-              0.005450371, 0.000000000, 0.028636132, 0.076469056, 0.028382618,
-              0.069602483, 0.001763720, 0.042031981, 0.013474549, 0.000000000, 
-              0.000000000, 0.015705756, 0.001903173, 0.063409950, 0.051807236,
-              0.222599530, 0.110431759, 0.023451957, 0.000000000, 0.032474090,
-              0.007033074, 0.000000000)
+    if (type == "normal") {
+      amps <- c(0.000000000, 0.009799548, 0.072152490, 0.077845526, 0.045575002, 
+                0.005450371, 0.000000000, 0.028636132, 0.076469056, 0.028382618,
+                0.069602483, 0.001763720, 0.042031981, 0.013474549, 0.000000000, 
+                0.000000000, 0.015705756, 0.001903173, 0.063409950, 0.051807236,
+                0.222599530, 0.110431759, 0.023451957, 0.000000000, 0.032474090,
+                0.007033074, 0.000000000)
+    } else {
+      stop("invalid spectrum type")
+    }
   }
 
   mrs_data <- basis2mrs_data(basis, sum_elements = TRUE, amp = amps)

@@ -4,12 +4,15 @@
 \alias{sim_brain_1h}
 \title{Simulate MRS data with a similar appearance to normal brain (by default).}
 \usage{
-sim_brain_1h(acq_paras = def_acq_paras(), pul_seq = press_ideal,
-  xlim = c(0.5, 4.2), full_output = FALSE, amps = NULL, ...)
+sim_brain_1h(acq_paras = def_acq_paras(), type = "normal",
+  pul_seq = press_ideal, xlim = c(0.5, 4.2), full_output = FALSE,
+  amps = NULL, ...)
 }
 \arguments{
 \item{acq_paras}{list of acquisition parameters or an mrs_data object. See
 \code{\link{def_acq_paras}}}
+
+\item{type}{type of spectrum, only "normal" is implemented currently.}
 
 \item{pul_seq}{pulse sequence function to use}
 
