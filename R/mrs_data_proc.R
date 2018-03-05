@@ -308,7 +308,15 @@ shift <- function(mrs_data, shift, units = "ppm") {
   
   t_orig <- rep(seconds(mrs_data), each = Nspec(mrs_data))
   t_array <- array(t_orig, dim = dim(mrs_data$data))
-  shift_array <- array(shift_hz, dim = dim(mrs_data$data))
+  
+  if (length(shift_hz) == 1) {
+    shift_array <- array(shift_hz, dim = dim(mrs_data$data))
+  } else {
+    if (length(shift_hz) != dyns(mrs_data)) stop("Shift vector has an incorrect length.")
+    # assume array should be applied in the dynamic dimension
+    shift_array <- array(shift_hz, dim = c(1,1,1,1,dyns(mrs_data),1,N(mrs_data)))
+  }
+  
   shift_array <- exp(2i * pi * t_array * shift_array)
   mrs_data$data <- mrs_data$data * shift_array
   mrs_data
@@ -321,9 +329,9 @@ shift <- function(mrs_data, shift, units = "ppm") {
 #' @return MRS data with applied phase parameters.
 #' @export
 phase <- function(mrs_data, zero_order, first_order = 0) {
-  if (first_order == 0) {
+  if ((first_order == 0) && (length(zero_order) == 1)) {
     mrs_data$data = mrs_data$data * exp(1i * zero_order * pi / 180)
-  } else {
+  } else if ((length(zero_order) == 1) && (first_order != 0)) {
     freq <- rep(hz(mrs_data), each = Nspec(mrs_data))
     freq_mat <- array(freq, dim = dim(mrs_data$data))
     # needs to be a freq-domain operation
@@ -332,6 +340,13 @@ phase <- function(mrs_data, zero_order, first_order = 0) {
     }
     mrs_data$data = mrs_data$data * exp(2i * pi * (zero_order / 360 - freq_mat
                                                    * first_order / 1000))
+  } else if ((length(zero_order) > 0) && (first_order == 0)) {
+    if (length(zero_order) != dyns(mrs_data)) stop("Shift vector has an incorrect length.")
+    # assume array should be applied in the dynamic dimension
+    phase_array <- array(zero_order, dim = c(1,1,1,1,dyns(mrs_data),1,N(mrs_data)))
+    mrs_data$data = mrs_data$data * exp(1i * phase_array * pi / 180)
+  } else {
+    stop("Unsupported input options.")
   }
   return(mrs_data)
 }

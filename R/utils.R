@@ -32,6 +32,12 @@ apply_axes <- function(x, axes, fun, ...) {
   x
 }
 
+#' Repeat an array over a given dimension
+#' @param x array
+#' @param rep_dim dimension to extend
+#' @param n number of times to repeat
+#' @return extended array
+#' @export
 rep_array_dim <- function(x, rep_dim, n) {
   dims <- length(dim(x))
   orig_dim <- dim(x)
