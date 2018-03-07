@@ -2,7 +2,7 @@
 % Please edit documentation in R/image_reg.R
 \name{spm_pve2categorical}
 \alias{spm_pve2categorical}
-\title{Convert SPM style segmentation files to a single catagorical image where
+\title{Convert SPM style segmentation files to a single categorical image where
 the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM.}
 \usage{
 spm_pve2categorical(fname)
@@ -14,6 +14,6 @@ spm_pve2categorical(fname)
 nifti object
 }
 \description{
-Convert SPM style segmentation files to a single catagorical image where
+Convert SPM style segmentation files to a single categorical image where
 the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM.
 }

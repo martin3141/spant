@@ -83,7 +83,7 @@ get_voi_seg <- function(voi, mri_seg) {
   return(pvs)
 }
 
-#' Convert SPM style segmentation files to a single catagorical image where
+#' Convert SPM style segmentation files to a single categorical image where
 #' the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM.
 #' @param fname any of the segmentation files (eg c1_MY_T1.nii)
 #' @return nifti object 

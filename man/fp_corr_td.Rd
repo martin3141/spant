@@ -2,7 +2,7 @@
 % Please edit documentation in R/fp_corr_td.R
 \name{fp_corr_td}
 \alias{fp_corr_td}
-\title{Frequency and phase corretion of MRS data in the time-domain.}
+\title{Frequency and phase correction of MRS data in the time-domain.}
 \usage{
 fp_corr_td(mrs_data, ref = NULL, xlim = NULL, max_t = 0.2)
 }

@@ -1,4 +1,4 @@
-#' Frequency and phase corretion of MRS data in the time-domain.
+#' Frequency and phase correction of MRS data in the time-domain.
 #' 
 #' An implementation of the method published by Near et al MRM 73:44-50 (2015).
 #' 

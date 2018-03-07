@@ -18,7 +18,7 @@ sim_brain_1h(acq_paras = def_acq_paras(), type = "normal",
 
 \item{xlim}{range of frequencies to simulate in ppm}
 
-\item{full_output}{when FALSE (default) only output the simualted MRS data.
+\item{full_output}{when FALSE (default) only output the simulated MRS data.
 When TRUE output a list containing the MRS data, basis set object and
 corresponding amplitudes.}
 

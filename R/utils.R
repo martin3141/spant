@@ -245,7 +245,7 @@ depth <- function(this) ifelse(is.list(this), 1L + max(sapply(this, depth)), 0L)
 #' @param type type of spectrum, only "normal" is implemented currently.
 #' @param pul_seq pulse sequence function to use
 #' @param xlim range of frequencies to simulate in ppm
-#' @param full_output when FALSE (default) only output the simualted MRS data.
+#' @param full_output when FALSE (default) only output the simulated MRS data.
 #' When TRUE output a list containing the MRS data, basis set object and 
 #' corresponding amplitudes.
 #' @param amps a vector of basis amplitudes may be specified to modify the
