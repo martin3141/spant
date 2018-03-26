@@ -1,3 +1,5 @@
+# spant 0.10.0
+
 # spant 0.9.0
 * Updated plotting modes to be one of : "re", "im", "mod" or "arg".
 * Updated int_spec function to use "re", "im", or "mod".
