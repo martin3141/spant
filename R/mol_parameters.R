@@ -12,7 +12,9 @@ get_mol_paras <- function(name, ...) {
 #' @export
 get_mol_names <- function() {
   funs <- ls(getNamespace("spant"), all.names = TRUE)
-  funs <- funs[!funs %in% c("get_mol_paras")]
+  funs <- funs[!funs %in% c("get_mol_paras", "get_acq_paras",
+                            "get_1h_brain_basis_paras")]
+  
   sub("_paras", "", sub("get_", "", funs[grep("get_.*_paras", funs)]))
 }
 

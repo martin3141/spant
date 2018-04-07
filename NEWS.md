@@ -1,4 +1,5 @@
 # spant 0.10.0
+* Bug fix for get_mol_names function.
 
 # spant 0.9.0
 * Updated plotting modes to be one of : "re", "im", "mod" or "arg".
