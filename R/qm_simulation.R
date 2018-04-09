@@ -1,3 +1,9 @@
+#' Create a spin system object for pulse sequence simulation
+#' @param spin_params an object describing the spin system properties
+#' @param ft transmitter frequency in Hz
+#' @param ref reference value for ppm scale
+#' @return spin system object
+#' @export
 spin_sys <- function(spin_params, ft, ref) {
   # TODO checks on input
   
@@ -50,6 +56,13 @@ H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, ft, ref) {
   H_mat
 }
 
+#' Simulate pulse sequence acquisition.
+#' @param sys spin system object
+#' @param rec_phase reciever phase in degrees
+#' @param tol ignore resonance amplitudes below this threshold
+#' @param detect detection nuclie
+#' @return a list of resonance amplitudes and frequencies
+#' @export
 acquire <- function(sys, rec_phase = 180, tol = 1e-4, detect = NULL) {
   if (is.null(detect)) {
     Fp <- gen_F(sys, "p")
@@ -69,6 +82,12 @@ acquire <- function(sys, rec_phase = 180, tol = 1e-4, detect = NULL) {
   list(amps = amps, freqs = freqs)
 }
 
+#' Generate the F product operator
+#' @param sys spin system object
+#' @param op operator, one of "x", "y", "z", "p", "m"
+#' @param detect detection nuclei
+#' @return F product operator matrix
+#' @export
 gen_F <- function(sys, op, detect=NULL) {
   basis_size <- prod(sys$spin_num * 2 + 1)
   F_mat <- matrix(0, basis_size, basis_size)
