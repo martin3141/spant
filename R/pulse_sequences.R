@@ -186,3 +186,158 @@ seq_spin_echo_ideal_31p <- function(spin_params, ft, ref, TE = 0.03) {
   # acquire
   acquire(sys, detect = "31P")
 }
+
+#' CPMG style sequence with ideal pulses.
+#' @param spin_params spin system definition.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @param TE echo time in seconds.
+#' @param echoes number of echoes.
+#' @return a list of resonance amplitudes and frequencies.
+#' @export
+seq_cpmg_ideal <- function(spin_params, ft, ref, TE = 0.03, echoes = 4) {
+  sys <- spin_sys(spin_params, ft, ref)
+  sys$rho <- -gen_F(sys, "y", "1H")
+  
+  # calc delay operator
+  t <- TE / (echoes * 2)
+  # find the inverse of the eigenvector matrix
+  eig_vec_inv <- solve(sys$H_eig_vecs)
+  lhs <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*%
+         eig_vec_inv
+  
+  rhs <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * t)) %*%
+         eig_vec_inv
+  
+  # calc pulse operator
+  angle <- 180
+  Fy <- gen_F(sys, "y", "1H")
+  lhs_pulse <- complexplus::matexp(-Fy * 1i * angle * pi / 180)
+  rhs_pulse <- complexplus::matexp(Fy * 1i * angle * pi / 180)
+    
+  sys$rho <- lhs %*% sys$rho %*% rhs
+  sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
+  if (echoes > 1) {
+    for (n in 1:(echoes - 1)) {
+      sys$rho <- lhs %*% sys$rho %*% rhs
+      sys$rho <- lhs %*% sys$rho %*% rhs
+      sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
+    }
+  }
+    
+  sys$rho <- lhs %*% sys$rho %*% rhs
+  
+  # acquire
+  acq_res <- acquire(sys, detect = "1H")
+}
+
+#' MEGA-PRESS sequence with ideal localisation pulses and Gaussian shaped
+#' editing pulse.
+#' @param spin_params spin system definition.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @param ed_freq editing pulse frequency in ppm.
+#' @param TE1 TE1 sequence parameter in seconds.
+#' @param TE2 TE2 sequence parameter in seconds.
+#' @param BW editing pulse bandwidth in Hz.
+#' @param steps number of hard pulses used to approximate the editing pulse.
+#' @return a list of resonance amplitudes and frequencies.
+#' @export
+seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89, TE1 = 0.015, 
+                             TE2 = 0.053, BW = 110, steps = 50) {
+ 
+  # ed pulse duration 
+  duration <- 1.53 / BW # 180 deg 1% Guass (p245 de Graff)
+  #print(duration)
+  
+  sys <- spin_sys(spin_params, ft, ed_freq)
+  sys$rho <- -gen_F(sys, "y", "1H")
+  
+  # apply delay
+  t = TE1 / 2
+  
+  # find the inverse of the eigenvector matrix
+  eig_vec_inv <- solve(sys$H_eig_vecs)
+  lhs <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*%
+    eig_vec_inv
+  
+  rhs <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * t)) %*%
+    eig_vec_inv
+  
+  sys$rho <- lhs %*% sys$rho %*% rhs
+  
+  # apply pulse
+  angle <- 180
+  Fy <- gen_F(sys, "y", "1H")
+  lhs_pulse <- complexplus::matexp(-Fy * 1i * angle * pi / 180)
+  rhs_pulse <- complexplus::matexp(Fy * 1i * angle * pi / 180)
+  sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
+  
+  # apply delay
+  t <- (TE1 + TE2 / 2) / 2 - duration / 2
+  if (t < 0) stop("Error, negative delay duration required.")
+  lhs <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*% 
+    eig_vec_inv
+  
+  rhs <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * t)) %*% 
+    eig_vec_inv
+  
+  sys$rho <- lhs %*% sys$rho %*% rhs
+  
+  # apply selective 180
+  pulse <- get_guassian_pulse(180, steps)
+  dt <- duration / steps
+  
+  eig_vec_inv <- solve(sys$H_eig_vecs)
+  lhs_dt <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * dt)) %*%
+    eig_vec_inv
+  
+  rhs_dt <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * dt)) %*%
+         eig_vec_inv
+  
+  for (x in pulse) {
+    angle <- x
+    Fx <- gen_F(sys, "y", "1H")
+    lhs_pulse_gaus <- complexplus::matexp(-Fx * 1i * angle)
+    rhs_pulse_gaus <- complexplus::matexp(Fx * 1i * angle)
+    sys$rho <- lhs_pulse_gaus %*% sys$rho %*% rhs_pulse_gaus
+    sys$rho <- lhs_dt %*% sys$rho %*% rhs_dt
+  }
+  
+  # apply TE2/4 delay
+  t = TE2 / 4 - duration / 2
+  if (t < 0) stop("Error, negative delay duration required.")
+  lhs <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*%
+         eig_vec_inv
+  
+  rhs <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * t)) %*%
+         eig_vec_inv
+  
+  sys$rho <- lhs %*% sys$rho %*% rhs
+  
+  # apply pulse
+  sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
+  
+  # apply TE2/4 delay
+  sys$rho <- lhs %*% sys$rho %*% rhs
+  
+  # apply selective 180 
+  for (x in pulse) {
+    angle <- x
+    Fx <- gen_F(sys, "x", "1H")
+    lhs_pulse_gaus <- complexplus::matexp(-Fx * 1i * angle)
+    rhs_pulse_gaus <- complexplus::matexp(Fx * 1i * angle)
+    sys$rho <- lhs_pulse_gaus %*% sys$rho %*% rhs_pulse_gaus
+    sys$rho <- lhs_dt %*% sys$rho %*% rhs_dt
+  }
+  
+  # apply TE2/4 delay
+  sys$rho <- lhs %*% sys$rho %*% rhs
+
+  # acquire
+  acq_res <- acquire(sys, detect = "1H")
+  
+  # shift back to requested ref
+  acq_res$freqs <- acq_res$freqs + (ref - ed_freq) * ft / 1e6
+  acq_res
+}
