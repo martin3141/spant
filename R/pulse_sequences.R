@@ -354,7 +354,8 @@ seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02) {
   
   # TODO, compare results with the method described by Young et al JMR 140,
   # 146-152 (1999) where a rotation about the z-axis is used instead of 
-  # the Fxy operator
+  # the Fxy operator. Current implementation reproduces Fig.2 in this paper
+  # pretty well (at first glance).
   
   sys <- spin_sys(spin_params, ft, ref)
   sys$rho <- gen_F(sys, "z")
