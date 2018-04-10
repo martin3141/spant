@@ -254,7 +254,7 @@ depth <- function(this) ifelse(is.list(this), 1L + max(sapply(this, depth)), 0L)
 #' @return see full_output option
 #' @export
 sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal",
-                         pul_seq = press_ideal, xlim = c(0.5, 4.2), 
+                         pul_seq = seq_press_ideal, xlim = c(0.5, 4.2), 
                          full_output = FALSE, amps = NULL,  ...) {
   
   brain_basis_paras <- get_1h_brain_basis_paras(ft = acq_paras$ft)

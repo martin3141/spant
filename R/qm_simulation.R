@@ -247,7 +247,7 @@ sim_basis_1h_brain_press <- function(acq_paras = def_acq_paras(),
   }
   
   sim_basis(get_1h_brain_basis_paras(ft = acq_paras$ft, lcm_compat = lcm_compat), 
-                                     press_ideal, fs = acq_paras$fs, 
+                                     seq_press_ideal, fs = acq_paras$fs, 
                                      N = acq_paras$N, ref = acq_paras$ref,
                                      ft = acq_paras$ft, xlim = xlim, TE1 = TE1,
                                      TE2 = TE2)
@@ -272,7 +272,7 @@ get_mol_para_list_names <- function(mol_para_list) {
 #' @param ... Extra parameters to pass to the pulse sequence function.
 #' @return A basis object.
 #' @export
-sim_basis <- function(mol_list, pul_seq = pulse_acquire, ft = def_ft(),
+sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire, ft = def_ft(),
                       ref = def_ref(), fs = def_fs(), N = def_N(),
                       xlim = NULL, ...) {
   
@@ -298,7 +298,7 @@ sim_basis <- function(mol_list, pul_seq = pulse_acquire, ft = def_ft(),
 #' @param ... Extra parameters to pass to the pulse sequence function.
 #' @return An \code{mrs_data} object.
 #' @export
-sim_mol <- function(mol, pul_seq = pulse_acquire, ft = def_ft(), 
+sim_mol <- function(mol, pul_seq = seq_pulse_acquire, ft = def_ft(), 
                     ref = def_ref(), fs = def_fs(), N = def_N(),
                     xlim = NULL, ...) {
   # create empty fid

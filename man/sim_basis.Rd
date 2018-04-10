@@ -4,7 +4,7 @@
 \alias{sim_basis}
 \title{Simulate a basis set object.}
 \usage{
-sim_basis(mol_list, pul_seq = pulse_acquire, ft = def_ft(),
+sim_basis(mol_list, pul_seq = seq_pulse_acquire, ft = def_ft(),
   ref = def_ref(), fs = def_fs(), N = def_N(), xlim = NULL, ...)
 }
 \arguments{

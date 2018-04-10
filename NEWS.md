@@ -1,5 +1,15 @@
 # spant 0.10.0
 * Bug fix for get_mol_names function.
+* The names of in-built pulse sequence functions now all start with seq_* to
+make them easier to find.
+* Added a notes field to mol.paras object to cite the origin of the numbers - 
+TODO
+* def_acq_paras function now accepts arguments to override the defaults - TODO
+* sim_mol function changed to accept def_acq_para object - TODO
+* Added new funcitons to simulate the following MRS sequences: CPMG, MEGA-PRESS, 
+STEAM, semi-LASER - TODO
+* Added a function to write basis objects as RAW LCModel format. - TODO
+* stackplot function now accepts labels - TODO
 
 # spant 0.9.0
 * Updated plotting modes to be one of : "re", "im", "mod" or "arg".

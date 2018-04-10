@@ -4,7 +4,7 @@
 \alias{sim_mol}
 \title{Simulate a \code{mol_parameter} object.}
 \usage{
-sim_mol(mol, pul_seq = pulse_acquire, ft = def_ft(), ref = def_ref(),
+sim_mol(mol, pul_seq = seq_pulse_acquire, ft = def_ft(), ref = def_ref(),
   fs = def_fs(), N = def_N(), xlim = NULL, ...)
 }
 \arguments{
