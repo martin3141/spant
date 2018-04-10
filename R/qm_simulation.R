@@ -124,14 +124,14 @@ qn_states <- function(sys) {
   outer(states_vec, states_vec, '-')
 }
 
-#' Zero the positive quantum coherences of a density matrix
+#' Zero all non-zero-order coherences
 #' @param sys spin system object
 #' @param rho density matrix
 #' @return density matrix
 #' @export
-zero_pqcs <- function(sys, rho) {
+zero_nzoc <- function(sys, rho) {
   qn_states <- qn_states(sys)
-  rho[qn_states > 0] <- 0
+  rho[qn_states != 0] <- 0
   rho
 }
 

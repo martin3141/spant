@@ -352,6 +352,10 @@ seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89, TE1 = 0.0
 #' @export
 seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02) {
   
+  # TODO, compare results with the method described by Young et al JMR 140,
+  # 146-152 (1999) where a rotation about the z-axis is used instead of 
+  # the Fxy operator
+  
   sys <- spin_sys(spin_params, ft, ref)
   sys$rho <- gen_F(sys, "z")
   
@@ -390,9 +394,9 @@ seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02) {
     angle <- 90
     Fxy <- gen_F_xy(sys, phase, "1H")
     # these lines give warnings because cos(90*pi/180) isn't exactly zero
-    # but that's ok
-    lhs_xy_pulse <- complexplus::matexp(-Fxy * 1i * angle * pi / 180)
-    rhs_xy_pulse <- complexplus::matexp(Fxy * 1i * angle * pi / 180)
+    # but that's ok - so suppressWarnings
+    lhs_xy_pulse <- suppressWarnings(complexplus::matexp(-Fxy * 1i * angle * pi / 180))
+    rhs_xy_pulse <- suppressWarnings(complexplus::matexp(Fxy * 1i * angle * pi / 180))
     
     # first 90
     rho <- lhs_xy_pulse %*% sys$rho %*% rhs_xy_pulse
@@ -400,10 +404,10 @@ seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02) {
     rho <- lhs_half_te %*% rho %*% rhs_half_te
     # second 90
     rho <- lhs_x_pulse %*% rho %*% rhs_x_pulse
+    # zero non-zero-order coherences
+    rho <- zero_nzoc(sys, rho)
     # evole TM
     rho <- lhs_tm %*% rho %*% rhs_tm
-    # zero positive coherences
-    rho <- zero_pqcs(sys, rho)
     # third 90
     rho <- lhs_xy_pulse %*% rho %*% rhs_xy_pulse
     # evole TE/2
