@@ -9,6 +9,7 @@ TODO
 STEAM, semi-LASER - TODO
 * Added a function to write basis objects as RAW LCModel format. - TODO
 * stackplot function now accepts labels - TODO
+* Check MEGA-PRESS editing pulse phases - TODO
 
 # spant 0.9.0
 * Updated plotting modes to be one of : "re", "im", "mod" or "arg".

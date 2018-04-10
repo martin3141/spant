@@ -17,7 +17,7 @@ seq_mega_press_ideal(spin_params, ft, ref, ed_freq = 1.89, TE1 = 0.015,
 
 \item{ed_freq}{editing pulse frequency in ppm.}
 
-\item{TE1}{TE1 sequence parameter in seconds.}
+\item{TE1}{TE1 sequence parameter in seconds (TE=TE1+TE2).}
 
 \item{TE2}{TE2 sequence parameter in seconds.}
 

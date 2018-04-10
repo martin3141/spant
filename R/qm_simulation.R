@@ -88,7 +88,7 @@ acquire <- function(sys, rec_phase = 180, tol = 1e-4, detect = NULL) {
 #' @param detect detection nuclei
 #' @return F product operator matrix
 #' @export
-gen_F <- function(sys, op, detect=NULL) {
+gen_F <- function(sys, op, detect = NULL) {
   basis_size <- prod(sys$spin_num * 2 + 1)
   F_mat <- matrix(0, basis_size, basis_size)
   if (is.null(detect)) {
@@ -101,6 +101,38 @@ gen_F <- function(sys, op, detect=NULL) {
     F_mat = F_mat + gen_I(n, sys$spin_num, op)
   }
   F_mat
+}
+
+#' Generate the Fxy product operator with a specified phase
+#' @param sys spin system object
+#' @param phase phase angle in degrees
+#' @param detect detection nuclei
+#' @return product operator matrix
+#' @export
+gen_F_xy <- function(sys, phase, detect = NULL) {
+  F_mat <- cos(phase * pi / 180) * gen_F(sys, "x", detect) +
+           sin(phase * pi / 180) * gen_F(sys, "y", detect)
+  F_mat
+}
+
+#' Get the quantum coherence matrix for a spin system
+#' @param sys spin system object
+#' @return quantum coherence number matrix
+qn_states <- function(sys) {
+  Fz <- gen_F(sys, "z")
+  states_vec <- diag(Fz)
+  outer(states_vec, states_vec, '-')
+}
+
+#' Zero the positive quantum coherences of a density matrix
+#' @param sys spin system object
+#' @param rho density matrix
+#' @return density matrix
+#' @export
+zero_pqcs <- function(sys, rho) {
+  qn_states <- qn_states(sys)
+  rho[qn_states > 0] <- 0
+  rho
 }
 
 gen_I <- function(n, spin_num, op) {
