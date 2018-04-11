@@ -2,7 +2,8 @@
 % Please edit documentation in R/spant.R
 \name{def_acq_paras}
 \alias{def_acq_paras}
-\title{Return a list of the default acquisition parameters.}
+\title{Return (and optionally modify using the input arguments) a list of the
+default acquisition parameters.}
 \usage{
 def_acq_paras(ft = getOption("spant.def_ft"),
   fs = getOption("spant.def_fs"), N = getOption("spant.def_N"),
@@ -27,5 +28,6 @@ A list containing the following elements:
 }
 }
 \description{
-Return a list of the default acquisition parameters.
+Return (and optionally modify using the input arguments) a list of the
+default acquisition parameters.
 }

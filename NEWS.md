@@ -4,8 +4,7 @@
 make them easier to find.
 * stackplot function now accepts labels argument and time-domain plotting.
 * def_acq_paras function now accepts arguments to override the defaults.
-* Added a notes field to mol.paras object to cite the origin of the numbers - 
-TODO
+* Added a source field to mol.paras object to cite the origin of the values.
 * Added new functions to simulate the following MRS sequences: CPMG, MEGA-PRESS, 
 STEAM, semi-LASER - TODO
 * Added a function to write basis objects as RAW LCModel format. - TODO
