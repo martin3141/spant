@@ -10,6 +10,7 @@ TODO
 STEAM, semi-LASER - TODO
 * Added a function to write basis objects as RAW LCModel format. - TODO
 * Add phase cycling to MEGA-PRESS sequence - TODO
+* Option to add labels to stackplot of mrs_fit object - TODO.
 
 # spant 0.9.0
 * Updated plotting modes to be one of : "re", "im", "mod" or "arg".
