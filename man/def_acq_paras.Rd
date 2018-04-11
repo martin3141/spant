@@ -4,7 +4,18 @@
 \alias{def_acq_paras}
 \title{Return a list of the default acquisition parameters.}
 \usage{
-def_acq_paras()
+def_acq_paras(ft = getOption("spant.def_ft"),
+  fs = getOption("spant.def_fs"), N = getOption("spant.def_N"),
+  ref = getOption("spant.def_ref"))
+}
+\arguments{
+\item{ft}{specify the transmitter frequency in Hz.}
+
+\item{fs}{specity the sampling frequency in Hz.}
+
+\item{N}{specify the number of data points in the spectral dimension.}
+
+\item{ref}{specify the reference value for ppm scale.}
 }
 \value{
 A list containing the following elements:
