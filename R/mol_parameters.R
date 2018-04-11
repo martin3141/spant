@@ -58,10 +58,10 @@ print.mol_parameters <- function(x, ...) {
       cat("j-coupling matrix\n")
       rownames(x$spin_groups[[n]]$j_coupling_mat) <- x$spin_groups[[n]]$chem_shift
       colnames(x$spin_groups[[n]]$j_coupling_mat) <- x$spin_groups[[n]]$chem_shift
-      j_mat <- x$spin_groups[[n]]$j_coupling_mat
+      j_mat <- x$spin_groups[[n]]$j_coupling_ma
       j_mat[upper.tri(j_mat, diag = TRUE)] <- NA
       j_mat[j_mat == 0] <- NA
-      #j_mat <- t(j_mat)
+      #j_mat <- t(j_mat)t
       print(j_mat, na.print = "-")
     }
   }
@@ -134,10 +134,39 @@ get_cr_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
+get_gaba_paras <- function(lw = NULL, lg = 0) {
+  if (is.null(lw)) lw = 2
+  nucleus <- rep("1H", 6)
+  chem_shift <- c(3.0128, 3.0128, 1.889, 1.889, 2.284, 2.284)
+  j_coupling_mat <- matrix(0, 6, 6)
+  j_coupling_mat[2,1] <- -12.021
+  j_coupling_mat[3,1] <- 5.372
+  j_coupling_mat[4,1] <- 7.127
+  j_coupling_mat[3,2] <- 10.578
+  j_coupling_mat[4,2] <- 6.982
+  j_coupling_mat[4,3] <- -13.121
+  j_coupling_mat[5,3] <- 7.755
+  j_coupling_mat[6,3] <- 7.432
+  j_coupling_mat[5,4] <- 6.173
+  j_coupling_mat[6,4] <- 7.933
+  j_coupling_mat[6,5] <- -10.744
+  
+  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 1,
+                       lw = lw, lg = lg)
+  
+  source <- "Corrigendum: Proton NMR chemical shifts and coupling constants for brain metabolites.
+              NMR Biomed. 2000; 13: 129-153."
+  
+  paras <- list(spin_groups = list(spin_group_a), name = "GABA", source = source)
+  class(paras) <- "mol_parameters"
+  paras
+}
+
 get_gaba_jn_paras <- function(lw = NULL, lg = 0) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 6)
-  chem_shift <- c(2.2840, 2.2840, 1.8880, 1.880, 3.0130, 3.0130)
+  chem_shift <- c(2.2840, 2.2840, 1.8880, 1.8880, 3.0130, 3.0130)
   j_coupling_mat <- matrix(0, 6, 6)
   j_coupling_mat[2,1] <- -15.938
   j_coupling_mat[3,1] <- 7.678
