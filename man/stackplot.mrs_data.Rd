@@ -4,9 +4,10 @@
 \alias{stackplot.mrs_data}
 \title{Stackplot plotting method for objects of class mrs_data.}
 \usage{
-\method{stackplot}{mrs_data}(x, xlim = NULL, mode = "re", col = NULL,
-  x_offset = 0, y_offset = 5, dim = "dyn", x_pos = NULL, y_pos = NULL,
-  z_pos = NULL, dyn = 1, coil = 1, ...)
+\method{stackplot}{mrs_data}(x, xlim = NULL, mode = "re", x_units = NULL,
+  fd = TRUE, col = NULL, x_offset = 0, y_offset = 5, dim = "dyn",
+  x_pos = NULL, y_pos = NULL, z_pos = NULL, dyn = 1, coil = 1,
+  labels = NULL, right_marg = NULL, ...)
 }
 \arguments{
 \item{x}{object of class mrs_data.}
@@ -15,6 +16,12 @@
 
 \item{mode}{representation of the complex numbers to be plotted, can be one
 of: "re", "im", "abs" or "arg".}
+
+\item{x_units}{the units to use for the x-axis, can be one of: "ppm", "hz",
+"points" or "seconds".}
+
+\item{fd}{display data in the frequency-domain (default), or time-domain
+(logical).}
 
 \item{col}{set the colour of the line, eg col = rgb(1,0,0,0.5).}
 
@@ -35,6 +42,10 @@ Default value is 0.}
 \item{dyn}{the dynamic index to plot.}
 
 \item{coil}{the coil element number to plot.}
+
+\item{labels}{add labels to each data item.}
+
+\item{right_marg}{change the size of the right plot margin.}
 
 \item{...}{other arguments to pass to the matplot method.}
 }

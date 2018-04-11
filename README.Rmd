@@ -73,7 +73,7 @@ mrs_proc <- align(mrs_proc, 2.01)
 plot(mrs_proc, xlim = c(5, 0.5))
 ```
 
-```{r basis_sim, message = FALSE}
+```{r basis_sim, message = FALSE, fig.height=9}
 # simulate a typical basis set for short TE brain analysis
 basis <- sim_basis_1h_brain_press(mrs_proc)
 
@@ -81,7 +81,7 @@ basis <- sim_basis_1h_brain_press(mrs_proc)
 print(basis)
 
 # plot basis signals
-stackplot(basis, xlim = c(4, 0.5))
+stackplot(basis, xlim = c(4, 0.5), labels = basis$names)
 ```
 
 ```{r fitting, message = FALSE}

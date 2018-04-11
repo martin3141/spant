@@ -98,7 +98,7 @@ print(basis)
 #> PCr,sIns,Tau
 
 # plot basis signals
-stackplot(basis, xlim = c(4, 0.5))
+stackplot(basis, xlim = c(4, 0.5), labels = basis$names)
 ```
 
 ![](README-basis_sim-1.png)

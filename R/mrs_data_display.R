@@ -261,6 +261,10 @@ stackplot <- function(x, ...) {
 #' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
 #' @param mode representation of the complex numbers to be plotted, can be one
 #' of: "re", "im", "abs" or "arg".
+#' @param fd display data in the frequency-domain (default), or time-domain 
+#' (logical).
+#' @param x_units the units to use for the x-axis, can be one of: "ppm", "hz", 
+#' "points" or "seconds".
 #' @param col set the colour of the line, eg col = rgb(1,0,0,0.5).
 #' @param x_offset separate plots in the x-axis direction by this value. 
 #' Default value is 0.
@@ -272,28 +276,61 @@ stackplot <- function(x, ...) {
 #' @param z_pos the z index to plot.
 #' @param dyn the dynamic index to plot.
 #' @param coil the coil element number to plot.
+#' @param labels add labels to each data item.
+#' @param right_marg change the size of the right plot margin.
 #' @param ... other arguments to pass to the matplot method.
 #' @export
-stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL, 
-                               x_offset = 0, y_offset = 5, dim = "dyn", 
-                               x_pos = NULL, y_pos = NULL, z_pos = NULL, 
-                               dyn = 1, coil = 1, ...) {
+stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
+                               fd = TRUE, col = NULL, x_offset = 0,
+                               y_offset = 5, dim = "dyn", x_pos = NULL, 
+                               y_pos = NULL, z_pos = NULL, dyn = 1, coil = 1, 
+                               labels = NULL, right_marg = NULL, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
-  if (!is_fd(x)) {
+  # convert to the correct domain for plotting
+  if (fd & !is_fd(x)) {
     x <- td2fd(x)
+  } else if (!fd & is_fd(x)) {
+    x <- fd2td(x)
   }
   
-  if (is.null(col)) {
-    col <- 1
-  }
+  if (is.null(col)) col <- 1
   
-  #par("xaxs" = "i") # tight axes limits
+  if (is.null(right_marg) && is.null(labels)) right_marg = 1
+  if (is.null(right_marg) && !is.null(labels)) right_marg = 4
+  
+  graphics::par("xaxs" = "i") # tight axes limits
   graphics::par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
-  graphics::par(mar = c(3.5, 1, 1, 1)) # margins
+  graphics::par(mar = c(3.5, 1, 1, right_marg)) # margins
   
-  x_scale <- ppm(x)
+  if (fd) {
+    xlab <- "Chemical Shift"  
+  } else {
+    xlab <- "Time"  
+  }
+  
+  if (is.null(x_units) & fd) {
+    x_units = "ppm"
+  } else if (is.null(x_units) & !fd) {
+    x_units = "seconds"
+  }
+  
+  if ( x_units == "ppm" ) {
+    x_scale <- ppm(x)
+    xlab <- paste(xlab, "(ppm)")
+  } else if (x_units == "hz") {
+    x_scale <- hz(x)
+    xlab <- paste(xlab, "(Hz)")
+  } else if (x_units == "points") {
+    x_scale <- pts(x)
+    xlab <- paste(xlab, "(Data Points)")
+  } else if (x_units == "seconds") {
+    x_scale <- seconds(x)
+    xlab <- paste(xlab, "(s)")
+  } else {
+    stop("Invalid x_units option, should be one of : 'ppm', 'hz', 'points' or 'seconds'") 
+  }
   
   if (is.null(xlim)) {
     xlim <- c(x_scale[1], x_scale[N(x)])
@@ -369,13 +406,26 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
   
   x_scale_mat <- x_scale_mat + x_offset_mat
   
+  xlim <- range(x_scale_mat)
+  if ( x_units == "ppm" ) xlim <- rev(xlim)
+    
   graphics::matplot(x_scale_mat[length(subset):1,],
                     plot_data[length(subset):1,], type = "l", 
-                    lty = 1, col = col, xlab = "Frequency (PPM)", ylab = "",
-                    yaxt = "n", xaxt = "n", xlim = rev(range(x_scale_mat)),
+                    lty = 1, col = col, xlab = xlab, ylab = "",
+                    yaxt = "n", xaxt = "n", xlim = xlim,
                     bty = "n", ...)
   
   graphics::axis(1, pretty(xlim))
+  
+  # allow text outside axes
+  graphics::par(xpd = NA)
+  
+  # write text labels if provided
+  if (!is.null(labels)) {
+    for (n in 1:length(labels)) {
+      graphics::text(xlim[2] , y_offset_vec[n], labels[n], pos = 4)
+    }
+  }
   
   #graphics::matplot(x_scale[subset][length(subset):1],
   #                  plot_data[length(subset):1,], type = "l", xlim = xlim,
