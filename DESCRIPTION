@@ -31,7 +31,9 @@ Imports:
     grDevices,
     smoother,
     svd,
-    tkrplot
+    tkrplot,
+    Rcpp,
+    RcppEigen
 Suggests:
     oro.nifti,
     MASS,
@@ -51,3 +53,6 @@ Suggests:
 VignetteBuilder:
     knitr
 Encoding: UTF-8
+LinkingTo: 
+    Rcpp,
+    RcppEigen

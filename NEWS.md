@@ -1,5 +1,6 @@
 # spant 0.10.0
 * Bug fix for get_mol_names function.
+* Simulation performance improvements.
 * The names of in-built pulse sequence functions now all start with seq_* to
 make them easier to find.
 * stackplot function now accepts labels argument and time-domain plotting.
@@ -8,7 +9,6 @@ make them easier to find.
 * Added new functions to simulate the following MRS sequences: CPMG, MEGA-PRESS, 
 STEAM, semi-LASER - TODO
 * Added a function to write basis objects as RAW LCModel format. - TODO
-* Add phase cycling to MEGA-PRESS sequence - TODO
 * Option to add labels to stackplot of mrs_fit object - TODO.
 
 # spant 0.9.0

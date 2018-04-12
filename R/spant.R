@@ -11,6 +11,13 @@
 #' 
 "_PACKAGE"
 
+# next chunk is for Rcpp and RcppEigen
+#' @useDynLib spant
+#' @import RcppEigen
+#' @importFrom Rcpp sourceCpp
+#' @importFrom Rcpp evalCpp
+NULL
+
 #' Example MEGA-PRESS data with significant B0 drift.
 "spant_mpress_drift"
 
