@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
   fig.height = 4
 )
 ```
-spant
+Spectroscopy Analysis Tools (spant)
 =====
 
 [![Travis Build Status](https://travis-ci.org/martin3141/spant.svg?branch=master)](https://travis-ci.org/martin3141/spant) 
