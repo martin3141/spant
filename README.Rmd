@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
   fig.height = 4
 )
 ```
-spant
+Spectroscopy Analysis Tools (spant)
 =====
 
 [![Travis Build Status](https://travis-ci.org/martin3141/spant.svg?branch=master)](https://travis-ci.org/martin3141/spant) 
@@ -50,6 +50,9 @@ Or the the development version from GitHub (requires `devtools` package):
 install.packages("devtools")
 devtools::install_github("martin3141/spant")
 ```
+
+## Documentation
+https://martin3141.github.io/spant/
 
 ## Usage
 ```{r import, message = FALSE}

@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-spant
-=====
+Spectroscopy Analysis Tools (spant)
+===================================
 
 [![Travis Build Status](https://travis-ci.org/martin3141/spant.svg?branch=master)](https://travis-ci.org/martin3141/spant) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/martin3141/spant?branch=master&svg=true)](https://ci.appveyor.com/project/martin3141/spant) [![](http://cranlogs.r-pkg.org/badges/spant)](http://cran.rstudio.com/web/packages/spant/index.html) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant) [![Coverage Status](https://coveralls.io/repos/github/martin3141/spant/badge.svg?branch=master)](https://coveralls.io/github/martin3141/spant?branch=master)
 
@@ -36,6 +36,11 @@ Or the the development version from GitHub (requires `devtools` package):
 install.packages("devtools")
 devtools::install_github("martin3141/spant")
 ```
+
+Documentation
+-------------
+
+<https://martin3141.github.io/spant/>
 
 Usage
 -----
