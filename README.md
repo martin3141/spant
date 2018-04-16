@@ -40,10 +40,10 @@ devtools::install_github("martin3141/spant")
 Documentation
 -------------
 
-<https://martin3141.github.io/spant/>
+Long form : <https://martin3141.github.io/spant/articles/> Function reference : <https://martin3141.github.io/spant/reference/>
 
-Usage
------
+Quick introduction
+------------------
 
 ``` r
 library(spant)
