@@ -7,4 +7,5 @@
 ^\.travis\.yml$
 ^appveyor\.yml$
 ^_pkgdown\.yml$
+^index\.Rmd$
 ^docs$
