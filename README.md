@@ -40,7 +40,9 @@ devtools::install_github("martin3141/spant")
 Documentation
 -------------
 
-Long form : <https://martin3141.github.io/spant/articles/> Function reference : <https://martin3141.github.io/spant/reference/>
+Long form : <https://martin3141.github.io/spant/articles/>
+
+Function reference : <https://martin3141.github.io/spant/reference/>
 
 Quick introduction
 ------------------
