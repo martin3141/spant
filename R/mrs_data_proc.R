@@ -1660,7 +1660,7 @@ calc_spec_snr <- function(mrs_data, sig_region = c(4,0.5),
 #' @return list of arrays containing the highest peak frequency, height and FWHM
 #' in units of PPM and Hz.
 #' @export
-calc_peak_info <- function(mrs_data, xlim = c(4,0.5), interp_f = 4, 
+peak_info <- function(mrs_data, xlim = c(4,0.5), interp_f = 4, 
                            scale = "ppm", mode = "real") {
   
   mrs_data_crop <- crop_spec(mrs_data, xlim, scale)
