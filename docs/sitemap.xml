@@ -34,9 +34,6 @@
     <loc>https://martin3141.github.io/spant//reference/calc_coil_noise_sd.html</loc>
   </url>
   <url>
-    <loc>https://martin3141.github.io/spant//reference/calc_peak_info.html</loc>
-  </url>
-  <url>
     <loc>https://martin3141.github.io/spant//reference/calc_sd_poly.html</loc>
   </url>
   <url>
@@ -248,6 +245,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/Nspec.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/peak_info.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/phase.html</loc>
