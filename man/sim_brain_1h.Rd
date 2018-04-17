@@ -4,7 +4,7 @@
 \alias{sim_brain_1h}
 \title{Simulate MRS data with a similar appearance to normal brain (by default).}
 \usage{
-sim_brain_1h(acq_paras = def_acq_paras(), type = "normal",
+sim_brain_1h(acq_paras = def_acq_paras(), type = "normal_v1",
   pul_seq = seq_press_ideal, xlim = c(0.5, 4.2), full_output = FALSE,
   amps = NULL, ...)
 }

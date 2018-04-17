@@ -253,18 +253,15 @@ depth <- function(this) ifelse(is.list(this), 1L + max(sapply(this, depth)), 0L)
 #' @param ... extra parameters to pass to the pulse sequence function.
 #' @return see full_output option
 #' @export
-sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal",
+sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal_v1",
                          pul_seq = seq_press_ideal, xlim = c(0.5, 4.2), 
                          full_output = FALSE, amps = NULL,  ...) {
   
-  brain_basis_paras <- get_1h_brain_basis_paras(ft = acq_paras$ft)
   
-  basis <- sim_basis(brain_basis_paras, pul_seq, fs = acq_paras$fs,
-                     N = acq_paras$N, ref = acq_paras$ref, ft = acq_paras$ft, 
-                     xlim = xlim, ...)
   
   if (is.null(amps)) {
-    if (type == "normal") {
+    if (type == "normal_v1") {
+      brain_basis_paras <- get_1h_brain_basis_paras_v1(ft = acq_paras$ft)
       amps <- c(0.000000000, 0.009799548, 0.072152490, 0.077845526, 0.045575002, 
                 0.005450371, 0.000000000, 0.028636132, 0.076469056, 0.028382618,
                 0.069602483, 0.001763720, 0.042031981, 0.013474549, 0.000000000, 
@@ -275,6 +272,10 @@ sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal",
       stop("invalid spectrum type")
     }
   }
+  
+  basis <- sim_basis(brain_basis_paras, pul_seq, fs = acq_paras$fs,
+                 N = acq_paras$N, ref = acq_paras$ref, ft = acq_paras$ft, 
+                 xlim = xlim, ...)
 
   mrs_data <- basis2mrs_data(basis, sum_elements = TRUE, amp = amps)
   
