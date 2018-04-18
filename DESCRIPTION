@@ -33,7 +33,9 @@ Imports:
     svd,
     tkrplot,
     Rcpp,
-    RcppEigen
+    RcppEigen,
+    readr,
+    tibble
 Suggests:
     oro.nifti,
     MASS,

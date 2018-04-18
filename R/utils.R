@@ -285,3 +285,43 @@ sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal_v1",
     return(list(mrs_data = mrs_data, basis = basis, amps = amps))
   }
 }
+
+#' Combine the results from multiple csv format files into a table
+#' @param pattern glob string to match csv files
+#' @param supp_mess suppress messages from the read_csv function
+#' @param ... extra parameters to pass to read_csv
+#' @return results table
+#' @export
+combine_csv_results <- function(pattern, supp_mess = TRUE, ...) {
+  files <- Sys.glob(pattern)
+  n <- length(files)
+  
+  if (n == 0) stop("No matching files found.")
+  
+  cat(paste(n, "file(s) found:\n"))
+  
+  # list the matches
+  for (file in files) cat(file, "\n")
+  
+  # read the first file
+  if (supp_mess) {
+    res <- suppressMessages(readr::read_csv(files[1], ...))
+  } else {
+    res <- readr::read_csv(files[1], ...)
+  }
+  
+  if (length(files) > 1) {
+    for (n in 2:length(files)) {
+      if (supp_mess) {
+        res_temp <- suppressMessages(readr::read_csv(files[n], ...))
+      } else {
+        res_temp <- readr::read_csv(files[n])
+      }
+      res <- rbind(res, res_temp)
+    }
+  }
+  
+  # add the filename
+  res <- tibble::add_column(res, files, .before = 1)
+  res
+}
