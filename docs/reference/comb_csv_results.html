@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Simulate MRS data with a similar appearance to normal brain (by default). — sim_brain_1h • Spectroscopy Analysis Tools (spant)</title>
+<title>Combine the results from multiple csv format files into a table — comb_csv_results • Spectroscopy Analysis Tools (spant)</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,9 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="Simulate MRS data with a similar appearance to normal brain (by default). — sim_brain_1h" />
+<meta property="og:title" content="Combine the results from multiple csv format files into a table — comb_csv_results" />
 
-<meta property="og:description" content="Simulate MRS data with a similar appearance to normal brain (by default)." />
+<meta property="og:description" content="Combine the results from multiple csv format files into a table" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -103,59 +103,37 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Simulate MRS data with a similar appearance to normal brain (by default).</h1>
+    <h1>Combine the results from multiple csv format files into a table</h1>
     
-    <div class="hidden name"><code>sim_brain_1h.Rd</code></div>
+    <div class="hidden name"><code>comb_csv_results.Rd</code></div>
     </div>
 
     
-    <p>Simulate MRS data with a similar appearance to normal brain (by default).</p>
+    <p>Combine the results from multiple csv format files into a table</p>
     
 
-    <pre class="usage"><span class='fu'>sim_brain_1h</span>(<span class='kw'>acq_paras</span> <span class='kw'>=</span> <span class='fu'><a href='def_acq_paras.html'>def_acq_paras</a></span>(), <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"normal_v1"</span>,
-  <span class='kw'>pul_seq</span> <span class='kw'>=</span> <span class='no'>seq_press_ideal</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.5</span>, <span class='fl'>4.2</span>), <span class='kw'>full_output</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>amps</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>comb_csv_results</span>(<span class='no'>pattern</span>, <span class='kw'>supp_mess</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>acq_paras</th>
-      <td><p>list of acquisition parameters or an mrs_data object. See
-<code><a href='def_acq_paras.html'>def_acq_paras</a></code></p></td>
+      <th>pattern</th>
+      <td><p>glob string to match csv files</p></td>
     </tr>
     <tr>
-      <th>type</th>
-      <td><p>type of spectrum, only "normal" is implemented currently.</p></td>
-    </tr>
-    <tr>
-      <th>pul_seq</th>
-      <td><p>pulse sequence function to use</p></td>
-    </tr>
-    <tr>
-      <th>xlim</th>
-      <td><p>range of frequencies to simulate in ppm</p></td>
-    </tr>
-    <tr>
-      <th>full_output</th>
-      <td><p>when FALSE (default) only output the simulated MRS data.
-When TRUE output a list containing the MRS data, basis set object and
-corresponding amplitudes.</p></td>
-    </tr>
-    <tr>
-      <th>amps</th>
-      <td><p>a vector of basis amplitudes may be specified to modify the
-output spectrum</p></td>
+      <th>supp_mess</th>
+      <td><p>suppress messages from the read_csv function</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>extra parameters to pass to the pulse sequence function.</p></td>
+      <td><p>extra parameters to pass to read_csv</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>see full_output option</p>
+    <p>results table</p>
     
 
   </div>
