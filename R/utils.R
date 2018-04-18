@@ -292,7 +292,7 @@ sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal_v1",
 #' @param ... extra parameters to pass to read_csv
 #' @return results table
 #' @export
-combine_csv_results <- function(pattern, supp_mess = TRUE, ...) {
+comb_csv_results <- function(pattern, supp_mess = TRUE, ...) {
   files <- Sys.glob(pattern)
   n <- length(files)
   
