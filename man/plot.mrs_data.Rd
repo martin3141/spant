@@ -6,7 +6,8 @@
 \usage{
 \method{plot}{mrs_data}(x, fd = TRUE, x_units = NULL, xlim = NULL,
   y_scale = FALSE, mode = "re", dyn = 1, x_pos = 1, y_pos = 1,
-  z_pos = 1, coil = 1, lwd = NULL, bty = NULL, label = "", ...)
+  z_pos = 1, coil = 1, lwd = NULL, bty = NULL, label = "",
+  restore_def_par = TRUE, ...)
 }
 \arguments{
 \item{x}{object of class mrs_data.}
@@ -39,6 +40,8 @@ of: "re", "im", "mod" or "arg".}
 \item{bty}{option to draw a box around the plot. See ?par.}
 
 \item{label}{character string to add to the top left of the plot window.}
+
+\item{restore_def_par}{restore default plotting par values after the plot has}
 
 \item{...}{other arguments to pass to the plot method.}
 }

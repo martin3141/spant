@@ -43,12 +43,13 @@ print.mrs_data <- function(x, ...) {
 #' @param lwd plot linewidth.
 #' @param bty option to draw a box around the plot. See ?par.
 #' @param label character string to add to the top left of the plot window.
+#' @param restore_def_par restore default plotting par values after the plot has 
 #' @param ... other arguments to pass to the plot method.
 #' @export
 plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
                           y_scale = FALSE, mode = "re", dyn = 1, x_pos = 1,
                           y_pos = 1, z_pos = 1, coil = 1, lwd = NULL, 
-                          bty = NULL, label = "", ...) {
+                          bty = NULL, label = "", restore_def_par = TRUE, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -140,7 +141,7 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
     graphics::par(xpd = F) 
   }
   
-  graphics::par(.pardefault)
+  if (restore_def_par) graphics::par(.pardefault)
 }
 
 #' Image plot method for objects of class mrs_data.
