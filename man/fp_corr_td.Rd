@@ -4,7 +4,7 @@
 \alias{fp_corr_td}
 \title{Frequency and phase correction of MRS data in the time-domain.}
 \usage{
-fp_corr_td(mrs_data, ref = NULL, xlim = NULL, max_t = 0.2)
+fp_corr_td(mrs_data, ref = NULL, xlim = c(4, 0.5), max_t = 0.2)
 }
 \arguments{
 \item{mrs_data}{MRS data to be corrected}
@@ -12,7 +12,8 @@ fp_corr_td(mrs_data, ref = NULL, xlim = NULL, max_t = 0.2)
 \item{ref}{optional MRS data to use as a reference, the first dynamic of
 mrs_data is used if this argument is not supplied.}
 
-\item{xlim}{optional frequency range to perform optimisation.}
+\item{xlim}{optional frequency range to perform optimisation, set to NULL
+to use the full range.}
 
 \item{max_t}{truncate the FID when longer than max_t to reduce time taken}
 }
