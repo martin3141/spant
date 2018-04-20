@@ -278,7 +278,7 @@ stackplot <- function(x, ...) {
 #' @param coil the coil element number to plot.
 #' @param labels add labels to each data item.
 #' @param right_marg change the size of the right plot margin.
-#' @param rest_def_par restore default plotting par values after the plot has 
+#' @param restore_def_par restore default plotting par values after the plot has 
 #' been made.
 #' @param ... other arguments to pass to the matplot method.
 #' @export
@@ -287,7 +287,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                                y_offset = 5, dim = "dyn", x_pos = NULL, 
                                y_pos = NULL, z_pos = NULL, dyn = 1, coil = 1, 
                                labels = NULL, right_marg = NULL,
-                               rest_def_par = TRUE, ...) {
+                               restore_def_par = TRUE, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
