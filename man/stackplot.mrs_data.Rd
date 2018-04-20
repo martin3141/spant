@@ -7,7 +7,7 @@
 \method{stackplot}{mrs_data}(x, xlim = NULL, mode = "re", x_units = NULL,
   fd = TRUE, col = NULL, x_offset = 0, y_offset = 5, dim = "dyn",
   x_pos = NULL, y_pos = NULL, z_pos = NULL, dyn = 1, coil = 1,
-  labels = NULL, right_marg = NULL, ...)
+  labels = NULL, right_marg = NULL, rest_def_par = TRUE, ...)
 }
 \arguments{
 \item{x}{object of class mrs_data.}
@@ -46,6 +46,9 @@ Default value is 0.}
 \item{labels}{add labels to each data item.}
 
 \item{right_marg}{change the size of the right plot margin.}
+
+\item{rest_def_par}{restore default plotting par values after the plot has
+been made.}
 
 \item{...}{other arguments to pass to the matplot method.}
 }
