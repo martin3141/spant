@@ -35,6 +35,7 @@ Imports:
     Rcpp,
     RcppEigen,
     readr,
+    magrittr,
     tibble
 Suggests:
     oro.nifti,
@@ -49,7 +50,6 @@ Suggests:
     RNiftyReg,
     neurobase,
     knitr,
-    magrittr,
     rmarkdown,
     testthat
 VignetteBuilder:

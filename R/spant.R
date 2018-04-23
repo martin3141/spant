@@ -22,6 +22,9 @@ NULL
 "spant_mpress_drift"
 
 .onLoad <- function(libname, pkgname) {
+  # load magrittr
+  library(magrittr)
+  
   # set default options unless already set
   # by the user
   op <- options()

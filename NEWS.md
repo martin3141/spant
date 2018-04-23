@@ -11,6 +11,7 @@ STEAM, semi-LASER - TODO
 * Added a function to write basis objects as RAW LCModel format. - TODO
 * Option to add labels to stackplot of mrs_fit object - TODO.
 * Option to restore plotting par defaults - TODO.
+* magrittr package is loaded by default.
 
 # spant 0.9.0
 * Updated plotting modes to be one of : "re", "im", "mod" or "arg".
