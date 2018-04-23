@@ -18,13 +18,7 @@
 #' @importFrom Rcpp evalCpp
 NULL
 
-#' Example MEGA-PRESS data with significant B0 drift.
-"spant_mpress_drift"
-
 .onLoad <- function(libname, pkgname) {
-  # load magrittr
-  library(magrittr)
-  
   # set default options unless already set
   # by the user
   op <- options()
