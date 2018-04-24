@@ -325,3 +325,7 @@ comb_csv_results <- function(pattern, supp_mess = TRUE, ...) {
   res <- tibble::add_column(res, files, .before = 1)
   res
 }
+
+#' @importFrom magrittr %>%
+#' @export
+magrittr::`%>%`
