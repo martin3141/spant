@@ -463,13 +463,25 @@ lb.basis_set <- function(x, lb, lg = 1) {
 }
 
 #' Zero-fill MRS data in the time domain.
-#' @param mrs_data MRS data.
+#' @param x input mrs_data or basis_set object
 #' @param factor Zero-filling factor, factor of 2 returns a dataset with
 #' twice the original data points.
 #' @return Zero-filled data.
+#' @rdname zf
 #' @export
-zf <- function(mrs_data, factor = 2) {
-  set_td_pts(mrs_data, factor * N(mrs_data))
+zf <- function(x, factor = 2) UseMethod("zf")
+
+#' @rdname zf
+#' @export
+zf.mrs_data <- function(x, factor = 2) {
+  set_td_pts(x, factor * N(x))
+}
+
+#' @rdname zf
+#' @export
+zf.basis_set <- function(x, factor = 2) {
+  x_mrs_data <- basis2mrs_data(x)
+  mrs_data2basis(set_td_pts(x_mrs_data, factor * N(x_mrs_data)), x$names)
 }
 
 #' Set the number of time-domain data points, truncating or zero-filling as

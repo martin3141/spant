@@ -2,12 +2,18 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{zf}
 \alias{zf}
+\alias{zf.mrs_data}
+\alias{zf.basis_set}
 \title{Zero-fill MRS data in the time domain.}
 \usage{
-zf(mrs_data, factor = 2)
+zf(x, factor = 2)
+
+\method{zf}{mrs_data}(x, factor = 2)
+
+\method{zf}{basis_set}(x, factor = 2)
 }
 \arguments{
-\item{mrs_data}{MRS data.}
+\item{x}{input mrs_data or basis_set object}
 
 \item{factor}{Zero-filling factor, factor of 2 returns a dataset with
 twice the original data points.}
