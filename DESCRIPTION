@@ -32,7 +32,6 @@ Imports:
     smoother,
     svd,
     tkrplot,
-    Rcpp,
     RcppEigen,
     readr,
     magrittr,
@@ -55,6 +54,3 @@ Suggests:
 VignetteBuilder:
     knitr
 Encoding: UTF-8
-LinkingTo: 
-    Rcpp,
-    RcppEigen

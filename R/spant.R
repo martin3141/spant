@@ -11,13 +11,6 @@
 #' 
 "_PACKAGE"
 
-# next chunk is for Rcpp and RcppEigen
-#' @useDynLib spant
-#' @import RcppEigen
-#' @importFrom Rcpp sourceCpp
-#' @importFrom Rcpp evalCpp
-NULL
-
 .onLoad <- function(libname, pkgname) {
   # set default options unless already set
   # by the user
