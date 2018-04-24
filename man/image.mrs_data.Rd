@@ -6,7 +6,7 @@
 \usage{
 \method{image}{mrs_data}(x, xlim = NULL, mode = "re", col = NULL,
   dim = "dyn", x_pos = NULL, y_pos = NULL, z_pos = NULL, dyn = 1,
-  coil = 1, ...)
+  coil = 1, restore_def_par = TRUE, ...)
 }
 \arguments{
 \item{x}{object of class mrs_data.}
@@ -14,7 +14,7 @@
 \item{xlim}{the range of values to display on the x-axis, eg xlim = c(4,1).}
 
 \item{mode}{representation of the complex numbers to be plotted, can be one
-of: "re", "im", "abs" or "arg".}
+of: "re", "im", "mod" or "arg".}
 
 \item{col}{Colour map to use, defaults to viridis if the package is
 available.}
@@ -31,6 +31,8 @@ available.}
 \item{dyn}{the dynamic index to plot.}
 
 \item{coil}{the coil element number to plot.}
+
+\item{restore_def_par}{restore default plotting par values after the plot has}
 
 \item{...}{other arguments to pass to the plot method.}
 }

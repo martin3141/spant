@@ -148,7 +148,7 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
 #' @param x object of class mrs_data.
 #' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
 #' @param mode representation of the complex numbers to be plotted, can be one
-#' of: "re", "im", "abs" or "arg".
+#' of: "re", "im", "mod" or "arg".
 #' @param col Colour map to use, defaults to viridis if the package is 
 #' available.
 #' @param dim the dimension to display on the y-axis, can be one of: "dyn", "x",
@@ -158,11 +158,13 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
 #' @param z_pos the z index to plot.
 #' @param dyn the dynamic index to plot.
 #' @param coil the coil element number to plot.
+#' @param restore_def_par restore default plotting par values after the plot has 
 #' @param ... other arguments to pass to the plot method.
 #' @export
 image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL, 
                            dim = "dyn", x_pos = NULL, y_pos = NULL,
-                           z_pos = NULL, dyn = 1, coil = 1, ...) { 
+                           z_pos = NULL, dyn = 1, coil = 1,
+                           restore_def_par = TRUE, ...) { 
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -246,7 +248,7 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
                   xlab = "Frequency (ppm)", ylab = y_title, 
                   col = col, ...)
   
-  graphics::par(.pardefault)
+  if (restore_def_par) graphics::par(.pardefault)
 }
 
 #' Produce a plot with multiple traces.

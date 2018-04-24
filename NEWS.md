@@ -6,12 +6,12 @@ make them easier to find.
 * stackplot function now accepts labels argument and time-domain plotting.
 * def_acq_paras function now accepts arguments to override the defaults.
 * Added a source field to mol.paras object to cite the origin of the values.
+* Option to restore plotting par defaults.
+* The magrittr pipe operator is now exported.
 * Added new functions to simulate the following MRS sequences: CPMG, MEGA-PRESS, 
 STEAM, semi-LASER - TODO
 * Added a function to write basis objects as RAW LCModel format. - TODO
 * Option to add labels to stackplot of mrs_fit object - TODO.
-* Option to restore plotting par defaults - TODO.
-* The magrittr pipe operator is now exported.
 
 # spant 0.9.0
 * Updated plotting modes to be one of : "re", "im", "mod" or "arg".
