@@ -280,6 +280,7 @@ stackplot <- function(x, ...) {
 #' @param dyn the dynamic index to plot.
 #' @param coil the coil element number to plot.
 #' @param labels add labels to each data item.
+#' @param lab_cex label size.
 #' @param right_marg change the size of the right plot margin.
 #' @param restore_def_par restore default plotting par values after the plot has 
 #' been made.
@@ -289,7 +290,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                                fd = TRUE, col = NULL, x_offset = 0,
                                y_offset = 5, dim = "dyn", x_pos = NULL, 
                                y_pos = NULL, z_pos = NULL, dyn = 1, coil = 1, 
-                               labels = NULL, right_marg = NULL,
+                               labels = NULL, lab_cex = 1, right_marg = NULL,
                                restore_def_par = TRUE, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
@@ -429,7 +430,8 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   # write text labels if provided
   if (!is.null(labels)) {
     for (n in 1:length(labels)) {
-      graphics::text(xlim[2] , y_offset_vec[n], labels[n], pos = 4)
+      graphics::text(xlim[2] , y_offset_vec[n], labels[n], pos = 4,
+                     cex = lab_cex)
     }
   }
   
