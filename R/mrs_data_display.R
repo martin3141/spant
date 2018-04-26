@@ -434,11 +434,11 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   
   if (bty == "n") graphics::abline(h = graphics::par("usr")[3]) 
   
-  # allow text outside axes
-  graphics::par(xpd = NA)
-  
   # write text labels if provided
   if (!is.null(labels)) {
+    
+    # allow text outside axes
+    graphics::par(xpd = NA)
     for (n in 1:length(labels)) {
       graphics::text(xlim[2] , y_offset_vec[n], labels[n], pos = 4,
                      cex = lab_cex)
