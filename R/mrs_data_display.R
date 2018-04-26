@@ -60,13 +60,9 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
     x <- fd2td(x)
   }
   
-  if (is.null(lwd)) {
-    lwd <- 1.2
-  }
+  if (is.null(lwd)) lwd <- 1.0
   
-  if (is.null(bty)) {
-    bty <- "n"
-  }
+  if (is.null(bty)) bty <- "n"
   
   if (fd) {
     xlab <- "Chemical Shift"  
@@ -96,9 +92,7 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
     stop("Invalid x_units option, should be one of : 'ppm', 'hz', 'points' or 'seconds'") 
   }
   
-  if (is.null(xlim)) {
-    xlim <- c(x_scale[1], x_scale[N(x)])
-  }
+  if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[N(x)])
   
   subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
   
