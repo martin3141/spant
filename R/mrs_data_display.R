@@ -65,7 +65,7 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
   }
   
   if (is.null(bty)) {
-    bty <- "o"
+    bty <- "n"
   }
   
   if (fd) {
@@ -279,6 +279,7 @@ stackplot <- function(x, ...) {
 #' @param z_pos the z index to plot.
 #' @param dyn the dynamic index to plot.
 #' @param coil the coil element number to plot.
+#' @param bty option to draw a box around the plot. See ?par.
 #' @param labels add labels to each data item.
 #' @param lab_cex label size.
 #' @param right_marg change the size of the right plot margin.
@@ -290,8 +291,8 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                                fd = TRUE, col = NULL, x_offset = 0,
                                y_offset = 5, dim = "dyn", x_pos = NULL, 
                                y_pos = NULL, z_pos = NULL, dyn = 1, coil = 1, 
-                               labels = NULL, lab_cex = 1, right_marg = NULL,
-                               restore_def_par = TRUE, ...) {
+                               bty = NULL, labels = NULL, lab_cex = 1, 
+                               right_marg = NULL, restore_def_par = TRUE, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -303,6 +304,8 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   }
   
   if (is.null(col)) col <- 1
+  
+  if (is.null(bty)) bty <- "n"
   
   if (is.null(right_marg) && is.null(labels)) right_marg = 1
   if (is.null(right_marg) && !is.null(labels)) right_marg = 4
@@ -413,16 +416,24 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   
   x_scale_mat <- x_scale_mat + x_offset_mat
   
+  xlim_labs <- xlim
   xlim <- range(x_scale_mat)
+  
+  # bug fix for rounding errors
+  if (xlim[1] > xlim_labs[1]) xlim[1] = xlim_labs[1]
+  if (xlim[2] < xlim_labs[2]) xlim[2] = xlim_labs[2]
+  
   if ( x_units == "ppm" ) xlim <- rev(xlim)
-    
+  
   graphics::matplot(x_scale_mat[length(subset):1,],
                     plot_data[length(subset):1,], type = "l", 
                     lty = 1, col = col, xlab = xlab, ylab = "",
-                    yaxt = "n", xaxt = "n", xlim = xlim,
-                    bty = "n", ...)
+                    yaxt = "n", xlim = xlim,
+                    bty = bty, ...)
   
-  graphics::axis(1, pretty(xlim))
+  if (bty == "n") {
+    graphics::abline(a = graphics::par("usr")[3], b = 0, lwd = 1.0) 
+  }
   
   # allow text outside axes
   graphics::par(xpd = NA)
@@ -434,18 +445,6 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                      cex = lab_cex)
     }
   }
-  
-  #graphics::matplot(x_scale[subset][length(subset):1],
-  #                  plot_data[length(subset):1,], type = "l", xlim = xlim,
-  #                  lty = 1, col = 1, xlab = "Frequency (PPM)", ylab = "",
-  #                  yaxt = "n", ...)
-  
-  #abline(a = par("usr")[3], b = 0, lw = 2.0) # looks better for bty="n"
-  
-  #matplot(x_scale[subset][length(subset):1])
-          #, (1:dyns(mrs_data)), plot_data[length(subset):1,],
-        #xlim=xlim, xlab="Frequency (ppm)", ylab="Dynamic", 
-        #col=gray.colors(64), ...)
   
   if (restore_def_par) graphics::par(.pardefault)
 }
