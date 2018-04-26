@@ -62,7 +62,8 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
   
   if (is.null(lwd)) lwd <- 1.0
   
-  if (is.null(bty)) bty <- "n"
+  if (is.null(bty) && !y_scale) bty <- "n"
+  if (is.null(bty) && y_scale) bty <- "l"
   
   if (fd) {
     xlab <- "Chemical Shift"  
@@ -115,23 +116,27 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
   graphics::par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
   if (y_scale) {
     graphics::par(mar = c(3.5, 3.5, 1, 1))
-    graphics::plot(x_scale[subset], plot_data[subset],type = 'l',xlim = xlim, 
-                   xlab = xlab, ylab = "Intensity (au)", lwd = lwd,
-                   bty = bty, ...)
+    graphics::plot(x_scale[subset], plot_data[subset], type = 'l', xlim = xlim, 
+                   xlab = xlab, ylab = "Intensity (au)", lwd = lwd, bty = bty, 
+                   xaxt = "n", yaxt = "n", ...)
+    axis(2, lwd = 0, lwd.ticks = 1)
   } else {
     graphics::par(mar = c(3.5, 1, 1, 1))
     graphics::plot(x_scale[subset], plot_data[subset], type = 'l', xlim = xlim,
-         xlab = xlab, yaxt = "n", ylab = "", lwd = lwd, bty = bty, ...)
+         xlab = xlab, yaxt = "n", xaxt = "n", ylab = "", lwd = lwd, bty = bty,
+         ...)
   }
   
+  axis(1, lwd = 0, lwd.ticks = 1)
+  
   if (bty == "n") {
-    graphics::abline(a = graphics::par("usr")[3], b = 0, lwd = 1.0) 
+    graphics::abline(h = graphics::par("usr")[3]) 
   }
   
   if (!is.null(label)) {
     max_dp <- max(plot_data[subset])
     graphics::par(xpd = T)
-    graphics::text(xlim[1],max_dp * 1.03, label, cex = 2.5)
+    graphics::text(xlim[1], max_dp * 1.03, label, cex = 2.5)
     graphics::par(xpd = F) 
   }
   
@@ -422,12 +427,12 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   graphics::matplot(x_scale_mat[length(subset):1,],
                     plot_data[length(subset):1,], type = "l", 
                     lty = 1, col = col, xlab = xlab, ylab = "",
-                    yaxt = "n", xlim = xlim,
+                    yaxt = "n", xaxt = "n", xlim = xlim,
                     bty = bty, ...)
   
-  if (bty == "n") {
-    graphics::abline(a = graphics::par("usr")[3], b = 0, lwd = 1.0) 
-  }
+  axis(1, lwd = 0, lwd.ticks = 1)
+  
+  if (bty == "n") graphics::abline(h = graphics::par("usr")[3]) 
   
   # allow text outside axes
   graphics::par(xpd = NA)
