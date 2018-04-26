@@ -9,8 +9,6 @@ make them easier to find.
 * The magrittr pipe operator is now exported.
 * Added new functions to simulate the following MRS sequences: CPMG, MEGA-PRESS, 
 STEAM.
-* Added a function to write basis objects as RAW LCModel format. - TODO
-* Option to add labels to stackplot of mrs_fit object - TODO.
 
 # spant 0.9.0
 * Updated plotting modes to be one of : "re", "im", "mod" or "arg".
