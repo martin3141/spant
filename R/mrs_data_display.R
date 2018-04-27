@@ -119,7 +119,7 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
     graphics::plot(x_scale[subset], plot_data[subset], type = 'l', xlim = xlim, 
                    xlab = xlab, ylab = "Intensity (au)", lwd = lwd, bty = bty, 
                    xaxt = "n", yaxt = "n", ...)
-    axis(2, lwd = 0, lwd.ticks = 1)
+    graphics::axis(2, lwd = 0, lwd.ticks = 1)
   } else {
     graphics::par(mar = c(3.5, 1, 1, 1))
     graphics::plot(x_scale[subset], plot_data[subset], type = 'l', xlim = xlim,
@@ -127,7 +127,7 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
          ...)
   }
   
-  axis(1, lwd = 0, lwd.ticks = 1)
+  graphics::axis(1, lwd = 0, lwd.ticks = 1)
   
   if (bty == "n") {
     graphics::abline(h = graphics::par("usr")[3]) 
@@ -430,7 +430,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                     yaxt = "n", xaxt = "n", xlim = xlim,
                     bty = bty, ...)
   
-  axis(1, lwd = 0, lwd.ticks = 1)
+  graphics::axis(1, lwd = 0, lwd.ticks = 1)
   
   if (bty == "n") graphics::abline(h = graphics::par("usr")[3]) 
   
