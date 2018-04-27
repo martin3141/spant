@@ -1,4 +1,4 @@
-#' Frequency and phase correction of MRS data in the time-domain.
+#' Time-domain spectral registration.
 #' 
 #' An implementation of the method published by Near et al MRM 73:44-50 (2015).
 #' 
@@ -11,7 +11,7 @@
 #' @return a list containing the corrected data; phase and shift values in units
 #' of degrees and Hz respectively.
 #' @export
-fp_corr_td <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_t = 0.2) {
+tdsr <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_t = 0.2) {
   # align to first dynamic if ref is not given
   if (is.null(ref)) ref <- get_dyns(mrs_data, 1)
   
