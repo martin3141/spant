@@ -5,7 +5,7 @@
 \title{Simulate a time-domain mrs_data object containing simulated Gaussian noise.}
 \usage{
 sim_noise(sd = 0.1, fs = def_fs(), ft = def_ft(), N = def_N(),
-  ref = def_ref(), dyns = 1)
+  ref = def_ref(), dyns = 1, fd = TRUE)
 }
 \arguments{
 \item{sd}{standard deviation of the noise.}
@@ -19,6 +19,8 @@ sim_noise(sd = 0.1, fs = def_fs(), ft = def_ft(), N = def_N(),
 \item{ref}{Reference value for ppm scale.}
 
 \item{dyns}{Number of dynamic scans to generate.}
+
+\item{fd}{Return data in the frequency-domian (TRUE) or time-domain (FALSE)}
 }
 \value{
 mrs_data object.

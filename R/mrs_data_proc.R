@@ -242,16 +242,16 @@ mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
 #' @param N Number of data points in the spectral dimension.
 #' @param ref Reference value for ppm scale.
 #' @param dyns Number of dynamic scans to generate.
+#' @param fd Return data in the frequency-domian (TRUE) or time-domain (FALSE)
 #' @return mrs_data object.
 #' @export
 sim_noise <- function(sd = 0.1, fs = def_fs(), ft = def_ft(), N = def_N(),
-                      ref = def_ref(), dyns = 1) {
+                      ref = def_ref(), dyns = 1, fd = TRUE) {
  
   data_pts <- dyns * N 
-  # generate data in TD
   vec <- stats::rnorm(data_pts, 0, sd) + 1i*stats::rnorm(data_pts, 0, sd)
   data_array <- array(vec, dim = c(1, 1, 1, 1, dyns, 1, N))
-  array2mrs_data(data_array, fs = fs, ft = ft, ref = ref)
+  array2mrs_data(data_array, fs = fs, ft = ft, ref = ref, fd)
 }
 
 sim_zeros <- function(fs = def_fs(), ft = def_ft(), N = def_N(),
@@ -1020,7 +1020,7 @@ bc <- function(mrs_data, lambda, p) {
 
 #' @export
 `+.mrs_data` <- function(a, b) {
-  if ( class(b) == "mrs_data" ) {
+  if (class(b) == "mrs_data" ) {
     a$data <- a$data + b$data
   } else if (class(b) == "numeric") {
     a$data <- a$data + b
@@ -1030,12 +1030,32 @@ bc <- function(mrs_data, lambda, p) {
 
 #' @export
 `-.mrs_data` <- function(a, b = NULL) {
-  if ( class(b) == "mrs_data" ) {
+  if (class(b) == "mrs_data" ) {
     a$data = a$data - b$data
   } else if (is.null(b)) {
     a$data = -a$data
   } else if ( class(b) == "numeric") {
     a$data = a$data - b
+  }
+  return(a)
+}
+
+#' @export
+`*.mrs_data` <- function(a, b) {
+  if (class(b) == "mrs_data" ) {
+    a$data <- a$data * b$data
+  } else if ( class(b) == "numeric") {
+    a$data <- a$data * b
+  }
+  return(a)
+}
+
+#' @export
+`/.mrs_data` <- function(a, b) {
+  if (class(b) == "mrs_data" ) {
+    a$data <- a$data / b$data
+  } else if (class(b) == "numeric") {
+    a$data <- a$data / b
   }
   return(a)
 }
@@ -1117,25 +1137,7 @@ median_dyns <- function(mrs_data) {
   return(apply_mrs(mrs_data, 5, cplx_median))
 }
 
-#' @export
-`*.mrs_data` <- function(a, b) {
-  if ( class(b) == "mrs_data" ) {
-    a$data <- a$data * b$data
-  } else if ( class(b) == "numeric") {
-    a$data <- a$data * b
-  }
-  return(a)
-}
 
-#' @export
-`/.mrs_data` <- function(a,b) {
-  if ( class(b) == "mrs_data" ) {
-    a$data <- a$data / b$data
-  } else if (class(b) == "numeric") {
-    a$data <- a$data / b
-  }
-  return(a)
-}
 
 # TODO correct first imaginary data point?
 recon_imag_vec <- function(data) {
