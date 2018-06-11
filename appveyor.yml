@@ -21,7 +21,7 @@ environment:
     PKGTYPE: "source"
     USE_RTOOLS: yes
     R_CHECK_INSTALL_ARGS: --install-args=--build --no-multiarch
-
+    _R_CHECK_FORCE_SUGGESTS_: 0
 
 build_script:
   - travis-tool.sh install_deps
