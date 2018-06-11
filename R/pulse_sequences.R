@@ -425,3 +425,111 @@ seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02) {
   # acquire
   acquire(sys, detect = "1H", rec_phase = 0)
 }
+
+#' sLASER sequence with ideal pulses
+#' @param spin_params spin system definition.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @param TE1 first echo time (between exc. and 1st echo) in seconds.
+#' @param TE2 second echo time (between 2nd echo and 4th echo) in seconds.
+#' @param TE3 third echo time (between 4th echo and 5th echo) in seconds.
+#' @return a list of resonance amplitudes and frequencies.
+#' @export
+seq_slaser_ideal <- function(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.009, TE3 = 0.011) {
+  sys <- spin_sys(spin_params, ft, ref)
+  
+  sys$rho <- gen_F(sys, "z")
+  
+  angle <- 90
+  Fx <- gen_F(sys, "x", "1H")
+  lhs_pulse <- complexplus::matexp(-Fx * 1i * angle * pi / 180)
+  rhs_pulse <- complexplus::matexp(Fx * 1i * angle * pi / 180)
+  sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
+  
+  # apply delay
+  t = TE1 / 2
+  # find the inverse of the eigenvector matrix
+  eig_vec_inv <- solve(sys$H_eig_vecs)
+  lhs <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*%
+    eig_vec_inv
+  
+  rhs <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * t)) %*%
+    eig_vec_inv
+  sys$rho <- lhs %*% sys$rho %*% rhs
+  
+  # apply pulse
+  angle <- 180
+  Fy <- gen_F(sys, "y", "1H")
+  lhs_pulse <- complexplus::matexp(-Fy * 1i * angle * pi / 180)
+  rhs_pulse <- complexplus::matexp(Fy * 1i * angle * pi / 180)
+  sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
+  
+  # apply delay
+  t = TE1 / 2 + TE2 / 4
+  # find the inverse of the eigenvector matrix
+  eig_vec_inv <- solve(sys$H_eig_vecs)
+  lhs <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*%
+    eig_vec_inv
+  
+  rhs <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * t)) %*%
+    eig_vec_inv
+  sys$rho <- lhs %*% sys$rho %*% rhs
+  
+  # apply pulse
+  angle <- 180
+  Fy <- gen_F(sys, "y", "1H")
+  lhs_pulse <- complexplus::matexp(-Fy * 1i * angle * pi / 180)
+  rhs_pulse <- complexplus::matexp(Fy * 1i * angle * pi / 180)
+  sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
+  
+  # apply delay
+  t = 2 * TE2 / 4
+  # find the inverse of the eigenvector matrix
+  eig_vec_inv <- solve(sys$H_eig_vecs)
+  lhs <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*%
+    eig_vec_inv
+  
+  rhs <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * t)) %*%
+    eig_vec_inv
+  sys$rho <- lhs %*% sys$rho %*% rhs
+  
+  # apply pulse
+  angle <- 180
+  Fy <- gen_F(sys, "y", "1H")
+  lhs_pulse <- complexplus::matexp(-Fy * 1i * angle * pi / 180)
+  rhs_pulse <- complexplus::matexp(Fy * 1i * angle * pi / 180)
+  sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
+  
+  # apply delay
+  t = TE2 / 4 + TE3 /2
+  # find the inverse of the eigenvector matrix
+  eig_vec_inv <- solve(sys$H_eig_vecs)
+  lhs <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*%
+    eig_vec_inv
+  
+  rhs <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * t)) %*%
+    eig_vec_inv
+  sys$rho <- lhs %*% sys$rho %*% rhs
+  
+  # apply pulse
+  angle <- 180
+  Fy <- gen_F(sys, "y", "1H")
+  lhs_pulse <- complexplus::matexp(-Fy * 1i * angle * pi / 180)
+  rhs_pulse <- complexplus::matexp(Fy * 1i * angle * pi / 180)
+  sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
+  
+  # apply delay
+  t = TE3 /2
+  # find the inverse of the eigenvector matrix
+  eig_vec_inv <- solve(sys$H_eig_vecs)
+  lhs <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*%
+    eig_vec_inv
+  
+  rhs <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * t)) %*%
+    eig_vec_inv
+  sys$rho <- lhs %*% sys$rho %*% rhs
+  
+  
+  # acquire
+  acquire(sys, detect = "1H")
+}
