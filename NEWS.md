@@ -1,7 +1,7 @@
 # spant 0.10.0
 * The names of in-built pulse sequence functions now all start with seq_* to
 make them easier to find.
-* Added new functions to simulate the following MRS sequences: CPMG, MEGA-PRESS, STEAM, sLASER. sLASER sequence contributed by Pierre-Gilles Henry.
+* Added new functions to simulate the following MRS sequences: CPMG, MEGA-PRESS, STEAM, sLASER. sLASER sequence kindly contributed by Pierre-Gilles Henry.
 * Bug fix for get_mol_names function.
 * stackplot function now accepts labels argument and time-domain plotting.
 * def_acq_paras function now accepts arguments to override the defaults.
