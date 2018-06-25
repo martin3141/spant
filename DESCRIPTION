@@ -32,7 +32,6 @@ Imports:
     smoother,
     svd,
     tkrplot,
-    RcppEigen,
     readr,
     magrittr,
     tibble
