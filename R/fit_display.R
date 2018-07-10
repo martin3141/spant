@@ -59,7 +59,7 @@ plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
     marg = (max_dp - min_dp) * 0.02
     graphics::plot(x$PPMScale, x$Data, type = 'l', xlim = xlim, 
          ylim = c(min_dp - marg, max_dp + marg), yaxt = "n", ylab = "",
-         xlab = "Chemical Shift (ppm)", ...)
+         xlab = "Chemical shift (ppm)", ...)
     
     if (!is.null(label)) {
       graphics::par(xpd = TRUE)
@@ -83,7 +83,7 @@ plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
     
     graphics::plot(x$PPMScale, x$Data, type = 'l', xlim = xlim, 
          ylim = c(min_dp,max_dp + res_range), yaxt = "n", ylab = "",
-         xlab = "Chemical Shift (ppm)", ...)
+         xlab = "Chemical shift (ppm)", ...)
     graphics::lines(x$PPMScale, fit_line, col = 'Red', lw = 2)
     if (!sub_bl) {
       graphics::lines(x$PPMScale, x$Baseline)
@@ -175,7 +175,7 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0.04,
   
   graphics::plot(x$PPMScale, x$Data, type = 'l', xlim = xlim, 
        ylim = c(min_basis - basis_yoff, max_dp + res_range), yaxt = "n", ylab = "",
-       xlab = "Chemical Shift (ppm)", ...)
+       xlab = "Chemical shift (ppm)", ...)
   graphics::lines(x$PPMScale, fit_line, col = 'Red', lw = 2)
   
   if (!sub_bl) {

@@ -68,7 +68,7 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
   if (is.null(bty) && y_scale) bty <- "l"
   
   if (fd) {
-    xlab <- "Chemical Shift"  
+    xlab <- "Chemical shift"  
   } else {
     xlab <- "Time"  
   }
@@ -319,7 +319,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   graphics::par(mar = c(3.5, 1, 1, right_marg)) # margins
   
   if (fd) {
-    xlab <- "Chemical Shift"  
+    xlab <- "Chemical shift"  
   } else {
     xlab <- "Time"  
   }
