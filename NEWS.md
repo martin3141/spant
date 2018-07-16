@@ -1,5 +1,6 @@
 # spant 0.11.0
 * Added mar argument to plot command.
+* td2fd and fd2td now give warnings when used with data already in the target domain.
 
 # spant 0.10.0
 * The names of in-built pulse sequence functions now all start with seq_* to

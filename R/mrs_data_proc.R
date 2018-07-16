@@ -533,6 +533,10 @@ is_fd <- function(mrs_data) {
 #' @return MRS data in frequency-domain representation.
 #' @export
 td2fd <- function(mrs_data) {
+  if (mrs_data$freq_domain[7] == TRUE) {
+    warning("Data is alread in the frequency-domain.")
+  }
+  
   mrs_data <- ft(mrs_data, 7)
   mrs_data$freq_domain[7] = TRUE
   return(mrs_data)
@@ -543,6 +547,10 @@ td2fd <- function(mrs_data) {
 #' @return MRS data in time-domain representation.
 #' @export
 fd2td <- function(mrs_data) {
+  if (mrs_data$freq_domain[7] == FALSE) {
+    warning("Data is alread in the time-domain.")
+  }
+  
   mrs_data <- ift(mrs_data, 7)
   mrs_data$freq_domain[7] = FALSE
   return(mrs_data)
