@@ -9,15 +9,15 @@ mat2mrs_data(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
   fd = FALSE)
 }
 \arguments{
-\item{mat}{The data matrix.}
+\item{mat}{data matrix.}
 
-\item{fs}{Sampling frequency in Hz.}
+\item{fs}{sampling frequency in Hz.}
 
-\item{ft}{Transmitter frequency in Hz.}
+\item{ft}{transmitter frequency in Hz.}
 
-\item{ref}{Reference value for ppm scale.}
+\item{ref}{reference value for ppm scale.}
 
-\item{fd}{Flag to indicate if the matrix is in the frequency domain (logical).}
+\item{fd}{flag to indicate if the matrix is in the frequency domain (logical).}
 }
 \value{
 mrs_data object.

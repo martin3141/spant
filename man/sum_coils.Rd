@@ -10,7 +10,7 @@ sum_coils(mrs_data)
 \item{mrs_data}{MRS data split across receiver coil elements.}
 }
 \value{
-Sum across coil elements.
+sum across coil elements.
 }
 \description{
 Calculate the sum across receiver coil elements.

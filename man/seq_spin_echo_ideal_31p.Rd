@@ -16,7 +16,7 @@ seq_spin_echo_ideal_31p(spin_params, ft, ref, TE = 0.03)
 \item{TE}{echo time in seconds.}
 }
 \value{
-a list of resonance amplitudes and frequencies.
+list of resonance amplitudes and frequencies.
 }
 \description{
 Spin echo sequence with ideal pulses.

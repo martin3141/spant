@@ -7,10 +7,10 @@
 conj(mrs_data)
 }
 \arguments{
-\item{mrs_data}{input data}
+\item{mrs_data}{input data.}
 }
 \value{
-Conjugated data
+conjugated data.
 }
 \description{
 Conjugate MRS data.

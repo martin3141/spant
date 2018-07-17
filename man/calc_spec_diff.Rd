@@ -2,20 +2,20 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{calc_spec_diff}
 \alias{calc_spec_diff}
-\title{Calculate the sum of squares differences between two mrs_data objects}
+\title{Calculate the sum of squares differences between two mrs_data objects.}
 \usage{
 calc_spec_diff(mrs_data, ref = NULL, xlim = c(4, 0.5))
 }
 \arguments{
-\item{mrs_data}{mrs_data oject}
+\item{mrs_data}{mrs_data oject.}
 
-\item{ref}{reference mrs_data object to calculate differences}
+\item{ref}{reference mrs_data object to calculate differences.}
 
-\item{xlim}{spectral limits to perform calculation}
+\item{xlim}{spectral limits to perform calculation.}
 }
 \value{
-an array of the sum of squared difference values
+an array of the sum of squared difference values.
 }
 \description{
-Calculate the sum of squares differences between two mrs_data objects
+Calculate the sum of squares differences between two mrs_data objects.
 }

@@ -10,10 +10,10 @@ fp_phase_correct(mrs_data, ret_phase = FALSE)
 \arguments{
 \item{mrs_data}{MRS data to be corrected.}
 
-\item{ret_phase}{Return phase values (logical).}
+\item{ret_phase}{return phase values (logical).}
 }
 \value{
-Corrected data or a list with corrected data and optional phase
+corrected data or a list with corrected data and optional phase
 values.
 }
 \description{

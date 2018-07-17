@@ -18,7 +18,7 @@ seq_cpmg_ideal(spin_params, ft, ref, TE = 0.03, echoes = 4)
 \item{echoes}{number of echoes.}
 }
 \value{
-a list of resonance amplitudes and frequencies.
+list of resonance amplitudes and frequencies.
 }
 \description{
 CPMG style sequence with ideal pulses.

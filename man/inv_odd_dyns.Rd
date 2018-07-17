@@ -7,10 +7,10 @@
 inv_odd_dyns(mrs_data)
 }
 \arguments{
-\item{mrs_data}{Dynamic MRS data.}
+\item{mrs_data}{dynamic MRS data.}
 }
 \value{
-Dynamic MRS data with inverted odd numbered scans.
+dynamic MRS data with inverted odd numbered scans.
 }
 \description{
 Invert odd numbered dynamic scans starting from 1 (1,3,5...).

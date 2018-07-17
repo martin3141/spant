@@ -7,10 +7,10 @@
 mean_dyns(mrs_data)
 }
 \arguments{
-\item{mrs_data}{Dynamic MRS data.}
+\item{mrs_data}{dynamic MRS data.}
 }
 \value{
-Mean dynamic data.
+mean dynamic data.
 }
 \description{
 Calculate the mean dynamic data.

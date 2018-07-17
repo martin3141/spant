@@ -2,16 +2,16 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{get_fh_dyns}
 \alias{get_fh_dyns}
-\title{Return the first half of a dynamic series}
+\title{Return the first half of a dynamic series.}
 \usage{
 get_fh_dyns(mrs_data)
 }
 \arguments{
-\item{mrs_data}{dynamic MRS data}
+\item{mrs_data}{dynamic MRS data.}
 }
 \value{
-first half of the dynamic series
+first half of the dynamic series.
 }
 \description{
-Return the first half of a dynamic series
+Return the first half of a dynamic series.
 }

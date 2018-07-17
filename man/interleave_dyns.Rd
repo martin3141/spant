@@ -2,16 +2,16 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{interleave_dyns}
 \alias{interleave_dyns}
-\title{Interleave the first and second half of a dynamic series}
+\title{Interleave the first and second half of a dynamic series.}
 \usage{
 interleave_dyns(mrs_data)
 }
 \arguments{
-\item{mrs_data}{dynamic MRS data}
+\item{mrs_data}{dynamic MRS data.}
 }
 \value{
-interleaved data
+interleaved data.
 }
 \description{
-Interleave the first and second half of a dynamic series
+Interleave the first and second half of a dynamic series.
 }

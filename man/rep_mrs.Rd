@@ -2,27 +2,27 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{rep_mrs}
 \alias{rep_mrs}
-\title{Replicate a scan over a given dimension}
+\title{Replicate a scan over a given dimension.}
 \usage{
 rep_mrs(mrs_data, x_rep = 1, y_rep = 1, z_rep = 1, dyn_rep = 1,
   coil_rep = 1)
 }
 \arguments{
-\item{mrs_data}{MRS data to be replicated}
+\item{mrs_data}{MRS data to be replicated.}
 
-\item{x_rep}{number of x replications}
+\item{x_rep}{number of x replications.}
 
-\item{y_rep}{number of y replications}
+\item{y_rep}{number of y replications.}
 
-\item{z_rep}{number of z replications}
+\item{z_rep}{number of z replications.}
 
-\item{dyn_rep}{number of dynamic replications}
+\item{dyn_rep}{number of dynamic replications.}
 
-\item{coil_rep}{number of coil replications}
+\item{coil_rep}{number of coil replications.}
 }
 \value{
-replicated data object
+replicated data object.
 }
 \description{
-Replicate a scan over a given dimension
+Replicate a scan over a given dimension.
 }

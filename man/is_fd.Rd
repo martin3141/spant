@@ -3,17 +3,17 @@
 \name{is_fd}
 \alias{is_fd}
 \title{Check if the chemical shift dimension of an MRS data object is in the
-frequency domain}
+frequency domain.}
 \usage{
 is_fd(mrs_data)
 }
 \arguments{
-\item{mrs_data}{MRS data}
+\item{mrs_data}{MRS data.}
 }
 \value{
-logical value
+logical value.
 }
 \description{
 Check if the chemical shift dimension of an MRS data object is in the
-frequency domain
+frequency domain.
 }

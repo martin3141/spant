@@ -11,7 +11,7 @@ mrs_data2mat(mrs_data)
 \item{mrs_data}{MRS data object.}
 }
 \value{
-A matrix.
+MRS data matrix.
 }
 \description{
 Convert mrs_data object to a matrix, with spectral points in the row dimension

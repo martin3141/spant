@@ -1,12 +1,12 @@
 #' Simulate a MRS data object containing a set of simulated resonances.
-#' @param freq Resonance frequency.
-#' @param amp Resonance amplitude.
-#' @param lw Line width in Hz.
+#' @param freq resonance frequency.
+#' @param amp resonance amplitude.
+#' @param lw line width in Hz.
 #' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1).
-#' @param phase Phase in degrees.
-#' @param freq_ppm Frequencies are given in ppm units if set to TRUE, otherwise
+#' @param phase phase in degrees.
+#' @param freq_ppm frequencies are given in ppm units if set to TRUE, otherwise
 #' Hz are assumed.
-#' @param acq_paras List of acquisition parameters. See
+#' @param acq_paras list of acquisition parameters. See
 #' \code{\link{def_acq_paras}}
 #' @return MRS data object.
 #' @examples
@@ -207,7 +207,7 @@ array2mrs_data <- function(data_array, fs = def_fs(), ft = def_ft(),
 #' Convert mrs_data object to a matrix, with spectral points in the row dimension
 #' and dynamics in the column dimension.
 #' @param mrs_data MRS data object.
-#' @return A matrix.
+#' @return MRS data matrix.
 #' @export
 mrs_data2mat <- function(mrs_data) {
   t(as.matrix(mrs_data$data[1,1,1,1,,1,]))
@@ -215,11 +215,11 @@ mrs_data2mat <- function(mrs_data) {
 
 #' Convert a matrix (with spectral points in the row dimension and dynamics in
 #' the column dimensions) into a mrs_data object.
-#' @param mat The data matrix.
-#' @param fs Sampling frequency in Hz.
-#' @param ft Transmitter frequency in Hz.
-#' @param ref Reference value for ppm scale.
-#' @param fd Flag to indicate if the matrix is in the frequency domain (logical).
+#' @param mat data matrix.
+#' @param fs sampling frequency in Hz.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @param fd flag to indicate if the matrix is in the frequency domain (logical).
 #' @return mrs_data object.
 #' @export
 mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
@@ -237,12 +237,12 @@ mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
 
 #' Simulate a time-domain mrs_data object containing simulated Gaussian noise.
 #' @param sd standard deviation of the noise.
-#' @param fs Sampling frequency in Hz.
-#' @param ft Transmitter frequency in Hz.
-#' @param N Number of data points in the spectral dimension.
-#' @param ref Reference value for ppm scale.
-#' @param dyns Number of dynamic scans to generate.
-#' @param fd Return data in the frequency-domain (TRUE) or time-domain (FALSE)
+#' @param fs sampling frequency in Hz.
+#' @param ft transmitter frequency in Hz.
+#' @param N number of data points in the spectral dimension.
+#' @param ref reference value for ppm scale.
+#' @param dyns number of dynamic scans to generate.
+#' @param fd return data in the frequency-domain (TRUE) or time-domain (FALSE)
 #' @return mrs_data object.
 #' @export
 sim_noise <- function(sd = 0.1, fs = def_fs(), ft = def_ft(), N = def_N(),
@@ -263,12 +263,12 @@ sim_zeros <- function(fs = def_fs(), ft = def_ft(), N = def_N(),
   array2mrs_data(data_array, fs = fs, ft = ft, ref = ref)
 }
 
-#' Apply a function across given dimensions of a MRS data object
-#' @param mrs_data MRS data
-#' @param dims dimensions to apply the function
-#' @param fun name of the function
-#' @param ... arguments to the function
-#' @param data_only return an array rather than an MRS data object
+#' Apply a function across given dimensions of a MRS data object.
+#' @param mrs_data MRS data.
+#' @param dims dimensions to apply the function.
+#' @param fun name of the function.
+#' @param ... arguments to the function.
+#' @param data_only return an array rather than an MRS data object.
 #' @export
 apply_mrs <- function(mrs_data, dims, fun, ..., data_only = FALSE) {
   dims <- sort(dims)
@@ -288,10 +288,10 @@ apply_mrs <- function(mrs_data, dims, fun, ..., data_only = FALSE) {
   }
 }
 
-#' Apply a frequency shift to MRS data
-#' @param mrs_data MRS data
-#' @param shift frequency shift (in ppm by default)
-#' @param units of the shift ("ppm" or "hz")
+#' Apply a frequency shift to MRS data.
+#' @param mrs_data MRS data.
+#' @param shift frequency shift (in ppm by default).
+#' @param units of the shift ("ppm" or "hz").
 #' @return frequency shifted MRS data.
 #' @export
 shift <- function(mrs_data, shift, units = "ppm") {
@@ -324,8 +324,8 @@ shift <- function(mrs_data, shift, units = "ppm") {
 
 #' Apply phasing parameters to MRS data.
 #' @param mrs_data MRS data.
-#' @param zero_order Zero'th order phase term in degrees.
-#' @param first_order First order (frequency dependent) phase term in ms.
+#' @param zero_order zero'th order phase term in degrees.
+#' @param first_order first order (frequency dependent) phase term in ms.
 #' @return MRS data with applied phase parameters.
 #' @export
 phase <- function(mrs_data, zero_order, first_order = 0) {
@@ -354,8 +354,8 @@ phase <- function(mrs_data, zero_order, first_order = 0) {
 #' Perform a zeroth order phase correction based on the phase of the first data 
 #' point in the time-domain.
 #' @param mrs_data MRS data to be corrected.
-#' @param ret_phase Return phase values (logical).
-#' @return Corrected data or a list with corrected data and optional phase 
+#' @param ret_phase return phase values (logical).
+#' @return corrected data or a list with corrected data and optional phase 
 #' values.
 #' @export
 fp_phase_correct <- function(mrs_data, ret_phase = FALSE) {
@@ -377,7 +377,7 @@ fp_phase_correct <- function(mrs_data, ret_phase = FALSE) {
 
 #' Return the first time-domain data point.
 #' @param mrs_data MRS data.
-#' @return First time-domain data point.
+#' @return first time-domain data point.
 #' @export
 get_fp <- function(mrs_data) {
   # needs to be a time-domain operation
@@ -401,7 +401,7 @@ fp_mag <- function(mrs_data) {
 
 #' Return the phase of the first data point in the time-domain.
 #' @param mrs_data MRS data.
-#' @return Phase values in degrees.
+#' @return phase values in degrees.
 #' @export
 fp_phase <- function(mrs_data) {
   # needs to be a time-domain operation
@@ -414,8 +414,8 @@ fp_phase <- function(mrs_data) {
 }
 
 #' Conjugate MRS data.
-#' @param mrs_data input data
-#' @return Conjugated data
+#' @param mrs_data input data.
+#' @return conjugated data.
 #' @export
 conj <- function(mrs_data) {
     mrs_data$data = Re(mrs_data$data) - Im(mrs_data$data) * 1i
@@ -423,10 +423,10 @@ conj <- function(mrs_data) {
 }
 
 #' Apply line-broadening (apodisation) to MRS data or basis object.
-#' @param x input mrs_data or basis_set object
-#' @param lb amount of line-broadening in Hz
-#' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1)
-#' @return line-broadened data
+#' @param x input mrs_data or basis_set object.
+#' @param lb amount of line-broadening in Hz.
+#' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1).
+#' @return line-broadened data.
 #' @rdname lb
 #' @export
 lb <- function(x, lb, lg = 1) UseMethod("lb")
@@ -463,10 +463,10 @@ lb.basis_set <- function(x, lb, lg = 1) {
 }
 
 #' Zero-fill MRS data in the time domain.
-#' @param x input mrs_data or basis_set object
-#' @param factor Zero-filling factor, factor of 2 returns a dataset with
+#' @param x input mrs_data or basis_set object.
+#' @param factor zero-filling factor, factor of 2 returns a dataset with
 #' twice the original data points.
-#' @return Zero-filled data.
+#' @return zero-filled data.
 #' @rdname zf
 #' @export
 zf <- function(x, factor = 2) UseMethod("zf")
@@ -487,7 +487,7 @@ zf.basis_set <- function(x, factor = 2) {
 #' Set the number of time-domain data points, truncating or zero-filling as
 #' appropriate.
 #' @param mrs_data MRS data.
-#' @param pts Number of data points.
+#' @param pts number of data points.
 #' @return MRS data with pts data points.
 #' @export
 set_td_pts <- function(mrs_data, pts) {
@@ -520,9 +520,9 @@ set_ref <- function(mrs_data, ref) {
 }
 
 #' Check if the chemical shift dimension of an MRS data object is in the
-#' frequency domain
-#' @param mrs_data MRS data
-#' @return logical value
+#' frequency domain.
+#' @param mrs_data MRS data.
+#' @return logical value.
 #' @export
 is_fd <- function(mrs_data) {
   mrs_data$freq_domain[7]
@@ -569,7 +569,7 @@ recon_imag <- function(mrs_data) {
 
 #' Return acquisition parameters from a MRS data object.
 #' @param mrs_data MRS data.
-#' @return A list of acquisition parameters.
+#' @return list of acquisition parameters.
 #' @export
 get_acq_paras <- function(mrs_data) {
   list(ft = mrs_data$ft, fs = fs(mrs_data), N = N(mrs_data), ref = mrs_data$ref)
@@ -589,7 +589,7 @@ dim.mrs_data <- function(x) {
 
 #' Return the number of data points in an MRS dataset.
 #' @param mrs_data MRS data.
-#' @return Number of data points.
+#' @return number of data points.
 #' @export
 N <- function(mrs_data) {
   dim(mrs_data$data)[7]
@@ -597,7 +597,7 @@ N <- function(mrs_data) {
 
 #' Return the number of dynamic scans in an MRS dataset.
 #' @param mrs_data MRS data.
-#' @return Number of dynamic scans
+#' @return number of dynamic scans.
 #' @export
 dyns <- function(mrs_data) {
   dim(mrs_data$data)[5]
@@ -614,7 +614,7 @@ Nspec <- function(mrs_data) {
 
 #' Return the sampling frequency in Hz of an MRS dataset.
 #' @param mrs_data MRS data.
-#' @return Sampling frequency in Hz.
+#' @return sampling frequency in Hz.
 #' @export
 fs <- function(mrs_data) {
   1 / mrs_data$resolution[7]
@@ -678,7 +678,7 @@ pts <- function(mrs_data) {
 
 #' Return a time scale vector to match the FID of an MRS data object.
 #' @param mrs_data MRS data.
-#' @return A time scale vector in units of seconds.
+#' @return time scale vector in units of seconds.
 #' @export
 seconds <- function(mrs_data) {
   fs <- fs(mrs_data)
@@ -686,10 +686,10 @@ seconds <- function(mrs_data) {
 }
 
 #' Get the indices of data points lying between two values (end > x > start).
-#' @param scale the full list of values.
-#' @param start the smallest value in the subset.
-#' @param end the largest value in the subset.
-#' @return a set of indices.
+#' @param scale full list of values.
+#' @param start smallest value in the subset.
+#' @param end largest value in the subset.
+#' @return set of indices.
 #' @export
 get_seg_ind <- function(scale, start, end) {
   if (start > end) {
@@ -702,7 +702,7 @@ get_seg_ind <- function(scale, start, end) {
 
 #' Crop \code{mrs_data} object based on a frequency range.
 #' @param mrs_data MRS data.
-#' @param xlim the range of values to crop in the spectral dimension 
+#' @param xlim range of values to crop in the spectral dimension eg 
 #' xlim = c(4,0.5).
 #' @param scale the units to use for the frequency scale, can be one of: "ppm", 
 #' "hz" or "points".
@@ -748,13 +748,13 @@ crop_spec <- function(mrs_data, xlim = c(4,0.5), scale = "ppm") {
 }
 
 #' Align spectra to a reference frequency using a convolution based method.
-#' @param mrs_data Data to be aligned.
-#' @param ref_peak A reference frequency in ppm units.
-#' @param zf_factor Zero filling factor to increase alignment resolution.
-#' @param lb Line broadening to apply to the reference signal.
-#' @param max_shift Maximum allowable shift in Hz.
-#' @param ret_df Return frequency shifts in addition to aligned data (logical).
-#' @return Aligned data object.
+#' @param mrs_data data to be aligned.
+#' @param ref_peak reference frequency in ppm units.
+#' @param zf_factor zero filling factor to increase alignment resolution.
+#' @param lb line broadening to apply to the reference signal.
+#' @param max_shift maximum allowable shift in Hz.
+#' @param ret_df return frequency shifts in addition to aligned data (logical).
+#' @return aligned data object.
 #' @export
 align <- function(mrs_data, ref_peak = 4.65, zf_factor = 2, lb = 2,
                   max_shift = 20, ret_df = FALSE) {
@@ -800,9 +800,9 @@ align <- function(mrs_data, ref_peak = 4.65, zf_factor = 2, lb = 2,
 #' Return an array of amplitudes derived from fitting the initial points in the
 #' time domain and extrapolating back to t=0.
 #' @param mrs_data MRS data.
-#' @param nstart The first data point to fit.
-#' @param nend The last data point to fit.
-#' @return An array of amplitudes.
+#' @param nstart first data point to fit.
+#' @param nend last data point to fit.
+#' @return array of amplitudes.
 #' @export
 get_td_amp <- function(mrs_data, nstart = 10, nend = 50) {
   
@@ -832,8 +832,8 @@ shift_hz <- function(fid_in, shifts, t) {
 }
 
 #' Extract a subset of dynamic scans.
-#' @param mrs_data Dynamic MRS data.
-#' @param subset A vector containing indices to the dynamic scans to be 
+#' @param mrs_data dynamic MRS data.
+#' @param subset vector containing indices to the dynamic scans to be 
 #' returned.
 #' @return MRS data containing the subset of requested dynamics.
 #' @export
@@ -842,9 +842,9 @@ get_dyns <- function(mrs_data, subset) {
   return(mrs_data)
 }
 
-#' Interleave the first and second half of a dynamic series
-#' @param mrs_data dynamic MRS data
-#' @return interleaved data
+#' Interleave the first and second half of a dynamic series.
+#' @param mrs_data dynamic MRS data.
+#' @return interleaved data.
 #' @export
 interleave_dyns <- function(mrs_data) {
   total <- dyns(mrs_data)
@@ -860,8 +860,8 @@ set_dyns <- function(mrs_data, subset, mrs_data_in) {
 }
 
 #' Remove a subset of dynamic scans.
-#' @param mrs_data Dynamic MRS data.
-#' @param subset A vector containing indices to the dynamic scans to be 
+#' @param mrs_data dynamic MRS data.
+#' @param subset vector containing indices to the dynamic scans to be 
 #' removed.
 #' @return MRS data without the specified dynamic scans.
 #' @export
@@ -894,18 +894,18 @@ get_slice <- function(mrs_data, z_pos) {
   return(mrs_data)
 }
 
-#' Return the first half of a dynamic series
-#' @param mrs_data dynamic MRS data
-#' @return first half of the dynamic series
+#' Return the first half of a dynamic series.
+#' @param mrs_data dynamic MRS data.
+#' @return first half of the dynamic series.
 #' @export
 get_fh_dyns <- function(mrs_data) {
   fh <- 1:(dyns(mrs_data) / 2)
   get_dyns(mrs_data, fh)
 }
 
-#' Return the second half of a dynamic series
-#' @param mrs_data dynamic MRS data
-#' @return second half of the dynamic series
+#' Return the second half of a dynamic series.
+#' @param mrs_data dynamic MRS data.
+#' @return second half of the dynamic series.
 #' @export
 get_sh_dyns <- function(mrs_data) {
   sh <- (dyns(mrs_data) / 2 + 1):dyns(mrs_data)
@@ -913,8 +913,8 @@ get_sh_dyns <- function(mrs_data) {
 }
   
 #' Return odd numbered dynamic scans starting from 1 (1,3,5...).
-#' @param mrs_data Dynamic MRS data.
-#' @return Dynamic MRS data containing odd numbered scans.
+#' @param mrs_data dynamic MRS data.
+#' @return dynamic MRS data containing odd numbered scans.
 #' @export
 get_odd_dyns <- function(mrs_data) {
   subset <- seq(1, dyns(mrs_data), 2)
@@ -922,8 +922,8 @@ get_odd_dyns <- function(mrs_data) {
 }
 
 #' Return even numbered dynamic scans starting from 1 (2,4,6...).
-#' @param mrs_data Dynamic MRS data.
-#' @return Dynamic MRS data containing even numbered scans.
+#' @param mrs_data dynamic MRS data.
+#' @return dynamic MRS data containing even numbered scans.
 #' @export
 get_even_dyns <- function(mrs_data) {
   subset <- seq(2, dyns(mrs_data), 2)
@@ -931,8 +931,8 @@ get_even_dyns <- function(mrs_data) {
 }
 
 #' Invert odd numbered dynamic scans starting from 1 (1,3,5...).
-#' @param mrs_data Dynamic MRS data.
-#' @return Dynamic MRS data with inverted odd numbered scans.
+#' @param mrs_data dynamic MRS data.
+#' @return dynamic MRS data with inverted odd numbered scans.
 #' @export
 inv_odd_dyns <- function(mrs_data) {
   subset <- seq(1, dyns(mrs_data), 2)
@@ -941,8 +941,8 @@ inv_odd_dyns <- function(mrs_data) {
 }
 
 #' Invert even numbered dynamic scans starting from 1 (2,4,6...).
-#' @param mrs_data Dynamic MRS data.
-#' @return Dynamic MRS data with inverted even numbered scans.
+#' @param mrs_data dynamic MRS data.
+#' @return dynamic MRS data with inverted even numbered scans.
 #' @export
 inv_even_dyns <- function(mrs_data) {
   subset <- seq(2, dyns(mrs_data), 2)
@@ -954,7 +954,7 @@ inv_even_dyns <- function(mrs_data) {
 #' Combine a reference and metabolite mrs_data object.
 #' @param metab metabolite mrs_data object.
 #' @param ref reference mrs_data object.
-#' @return Combined metabolite and reference mrs_data object.
+#' @return combined metabolite and reference mrs_data object.
 #' @export
 comb_metab_ref <- function(metab, ref) {
   metab$data <- abind::abind(metab$data, ref$data, along = 1)
@@ -963,7 +963,7 @@ comb_metab_ref <- function(metab, ref) {
 
 #' Extract the reference component from an mrs_data object.
 #' @param mrs_data MRS data.
-#' @return Reference component.
+#' @return reference component.
 #' @export
 get_ref <- function(mrs_data) {
   mrs_data$data <- mrs_data$data[2,,,,,,,drop = FALSE]
@@ -972,7 +972,7 @@ get_ref <- function(mrs_data) {
 
 #' Extract the metabolite component from an mrs_data object.
 #' @param mrs_data MRS data.
-#' @return Metabolite component.
+#' @return metabolite component.
 #' @export
 get_metab <- function(mrs_data) {
   mrs_data$data <- mrs_data$data[1,,,,,,,drop = FALSE]
@@ -981,8 +981,8 @@ get_metab <- function(mrs_data) {
 
 #' Append MRS data across the dynamic dimension, assumes they matched across the
 #' other dimensions.
-#' @param ... MRS data objects as arguments, or a list of MRS data objects
-#' @return A single MRS data object with the input objects concatenated together
+#' @param ... MRS data objects as arguments, or a list of MRS data objects.
+#' @return a single MRS data object with the input objects concatenated together.
 #' @export
 append_dyns <- function(...) {
   x <- list(...)
@@ -1069,8 +1069,8 @@ bc <- function(mrs_data, lambda, p) {
 }
 
 #' Calculate the mean dynamic data.
-#' @param mrs_data Dynamic MRS data.
-#' @return Mean dynamic data.
+#' @param mrs_data dynamic MRS data.
+#' @return mean dynamic data.
 #' @export
 mean_dyns <- function(mrs_data) {
   mrs_data$data <- aperm(mrs_data$data, c(5,1,2,3,4,6,7))
@@ -1081,9 +1081,9 @@ mean_dyns <- function(mrs_data) {
 }
 
 #' Calculate the mean of adjacent dynamic scans.
-#' @param mrs_data Dynamic MRS data.
-#' @param block_size Number of adjacent dynamics scans to average over.
-#' @return Dynamic data averaged in blocks.
+#' @param mrs_data dynamic MRS data.
+#' @param block_size number of adjacent dynamics scans to average over.
+#' @return dynamic data averaged in blocks.
 #' @export
 mean_dyn_blocks <- function(mrs_data, block_size) {
   
@@ -1101,8 +1101,8 @@ mean_dyn_blocks <- function(mrs_data, block_size) {
 }
 
 #' Calculate the pairwise means across a dynamic data set.
-#' @param mrs_data Dynamic MRS data.
-#' @return Mean dynamic data of adjacent dynamic pairs.
+#' @param mrs_data dynamic MRS data.
+#' @return mean dynamic data of adjacent dynamic pairs.
 #' @export
 mean_dyn_pairs <- function(mrs_data) {
   pairs <- get_odd_dyns(mrs_data) + get_even_dyns(mrs_data)
@@ -1110,8 +1110,8 @@ mean_dyn_pairs <- function(mrs_data) {
 }
 
 #' Calculate the sum of data dynamics.
-#' @param mrs_data Dynamic MRS data.
-#' @return Sum of data dynamics.
+#' @param mrs_data dynamic MRS data.
+#' @return sum of data dynamics.
 #' @export
 sum_dyns <- function(mrs_data) {
   mrs_data$data <- aperm(mrs_data$data, c(5,1,2,3,4,6,7))
@@ -1123,7 +1123,7 @@ sum_dyns <- function(mrs_data) {
 
 #' Calculate the sum across receiver coil elements.
 #' @param mrs_data MRS data split across receiver coil elements.
-#' @return Sum across coil elements.
+#' @return sum across coil elements.
 #' @export
 sum_coils <- function(mrs_data) {
   mrs_data$data <- aperm(mrs_data$data, c(6,1,2,3,4,5,7))
@@ -1138,14 +1138,12 @@ cplx_median <- function(input) {
 }
 
 #' Calculate the median dynamic data.
-#' @param mrs_data Dynamic MRS data.
-#' @return Median dynamic data.
+#' @param mrs_data dynamic MRS data.
+#' @return median dynamic data.
 #' @export
 median_dyns <- function(mrs_data) {
   return(apply_mrs(mrs_data, 5, cplx_median))
 }
-
-
 
 # TODO correct first imaginary data point?
 recon_imag_vec <- function(data) {
@@ -1236,9 +1234,9 @@ td_conv_filt <- function(mrs_data, K = 25, ext = 1) {
 #' signals. J Magn Reson 1987;73:553-557.
 #' 
 #' @param mrs_data MRS data to be filtered.
-#' @param xlim Frequency range in Hz to filter.
-#' @param comps Number of Lorentzian components to use for modelling.
-#' @param propack Option to use PROPACK SVD (logical).
+#' @param xlim frequency range in Hz to filter.
+#' @param comps number of Lorentzian components to use for modelling.
+#' @param propack option to use PROPACK SVD (logical).
 #' @export
 hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 50, propack = FALSE) {
 # TODO, region defn in ppm and allow multiple region selection
@@ -1385,8 +1383,8 @@ ecc_ref <- function(mrs_data) {
 #' Magn Reson Med. 1990 Apr;14(1):26-30.
 #' 
 #' @param metab MRS data to be corrected.
-#' @param ref Reference dataset.
-#' @return Corrected data in the time domain.
+#' @param ref ceference dataset.
+#' @return corrected data in the time domain.
 #' @export
 ecc <- function(metab, ref) {
   if (is_fd(metab)) {
@@ -1414,7 +1412,7 @@ ecc <- function(metab, ref) {
 
 #' Apodise MRSI data in the x-y direction with a k-space hamming filter.
 #' @param mrs_data MRSI data.
-#' @return Apodised data.
+#' @return apodised data.
 #' @export
 apodise_xy <- function(mrs_data) {
   # TODO check data is 2D in xy dirn and make faster...
@@ -1432,9 +1430,9 @@ apodise_xy <- function(mrs_data) {
 
 #' Zero-fill MRSI data in the k-space x-y direction.
 #' @param mrs_data MRSI data.
-#' @param factor Zero-filling factor, factor of 2 returns a dataset with
+#' @param factor zero-filling factor, factor of 2 returns a dataset with
 #' twice the original points in the x-y directions.
-#' @return Zero-filled data.
+#' @return zero-filled data.
 #' @export
 zf_xy <- function(mrs_data, factor = 2) {
   # TODO check data is 2D in xy dirn and make (much) faster by using afill
@@ -1559,24 +1557,24 @@ comb_coils <- function(metab, ref = NULL, noise = NULL,
   }
 }
 
-#' Replicate a scan in the dynamic dimension
-#' @param mrs_data MRS data to be replicated
-#' @param times Number of times to replicate
-#' @return replicated data object
+#' Replicate a scan in the dynamic dimension.
+#' @param mrs_data MRS data to be replicated.
+#' @param times number of times to replicate.
+#' @return replicated data object.
 #' @export
 rep_dyn <- function(mrs_data, times) {
   mrs_data$data <- rep_array_dim(mrs_data$data, 5, times)
   mrs_data
 }
 
-#' Replicate a scan over a given dimension
-#' @param mrs_data MRS data to be replicated
-#' @param x_rep number of x replications
-#' @param y_rep number of y replications
-#' @param z_rep number of z replications
-#' @param dyn_rep number of dynamic replications
-#' @param coil_rep number of coil replications
-#' @return replicated data object
+#' Replicate a scan over a given dimension.
+#' @param mrs_data MRS data to be replicated.
+#' @param x_rep number of x replications.
+#' @param y_rep number of y replications.
+#' @param z_rep number of z replications.
+#' @param dyn_rep number of dynamic replications.
+#' @param coil_rep number of coil replications.
+#' @return replicated data object.
 #' @export
 rep_mrs <- function(mrs_data, x_rep = 1, y_rep = 1, z_rep = 1, dyn_rep = 1,
                     coil_rep = 1) {
@@ -1596,10 +1594,10 @@ rep_mrs <- function(mrs_data, x_rep = 1, y_rep = 1, z_rep = 1, dyn_rep = 1,
 
 #' Estimate the standard deviation of the noise from a segment of an mrs_data object.
 #' @param mrs_data MRS data object.
-#' @param n The number of data points (taken from the end of array) to use in the estimation.
-#' @param offset The number of final points to exclude from the calculation.
-#' @param p_order Polynomial order to fit to the data before estimating the standard deviation.
-#' @return Standard deviation array.
+#' @param n number of data points (taken from the end of array) to use in the estimation.
+#' @param offset number of final points to exclude from the calculation.
+#' @param p_order polynomial order to fit to the data before estimating the standard deviation.
+#' @return standard deviation array.
 #' @export
 est_noise_sd <- function(mrs_data, n = 100, offset = 100, p_order = 2) {
   apply_mrs(mrs_data, 7, est_noise_sd_vec, n, offset, p_order, data_only = TRUE)
@@ -1614,7 +1612,7 @@ est_noise_sd_vec <- function(x, n = 100, offset = 100, p_order = 2) {
 
 #' Calculate the noise correlation between coil elements.
 #' @param noise_data \code{mrs_data} object with one FID for each coil element.
-#' @return Correlation matrix.
+#' @return correlation matrix.
 #' @export
 calc_coil_noise_cor <- function(noise_data) {
   cplx_data <- drop(noise_data$data)
@@ -1778,11 +1776,11 @@ int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "real") {
 }
 
 
-#' Calculate the sum of squares differences between two mrs_data objects
-#' @param mrs_data mrs_data oject 
-#' @param ref reference mrs_data object to calculate differences
-#' @param xlim spectral limits to perform calculation
-#' @return an array of the sum of squared difference values
+#' Calculate the sum of squares differences between two mrs_data objects.
+#' @param mrs_data mrs_data oject.
+#' @param ref reference mrs_data object to calculate differences.
+#' @param xlim spectral limits to perform calculation.
+#' @return an array of the sum of squared difference values.
 #' @export
 calc_spec_diff <- function(mrs_data, ref = NULL, xlim = c(4, 0.5)) {
   if (!is_fd(mrs_data)) {

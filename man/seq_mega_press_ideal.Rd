@@ -26,7 +26,7 @@ seq_mega_press_ideal(spin_params, ft, ref, ed_freq = 1.89, TE1 = 0.015,
 \item{steps}{number of hard pulses used to approximate the editing pulse.}
 }
 \value{
-a list of resonance amplitudes and frequencies.
+list of resonance amplitudes and frequencies.
 }
 \description{
 MEGA-PRESS sequence with ideal localisation pulses and Gaussian shaped

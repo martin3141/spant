@@ -10,7 +10,7 @@ fs(mrs_data)
 \item{mrs_data}{MRS data.}
 }
 \value{
-Sampling frequency in Hz.
+sampling frequency in Hz.
 }
 \description{
 Return the sampling frequency in Hz of an MRS dataset.

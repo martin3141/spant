@@ -2,18 +2,18 @@
 % Please edit documentation in R/qm_simulation.R
 \name{zero_nzoc}
 \alias{zero_nzoc}
-\title{Zero all non-zero-order coherences}
+\title{Zero all non-zero-order coherences.}
 \usage{
 zero_nzoc(sys, rho)
 }
 \arguments{
-\item{sys}{spin system object}
+\item{sys}{spin system object.}
 
-\item{rho}{density matrix}
+\item{rho}{density matrix.}
 }
 \value{
-density matrix
+density matrix.
 }
 \description{
-Zero all non-zero-order coherences
+Zero all non-zero-order coherences.
 }

@@ -1,8 +1,8 @@
-#' Create a spin system object for pulse sequence simulation
-#' @param spin_params an object describing the spin system properties
-#' @param ft transmitter frequency in Hz
-#' @param ref reference value for ppm scale
-#' @return spin system object
+#' Create a spin system object for pulse sequence simulation.
+#' @param spin_params an object describing the spin system properties.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @return spin system object.
 #' @export
 spin_sys <- function(spin_params, ft, ref) {
   # TODO checks on input
@@ -57,11 +57,11 @@ H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, ft, ref) {
 }
 
 #' Simulate pulse sequence acquisition.
-#' @param sys spin system object
-#' @param rec_phase receiver phase in degrees
-#' @param tol ignore resonance amplitudes below this threshold
-#' @param detect detection nuclei
-#' @return a list of resonance amplitudes and frequencies
+#' @param sys spin system object.
+#' @param rec_phase receiver phase in degrees.
+#' @param tol ignore resonance amplitudes below this threshold.
+#' @param detect detection nuclei.
+#' @return a list of resonance amplitudes and frequencies.
 #' @export
 acquire <- function(sys, rec_phase = 180, tol = 1e-4, detect = NULL) {
   if (is.null(detect)) {
@@ -82,11 +82,11 @@ acquire <- function(sys, rec_phase = 180, tol = 1e-4, detect = NULL) {
   list(amps = amps, freqs = freqs)
 }
 
-#' Generate the F product operator
-#' @param sys spin system object
-#' @param op operator, one of "x", "y", "z", "p", "m"
-#' @param detect detection nuclei
-#' @return F product operator matrix
+#' Generate the F product operator.
+#' @param sys spin system object.
+#' @param op operator, one of "x", "y", "z", "p", "m".
+#' @param detect detection nuclei.
+#' @return F product operator matrix.
 #' @export
 gen_F <- function(sys, op, detect = NULL) {
   basis_size <- prod(sys$spin_num * 2 + 1)
@@ -103,11 +103,11 @@ gen_F <- function(sys, op, detect = NULL) {
   F_mat
 }
 
-#' Generate the Fxy product operator with a specified phase
-#' @param sys spin system object
-#' @param phase phase angle in degrees
-#' @param detect detection nuclei
-#' @return product operator matrix
+#' Generate the Fxy product operator with a specified phase.
+#' @param sys spin system object.
+#' @param phase phase angle in degrees.
+#' @param detect detection nuclei.
+#' @return product operator matrix.
 #' @export
 gen_F_xy <- function(sys, phase, detect = NULL) {
   F_mat <- cos(phase * pi / 180) * gen_F(sys, "x", detect) +
@@ -115,19 +115,19 @@ gen_F_xy <- function(sys, phase, detect = NULL) {
   F_mat
 }
 
-#' Get the quantum coherence matrix for a spin system
-#' @param sys spin system object
-#' @return quantum coherence number matrix
+#' Get the quantum coherence matrix for a spin system.
+#' @param sys spin system object.
+#' @return quantum coherence number matrix.
 qn_states <- function(sys) {
   Fz <- gen_F(sys, "z")
   states_vec <- diag(Fz)
   outer(states_vec, states_vec, '-')
 }
 
-#' Zero all non-zero-order coherences
-#' @param sys spin system object
-#' @param rho density matrix
-#' @return density matrix
+#' Zero all non-zero-order coherences.
+#' @param sys spin system object.
+#' @param rho density matrix.
+#' @return density matrix.
 #' @export
 zero_nzoc <- function(sys, rho) {
   qn_states <- qn_states(sys)
@@ -273,14 +273,14 @@ get_1h_brain_basis_paras <- function(ft, metab_lw = NULL, lcm_compat = FALSE) {
 
 #' Simulate a basis-set suitable for 1H brain MRS analysis acquired with a PRESS 
 #' sequence. Note, ideal pulses are assumed.
-#' @param pul_seq A pulse sequence function to use.
-#' @param acq_paras List of acquisition parameters or an mrs_data object. See
-#' \code{\link{def_acq_paras}}
-#' @param xlim Range of frequencies to simulate in ppm.
-#' @param lcm_compat Exclude lipid and MM signals for use with default LCModel
+#' @param pul_seq pulse sequence function to use.
+#' @param acq_paras list of acquisition parameters or an mrs_data object. See
+#' \code{\link{def_acq_paras}}.
+#' @param xlim range of frequencies to simulate in ppm.
+#' @param lcm_compat exclude lipid and MM signals for use with default LCModel
 #' options.
-#' @param ... Extra parameters to pass to the pulse sequence function.
-#' @return Basis object.
+#' @param ... extra parameters to pass to the pulse sequence function.
+#' @return basis object.
 #' @export
 sim_basis_1h_brain <- function(pul_seq = seq_press_ideal, 
                                acq_paras = def_acq_paras(), xlim = c(0.5, 4.2), 
@@ -298,14 +298,14 @@ sim_basis_1h_brain <- function(pul_seq = seq_press_ideal,
 
 #' Simulate a basis-set suitable for 1H brain MRS analysis acquired with a PRESS 
 #' sequence. Note, ideal pulses are assumed.
-#' @param acq_paras List of acquisition parameters or an mrs_data object. See
+#' @param acq_paras list of acquisition parameters or an mrs_data object. See
 #' \code{\link{def_acq_paras}}
-#' @param xlim Range of frequencies to simulate in ppm.
-#' @param lcm_compat Exclude lipid and MM signals for use with default LCModel
+#' @param xlim range of frequencies to simulate in ppm.
+#' @param lcm_compat exclude lipid and MM signals for use with default LCModel
 #' options.
 #' @param TE1 TE1 of PRESS sequence (TE = TE1 + TE2).
 #' @param TE2 TE2 of PRESS sequence.
-#' @return Basis object.
+#' @return basis object.
 #' @export
 sim_basis_1h_brain_press <- function(acq_paras = def_acq_paras(),
                                      xlim = c(0.5, 4.2), lcm_compat = FALSE, 
@@ -331,15 +331,15 @@ get_mol_para_list_names <- function(mol_para_list) {
 }
 
 #' Simulate a basis set object.
-#' @param mol_list a list of \code{mol_parameter} objects.
-#' @param pul_seq A pulse sequence function to use.
-#' @param ft Transmitter frequency in Hz.
-#' @param ref Reference value for ppm scale.
-#' @param fs Sampling frequency in Hz.
-#' @param N Number of data points in the spectral dimension.
-#' @param xlim A ppm range limiting signals to be simulated.
-#' @param ... Extra parameters to pass to the pulse sequence function.
-#' @return A basis object.
+#' @param mol_list list of \code{mol_parameter} objects.
+#' @param pul_seq pulse sequence function to use.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @param fs sampling frequency in Hz.
+#' @param N number of data points in the spectral dimension.
+#' @param xlim ppm range limiting signals to be simulated.
+#' @param ... extra parameters to pass to the pulse sequence function.
+#' @return basis object.
 #' @export
 sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire, ft = def_ft(),
                       ref = def_ref(), fs = def_fs(), N = def_N(),
@@ -357,15 +357,15 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire, ft = def_ft(),
 }
 
 #' Simulate a \code{mol_parameter} object.
-#' @param mol a \code{mol_parameter} object.
-#' @param pul_seq A pulse sequence function to use.
-#' @param ft Transmitter frequency in Hz.
-#' @param ref Reference value for ppm scale.
-#' @param fs Sampling frequency in Hz.
-#' @param N Number of data points in the spectral dimension.
-#' @param xlim A ppm range limiting signals to be simulated.
-#' @param ... Extra parameters to pass to the pulse sequence function.
-#' @return An \code{mrs_data} object.
+#' @param mol \code{mol_parameter} object.
+#' @param pul_seq pulse sequence function to use.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @param fs sampling frequency in Hz.
+#' @param N number of data points in the spectral dimension.
+#' @param xlim ppm range limiting signals to be simulated.
+#' @param ... extra parameters to pass to the pulse sequence function.
+#' @return \code{mrs_data} object.
 #' @export
 sim_mol <- function(mol, pul_seq = seq_pulse_acquire, ft = def_ft(), 
                     ref = def_ref(), fs = def_fs(), N = def_N(),

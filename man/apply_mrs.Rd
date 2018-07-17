@@ -2,21 +2,21 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{apply_mrs}
 \alias{apply_mrs}
-\title{Apply a function across given dimensions of a MRS data object}
+\title{Apply a function across given dimensions of a MRS data object.}
 \usage{
 apply_mrs(mrs_data, dims, fun, ..., data_only = FALSE)
 }
 \arguments{
-\item{mrs_data}{MRS data}
+\item{mrs_data}{MRS data.}
 
-\item{dims}{dimensions to apply the function}
+\item{dims}{dimensions to apply the function.}
 
-\item{fun}{name of the function}
+\item{fun}{name of the function.}
 
-\item{...}{arguments to the function}
+\item{...}{arguments to the function.}
 
-\item{data_only}{return an array rather than an MRS data object}
+\item{data_only}{return an array rather than an MRS data object.}
 }
 \description{
-Apply a function across given dimensions of a MRS data object
+Apply a function across given dimensions of a MRS data object.
 }

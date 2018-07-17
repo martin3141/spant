@@ -2,20 +2,20 @@
 % Please edit documentation in R/qm_simulation.R
 \name{gen_F_xy}
 \alias{gen_F_xy}
-\title{Generate the Fxy product operator with a specified phase}
+\title{Generate the Fxy product operator with a specified phase.}
 \usage{
 gen_F_xy(sys, phase, detect = NULL)
 }
 \arguments{
-\item{sys}{spin system object}
+\item{sys}{spin system object.}
 
-\item{phase}{phase angle in degrees}
+\item{phase}{phase angle in degrees.}
 
-\item{detect}{detection nuclei}
+\item{detect}{detection nuclei.}
 }
 \value{
-product operator matrix
+product operator matrix.
 }
 \description{
-Generate the Fxy product operator with a specified phase
+Generate the Fxy product operator with a specified phase.
 }

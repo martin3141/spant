@@ -13,13 +13,13 @@ zf(x, factor = 2)
 \method{zf}{basis_set}(x, factor = 2)
 }
 \arguments{
-\item{x}{input mrs_data or basis_set object}
+\item{x}{input mrs_data or basis_set object.}
 
-\item{factor}{Zero-filling factor, factor of 2 returns a dataset with
+\item{factor}{zero-filling factor, factor of 2 returns a dataset with
 twice the original data points.}
 }
 \value{
-Zero-filled data.
+zero-filled data.
 }
 \description{
 Zero-fill MRS data in the time domain.

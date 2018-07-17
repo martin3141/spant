@@ -7,7 +7,7 @@
 set_tqn_cmd(cmd)
 }
 \arguments{
-\item{cmd}{Path to binary.}
+\item{cmd}{path to binary.}
 }
 \description{
 Set the command to run the TARQUIN command-line program.

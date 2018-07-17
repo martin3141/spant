@@ -8,20 +8,20 @@ sim_resonances(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
   freq_ppm = TRUE, acq_paras = def_acq_paras())
 }
 \arguments{
-\item{freq}{Resonance frequency.}
+\item{freq}{resonance frequency.}
 
-\item{amp}{Resonance amplitude.}
+\item{amp}{resonance amplitude.}
 
-\item{lw}{Line width in Hz.}
+\item{lw}{line width in Hz.}
 
 \item{lg}{Lorentz-Gauss lineshape parameter (between 0 and 1).}
 
-\item{phase}{Phase in degrees.}
+\item{phase}{phase in degrees.}
 
-\item{freq_ppm}{Frequencies are given in ppm units if set to TRUE, otherwise
+\item{freq_ppm}{frequencies are given in ppm units if set to TRUE, otherwise
 Hz are assumed.}
 
-\item{acq_paras}{List of acquisition parameters. See
+\item{acq_paras}{list of acquisition parameters. See
 \code{\link{def_acq_paras}}}
 }
 \value{

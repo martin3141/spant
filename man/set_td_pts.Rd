@@ -10,7 +10,7 @@ set_td_pts(mrs_data, pts)
 \arguments{
 \item{mrs_data}{MRS data.}
 
-\item{pts}{Number of data points.}
+\item{pts}{number of data points.}
 }
 \value{
 MRS data with pts data points.

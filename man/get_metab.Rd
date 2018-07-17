@@ -10,7 +10,7 @@ get_metab(mrs_data)
 \item{mrs_data}{MRS data.}
 }
 \value{
-Metabolite component.
+metabolite component.
 }
 \description{
 Extract the metabolite component from an mrs_data object.

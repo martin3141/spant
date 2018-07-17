@@ -2,20 +2,20 @@
 % Please edit documentation in R/utils.R
 \name{comb_csv_results}
 \alias{comb_csv_results}
-\title{Combine the results from multiple csv format files into a table}
+\title{Combine the results from multiple csv format files into a table.}
 \usage{
 comb_csv_results(pattern, supp_mess = TRUE, ...)
 }
 \arguments{
-\item{pattern}{glob string to match csv files}
+\item{pattern}{glob string to match csv files.}
 
-\item{supp_mess}{suppress messages from the read_csv function}
+\item{supp_mess}{suppress messages from the read_csv function.}
 
-\item{...}{extra parameters to pass to read_csv}
+\item{...}{extra parameters to pass to read_csv.}
 }
 \value{
-results table
+results table.
 }
 \description{
-Combine the results from multiple csv format files into a table
+Combine the results from multiple csv format files into a table.
 }

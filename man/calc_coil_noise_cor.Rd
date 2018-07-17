@@ -10,7 +10,7 @@ calc_coil_noise_cor(noise_data)
 \item{noise_data}{\code{mrs_data} object with one FID for each coil element.}
 }
 \value{
-Correlation matrix.
+correlation matrix.
 }
 \description{
 Calculate the noise correlation between coil elements.

@@ -2,20 +2,20 @@
 % Please edit documentation in R/qm_simulation.R
 \name{spin_sys}
 \alias{spin_sys}
-\title{Create a spin system object for pulse sequence simulation}
+\title{Create a spin system object for pulse sequence simulation.}
 \usage{
 spin_sys(spin_params, ft, ref)
 }
 \arguments{
-\item{spin_params}{an object describing the spin system properties}
+\item{spin_params}{an object describing the spin system properties.}
 
-\item{ft}{transmitter frequency in Hz}
+\item{ft}{transmitter frequency in Hz.}
 
-\item{ref}{reference value for ppm scale}
+\item{ref}{reference value for ppm scale.}
 }
 \value{
-spin system object
+spin system object.
 }
 \description{
-Create a spin system object for pulse sequence simulation
+Create a spin system object for pulse sequence simulation.
 }

@@ -7,7 +7,7 @@
 def_ft()
 }
 \value{
-Transmitter frequency in Hz.
+transmitter frequency in Hz.
 }
 \description{
 Return the default transmitter frequency in Hz.

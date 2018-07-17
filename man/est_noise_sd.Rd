@@ -9,14 +9,14 @@ est_noise_sd(mrs_data, n = 100, offset = 100, p_order = 2)
 \arguments{
 \item{mrs_data}{MRS data object.}
 
-\item{n}{The number of data points (taken from the end of array) to use in the estimation.}
+\item{n}{number of data points (taken from the end of array) to use in the estimation.}
 
-\item{offset}{The number of final points to exclude from the calculation.}
+\item{offset}{number of final points to exclude from the calculation.}
 
-\item{p_order}{Polynomial order to fit to the data before estimating the standard deviation.}
+\item{p_order}{polynomial order to fit to the data before estimating the standard deviation.}
 }
 \value{
-Standard deviation array.
+standard deviation array.
 }
 \description{
 Estimate the standard deviation of the noise from a segment of an mrs_data object.

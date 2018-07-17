@@ -7,10 +7,10 @@
 sum_dyns(mrs_data)
 }
 \arguments{
-\item{mrs_data}{Dynamic MRS data.}
+\item{mrs_data}{dynamic MRS data.}
 }
 \value{
-Sum of data dynamics.
+sum of data dynamics.
 }
 \description{
 Calculate the sum of data dynamics.

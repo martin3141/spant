@@ -12,7 +12,7 @@ comb_metab_ref(metab, ref)
 \item{ref}{reference mrs_data object.}
 }
 \value{
-Combined metabolite and reference mrs_data object.
+combined metabolite and reference mrs_data object.
 }
 \description{
 Combine a reference and metabolite mrs_data object.

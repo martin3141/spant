@@ -9,20 +9,20 @@ sim_basis_1h_brain(pul_seq = seq_press_ideal, acq_paras = def_acq_paras(),
   xlim = c(0.5, 4.2), lcm_compat = FALSE, ...)
 }
 \arguments{
-\item{pul_seq}{A pulse sequence function to use.}
+\item{pul_seq}{pulse sequence function to use.}
 
-\item{acq_paras}{List of acquisition parameters or an mrs_data object. See
-\code{\link{def_acq_paras}}}
+\item{acq_paras}{list of acquisition parameters or an mrs_data object. See
+\code{\link{def_acq_paras}}.}
 
-\item{xlim}{Range of frequencies to simulate in ppm.}
+\item{xlim}{range of frequencies to simulate in ppm.}
 
-\item{lcm_compat}{Exclude lipid and MM signals for use with default LCModel
+\item{lcm_compat}{exclude lipid and MM signals for use with default LCModel
 options.}
 
-\item{...}{Extra parameters to pass to the pulse sequence function.}
+\item{...}{extra parameters to pass to the pulse sequence function.}
 }
 \value{
-Basis object.
+basis object.
 }
 \description{
 Simulate a basis-set suitable for 1H brain MRS analysis acquired with a PRESS

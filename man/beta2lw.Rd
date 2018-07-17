@@ -3,17 +3,17 @@
 \name{beta2lw}
 \alias{beta2lw}
 \title{Covert a beta value in the time-domain to an equivalent linewidth in Hz:
-x * exp(-i * t * t * beta)}
+x * exp(-i * t * t * beta).}
 \usage{
 beta2lw(beta)
 }
 \arguments{
-\item{beta}{beta damping value}
+\item{beta}{beta damping value.}
 }
 \value{
-linewidth value in Hz
+linewidth value in Hz.
 }
 \description{
 Covert a beta value in the time-domain to an equivalent linewidth in Hz:
-x * exp(-i * t * t * beta)
+x * exp(-i * t * t * beta).
 }

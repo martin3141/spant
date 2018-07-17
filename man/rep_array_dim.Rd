@@ -2,20 +2,20 @@
 % Please edit documentation in R/utils.R
 \name{rep_array_dim}
 \alias{rep_array_dim}
-\title{Repeat an array over a given dimension}
+\title{Repeat an array over a given dimension.}
 \usage{
 rep_array_dim(x, rep_dim, n)
 }
 \arguments{
-\item{x}{array}
+\item{x}{array.}
 
-\item{rep_dim}{dimension to extend}
+\item{rep_dim}{dimension to extend.}
 
-\item{n}{number of times to repeat}
+\item{n}{number of times to repeat.}
 }
 \value{
-extended array
+extended array.
 }
 \description{
-Repeat an array over a given dimension
+Repeat an array over a given dimension.
 }

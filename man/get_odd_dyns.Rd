@@ -7,10 +7,10 @@
 get_odd_dyns(mrs_data)
 }
 \arguments{
-\item{mrs_data}{Dynamic MRS data.}
+\item{mrs_data}{dynamic MRS data.}
 }
 \value{
-Dynamic MRS data containing odd numbered scans.
+dynamic MRS data containing odd numbered scans.
 }
 \description{
 Return odd numbered dynamic scans starting from 1 (1,3,5...).

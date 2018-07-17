@@ -7,10 +7,10 @@
 median_dyns(mrs_data)
 }
 \arguments{
-\item{mrs_data}{Dynamic MRS data.}
+\item{mrs_data}{dynamic MRS data.}
 }
 \value{
-Median dynamic data.
+median dynamic data.
 }
 \description{
 Calculate the median dynamic data.

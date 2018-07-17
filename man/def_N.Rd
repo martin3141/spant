@@ -7,7 +7,7 @@
 def_N()
 }
 \value{
-Number of data points in the spectral dimension.
+number of data points in the spectral dimension.
 }
 \description{
 Return the default number of data points in the spectral dimension.

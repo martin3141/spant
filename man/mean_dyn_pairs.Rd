@@ -7,10 +7,10 @@
 mean_dyn_pairs(mrs_data)
 }
 \arguments{
-\item{mrs_data}{Dynamic MRS data.}
+\item{mrs_data}{dynamic MRS data.}
 }
 \value{
-Mean dynamic data of adjacent dynamic pairs.
+mean dynamic data of adjacent dynamic pairs.
 }
 \description{
 Calculate the pairwise means across a dynamic data set.

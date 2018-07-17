@@ -7,10 +7,10 @@
 get_even_dyns(mrs_data)
 }
 \arguments{
-\item{mrs_data}{Dynamic MRS data.}
+\item{mrs_data}{dynamic MRS data.}
 }
 \value{
-Dynamic MRS data containing even numbered scans.
+dynamic MRS data containing even numbered scans.
 }
 \description{
 Return even numbered dynamic scans starting from 1 (2,4,6...).

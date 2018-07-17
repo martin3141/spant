@@ -164,20 +164,20 @@ varpro_obj <- function(par, y, basis, t, nstart, sc_res = FALSE) {
 }
 
 #' Return a list of options for VARPRO based fitting.
-#' @param nstart Position in the time-domain to start fitting, units of data
+#' @param nstart position in the time-domain to start fitting, units of data
 #' points.
-#' @param init_g_damping Starting value for the global Gaussian line-broadening
+#' @param init_g_damping starting value for the global Gaussian line-broadening
 #' term - measured in Hz.
-#' @param maxiters Maximum number of levmar iterations to perform.
-#' @param max_shift Maximum shift allowed to each element in the basis set, 
+#' @param maxiters maximum number of levmar iterations to perform.
+#' @param max_shift maximum shift allowed to each element in the basis set, 
 #' measured in Hz.
-#' @param max_g_damping Maximum permitted global Gaussian line-broadening.
-#' @param max_ind_damping Maximum permitted Lorentzian line-broadening for each
+#' @param max_g_damping maximum permitted global Gaussian line-broadening.
+#' @param max_ind_damping maximum permitted Lorentzian line-broadening for each
 #' element in the basis set, measured in Hz.
-#' @param anal_jac Option to use the analytic or numerical Jacobian (logical).
-#' @param bl_smth_pts Number of data points to use in the baseline smoothing
+#' @param anal_jac option to use the analytic or numerical Jacobian (logical).
+#' @param bl_smth_pts number of data points to use in the baseline smoothing
 #' calculation.
-#' @return List of options.
+#' @return list of options.
 #' @examples
 #' varpro_opts(nstart = 10)
 #' @export
@@ -250,4 +250,3 @@ varpro_anal_jac <- function(par, y, basis, t, nstart) {
   
   c(phase_jac_real, g_lw_jac_real, shift_jac, lw_jac)
 }
-    

@@ -7,12 +7,12 @@
 mean_dyn_blocks(mrs_data, block_size)
 }
 \arguments{
-\item{mrs_data}{Dynamic MRS data.}
+\item{mrs_data}{dynamic MRS data.}
 
-\item{block_size}{Number of adjacent dynamics scans to average over.}
+\item{block_size}{number of adjacent dynamics scans to average over.}
 }
 \value{
-Dynamic data averaged in blocks.
+dynamic data averaged in blocks.
 }
 \description{
 Calculate the mean of adjacent dynamic scans.

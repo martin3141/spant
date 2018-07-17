@@ -2,20 +2,20 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{shift}
 \alias{shift}
-\title{Apply a frequency shift to MRS data}
+\title{Apply a frequency shift to MRS data.}
 \usage{
 shift(mrs_data, shift, units = "ppm")
 }
 \arguments{
-\item{mrs_data}{MRS data}
+\item{mrs_data}{MRS data.}
 
-\item{shift}{frequency shift (in ppm by default)}
+\item{shift}{frequency shift (in ppm by default).}
 
-\item{units}{of the shift ("ppm" or "hz")}
+\item{units}{of the shift ("ppm" or "hz").}
 }
 \value{
 frequency shifted MRS data.
 }
 \description{
-Apply a frequency shift to MRS data
+Apply a frequency shift to MRS data.
 }

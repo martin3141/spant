@@ -7,7 +7,7 @@
 def_fs()
 }
 \value{
-Sampling frequency in Hz.
+sampling frequency in Hz.
 }
 \description{
 Return the default sampling frequency in Hz.
