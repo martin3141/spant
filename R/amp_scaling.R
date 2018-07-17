@@ -31,11 +31,11 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr){
   
 #' Apply water reference scaling to a fitting results object to yield metabolite 
 #' quantities in millimolar (mM) units (mol/litre).
-#' @param fit_result A result object generated from fitting.
-#' @param ref_data Water reference MRS data object.
-#' @param w_att Water attenuation factor (default = 0.7).
-#' @param w_conc Assumed water concentration (default = 35880).
-#' @return A \code{fit_result} object with a res_tab_molar data table added.
+#' @param fit_result a result object generated from fitting.
+#' @param ref_data water reference MRS data object.
+#' @param w_att water attenuation factor (default = 0.7).
+#' @param w_conc assumed water concentration (default = 35880).
+#' @return a \code{fit_result} object with a res_tab_molar data table added.
 #' @export
 scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, 
                                  w_conc = 35880) {
@@ -92,7 +92,6 @@ scale_amp_ratio <- function(fit_result, name) {
   
   fit_result
 }
-
 
 get_corr_factor <- function(te, tr, B0, gm_vol, wm_vol, csf_vol) {
   # Correction factor calcualted according to the method of Gasparovic et al (MRM 55:1219-1226 2006)

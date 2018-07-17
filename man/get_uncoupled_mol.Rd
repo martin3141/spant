@@ -7,20 +7,20 @@
 get_uncoupled_mol(name, chem_shift, nucleus, scale_factor, lw, lg)
 }
 \arguments{
-\item{name}{Name of the molecule.}
+\item{name}{name of the molecule.}
 
-\item{chem_shift}{Chemical shift of the resonance (PPM).}
+\item{chem_shift}{chemical shift of the resonance (PPM).}
 
-\item{nucleus}{Nucleus (1H, 31P...).}
+\item{nucleus}{nucleus (1H, 31P...).}
 
-\item{scale_factor}{Multiplicative scaling factor.}
+\item{scale_factor}{multiplicative scaling factor.}
 
-\item{lw}{Line width in Hz.}
+\item{lw}{linewidth in Hz.}
 
 \item{lg}{Lorentz-Gauss lineshape parameter (between 0 and 1).}
 }
 \value{
-A mol_parameters object.
+mol_parameters object.
 }
 \description{
 Generate a \code{mol_parameters} object for a simple spin system with one resonance.

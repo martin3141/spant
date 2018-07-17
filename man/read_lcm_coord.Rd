@@ -7,10 +7,10 @@
 read_lcm_coord(coord_f)
 }
 \arguments{
-\item{coord_f}{Path to the coord file.}
+\item{coord_f}{path to the coord file.}
 }
 \value{
-A list containing a table of fit point and results structure containing
+list containing a table of fit point and results structure containing
 signal amplitudes, errors and fitting diagnostics.
 }
 \description{

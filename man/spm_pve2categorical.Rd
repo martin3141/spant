@@ -8,10 +8,10 @@ the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM.}
 spm_pve2categorical(fname)
 }
 \arguments{
-\item{fname}{any of the segmentation files (eg c1_MY_T1.nii)}
+\item{fname}{any of the segmentation files (eg c1_MY_T1.nii).}
 }
 \value{
-nifti object
+nifti object.
 }
 \description{
 Convert SPM style segmentation files to a single categorical image where

@@ -7,9 +7,9 @@
 write_mrs_dpt_v2(fname, mrs_data)
 }
 \arguments{
-\item{fname}{The filename of the output dpt format MRS data.}
+\item{fname}{the filename of the output dpt format MRS data.}
 
-\item{mrs_data}{Object to be written to file.}
+\item{mrs_data}{object to be written to file.}
 }
 \description{
 Write MRS data object to file in dangerplot (dpt) v2 format.

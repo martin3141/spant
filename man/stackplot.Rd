@@ -9,7 +9,7 @@ stackplot(x, ...)
 \arguments{
 \item{x}{object for plotting.}
 
-\item{...}{Arguments to be passed to methods.}
+\item{...}{arguments to be passed to methods.}
 }
 \description{
 Produce a plot with multiple traces.

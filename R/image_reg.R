@@ -70,9 +70,9 @@ plot_voi_overlay_seg <- function(voi, mri_seg) {
 }
 
 #' Return the white matter, gray matter and CSF composition of a volume.
-#' @param voi volume data as a nifti object
-#' @param mri_seg segmented brain volume as a nifti object
-#' @return a vector of partial volumes expressed as percentages
+#' @param voi volume data as a nifti object.
+#' @param mri_seg segmented brain volume as a nifti object.
+#' @return a vector of partial volumes expressed as percentages.
 #' @export
 get_voi_seg <- function(voi, mri_seg) {
   # check the image orientation etc is the same
@@ -85,8 +85,8 @@ get_voi_seg <- function(voi, mri_seg) {
 
 #' Convert SPM style segmentation files to a single categorical image where
 #' the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM.
-#' @param fname any of the segmentation files (eg c1_MY_T1.nii)
-#' @return nifti object 
+#' @param fname any of the segmentation files (eg c1_MY_T1.nii).
+#' @return nifti object.
 #' @export
 spm_pve2categorical <- function(fname) {
   # check the file name makes sense

@@ -226,12 +226,12 @@ fit_tab2csv <- function(x, fname, pvc = FALSE) {
   utils::write.csv(x, fname, quote = FALSE, row.names = FALSE)
 }
 
-#' Plot a 2D slice from an MRSI fit result object
-#' @param fit_res \code{fit_result} object
-#' @param name name of the quantity to plot, eg "TNAA"
-#' @param slice slice to plot in the z direction
-#' @param zlim range of values to plot
-#' @param interp interpolation factor
+#' Plot a 2D slice from an MRSI fit result object.
+#' @param fit_res \code{fit_result} object.
+#' @param name name of the quantity to plot, eg "TNAA".
+#' @param slice slice to plot in the z direction.
+#' @param zlim range of values to plot.
+#' @param interp interpolation factor.
 #' @export
 plot_fit_slice <- function(fit_res, name, slice = 1, zlim = NULL, interp = 1) {
   result_map <- fit_res$res_tab[[name]]
@@ -252,9 +252,9 @@ plot_fit_slice <- function(fit_res, name, slice = 1, zlim = NULL, interp = 1) {
   }
 }
 
-#' Get a data array from a fit result
-#' @param fit_res \code{fit_result} object
-#' @param name name of the quantity to plot, eg "TNAA"
+#' Get a data array from a fit result.
+#' @param fit_res \code{fit_result} object.
+#' @param name name of the quantity to plot, eg "TNAA".
 #' @export
 get_fit_map <- function(fit_res, name) {
   result_map <- fit_res$res_tab[[name]]

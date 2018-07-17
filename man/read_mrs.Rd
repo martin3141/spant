@@ -7,20 +7,20 @@
 read_mrs(fname, format, ft = NULL, fs = NULL, ref = NULL)
 }
 \arguments{
-\item{fname}{The filename of the dpt format MRS data.}
+\item{fname}{filename of the dpt format MRS data.}
 
-\item{format}{A string describing the data format. May be one of the
+\item{format}{string describing the data format. May be one of the
 following : "spar_sdat", "rda", "ima", "twix", "pfile", "list_data",
 "paravis", "dpt".}
 
-\item{ft}{Transmitter frequency in Hz (required for list_data format).}
+\item{ft}{transmitter frequency in Hz (required for list_data format).}
 
-\item{fs}{Sampling frequency in Hz (required for list_data format).}
+\item{fs}{sampling frequency in Hz (required for list_data format).}
 
-\item{ref}{Reference value for ppm scale (required for list_data format).}
+\item{ref}{reference value for ppm scale (required for list_data format).}
 }
 \value{
-An MRS data object.
+MRS data object.
 }
 \description{
 Read MRS data from a file.

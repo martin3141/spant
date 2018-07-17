@@ -2,18 +2,18 @@
 % Please edit documentation in R/fitting.R
 \name{fit_diags}
 \alias{fit_diags}
-\title{Calculate diagnostic information for object of class \code{fit_result}}
+\title{Calculate diagnostic information for object of class \code{fit_result}.}
 \usage{
 fit_diags(x, amps = NULL)
 }
 \arguments{
-\item{x}{\code{fit_result} object}
+\item{x}{\code{fit_result} object.}
 
-\item{amps}{known metabolite amplitudes}
+\item{amps}{known metabolite amplitudes.}
 }
 \value{
-a dataframe of diagnostic information
+a dataframe of diagnostic information.
 }
 \description{
-Calculate diagnostic information for object of class \code{fit_result}
+Calculate diagnostic information for object of class \code{fit_result}.
 }

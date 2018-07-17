@@ -1,7 +1,7 @@
 #' Generate a basis file using TARQUIN.
-#' @param basis_file The filename of the basis file to be generated.
-#' @param metab_data The MRS data object to match the generated basis parameters.
-#' @param opts List of options to pass to TARQUIN.
+#' @param basis_file filename of the basis file to be generated.
+#' @param metab_data MRS data object to match the generated basis parameters.
+#' @param opts list of options to pass to TARQUIN.
 #' @examples
 #' \dontrun{
 #' write_basis_tqn('test.basis',mrs_data,c("--echo","0.04"))
@@ -32,7 +32,7 @@ write_basis_tqn <- function(basis_file, metab_data, opts = NULL) {
 #' @param ft transmitter frequency
 #' @param N number of data points
 #' @param ref chemical shift reference
-#' @param opts List of options to pass to TARQUIN.
+#' @param opts list of options to pass to TARQUIN.
 #' @examples
 #' \dontrun{
 #' write_basis_tqn('test.basis',mrs_data,c("--echo","0.04"))
@@ -94,9 +94,9 @@ stackplot.basis_set <- function(x, ...) {
 }
 
 #' Read a basis file in LCModel .basis format.
-#' @param basis_file Path to basis file.
-#' @param ref Assumed ppm reference value.
-#' @return Basis object.
+#' @param basis_file path to basis file.
+#' @param ref assumed ppm reference value.
+#' @return basis object.
 #' @export
 read_basis <- function(basis_file, ref = def_ref()) {
   con  <- file(basis_file, open = "r")
@@ -141,8 +141,8 @@ read_basis <- function(basis_file, ref = def_ref()) {
 }
 
 #' Write a basis object to an LCModel .basis formatted file.
-#' @param basis Basis object to be exported.
-#' @param basis_file Path to basis file to be generated.
+#' @param basis basis object to be exported.
+#' @param basis_file path to basis file to be generated.
 #' @export
 write_basis <- function(basis, basis_file) {
   mrs_data <- basis2mrs_data(basis)
@@ -246,9 +246,9 @@ basis2mrs_data <- function(basis, sum_elements = FALSE, amp = NULL) {
 
 #' Convert an mrs_data object to basis object - where basis signals are spread
 #' across the dynamic dimension in the MRS data.
-#' @param mrs_data An mrs_data object with basis signals spread across the dynamic dimension.
-#' @param names A list of names corresponding to basis signals.
-#' @return Basis set object.
+#' @param mrs_data mrs_data object with basis signals spread across the dynamic dimension.
+#' @param names list of names corresponding to basis signals.
+#' @return basis set object.
 #' @export
 mrs_data2basis <- function(mrs_data, names) {
   # transform to FD

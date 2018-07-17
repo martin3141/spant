@@ -257,7 +257,7 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
 
 #' Produce a plot with multiple traces.
 #' @param x object for plotting.
-#' @param ... Arguments to be passed to methods.
+#' @param ... arguments to be passed to methods.
 #' @export
 stackplot <- function(x, ...) {
   UseMethod("stackplot", x)
@@ -453,19 +453,19 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   if (restore_def_par) graphics::par(.pardefault)
 }
 
-#' Plot a slice from a 7 dimensional array
-#' @param data 7d array of values to be plotted
-#' @param zlim smallest and largest values to be plotted
+#' Plot a slice from a 7 dimensional array.
+#' @param data 7d array of values to be plotted.
+#' @param zlim smallest and largest values to be plotted.
 #' @param mask_map matching map with logical values to indicate if the 
-#' corresponding values should be plotted
-#' @param mask_cutoff minimum values to plot (as a percentage of the maximum)
-#' @param interp map interpolation factor
-#' @param slice the slice index to plot
-#' @param dyn the dynamic index to plot
-#' @param coil the coil element number to plot
-#' @param ref reference index to plot
-#' @param denom map to use as a denominator
-#' @param horizontal display the colorbar horizontally (logical)
+#' corresponding values should be plotted.
+#' @param mask_cutoff minimum values to plot (as a percentage of the maximum).
+#' @param interp map interpolation factor.
+#' @param slice the slice index to plot.
+#' @param dyn the dynamic index to plot.
+#' @param coil the coil element number to plot.
+#' @param ref reference index to plot.
+#' @param denom map to use as a denominator.
+#' @param horizontal display the colorbar horizontally (logical).
 #' @export
 plot_slice_map <- function(data, zlim = NULL, mask_map = NULL,
                            mask_cutoff = 20, interp = 1, slice = 1, dyn = 1,

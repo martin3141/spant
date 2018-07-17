@@ -16,7 +16,7 @@ sim_basis_tqn(fs = def_fs(), ft = def_ft(), N = def_N(),
 
 \item{ref}{chemical shift reference}
 
-\item{opts}{List of options to pass to TARQUIN.}
+\item{opts}{list of options to pass to TARQUIN.}
 }
 \description{
 Simulate a basis file using TARQUIN.

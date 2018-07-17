@@ -1,12 +1,12 @@
 #' Read MRS data from a file.
-#' @param fname The filename of the dpt format MRS data.
-#' @param format A string describing the data format. May be one of the 
+#' @param fname filename of the dpt format MRS data.
+#' @param format string describing the data format. May be one of the 
 #' following : "spar_sdat", "rda", "ima", "twix", "pfile", "list_data",
 #' "paravis", "dpt".
-#' @param ft Transmitter frequency in Hz (required for list_data format).
-#' @param fs Sampling frequency in Hz (required for list_data format).
-#' @param ref Reference value for ppm scale (required for list_data format).
-#' @return An MRS data object.
+#' @param ft transmitter frequency in Hz (required for list_data format).
+#' @param fs sampling frequency in Hz (required for list_data format).
+#' @param ref reference value for ppm scale (required for list_data format).
+#' @return MRS data object.
 #' @examples
 #' fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
 #' mrs_data <- read_mrs(fname, format = "spar_sdat")
@@ -38,8 +38,8 @@ read_mrs <- function(fname, format, ft = NULL, fs = NULL, ref = NULL) {
 }
 
 #' Read MRS data stored in dangerplot (dpt) v3 format.
-#' @param fname The filename of the dpt format MRS data.
-#' @return An MRS data object.
+#' @param fname filename of the dpt format MRS data.
+#' @return MRS data object.
 #' @examples
 #' \dontrun{
 #' mrs_data <- read_mrs_dpt(system.file("extdata","svs.dpt",package="spant"))
@@ -130,12 +130,12 @@ read_mrs_dpt <- function(fname) {
 }
 
 #' Read MRS data using the TARQUIN software package.
-#' @param fname The filename containing the MRS data.
-#' @param fname_ref A second filename containing reference MRS data.
-#' @param format The format of the MRS data. Can be one of the following:
+#' @param fname the filename containing the MRS data.
+#' @param fname_ref a second filename containing reference MRS data.
+#' @param format format of the MRS data. Can be one of the following:
 #' siemens, philips, ge, dcm, dpt, rda, lcm, varian, bruker, jmrui_txt.
-#' @param id An optional ID string.
-#' @param group An optional group string.
+#' @param id optional ID string.
+#' @param group optional group string.
 #' @return MRS data object.
 #' @examples
 #' fname <- system.file("extdata","philips_spar_sdat_WS.SDAT",package="spant")
@@ -201,8 +201,8 @@ read_mrs_tqn <- function(fname, fname_ref = NA, format, id = NA, group = NA) {
 }
 
 #' Write MRS data object to file in dangerplot (dpt) v2 format.
-#' @param fname The filename of the output dpt format MRS data.
-#' @param mrs_data Object to be written to file.
+#' @param fname the filename of the output dpt format MRS data.
+#' @param mrs_data object to be written to file.
 #' @examples
 #' \dontrun{
 #' mrs_data <- write_mrs_dpt_v2("my_mrs_data.dpt", my_mrs_data)

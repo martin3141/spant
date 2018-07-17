@@ -2,12 +2,12 @@
 #' 
 #' An implementation of the method published by Near et al MRM 73:44-50 (2015).
 #' 
-#' @param mrs_data MRS data to be corrected
+#' @param mrs_data MRS data to be corrected.
 #' @param ref optional MRS data to use as a reference, the first dynamic of 
 #' mrs_data is used if this argument is not supplied.
 #' @param xlim optional frequency range to perform optimisation, set to NULL
 #' to use the full range.
-#' @param max_t truncate the FID when longer than max_t to reduce time taken
+#' @param max_t truncate the FID when longer than max_t to reduce time taken.
 #' @return a list containing the corrected data; phase and shift values in units
 #' of degrees and Hz respectively.
 #' @export

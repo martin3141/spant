@@ -7,12 +7,12 @@
 read_basis(basis_file, ref = def_ref())
 }
 \arguments{
-\item{basis_file}{Path to basis file.}
+\item{basis_file}{path to basis file.}
 
-\item{ref}{Assumed ppm reference value.}
+\item{ref}{assumed ppm reference value.}
 }
 \value{
-Basis object.
+basis object.
 }
 \description{
 Read a basis file in LCModel .basis format.

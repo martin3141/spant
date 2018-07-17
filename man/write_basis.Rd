@@ -7,9 +7,9 @@
 write_basis(basis, basis_file)
 }
 \arguments{
-\item{basis}{Basis object to be exported.}
+\item{basis}{basis object to be exported.}
 
-\item{basis_file}{Path to basis file to be generated.}
+\item{basis_file}{path to basis file to be generated.}
 }
 \description{
 Write a basis object to an LCModel .basis formatted file.

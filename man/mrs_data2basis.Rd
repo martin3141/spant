@@ -8,12 +8,12 @@ across the dynamic dimension in the MRS data.}
 mrs_data2basis(mrs_data, names)
 }
 \arguments{
-\item{mrs_data}{An mrs_data object with basis signals spread across the dynamic dimension.}
+\item{mrs_data}{mrs_data object with basis signals spread across the dynamic dimension.}
 
-\item{names}{A list of names corresponding to basis signals.}
+\item{names}{list of names corresponding to basis signals.}
 }
 \value{
-Basis set object.
+basis set object.
 }
 \description{
 Convert an mrs_data object to basis object - where basis signals are spread

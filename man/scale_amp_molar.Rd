@@ -8,16 +8,16 @@ quantities in millimolar (mM) units (mol/litre).}
 scale_amp_molar(fit_result, ref_data, w_att = 0.7, w_conc = 35880)
 }
 \arguments{
-\item{fit_result}{A result object generated from fitting.}
+\item{fit_result}{a result object generated from fitting.}
 
-\item{ref_data}{Water reference MRS data object.}
+\item{ref_data}{water reference MRS data object.}
 
-\item{w_att}{Water attenuation factor (default = 0.7).}
+\item{w_att}{water attenuation factor (default = 0.7).}
 
-\item{w_conc}{Assumed water concentration (default = 35880).}
+\item{w_conc}{assumed water concentration (default = 35880).}
 }
 \value{
-A \code{fit_result} object with a res_tab_molar data table added.
+a \code{fit_result} object with a res_tab_molar data table added.
 }
 \description{
 Apply water reference scaling to a fitting results object to yield metabolite

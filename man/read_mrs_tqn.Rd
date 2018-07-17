@@ -7,16 +7,16 @@
 read_mrs_tqn(fname, fname_ref = NA, format, id = NA, group = NA)
 }
 \arguments{
-\item{fname}{The filename containing the MRS data.}
+\item{fname}{the filename containing the MRS data.}
 
-\item{fname_ref}{A second filename containing reference MRS data.}
+\item{fname_ref}{a second filename containing reference MRS data.}
 
-\item{format}{The format of the MRS data. Can be one of the following:
+\item{format}{format of the MRS data. Can be one of the following:
 siemens, philips, ge, dcm, dpt, rda, lcm, varian, bruker, jmrui_txt.}
 
-\item{id}{An optional ID string.}
+\item{id}{optional ID string.}
 
-\item{group}{An optional group string.}
+\item{group}{optional group string.}
 }
 \value{
 MRS data object.

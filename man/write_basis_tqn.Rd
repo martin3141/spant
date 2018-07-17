@@ -7,11 +7,11 @@
 write_basis_tqn(basis_file, metab_data, opts = NULL)
 }
 \arguments{
-\item{basis_file}{The filename of the basis file to be generated.}
+\item{basis_file}{filename of the basis file to be generated.}
 
-\item{metab_data}{The MRS data object to match the generated basis parameters.}
+\item{metab_data}{MRS data object to match the generated basis parameters.}
 
-\item{opts}{List of options to pass to TARQUIN.}
+\item{opts}{list of options to pass to TARQUIN.}
 }
 \description{
 Generate a basis file using TARQUIN.

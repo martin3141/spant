@@ -2,15 +2,15 @@
 % Please edit documentation in R/fit_display.R
 \name{get_fit_map}
 \alias{get_fit_map}
-\title{Get a data array from a fit result}
+\title{Get a data array from a fit result.}
 \usage{
 get_fit_map(fit_res, name)
 }
 \arguments{
-\item{fit_res}{\code{fit_result} object}
+\item{fit_res}{\code{fit_result} object.}
 
-\item{name}{name of the quantity to plot, eg "TNAA"}
+\item{name}{name of the quantity to plot, eg "TNAA".}
 }
 \description{
-Get a data array from a fit result
+Get a data array from a fit result.
 }

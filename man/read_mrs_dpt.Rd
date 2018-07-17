@@ -7,10 +7,10 @@
 read_mrs_dpt(fname)
 }
 \arguments{
-\item{fname}{The filename of the dpt format MRS data.}
+\item{fname}{filename of the dpt format MRS data.}
 }
 \value{
-An MRS data object.
+MRS data object.
 }
 \description{
 Read MRS data stored in dangerplot (dpt) v3 format.

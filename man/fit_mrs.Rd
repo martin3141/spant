@@ -8,20 +8,20 @@ fit_mrs(metab, basis = NULL, method = "VARPRO_3P", w_ref = NULL,
   opts = NULL, parallel = FALSE, cores = 4)
 }
 \arguments{
-\item{metab}{Metabolite data.}
+\item{metab}{metabolite data.}
 
-\item{basis}{A basis class object or character vector to basis file in
+\item{basis}{basis class object or character vector to basis file in
 LCModel .basis format.}
 
-\item{method}{'VARPRO', 'VARPRO_3P', 'TARQUIN' or 'LCMODEL'}
+\item{method}{'VARPRO', 'VARPRO_3P', 'TARQUIN' or 'LCMODEL'.}
 
-\item{w_ref}{Water reference data for concentration scaling (optional).}
+\item{w_ref}{water reference data for concentration scaling (optional).}
 
-\item{opts}{Options to pass to the analysis method.}
+\item{opts}{options to pass to the analysis method.}
 
-\item{parallel}{Perform analysis in parallel (TRUE or FALSE)}
+\item{parallel}{perform analysis in parallel (TRUE or FALSE).}
 
-\item{cores}{Number of cores to use for parallel analysis.}
+\item{cores}{number of cores to use for parallel analysis.}
 }
 \value{
 MRS analysis object.

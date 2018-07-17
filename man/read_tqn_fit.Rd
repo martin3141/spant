@@ -7,7 +7,7 @@
 read_tqn_fit(fit_f)
 }
 \arguments{
-\item{fit_f}{TARQUIN fit file}
+\item{fit_f}{TARQUIN fit file.}
 }
 \value{
 A data frame of the fit data points.
