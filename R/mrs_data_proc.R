@@ -1785,6 +1785,10 @@ int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "real") {
 #' @return an array of the sum of squared difference values
 #' @export
 calc_spec_diff <- function(mrs_data, ref = NULL, xlim = c(4, 0.5)) {
+  if (!is_fd(mrs_data)) {
+    mrs_data <- td2fd(mrs_data)
+  }
+  
   # diff from mean dynamic if ref not given
   if (is.null(ref)) ref <- mean_dyns(mrs_data)
   
