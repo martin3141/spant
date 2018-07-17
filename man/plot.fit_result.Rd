@@ -32,7 +32,7 @@
 
 \item{coil}{the coil element number to plot.}
 
-\item{n}{single index element to plot (overides other indices when given).}
+\item{n}{single index element to plot (overrides other indices when given).}
 
 \item{sub_bl}{subtract the baseline from the data and fit (logical).}
 

@@ -20,7 +20,7 @@ sim_noise(sd = 0.1, fs = def_fs(), ft = def_ft(), N = def_N(),
 
 \item{dyns}{Number of dynamic scans to generate.}
 
-\item{fd}{Return data in the frequency-domian (TRUE) or time-domain (FALSE)}
+\item{fd}{Return data in the frequency-domain (TRUE) or time-domain (FALSE)}
 }
 \value{
 mrs_data object.

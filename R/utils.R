@@ -2,7 +2,7 @@
 #' @param x an array
 #' @param axes a vector of axes to apply fun over
 #' @param fun function to be applied
-#' @param ... optional argments to fun
+#' @param ... optional arguments to fun
 #' @return array
 #' @examples
 #' z <- array(1:1000, dim = c(10, 10, 10))

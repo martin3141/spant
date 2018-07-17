@@ -81,7 +81,7 @@ set_lcm_cmd <- function(cmd) {
 #' Return (and optionally modify using the input arguments) a list of the 
 #' default acquisition parameters.
 #' @param ft specify the transmitter frequency in Hz.
-#' @param fs specity the sampling frequency in Hz.
+#' @param fs specify the sampling frequency in Hz.
 #' @param N specify the number of data points in the spectral dimension.
 #' @param ref specify the reference value for ppm scale.
 #' @return A list containing the following elements:

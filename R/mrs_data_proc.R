@@ -242,7 +242,7 @@ mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
 #' @param N Number of data points in the spectral dimension.
 #' @param ref Reference value for ppm scale.
 #' @param dyns Number of dynamic scans to generate.
-#' @param fd Return data in the frequency-domian (TRUE) or time-domain (FALSE)
+#' @param fd Return data in the frequency-domain (TRUE) or time-domain (FALSE)
 #' @return mrs_data object.
 #' @export
 sim_noise <- function(sd = 0.1, fs = def_fs(), ft = def_ft(), N = def_N(),
@@ -636,7 +636,7 @@ hz <- function(mrs_data, fs = NULL, N = NULL) {
 #' @param mrs_data MRS data.
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.
-#' @param fs sampline frequency in Hz.
+#' @param fs sampling frequency in Hz.
 #' @param N number of data points in the spectral dimension.
 #' @return ppm scale.
 #' @export

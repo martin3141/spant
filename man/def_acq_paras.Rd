@@ -12,7 +12,7 @@ def_acq_paras(ft = getOption("spant.def_ft"),
 \arguments{
 \item{ft}{specify the transmitter frequency in Hz.}
 
-\item{fs}{specity the sampling frequency in Hz.}
+\item{fs}{specify the sampling frequency in Hz.}
 
 \item{N}{specify the number of data points in the spectral dimension.}
 

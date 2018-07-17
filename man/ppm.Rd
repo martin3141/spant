@@ -13,7 +13,7 @@ ppm(mrs_data, ft = NULL, ref = NULL, fs = NULL, N = NULL)
 
 \item{ref}{reference value for ppm scale.}
 
-\item{fs}{sampline frequency in Hz.}
+\item{fs}{sampling frequency in Hz.}
 
 \item{N}{number of data points in the spectral dimension.}
 }

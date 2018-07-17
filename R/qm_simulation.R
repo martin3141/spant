@@ -58,9 +58,9 @@ H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, ft, ref) {
 
 #' Simulate pulse sequence acquisition.
 #' @param sys spin system object
-#' @param rec_phase reciever phase in degrees
+#' @param rec_phase receiver phase in degrees
 #' @param tol ignore resonance amplitudes below this threshold
-#' @param detect detection nuclie
+#' @param detect detection nuclei
 #' @return a list of resonance amplitudes and frequencies
 #' @export
 acquire <- function(sys, rec_phase = 180, tol = 1e-4, detect = NULL) {

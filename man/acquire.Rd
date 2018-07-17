@@ -9,11 +9,11 @@ acquire(sys, rec_phase = 180, tol = 1e-04, detect = NULL)
 \arguments{
 \item{sys}{spin system object}
 
-\item{rec_phase}{reciever phase in degrees}
+\item{rec_phase}{receiver phase in degrees}
 
 \item{tol}{ignore resonance amplitudes below this threshold}
 
-\item{detect}{detection nuclie}
+\item{detect}{detection nuclei}
 }
 \value{
 a list of resonance amplitudes and frequencies

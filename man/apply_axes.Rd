@@ -13,7 +13,7 @@ apply_axes(x, axes, fun, ...)
 
 \item{fun}{function to be applied}
 
-\item{...}{optional argments to fun}
+\item{...}{optional arguments to fun}
 }
 \value{
 array

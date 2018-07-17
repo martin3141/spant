@@ -10,7 +10,7 @@
 #' @param y_pos the y index to plot.
 #' @param z_pos the z index to plot.
 #' @param coil the coil element number to plot.
-#' @param n single index element to plot (overides other indices when given).
+#' @param n single index element to plot (overrides other indices when given).
 #' @param sub_bl subtract the baseline from the data and fit (logical).
 #' @param ... further arguments to plot method.
 #' @export
@@ -110,7 +110,7 @@ plot.fit_result <- function(x, xlim = NULL, plt_title = FALSE,
 #' @param y_pos the y index to plot.
 #' @param z_pos the z index to plot.
 #' @param coil the coil element number to plot.
-#' @param n single index element to plot (overides other indices when given).
+#' @param n single index element to plot (overrides other indices when given).
 #' @param sub_bl subtract the baseline from the data and fit (logical).
 #' @param ... further arguments to plot method.
 #' @export
