@@ -18,7 +18,7 @@ seq_press_ideal(spin_params, ft, ref, TE1 = 0.01, TE2 = 0.02)
 \item{TE2}{TE2 sequence parameter in seconds.}
 }
 \value{
-a list of resonance amplitudes and frequencies.
+list of resonance amplitudes and frequencies.
 }
 \description{
 PRESS sequence with ideal pulses.

@@ -2,16 +2,16 @@
 % Please edit documentation in R/qm_simulation.R
 \name{qn_states}
 \alias{qn_states}
-\title{Get the quantum coherence matrix for a spin system}
+\title{Get the quantum coherence matrix for a spin system.}
 \usage{
 qn_states(sys)
 }
 \arguments{
-\item{sys}{spin system object}
+\item{sys}{spin system object.}
 }
 \value{
-quantum coherence number matrix
+quantum coherence number matrix.
 }
 \description{
-Get the quantum coherence matrix for a spin system
+Get the quantum coherence matrix for a spin system.
 }

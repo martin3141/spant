@@ -2,18 +2,18 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{rep_dyn}
 \alias{rep_dyn}
-\title{Replicate a scan in the dynamic dimension}
+\title{Replicate a scan in the dynamic dimension.}
 \usage{
 rep_dyn(mrs_data, times)
 }
 \arguments{
-\item{mrs_data}{MRS data to be replicated}
+\item{mrs_data}{MRS data to be replicated.}
 
-\item{times}{Number of times to replicate}
+\item{times}{number of times to replicate.}
 }
 \value{
-replicated data object
+replicated data object.
 }
 \description{
-Replicate a scan in the dynamic dimension
+Replicate a scan in the dynamic dimension.
 }

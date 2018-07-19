@@ -1,9 +1,9 @@
-#' Apply a function over specified array axes
-#' @param x an array
-#' @param axes a vector of axes to apply fun over
-#' @param fun function to be applied
-#' @param ... optional arguments to fun
-#' @return array
+#' Apply a function over specified array axes.
+#' @param x an array.
+#' @param axes a vector of axes to apply fun over.
+#' @param fun function to be applied.
+#' @param ... optional arguments to fun.
+#' @return array.
 #' @examples
 #' z <- array(1:1000, dim = c(10, 10, 10))
 #' a <- apply_axes(z, 3, fft)
@@ -32,11 +32,11 @@ apply_axes <- function(x, axes, fun, ...) {
   x
 }
 
-#' Repeat an array over a given dimension
-#' @param x array
-#' @param rep_dim dimension to extend
-#' @param n number of times to repeat
-#' @return extended array
+#' Repeat an array over a given dimension.
+#' @param x array.
+#' @param rep_dim dimension to extend.
+#' @param n number of times to repeat.
+#' @return extended array.
 #' @export
 rep_array_dim <- function(x, rep_dim, n) {
   dims <- length(dim(x))
@@ -69,16 +69,16 @@ rep_array_dim <- function(x, rep_dim, n) {
 #}
 
 #' Covert a beta value in the time-domain to an equivalent linewidth in Hz:
-#' x * exp(-i * t * t * beta)
-#' @param beta beta damping value 
-#' @return linewidth value in Hz
+#' x * exp(-i * t * t * beta).
+#' @param beta beta damping value.
+#' @return linewidth value in Hz.
 #' @export
 beta2lw <- function(beta) {2 * (-beta * log(0.5)) ^ 0.5 / pi}
 
 #' Covert a linewidth in Hz to an equivalent beta value in the time-domain ie:
-#' x * exp(-i * t * t * beta)
-#' @param lw linewidth in Hz
-#' @return beta damping value
+#' x * exp(-i * t * t * beta).
+#' @param lw linewidth in Hz.
+#' @return beta damping value.
 #' @export
 lw2beta <- function(lw) {(lw * pi / 2) ^ 2 / (-log(0.5))}
 
@@ -186,9 +186,9 @@ cplx_sum_sq <- function(x) sum(Re(x) ^ 2) + sum(Im(x) ^ 2)
 
 #' Perform a polynomial fit, subtract and return the standard deviation of the
 #' residuals.
-#' @param y an array.
+#' @param y array.
 #' @param degree polynomial degree.
-#' @return the standard deviation of the fit residuals.
+#' @return standard deviation of the fit residuals.
 #' @export
 calc_sd_poly <- function(y, degree = 1) {
   x <- 1:length(y)
@@ -241,17 +241,17 @@ depth <- function(this) ifelse(is.list(this), 1L + max(sapply(this, depth)), 0L)
 
 #' Simulate MRS data with a similar appearance to normal brain (by default).
 #' @param acq_paras list of acquisition parameters or an mrs_data object. See
-#' \code{\link{def_acq_paras}}
+#' \code{\link{def_acq_paras}}.
 #' @param type type of spectrum, only "normal" is implemented currently.
-#' @param pul_seq pulse sequence function to use
-#' @param xlim range of frequencies to simulate in ppm
+#' @param pul_seq pulse sequence function to use.
+#' @param xlim range of frequencies to simulate in ppm.
 #' @param full_output when FALSE (default) only output the simulated MRS data.
 #' When TRUE output a list containing the MRS data, basis set object and 
 #' corresponding amplitudes.
 #' @param amps a vector of basis amplitudes may be specified to modify the
-#' output spectrum
+#' output spectrum.
 #' @param ... extra parameters to pass to the pulse sequence function.
-#' @return see full_output option
+#' @return see full_output option.
 #' @export
 sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal_v1",
                          pul_seq = seq_press_ideal, xlim = c(0.5, 4.2), 
@@ -286,11 +286,11 @@ sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal_v1",
   }
 }
 
-#' Combine the results from multiple csv format files into a table
-#' @param pattern glob string to match csv files
-#' @param supp_mess suppress messages from the read_csv function
-#' @param ... extra parameters to pass to read_csv
-#' @return results table
+#' Combine the results from multiple csv format files into a table.
+#' @param pattern glob string to match csv files.
+#' @param supp_mess suppress messages from the read_csv function.
+#' @param ... extra parameters to pass to read_csv.
+#' @return results table.
 #' @export
 comb_csv_results <- function(pattern, supp_mess = TRUE, ...) {
   files <- Sys.glob(pattern)

@@ -1,7 +1,7 @@
-#' Generate a gaussian pulse shape
-#' @param angle pulse angle in degrees
-#' @param n number of points to generate
-#' @param trunc percentage truncation factor
+#' Generate a gaussian pulse shape.
+#' @param angle pulse angle in degrees.
+#' @param n number of points to generate.
+#' @param trunc percentage truncation factor.
 #' @export
 get_guassian_pulse <- function(angle, n, trunc = 1) {
   T = 1

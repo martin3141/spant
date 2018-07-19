@@ -2,7 +2,7 @@
 % Please edit documentation in R/pulse_sequences.R
 \name{seq_slaser_ideal}
 \alias{seq_slaser_ideal}
-\title{sLASER sequence with ideal pulses}
+\title{sLASER sequence with ideal pulses.}
 \usage{
 seq_slaser_ideal(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.009,
   TE3 = 0.011)
@@ -21,8 +21,8 @@ seq_slaser_ideal(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.009,
 \item{TE3}{third echo time (between 4th echo and 5th echo) in seconds.}
 }
 \value{
-a list of resonance amplitudes and frequencies.
+list of resonance amplitudes and frequencies.
 }
 \description{
-sLASER sequence with ideal pulses
+sLASER sequence with ideal pulses.
 }

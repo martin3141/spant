@@ -8,12 +8,12 @@ residuals.}
 calc_sd_poly(y, degree = 1)
 }
 \arguments{
-\item{y}{an array.}
+\item{y}{array.}
 
 \item{degree}{polynomial degree.}
 }
 \value{
-the standard deviation of the fit residuals.
+standard deviation of the fit residuals.
 }
 \description{
 Perform a polynomial fit, subtract and return the standard deviation of the

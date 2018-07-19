@@ -7,14 +7,14 @@
 get_seg_ind(scale, start, end)
 }
 \arguments{
-\item{scale}{the full list of values.}
+\item{scale}{full list of values.}
 
-\item{start}{the smallest value in the subset.}
+\item{start}{smallest value in the subset.}
 
-\item{end}{the largest value in the subset.}
+\item{end}{largest value in the subset.}
 }
 \value{
-a set of indices.
+set of indices.
 }
 \description{
 Get the indices of data points lying between two values (end > x > start).

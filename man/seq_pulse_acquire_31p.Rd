@@ -14,7 +14,7 @@ seq_pulse_acquire_31p(spin_params, ft, ref)
 \item{ref}{reference value for ppm scale.}
 }
 \value{
-a list of resonance amplitudes and frequencies.
+list of resonance amplitudes and frequencies.
 }
 \description{
 Simple pulse and acquire sequence with ideal pulses.

@@ -10,7 +10,7 @@ seconds(mrs_data)
 \item{mrs_data}{MRS data.}
 }
 \value{
-A time scale vector in units of seconds.
+time scale vector in units of seconds.
 }
 \description{
 Return a time scale vector to match the FID of an MRS data object.

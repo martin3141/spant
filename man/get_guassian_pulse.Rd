@@ -2,17 +2,17 @@
 % Please edit documentation in R/pulse_shapes.R
 \name{get_guassian_pulse}
 \alias{get_guassian_pulse}
-\title{Generate a gaussian pulse shape}
+\title{Generate a gaussian pulse shape.}
 \usage{
 get_guassian_pulse(angle, n, trunc = 1)
 }
 \arguments{
-\item{angle}{pulse angle in degrees}
+\item{angle}{pulse angle in degrees.}
 
-\item{n}{number of points to generate}
+\item{n}{number of points to generate.}
 
-\item{trunc}{percentage truncation factor}
+\item{trunc}{percentage truncation factor.}
 }
 \description{
-Generate a gaussian pulse shape
+Generate a gaussian pulse shape.
 }

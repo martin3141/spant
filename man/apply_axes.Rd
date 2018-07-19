@@ -2,24 +2,24 @@
 % Please edit documentation in R/utils.R
 \name{apply_axes}
 \alias{apply_axes}
-\title{Apply a function over specified array axes}
+\title{Apply a function over specified array axes.}
 \usage{
 apply_axes(x, axes, fun, ...)
 }
 \arguments{
-\item{x}{an array}
+\item{x}{an array.}
 
-\item{axes}{a vector of axes to apply fun over}
+\item{axes}{a vector of axes to apply fun over.}
 
-\item{fun}{function to be applied}
+\item{fun}{function to be applied.}
 
-\item{...}{optional arguments to fun}
+\item{...}{optional arguments to fun.}
 }
 \value{
-array
+array.
 }
 \description{
-Apply a function over specified array axes
+Apply a function over specified array axes.
 }
 \examples{
 z <- array(1:1000, dim = c(10, 10, 10))

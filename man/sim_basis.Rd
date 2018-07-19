@@ -8,24 +8,24 @@ sim_basis(mol_list, pul_seq = seq_pulse_acquire, ft = def_ft(),
   ref = def_ref(), fs = def_fs(), N = def_N(), xlim = NULL, ...)
 }
 \arguments{
-\item{mol_list}{a list of \code{mol_parameter} objects.}
+\item{mol_list}{list of \code{mol_parameter} objects.}
 
-\item{pul_seq}{A pulse sequence function to use.}
+\item{pul_seq}{pulse sequence function to use.}
 
-\item{ft}{Transmitter frequency in Hz.}
+\item{ft}{transmitter frequency in Hz.}
 
-\item{ref}{Reference value for ppm scale.}
+\item{ref}{reference value for ppm scale.}
 
-\item{fs}{Sampling frequency in Hz.}
+\item{fs}{sampling frequency in Hz.}
 
-\item{N}{Number of data points in the spectral dimension.}
+\item{N}{number of data points in the spectral dimension.}
 
-\item{xlim}{A ppm range limiting signals to be simulated.}
+\item{xlim}{ppm range limiting signals to be simulated.}
 
-\item{...}{Extra parameters to pass to the pulse sequence function.}
+\item{...}{extra parameters to pass to the pulse sequence function.}
 }
 \value{
-A basis object.
+basis object.
 }
 \description{
 Simulate a basis set object.

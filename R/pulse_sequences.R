@@ -2,7 +2,7 @@
 #' @param spin_params spin system definition.
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.
-#' @return a list of resonance amplitudes and frequencies.
+#' @return list of resonance amplitudes and frequencies.
 #' @export
 seq_pulse_acquire <- function(spin_params, ft, ref) {
   sys <- spin_sys(spin_params, ft, ref)
@@ -23,7 +23,7 @@ seq_pulse_acquire <- function(spin_params, ft, ref) {
 #' @param spin_params spin system definition.
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.
-#' @return a list of resonance amplitudes and frequencies.
+#' @return list of resonance amplitudes and frequencies.
 #' @export
 seq_pulse_acquire_31p <- function(spin_params, ft, ref) {
   sys <- spin_sys(spin_params, ft, ref)
@@ -46,7 +46,7 @@ seq_pulse_acquire_31p <- function(spin_params, ft, ref) {
 #' @param ref reference value for ppm scale.
 #' @param TE1 TE1 sequence parameter in seconds (TE=TE1+TE2).
 #' @param TE2 TE2 sequence parameter in seconds.
-#' @return a list of resonance amplitudes and frequencies.
+#' @return list of resonance amplitudes and frequencies.
 #' @export
 seq_press_ideal <- function(spin_params, ft, ref, TE1 = 0.01, TE2 = 0.02) {
   
@@ -104,7 +104,7 @@ seq_press_ideal <- function(spin_params, ft, ref, TE1 = 0.01, TE2 = 0.02) {
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.
 #' @param TE echo time in seconds.
-#' @return a list of resonance amplitudes and frequencies.
+#' @return list of resonance amplitudes and frequencies.
 #' @export
 seq_spin_echo_ideal <- function(spin_params, ft, ref, TE = 0.03) {
   sys <- spin_sys(spin_params, ft, ref)
@@ -148,7 +148,7 @@ seq_spin_echo_ideal <- function(spin_params, ft, ref, TE = 0.03) {
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.
 #' @param TE echo time in seconds.
-#' @return a list of resonance amplitudes and frequencies.
+#' @return list of resonance amplitudes and frequencies.
 #' @export
 seq_spin_echo_ideal_31p <- function(spin_params, ft, ref, TE = 0.03) {
   sys <- spin_sys(spin_params, ft, ref)
@@ -193,7 +193,7 @@ seq_spin_echo_ideal_31p <- function(spin_params, ft, ref, TE = 0.03) {
 #' @param ref reference value for ppm scale.
 #' @param TE echo time in seconds.
 #' @param echoes number of echoes.
-#' @return a list of resonance amplitudes and frequencies.
+#' @return list of resonance amplitudes and frequencies.
 #' @export
 seq_cpmg_ideal <- function(spin_params, ft, ref, TE = 0.03, echoes = 4) {
   sys <- spin_sys(spin_params, ft, ref)
@@ -241,7 +241,7 @@ seq_cpmg_ideal <- function(spin_params, ft, ref, TE = 0.03, echoes = 4) {
 #' @param TE2 TE2 sequence parameter in seconds.
 #' @param BW editing pulse bandwidth in Hz.
 #' @param steps number of hard pulses used to approximate the editing pulse.
-#' @return a list of resonance amplitudes and frequencies.
+#' @return list of resonance amplitudes and frequencies.
 #' @export
 seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89, TE1 = 0.015, 
                              TE2 = 0.053, BW = 110, steps = 50) {
@@ -351,7 +351,7 @@ seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89, TE1 = 0.0
 #' @param ref reference value for ppm scale.
 #' @param TE sequence parameter in seconds.
 #' @param TM sequence parameter in seconds.
-#' @return a list of resonance amplitudes and frequencies.
+#' @return list of resonance amplitudes and frequencies.
 #' @export
 seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02) {
   
@@ -426,14 +426,14 @@ seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02) {
   acquire(sys, detect = "1H", rec_phase = 0)
 }
 
-#' sLASER sequence with ideal pulses
+#' sLASER sequence with ideal pulses.
 #' @param spin_params spin system definition.
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.
 #' @param TE1 first echo time (between exc. and 1st echo) in seconds.
 #' @param TE2 second echo time (between 2nd echo and 4th echo) in seconds.
 #' @param TE3 third echo time (between 4th echo and 5th echo) in seconds.
-#' @return a list of resonance amplitudes and frequencies.
+#' @return list of resonance amplitudes and frequencies.
 #' @export
 seq_slaser_ideal <- function(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.009, TE3 = 0.011) {
   sys <- spin_sys(spin_params, ft, ref)

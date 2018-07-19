@@ -13,14 +13,14 @@ lb(x, lb, lg = 1)
 \method{lb}{basis_set}(x, lb, lg = 1)
 }
 \arguments{
-\item{x}{input mrs_data or basis_set object}
+\item{x}{input mrs_data or basis_set object.}
 
-\item{lb}{amount of line-broadening in Hz}
+\item{lb}{amount of line-broadening in Hz.}
 
-\item{lg}{Lorentz-Gauss lineshape parameter (between 0 and 1)}
+\item{lg}{Lorentz-Gauss lineshape parameter (between 0 and 1).}
 }
 \value{
-line-broadened data
+line-broadened data.
 }
 \description{
 Apply line-broadening (apodisation) to MRS data or basis object.

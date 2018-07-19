@@ -10,7 +10,7 @@ get_acq_paras(mrs_data)
 \item{mrs_data}{MRS data.}
 }
 \value{
-A list of acquisition parameters.
+list of acquisition parameters.
 }
 \description{
 Return acquisition parameters from a MRS data object.

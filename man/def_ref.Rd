@@ -7,7 +7,7 @@
 def_ref()
 }
 \value{
-Reference value for ppm scale.
+reference value for ppm scale.
 }
 \description{
 Return the default reference value for ppm scale.

@@ -10,17 +10,17 @@ sim_noise(sd = 0.1, fs = def_fs(), ft = def_ft(), N = def_N(),
 \arguments{
 \item{sd}{standard deviation of the noise.}
 
-\item{fs}{Sampling frequency in Hz.}
+\item{fs}{sampling frequency in Hz.}
 
-\item{ft}{Transmitter frequency in Hz.}
+\item{ft}{transmitter frequency in Hz.}
 
-\item{N}{Number of data points in the spectral dimension.}
+\item{N}{number of data points in the spectral dimension.}
 
-\item{ref}{Reference value for ppm scale.}
+\item{ref}{reference value for ppm scale.}
 
-\item{dyns}{Number of dynamic scans to generate.}
+\item{dyns}{number of dynamic scans to generate.}
 
-\item{fd}{Return data in the frequency-domain (TRUE) or time-domain (FALSE)}
+\item{fd}{return data in the frequency-domain (TRUE) or time-domain (FALSE)}
 }
 \value{
 mrs_data object.

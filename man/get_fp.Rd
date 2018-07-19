@@ -10,7 +10,7 @@ get_fp(mrs_data)
 \item{mrs_data}{MRS data.}
 }
 \value{
-First time-domain data point.
+first time-domain data point.
 }
 \description{
 Return the first time-domain data point.

@@ -48,7 +48,7 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
   if (p_deg == 0) {
     poly_basis <- rep(1, length(inds))
   } else if (p_deg > 0) {
-    poly_basis <- cbind(rep(1, length(inds)), polym(1:length(inds), degree = p_deg))
+    poly_basis <- cbind(rep(1, length(inds)), stats::polym(1:length(inds), degree = p_deg))
   } else {
     poly_basis <- NULL
   }
@@ -79,7 +79,7 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
 
 optim_rats <- function(x, ref, t, inds, poly_basis, max_shift) {
   # optim step
-  res <- optim(c(0), rats_obj_fn, gr = NULL, x, ref, t, inds, poly_basis, 
+  res <- stats::optim(c(0), rats_obj_fn, gr = NULL, x, ref, t, inds, poly_basis, 
                method = "Brent", lower = -max_shift, upper = max_shift)
   
   # find the phase

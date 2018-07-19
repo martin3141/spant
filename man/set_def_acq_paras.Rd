@@ -9,13 +9,13 @@ set_def_acq_paras(ft = getOption("spant.def_ft"),
   ref = getOption("spant.def_ref"))
 }
 \arguments{
-\item{ft}{Transmitter frequency in Hz.}
+\item{ft}{transmitter frequency in Hz.}
 
-\item{fs}{Sampling frequency in Hz.}
+\item{fs}{sampling frequency in Hz.}
 
-\item{N}{Number of data points in the spectral dimension.}
+\item{N}{number of data points in the spectral dimension.}
 
-\item{ref}{Reference value for ppm scale.}
+\item{ref}{reference value for ppm scale.}
 }
 \description{
 Set the default acquisition parameters.

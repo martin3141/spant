@@ -9,11 +9,11 @@ hsvd_filt(mrs_data, xlim = c(-30, 30), comps = 50, propack = FALSE)
 \arguments{
 \item{mrs_data}{MRS data to be filtered.}
 
-\item{xlim}{Frequency range in Hz to filter.}
+\item{xlim}{frequency range in Hz to filter.}
 
-\item{comps}{Number of Lorentzian components to use for modelling.}
+\item{comps}{number of Lorentzian components to use for modelling.}
 
-\item{propack}{Option to use PROPACK SVD (logical).}
+\item{propack}{option to use PROPACK SVD (logical).}
 }
 \description{
 HSVD based signal filter described in:

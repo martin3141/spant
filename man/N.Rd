@@ -10,7 +10,7 @@ N(mrs_data)
 \item{mrs_data}{MRS data.}
 }
 \value{
-Number of data points.
+number of data points.
 }
 \description{
 Return the number of data points in an MRS dataset.

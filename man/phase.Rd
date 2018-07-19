@@ -9,9 +9,9 @@ phase(mrs_data, zero_order, first_order = 0)
 \arguments{
 \item{mrs_data}{MRS data.}
 
-\item{zero_order}{Zero'th order phase term in degrees.}
+\item{zero_order}{zero'th order phase term in degrees.}
 
-\item{first_order}{First order (frequency dependent) phase term in ms.}
+\item{first_order}{first order (frequency dependent) phase term in ms.}
 }
 \value{
 MRS data with applied phase parameters.

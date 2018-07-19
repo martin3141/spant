@@ -167,17 +167,17 @@ varpro_3_para_obj <- function(par, y, basis, t, nstart, sc_res = FALSE) {
 #' * zero'th order phase correction
 #' * global damping
 #' * global frequency shift.
-#' @param nstart Position in the time-domain to start fitting, units of data
+#' @param nstart position in the time-domain to start fitting, units of data
 #' points.
-#' @param init_damping Starting value for the global Gaussian line-broadening
+#' @param init_damping starting value for the global Gaussian line-broadening
 #' term - measured in Hz.
-#' @param maxiters Maximum number of levmar iterations to perform.
-#' @param max_shift Maximum global shift allowed, measured in Hz.
-#' @param max_damping Maximum damping allowed, FWHM measured in Hz.
-#' @param anal_jac Option to use the analytic or numerical Jacobian (logical).
-#' @param bl_smth_pts Number of data points to use in the baseline smoothing
+#' @param maxiters maximum number of levmar iterations to perform.
+#' @param max_shift maximum global shift allowed, measured in Hz.
+#' @param max_damping maximum damping allowed, FWHM measured in Hz.
+#' @param anal_jac option to use the analytic or numerical Jacobian (logical).
+#' @param bl_smth_pts number of data points to use in the baseline smoothing
 #' calculation.
-#' @return List of options.
+#' @return list of options.
 #' @export
 varpro_3_para_opts <- function(nstart = 20, init_damping = 2, maxiters = 200,
                         max_shift = 5, max_damping = 5, anal_jac = FALSE,

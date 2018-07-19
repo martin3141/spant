@@ -9,10 +9,10 @@ ecc(metab, ref)
 \arguments{
 \item{metab}{MRS data to be corrected.}
 
-\item{ref}{Reference dataset.}
+\item{ref}{ceference dataset.}
 }
 \value{
-Corrected data in the time domain.
+corrected data in the time domain.
 }
 \description{
 Apply eddy current correction using the Klose method.

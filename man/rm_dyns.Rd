@@ -7,9 +7,9 @@
 rm_dyns(mrs_data, subset)
 }
 \arguments{
-\item{mrs_data}{Dynamic MRS data.}
+\item{mrs_data}{dynamic MRS data.}
 
-\item{subset}{A vector containing indices to the dynamic scans to be
+\item{subset}{vector containing indices to the dynamic scans to be
 removed.}
 }
 \value{

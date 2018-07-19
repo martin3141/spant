@@ -9,29 +9,29 @@ varpro_opts(nstart = 20, init_g_damping = 2, maxiters = 200,
   anal_jac = TRUE, bl_smth_pts = 80)
 }
 \arguments{
-\item{nstart}{Position in the time-domain to start fitting, units of data
+\item{nstart}{position in the time-domain to start fitting, units of data
 points.}
 
-\item{init_g_damping}{Starting value for the global Gaussian line-broadening
+\item{init_g_damping}{starting value for the global Gaussian line-broadening
 term - measured in Hz.}
 
-\item{maxiters}{Maximum number of levmar iterations to perform.}
+\item{maxiters}{maximum number of levmar iterations to perform.}
 
-\item{max_shift}{Maximum shift allowed to each element in the basis set,
+\item{max_shift}{maximum shift allowed to each element in the basis set,
 measured in Hz.}
 
-\item{max_g_damping}{Maximum permitted global Gaussian line-broadening.}
+\item{max_g_damping}{maximum permitted global Gaussian line-broadening.}
 
-\item{max_ind_damping}{Maximum permitted Lorentzian line-broadening for each
+\item{max_ind_damping}{maximum permitted Lorentzian line-broadening for each
 element in the basis set, measured in Hz.}
 
-\item{anal_jac}{Option to use the analytic or numerical Jacobian (logical).}
+\item{anal_jac}{option to use the analytic or numerical Jacobian (logical).}
 
-\item{bl_smth_pts}{Number of data points to use in the baseline smoothing
+\item{bl_smth_pts}{number of data points to use in the baseline smoothing
 calculation.}
 }
 \value{
-List of options.
+list of options.
 }
 \description{
 Return a list of options for VARPRO based fitting.

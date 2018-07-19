@@ -2,16 +2,16 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{get_sh_dyns}
 \alias{get_sh_dyns}
-\title{Return the second half of a dynamic series}
+\title{Return the second half of a dynamic series.}
 \usage{
 get_sh_dyns(mrs_data)
 }
 \arguments{
-\item{mrs_data}{dynamic MRS data}
+\item{mrs_data}{dynamic MRS data.}
 }
 \value{
-second half of the dynamic series
+second half of the dynamic series.
 }
 \description{
-Return the second half of a dynamic series
+Return the second half of a dynamic series.
 }

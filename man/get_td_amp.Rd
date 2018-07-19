@@ -10,12 +10,12 @@ get_td_amp(mrs_data, nstart = 10, nend = 50)
 \arguments{
 \item{mrs_data}{MRS data.}
 
-\item{nstart}{The first data point to fit.}
+\item{nstart}{first data point to fit.}
 
-\item{nend}{The last data point to fit.}
+\item{nend}{last data point to fit.}
 }
 \value{
-An array of amplitudes.
+array of amplitudes.
 }
 \description{
 Return an array of amplitudes derived from fitting the initial points in the

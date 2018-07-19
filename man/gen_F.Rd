@@ -2,20 +2,20 @@
 % Please edit documentation in R/qm_simulation.R
 \name{gen_F}
 \alias{gen_F}
-\title{Generate the F product operator}
+\title{Generate the F product operator.}
 \usage{
 gen_F(sys, op, detect = NULL)
 }
 \arguments{
-\item{sys}{spin system object}
+\item{sys}{spin system object.}
 
-\item{op}{operator, one of "x", "y", "z", "p", "m"}
+\item{op}{operator, one of "x", "y", "z", "p", "m".}
 
-\item{detect}{detection nuclei}
+\item{detect}{detection nuclei.}
 }
 \value{
-F product operator matrix
+F product operator matrix.
 }
 \description{
-Generate the F product operator
+Generate the F product operator.
 }

@@ -18,7 +18,7 @@ seq_steam_ideal(spin_params, ft, ref, TE = 0.03, TM = 0.02)
 \item{TM}{sequence parameter in seconds.}
 }
 \value{
-a list of resonance amplitudes and frequencies.
+list of resonance amplitudes and frequencies.
 }
 \description{
 STEAM sequence with ideal pulses.

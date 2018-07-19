@@ -10,7 +10,7 @@ fp_phase(mrs_data)
 \item{mrs_data}{MRS data.}
 }
 \value{
-Phase values in degrees.
+phase values in degrees.
 }
 \description{
 Return the phase of the first data point in the time-domain.

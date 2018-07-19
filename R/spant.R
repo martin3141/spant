@@ -65,14 +65,14 @@ check_lcm <- function() {
 
 
 #' Set the command to run the TARQUIN command-line program.
-#' @param cmd Path to binary.
+#' @param cmd path to binary.
 #' @export
 set_tqn_cmd <- function(cmd) {
   options(spant.tqn_cmd = cmd)
 }
 
 #' Set the command to run the LCModel command-line program.
-#' @param cmd Path to binary.
+#' @param cmd oath to binary.
 #' @export
 set_lcm_cmd <- function(cmd) {
   options(spant.lcm_cmd = cmd)
@@ -85,10 +85,10 @@ set_lcm_cmd <- function(cmd) {
 #' @param N specify the number of data points in the spectral dimension.
 #' @param ref specify the reference value for ppm scale.
 #' @return A list containing the following elements:
-#' * ft Transmitter frequency in Hz.
-#' * fs Sampling frequency in Hz.
-#' * N Number of data points in the spectral dimension.
-#' * ref Reference value for ppm scale.
+#' * ft transmitter frequency in Hz.
+#' * fs sampling frequency in Hz.
+#' * N number of data points in the spectral dimension.
+#' * ref reference value for ppm scale.
 #' @export
 def_acq_paras <- function(ft  = getOption("spant.def_ft"),
                           fs  = getOption("spant.def_fs"),
@@ -98,38 +98,38 @@ def_acq_paras <- function(ft  = getOption("spant.def_ft"),
 }
 
 #' Return the default reference value for ppm scale.
-#' @return Reference value for ppm scale.
+#' @return reference value for ppm scale.
 #' @export
 def_ref <- function() {
   options()$spant.def_ref
 }
 
 #' Return the default sampling frequency in Hz.
-#' @return Sampling frequency in Hz.
+#' @return sampling frequency in Hz.
 #' @export
 def_fs <- function() {
   options()$spant.def_fs
 }
 
 #' Return the default transmitter frequency in Hz.
-#' @return Transmitter frequency in Hz.
+#' @return transmitter frequency in Hz.
 #' @export
 def_ft <- function() {
   options()$spant.def_ft
 }
 
 #' Return the default number of data points in the spectral dimension.
-#' @return Number of data points in the spectral dimension.
+#' @return number of data points in the spectral dimension.
 #' @export
 def_N <- function() {
   options()$spant.def_N
 }
 
 #' Set the default acquisition parameters.
-#' @param ft Transmitter frequency in Hz.
-#' @param fs Sampling frequency in Hz.
-#' @param N Number of data points in the spectral dimension.
-#' @param ref Reference value for ppm scale.
+#' @param ft transmitter frequency in Hz.
+#' @param fs sampling frequency in Hz.
+#' @param N number of data points in the spectral dimension.
+#' @param ref reference value for ppm scale.
 #' @export
 set_def_acq_paras <- function(ft  = getOption("spant.def_ft"),
                               fs  = getOption("spant.def_fs"),
@@ -141,4 +141,3 @@ set_def_acq_paras <- function(ft  = getOption("spant.def_ft"),
   options(spant.def_N   = N)
   options(spant.def_ref = ref)
 }
-

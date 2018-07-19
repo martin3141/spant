@@ -10,7 +10,7 @@ get_ref(mrs_data)
 \item{mrs_data}{MRS data.}
 }
 \value{
-Reference component.
+reference component.
 }
 \description{
 Extract the reference component from an mrs_data object.

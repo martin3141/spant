@@ -10,7 +10,7 @@ dyns(mrs_data)
 \item{mrs_data}{MRS data.}
 }
 \value{
-Number of dynamic scans
+number of dynamic scans.
 }
 \description{
 Return the number of dynamic scans in an MRS dataset.

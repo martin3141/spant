@@ -10,7 +10,7 @@ apodise_xy(mrs_data)
 \item{mrs_data}{MRSI data.}
 }
 \value{
-Apodised data.
+apodised data.
 }
 \description{
 Apodise MRSI data in the x-y direction with a k-space hamming filter.

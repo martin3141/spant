@@ -8,24 +8,24 @@ sim_mol(mol, pul_seq = seq_pulse_acquire, ft = def_ft(), ref = def_ref(),
   fs = def_fs(), N = def_N(), xlim = NULL, ...)
 }
 \arguments{
-\item{mol}{a \code{mol_parameter} object.}
+\item{mol}{\code{mol_parameter} object.}
 
-\item{pul_seq}{A pulse sequence function to use.}
+\item{pul_seq}{pulse sequence function to use.}
 
-\item{ft}{Transmitter frequency in Hz.}
+\item{ft}{transmitter frequency in Hz.}
 
-\item{ref}{Reference value for ppm scale.}
+\item{ref}{reference value for ppm scale.}
 
-\item{fs}{Sampling frequency in Hz.}
+\item{fs}{sampling frequency in Hz.}
 
-\item{N}{Number of data points in the spectral dimension.}
+\item{N}{number of data points in the spectral dimension.}
 
-\item{xlim}{A ppm range limiting signals to be simulated.}
+\item{xlim}{ppm range limiting signals to be simulated.}
 
-\item{...}{Extra parameters to pass to the pulse sequence function.}
+\item{...}{extra parameters to pass to the pulse sequence function.}
 }
 \value{
-An \code{mrs_data} object.
+\code{mrs_data} object.
 }
 \description{
 Simulate a \code{mol_parameter} object.
