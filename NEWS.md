@@ -1,3 +1,6 @@
+# spant 0.12.0
+* Fit results stackplot now has the option to display labels.
+
 # spant 0.11.0
 * Added mar argument to plot command.
 * td2fd and fd2td now give warnings when used with data already in the target domain.

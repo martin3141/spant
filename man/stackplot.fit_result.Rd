@@ -5,9 +5,9 @@
 \title{Plot the fitting results of an object of class \code{fit_result} with
 individual basis set components shown.}
 \usage{
-\method{stackplot}{fit_result}(x, xlim = NULL, y_offset = 0.04,
-  plt_title = FALSE, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
-  coil = 1, n = NULL, sub_bl = FALSE, ...)
+\method{stackplot}{fit_result}(x, xlim = NULL, y_offset = 1, dyn = 1,
+  x_pos = 1, y_pos = 1, z_pos = 1, coil = 1, n = NULL,
+  sub_bl = FALSE, labels = FALSE, ...)
 }
 \arguments{
 \item{x}{fit_result object.}
@@ -15,8 +15,6 @@ individual basis set components shown.}
 \item{xlim}{the range of values to display on the x-axis, eg xlim = c(4,1).}
 
 \item{y_offset}{separate basis signals in the y-axis direction by this value.}
-
-\item{plt_title}{title to add to the plot.}
 
 \item{dyn}{the dynamic index to plot.}
 
@@ -31,6 +29,8 @@ individual basis set components shown.}
 \item{n}{single index element to plot (overrides other indices when given).}
 
 \item{sub_bl}{subtract the baseline from the data and fit (logical).}
+
+\item{labels}{print signal labels at the right side of the plot.}
 
 \item{...}{further arguments to plot method.}
 }

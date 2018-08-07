@@ -4,17 +4,14 @@
 \alias{plot.fit_result}
 \title{Plot the fitting results of an object of class \code{fit_result}.}
 \usage{
-\method{plot}{fit_result}(x, xlim = NULL, plt_title = FALSE,
-  data_only = FALSE, label = NULL, plot_sigs = NULL, dyn = 1,
-  x_pos = 1, y_pos = 1, z_pos = 1, coil = 1, n = NULL,
-  sub_bl = FALSE, ...)
+\method{plot}{fit_result}(x, xlim = NULL, data_only = FALSE, label = NULL,
+  plot_sigs = NULL, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
+  coil = 1, n = NULL, sub_bl = FALSE, ...)
 }
 \arguments{
 \item{x}{fit_result object.}
 
 \item{xlim}{the range of values to display on the x-axis, eg xlim = c(4,1).}
-
-\item{plt_title}{title to add to the plot.}
 
 \item{data_only}{display only the processed data (logical).}
 
