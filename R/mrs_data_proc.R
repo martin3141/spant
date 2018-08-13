@@ -1017,7 +1017,8 @@ split_metab_ref <- function(mrs_data) {
   return(list(metab, ref))
 }
 
-bc <- function(mrs_data, lambda, p) {
+#' @export
+bc <- function(mrs_data, lambda = 1e3, p = 0.1) {
   if (!is_fd(mrs_data)) {
       mrs_data <- td2fd(mrs_data)
   }
@@ -1384,16 +1385,15 @@ ecc_ref <- function(mrs_data) {
 #' 
 #' @param metab MRS data to be corrected.
 #' @param ref ceference dataset.
+#' @param rev reverse the correction.
 #' @return corrected data in the time domain.
 #' @export
-ecc <- function(metab, ref) {
-  if (is_fd(metab)) {
-      metab <- fd2td(metab)
-  }
+ecc <- function(metab, ref, rev = FALSE) {
+  if (is_fd(metab)) metab <- fd2td(metab)
   
-  if (is_fd(ref)) {
-      ref <- fd2td(ref)
-  }
+  if (is_fd(ref)) ref <- fd2td(ref)
+  
+  if (rev) ref <- conj(ref)
   
   if (dyns(ref) > 1) {
     ref <- mean_dyns(ref)

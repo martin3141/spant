@@ -4,12 +4,14 @@
 \alias{ecc}
 \title{Eddy current correction.}
 \usage{
-ecc(metab, ref)
+ecc(metab, ref, rev = FALSE)
 }
 \arguments{
 \item{metab}{MRS data to be corrected.}
 
 \item{ref}{ceference dataset.}
+
+\item{rev}{reverse the correction.}
 }
 \value{
 corrected data in the time domain.
