@@ -1017,7 +1017,6 @@ split_metab_ref <- function(mrs_data) {
   return(list(metab, ref))
 }
 
-#' @export
 bc <- function(mrs_data, lambda = 1e3, p = 0.1) {
   if (!is_fd(mrs_data)) {
       mrs_data <- td2fd(mrs_data)
