@@ -7,7 +7,7 @@ individual basis set components shown.}
 \usage{
 \method{stackplot}{fit_result}(x, xlim = NULL, y_offset = 1, dyn = 1,
   x_pos = 1, y_pos = 1, z_pos = 1, coil = 1, n = NULL,
-  sub_bl = FALSE, labels = FALSE, ...)
+  sub_bl = FALSE, labels = FALSE, sig_col = "black", ...)
 }
 \arguments{
 \item{x}{fit_result object.}
@@ -31,6 +31,8 @@ individual basis set components shown.}
 \item{sub_bl}{subtract the baseline from the data and fit (logical).}
 
 \item{labels}{print signal labels at the right side of the plot.}
+
+\item{sig_col}{colour of individual signal components.}
 
 \item{...}{further arguments to plot method.}
 }
