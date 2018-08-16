@@ -4,7 +4,8 @@
 \alias{plot_fit_slice_inter}
 \title{Plot a 2D slice from an MRSI fit result object.}
 \usage{
-plot_fit_slice_inter(fit_res, name, slice = 1, zlim = NULL, interp = 1)
+plot_fit_slice_inter(fit_res, name, slice = 1, zlim = NULL,
+  interp = 1)
 }
 \arguments{
 \item{fit_res}{\code{fit_result} object.}

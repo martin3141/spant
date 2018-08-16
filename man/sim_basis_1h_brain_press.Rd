@@ -5,8 +5,8 @@
 \title{Simulate a basis-set suitable for 1H brain MRS analysis acquired with a PRESS
 sequence. Note, ideal pulses are assumed.}
 \usage{
-sim_basis_1h_brain_press(acq_paras = def_acq_paras(), xlim = c(0.5, 4.2),
-  lcm_compat = FALSE, TE1 = 0.01, TE2 = 0.02)
+sim_basis_1h_brain_press(acq_paras = def_acq_paras(), xlim = c(0.5,
+  4.2), lcm_compat = FALSE, TE1 = 0.01, TE2 = 0.02)
 }
 \arguments{
 \item{acq_paras}{list of acquisition parameters or an mrs_data object. See

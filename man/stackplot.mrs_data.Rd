@@ -4,11 +4,11 @@
 \alias{stackplot.mrs_data}
 \title{Stackplot plotting method for objects of class mrs_data.}
 \usage{
-\method{stackplot}{mrs_data}(x, xlim = NULL, mode = "re", x_units = NULL,
-  fd = TRUE, col = NULL, x_offset = 0, y_offset = 5, dim = "dyn",
-  x_pos = NULL, y_pos = NULL, z_pos = NULL, dyn = 1, coil = 1,
-  bty = NULL, labels = NULL, lab_cex = 1, right_marg = NULL,
-  restore_def_par = TRUE, ...)
+\method{stackplot}{mrs_data}(x, xlim = NULL, mode = "re",
+  x_units = NULL, fd = TRUE, col = NULL, x_offset = 0,
+  y_offset = 5, dim = "dyn", x_pos = NULL, y_pos = NULL,
+  z_pos = NULL, dyn = 1, coil = 1, bty = NULL, labels = NULL,
+  lab_cex = 1, right_marg = NULL, restore_def_par = TRUE, ...)
 }
 \arguments{
 \item{x}{object of class mrs_data.}
