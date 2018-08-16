@@ -106,12 +106,13 @@ plot.fit_result <- function(x, xlim = NULL, data_only = FALSE, label = NULL,
 #' @param n single index element to plot (overrides other indices when given).
 #' @param sub_bl subtract the baseline from the data and fit (logical).
 #' @param labels print signal labels at the right side of the plot.
+#' @param sig_col colour of individual signal components.
 #' @param ... further arguments to plot method.
 #' @export
 stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1, 
                                  x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
                                  n = NULL, sub_bl = FALSE, labels = FALSE,
-                                 ...) {
+                                 sig_col = "black", ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -184,7 +185,7 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1,
     if (substr(colnames(x)[p], 1, 3) == "SP_") {
       graphics::lines(x$PPMScale, x[,p], col = "blue")
     } else {
-      graphics::lines(x$PPMScale, x[,p])
+      graphics::lines(x$PPMScale, x[,p], col = sig_col)
     }
   }
   
