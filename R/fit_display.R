@@ -123,9 +123,10 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1,
     n <- which(ind)
   }
   
-  names <- x$basis$names 
-  
   x <- x$fits[[n]]
+  
+  # label names 
+  names <- colnames(x)[5:length(colnames(x))]
   
   if (is.null(xlim)) {
     xlim <- rev(range(x$PPMScale))
@@ -180,7 +181,11 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1,
   graphics::abline(h = max_dp)
   
   for (p in 5:ncol(x)) {
-    graphics::lines(x$PPMScale, x[,p])
+    if (substr(colnames(x)[p], 1, 3) == "SP_") {
+      graphics::lines(x$PPMScale, x[,p], col = "blue")
+    } else {
+      graphics::lines(x$PPMScale, x[,p])
+    }
   }
   
   if (labels) {
