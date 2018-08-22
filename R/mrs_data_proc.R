@@ -682,7 +682,7 @@ pts <- function(mrs_data) {
 #' @export
 seconds <- function(mrs_data) {
   fs <- fs(mrs_data)
-  seq(from = 0, to = (N(mrs_data) - 1)/fs, by = 1 / fs)
+  seq(from = 0, to = (N(mrs_data) - 1) / fs, by = 1 / fs)
 }
 
 #' Get the indices of data points lying between two values (end > x > start).
