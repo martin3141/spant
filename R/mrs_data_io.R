@@ -193,11 +193,12 @@ read_mrs_tqn <- function(fname, fname_ref = NA, format, id = NA, group = NA) {
   
   if (file.exists(w_fname)) {
     ref <- read_mrs_dpt(w_fname)
-    main$data <- comb_metab_ref(main, ref)
+    #main$data <- comb_metab_ref(main, ref)
     #main$data <- abind::abind(main$data, ref$data, along=1)
+    return(list(metab = main, ref = ref))
+  } else {
+    return(main)
   }
-  
-  return(main)
 }
 
 #' Write MRS data object to file in dangerplot (dpt) v2 format.
