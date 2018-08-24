@@ -76,7 +76,7 @@ rep_array_dim <- function(x, rep_dim, n) {
 beta2lw <- function(beta) {2 * (-beta * log(0.5)) ^ 0.5 / pi}
 
 #' Covert a linewidth in Hz to an equivalent beta value in the time-domain ie:
-#' x * exp(-i * t * t * beta).
+#' x * exp(-t * t * beta).
 #' @param lw linewidth in Hz.
 #' @return beta damping value.
 #' @export
@@ -84,6 +84,11 @@ lw2beta <- function(lw) {(lw * pi / 2) ^ 2 / (-log(0.5))}
 
 alpha2lw <- function(alpha) {alpha / pi}
 
+#' Covert a linewidth in Hz to an equivalent alpha value in the time-domain ie:
+#' x * exp(-t * alpha).
+#' @param lw linewidth in Hz.
+#' @return beta damping value.
+#' @export
 lw2alpha <- function(lw) {lw * pi}
 
 #' Perform a fft and ffshift on a vector.
