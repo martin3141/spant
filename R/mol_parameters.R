@@ -462,6 +462,17 @@ get_sins_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
+get_suc_paras <- function(lw = NULL, lg = 0) {
+  if (is.null(lw)) lw = 2
+  paras <- get_uncoupled_mol("Suc", 2.3920, "1H", 4, lw, lg)
+  
+  source <- "Proton NMR chemical shifts and coupling constants for brain metabolites.
+              NMR Biomed. 2000; 13:129-153."
+  
+  paras$source <- source
+  paras
+}
+
 get_tau_paras <- function(lw = NULL, lg = 0) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 4)

@@ -107,12 +107,15 @@ plot.fit_result <- function(x, xlim = NULL, data_only = FALSE, label = NULL,
 #' @param sub_bl subtract the baseline from the data and fit (logical).
 #' @param labels print signal labels at the right side of the plot.
 #' @param sig_col colour of individual signal components.
+#' @param restore_def_par restore default plotting par values after the plot has 
+#' been made.
 #' @param ... further arguments to plot method.
 #' @export
 stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1, 
                                  x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
                                  n = NULL, sub_bl = FALSE, labels = FALSE,
-                                 sig_col = "black", ...) {
+                                 sig_col = "black", restore_def_par = TRUE, 
+                                 ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -135,7 +138,7 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1,
   
   graphics::par("xaxs" = "i", "yaxs" = "i") # tight axes limits
   
-  right_mar <-ifelse(labels, 4, 1.2)
+  right_mar <- ifelse(labels, 4, 1.2)
   
   graphics::par(mar = c(3.5, 1.2, 1.2, right_mar)) # space around the plot
   
@@ -192,11 +195,11 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1,
   if (labels) {
     for (p in 5:ncol(x)) {
       graphics::text(graphics::par("usr")[2], -(p - 4) * basis_yoff + min_dp, 
-                     names[p-4], xpd = TRUE, pos = 4, offset = 0.25)
+                     names[p - 4], xpd = TRUE, pos = 4, offset = 0.25)
     }
   }
   
-  graphics::par(.pardefault)
+  if (restore_def_par) graphics::par(.pardefault)
 }
 
 #' Print a summary of an object of class \code{fit_result}.

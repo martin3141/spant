@@ -7,7 +7,8 @@ individual basis set components shown.}
 \usage{
 \method{stackplot}{fit_result}(x, xlim = NULL, y_offset = 1, dyn = 1,
   x_pos = 1, y_pos = 1, z_pos = 1, coil = 1, n = NULL,
-  sub_bl = FALSE, labels = FALSE, sig_col = "black", ...)
+  sub_bl = FALSE, labels = FALSE, sig_col = "black",
+  restore_def_par = TRUE, ...)
 }
 \arguments{
 \item{x}{fit_result object.}
@@ -33,6 +34,9 @@ individual basis set components shown.}
 \item{labels}{print signal labels at the right side of the plot.}
 
 \item{sig_col}{colour of individual signal components.}
+
+\item{restore_def_par}{restore default plotting par values after the plot has
+been made.}
 
 \item{...}{further arguments to plot method.}
 }
