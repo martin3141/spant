@@ -45,13 +45,14 @@ print.mrs_data <- function(x, ...) {
 #' @param label character string to add to the top left of the plot window.
 #' @param restore_def_par restore default plotting par values after the plot has 
 #' @param mar option to adjust the plot margins. See ?par.
+#' @param xaxis_lab x-axis label.
 #' @param ... other arguments to pass to the plot method.
 #' @export
 plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
                           y_scale = FALSE, mode = "re", dyn = 1, x_pos = 1,
                           y_pos = 1, z_pos = 1, coil = 1, lwd = NULL, 
                           bty = NULL, label = "", restore_def_par = TRUE, 
-                          mar = NULL, ...) {
+                          mar = NULL, xaxis_lab = NULL, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -94,6 +95,8 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
   } else {
     stop("Invalid x_units option, should be one of : 'ppm', 'hz', 'points' or 'seconds'") 
   }
+  
+  if (!is.null(xaxis_lab)) xlab <- xaxis_lab
   
   if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[N(x)])
   
