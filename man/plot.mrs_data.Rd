@@ -41,7 +41,8 @@ of: "re", "im", "mod" or "arg".}
 
 \item{label}{character string to add to the top left of the plot window.}
 
-\item{restore_def_par}{restore default plotting par values after the plot has}
+\item{restore_def_par}{restore default plotting par values after the plot has
+been made.}
 
 \item{mar}{option to adjust the plot margins. See ?par.}
 

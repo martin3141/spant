@@ -11,12 +11,16 @@
 #' @param coil the coil element number to plot.
 #' @param n single index element to plot (overrides other indices when given).
 #' @param sub_bl subtract the baseline from the data and fit (logical).
+#' @param mar option to adjust the plot margins. See ?par.
+#' @param restore_def_par restore default plotting par values after the plot has 
+#' been made.
 #' @param ... further arguments to plot method.
 #' @export
 plot.fit_result <- function(x, xlim = NULL, data_only = FALSE, label = NULL, 
                            plot_sigs = NULL, dyn = 1, x_pos = 1,
                            y_pos = 1, z_pos = 1, coil = 1, n = NULL,
-                           sub_bl = FALSE, ...) {
+                           sub_bl = FALSE, mar = NULL, restore_def_par = TRUE, 
+                           ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -36,7 +40,11 @@ plot.fit_result <- function(x, xlim = NULL, data_only = FALSE, label = NULL,
   
   graphics::par("xaxs" = "i", "yaxs" = "i") # tight axes limits
   
-  graphics::par(mar = c(3.5, 1.2, 1.2, 1.2)) # space around the plot
+  if (!is.null(mar)) {
+    graphics::par(mar = mar)
+  } else {
+    graphics::par(mar = c(3.5, 1.2, 1.2, 1.2)) # space around the plot
+  }
   
   graphics::par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
   
@@ -90,7 +98,7 @@ plot.fit_result <- function(x, xlim = NULL, data_only = FALSE, label = NULL,
     graphics::lines(x$PPMScale, x[sig][[1]] + x$Baseline, col = "blue")
   }
   
-  graphics::par(.pardefault)
+  if (restore_def_par) graphics::par(.pardefault)
 }
 
 #' Plot the fitting results of an object of class \code{fit_result} with 

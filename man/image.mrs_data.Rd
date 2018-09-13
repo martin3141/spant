@@ -32,7 +32,8 @@ available.}
 
 \item{coil}{the coil element number to plot.}
 
-\item{restore_def_par}{restore default plotting par values after the plot has}
+\item{restore_def_par}{restore default plotting par values after the plot has
+been made.}
 
 \item{...}{other arguments to pass to the plot method.}
 }

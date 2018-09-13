@@ -44,6 +44,7 @@ print.mrs_data <- function(x, ...) {
 #' @param bty option to draw a box around the plot. See ?par.
 #' @param label character string to add to the top left of the plot window.
 #' @param restore_def_par restore default plotting par values after the plot has 
+#' been made.
 #' @param mar option to adjust the plot margins. See ?par.
 #' @param xaxis_lab x-axis label.
 #' @param ... other arguments to pass to the plot method.
@@ -166,6 +167,7 @@ plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
 #' @param dyn the dynamic index to plot.
 #' @param coil the coil element number to plot.
 #' @param restore_def_par restore default plotting par values after the plot has 
+#' been made.
 #' @param ... other arguments to pass to the plot method.
 #' @export
 image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL, 
