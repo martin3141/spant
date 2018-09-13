@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{fit_result}(x, xlim = NULL, data_only = FALSE,
   label = NULL, plot_sigs = NULL, dyn = 1, x_pos = 1, y_pos = 1,
-  z_pos = 1, coil = 1, n = NULL, sub_bl = FALSE,
+  z_pos = 1, coil = 1, n = NULL, sub_bl = FALSE, mar = NULL,
   restore_def_par = TRUE, ...)
 }
 \arguments{
@@ -33,6 +33,8 @@
 \item{n}{single index element to plot (overrides other indices when given).}
 
 \item{sub_bl}{subtract the baseline from the data and fit (logical).}
+
+\item{mar}{option to adjust the plot margins. See ?par.}
 
 \item{restore_def_par}{restore default plotting par values after the plot has
 been made.}

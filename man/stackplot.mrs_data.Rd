@@ -16,7 +16,7 @@
 \item{xlim}{the range of values to display on the x-axis, eg xlim = c(4,1).}
 
 \item{mode}{representation of the complex numbers to be plotted, can be one
-of: "re", "im", "abs" or "arg".}
+of: "re", "im", "mod" or "arg".}
 
 \item{x_units}{the units to use for the x-axis, can be one of: "ppm", "hz",
 "points" or "seconds".}
