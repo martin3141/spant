@@ -1,6 +1,7 @@
 # spant 0.12.0
 * Fit results stackplot now has the option to display labels.
 * Added the option to reverse eddy current correction.
+* Improved GE p-file reader.
 
 # spant 0.11.0
 * Added mar argument to plot command.
