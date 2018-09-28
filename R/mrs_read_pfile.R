@@ -1,9 +1,16 @@
 # TODO test MEGA-PRESS and CSI
-read_pfile <- function(fname) {
+# when nechoes = 2 we're probally dealing with MEGA-PRESS data, where edited
+# pairs are not interleaved but occupy the first and second half of the data
+
+read_pfile <- function(fname, n_ref_scans = NULL) {
   # check the file size
   fbytes <- file.size(fname)
   
   hdr <- read_pfile_header(fname)
+  
+  # override w ref scans detected in the header 
+  if (!is.null(n_ref_scans)) hdr$rhuser19 <- n_ref_scans
+  
   con <- file(fname, "rb")
   seek(con, hdr$off_data)
   endian <- "little"
@@ -23,17 +30,32 @@ read_pfile <- function(fname) {
   
   if (coils == 0) coils <- 1
   
-  expt_pts <- coils * (hdr$nframes * hdr$nechoes + 1) * hdr$frame_size * 2
+  # each echo starts with a frame of zeros followed by w_ref frames followed by
+  # ws frames
+  expt_pts <- coils * (hdr$nframes * hdr$nechoes + hdr$nechoes) * hdr$frame_size * 2
   
-  if (expt_pts != Npts) warning("Unexpected number of data points.")
+  if (expt_pts != Npts) {
+    warning("Unexpected number of data points.")
+  }
+    cat(paste("Expecting :", Npts, "points based on file size.\n"))
+    cat(paste("Expecting :", expt_pts, "points based on header information.\n"))
+    cat(paste("Coils :", coils, "\n"))
+    cat(paste("nframes :", hdr$nframes, "\n"))
+    cat(paste("nechoes :", hdr$nechoes), "\n")
+    cat(paste("frame_size :", hdr$frame_size), "\n")
+    cat(paste("w_frames :", hdr$rhuser19), "\n")
   
   data <- raw_pts[c(TRUE, FALSE)] + 1i * raw_pts[c(FALSE, TRUE)]
   
-  data <- array(data, dim = c(hdr$frame_size, hdr$nechoes * hdr$nframes + 1, coils, 1, 1, 1, 1))
+  dyns <- hdr$nechoes * hdr$nframes + hdr$nechoes
+  
+  data <- array(data, dim = c(hdr$frame_size, dyns, coils, 1, 1, 1, 1))
+  
   data <- aperm(data, c(7,6,5,4,2,3,1))
   
-  # remove the empty frame at the start of each coil
-  data <- data[,,,,-1,,,drop = FALSE]
+  # remove the empty frame at the start of each coil for each echo
+  rem <- seq(from = 1, to = dyns, by = dyns / hdr$nechoes)
+  data <- data[,,,,-rem,,,drop = FALSE]
   
   res <- c(NA, NA, NA, NA, 1, NA, 1 / hdr$spec_width)
   
@@ -49,8 +71,13 @@ read_pfile <- function(fname) {
   class(mrs_data) <- "mrs_data"
   
   if (hdr$rhuser19 > 0) {
-    ref_mrs <- get_dyns(mrs_data, 1:hdr$rhuser)
-    metab_mrs <- get_dyns(mrs_data, (1 + hdr$rhuser):dyns(mrs_data))
+    # split water and metab data for each echo
+    wref_inds <- rep(FALSE, dyns(mrs_data) / hdr$nechoes)
+    wref_inds[1:hdr$rhuser] <- TRUE
+    wref_inds <- rep(wref_inds, hdr$nechoes)
+    
+    ref_mrs <- get_dyns(mrs_data, which(wref_inds))
+    metab_mrs <- get_dyns(mrs_data, which(!wref_inds))
   } else {
     ref_mrs <- NA
     metab_mrs <- mrs_data

@@ -6,13 +6,17 @@
 #' @param ft transmitter frequency in Hz (required for list_data format).
 #' @param fs sampling frequency in Hz (required for list_data format).
 #' @param ref reference value for ppm scale (required for list_data format).
+#' @param n_ref_scans override the number of water reference scans detected in
+#' the file header (GE p-file only).
 #' @return MRS data object.
 #' @examples
 #' fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
 #' mrs_data <- read_mrs(fname, format = "spar_sdat")
 #' print(mrs_data)
 #' @export
-read_mrs <- function(fname, format, ft = NULL, fs = NULL, ref = NULL) {
+read_mrs <- function(fname, format, ft = NULL, fs = NULL, ref = NULL,
+                     n_ref_scans = NULL) {
+  
   if (format == "spar_sdat") {
     return(read_spar_sdat(fname))
   } else if (format == "rda") {
@@ -22,7 +26,7 @@ read_mrs <- function(fname, format, ft = NULL, fs = NULL, ref = NULL) {
   } else if (format == "twix") {
     return(read_twix(fname))
   } else if (format == "pfile") {
-    return(read_pfile(fname))
+    return(read_pfile(fname, n_ref_scans))
   } else if (format == "list_data") {
     if (is.null(ft)) stop("Please specify ft parameter for list_data format")
     if (is.null(fs)) stop("Please specify fs parameter for list_data format")
