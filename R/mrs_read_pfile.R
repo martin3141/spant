@@ -36,7 +36,6 @@ read_pfile <- function(fname, n_ref_scans = NULL) {
   
   if (expt_pts != Npts) {
     warning("Unexpected number of data points.")
-  }
     cat(paste("Expecting :", Npts, "points based on file size.\n"))
     cat(paste("Expecting :", expt_pts, "points based on header information.\n"))
     cat(paste("Coils :", coils, "\n"))
@@ -44,6 +43,7 @@ read_pfile <- function(fname, n_ref_scans = NULL) {
     cat(paste("nechoes :", hdr$nechoes), "\n")
     cat(paste("frame_size :", hdr$frame_size), "\n")
     cat(paste("w_frames :", hdr$rhuser19), "\n")
+  }
   
   data <- raw_pts[c(TRUE, FALSE)] + 1i * raw_pts[c(FALSE, TRUE)]
   
@@ -135,7 +135,7 @@ read_pfile_header <- function(fname) {
   vars$ps_mps_freq <- sum(2^.subset(0:31, as.logical(ps_mps_freq_bits)))
   
   seek(con, loc$te)
-  vars$te <- readBin(con, "int", size = 4, endian = endian)
+  vars$te <- readBin(con, "int", size = 4, endian = endian) / 1e6
   
   close(con)
   
