@@ -4,10 +4,10 @@
 \alias{Conj.mrs_data}
 \title{Apply Conj operator to an MRS dataset.}
 \usage{
-\method{Conj}{mrs_data}(x)
+\method{Conj}{mrs_data}(z)
 }
 \arguments{
-\item{x}{MRS data.}
+\item{z}{MRS data.}
 }
 \value{
 MRS data following Conj operator.

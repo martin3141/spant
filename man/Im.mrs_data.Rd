@@ -4,10 +4,10 @@
 \alias{Im.mrs_data}
 \title{Apply Im operator to an MRS dataset.}
 \usage{
-\method{Im}{mrs_data}(x)
+\method{Im}{mrs_data}(z)
 }
 \arguments{
-\item{x}{MRS data.}
+\item{z}{MRS data.}
 }
 \value{
 MRS data following Im operator.

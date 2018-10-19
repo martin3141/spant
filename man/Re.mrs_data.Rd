@@ -4,10 +4,10 @@
 \alias{Re.mrs_data}
 \title{Apply Re operator to an MRS dataset.}
 \usage{
-\method{Re}{mrs_data}(x)
+\method{Re}{mrs_data}(z)
 }
 \arguments{
-\item{x}{MRS data.}
+\item{z}{MRS data.}
 }
 \value{
 MRS data following Re operator.

@@ -4,10 +4,10 @@
 \alias{Mod.mrs_data}
 \title{Apply Mod operator to an MRS dataset.}
 \usage{
-\method{Mod}{mrs_data}(x)
+\method{Mod}{mrs_data}(z)
 }
 \arguments{
-\item{x}{MRS data.}
+\item{z}{MRS data.}
 }
 \value{
 MRS data following Mod operator.

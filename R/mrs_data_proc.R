@@ -582,57 +582,56 @@ ft <- function(mrs_data, dims) {
 
 #' Apply the diff operator to an MRS dataset.
 #' @param x MRS data.
-#' @param lag diff lag (default = 1).
-#' @param order diff order (default = 1).
+#' @param ... additional arguments to the diff function.
 #' @return MRS data following diff operator.
 #' @export
-diff.mrs_data <- function(x, lag = 1, order = 1) {
-  apply_mrs(x, 7, diff, lag, order)
+diff.mrs_data <- function(x, ...) {
+  apply_mrs(x, 7, ...)
 }
 
 #' Apply Re operator to an MRS dataset.
-#' @param x MRS data.
+#' @param z MRS data.
 #' @return MRS data following Re operator.
 #' @export
-Re.mrs_data <- function(x) {
-  x$data <- Re(x$data)
-  x
+Re.mrs_data <- function(z) {
+  z$data <- Re(z$data)
+  z
 }
 
 #' Apply Im operator to an MRS dataset.
-#' @param x MRS data.
+#' @param z MRS data.
 #' @return MRS data following Im operator.
 #' @export
-Im.mrs_data <- function(x) {
-  x$data <- Im(x$data)
-  x
+Im.mrs_data <- function(z) {
+  z$data <- Im(z$data)
+  z
 }
 
 #' Apply Mod operator to an MRS dataset.
-#' @param x MRS data.
+#' @param z MRS data.
 #' @return MRS data following Mod operator.
 #' @export
-Mod.mrs_data <- function(x) {
-  x$data <- Mod(x$data)
-  x
+Mod.mrs_data <- function(z) {
+  z$data <- Mod(z$data)
+  z
 }
 
 #' Apply Arg operator to an MRS dataset.
-#' @param x MRS data.
+#' @param z MRS data.
 #' @return MRS data following Arg operator.
 #' @export
-Arg.mrs_data <- function(x) {
-  x$data <- Arg(x$data)
-  x
+Arg.mrs_data <- function(z) {
+  z$data <- Arg(z$data)
+  z
 }
 
 #' Apply Conj operator to an MRS dataset.
-#' @param x MRS data.
+#' @param z MRS data.
 #' @return MRS data following Conj operator.
 #' @export
-Conj.mrs_data <- function(x) {
-  x$data <- Conj(x$data)
-  x
+Conj.mrs_data <- function(z) {
+  z$data <- Conj(z$data)
+  z
 }
 
 ift <- function(mrs_data, dims) {

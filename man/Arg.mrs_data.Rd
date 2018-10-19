@@ -4,10 +4,10 @@
 \alias{Arg.mrs_data}
 \title{Apply Arg operator to an MRS dataset.}
 \usage{
-\method{Arg}{mrs_data}(x)
+\method{Arg}{mrs_data}(z)
 }
 \arguments{
-\item{x}{MRS data.}
+\item{z}{MRS data.}
 }
 \value{
 MRS data following Arg operator.

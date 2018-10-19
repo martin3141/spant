@@ -4,14 +4,12 @@
 \alias{diff.mrs_data}
 \title{Apply the diff operator to an MRS dataset.}
 \usage{
-\method{diff}{mrs_data}(x, lag = 1, order = 1)
+\method{diff}{mrs_data}(x, ...)
 }
 \arguments{
 \item{x}{MRS data.}
 
-\item{lag}{diff lag (default = 1).}
-
-\item{order}{diff order (default = 1).}
+\item{...}{additional arguments to the diff function.}
 }
 \value{
 MRS data following diff operator.
