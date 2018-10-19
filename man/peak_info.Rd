@@ -19,7 +19,7 @@ peak.}
 \item{scale}{the units to use for the frequency scale, can be one of: "ppm",
 "hz" or "points".}
 
-\item{mode}{spectral mode, can be : "real", "imag" or "abs".}
+\item{mode}{spectral mode, can be : "real", "imag" or "mod".}
 }
 \value{
 list of arrays containing the highest peak frequency, height and FWHM

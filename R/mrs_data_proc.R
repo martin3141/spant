@@ -1730,7 +1730,7 @@ calc_spec_snr <- function(mrs_data, sig_region = c(4,0.5),
 #' @param interp_f interpolation factor, defaults to 4x.
 #' @param scale the units to use for the frequency scale, can be one of: "ppm", 
 #' "hz" or "points".
-#' @param mode spectral mode, can be : "real", "imag" or "abs".
+#' @param mode spectral mode, can be : "real", "imag" or "mod".
 #' @return list of arrays containing the highest peak frequency, height and FWHM
 #' in units of PPM and Hz.
 #' @export
@@ -1743,7 +1743,7 @@ peak_info <- function(mrs_data, xlim = c(4,0.5), interp_f = 4,
     mrs_data_crop$data <- Re(mrs_data_crop$data)
   } else if (mode == "imag") {
     mrs_data_crop$data <- Im(mrs_data_crop$data)
-  } else if (mode == "abs") {
+  } else if (mode == "mod") {
     mrs_data_crop$data <- Mod(mrs_data_crop$data)
   }
   
