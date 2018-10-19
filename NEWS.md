@@ -2,6 +2,9 @@
 * Fit results stackplot now has the option to display labels.
 * Added the option to reverse eddy current correction.
 * Improved GE p-file reader.
+* diff function can now be applied to mrs_data objects.
+* Complex functions: Re, Im, Mod, Arg and Conj can now be applied to mrs_data 
+objects.
 
 # spant 0.11.0
 * Added mar argument to plot command.
