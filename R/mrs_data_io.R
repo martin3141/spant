@@ -237,6 +237,14 @@ write_mrs_dpt_v2 <- function(fname, mrs_data) {
   sink()
 }
 
+#' Write MRS data object to file in a RAW format compatible with LCModel.
+#' @param fname the filename of the output RAW format MRS data.
+#' @param mrs_data object to be written to file.
+#' @examples
+#' \dontrun{
+#' mrs_data <- write_mrs_lcm_raw("my_mrs_data.RAW", my_mrs_data)
+#' }
+#' @export
 write_mrs_lcm_raw <- function(fname, mrs_data) {
   sig <- mrs_data$data[1, 1, 1, 1, 1, 1,]
   N <- length(sig)
