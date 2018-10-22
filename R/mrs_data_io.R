@@ -240,17 +240,19 @@ write_mrs_dpt_v2 <- function(fname, mrs_data) {
 #' Write MRS data object to file in a RAW format compatible with LCModel.
 #' @param fname the filename of the output RAW format MRS data.
 #' @param mrs_data object to be written to file.
+#' @param id text string to identify the data.
 #' @examples
 #' \dontrun{
 #' mrs_data <- write_mrs_lcm_raw("my_mrs_data.RAW", my_mrs_data)
 #' }
 #' @export
-write_mrs_lcm_raw <- function(fname, mrs_data) {
+write_mrs_lcm_raw <- function(fname, mrs_data, id = NA) {
   sig <- mrs_data$data[1, 1, 1, 1, 1, 1,]
   N <- length(sig)
   sink(fname)
   cat(" $NMID\n")
-  cat(" ID='Simulated Data', FMTDAT='(2E15.6)'\n")
+  if (is.na(id)) id <- fname
+  cat(paste(" ID='", id, "', FMTDAT='(2E15.6)'\n", sep = ""))
   cat(" VOLUME=1\n")
   cat(" TRAMP=1\n")
   cat(" $END\n")
