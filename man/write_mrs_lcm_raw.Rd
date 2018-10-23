@@ -4,12 +4,14 @@
 \alias{write_mrs_lcm_raw}
 \title{Write MRS data object to file in a RAW format compatible with LCModel.}
 \usage{
-write_mrs_lcm_raw(fname, mrs_data)
+write_mrs_lcm_raw(fname, mrs_data, id = NA)
 }
 \arguments{
 \item{fname}{the filename of the output RAW format MRS data.}
 
 \item{mrs_data}{object to be written to file.}
+
+\item{id}{text string to identify the data.}
 }
 \description{
 Write MRS data object to file in a RAW format compatible with LCModel.
