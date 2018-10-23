@@ -4,12 +4,14 @@
 \alias{write_basis}
 \title{Write a basis object to an LCModel .basis formatted file.}
 \usage{
-write_basis(basis, basis_file)
+write_basis(basis, basis_file, fwhmba = 0.0625)
 }
 \arguments{
 \item{basis}{basis object to be exported.}
 
 \item{basis_file}{path to basis file to be generated.}
+
+\item{fwhmba}{parameter used by LCModel.}
 }
 \description{
 Write a basis object to an LCModel .basis formatted file.

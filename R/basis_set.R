@@ -143,14 +143,15 @@ read_basis <- function(basis_file, ref = def_ref()) {
 #' Write a basis object to an LCModel .basis formatted file.
 #' @param basis basis object to be exported.
 #' @param basis_file path to basis file to be generated.
+#' @param fwhmba parameter used by LCModel.
 #' @export
-write_basis <- function(basis, basis_file) {
+write_basis <- function(basis, basis_file, fwhmba = 0.0625) {
   mrs_data <- basis2mrs_data(basis)
   N <- N(mrs_data)
   
   sink(basis_file)
   cat(" $SEQPAR\n", sep = "")
-  cat(" FWHMBA =  ", 0.00621699, " ,\n", sep = "")
+  cat(" FWHMBA =  ", fwhmba, " ,\n", sep = "")
   cat(" HZPPPM =  ",mrs_data$ft * 1e-6,",\n", sep = "")
   cat(" ECHOT =  ",mrs_data$te * 1000,",\n", sep = "")
   cat(" SEQ = 'PRESS' $END\n", sep = "")

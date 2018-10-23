@@ -65,7 +65,6 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL, opt
     if (!file.exists(basis)) {
       stop("Error, basis file not found.")
     }
-    basis <- read_basis(basis)
   } else {
     stop("Error, specified basis is not the correct data type.")
   }
@@ -175,10 +174,14 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL, opt
     if (!is.null(w_ref)) {
       metab <- comb_metab_ref(metab, w_ref)
     }
-    
-    # write basis object (if specified) to file
-    basis_file <- tempfile(fileext = ".basis")
-    write_basis(basis, basis_file)
+  
+    if (is.character(basis)) {
+      basis_file <- basis  
+    } else {
+      # write basis object (if specified) to file
+      basis_file <- tempfile(fileext = ".basis")
+      write_basis(basis, basis_file)
+    }
     
     temp_mrs <- metab
     temp_mrs$data = temp_mrs$data[1, 1, 1, 1, 1, 1,]
