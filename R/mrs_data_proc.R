@@ -413,6 +413,18 @@ fp_mag <- function(mrs_data) {
   abind::adrop(Mod(mrs_data$data[,,,,,, 1, drop = F]), 7)
 }
 
+#' Convolve two MRS data objects.
+#' @param mrs_data MRS data to be convolved.
+#' @param conv convolution data stored as an mrs_data object.
+#' @return convolved data.
+#' @export
+conv_mrs <- function(mrs_data, conv) {
+  # needs to be a time-domain operation
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+  if (is_fd(conv)) conv <- fd2td(conv)
+  mrs_data * conv 
+}
+
 #' Return the phase of the first data point in the time-domain.
 #' @param mrs_data MRS data.
 #' @return phase values in degrees.
