@@ -213,6 +213,19 @@ mrs_data2mat <- function(mrs_data) {
   t(as.matrix(mrs_data$data[1,1,1,1,,1,]))
 }
 
+#' Convert mrs_data object to a vector.
+#' @param dyn dynamic index.
+#' @param x_pos x index.
+#' @param y_pos y index.
+#' @param z_pos z index.
+#' @param coil coil element index.
+#' @return MRS data vector.
+#' @export
+mrs_data2vec <- function(mrs_data, dyn = 1, x_pos = 1,
+                          y_pos = 1, z_pos = 1, coil = 1) {
+  as.vector(mrs_data$data[1, x_pos, y_pos, z_pos, dyn, coil,])
+}
+
 #' Convert a matrix (with spectral points in the row dimension and dynamics in
 #' the column dimensions) into a mrs_data object.
 #' @param mat data matrix.
