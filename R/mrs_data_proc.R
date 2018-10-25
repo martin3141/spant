@@ -214,6 +214,7 @@ mrs_data2mat <- function(mrs_data) {
 }
 
 #' Convert mrs_data object to a vector.
+#' @param mrs_data MRS data object.
 #' @param dyn dynamic index.
 #' @param x_pos x index.
 #' @param y_pos y index.

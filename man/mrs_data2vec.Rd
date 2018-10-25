@@ -8,6 +8,8 @@ mrs_data2vec(mrs_data, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
   coil = 1)
 }
 \arguments{
+\item{mrs_data}{MRS data object.}
+
 \item{dyn}{dynamic index.}
 
 \item{x_pos}{x index.}
