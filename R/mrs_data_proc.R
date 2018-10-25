@@ -881,8 +881,9 @@ get_td_amp <- function(mrs_data, nstart = 10, nend = 50) {
   
   #t <- seconds(mrs_data)
   #amps <- apply_mrs(mrs_data, 7, measure_lorentz_amp, t, nstart, nend)$data
-  amps <- apply_mrs(mrs_data, 7, measure_td_amp, nstart, nend)$data
   
+  amps <- apply_mrs(mrs_data, 7, measure_td_amp, nstart, nend)$data
+ 
   abind::adrop(amps, 7)
   amps
 }

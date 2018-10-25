@@ -189,7 +189,7 @@ measure_lorentz_amp <- function(y, t, start_pnt = 10, end_pnt = 50) {
 measure_td_amp <- function(y, start_pnt = 10, end_pnt = 50) {
   # crop to time region and take Mod
   y <- Mod(y[start_pnt:end_pnt])
-  stats::spline(start_pnt:end_pnt, y, xout=1)$y
+  stats::spline(start_pnt:end_pnt, y, xout=1, method = "natural")$y
 }
 
 # return the sum of squares of a complex vector
