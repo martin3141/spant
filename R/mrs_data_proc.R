@@ -422,6 +422,12 @@ conv_mrs <- function(mrs_data, conv) {
   # needs to be a time-domain operation
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   if (is_fd(conv)) conv <- fd2td(conv)
+  
+  if (dyns(mrs_data) > 1) {
+    warning("Repeating convolution data to match mrs_data dynamics.")
+    conv <- rep_dyn(conv, dyns(mrs_data))
+  }
+  
   mrs_data * conv 
 }
 
@@ -1476,7 +1482,7 @@ ecc <- function(metab, ref, rev = FALSE) {
   
   if (is_fd(ref)) ref <- fd2td(ref)
   
-  if (rev) ref <- conj(ref)
+  if (rev) ref <- Conj(ref)
   
   if (dyns(ref) > 1) {
     ref <- mean_dyns(ref)
