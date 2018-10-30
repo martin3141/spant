@@ -607,21 +607,6 @@ get_b_glc_paras <- function(lw = NULL, lg = 0) {
 get_glc_paras <- function(lw = NULL, lg = 0) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 7)
-  chem_shift <- c(4.630, 3.230, 3.473, 3.387, 3.450, 3.882, 3.707)
-  j_coupling_mat <- matrix(0, 7, 7)
-  j_coupling_mat[2,1] <- 8.0
-  j_coupling_mat[3,2] <- 9.1
-  j_coupling_mat[4,3] <- 9.4
-  j_coupling_mat[5,4] <- 8.9
-  j_coupling_mat[6,5] <- 1.6
-  j_coupling_mat[7,5] <- 5.4
-  j_coupling_mat[7,6] <- -12.3
-  
-  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
-                       j_coupling_mat = j_coupling_mat, scale_factor = 0.36,
-                       lw = lw, lg = lg)
-  
-  nucleus <- rep("1H", 7)
   chem_shift <- c(5.216, 3.519, 3.698, 3.395, 3.822, 3.826, 3.749)
   j_coupling_mat <- matrix(0, 7, 7)
   j_coupling_mat[2,1] <- 3.8
@@ -631,6 +616,21 @@ get_glc_paras <- function(lw = NULL, lg = 0) {
   j_coupling_mat[6,5] <- 1.5
   j_coupling_mat[7,5] <- 6
   j_coupling_mat[7,6] <- -12.1
+  
+  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 0.36,
+                       lw = lw, lg = lg)
+  
+  nucleus <- rep("1H", 7)
+  chem_shift <- c(4.630, 3.230, 3.473, 3.387, 3.450, 3.882, 3.707)
+  j_coupling_mat <- matrix(0, 7, 7)
+  j_coupling_mat[2,1] <- 8.0
+  j_coupling_mat[3,2] <- 9.1
+  j_coupling_mat[4,3] <- 9.4
+  j_coupling_mat[5,4] <- 8.9
+  j_coupling_mat[6,5] <- 1.6
+  j_coupling_mat[7,5] <- 5.4
+  j_coupling_mat[7,6] <- -12.3
   
   spin_group_b <- list(nucleus = nucleus, chem_shift = chem_shift, 
                        j_coupling_mat = j_coupling_mat, scale_factor = 0.64,
