@@ -390,12 +390,22 @@ get_naa_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_naag_paras <- function(lw = NULL, lg = 0) {
+get_naag_ch3_paras <- function(lw = NULL, lg = 0) {
   if (is.null(lw)) lw = 0.5
   paras <- get_uncoupled_mol("NAAG", 2.042, "1H", 3, lw, lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain metabolites.
               NMR Biomed. 2000; 13:129-153. Note, only the acetyl moiety is simualted."
+  
+  paras$source <- source
+  paras
+}
+
+get_naag_paras <- function(lw = NULL, lg = 0) {
+  if (is.null(lw)) lw = 0.5
+  paras <- get_uncoupled_mol("NAAG", 2.042, "1H", 3, lw, lg)
+  
+  source <- "TODO"
   
   paras$source <- source
   paras
@@ -544,7 +554,7 @@ get_glu_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_glc_paras <- function(lw = NULL, lg = 0) {
+get_a_glc_paras <- function(lw = NULL, lg = 0) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 7)
   chem_shift <- c(5.216, 3.519, 3.698, 3.395, 3.822, 3.826, 3.749)
@@ -562,13 +572,104 @@ get_glc_paras <- function(lw = NULL, lg = 0) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain metabolites.
-              NMR Biomed. 2000; 13:129-153. Only the alpha-anomer is simulated as the 
-              beta-anomer is eliminated by water supression according to the above reference."
+              NMR Biomed. 2000; 13:129-153."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "Glc", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "aGlc", source = source)
   class(paras) <- "mol_parameters"
   paras
 }
+
+get_b_glc_paras <- function(lw = NULL, lg = 0) {
+  if (is.null(lw)) lw = 2
+  nucleus <- rep("1H", 7)
+  chem_shift <- c(4.630, 3.230, 3.473, 3.387, 3.450, 3.882, 3.707)
+  j_coupling_mat <- matrix(0, 7, 7)
+  j_coupling_mat[2,1] <- 8.0
+  j_coupling_mat[3,2] <- 9.1
+  j_coupling_mat[4,3] <- 9.4
+  j_coupling_mat[5,4] <- 8.9
+  j_coupling_mat[6,5] <- 1.6
+  j_coupling_mat[7,5] <- 5.4
+  j_coupling_mat[7,6] <- -12.3
+  
+  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 1,
+                       lw = lw, lg = lg)
+  
+  source <- "Proton NMR chemical shifts and coupling constants for brain metabolites.
+              NMR Biomed. 2000; 13:129-153."
+  
+  paras <- list(spin_groups = list(spin_group_a), name = "bGlc", source = source)
+  class(paras) <- "mol_parameters"
+  paras
+}
+get_a_glc_paras <- function(lw = NULL, lg = 0) {
+  if (is.null(lw)) lw = 2
+  nucleus <- rep("1H", 7)
+  chem_shift <- c(5.216, 3.519, 3.698, 3.395, 3.822, 3.826, 3.749)
+  j_coupling_mat <- matrix(0, 7, 7)
+  j_coupling_mat[2,1] <- 3.8
+  j_coupling_mat[3,2] <- 9.6
+  j_coupling_mat[4,3] <- 9.4
+  j_coupling_mat[5,4] <- 9.9
+  j_coupling_mat[6,5] <- 1.5
+  j_coupling_mat[7,5] <- 6
+  j_coupling_mat[7,6] <- -12.1
+  
+  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 1,
+                       lw = lw, lg = lg)
+  
+  source <- "Proton NMR chemical shifts and coupling constants for brain metabolites.
+              NMR Biomed. 2000; 13:129-153."
+  
+  paras <- list(spin_groups = list(spin_group_a), name = "aGlc", source = source)
+  class(paras) <- "mol_parameters"
+  paras
+}
+
+get_glc_paras <- function(lw = NULL, lg = 0) {
+  if (is.null(lw)) lw = 2
+  nucleus <- rep("1H", 7)
+  chem_shift <- c(4.630, 3.230, 3.473, 3.387, 3.450, 3.882, 3.707)
+  j_coupling_mat <- matrix(0, 7, 7)
+  j_coupling_mat[2,1] <- 8.0
+  j_coupling_mat[3,2] <- 9.1
+  j_coupling_mat[4,3] <- 9.4
+  j_coupling_mat[5,4] <- 8.9
+  j_coupling_mat[6,5] <- 1.6
+  j_coupling_mat[7,5] <- 5.4
+  j_coupling_mat[7,6] <- -12.3
+  
+  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 0.36,
+                       lw = lw, lg = lg)
+  
+  nucleus <- rep("1H", 7)
+  chem_shift <- c(5.216, 3.519, 3.698, 3.395, 3.822, 3.826, 3.749)
+  j_coupling_mat <- matrix(0, 7, 7)
+  j_coupling_mat[2,1] <- 3.8
+  j_coupling_mat[3,2] <- 9.6
+  j_coupling_mat[4,3] <- 9.4
+  j_coupling_mat[5,4] <- 9.9
+  j_coupling_mat[6,5] <- 1.5
+  j_coupling_mat[7,5] <- 6
+  j_coupling_mat[7,6] <- -12.1
+  
+  spin_group_b <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 0.64,
+                       lw = lw, lg = lg)
+  
+  
+  source <- "Proton NMR chemical shifts and coupling constants for brain metabolites.
+             NMR Biomed. 2000; 13:129-153. This is a combination of alpha-glc (36%) 
+             and beta-glc (64%)."
+  
+  paras <- list(spin_groups = list(spin_group_a, spin_goup_b), name = "Glc", source = source)
+  class(paras) <- "mol_parameters"
+  paras
+}
+
 
 get_gpc_paras <- function(lw = NULL, lg = 0) {
   if (is.null(lw)) lw = 2
