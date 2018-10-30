@@ -562,7 +562,8 @@ get_glc_paras <- function(lw = NULL, lg = 0) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain metabolites.
-              NMR Biomed. 2000; 13:129-153."
+              NMR Biomed. 2000; 13:129-153. Only the alpha-anomer is simulated as the 
+              beta-anomer is eliminated by water supression according to the above reference."
   
   paras <- list(spin_groups = list(spin_group_a), name = "Glc", source = source)
   class(paras) <- "mol_parameters"
