@@ -467,7 +467,10 @@ get_naag_paras <- function(lw = NULL, lg = 0) {
                        j_coupling_mat = j_coupling_mat, scale_factor = 1,
                        lw = lw, lg = lg)
   
-  source <- "TODO"
+  source <- "Chemical shifts are from the Govindaraju paper, J-couplings are
+             from : Characterisation of the 1H and 13C NMR spectra of N-
+             acetylaspartylglutamate and its detection in urine from patients
+             with Canavan disease, J Pharm Biomed Anal. 2003 Mar 10;31(3):455-63."
   
   paras <- list(spin_groups = list(spin_group_a, spin_group_b, spin_group_c),
                 name = "NAAG", source = source)
