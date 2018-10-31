@@ -5,17 +5,20 @@
 * diff function can now be applied to mrs_data objects.
 * Complex functions: Re, Im, Mod, Arg and Conj can now be applied to mrs_data 
 objects.
+* Default simulations for Glc and NAAG have been improved.
 
 # spant 0.11.0
 * Added mar argument to plot command.
-* td2fd and fd2td now give warnings when used with data already in the target domain.
+* td2fd and fd2td now give warnings when used with data already in the target
+domain.
 * Improved documentation formatting consistency and fixed some spelling errors.
 * Added rats method.
 
 # spant 0.10.0
 * The names of in-built pulse sequence functions now all start with seq_* to
 make them easier to find.
-* Added new functions to simulate the following MRS sequences: CPMG, MEGA-PRESS, STEAM, sLASER. sLASER sequence kindly contributed by Pierre-Gilles Henry.
+* Added new functions to simulate the following MRS sequences: CPMG, MEGA-PRESS, 
+STEAM, sLASER. sLASER sequence kindly contributed by Pierre-Gilles Henry.
 * Bug fix for get_mol_names function.
 * stackplot function now accepts labels argument and time-domain plotting.
 * def_acq_paras function now accepts arguments to override the defaults.
