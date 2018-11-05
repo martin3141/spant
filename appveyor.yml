@@ -1,38 +1,107 @@
+# Neuroconductor Template
 # DO NOT CHANGE the "init" and "install" sections below
 
 # Download script file from GitHub
 init:
-  ps: |
+  - "ECHO %PYTHON_VERSION% %MINICONDA%"  
+  - ps: |
         $ErrorActionPreference = "Stop"
         Invoke-WebRequest http://raw.github.com/krlmlr/r-appveyor/master/scripts/appveyor-tool.ps1 -OutFile "..\appveyor-tool.ps1"
         Import-Module '..\appveyor-tool.ps1'
+platform:
+ - x86
+
+environment:
+  global:
+    USE_RTOOLS: true
+    R_CHECK_INSTALL_ARGS: "--install-args=--build --no-multiarch "
+    WARNINGS_ARE_ERRORS: 1
+    PYTHON_VERSION: 3.6
+    MINICONDA: C:\Miniconda3-x64
+    R_ARCH: x64    
+  matrix:
+    - R_VERSION: devel
+      R_VER: 3.6
+
+    - R_VERSION: release
+      R_VER: 3.5
+
+    - R_VERSION: oldrel
+      CRAN: http://cran.rstudio.com
+      R_VER: 3.4
+
+    - R_VERSION: 3.3.3
+      CRAN: http://cran.rstudio.com
+      R_VER: 3.3
+
+    - R_VERSION: 3.2.5
+      CRAN: http://cran.rstudio.com
+      R_VER: 3.2
 
 install:
-  ps: Bootstrap
+  - ps: Bootstrap
+  - ps: (new-object net.webclient).DownloadFile('https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Windows/JAGS-4.2.0-Rtools33.exe', 'C:\projects\JAGS-4.2.0.exe')
+  - cmd: C:\projects\JAGS-4.2.0.exe /S
+  - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
+  - conda config --set always_yes yes --set changeps1 no
+  - if exist "requirements.txt" conda update -q conda
+  - if exist "requirements.txt" conda info -a
+  - if exist "requirements.txt" conda create -q -n test-environment python="%PYTHON_VERSION%" --file requirements.txt
+
 
 cache:
   - C:\RLibrary
 
 # Adapt as necessary starting from here
-
-environment:
-  global:
-    WARNINGS_ARE_ERRORS: 1
-    PKGTYPE: "source"
-    USE_RTOOLS: yes
-    R_CHECK_INSTALL_ARGS: --install-args=--build --no-multiarch
-    R_CHECK_FORCE_SUGGESTS: 0
-
 build_script:
   - travis-tool.sh install_deps
 
 test_script:
+  - if not exist "C:\rtm" mkdir C:\rtm
+  - set TMP=C:/rtm
+  - set TEMP=C:/rtm
+  - set TMPDIR=C:/rtm
+  # need to move to higher dir because CMake path req
+  - if not exist "C:\run" mkdir C:\run
+  - cp -avrTf . C:\run
+  # need the tool a level above
+  - cp ../travis-tool.sh C:\
+  - cd C:\run
+  # setting PATH to be specific - no MinGW overall - just R's
+  # - set PATH=C:\Rtools\bin;C:\Rtools\MinGW\bin;
+  # - set PATH=%PATH%;C:\Rtools\gcc-4.6.3\bin;
+  # - set PATH=%PATH%;C:\Rtools\mingw_64\bin;
+  # - set PATH=%PATH%;C:\Program Files\Git\cmd;
+  # - set PATH=%PATH%;C:\Program Files (x86)\CMake\bin;
+  # - set PATH=%PATH%;"C:\Program Files (x86)\CMake\bin";
+  # - set PATH=%PATH%;C:\R\bin\x64;  
+  # - set PATH=%PATH%;C:\Program Files\Git\usr\bin  
+  # - set PATH=%PATH%;C:\Users\appveyor\AppData\Roaming\npm
+  # - set PATH=%PATH%;C:\Users\appveyor\AppData\Local\Yarn\bin
+  # - set PATH=%PATH%;C:\Program Files\AppVeyor\BuildAgent\
+  # - set PATH=%PATH%;C:\Windows\system32
+  # - set PATH=%PATH%;C:\Windows
+  # - set PATH=%PATH%;C:\Windows\System32\Wbem
+  # - set PATH=%PATH%;C:\Windows\System32\WindowsPowerShell\v1.0\
+  # - set PATH=%PATH%;C:\Program Files\7-Zip
   - travis-tool.sh run_tests
+  - ls
+  - ls ../
+  # - cp ../*.zip ./
+  - cp -ravTf C:/run %APPVEYOR_BUILD_FOLDER%
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - for %%i in (*.zip) do echo %%~ni> zip_filename.txt
+  - SET /P PKG_TARBALL=<zip_filename.txt
+  - del zip_filename.txt
+  - rename %PKG_TARBALL%.zip %PKG_TARBALL%_R%R_VER%.zip
+  - echo Built tarball is %PKG_TARBALL%_R%R_VER%.zip
 
 on_failure:
-  - cat *.Rcheck/00install.out  
   - 7z a failure.zip *.Rcheck\*
   - appveyor PushArtifact failure.zip
+
+after_test:
+- 7z a testthat.zip *.Rcheck\**\*.Rout
 
 artifacts:
   - path: '*.Rcheck\**\*.log'
@@ -44,8 +113,18 @@ artifacts:
   - path: '*.Rcheck\**\*.fail'
     name: Logs
 
-  - path: '*.Rcheck\**\*.Rout'
+  - path: testthat.zip
     name: Logs
 
-  - path: '\*_*.zip'
+  - path: '\*_*_*.zip'
     name: Bits
+
+deploy:
+  provider: GitHub
+  description: 'Windows Binary'
+  auth_token:
+    secure: dUI5DBS31Kfp6DIqx8NSxsyTkOOXbF5QkW6vi+++/smzii3mGky/YYRTA9KJX+1Z
+  draft: false
+  prerelease: false
+  on:
+appveyor_repo_tag: true
