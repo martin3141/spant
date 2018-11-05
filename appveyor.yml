@@ -8,6 +8,7 @@ init:
         $ErrorActionPreference = "Stop"
         Invoke-WebRequest http://raw.github.com/krlmlr/r-appveyor/master/scripts/appveyor-tool.ps1 -OutFile "..\appveyor-tool.ps1"
         Import-Module '..\appveyor-tool.ps1'
+        
 platform:
  - x86
 
@@ -127,4 +128,4 @@ deploy:
   draft: false
   prerelease: false
   on:
-appveyor_repo_tag: true
+    appveyor_repo_tag: true
