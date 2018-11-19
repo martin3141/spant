@@ -14,13 +14,14 @@
 #' @param mar option to adjust the plot margins. See ?par.
 #' @param restore_def_par restore default plotting par values after the plot has 
 #' been made.
+#' @param ylim range of values to display on the y-axis, eg ylim = c(0,10).
 #' @param ... further arguments to plot method.
 #' @export
 plot.fit_result <- function(x, xlim = NULL, data_only = FALSE, label = NULL, 
                            plot_sigs = NULL, dyn = 1, x_pos = 1,
                            y_pos = 1, z_pos = 1, coil = 1, n = NULL,
                            sub_bl = FALSE, mar = NULL, restore_def_par = TRUE, 
-                           ...) {
+                           ylim = NULL, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -76,8 +77,14 @@ plot.fit_result <- function(x, xlim = NULL, data_only = FALSE, label = NULL,
     }
     
     fit_line <- x$Fit + x$Baseline
-    max_dp <- max(x$Data[ind],fit_line[ind])
-    min_dp <- min(x$Data[ind],fit_line[ind],x$Baseline[ind])
+    
+    if (is.null(ylim)) {
+      max_dp <- max(x$Data[ind],fit_line[ind])
+      min_dp <- min(x$Data[ind],fit_line[ind],x$Baseline[ind])
+    } else {
+      max_dp <- ylim[2]
+      min_dp <- ylim[1]
+    }
     
     res <- x$Data - fit_line
     res_range <- max(res[ind]) - min(res[ind])

@@ -1,3 +1,6 @@
+# spant 0.13.0
+* Added ylim option to fit plotting.
+
 # spant 0.12.0
 * Fit results stackplot now has the option to display labels.
 * Added the option to reverse eddy current correction.
