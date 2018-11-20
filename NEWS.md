@@ -1,5 +1,5 @@
 # spant 0.13.0
-* Added ylim option to fit plotting.
+* Added ylim and y_scale options to fit plotting.
 
 # spant 0.12.0
 * Fit results stackplot now has the option to display labels.

@@ -7,7 +7,7 @@
 \method{plot}{fit_result}(x, xlim = NULL, data_only = FALSE,
   label = NULL, plot_sigs = NULL, dyn = 1, x_pos = 1, y_pos = 1,
   z_pos = 1, coil = 1, n = NULL, sub_bl = FALSE, mar = NULL,
-  restore_def_par = TRUE, ylim = NULL, ...)
+  restore_def_par = TRUE, ylim = NULL, y_scale = FALSE, ...)
 }
 \arguments{
 \item{x}{fit_result object.}
@@ -40,6 +40,8 @@
 been made.}
 
 \item{ylim}{range of values to display on the y-axis, eg ylim = c(0,10).}
+
+\item{y_scale}{option to display the y-axis values (logical).}
 
 \item{...}{further arguments to plot method.}
 }
