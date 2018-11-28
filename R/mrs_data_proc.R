@@ -625,7 +625,7 @@ diff_mrs <- function(mrs_data, ...) {
 #' @param mrs_data MRS data.
 #' @return MRS data following max operator.
 #' @export
-max.mrs_data <- function(mrs_data) {
+max_mrs <- function(mrs_data) {
   apply_mrs(mrs_data, 7, max, data_only = TRUE)
 }
 
