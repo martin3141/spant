@@ -612,13 +612,21 @@ ft <- function(mrs_data, dims) {
   apply_mrs(mrs_data, dims, ft_shift)
 }
 
-#' Apply the diff operator to an MRS dataset.
-#' @param x MRS data.
+#' Apply the diff operator to an MRS dataset in the FID/spectral dimension.
+#' @param mrs_data MRS data.
 #' @param ... additional arguments to the diff function.
 #' @return MRS data following diff operator.
 #' @export
-diff.mrs_data <- function(x, ...) {
-  apply_mrs(x, 7, ...)
+diff_mrs <- function(mrs_data, ...) {
+  apply_mrs(mrs_data, 7, fun = diff, ...)
+}
+
+#' Apply the max operator to an MRS dataset.
+#' @param mrs_data MRS data.
+#' @return MRS data following max operator.
+#' @export
+max.mrs_data <- function(mrs_data) {
+  apply_mrs(mrs_data, 7, max, data_only = TRUE)
 }
 
 #' Apply Re operator to an MRS dataset.

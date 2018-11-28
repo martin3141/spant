@@ -340,3 +340,7 @@ comb_csv_results <- function(pattern, supp_mess = TRUE, ...) {
 #' @importFrom magrittr %>%
 #' @export
 magrittr::`%>%`
+
+#' @importFrom magrittr %$%
+#' @export
+magrittr::`%$%`

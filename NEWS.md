@@ -1,5 +1,6 @@
 # spant 0.13.0
 * Added ylim and y_scale options to fit plotting.
+* Added %$% operator from magrittr package.
 
 # spant 0.12.0
 * Fit results stackplot now has the option to display labels.
