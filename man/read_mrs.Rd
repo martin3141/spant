@@ -5,7 +5,7 @@
 \title{Read MRS data from a file.}
 \usage{
 read_mrs(fname, format, ft = NULL, fs = NULL, ref = NULL,
-  n_ref_scans = NULL)
+  n_ref_scans = NULL, verbose = FALSE)
 }
 \arguments{
 \item{fname}{filename of the dpt format MRS data.}
@@ -22,6 +22,8 @@ following : "spar_sdat", "rda", "ima", "twix", "pfile", "list_data",
 
 \item{n_ref_scans}{override the number of water reference scans detected in
 the file header (GE p-file only).}
+
+\item{verbose}{print data file information (default = FALSE).}
 }
 \value{
 MRS data object.

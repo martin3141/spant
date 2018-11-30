@@ -1,4 +1,4 @@
-read_twix <- function(fname) {
+read_twix <- function(fname, verbose) {
   # check the file size
   fbytes <- file.size(fname)
   
@@ -9,7 +9,7 @@ read_twix <- function(fname) {
   #print(first_int)
   #print(second_int)
   if ((first_int < 10000) && (second_int <= 64)) {
-    cat("TWIX file is VD format.\n")
+    if (verbose) cat("TWIX file is VD format.\n")
     version <- "vd"
     Nscans <- second_int
     measID <- read_uint32(con)
@@ -24,7 +24,7 @@ read_twix <- function(fname) {
     dataStart <- measOffset + hdrLength
     #print(dataStart)
   } else {
-    cat("TWIX file is VB format.\n")
+    if (verbose) cat("TWIX file is VB format.\n")
     version <- "vb"
     dataStart <- first_int
     Nscans <- 1
@@ -48,7 +48,7 @@ read_twix <- function(fname) {
   for (scans in 0:(Nscans - 1)) {
     n <- 0
     while (TRUE) {
-      cat(".")
+      if (verbose) cat(".")
       seek(con, cPos, "start")
       n <- n + 1
       ulDMALength_bin <- intToBits(read_int32(con))
@@ -172,14 +172,14 @@ read_twix <- function(fname) {
   }
   close(con)
   
-  cat("\n")
+  if (verbose) cat("\n")
   raw_pts <- raw_pts[1:raw_pt_end]
   fid_offset <- floor(ima_kspace_center_column / 2) + 1
   dynamics <- length(raw_pts) / ima_coils / (ima_samples * 2)
-  cat(paste("Coils          :", ima_coils, "\n"))
-  cat(paste("Complex pts    :", ima_samples, "\n"))
-  cat(paste("Dynamics       :", dynamics, "\n"))
-  cat(paste("FID offset pts :", fid_offset, "\n"))
+  if (verbose) cat(paste("Coils          :", ima_coils, "\n"))
+  if (verbose) cat(paste("Complex pts    :", ima_samples, "\n"))
+  if (verbose) cat(paste("Dynamics       :", dynamics, "\n"))
+  if (verbose) cat(paste("FID offset pts :", fid_offset, "\n"))
   
   # make complex
   data <- raw_pts[c(TRUE, FALSE)] - 1i * raw_pts[c(FALSE, TRUE)]
