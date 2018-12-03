@@ -6,7 +6,8 @@
 \usage{
 \method{image}{mrs_data}(x, xlim = NULL, mode = "re", col = NULL,
   dim = "dyn", x_pos = NULL, y_pos = NULL, z_pos = NULL, dyn = 1,
-  coil = 1, restore_def_par = TRUE, ...)
+  coil = 1, restore_def_par = TRUE, y_ticks = NULL, vline = NULL,
+  hline = NULL, ...)
 }
 \arguments{
 \item{x}{object of class mrs_data.}
@@ -34,6 +35,12 @@ available.}
 
 \item{restore_def_par}{restore default plotting par values after the plot has
 been made.}
+
+\item{y_ticks}{a vector of indices specifying where to place tick marks.}
+
+\item{vline}{draw a vertical line at the value of vline.}
+
+\item{hline}{draw a horizonal line at the value of hline.}
 
 \item{...}{other arguments to pass to the plot method.}
 }

@@ -2,6 +2,7 @@
 * Added ylim and y_scale options to fit plotting.
 * Added %$% operator from magrittr package.
 * Added an interpolation option to calc_spec_snr.
+* Added hline and vline options to image.mrs_data.
 
 # spant 0.12.0
 * Fit results stackplot now has the option to display labels.
