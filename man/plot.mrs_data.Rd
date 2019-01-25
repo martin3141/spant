@@ -5,9 +5,10 @@
 \title{Plotting method for objects of class mrs_data.}
 \usage{
 \method{plot}{mrs_data}(x, fd = TRUE, x_units = NULL, xlim = NULL,
-  y_scale = FALSE, mode = "re", dyn = 1, x_pos = 1, y_pos = 1,
-  z_pos = 1, coil = 1, lwd = NULL, bty = NULL, label = "",
-  restore_def_par = TRUE, mar = NULL, xaxis_lab = NULL, ...)
+  y_scale = FALSE, x_ax = TRUE, mode = "re", dyn = 1, x_pos = 1,
+  y_pos = 1, z_pos = 1, coil = 1, lwd = NULL, bty = NULL,
+  label = "", restore_def_par = TRUE, mar = NULL, xaxis_lab = NULL,
+  ...)
 }
 \arguments{
 \item{x}{object of class mrs_data.}
@@ -21,6 +22,8 @@
 \item{xlim}{the range of values to display on the x-axis, eg xlim = c(4,1).}
 
 \item{y_scale}{option to display the y-axis values (logical).}
+
+\item{x_ax}{option to display the x-axis values (logical).}
 
 \item{mode}{representation of the complex numbers to be plotted, can be one
 of: "re", "im", "mod" or "arg".}
