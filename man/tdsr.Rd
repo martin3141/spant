@@ -9,8 +9,8 @@ tdsr(mrs_data, ref = NULL, xlim = c(4, 0.5), max_t = 0.2)
 \arguments{
 \item{mrs_data}{MRS data to be corrected.}
 
-\item{ref}{optional MRS data to use as a reference, the first dynamic of
-mrs_data is used if this argument is not supplied.}
+\item{ref}{optional MRS data to use as a reference, the mean of all dynamics
+is used if this argument is not supplied.}
 
 \item{xlim}{optional frequency range to perform optimisation, set to NULL
 to use the full range.}

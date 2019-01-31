@@ -1,4 +1,6 @@
 # spant 0.13.0
+* rats and tdsr functions now use the mean spectrum as the default reference.
+* Added the option to remove the x axis in an mrs_data plot.
 * Added ylim and y_scale options to fit plotting.
 * Added %$% operator from magrittr package.
 * Added an interpolation option to calc_spec_snr.

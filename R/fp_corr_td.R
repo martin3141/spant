@@ -3,8 +3,8 @@
 #' An implementation of the method published by Near et al MRM 73:44-50 (2015).
 #' 
 #' @param mrs_data MRS data to be corrected.
-#' @param ref optional MRS data to use as a reference, the first dynamic of 
-#' mrs_data is used if this argument is not supplied.
+#' @param ref optional MRS data to use as a reference, the mean of all dynamics
+#' is used if this argument is not supplied.
 #' @param xlim optional frequency range to perform optimisation, set to NULL
 #' to use the full range.
 #' @param max_t truncate the FID when longer than max_t to reduce time taken.
@@ -12,8 +12,9 @@
 #' of degrees and Hz respectively.
 #' @export
 tdsr <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_t = 0.2) {
-  # align to first dynamic if ref is not given
-  if (is.null(ref)) ref <- get_dyns(mrs_data, 1)
+  
+  # align to mean if ref is not given
+  if (is.null(ref)) ref <- mean_dyns(mrs_data)
   
   if (is.null(xlim)) {
     if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)

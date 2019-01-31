@@ -1,8 +1,8 @@
-#' Robust Alignment to a Target Spectrum (RATS)
+#' Robust Alignment to a Target Spectrum (RATS).
 #' 
 #' @param mrs_data MRS data to be corrected.
-#' @param ref optional MRS data to use as a reference, the first dynamic of 
-#' mrs_data is used if this argument is not supplied.
+#' @param ref optional MRS data to use as a reference, the mean of all dynamics
+#' is used if this argument is not supplied.
 #' @param xlim optional frequency range to perform optimisation, set to NULL
 #' to use the full range.
 #' @param max_shift maximum allowable frequency shift in Hz.
@@ -28,8 +28,8 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
     mrs_data_mod$data <- mrs_data_mod$data[,,,,,,1:pts, drop = FALSE]
   }
   
-  # align to first dynamic if ref is not given
-  if (is.null(ref)) ref <- get_dyns(mrs_data, 1)
+  # align to mean if ref is not given
+  if (is.null(ref)) ref <- mean_dyns(mrs_data)
   
   if (!is.null(max_t)) {
     # move ref to the time-domain
