@@ -41,11 +41,15 @@ read_twix <- function(fname, verbose) {
   
   # overestimate the number of data points and pre-allocate
   expected_pts <- as.integer((fbytes - dataStart) / 4)  
-  raw_pts <- c(NA)
-  length(raw_pts) <- expected_pts
-  raw_pt_start <- 1
+  
+  if (verbose) cat(paste("Scans           :", Nscans, "\n"))
   
   for (scans in 0:(Nscans - 1)) {
+    # the final scan is the one we are interested in, so clear the last one 
+    raw_pts <- c(NA)
+    length(raw_pts) <- expected_pts
+    raw_pt_start <- 1
+    
     n <- 0
     while (TRUE) {
       if (verbose) cat(".")
@@ -176,10 +180,11 @@ read_twix <- function(fname, verbose) {
   raw_pts <- raw_pts[1:raw_pt_end]
   fid_offset <- floor(ima_kspace_center_column / 2) + 1
   dynamics <- length(raw_pts) / ima_coils / (ima_samples * 2)
-  if (verbose) cat(paste("Coils          :", ima_coils, "\n"))
-  if (verbose) cat(paste("Complex pts    :", ima_samples, "\n"))
-  if (verbose) cat(paste("Dynamics       :", dynamics, "\n"))
-  if (verbose) cat(paste("FID offset pts :", fid_offset, "\n"))
+  if (verbose) cat(paste("Raw data points :", length(raw_pts), "\n"))
+  if (verbose) cat(paste("Coils           :", ima_coils, "\n"))
+  if (verbose) cat(paste("Complex pts     :", ima_samples, "\n"))
+  if (verbose) cat(paste("Dynamics        :", dynamics, "\n"))
+  if (verbose) cat(paste("FID offset pts  :", fid_offset, "\n"))
   
   # make complex
   data <- raw_pts[c(TRUE, FALSE)] - 1i * raw_pts[c(FALSE, TRUE)]
