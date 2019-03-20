@@ -1,4 +1,5 @@
 # spant 0.13.0
+* Bug fix for Siemens TWIX reader.
 * rats and tdsr functions now use the mean spectrum as the default reference.
 * Added the option to remove the x axis in an mrs_data plot.
 * Added ylim and y_scale options to fit plotting.
