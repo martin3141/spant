@@ -428,7 +428,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   }
   
   max_val <- max(abs(plot_data))
-  y_offset_vec <- 0:(ncol(plot_data) - 1) * max_val * y_offset / 100
+  y_offset_vec <- 0:(ncol(plot_data) - 1) * max_val * -y_offset / 100
   y_offset_mat <- matrix(y_offset_vec, nrow = nrow(plot_data),
                          ncol = ncol(plot_data), byrow = TRUE)
   
