@@ -804,6 +804,20 @@ get_seg_ind <- function(scale, start, end) {
   which(scale >= start & scale <= end)
 }
 
+#' @export
+crop_td_pts <- function(mrs_data, start = NULL, end = NULL) {
+  # needs to be a TD operation
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+  
+  if (is.null(start)) start <- 1
+  
+  if (is.null(end)) end <- N(mrs_data)
+  
+  mrs_data$data <- mrs_data$data[,,,,,,start:end, drop = F]
+  
+  mrs_data
+}
+
 #' Crop \code{mrs_data} object based on a frequency range.
 #' @param mrs_data MRS data.
 #' @param xlim range of values to crop in the spectral dimension eg 
@@ -1621,7 +1635,16 @@ comb_coils <- function(metab, ref = NULL, noise = NULL,
   amp <- Mod(fp)
   
   if (!is.null(noise)) {
+    # estimate noise from noise data
     amp <- amp / (calc_coil_noise_sd(noise) ^ 2)
+  } else {
+    # estimate noise from first FID of the metab data
+    metab_first <- get_dyns(metab, 1)
+    noise_data <- crop_spec(metab_first, c(-0.5, -2.5))
+    noise_sd <- est_noise_sd(noise_data, offset = 0, n = N(noise_data),
+                             p_order = 2)
+    
+    amp <- amp / (noise_sd ^ 2)
   }
   
   # phase and scale ref data

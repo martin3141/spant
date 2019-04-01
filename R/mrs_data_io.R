@@ -8,6 +8,8 @@
 #' @param ref reference value for ppm scale (required for list_data format).
 #' @param n_ref_scans override the number of water reference scans detected in
 #' the file header (GE p-file only).
+#' @param full_data export all data points, including those before the start of
+#' the FID (default = FALSE).
 #' @param verbose print data file information (default = FALSE).
 #' @return MRS data object.
 #' @examples
@@ -16,7 +18,7 @@
 #' print(mrs_data)
 #' @export
 read_mrs <- function(fname, format, ft = NULL, fs = NULL, ref = NULL,
-                     n_ref_scans = NULL, verbose = FALSE) {
+                     n_ref_scans = NULL, full_data = FALSE, verbose = FALSE) {
   
   if (format == "spar_sdat") {
     return(read_spar_sdat(fname))
@@ -25,7 +27,7 @@ read_mrs <- function(fname, format, ft = NULL, fs = NULL, ref = NULL,
   } else if (format == "ima") {
     return(read_ima(fname))
   } else if (format == "twix") {
-    return(read_twix(fname, verbose))
+    return(read_twix(fname, verbose, full_data))
   } else if (format == "pfile") {
     return(read_pfile(fname, n_ref_scans))
   } else if (format == "list_data") {
