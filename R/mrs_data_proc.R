@@ -804,6 +804,11 @@ get_seg_ind <- function(scale, start, end) {
   which(scale >= start & scale <= end)
 }
 
+#' Crop \code{mrs_data} object data points in the time-domain.
+#' @param mrs_data MRS data.
+#' @param start starting data point (defaults to 1).
+#' @param end ending data point (defaults to the last saved point).
+#' @return cropped \code{mrs_data} object.
 #' @export
 crop_td_pts <- function(mrs_data, start = NULL, end = NULL) {
   # needs to be a TD operation
