@@ -236,7 +236,7 @@ read_siemens_txt_hdr <- function(fname, version) {
   
   while (TRUE) {
     line <- readLines(con, n = 1, skipNul = TRUE)
-    if (grepl("### ASCCONV END ###", line, fixed = TRUE)) {
+    if (grepl("### ASCCONV END ###", line, fixed = TRUE, useBytes = TRUE)) {
       break
     } else if (startsWith(line, "lAverages")) {
       vars$averages <- as.integer(strsplit(line, "=")[[1]][2])
