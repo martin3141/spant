@@ -1,7 +1,7 @@
 Package: spant
 Type: Package
 Title: MR Spectroscopy Analysis Tools
-Version: 0.13.0
+Version: 0.14.9000
 Date: 2019-04-25
 Authors@R: c(
   person("Martin", "Wilson", email = "martin@pipegrep.co.uk", role = c("cre","aut")),
