@@ -5,14 +5,15 @@
 \title{Plot an interactive slice map from a data array where voxels can be selected
 to display a corresponding spectrum.}
 \usage{
-plot_slice_map_inter(map, mrs_data, xlim = NULL, slice = 1,
+plot_slice_map_inter(mrs_data, map = NULL, xlim = NULL, slice = 1,
   zlim = NULL, mask_map = NULL, denom = NULL, mask_cutoff = 20,
   interp = 1)
 }
 \arguments{
-\item{map}{array of values to be plotted.}
-
 \item{mrs_data}{spectral data.}
+
+\item{map}{array of values to be plotted, defaults to the integration of the
+modulus of the full spectral width.}
 
 \item{xlim}{spectral region to plot.}
 
