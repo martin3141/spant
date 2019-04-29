@@ -343,7 +343,11 @@ shift <- function(mrs_data, shift, units = "ppm") {
 #' @return MRS data with applied phase parameters.
 #' @export
 phase <- function(mrs_data, zero_order, first_order = 0) {
-  if ((first_order == 0) && (length(zero_order) == 1)) {
+  if ((first_order == 0) && (dim(zero_order)[1:6] == dim(mrs_data$data)[1:6])) {
+    phase_array <- array(rep(zero_order,N(mrs_data)), 
+                         dim = dim(mrs_data$data))
+    mrs_data$data = mrs_data$data * exp(1i * phase_array * pi / 180)
+  } else if ((first_order == 0) && (length(zero_order) == 1)) {
     mrs_data$data = mrs_data$data * exp(1i * zero_order * pi / 180)
   } else if ((length(zero_order) == 1) && (first_order != 0)) {
     freq <- rep(hz(mrs_data), each = Nspec(mrs_data))
@@ -1492,10 +1496,10 @@ auto_phase <- function(mrs_data, xlim = NULL, ret_phase = FALSE) {
   }
   
   # TODO update phase function and remove drop
-  mrs_data <- phase(mrs_data, drop(phases))
+  mrs_data <- phase(mrs_data, phases)
   
   if (ret_phase) {
-    return(list(mrs_data, abind::adrop(phases, 7)))
+    return(list(mrs_data = mrs_data, phase = abind::adrop(phases, 7)))
   } else {
     return(mrs_data)
   }
@@ -1923,7 +1927,7 @@ calc_peak_info_vec <- function(data_pts, interp_f) {
 #' @param mode spectral mode, can be : "re", "im" or "mod".
 #' @return an array of integral values.
 #' @export
-int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "real") {
+int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re") {
   
   if (!is_fd(mrs_data)) {
     mrs_data <- td2fd(mrs_data)

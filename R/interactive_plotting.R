@@ -15,8 +15,9 @@ plot_fit_slice_inter <- function(fit_res, name, slice = 1, zlim = NULL,
 
 #' Plot an interactive slice map from a data array where voxels can be selected
 #' to display a corresponding spectrum.
-#' @param map array of values to be plotted.
 #' @param mrs_data spectral data.
+#' @param map array of values to be plotted, defaults to the integration of the
+#' modulus of the full spectral width.
 #' @param xlim spectral region to plot.
 #' @param slice the slice index to plot.
 #' @param zlim smallest and largest values to be plotted.
@@ -27,7 +28,7 @@ plot_fit_slice_inter <- function(fit_res, name, slice = 1, zlim = NULL,
 #' @param interp map interpolation factor.
 #' @export
 #' @importFrom tkrplot tkrplot
-plot_slice_map_inter <- function(map, mrs_data, xlim = NULL, slice = 1,
+plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
                                  zlim = NULL, mask_map = NULL, denom = NULL, 
                                  mask_cutoff = 20, interp = 1) {
   
@@ -40,6 +41,8 @@ plot_slice_map_inter <- function(map, mrs_data, xlim = NULL, slice = 1,
 
   assign("plot_env", new.env(hash = TRUE), envir = baseenv())
   #assign("plot_env", new.env(hash = TRUE), envir = globalenv())
+  
+  if (is.null(map)) map <- int_spec(mrs_data, mode = "mod")
 
   if (class(mrs_data) == "mrs_data") {
     x_scale <- ppm(mrs_data)

@@ -1,5 +1,6 @@
 # spant 0.14.0
 * Added auto_phase function for zeroth order phase-correction of simple spectra.
+* Bug fix for int_spec function.
 
 # spant 0.13.0
 * Various bug fixes for Siemens TWIX reader.
