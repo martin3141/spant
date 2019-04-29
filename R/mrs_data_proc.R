@@ -1472,21 +1472,45 @@ hsvd <- function(y, fs, K = 50, propack = TRUE, fast_hank = TRUE) {
   list(basis = basis, reson_table = reson_table)
 }
 
-auto_phase <- function(mrs_data) {
-  if (!is_fd(mrs_data)) {
-      mrs_data <- td2fd(mrs_data)
+#' Perform zeroth-order phase correction based on the minimisation of the
+#' squared difference between the real and magnitude components of the
+#' spectrum.
+#' @param mrs_data an object of class \code{mrs_data}.
+#' @param xlim frequency range (default units of PPM) to including in the phase
+#' @param ret_phase return phase values (logical).
+#' determination.
+#' @return MRS data object and phase values (optional).
+#' @export
+auto_phase <- function(mrs_data, xlim = NULL, ret_phase = FALSE) {
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  if (!is.null(xlim)) {
+    mrs_data_crop <- crop_spec(mrs_data, xlim)
+    phases <- apply_mrs(mrs_data_crop, 7, auto_phase_vec, data_only = TRUE)
+  } else {
+    phases <- apply_mrs(mrs_data, 7, auto_phase_vec, data_only = TRUE)
   }
-  apply_mrs(mrs_data, 7, auto_phase_vec)
+  
+  # TODO update phase function and remove drop
+  mrs_data <- phase(mrs_data, drop(phases))
+  
+  if (ret_phase) {
+    return(list(mrs_data, abind::adrop(phases, 7)))
+  } else {
+    return(mrs_data)
+  }
 }
 
 auto_phase_vec <- function(vec) {
   res <- stats::optim(0, phase_obj_fn, gr = NULL, vec, method = "Brent",
                       lower = -180, upper = 180)
-  vec * exp(1i * (res$par + 180) / 180 * pi)
+  #vec * exp(1i * res$par / 180 * pi)
+  res$par
 }
 
 phase_obj_fn <- function(phi, vec) {
-  sum(Re(vec * exp(1i * phi / 180 * pi)))
+  vec_adj <- vec * exp(1i * phi / 180 * pi)
+  sum((Mod(vec_adj) - Re(vec_adj)) ^ 2)
 }
 
 ecc_2d_array <- function(array) {
@@ -1913,9 +1937,7 @@ int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "real") {
     x_scale <- pts(mrs_data)
   }
   
-  if (is.null(xlim)) {
-    xlim <- c(x_scale[1], x_scale[N(mrs_data)])
-  }
+  if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[N(mrs_data)])
   
   subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
   
