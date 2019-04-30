@@ -2,17 +2,27 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{get_subset}
 \alias{get_subset}
-\title{Extract a subset}
+\title{Extract a subset of MRS data.}
 \usage{
 get_subset(mrs_data, x_set = NULL, y_set = NULL, z_set = NULL,
   dyn_set = NULL, coil_set = NULL)
 }
 \arguments{
-\item{mrs_data}{MRS data.}
+\item{mrs_data}{MRS data object.}
+
+\item{x_set}{x indices to include in the output (default all).}
+
+\item{y_set}{y indices to include in the output (default all).}
+
+\item{z_set}{z indices to include in the output (default all).}
+
+\item{dyn_set}{dynamic indices to include in the output (default all).}
+
+\item{coil_set}{coil indices to include in the output (default all).}
 }
 \value{
-MRS data.
+selected subset of MRS data.
 }
 \description{
-Extract a subset
+Extract a subset of MRS data.
 }

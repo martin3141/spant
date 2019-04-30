@@ -1,6 +1,6 @@
 #' Plot a 2D slice from an MRSI fit result object.
 #' @param fit_res \code{fit_result} object.
-#' @param name name of the quantity to plot, eg "TNAA".
+#' @param map array of values to be plotted, defaults to a "TNAA" map.
 #' @param slice slice to plot in the z direction.
 #' @param zlim range of values to plot.
 #' @param interp interpolation factor.

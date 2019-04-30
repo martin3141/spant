@@ -1024,9 +1024,14 @@ get_slice <- function(mrs_data, z_pos) {
   return(mrs_data)
 }
 
-#' Extract a subset
-#' @param mrs_data MRS data.
-#' @return MRS data.
+#' Extract a subset of MRS data.
+#' @param mrs_data MRS data object.
+#' @param x_set x indices to include in the output (default all).
+#' @param y_set y indices to include in the output (default all).
+#' @param z_set z indices to include in the output (default all). 
+#' @param dyn_set dynamic indices to include in the output (default all). 
+#' @param coil_set coil indices to include in the output (default all). 
+#' @return selected subset of MRS data.
 #' @export
 get_subset <- function(mrs_data, x_set = NULL, y_set = NULL, z_set = NULL,
                        dyn_set = NULL, coil_set = NULL) {
