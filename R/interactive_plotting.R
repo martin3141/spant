@@ -5,11 +5,12 @@
 #' @param zlim range of values to plot.
 #' @param interp interpolation factor.
 #' @export
-plot_fit_slice_inter <- function(fit_res, name, slice = 1, zlim = NULL, 
+plot_fit_slice_inter <- function(fit_res, map = NULL, slice = 1, zlim = NULL, 
                                  interp = 1) {
   
-  map <- get_fit_map(fit_res, name) 
-  plot_slice_map_inter(map = map, mrs_data = fit_res, slice = slice, 
+  if (is.null(map)) map <- get_fit_map(fit_res, "TNAA") 
+  
+  plot_slice_map_inter(mrs_data = fit_res, map = map, slice = slice, 
                        interp = interp, zlim = zlim)
 }
 

@@ -343,12 +343,12 @@ shift <- function(mrs_data, shift, units = "ppm") {
 #' @return MRS data with applied phase parameters.
 #' @export
 phase <- function(mrs_data, zero_order, first_order = 0) {
-  if ((first_order == 0) && (dim(zero_order)[1:6] == dim(mrs_data$data)[1:6])) {
+  if ((first_order == 0) && (length(zero_order) == 1)) {
+    mrs_data$data = mrs_data$data * exp(1i * zero_order * pi / 180)
+  } else if ((first_order == 0) && (dim(zero_order)[1:6] == dim(mrs_data$data)[1:6])) {
     phase_array <- array(rep(zero_order,N(mrs_data)), 
                          dim = dim(mrs_data$data))
     mrs_data$data = mrs_data$data * exp(1i * phase_array * pi / 180)
-  } else if ((first_order == 0) && (length(zero_order) == 1)) {
-    mrs_data$data = mrs_data$data * exp(1i * zero_order * pi / 180)
   } else if ((length(zero_order) == 1) && (first_order != 0)) {
     freq <- rep(hz(mrs_data), each = Nspec(mrs_data))
     freq_mat <- array(freq, dim = dim(mrs_data$data))
@@ -1021,6 +1021,26 @@ get_voxel <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1, dyn = 1, coil =
 #' @export
 get_slice <- function(mrs_data, z_pos) {
   mrs_data$data <- mrs_data$data[,,,z_pos,,,, drop = FALSE]
+  return(mrs_data)
+}
+
+#' Extract a subset
+#' @param mrs_data MRS data.
+#' @return MRS data.
+#' @export
+get_subset <- function(mrs_data, x_set = NULL, y_set = NULL, z_set = NULL,
+                       dyn_set = NULL, coil_set = NULL) {
+  
+  orig_dims <- dim(mrs_data$data)
+  
+  if (is.null(x_set)) x_set       <- 1:orig_dims[2]
+  if (is.null(y_set)) y_set       <- 1:orig_dims[3]
+  if (is.null(z_set)) z_set       <- 1:orig_dims[4]
+  if (is.null(dyn_set)) dyn_set   <- 1:orig_dims[5]
+  if (is.null(coil_set)) coil_set <- 1:orig_dims[6]
+  
+  mrs_data$data <- mrs_data$data[, x_set, y_set, z_set, dyn_set, coil_set,
+                                 , drop = FALSE]
   return(mrs_data)
 }
 
