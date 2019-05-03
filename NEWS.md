@@ -1,6 +1,7 @@
 # spant 0.14.0
 * Added auto_phase function for zeroth order phase-correction of simple spectra.
 * Added get_subset function to aid MRSI slicing.
+* Added decimate_mrs function.
 * Bug fix for int_spec function.
 
 # spant 0.13.0

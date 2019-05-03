@@ -687,6 +687,22 @@ Conj.mrs_data <- function(z) {
   z
 }
 
+#' Downsample an MRS signal by a factor.
+#' @param mrs_data MRS data object.
+#' @param q integer factor to downsample by (default = 2).
+#' @return downsampled data.
+#' @export
+decimate_mrs <- function(mrs_data, q = 2) {
+  # needs to be a TD operation
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+  
+  mrs_data_re <- apply_mrs(Re(mrs_data), 7, fun = signal::decimate, q)
+  mrs_data_im <- apply_mrs(Im(mrs_data), 7, fun = signal::decimate, q)
+  mrs_data$data <- mrs_data_re$data + 1i * mrs_data_im$data
+  mrs_data$resolution <- mrs_data$resolution * q
+  mrs_data
+}
+
 ift <- function(mrs_data, dims) {
   apply_mrs(mrs_data, dims, ift_shift)
 }
@@ -1805,7 +1821,7 @@ est_noise_sd <- function(mrs_data, n = 100, offset = 100, p_order = 2) {
 est_noise_sd_vec <- function(x, n = 100, offset = 100, p_order = 2) {
   N <- length(x)
   seg <- Re(x[(N - offset - n + 1):(N - offset)])
-  lm_res <- stats::lm(seg ~ poly(1:n, p_order))
+  lm_res <- stats::lm(seg ~ stats::poly(1:n, p_order))
   stats::sd(lm_res$residual)
 }
 
