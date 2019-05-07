@@ -698,7 +698,7 @@ decimate_mrs <- function(mrs_data, q = 2) {
   
   mrs_data_re <- apply_mrs(Re(mrs_data), 7, fun = signal::decimate, q)
   mrs_data_im <- apply_mrs(Im(mrs_data), 7, fun = signal::decimate, q)
-  mrs_data$data <- mrs_data_re$data + 1i * mrs_data_im$data
+  mrs_data$data <- (mrs_data_re$data + 1i * mrs_data_im$data) * q
   mrs_data$resolution <- mrs_data$resolution * q
   mrs_data
 }
