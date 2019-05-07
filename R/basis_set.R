@@ -145,7 +145,7 @@ read_basis <- function(basis_file, ref = def_ref()) {
 #' @param basis_file path to basis file to be generated.
 #' @param fwhmba parameter used by LCModel.
 #' @export
-write_basis <- function(basis, basis_file, fwhmba = 0.0625) {
+write_basis <- function(basis, basis_file, fwhmba = 0.1) {
   mrs_data <- basis2mrs_data(basis)
   N <- N(mrs_data)
   
