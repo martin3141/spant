@@ -37,7 +37,7 @@
 #' }
 #' @export
 fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL, opts = NULL, 
-                    parallel = FALSE, cores = 4) {
+                    parallel = FALSE, cores = 1) {
   
   # start the clock
   ptm <- proc.time()
@@ -119,18 +119,16 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL, opt
                                .paropts = list(.inorder = TRUE),
                                .progress = "text", .inform = FALSE)
     
-    
   } else if (METHOD == "TARQUIN") {
     if (!is.null(w_ref)) { 
       if (dyns(w_ref) > 1) {
         w_ref <- mean_dyns(w_ref)
         warning("Using the mean reference signal for water scaling.")
       }
-    }
-    
-    # repeat the refernce signal to match the number of dynamics
-    if (dyns(metab) > 1) {
-      w_ref <- rep_dyn(w_ref, dyns(metab))
+      # repeat the refernce signal to match the number of dynamics
+      if (dyns(metab) > 1) {
+        w_ref <- rep_dyn(w_ref, dyns(metab))
+      }
     }
     
     # combine metab and w_ref data together
@@ -163,11 +161,11 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL, opt
         w_ref <- mean_dyns(w_ref)
         warning("Using the mean reference signal for water scaling.")
       }
-    }
-    
-    # repeat the reference signal to match the number of dynamics
-    if (dyns(metab) > 1) {
-      w_ref <- rep_dyn(w_ref, dyns(metab))
+      
+      # repeat the reference signal to match the number of dynamics
+      if (dyns(metab) > 1) {
+        w_ref <- rep_dyn(w_ref, dyns(metab))
+      }
     }
     
     # combine metab and w_ref data together
@@ -233,10 +231,10 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL, opt
     # check that all temp i/o files are unique
     file_list_vec <- stats::na.omit(file_list_vec)
     file_list_vec <- as.character(file_list_vec)
+    file_list_vec <- grep("NA", file_list_vec, value = TRUE, invert = TRUE)
     if (sum(duplicated(file_list_vec)) > 0 ) {
       stop("Error, duplicate temp file detected.")
     }
-    #print(file_list_vec)
   }
   
   df_list_amps <- result_list[seq(from = 1, by = res_n,length.out = fit_num)]
