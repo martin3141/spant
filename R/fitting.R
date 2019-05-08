@@ -37,7 +37,7 @@
 #' }
 #' @export
 fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL, opts = NULL, 
-                    parallel = FALSE, cores = 1) {
+                    parallel = FALSE, cores = 4) {
   
   # start the clock
   ptm <- proc.time()
