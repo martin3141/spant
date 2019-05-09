@@ -5,7 +5,8 @@
 \title{Apply water reference scaling to a fitting results object to yield metabolite
 quantities in millimolar (mM) units (mol/litre).}
 \usage{
-scale_amp_molar(fit_result, ref_data, w_att = 0.7, w_conc = 35880)
+scale_amp_molar(fit_result, ref_data, w_att = 0.7, w_conc = 35880,
+  overwrite = FALSE)
 }
 \arguments{
 \item{fit_result}{a result object generated from fitting.}
@@ -15,6 +16,8 @@ scale_amp_molar(fit_result, ref_data, w_att = 0.7, w_conc = 35880)
 \item{w_att}{water attenuation factor (default = 0.7).}
 
 \item{w_conc}{assumed water concentration (default = 35880).}
+
+\item{overwrite}{overwrite unscaled values (default = FALSE).}
 }
 \value{
 a \code{fit_result} object with a res_tab_molar data table added.

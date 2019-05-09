@@ -35,10 +35,11 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr){
 #' @param ref_data water reference MRS data object.
 #' @param w_att water attenuation factor (default = 0.7).
 #' @param w_conc assumed water concentration (default = 35880).
+#' @param overwrite overwrite unscaled values (default = FALSE).
 #' @return a \code{fit_result} object with a res_tab_molar data table added.
 #' @export
 scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, 
-                                 w_conc = 35880) {
+                                 w_conc = 35880, overwrite = FALSE) {
   
   w_amp <- as.numeric(get_td_amp(ref_data))
   
@@ -51,6 +52,8 @@ scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7,
   fit_result$res_tab_molar[, ws_cols] <- (fit_result$res_tab_molar[, ws_cols] * 
                                           w_att * w_conc / w_amp)
   
+  if (overwrite) fit_result$res_tab <- fit_result$res_tab_molar
+    
   fit_result
 }
 
