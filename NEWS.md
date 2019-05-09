@@ -2,6 +2,8 @@
 * Added auto_phase function for zeroth order phase-correction of simple spectra.
 * Added get_subset function to aid MRSI slicing.
 * Added decimate_mrs function.
+* Added fit_amps function to quickly extract amplitude estimates from a fit
+object.
 * Bug fix for int_spec function.
 
 # spant 0.13.0
