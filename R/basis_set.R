@@ -222,27 +222,33 @@ write_basis <- function(basis, basis_file, fwhmba = 0.1) {
 #' @param basis basis set object.
 #' @param sum_elements return the sum of basis elements (logical)
 #' @param amp a vector of scaling factors to apply to each basis element.
-#' @return an mrs_data object with basis signals spread across the dynamic dimension.
+#' @param shift a vector of frequency shifts (in PPM) to apply to each basis
+#' element.
+#' @return an mrs_data object with basis signals spread across the dynamic 
+#' dimension or summed.
 #' @export
-basis2mrs_data <- function(basis, sum_elements = FALSE, amp = NULL) {
+basis2mrs_data <- function(basis, sum_elements = FALSE, amp = NULL,
+                           shift = NULL) {
+  
+  res <- mat2mrs_data(basis$data, fs = basis$fs, ft = basis$ft,
+                      ref = basis$ref, fd = TRUE)
+  
   # scale basis elements
   if (!is.null(amp)) {
-    if (dim(basis$data)[2] != length(amp)) {
+    n_sigs <- dyns(res)
+    if (n_sigs != length(amp)) {
       stop(paste("Error, length of amp does not match the number of basis elements :", dim(basis$data)[2]))
     }
-    for (n in 1:dim(basis$data)[2]) {
-      basis$data[,n] <- basis$data[,n] * amp[n]
+    for (n in 1:n_sigs) {
+      res$data[,,,,n ,,] <- res$data[,,,,n ,,] * amp[n]
     }
   }
   
-  if (sum_elements) {
-    basis$data <- apply(basis$data, 1, sum)
-    vec2mrs_data(basis$data, fs = basis$fs, ft = basis$ft, ref = basis$ref, 
-               fd = TRUE)
-  } else {
-    mat2mrs_data(basis$data, fs = basis$fs, ft = basis$ft, ref = basis$ref, 
-               fd = TRUE)
-  }
+  if (!is.null(shift)) res <- shift(res, shift)
+  
+  if (sum_elements) res <- sum_dyns(res)
+  
+  res
 }
 
 #' Convert an mrs_data object to basis object - where basis signals are spread
