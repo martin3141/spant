@@ -75,7 +75,7 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
   plot_env$y <- 1
 
 
-  plot_env$win1 <- tcltk::tktoplevel()
+  plot_env$win1 <- tcltk::tktoplevel(class = "spant_plot")
 
   #plot_env$win1$env$plot <- tkrplot::tkrplot(plot_env$win1, fun = plotTk,
   #                                           hscale = 3.0, vscale = 1.5)

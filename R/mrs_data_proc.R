@@ -1239,6 +1239,33 @@ bc <- function(mrs_data, lambda = 1e3, p = 0.1) {
   return(a)
 }
 
+#' Calculate the mean spectrum from an mrs_data object.
+#' @param x object of class mrs_data.
+#' @param ... other arguments to pass to the colMeans function.
+#' @return mean mrs_data object.
+#' @export
+mean.mrs_data <- function(x, ...) {
+  data_pts <- x$data
+  data_N <- N(x)
+  dim(data_pts) <- c(length(data_pts) / data_N, data_N)
+  x$data <- colMeans(data_pts, ...)
+  dim(x$data) <- c(1, 1, 1, 1, 1, 1, data_N)
+  x
+}
+
+#' Collapse MRS data by concatenating spectra along the dynamic dimension.
+#' @param mrs_data mrs_data object to be collapsed.
+#' @return collapsed data with spectra concatentated along the dynamic
+#' dimension.
+#' @export
+collapse_to_dyns <- function(mrs_data) {
+  data_pts <- mrs_data$data
+  data_N <- N(mrs_data)
+  dim(data_pts) <- c(1, 1, 1, 1, length(data_pts) / data_N, 1, data_N)
+  mrs_data$data <- data_pts
+  mrs_data
+}
+ 
 #' Calculate the mean dynamic data.
 #' @param mrs_data dynamic MRS data.
 #' @return mean dynamic data.
