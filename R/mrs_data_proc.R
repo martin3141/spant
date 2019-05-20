@@ -1914,7 +1914,12 @@ calc_spec_snr <- function(mrs_data, sig_region = c(4,0.5),
   
   snr <- max_sig / (2 * noise_sd)
   
+  # drop the last dimension for plotting functions
+  snr <- abind::adrop(snr, 7)
+  
   if (full_output) {
+    max_sig  <- abind::adrop(max_sig, 7)
+    noise_sd <- abind::adrop(noise_sd, 7)
     return(list(snr = snr, max_sig = max_sig, noise_sd = noise_sd))
   } else {
     return(snr)

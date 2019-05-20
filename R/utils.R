@@ -39,6 +39,9 @@ apply_axes <- function(x, axes, fun, ...) {
 #' @return extended array.
 #' @export
 rep_array_dim <- function(x, rep_dim, n) {
+  # add a dimension if needed
+  if ((rep_dim == 7) && length(dim(x)) == 6) dim(x) <- c(dim(x), 1)
+  
   dims <- length(dim(x))
   orig_dim <- dim(x)
   new_dim <- orig_dim
