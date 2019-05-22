@@ -139,15 +139,23 @@ plot.fit_result <- function(x, xlim = NULL, data_only = FALSE, label = NULL,
 #' @param n single index element to plot (overrides other indices when given).
 #' @param sub_bl subtract the baseline from the data and fit (logical).
 #' @param labels print signal labels at the right side of the plot.
+#' @param label_names provide a character vector of signal names to replace the
+#' defaults determined from the basis set.
 #' @param sig_col colour of individual signal components.
 #' @param restore_def_par restore default plotting par values after the plot has 
 #' been made.
+#' @param omit_signals a character vector of basis signal names to be removed 
+#' from the plot.
+#' @param combine_lipmm combine all basis signals with names starting with "Lip"
+#' or "MM".
 #' @param ... further arguments to plot method.
 #' @export
 stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1, 
                                  x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
                                  n = NULL, sub_bl = FALSE, labels = FALSE,
-                                 sig_col = "black", restore_def_par = TRUE, 
+                                 label_names = NULL, sig_col = "black",
+                                 restore_def_par = TRUE, omit_signals = NULL,
+                                 combine_lipmm = FALSE, 
                                  ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
@@ -162,8 +170,23 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1,
   
   x <- x$fits[[n]]
   
+  # remove any signals that were requested
+  if (!is.null(omit_signals)) x <- x[, !(names(x) %in% omit_signals)]
+  
+  if (combine_lipmm) {
+    # find lip/mm indices
+    indices <- c(grep("^Lip",colnames(x)), grep("^MM",colnames(x)))
+    new_col <- rowSums(x[indices])
+    x <- x[, -indices]
+    x$LipMM <- new_col
+  }
+  
   # label names 
-  names <- colnames(x)[5:length(colnames(x))]
+  if (is.null(label_names)) {
+    names <- colnames(x)[5:length(colnames(x))]
+  } else {
+    names <- label_names
+  }
   
   if (is.null(xlim)) {
     xlim <- rev(range(x$PPMScale))

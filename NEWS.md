@@ -1,4 +1,6 @@
 # spant 0.14.0
+* Added options to omit basis signals, change labele names and combine lipid and
+MM signals from the stackplot of a fit object.
 * Added auto_phase function for zeroth order phase-correction of simple spectra.
 * Added get_subset function to aid MRSI slicing.
 * Added decimate_mrs function.
