@@ -487,9 +487,9 @@ lb.mrs_data <- function(x, lb, lg = 1) {
   }
   
   if (lg > 0) {
-    x$data = x$data * exp((lg * lb ^ 2 * pi ^ 2 / 4 /
-                                          log(0.5)) * (t ^ 2))
+    x$data = x$data * exp((lg * lb ^ 2 * pi ^ 2 / 4 / log(0.5)) * (t ^ 2))
   }
+  
   return(x)
 }
 
