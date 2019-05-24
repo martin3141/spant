@@ -4,21 +4,16 @@
 \alias{sim_basis}
 \title{Simulate a basis set object.}
 \usage{
-sim_basis(mol_list, pul_seq = seq_pulse_acquire, ft = def_ft(),
-  ref = def_ref(), fs = def_fs(), N = def_N(), xlim = NULL, ...)
+sim_basis(mol_list, pul_seq = seq_pulse_acquire,
+  acq_paras = def_acq_paras(), xlim = NULL, ...)
 }
 \arguments{
 \item{mol_list}{list of \code{mol_parameter} objects.}
 
 \item{pul_seq}{pulse sequence function to use.}
 
-\item{ft}{transmitter frequency in Hz.}
-
-\item{ref}{reference value for ppm scale.}
-
-\item{fs}{sampling frequency in Hz.}
-
-\item{N}{number of data points in the spectral dimension.}
+\item{acq_paras}{list of acquisition parameters or an mrs_data object. See
+\code{\link{def_acq_paras}}}
 
 \item{xlim}{ppm range limiting signals to be simulated.}
 

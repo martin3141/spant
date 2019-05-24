@@ -7,6 +7,7 @@ MM signals from the stackplot of a fit object.
 * Added fit_amps function to quickly extract amplitude estimates from a fit
 object.
 * Bug fix for int_spec function.
+* sim_basis function arguments updated to accept acq_par objects.
 
 # spant 0.13.0
 * Various bug fixes for Siemens TWIX reader.

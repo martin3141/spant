@@ -339,14 +339,9 @@ sim_basis_1h_brain <- function(pul_seq = seq_press_ideal,
                                acq_paras = def_acq_paras(), xlim = c(0.5, 4.2), 
                                lcm_compat = FALSE, ...) {
   
-  if (class(acq_paras) == "mrs_data") {
-    acq_paras <- get_acq_paras(acq_paras)
-  }
-  
   sim_basis(get_1h_brain_basis_paras(ft = acq_paras$ft, lcm_compat = lcm_compat), 
-                                     pul_seq = pul_seq, fs = acq_paras$fs, 
-                                     N = acq_paras$N, ref = acq_paras$ref,
-                                     ft = acq_paras$ft, xlim = xlim, ...)
+                                     pul_seq = pul_seq, acq_paras = acq_paras,
+                                     xlim = xlim, ...)
 }
 
 #' Simulate a basis-set suitable for 1H brain MRS analysis acquired with a PRESS 
@@ -364,15 +359,9 @@ sim_basis_1h_brain_press <- function(acq_paras = def_acq_paras(),
                                      xlim = c(0.5, 4.2), lcm_compat = FALSE, 
                                      TE1 = 0.01, TE2 = 0.02) {
   
-  if (class(acq_paras) == "mrs_data") {
-    acq_paras <- get_acq_paras(acq_paras)
-  }
-  
   sim_basis(get_1h_brain_basis_paras(ft = acq_paras$ft, lcm_compat = lcm_compat), 
-                                     seq_press_ideal, fs = acq_paras$fs, 
-                                     N = acq_paras$N, ref = acq_paras$ref,
-                                     ft = acq_paras$ft, xlim = xlim, TE1 = TE1,
-                                     TE2 = TE2)
+                                     seq_press_ideal, acq_paras = acq_paras,
+                                     xlim = xlim, TE1 = TE1, TE2 = TE2)
 }
 
 get_mol_para_list_names <- function(mol_para_list) {
@@ -386,18 +375,22 @@ get_mol_para_list_names <- function(mol_para_list) {
 #' Simulate a basis set object.
 #' @param mol_list list of \code{mol_parameter} objects.
 #' @param pul_seq pulse sequence function to use.
-#' @param ft transmitter frequency in Hz.
-#' @param ref reference value for ppm scale.
-#' @param fs sampling frequency in Hz.
-#' @param N number of data points in the spectral dimension.
+#' @param acq_paras list of acquisition parameters or an mrs_data object. See
+#' \code{\link{def_acq_paras}}
 #' @param xlim ppm range limiting signals to be simulated.
 #' @param ... extra parameters to pass to the pulse sequence function.
 #' @return basis object.
 #' @export
-sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire, ft = def_ft(),
-                      ref = def_ref(), fs = def_fs(), N = def_N(),
-                      xlim = NULL, ...) {
+sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
+                      acq_paras = def_acq_paras(), xlim = NULL, ...) {
   
+  if (class(acq_paras) == "mrs_data") acq_paras <- get_acq_paras(acq_paras)
+  
+  ft  <- acq_paras$ft
+  ref <- acq_paras$ref
+  fs  <- acq_paras$fs
+  N   <- acq_paras$N
+    
   basis_mrs_data <- sim_zeros(ft = ft, ref = ref, fs = fs, N = N,
                               dyns = length(mol_list))
   
