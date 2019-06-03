@@ -1563,6 +1563,8 @@ auto_phase <- function(mrs_data, xlim = NULL, ret_phase = FALSE) {
     phases <- apply_mrs(mrs_data, 7, auto_phase_vec, data_only = TRUE)
   }
   
+  if (length(phases == 1)) phases <- as.numeric(phases)
+  
   # TODO update phase function and remove drop
   mrs_data <- phase(mrs_data, phases)
   
