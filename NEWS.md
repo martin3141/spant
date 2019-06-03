@@ -1,3 +1,6 @@
+# spant 0.15.0
+* Bug fix for using auto_phase function with a single spectrum.
+
 # spant 0.14.0
 * Added options to omit basis signals, change label names and combine lipid and
 MM signals from the stackplot of a fit object.
