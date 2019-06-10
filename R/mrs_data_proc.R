@@ -1769,7 +1769,7 @@ comb_coils <- function(metab, ref = NULL, noise = NULL,
     ref_ps$data <- ref$data * exp(-1i * ang)
   }
   
-  ref_ps <- sum_coils(ref_ps)
+  if (sum_coils) ref_ps <- sum_coils(ref_ps)
   
   # phase and scale metab data
   metab_dims <- dim(metab$data)
@@ -1790,9 +1790,7 @@ comb_coils <- function(metab, ref = NULL, noise = NULL,
     metab_ps$data <- metab$data * exp(-1i * ang)
   }
   
-  if (sum_coils == TRUE) {
-    metab_ps <- sum_coils(metab_ps)
-  }
+  if (sum_coils) metab_ps <- sum_coils(metab_ps)
   
   if (metab_only) {
     return(metab_ps)
