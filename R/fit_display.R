@@ -150,6 +150,7 @@ plot.fit_result <- function(x, xlim = NULL, data_only = FALSE, label = NULL,
 #' or "MM".
 #' @param combine_metab combine all basis signals with names not starting with
 #' "Lip" or "MM".
+#' @param mar option to adjust the plot margins. See ?par.
 #' @param ... further arguments to plot method.
 #' @export
 stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1, 
@@ -158,7 +159,7 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1,
                                  label_names = NULL, sig_col = "black",
                                  restore_def_par = TRUE, omit_signals = NULL,
                                  combine_lipmm = FALSE, combine_metab = FALSE,
-                                 ...) {
+                                 mar = NULL, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -215,6 +216,8 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1,
   right_mar <- ifelse(labels, 4, 1.2)
   
   graphics::par(mar = c(3.5, 1.2, 1.2, right_mar)) # space around the plot
+  
+  if (!is.null(mar)) graphics::par(mar = mar)
   
   graphics::par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
   
