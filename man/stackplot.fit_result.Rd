@@ -9,7 +9,7 @@ individual basis set components shown.}
   x_pos = 1, y_pos = 1, z_pos = 1, coil = 1, n = NULL,
   sub_bl = FALSE, labels = FALSE, label_names = NULL,
   sig_col = "black", restore_def_par = TRUE, omit_signals = NULL,
-  combine_lipmm = FALSE, ...)
+  combine_lipmm = FALSE, combine_metab = FALSE, ...)
 }
 \arguments{
 \item{x}{fit_result object.}
@@ -47,6 +47,9 @@ from the plot.}
 
 \item{combine_lipmm}{combine all basis signals with names starting with "Lip"
 or "MM".}
+
+\item{combine_metab}{combine all basis signals with names not starting with
+"Lip" or "MM".}
 
 \item{...}{further arguments to plot method.}
 }

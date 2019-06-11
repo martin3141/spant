@@ -1,6 +1,7 @@
 # spant 0.15.0
 * Bug fix for using auto_phase function with a single spectrum.
 * Bug fix for comb_coils not returning unaveraged data when requested.
+* Added options to combine metabolite signals from the stackplot of a fit object.
 
 # spant 0.14.0
 * Added options to omit basis signals, change label names and combine lipid and

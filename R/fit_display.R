@@ -148,6 +148,8 @@ plot.fit_result <- function(x, xlim = NULL, data_only = FALSE, label = NULL,
 #' from the plot.
 #' @param combine_lipmm combine all basis signals with names starting with "Lip"
 #' or "MM".
+#' @param combine_metab combine all basis signals with names not starting with
+#' "Lip" or "MM".
 #' @param ... further arguments to plot method.
 #' @export
 stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1, 
@@ -155,7 +157,7 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1,
                                  n = NULL, sub_bl = FALSE, labels = FALSE,
                                  label_names = NULL, sig_col = "black",
                                  restore_def_par = TRUE, omit_signals = NULL,
-                                 combine_lipmm = FALSE, 
+                                 combine_lipmm = FALSE, combine_metab = FALSE,
                                  ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
@@ -179,6 +181,22 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1,
     new_col <- rowSums(x[indices])
     x <- x[, -indices]
     x$LipMM <- new_col
+    cols <- length(colnames(x))
+    reorder <- c(1:4, cols, 5:(cols-1))
+    x <- x[,reorder]
+  }
+  
+  if (combine_metab) {
+    # find lip/mm indices
+    matches <- grepl("^Lip", colnames(x)) | grepl("^MM", colnames(x))
+    matches <- !matches
+    indices <- which(matches)[-c(1:4)]
+    new_col <- rowSums(x[indices])
+    x <- x[, -indices]
+    x$Metabs <- new_col
+    cols <- length(colnames(x))
+    reorder <- c(1:4, cols, 5:(cols-1))
+    x <- x[,reorder]
   }
   
   # label names 
