@@ -3,6 +3,7 @@
 * Bug fix for comb_coils not returning unaveraged data when requested.
 * Added options to combine metabolite signals from the stackplot of a fit object
 and adjust the plot margins.
+* Added comb_fits function.
 
 # spant 0.14.0
 * Added options to omit basis signals, change label names and combine lipid and
