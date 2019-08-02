@@ -27,6 +27,11 @@ print.mrs_data <- function(x, ...) {
 
 #' Plotting method for objects of class mrs_data.
 #' @param x object of class mrs_data.
+#' @param dyn the dynamic index to plot.
+#' @param x_pos the x index to plot.
+#' @param y_pos the y index to plot.
+#' @param z_pos the z index to plot.
+#' @param coil the coil element number to plot.
 #' @param fd display data in the frequency-domain (default), or time-domain 
 #' (logical).
 #' @param x_units the units to use for the x-axis, can be one of: "ppm", "hz", 
@@ -36,11 +41,6 @@ print.mrs_data <- function(x, ...) {
 #' @param x_ax option to display the x-axis values (logical).
 #' @param mode representation of the complex numbers to be plotted, can be one
 #' of: "re", "im", "mod" or "arg".
-#' @param dyn the dynamic index to plot.
-#' @param x_pos the x index to plot.
-#' @param y_pos the y index to plot.
-#' @param z_pos the z index to plot.
-#' @param coil the coil element number to plot.
 #' @param lwd plot linewidth.
 #' @param bty option to draw a box around the plot. See ?par.
 #' @param label character string to add to the top left of the plot window.
@@ -50,11 +50,12 @@ print.mrs_data <- function(x, ...) {
 #' @param xaxis_lab x-axis label.
 #' @param ... other arguments to pass to the plot method.
 #' @export
-plot.mrs_data <- function(x, fd = TRUE, x_units = NULL, xlim = NULL,
-                          y_scale = FALSE, x_ax = TRUE, mode = "re", dyn = 1,
-                          x_pos = 1, y_pos = 1, z_pos = 1, coil = 1, lwd = NULL, 
-                          bty = NULL, label = "", restore_def_par = TRUE, 
-                          mar = NULL, xaxis_lab = NULL, ...) {
+plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
+                          fd = TRUE, x_units = NULL, xlim = NULL, 
+                          y_scale = FALSE, x_ax = TRUE, mode = "re",
+                          lwd = NULL, bty = NULL, label = "",
+                          restore_def_par = TRUE, mar = NULL,
+                          xaxis_lab = NULL, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   

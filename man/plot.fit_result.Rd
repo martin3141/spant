@@ -4,21 +4,14 @@
 \alias{plot.fit_result}
 \title{Plot the fitting results of an object of class \code{fit_result}.}
 \usage{
-\method{plot}{fit_result}(x, xlim = NULL, data_only = FALSE,
-  label = NULL, plot_sigs = NULL, dyn = 1, x_pos = 1, y_pos = 1,
-  z_pos = 1, coil = 1, n = NULL, sub_bl = FALSE, mar = NULL,
-  restore_def_par = TRUE, ylim = NULL, y_scale = FALSE, ...)
+\method{plot}{fit_result}(x, dyn = 1, x_pos = 1, y_pos = 1,
+  z_pos = 1, coil = 1, xlim = NULL, data_only = FALSE,
+  label = NULL, plot_sigs = NULL, n = NULL, sub_bl = FALSE,
+  mar = NULL, restore_def_par = TRUE, ylim = NULL, y_scale = FALSE,
+  ...)
 }
 \arguments{
 \item{x}{fit_result object.}
-
-\item{xlim}{the range of values to display on the x-axis, eg xlim = c(4,1).}
-
-\item{data_only}{display only the processed data (logical).}
-
-\item{label}{character string to add to the top left of the plot window.}
-
-\item{plot_sigs}{a character vector of signal names to add to the plot.}
 
 \item{dyn}{the dynamic index to plot.}
 
@@ -29,6 +22,14 @@
 \item{z_pos}{the z index to plot.}
 
 \item{coil}{the coil element number to plot.}
+
+\item{xlim}{the range of values to display on the x-axis, eg xlim = c(4,1).}
+
+\item{data_only}{display only the processed data (logical).}
+
+\item{label}{character string to add to the top left of the plot window.}
+
+\item{plot_sigs}{a character vector of signal names to add to the plot.}
 
 \item{n}{single index element to plot (overrides other indices when given).}
 

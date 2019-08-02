@@ -4,14 +4,24 @@
 \alias{plot.mrs_data}
 \title{Plotting method for objects of class mrs_data.}
 \usage{
-\method{plot}{mrs_data}(x, fd = TRUE, x_units = NULL, xlim = NULL,
-  y_scale = FALSE, x_ax = TRUE, mode = "re", dyn = 1, x_pos = 1,
-  y_pos = 1, z_pos = 1, coil = 1, lwd = NULL, bty = NULL,
-  label = "", restore_def_par = TRUE, mar = NULL, xaxis_lab = NULL,
-  ...)
+\method{plot}{mrs_data}(x, dyn = 1, x_pos = 1, y_pos = 1,
+  z_pos = 1, coil = 1, fd = TRUE, x_units = NULL, xlim = NULL,
+  y_scale = FALSE, x_ax = TRUE, mode = "re", lwd = NULL,
+  bty = NULL, label = "", restore_def_par = TRUE, mar = NULL,
+  xaxis_lab = NULL, ...)
 }
 \arguments{
 \item{x}{object of class mrs_data.}
+
+\item{dyn}{the dynamic index to plot.}
+
+\item{x_pos}{the x index to plot.}
+
+\item{y_pos}{the y index to plot.}
+
+\item{z_pos}{the z index to plot.}
+
+\item{coil}{the coil element number to plot.}
 
 \item{fd}{display data in the frequency-domain (default), or time-domain
 (logical).}
@@ -27,16 +37,6 @@
 
 \item{mode}{representation of the complex numbers to be plotted, can be one
 of: "re", "im", "mod" or "arg".}
-
-\item{dyn}{the dynamic index to plot.}
-
-\item{x_pos}{the x index to plot.}
-
-\item{y_pos}{the y index to plot.}
-
-\item{z_pos}{the z index to plot.}
-
-\item{coil}{the coil element number to plot.}
 
 \item{lwd}{plot linewidth.}
 

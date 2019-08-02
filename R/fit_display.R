@@ -1,14 +1,14 @@
 #' Plot the fitting results of an object of class \code{fit_result}.
 #' @param x fit_result object.
-#' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
-#' @param data_only display only the processed data (logical).
-#' @param label character string to add to the top left of the plot window.
-#' @param plot_sigs a character vector of signal names to add to the plot.
 #' @param dyn the dynamic index to plot.
 #' @param x_pos the x index to plot.
 #' @param y_pos the y index to plot.
 #' @param z_pos the z index to plot.
 #' @param coil the coil element number to plot.
+#' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
+#' @param data_only display only the processed data (logical).
+#' @param label character string to add to the top left of the plot window.
+#' @param plot_sigs a character vector of signal names to add to the plot.
 #' @param n single index element to plot (overrides other indices when given).
 #' @param sub_bl subtract the baseline from the data and fit (logical).
 #' @param mar option to adjust the plot margins. See ?par.
@@ -18,11 +18,11 @@
 #' @param y_scale option to display the y-axis values (logical).
 #' @param ... further arguments to plot method.
 #' @export
-plot.fit_result <- function(x, xlim = NULL, data_only = FALSE, label = NULL, 
-                           plot_sigs = NULL, dyn = 1, x_pos = 1,
-                           y_pos = 1, z_pos = 1, coil = 1, n = NULL,
-                           sub_bl = FALSE, mar = NULL, restore_def_par = TRUE, 
-                           ylim = NULL, y_scale = FALSE, ...) {
+plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
+                            coil = 1,xlim = NULL, data_only = FALSE,
+                            label = NULL, plot_sigs = NULL, n = NULL,
+                            sub_bl = FALSE, mar = NULL, restore_def_par = TRUE, 
+                            ylim = NULL, y_scale = FALSE, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -92,8 +92,8 @@ plot.fit_result <- function(x, xlim = NULL, data_only = FALSE, label = NULL,
     fit_line <- x$Fit + x$Baseline
     
     if (is.null(ylim)) {
-      max_dp <- max(x$Data[ind],fit_line[ind])
-      min_dp <- min(x$Data[ind],fit_line[ind],x$Baseline[ind])
+      max_dp <- max(x$Data[ind], fit_line[ind])
+      min_dp <- min(x$Data[ind], fit_line[ind], x$Baseline[ind])
     } else {
       max_dp <- ylim[2]
       min_dp <- ylim[1]

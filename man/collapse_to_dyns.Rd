@@ -2,15 +2,21 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{collapse_to_dyns}
 \alias{collapse_to_dyns}
+\alias{collapse_to_dyns.mrs_data}
+\alias{collapse_to_dyns.fit_result}
 \title{Collapse MRS data by concatenating spectra along the dynamic dimension.}
 \usage{
-collapse_to_dyns(mrs_data)
+collapse_to_dyns(x)
+
+\method{collapse_to_dyns}{mrs_data}(x)
+
+\method{collapse_to_dyns}{fit_result}(x)
 }
 \arguments{
-\item{mrs_data}{mrs_data object to be collapsed.}
+\item{x}{data object to be collapsed (mrs_data or fit_result object).}
 }
 \value{
-collapsed data with spectra concatentated along the dynamic
+collapsed data with spectra or fits concatentated along the dynamic
 dimension.
 }
 \description{

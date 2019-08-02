@@ -1254,16 +1254,30 @@ mean.mrs_data <- function(x, ...) {
 }
 
 #' Collapse MRS data by concatenating spectra along the dynamic dimension.
-#' @param mrs_data mrs_data object to be collapsed.
-#' @return collapsed data with spectra concatentated along the dynamic
+#' @param x data object to be collapsed (mrs_data or fit_result object).
+#' @return collapsed data with spectra or fits concatentated along the dynamic
 #' dimension.
+#' @rdname collapse_to_dyns
 #' @export
-collapse_to_dyns <- function(mrs_data) {
-  data_pts <- mrs_data$data
-  data_N <- N(mrs_data)
+collapse_to_dyns <- function(x) UseMethod("collapse_to_dyns")
+
+#' @rdname collapse_to_dyns
+#' @export
+collapse_to_dyns.mrs_data <- function(x) {
+  data_pts <- x$data
+  data_N <- N(x)
   dim(data_pts) <- c(1, 1, 1, 1, length(data_pts) / data_N, 1, data_N)
-  mrs_data$data <- data_pts
-  mrs_data
+  x$data <- data_pts
+  x
+}
+
+#' @rdname collapse_to_dyns
+#' @export
+collapse_to_dyns.fit_result <- function(x) {
+  x$res_tab[c(1, 2, 3, 5)] <- 1
+  dyns <- nrow(x$res_tab)
+  x$res_tab[4] <- 1:dyns
+  x
 }
  
 #' Calculate the mean dynamic data.
