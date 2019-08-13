@@ -5,6 +5,7 @@
 and adjust the plot margins.
 * Added comb_fits function.
 * Added collapse_to_dyns function for mrs_fit objects.
+* RDA reader now extracts geometry information.
 
 # spant 0.14.0
 * Added options to omit basis signals, change label names and combine lipid and
