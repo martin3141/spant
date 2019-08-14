@@ -17,6 +17,56 @@ get_svs_voi <- function(mrs_data, target_mri) {
   voi  
 }
 
+#' Generate a MRSI voxel from an \code{mrs_data} object.
+#' @param mrs_data MRS data.
+#' @param target_mri optional image data to match the intended volume space.
+#' @param x_pos x voxel coordinate.
+#' @param y_pos y voxel coordinate.
+#' @param z_pos z voxel coordinate.
+#' @return volume data as a nifti object.
+#' @export
+get_mrsi_voxel <- function(mrs_data, target_mri, x_pos, y_pos, z_pos) {
+  affine <- get_mrs_affine(mrs_data, x_pos, y_pos, z_pos)
+  raw_data <- array(1, c(mrs_data$resolution[2:4]))
+  voi <- RNifti::retrieveNifti(raw_data)
+  voi <- RNifti::`sform<-`(voi, structure(affine, code = 2L))
+  
+  if (missing(target_mri)) {
+    warning("Target MRI data has not been specified.")  
+  } else {
+    voi <- resample_voi(voi, target_mri)
+  }
+  voi  
+}
+
+#' Generate a MRSI VOI from an \code{mrs_data} object.
+#' @param mrs_data MRS data.
+#' @param target_mri optional image data to match the intended volume space.
+#' @return volume data as a nifti object.
+#' @export
+get_mrsi_voi <- function(mrs_data, target_mri) {
+  affine <- get_mrs_affine(mrs_data)
+  
+  rows   <- dim(mrs_data$data)[2]
+  cols   <- dim(mrs_data$data)[3]
+  slices <- dim(mrs_data$data)[4]
+  
+  voi_dim <- c(rows * mrs_data$resolution[2],
+               cols * mrs_data$resolution[3],
+               slices * mrs_data$resolution[4])
+  
+  raw_data <- array(1, voi_dim)
+  voi <- RNifti::retrieveNifti(raw_data)
+  voi <- RNifti::`sform<-`(voi, structure(affine, code = 2L))
+  
+  if (missing(target_mri)) {
+    warning("Target MRI data has not been specified.")  
+  } else {
+    voi <- resample_voi(voi, target_mri)
+  }
+  voi  
+}
+
 #' Resample a VOI to match a target image space.
 #' @param voi volume data as a nifti object.
 #' @param mri image data as a nifti object.
@@ -150,7 +200,7 @@ spm_pve2categorical <- function(fname) {
 }
 
 # generate an sform affine for nifti generation
-get_mrs_affine <- function(mrs_data) {
+get_mrs_affine <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1) {
   # l1 norm
   col_vec <- mrs_data$col_vec/sqrt(sum(mrs_data$col_vec ^ 2))
   row_vec <- mrs_data$row_vec/sqrt(sum(mrs_data$row_vec ^ 2))
@@ -164,10 +214,14 @@ get_mrs_affine <- function(mrs_data) {
   affine[1:3, 1] <- col_vec
   affine[1:3, 2] <- row_vec
   affine[1:3, 3] <- slice_vec
-  affine[1:3, 4] <- pos_vec - mrs_data$resolution[2] / 2 * col_vec -
-                    mrs_data$resolution[3] / 2 * row_vec -
-                    mrs_data$resolution[4] / 2 * slice_vec 
+  rows <- dim(mrs_data$data)[2]
+  cols <- dim(mrs_data$data)[3]
+  slices <- dim(mrs_data$data)[4]
   
+  affine[1:3, 4] <- pos_vec -
+                    (mrs_data$resolution[2] * (-(x_pos - 1) + 0.5)) * col_vec -
+                    (mrs_data$resolution[3] * (-(y_pos - 1) + 0.5)) * row_vec -
+                    (mrs_data$resolution[4] * (-(z_pos - 1) + 0.5)) * slice_vec
   return(affine)
 }
 
