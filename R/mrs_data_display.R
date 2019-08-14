@@ -1,11 +1,13 @@
 #' Print a summary of mrs_data parameters.
 #' @param x mrs_data object.
+#' @param full print all parameters (default FALSE).
 #' @param ... further arguments.
 #' @export
-print.mrs_data <- function(x, ...) {
+print.mrs_data <- function(x, full = FALSE, ...) {
   cat("MRS Data Parameters\n")
   cat("----------------------------------\n")
-  cat(paste(c("Trans. freq (MHz)       : ", round(x$ft * 1e-6, 4), "\n")), sep = "")
+  cat(paste(c("Trans. freq (MHz)       : ", round(x$ft * 1e-6, 4), "\n")),
+      sep = "")
   cat(paste(c("FID data points         : ", dim(x$data)[7], "\n")), sep = "")
   cat(paste(c("X,Y,Z dimensions        : ", dim(x$data)[2], "x", dim(x$data)[3],
               "x", dim(x$data)[4], "\n")), sep = "")
@@ -17,12 +19,11 @@ print.mrs_data <- function(x, ...) {
               1 / x$resolution[7], "\n")), sep = "")
   cat(paste(c("Reference freq. (ppm)   : ", x$ref, "\n")), sep = "")
   cat(paste(c("Spectral domain         : ", x$freq_domain[7], "\n")), sep = "")
-  
-  # next line only works for 1H, add nucleus option?
-  #cat(paste(c("Field strength (Tesla)  : ",
-  #             sprintf("%.1f",x$ft/42.58e6),"\n")),sep="")
-  #cat(paste(c("Contains referece data  : ",
-  #            dim(x$data)[1] == 2, "\n")), sep = "")
+  if (full) {
+    cat(paste(c("Row vector              :", x$row_vec, "\n")), sep = " ")
+    cat(paste(c("Column vector           :", x$col_vec, "\n")), sep = " ")
+    cat(paste(c("Position vector         :", x$pos_vec, "\n")), sep = " ")
+  }
 }
 
 #' Plotting method for objects of class mrs_data.

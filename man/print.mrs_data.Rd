@@ -4,10 +4,12 @@
 \alias{print.mrs_data}
 \title{Print a summary of mrs_data parameters.}
 \usage{
-\method{print}{mrs_data}(x, ...)
+\method{print}{mrs_data}(x, full = FALSE, ...)
 }
 \arguments{
 \item{x}{mrs_data object.}
+
+\item{full}{print all parameters (default FALSE).}
 
 \item{...}{further arguments.}
 }
