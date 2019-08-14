@@ -716,6 +716,7 @@ dim.mrs_data <- function(x) {
 #' @return number of data points.
 #' @export
 N <- function(mrs_data) {
+  warning("N function is depricated, use Npts instead.")
   dim(mrs_data$data)[7]
 }
 
@@ -724,6 +725,7 @@ N <- function(mrs_data) {
 #' @return number of dynamic scans.
 #' @export
 dyns <- function(mrs_data) {
+  warning("dyns function is depricated, use Ndyns instead.")
   dim(mrs_data$data)[5]
 }
 
@@ -734,6 +736,49 @@ Nspec <- function(mrs_data) {
   mrs_dims <- dim(mrs_data$data)
   (mrs_dims[1] * mrs_dims[2] * mrs_dims[3] * mrs_dims[4] * mrs_dims[5] *
    mrs_dims[6])
+}
+
+#' Return the total number of x locations in an MRS dataset.
+#' @param mrs_data MRS data.
+#' @export
+Nx <- function(mrs_data) {
+  dim(mrs_data$data)[2]
+}
+
+#' Return the total number of y locations in an MRS dataset.
+#' @param mrs_data MRS data.
+#' @export
+Ny <- function(mrs_data) {
+  dim(mrs_data$data)[3]
+}
+
+#' Return the total number of z locations in an MRS dataset.
+#' @param mrs_data MRS data.
+#' @export
+Nz <- function(mrs_data) {
+  dim(mrs_data$data)[4]
+}
+
+#' Return the total number of dynamic scans in an MRS dataset.
+#' @param mrs_data MRS data.
+#' @export
+Ndyns <- function(mrs_data) {
+  dim(mrs_data$data)[5]
+}
+
+#' Return the total number of coil elements in an MRS dataset.
+#' @param mrs_data MRS data.
+#' @export
+Ncoils <- function(mrs_data) {
+  dim(mrs_data$data)[6]
+}
+
+#' Return the number of data points in an MRS dataset.
+#' @param mrs_data MRS data.
+#' @return number of data points.
+#' @export
+Npts <- function(mrs_data) {
+  dim(mrs_data$data)[7]
 }
 
 #' Return the sampling frequency in Hz of an MRS dataset.
