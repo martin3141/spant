@@ -1110,6 +1110,28 @@ get_subset <- function(mrs_data, x_set = NULL, y_set = NULL, z_set = NULL,
   return(mrs_data)
 }
 
+#' Crop an MRSI dataset in the x-y direction
+#' @param mrs_data MRS data object.
+#' @param x_dim x dimension output length.
+#' @param y_dim y dimension output length.
+#' @return selected subset of MRS data.
+#' @export
+crop_xy <- function(mrs_data, x_dim, y_dim) {
+  mid_pt_x <- Nx(mrs_data) / 2
+  mid_pt_y <- Ny(mrs_data) / 2
+  x_set <- seq(from = mid_pt_x - x_dim / 2 + 1, by = 1, length.out = x_dim)
+  y_set <- seq(from = mid_pt_y - y_dim / 2 + 1, by = 1, length.out = y_dim)
+  x_set <- floor(x_set) # could be floor or ceil, need to test
+  y_set <- floor(y_set) # could be floor or ceil, need to test
+  x_offset <- x_set[1] - 1
+  y_offset <- y_set[1] - 1
+  mrs_data$pos_vec <- mrs_data$pos_vec +
+                      x_offset * mrs_data$row_vec * mrs_data$resolution[2] +
+                      y_offset * mrs_data$col_vec * mrs_data$resolution[3]
+  
+  return(get_subset(mrs_data, x_set = x_set, y_set = y_set))
+}
+
 #' Return the first half of a dynamic series.
 #' @param mrs_data dynamic MRS data.
 #' @return first half of the dynamic series.
