@@ -2034,7 +2034,9 @@ peak_info <- function(mrs_data, xlim = c(4,0.5), interp_f = 4,
     mrs_data_crop$data <- Mod(mrs_data_crop$data)
   }
   
-  res <- apply_mrs(mrs_data_crop, 7, calc_peak_info_vec, interp_f, data_only = TRUE)
+  res <- apply_mrs(mrs_data_crop, 7, calc_peak_info_vec, interp_f,
+                   data_only = TRUE)
+  
   pos_n <- res[,,,,,,1, drop = FALSE]
   pos_hz <- n2hz(pos_n, Npts(mrs_data_crop), fs(mrs_data_crop))
   pos_ppm <- hz2ppm(pos_hz, mrs_data_crop$ft, mrs_data_crop$ref)
@@ -2042,6 +2044,11 @@ peak_info <- function(mrs_data, xlim = c(4,0.5), interp_f = 4,
   fwhm_n <- res[,,,,,,3, drop = FALSE]
   fwhm_hz <- fwhm_n * fs(mrs_data_crop) / Npts(mrs_data_crop)
   fwhm_ppm <- fwhm_hz / mrs_data_crop$ft * 1e6 
+  pos_ppm <- abind::adrop(pos_ppm, 7)
+  pos_hz <- abind::adrop(pos_hz, 7)
+  height <- abind::adrop(height, 7)
+  fwhm_ppm <- abind::adrop(fwhm_ppm, 7)
+  fwhm_hz <- abind::adrop(fwhm_hz, 7)
   list(freq_ppm = pos_ppm, freq_hz = pos_hz, height = height,
        fwhm_ppm = fwhm_ppm, fwhm_hz = fwhm_hz)
 }

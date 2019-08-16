@@ -27,11 +27,16 @@ plot_slice_fit_inter <- function(fit_res, map = NULL, slice = 1, zlim = NULL,
 #' @param denom map to use as a denominator.
 #' @param mask_cutoff minimum values to plot (as a percentage of the maximum).
 #' @param interp map interpolation factor.
+#' @param mode representation of the complex spectrum to be plotted, can be one
+#' of: "re", "im", "mod" or "arg".
+#' @param y_scale option to display the y-axis values (logical).
+#' @param ylim intensity range to plot.
 #' @export
 #' @importFrom tkrplot tkrplot
 plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
                                  zlim = NULL, mask_map = NULL, denom = NULL, 
-                                 mask_cutoff = 20, interp = 1) {
+                                 mask_cutoff = 20, interp = 1, mode = "re",
+                                 y_scale = FALSE, ylim = NULL) {
   
   # kill any existing plots
   if (exists("plot_env")) {
@@ -62,6 +67,9 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
   plot_env$denom <- denom
   plot_env$mask_cutoff <- mask_cutoff
   plot_env$interp <- interp
+  plot_env$mode <- mode
+  plot_env$y_scale <- y_scale
+  plot_env$ylim <- ylim
 
   #map_data <- map[1,,,1,1,1]
   #map_data <- pracma::fliplr(map_data)
@@ -149,7 +157,7 @@ plotTk <- function() {
   #image(plot_env$map_data, col = viridis::viridis(128), useRaster = T,
   #      asp = 1, axes = FALSE)
 
-  graphics::par(mar = c(1,1,1,3))
+  graphics::par(mar = c(1,1,1,6))
   plot_slice_map(plot_env$map_data, slice = plot_env$slice,
                  mask_map = plot_env$mask_map, zlim = plot_env$zlim,
                  denom = plot_env$denom, mask_cutoff = plot_env$mask_cutoff, 
@@ -165,7 +173,14 @@ plotTk <- function() {
   plot_env$usrCoords      <- graphics::par("usr")
   text = paste("X=", plot_env$x, ", Y=", plot_env$y, sep = "")
   cat(text, "\n")
-  graphics::plot(plot_env$mrs_data, x_pos = plot_env$x, y_pos = plot_env$y,
-                 z_pos = plot_env$slice, xlim = plot_env$xlim)
-                 #z_pos = plot_env$slice, yscale = TRUE, xlim = plot_env$xlim)
+  
+  if (class(plot_env$mrs_data) == "mrs_data") {
+    graphics::plot(plot_env$mrs_data, x_pos = plot_env$x, y_pos = plot_env$y,
+                   z_pos = plot_env$slice, xlim = plot_env$xlim,
+                   mode = plot_env$mode, y_scale = plot_env$y_scale,
+                   ylim = plot_env$ylim)
+  } else {
+    graphics::plot(plot_env$mrs_data, x_pos = plot_env$x, y_pos = plot_env$y,
+                   z_pos = plot_env$slice, xlim = plot_env$xlim)
+  }
 }

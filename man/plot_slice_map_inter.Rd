@@ -7,7 +7,7 @@ to display a corresponding spectrum.}
 \usage{
 plot_slice_map_inter(mrs_data, map = NULL, xlim = NULL, slice = 1,
   zlim = NULL, mask_map = NULL, denom = NULL, mask_cutoff = 20,
-  interp = 1)
+  interp = 1, mode = "re", y_scale = FALSE, ylim = NULL)
 }
 \arguments{
 \item{mrs_data}{spectral data.}
@@ -29,6 +29,13 @@ corresponding values should be plotted.}
 \item{mask_cutoff}{minimum values to plot (as a percentage of the maximum).}
 
 \item{interp}{map interpolation factor.}
+
+\item{mode}{representation of the complex spectrum to be plotted, can be one
+of: "re", "im", "mod" or "arg".}
+
+\item{y_scale}{option to display the y-axis values (logical).}
+
+\item{ylim}{intensity range to plot.}
 }
 \description{
 Plot an interactive slice map from a data array where voxels can be selected
