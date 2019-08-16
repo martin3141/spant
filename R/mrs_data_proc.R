@@ -2078,7 +2078,7 @@ calc_peak_info_vec <- function(data_pts, interp_f) {
 
 #' Integrate a spectral region.
 #' @param mrs_data MRS data.
-#' @param xlim spectral range to be integrated.
+#' @param xlim spectral range to be integrated (defaults to full range).
 #' @param scale units of xlim, can be : "ppm", "Hz" or "points".
 #' @param mode spectral mode, can be : "re", "im" or "mod".
 #' @return an array of integral values.
