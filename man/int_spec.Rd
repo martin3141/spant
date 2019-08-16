@@ -9,7 +9,7 @@ int_spec(mrs_data, xlim = NULL, scale = "ppm", mode = "re")
 \arguments{
 \item{mrs_data}{MRS data.}
 
-\item{xlim}{spectral range to be integrated.}
+\item{xlim}{spectral range to be integrated (defaults to full range).}
 
 \item{scale}{units of xlim, can be : "ppm", "Hz" or "points".}
 
