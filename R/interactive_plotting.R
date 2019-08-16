@@ -172,7 +172,7 @@ plotTk <- function() {
   plot_env$parPlotSize[2] <- plot_env$parPlotSize[2] / 2 # correction for subplt
   plot_env$usrCoords      <- graphics::par("usr")
   val <- plot_env$map_data[1, plot_env$x, plot_env$y, plot_env$slice, 1, 1]
-  text = paste("X=", plot_env$x, ", Y=", plot_env$y, ", val =", val, sep = "")
+  text = paste("X=", plot_env$x, "\t Y=", plot_env$y, "\t val=", val, sep = "")
   cat(text, "\n")
   
   if (class(plot_env$mrs_data) == "mrs_data") {
