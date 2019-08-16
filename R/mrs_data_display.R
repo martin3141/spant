@@ -499,12 +499,12 @@ plot_slice_map <- function(data, zlim = NULL, mask_map = NULL,
                            horizontal = FALSE) {
   
   data <- data[ref,,, slice, dyn, coil]
-  data <- pracma::fliplr(data)
+  #data <- pracma::fliplr(data)
   data <- mmand::rescale(data, interp,mmand::mnKernel())
   
   if (!is.null(mask_map)) {
     mask_map <- mask_map[ref,,, slice, dyn, coil]
-    mask_map <- pracma::fliplr(mask_map)
+    #mask_map <- pracma::fliplr(mask_map)
     mask_map <- mmand::rescale(mask_map, interp, mmand::mnKernel())
     max_mask <- max(mask_map)
     data <- ifelse(mask_map < (max_mask * mask_cutoff / 100), NA, data)
@@ -512,7 +512,7 @@ plot_slice_map <- function(data, zlim = NULL, mask_map = NULL,
   
   if (!is.null(denom)) {
     denom <- denom[ref,,, slice, dyn, coil]
-    denom <- pracma::fliplr(denom)
+    #denom <- pracma::fliplr(denom)
     denom <- mmand::rescale(denom, interp,mmand::mnKernel())
     data <- data / denom
   }
