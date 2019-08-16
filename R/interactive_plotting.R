@@ -130,6 +130,7 @@ onLeftClick <- function(x, y) {
   #print(yPlotCoord)
   x_len <- dim(plot_env$mrs_data)[2]
   y_len <- dim(plot_env$mrs_data)[3]
+  
   plot_env$x <- round(xPlotCoord * (x_len - 1)) + 1
   plot_env$y <- y_len - round(yPlotCoord*(y_len - 1))
 
