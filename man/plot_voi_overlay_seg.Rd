@@ -4,12 +4,14 @@
 \alias{plot_voi_overlay_seg}
 \title{Plot a volume as an overlay on a segmented brain volume.}
 \usage{
-plot_voi_overlay_seg(voi, mri_seg)
+plot_voi_overlay_seg(voi, mri_seg, flip_lr = TRUE)
 }
 \arguments{
 \item{voi}{volume data as a nifti object.}
 
 \item{mri_seg}{segmented brain volume as a nifti object.}
+
+\item{flip_lr}{flip the image in the left-right direction.}
 }
 \description{
 Plot a volume as an overlay on a segmented brain volume.

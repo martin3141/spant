@@ -4,12 +4,14 @@
 \alias{plot_voi_overlay}
 \title{Plot a volume as an image overlay.}
 \usage{
-plot_voi_overlay(voi, mri)
+plot_voi_overlay(voi, mri, flip_lr = TRUE)
 }
 \arguments{
 \item{voi}{volume data as a nifti object.}
 
 \item{mri}{image data as a nifti object.}
+
+\item{flip_lr}{flip the image in the left-right direction.}
 }
 \description{
 Plot a volume as an image overlay.

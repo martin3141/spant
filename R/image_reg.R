@@ -81,9 +81,16 @@ resample_voi <- function(voi, mri) {
 #' @export
 #' @param voi volume data as a nifti object.
 #' @param mri image data as a nifti object.
-plot_voi_overlay <- function(voi, mri) {
+#' @param flip_lr flip the image in the left-right direction.
+plot_voi_overlay <- function(voi, mri, flip_lr = TRUE) {
   # check the image orientation etc is the same
   check_geom(voi, mri)
+ 
+  # swap L/R direction 
+  if (flip_lr) {
+    voi <- nifti_flip_lr(voi)
+    mri <- nifti_flip_lr(mri)
+  }
   
   # get the centre of gravity coords
   vox_inds <- get_voi_cog(voi)
@@ -96,10 +103,17 @@ plot_voi_overlay <- function(voi, mri) {
 #' Plot a volume as an overlay on a segmented brain volume.
 #' @param voi volume data as a nifti object.
 #' @param mri_seg segmented brain volume as a nifti object.
+#' @param flip_lr flip the image in the left-right direction.
 #' @export
-plot_voi_overlay_seg <- function(voi, mri_seg) {
+plot_voi_overlay_seg <- function(voi, mri_seg, flip_lr = TRUE) {
   # check the image orientation etc is the same
   check_geom(voi, mri_seg)
+  
+  # swap L/R direction 
+  if (flip_lr) {
+    voi     <- nifti_flip_lr(voi)
+    mri_seg <- nifti_flip_lr(mri_seg)
+  }
   
   # get the centre of gravity coords
   vox_inds <- get_voi_cog(voi)
@@ -239,4 +253,16 @@ check_geom <- function(a, b) {
 # VOI centre of gravity
 get_voi_cog <- function(voi) {
   as.integer(colMeans(which(voi == 1, arr.ind = TRUE)))
+}
+
+#' Flip the x data dimension order of a nifti image. This corresponds to
+#' flipping MRI data in the left-right direction, assuming the data in save in
+#' neurological format (can check with fslorient program).
+#' @param x nifti object to be processed.
+#' @return nifti object with reversed x data direction.
+#' @export
+nifti_flip_lr <- function(x) {
+  lr_dim <- dim(x)[1]
+  x[] <- x[lr_dim:1,,]
+  return(x)
 }
