@@ -11,10 +11,9 @@ auto_phase(mrs_data, xlim = NULL, ret_phase = FALSE)
 \arguments{
 \item{mrs_data}{an object of class \code{mrs_data}.}
 
-\item{xlim}{frequency range (default units of PPM) to including in the phase}
+\item{xlim}{frequency range (default units of PPM) to including in the phase.}
 
-\item{ret_phase}{return phase values (logical).
-determination.}
+\item{ret_phase}{return phase values (logical).}
 }
 \value{
 MRS data object and phase values (optional).

@@ -345,11 +345,11 @@ shift <- function(mrs_data, shift, units = "ppm") {
 #' @export
 phase <- function(mrs_data, zero_order, first_order = 0) {
   if ((first_order == 0) && (length(zero_order) == 1)) {
-    mrs_data$data = mrs_data$data * exp(1i * zero_order * pi / 180)
+    mrs_data$data <- mrs_data$data * exp(1i * zero_order * pi / 180)
   } else if ((first_order == 0) && (dim(zero_order)[1:6] == dim(mrs_data$data)[1:6])) {
     phase_array <- array(rep(zero_order, Npts(mrs_data)), 
                          dim = dim(mrs_data$data))
-    mrs_data$data = mrs_data$data * exp(1i * phase_array * pi / 180)
+    mrs_data$data <- mrs_data$data * exp(1i * phase_array * pi / 180)
   } else if ((length(zero_order) == 1) && (first_order != 0)) {
     freq <- rep(hz(mrs_data), each = Nspec(mrs_data))
     freq_mat <- array(freq, dim = dim(mrs_data$data))
@@ -1005,7 +1005,7 @@ get_td_amp <- function(mrs_data, nstart = 10, nend = 50) {
   
   amps <- apply_mrs(mrs_data, 7, measure_td_amp, nstart, nend)$data
  
-  abind::adrop(amps, 7)
+  amps <- abind::adrop(amps, 7)
   amps
 }
 
@@ -1631,22 +1631,21 @@ hsvd <- function(y, fs, K = 50, propack = TRUE, fast_hank = TRUE) {
 #' squared difference between the real and magnitude components of the
 #' spectrum.
 #' @param mrs_data an object of class \code{mrs_data}.
-#' @param xlim frequency range (default units of PPM) to including in the phase
+#' @param xlim frequency range (default units of PPM) to including in the phase.
 #' @param ret_phase return phase values (logical).
-#' determination.
 #' @return MRS data object and phase values (optional).
 #' @export
 auto_phase <- function(mrs_data, xlim = NULL, ret_phase = FALSE) {
+  
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
-  if (!is.null(xlim)) {
-    mrs_data_crop <- crop_spec(mrs_data, xlim)
-    phases <- apply_mrs(mrs_data_crop, 7, auto_phase_vec, data_only = TRUE)
-  } else {
-    phases <- apply_mrs(mrs_data, 7, auto_phase_vec, data_only = TRUE)
-  }
+  mrs_data_proc <- mrs_data
   
-  if (length(phases == 1)) phases <- as.numeric(phases)
+  if (!is.null(xlim)) mrs_data_proc <- crop_spec(mrs_data_proc, xlim)
+    
+  phases <- apply_mrs(mrs_data_proc, 7, auto_phase_vec, data_only = TRUE)
+  
+  if (length(phases) == 1) phases <- as.numeric(phases)
   
   # TODO update phase function and remove drop
   mrs_data <- phase(mrs_data, phases)
