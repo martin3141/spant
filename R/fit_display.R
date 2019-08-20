@@ -320,7 +320,7 @@ fit_tab2csv <- function(x, fname, pvc = FALSE) {
 #' @param zlim range of values to plot.
 #' @param interp interpolation factor.
 #' @export
-plot_fit_slice <- function(fit_res, name, slice = 1, zlim = NULL, interp = 1) {
+plot_slice_fit <- function(fit_res, name, slice = 1, zlim = NULL, interp = 1) {
   result_map <- fit_res$res_tab[[name]]
   dim(result_map) <- dim(fit_res$data$data)[2:6]
   col <- viridisLite::viridis(64)
