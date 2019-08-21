@@ -233,8 +233,8 @@ get_mrs_affine <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1) {
   slices <- dim(mrs_data$data)[4]
   
   affine[1:3, 4] <- pos_vec -
-                    (mrs_data$resolution[2] * (-(x_pos - 1) + 0.5)) * col_vec -
-                    (mrs_data$resolution[3] * (-(y_pos - 1) + 0.5)) * row_vec -
+                    (mrs_data$resolution[2] * (-(x_pos - 1) + 0.5)) * row_vec -
+                    (mrs_data$resolution[3] * (-(y_pos - 1) + 0.5)) * col_vec -
                     (mrs_data$resolution[4] * (-(z_pos - 1) + 0.5)) * slice_vec
   return(affine)
 }
