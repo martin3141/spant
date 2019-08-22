@@ -177,6 +177,26 @@ get_voi_seg <- function(voi, mri_seg) {
   return(pvs)
 }
 
+#' Return the white matter, gray matter and CSF composition of a volume.
+#' @param voi volume data as a nifti object.
+#' @param mri_seg segmented brain volume as a nifti object.
+#' @return a vector of partial volumes expressed as percentages.
+#' @export
+get_voi_seg_psf <- function(psf, mri_seg) {
+  # check the image orientation etc is the same
+  check_geom(psf, mri_seg)
+  mask <- (psf > 0)
+  vals <- mri_seg[mask]
+  other <- sum(as.numeric(vals == 0) * psf[mask])
+  csf   <- sum(as.numeric(vals == 1) * psf[mask])
+  gm    <- sum(as.numeric(vals == 2) * psf[mask])
+  wm    <- sum(as.numeric(vals == 3) * psf[mask])
+  vec <- c(other, csf, gm, wm)
+  vec <- 100 * vec / sum(vec)  # normalise as a %
+  names(vec) <- c("Other", "CSF", "GM", "WM")
+  return(vec)
+}
+
 #' Convert SPM style segmentation files to a single categorical image where
 #' the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM.
 #' @param fname any of the segmentation files (eg c1_MY_T1.nii).
