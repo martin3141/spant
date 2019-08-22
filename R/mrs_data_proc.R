@@ -1767,7 +1767,7 @@ zf_xy <- function(mrs_data, factor = 2) {
 }
 
 hamming_vec <- function(vector) {
-  vector*signal::hamming(length(vector))
+  vector * signal::hamming(length(vector))
 }
 
 # zero pad vector
