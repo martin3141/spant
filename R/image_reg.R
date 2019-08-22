@@ -53,7 +53,7 @@ get_mrsi_voxel_xy_psf <- function(mrs_data, target_mri, x_pos, y_pos, z_pos) {
   nom_vox_res[1:2] <- nom_vox_res[1:2] * 2 # double the size in x-y direction
   raw_data <- array(1, nom_vox_res)
 
-  psf_mat <- repmat(signal::hamming(nom_vox_res[1]), nom_vox_res[1], 1)
+  psf_mat <- pracma::repmat(signal::hamming(nom_vox_res[1]), nom_vox_res[1], 1)
   psf_mat <- psf_mat * t(psf_mat)
   psf_vec <- rep(psf_mat, nom_vox_res[3])
   vox_psf <- array(psf_vec, nom_vox_res)
@@ -178,7 +178,7 @@ get_voi_seg <- function(voi, mri_seg) {
 }
 
 #' Return the white matter, gray matter and CSF composition of a volume.
-#' @param voi volume data as a nifti object.
+#' @param psf volume data as a nifti object.
 #' @param mri_seg segmented brain volume as a nifti object.
 #' @return a vector of partial volumes expressed as percentages.
 #' @export
