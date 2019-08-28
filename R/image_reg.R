@@ -39,6 +39,34 @@ get_mrsi_voxel <- function(mrs_data, target_mri, x_pos, y_pos, z_pos) {
   voi  
 }
 
+# Generate a MRSI voxel PSF from an \code{mrs_data} object.
+# @param mrs_data MRS data.
+# @param target_mri optional image data to match the intended volume space.
+# @param x_pos x voxel coordinate.
+# @param y_pos y voxel coordinate.
+# @param z_pos z voxel coordinate.
+# @return volume data as a nifti object.
+# get_mrsi_voxel_xy_psf_old <- function(mrs_data, target_mri, x_pos, y_pos, z_pos) {
+#   affine <- get_mrs_affine(mrs_data, x_pos - 0.5, y_pos - 0.5, z_pos)
+#   nom_vox_res <- mrs_data$resolution[2:4]
+#   nom_vox_res[1:2] <- nom_vox_res[1:2] * 2 # double the size in x-y direction
+# 
+#   psf_mat <- pracma::repmat(signal::hamming(nom_vox_res[1]), nom_vox_res[1], 1)
+#   psf_mat <- psf_mat * t(psf_mat)
+#   psf_vec <- rep(psf_mat, nom_vox_res[3])
+#   vox_psf <- array(psf_vec, nom_vox_res)
+#   
+#   voi <- RNifti::retrieveNifti(vox_psf)
+#   voi <- RNifti::`sform<-`(voi, structure(affine, code = 2L))
+#   
+#   if (missing(target_mri)) {
+#     warning("Target MRI data has not been specified.")  
+#   } else {
+#     voi <- resample_voi(voi, target_mri)
+#   }
+#   voi  
+# }
+
 #' Generate a MRSI voxel PSF from an \code{mrs_data} object.
 #' @param mrs_data MRS data.
 #' @param target_mri optional image data to match the intended volume space.
@@ -48,13 +76,21 @@ get_mrsi_voxel <- function(mrs_data, target_mri, x_pos, y_pos, z_pos) {
 #' @return volume data as a nifti object.
 #' @export
 get_mrsi_voxel_xy_psf <- function(mrs_data, target_mri, x_pos, y_pos, z_pos) {
-  affine <- get_mrs_affine(mrs_data, x_pos - 0.5, y_pos - 0.5, z_pos)
+  FOV <- mrs_data$resolution[2] * Nx(mrs_data)
+  
+  psf_spatial_factor <- 8 # create a psf with spatial extent 8 times the nominal
+                          # voxel size
+  
+  aff_off <- psf_spatial_factor / 2 - 0.5 # affine position offset
+  affine <- get_mrs_affine(mrs_data, x_pos - aff_off, y_pos - aff_off, z_pos)
   nom_vox_res <- mrs_data$resolution[2:4]
-  nom_vox_res[1:2] <- nom_vox_res[1:2] * 2 # double the size in x-y direction
-  raw_data <- array(1, nom_vox_res)
+  nom_vox_res[1:2] <- nom_vox_res[1:2] * psf_spatial_factor
 
-  psf_mat <- pracma::repmat(signal::hamming(nom_vox_res[1]), nom_vox_res[1], 1)
-  psf_mat <- psf_mat * t(psf_mat)
+  start_pt <- FOV / 2 - nom_vox_res[1] / 2 + 1
+  subset <- seq(start_pt, by = 1, length.out = nom_vox_res[1])
+  
+  psf_mat <- Re(get_2d_psf(FOV = FOV, mat_size = Nx(mrs_data)))[subset, subset]
+  
   psf_vec <- rep(psf_mat, nom_vox_res[3])
   vox_psf <- array(psf_vec, nom_vox_res)
   
