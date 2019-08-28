@@ -2052,6 +2052,12 @@ peak_info <- function(mrs_data, xlim = c(4,0.5), interp_f = 4,
        fwhm_ppm = fwhm_ppm, fwhm_hz = fwhm_hz)
 }
 
+#' Calculate the FWHM of a peak from a vector of intensity values.
+#' @param data_pts input vector.
+#' @param interp_f interpolation factor to improve the FWHM estimate.
+#' @return a vector of: x position of the highest data point, maximum peak
+#' value in the y axis, FWHM in the units of data points.
+#' @export
 calc_peak_info_vec <- function(data_pts, interp_f) {
   data_pts <- stats::spline(data_pts, n = interp_f * length(data_pts))
   data_pts_x <- data_pts$x
@@ -2073,11 +2079,6 @@ calc_peak_info_vec <- function(data_pts, interp_f) {
   ls_x_hh <- (hh - ls_intercept) / ls_slope
   
   fwhm <- (rs_x_hh - ls_x_hh) / interp_f
-  
-  #plot(data_pts, xlim = c(ls,rs))
-  #abline(h = hh)
-  #abline(v = rs_x_hh)
-  #abline(v = ls_x_hh)
   
   array(c(data_pts_x[peak_pos_n], peak_height, fwhm))
 }
