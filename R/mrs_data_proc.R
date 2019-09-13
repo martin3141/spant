@@ -326,9 +326,9 @@ shift <- function(mrs_data, shift, units = "ppm") {
   if (length(shift_hz) == 1) {
     shift_array <- array(shift_hz, dim = dim(mrs_data$data))
   } else {
-    if (length(shift_hz) != dyns(mrs_data)) stop("Shift vector has an incorrect length.")
+    if (length(shift_hz) != Ndyns(mrs_data)) stop("Shift vector has an incorrect length.")
     # assume array should be applied in the dynamic dimension
-    shift_array <- array(shift_hz, dim = c(1, 1, 1, 1, dyns(mrs_data), 1,
+    shift_array <- array(shift_hz, dim = c(1, 1, 1, 1, Ndyns(mrs_data), 1,
                                            Npts(mrs_data)))
   }
   
@@ -344,8 +344,18 @@ shift <- function(mrs_data, shift, units = "ppm") {
 #' @return MRS data with applied phase parameters.
 #' @export
 phase <- function(mrs_data, zero_order, first_order = 0) {
-  if ((first_order == 0) && (length(zero_order) == 1)) {
+  if ((first_order == 0) && (length(zero_order) == 1)) { 
+    # single zero order phase term given
     mrs_data$data <- mrs_data$data * exp(1i * zero_order * pi / 180)
+  } else if ((first_order == 0) && (is.null(dim(zero_order)))) { 
+    # array of zero order phase terms given
+    if (length(zero_order) != Ndyns(mrs_data)) {
+      stop("Shift vector has an incorrect length.")
+    }
+    # assume array should be applied in the dynamic dimension
+    phase_array <- array(zero_order, dim = c(1, 1, 1, 1, Ndyns(mrs_data), 1,
+                                             Npts(mrs_data)))
+    mrs_data$data = mrs_data$data * exp(1i * phase_array * pi / 180)
   } else if ((first_order == 0) && (dim(zero_order)[1:6] == dim(mrs_data$data)[1:6])) {
     phase_array <- array(rep(zero_order, Npts(mrs_data)), 
                          dim = dim(mrs_data$data))
@@ -359,12 +369,6 @@ phase <- function(mrs_data, zero_order, first_order = 0) {
     }
     mrs_data$data = mrs_data$data * exp(2i * pi * (zero_order / 360 - freq_mat
                                                    * first_order / 1000))
-  } else if ((length(zero_order) > 0) && (first_order == 0)) {
-    if (length(zero_order) != dyns(mrs_data)) stop("Shift vector has an incorrect length.")
-    # assume array should be applied in the dynamic dimension
-    phase_array <- array(zero_order, dim = c(1, 1, 1, 1, dyns(mrs_data), 1,
-                                             Npts(mrs_data)))
-    mrs_data$data = mrs_data$data * exp(1i * phase_array * pi / 180)
   } else {
     stop("Unsupported input options.")
   }
@@ -429,9 +433,9 @@ conv_mrs <- function(mrs_data, conv) {
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   if (is_fd(conv)) conv <- fd2td(conv)
   
-  if (dyns(mrs_data) > 1) {
+  if (Ndyns(mrs_data) > 1) {
     warning("Repeating convolution data to match mrs_data dynamics.")
-    conv <- rep_dyn(conv, dyns(mrs_data))
+    conv <- rep_dyn(conv, Ndyns(mrs_data))
   }
   
   mrs_data * conv 
@@ -718,6 +722,7 @@ dim.mrs_data <- function(x) {
 #' @return number of data points.
 #' @export
 N <- function(mrs_data) {
+  #stop("N function is depricated, use Npts instead.")
   warning("N function is depricated, use Npts instead.")
   dim(mrs_data$data)[7]
 }
@@ -1040,7 +1045,7 @@ get_dyns <- function(mrs_data, subset) {
 #' @return interleaved data.
 #' @export
 interleave_dyns <- function(mrs_data) {
-  total <- dyns(mrs_data)
+  total <- Ndyns(mrs_data)
   fh <- 1:(total / 2)
   sh <- (total / 2 + 1):total
   new_idx <- c(rbind(fh, sh))
@@ -1139,7 +1144,7 @@ crop_xy <- function(mrs_data, x_dim, y_dim) {
 #' @return first half of the dynamic series.
 #' @export
 get_fh_dyns <- function(mrs_data) {
-  fh <- 1:(dyns(mrs_data) / 2)
+  fh <- 1:(Ndyns(mrs_data) / 2)
   get_dyns(mrs_data, fh)
 }
 
@@ -1148,7 +1153,7 @@ get_fh_dyns <- function(mrs_data) {
 #' @return second half of the dynamic series.
 #' @export
 get_sh_dyns <- function(mrs_data) {
-  sh <- (dyns(mrs_data) / 2 + 1):dyns(mrs_data)
+  sh <- (Ndyns(mrs_data) / 2 + 1):Ndyns(mrs_data)
   get_dyns(mrs_data, sh)
 }
   
@@ -1157,7 +1162,7 @@ get_sh_dyns <- function(mrs_data) {
 #' @return dynamic MRS data containing odd numbered scans.
 #' @export
 get_odd_dyns <- function(mrs_data) {
-  subset <- seq(1, dyns(mrs_data), 2)
+  subset <- seq(1, Ndyns(mrs_data), 2)
   get_dyns(mrs_data, subset)
 }
 
@@ -1166,7 +1171,7 @@ get_odd_dyns <- function(mrs_data) {
 #' @return dynamic MRS data containing even numbered scans.
 #' @export
 get_even_dyns <- function(mrs_data) {
-  subset <- seq(2, dyns(mrs_data), 2)
+  subset <- seq(2, Ndyns(mrs_data), 2)
   get_dyns(mrs_data, subset)
 }
 
@@ -1175,7 +1180,7 @@ get_even_dyns <- function(mrs_data) {
 #' @return dynamic MRS data with inverted odd numbered scans.
 #' @export
 inv_odd_dyns <- function(mrs_data) {
-  subset <- seq(1, dyns(mrs_data), 2)
+  subset <- seq(1, Ndyns(mrs_data), 2)
   mrs_data$data[,,,, subset,,] <- -1 * mrs_data$data[,,,, subset,,]
   return(mrs_data)
 }
@@ -1185,7 +1190,7 @@ inv_odd_dyns <- function(mrs_data) {
 #' @return dynamic MRS data with inverted even numbered scans.
 #' @export
 inv_even_dyns <- function(mrs_data) {
-  subset <- seq(2, dyns(mrs_data), 2)
+  subset <- seq(2, Ndyns(mrs_data), 2)
   mrs_data$data[,,,, subset,,] <- -1 * mrs_data$data[,,,, subset,,]
   return(mrs_data)
 }
@@ -1368,14 +1373,14 @@ mean_dyns <- function(mrs_data) {
 #' @export
 mean_dyn_blocks <- function(mrs_data, block_size) {
   
-  if ((dyns(mrs_data) %% block_size) != 0) {
+  if ((Ndyns(mrs_data) %% block_size) != 0) {
     warning("Block size does not fit into the number of dynamics without truncation.")
   }
   
-  new_dyns <-  floor(dyns(mrs_data) / block_size)
-  mrs_out <- get_dyns(mrs_data, seq(1,new_dyns*block_size, block_size))
+  new_dyns <-  floor(Ndyns(mrs_data) / block_size)
+  mrs_out <- get_dyns(mrs_data, seq(1, new_dyns * block_size, block_size))
   for (n in 2:block_size) {
-    mrs_out <- mrs_out + get_dyns(mrs_data, seq(n,new_dyns*block_size, block_size))
+    mrs_out <- mrs_out + get_dyns(mrs_data, seq(n, new_dyns * block_size, block_size))
   }
   
   mrs_out / block_size
@@ -1712,14 +1717,14 @@ ecc <- function(metab, ref, rev = FALSE) {
   
   if (rev) ref <- Conj(ref)
   
-  if (dyns(ref) > 1) {
+  if (Ndyns(ref) > 1) {
     ref <- mean_dyns(ref)
     warning("Using the mean reference signal for ECC.")
   }
   
   # repeat the refernce signal to match the number of dynamics
-  if (dyns(metab) > 1) {
-    ref <- rep_dyn(ref, dyns(metab))
+  if (Ndyns(metab) > 1) {
+    ref <- rep_dyn(ref, Ndyns(metab))
   }
   
   mrs_data <- comb_metab_ref(metab, ref)

@@ -147,7 +147,7 @@ read_basis <- function(basis_file, ref = def_ref()) {
 #' @export
 write_basis <- function(basis, basis_file, fwhmba = 0.1) {
   mrs_data <- basis2mrs_data(basis)
-  N <- N(mrs_data)
+  N <- Npts(mrs_data)
   
   sink(basis_file)
   cat(" $SEQPAR\n", sep = "")
@@ -159,9 +159,9 @@ write_basis <- function(basis, basis_file, fwhmba = 0.1) {
   cat(" IDBASI = 'SPANT',\n", sep = "")
   cat(" FMTBAS = '(6E13.5)',\n", sep = "")
   cat(" BADELT =  ", 1 / fs(mrs_data), ",\n", sep = "")
-  cat(" NDATAB = ", N(mrs_data), " $END\n",sep = "")
+  cat(" NDATAB = ", Npts(mrs_data), " $END\n",sep = "")
   
-  for (n in 1:dyns(mrs_data)) {
+  for (n in 1:Ndyns(mrs_data)) {
     name = basis$names[n]
     cat(" $NMUSED\n")
     cat(" FILERAW = '", name,"',\n", sep = "")
@@ -235,7 +235,7 @@ basis2mrs_data <- function(basis, sum_elements = FALSE, amp = NULL,
   
   # scale basis elements
   if (!is.null(amp)) {
-    n_sigs <- dyns(res)
+    n_sigs <- Ndyns(res)
     if (n_sigs != length(amp)) {
       stop(paste("Error, length of amp does not match the number of basis elements :", dim(basis$data)[2]))
     }
@@ -264,9 +264,9 @@ mrs_data2basis <- function(mrs_data, names) {
   }
   
   data <- matrix(mrs_data$data[1, 1, 1, 1,, 1,], 
-            nrow = N(mrs_data), ncol = dyns(mrs_data), byrow = TRUE)
+            nrow = Npts(mrs_data), ncol = Ndyns(mrs_data), byrow = TRUE)
   
-  basis_set <- list(data = data, N = N(mrs_data), fs = fs(mrs_data), 
+  basis_set <- list(data = data, N = Npts(mrs_data), fs = fs(mrs_data), 
                     ft = mrs_data$ft, names = names, ref = mrs_data$ref)
   
   class(basis_set) <- "basis_set"

@@ -396,7 +396,7 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
   
   for (n in 1:length(mol_list)) {
     mrs_data <- sim_mol(mol_list[[n]], pul_seq, ft, ref, fs, N, xlim, ...) 
-    basis_mrs_data <- set_dyns(basis_mrs_data,n,mrs_data)
+    basis_mrs_data <- set_dyns(basis_mrs_data, n, mrs_data)
   }
   names <- get_mol_para_list_names(mol_list)
   mrs_data2basis(basis_mrs_data, names = names)
