@@ -102,7 +102,7 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
   
   if (!is.null(xaxis_lab)) xlab <- xaxis_lab
   
-  if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[N(x)])
+  if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[Npts(x)])
   
   subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
   
