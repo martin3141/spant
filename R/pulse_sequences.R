@@ -435,7 +435,8 @@ seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02) {
 #' @param TE3 third echo time (between 4th echo and 5th echo) in seconds.
 #' @return list of resonance amplitudes and frequencies.
 #' @export
-seq_slaser_ideal <- function(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.009, TE3 = 0.011) {
+seq_slaser_ideal <- function(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.011,
+                             TE3 = 0.009) {
   sys <- spin_sys(spin_params, ft, ref)
   
   sys$rho <- gen_F(sys, "z")

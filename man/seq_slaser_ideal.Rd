@@ -4,8 +4,8 @@
 \alias{seq_slaser_ideal}
 \title{sLASER sequence with ideal pulses.}
 \usage{
-seq_slaser_ideal(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.009,
-  TE3 = 0.011)
+seq_slaser_ideal(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.011,
+  TE3 = 0.009)
 }
 \arguments{
 \item{spin_params}{spin system definition.}
