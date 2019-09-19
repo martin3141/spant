@@ -16,7 +16,7 @@ collapse_to_dyns(x)
 \item{x}{data object to be collapsed (mrs_data or fit_result object).}
 }
 \value{
-collapsed data with spectra or fits concatentated along the dynamic
+collapsed data with spectra or fits concatenated along the dynamic
 dimension.
 }
 \description{

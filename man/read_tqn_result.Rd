@@ -7,7 +7,7 @@
 read_tqn_result(result_f, remove_rcs = TRUE)
 }
 \arguments{
-\item{result_f}{TARQIUN result file.}
+\item{result_f}{TARQUIN result file.}
 
 \item{remove_rcs}{omit row, column and slice ids from output.}
 }

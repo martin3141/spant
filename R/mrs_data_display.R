@@ -173,7 +173,7 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
 #' been made.
 #' @param y_ticks a vector of indices specifying where to place tick marks.
 #' @param vline draw a vertical line at the value of vline.
-#' @param hline draw a horizonal line at the value of hline.
+#' @param hline draw a horizontal line at the value of hline.
 #' @param ... other arguments to pass to the plot method.
 #' @export
 image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL, 

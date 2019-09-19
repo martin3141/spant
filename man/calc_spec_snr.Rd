@@ -22,7 +22,7 @@ the standard deviation.}
 \item{interp_f}{interpolation factor to improve detection of the highest
 signal value.}
 
-\item{full_output}{output signal, noise and SNR values separatly.}
+\item{full_output}{output signal, noise and SNR values separately.}
 }
 \value{
 an array of SNR values.

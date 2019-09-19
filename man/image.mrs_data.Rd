@@ -40,7 +40,7 @@ been made.}
 
 \item{vline}{draw a vertical line at the value of vline.}
 
-\item{hline}{draw a horizonal line at the value of hline.}
+\item{hline}{draw a horizontal line at the value of hline.}
 
 \item{...}{other arguments to pass to the plot method.}
 }

@@ -1,28 +1,44 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-Spectroscopy Analysis Tools (spant)
-===================================
 
-[![Travis Build Status](https://travis-ci.org/martin3141/spant.svg?branch=master)](https://travis-ci.org/martin3141/spant) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/martin3141/spant?branch=master&svg=true)](https://ci.appveyor.com/project/martin3141/spant) [![](http://cranlogs.r-pkg.org/badges/spant)](http://cran.rstudio.com/web/packages/spant/index.html) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant) [![Coverage Status](https://coveralls.io/repos/github/martin3141/spant/badge.svg?branch=master)](https://coveralls.io/github/martin3141/spant?branch=master)
+# Spectroscopy Analysis Tools (spant)
 
-`muschellij2` badges: [![Travis Build Status](https://travis-ci.org/muschellij2/spant.svg?branch=master)](https://travis-ci.org/muschellij2/spant) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/muschellij2/spant?branch=master&svg=true)](https://ci.appveyor.com/project/muschellij2/spant)
+[![Travis Build
+Status](https://travis-ci.org/martin3141/spant.svg?branch=master)](https://travis-ci.org/martin3141/spant)
+[![AppVeyor Build
+Status](https://ci.appveyor.com/api/projects/status/github/martin3141/spant?branch=master&svg=true)](https://ci.appveyor.com/project/martin3141/spant)
+[![](http://cranlogs.r-pkg.org/badges/spant)](http://cran.rstudio.com/web/packages/spant/index.html)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant)
+[![Coverage
+Status](https://coveralls.io/repos/github/martin3141/spant/badge.svg?branch=master)](https://coveralls.io/github/martin3141/spant?branch=master)
 
-Overview
---------
+`muschellij2` badges: [![Travis Build
+Status](https://travis-ci.org/muschellij2/spant.svg?branch=master)](https://travis-ci.org/muschellij2/spant)
+[![AppVeyor Build
+Status](https://ci.appveyor.com/api/projects/status/github/muschellij2/spant?branch=master&svg=true)](https://ci.appveyor.com/project/muschellij2/spant)
 
-spant provides a full suite of tools to build automated anaysis pipelines for Magnetic Resonance Spectroscopy (MRS) data. The following features are included:
+## Overview
 
--   Raw data import/export.
--   Flexable data types to support single voxel, dynamic and spectroscopic imaging data types.
--   Publication quality plotting.
--   Extensive set of pre-processing steps (phasing, coil-combination, zero-filling, HSVD filtering...)
--   Quantum mechanical based simulation for experimental design and basis-set generation.
--   Set of metabolite, macromolecule and lipid parameters for typical brain analyses.
--   VARPRO based fitting and interfaces for TARQUIN and LCModel for metabolite quantitation.
--   Voxel registration to anatomical images for partial volume concentration corrections.
+spant provides a full suite of tools to build automated analysis
+pipelines for Magnetic Resonance Spectroscopy (MRS) data. The following
+features are included:
 
-Installation
-------------
+  - Raw data import/export.
+  - Flexible data types to support single voxel, dynamic and
+    spectroscopic imaging data types.
+  - Publication quality plotting.
+  - Extensive set of pre-processing steps (phasing, coil-combination,
+    zero-filling, HSVD filtering…)
+  - Quantum mechanical based simulation for experimental design and
+    basis-set generation.
+  - Set of metabolite, macromolecule and lipid parameters for typical
+    brain analyses.
+  - VARPRO based fitting and interfaces for TARQUIN and LCModel for
+    metabolite quantitation.
+  - Voxel registration to anatomical images for partial volume
+    concentration corrections.
+
+## Installation
 
 You can install the stable version of spant from CRAN:
 
@@ -30,22 +46,21 @@ You can install the stable version of spant from CRAN:
 install.packages("spant", dependencies = TRUE)
 ```
 
-Or the the development version from GitHub (requires `devtools` package):
+Or the the development version from GitHub (requires `devtools`
+package):
 
 ``` r
 install.packages("devtools")
 devtools::install_github("martin3141/spant")
 ```
 
-Documentation
--------------
+## Documentation
 
 Long form : <https://martin3141.github.io/spant/articles/>
 
 Function reference : <https://martin3141.github.io/spant/reference/>
 
-Quick introduction
-------------------
+## Quick introduction
 
 ``` r
 library(spant)
@@ -72,7 +87,7 @@ print(mrs_data)
 plot(mrs_data, xlim = c(5, 0.5))
 ```
 
-![](README-import-1.png)
+![](README-import-1.png)<!-- -->
 
 ``` r
 # apply water filter and align to tNAA resonance
@@ -81,7 +96,7 @@ mrs_proc <- align(mrs_proc, 2.01)
 plot(mrs_proc, xlim = c(5, 0.5))
 ```
 
-![](README-processing-1.png)
+![](README-processing-1.png)<!-- -->
 
 ``` r
 # simulate a typical basis set for short TE brain analysis
@@ -108,7 +123,7 @@ print(basis)
 stackplot(basis, xlim = c(4, 0.5), labels = basis$names)
 ```
 
-![](README-basis_sim-1.png)
+![](README-basis_sim-1.png)<!-- -->
 
 ``` r
 # perform VARPRO fitting to processed data
@@ -123,4 +138,4 @@ fit_res <- fit_mrs(mrs_proc, basis)
 plot(fit_res, xlim = c(4, 0.5))
 ```
 
-![](README-fitting-1.png)
+![](README-fitting-1.png)<!-- -->

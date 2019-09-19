@@ -2,7 +2,7 @@
 % Please edit documentation in R/fitting.R
 \name{fit_amps}
 \alias{fit_amps}
-\title{Extract the fit amplitues from an object of class \code{fit_result}.}
+\title{Extract the fit amplitudes from an object of class \code{fit_result}.}
 \usage{
 fit_amps(x, inc_index = FALSE, sort_names = TRUE,
   append_common_1h_comb = TRUE)
@@ -18,8 +18,8 @@ fit_amps(x, inc_index = FALSE, sort_names = TRUE,
 eg TNAA = NAA + NAAG.}
 }
 \value{
-a dataframe of amplidudes.
+a dataframe of amplitudes.
 }
 \description{
-Extract the fit amplitues from an object of class \code{fit_result}.
+Extract the fit amplitudes from an object of class \code{fit_result}.
 }

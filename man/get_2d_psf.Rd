@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{get_2d_psf}
 \alias{get_2d_psf}
-\title{Get the point spead function (PSF) for a 2D phase encoded MRSI scan.}
+\title{Get the point spread function (PSF) for a 2D phase encoded MRSI scan.}
 \usage{
 get_2d_psf(FOV = 160, mat_size = 16, sampling = "circ",
   hamming = FALSE)
@@ -10,7 +10,7 @@ get_2d_psf(FOV = 160, mat_size = 16, sampling = "circ",
 \arguments{
 \item{FOV}{field of view in mm.}
 
-\item{mat_size}{acquistion matrix size (not interpolated).}
+\item{mat_size}{acquisition matrix size (not interpolated).}
 
 \item{sampling}{can be eith "circ" for circular or "rect" for rectangular.}
 
@@ -20,5 +20,5 @@ get_2d_psf(FOV = 160, mat_size = 16, sampling = "circ",
 A matrix of the PSF with 1mm resolution.
 }
 \description{
-Get the point spead function (PSF) for a 2D phase encoded MRSI scan.
+Get the point spread function (PSF) for a 2D phase encoded MRSI scan.
 }

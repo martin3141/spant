@@ -27,11 +27,11 @@ Spectroscopy Analysis Tools (spant)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/muschellij2/spant?branch=master&svg=true)](https://ci.appveyor.com/project/muschellij2/spant)
 
 ## Overview
-spant provides a full suite of tools to build automated anaysis pipelines for
+spant provides a full suite of tools to build automated analysis pipelines for
 Magnetic Resonance Spectroscopy (MRS) data. The following features are included:
 
 * Raw data import/export.
-* Flexable data types to support single voxel, dynamic and spectroscopic imaging data types.
+* Flexible data types to support single voxel, dynamic and spectroscopic imaging data types.
 * Publication quality plotting.
 * Extensive set of pre-processing steps (phasing, coil-combination, zero-filling, HSVD filtering...)
 * Quantum mechanical based simulation for experimental design and basis-set generation.

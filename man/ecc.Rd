@@ -9,7 +9,7 @@ ecc(metab, ref, rev = FALSE)
 \arguments{
 \item{metab}{MRS data to be corrected.}
 
-\item{ref}{ceference dataset.}
+\item{ref}{reference dataset.}
 
 \item{rev}{reverse the correction.}
 }

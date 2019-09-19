@@ -1329,7 +1329,7 @@ mean.mrs_data <- function(x, ...) {
 
 #' Collapse MRS data by concatenating spectra along the dynamic dimension.
 #' @param x data object to be collapsed (mrs_data or fit_result object).
-#' @return collapsed data with spectra or fits concatentated along the dynamic
+#' @return collapsed data with spectra or fits concatenated along the dynamic
 #' dimension.
 #' @rdname collapse_to_dyns
 #' @export
@@ -1706,7 +1706,7 @@ ecc_ref <- function(mrs_data) {
 #' Magn Reson Med. 1990 Apr;14(1):26-30.
 #' 
 #' @param metab MRS data to be corrected.
-#' @param ref ceference dataset.
+#' @param ref reference dataset.
 #' @param rev reverse the correction.
 #' @return corrected data in the time domain.
 #' @export
@@ -1979,7 +1979,7 @@ calc_coil_noise_sd <- function(noise_data) {
 #' the standard deviation.
 #' @param interp_f interpolation factor to improve detection of the highest
 #' signal value.
-#' @param full_output output signal, noise and SNR values separatly.
+#' @param full_output output signal, noise and SNR values separately.
 #' @return an array of SNR values.
 #' @export
 calc_spec_snr <- function(mrs_data, sig_region = c(4,0.5), 
