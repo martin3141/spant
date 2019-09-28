@@ -2088,14 +2088,33 @@ calc_peak_info_vec <- function(data_pts, interp_f) {
   array(c(data_pts_x[peak_pos_n], peak_height, fwhm))
 }
 
+#' Normalise mrs_data to a spectral region.
+#' @param mrs_data MRS data.
+#' @param xlim spectral range to be integrated (defaults to full range).
+#' @param scale units of xlim, can be : "ppm", "Hz" or "points".
+#' @param mode spectral mode, can be : "re", "im" or "mod".
+#' @param square square the data point values before summation (default = 
+#' TRUE).
+#' @export
+norm_mrs <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
+                     square = TRUE) {
+  amps <- int_spec(mrs_data, xlim, scale, mode, square)
+  amps_full <- array(rep(amps, Npts(mrs_data)), dim = dim(mrs_data$data))
+  mrs_data$data <- mrs_data$data * amps_full
+  return(mrs_data)
+}
+
 #' Integrate a spectral region.
 #' @param mrs_data MRS data.
 #' @param xlim spectral range to be integrated (defaults to full range).
 #' @param scale units of xlim, can be : "ppm", "Hz" or "points".
 #' @param mode spectral mode, can be : "re", "im" or "mod".
+#' @param square square the data point values before summation (default = 
+#' FALSE).
 #' @return an array of integral values.
 #' @export
-int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re") {
+int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
+                     square = FALSE) {
   
   if (!is_fd(mrs_data)) {
     mrs_data <- td2fd(mrs_data)
@@ -2122,6 +2141,8 @@ int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re") {
   } else if (mode == "mod") {
     data_arr <- Mod(data_arr)
   }
+  
+  if (square) data_arr <- data_arr * data_arr
   
   apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
 }

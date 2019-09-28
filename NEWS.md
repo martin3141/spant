@@ -1,5 +1,6 @@
 # spant 0.16.0
 * Default rats method improved for multidimensional datasets.
+* Added norm_mrs function.
 
 # spant 0.15.0
 * Bug fix for using auto_phase function with a single spectrum.
