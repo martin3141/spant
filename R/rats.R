@@ -29,7 +29,7 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
   }
   
   # align to mean if ref is not given
-  if (is.null(ref)) ref <- mean_dyns(mrs_data)
+  if (is.null(ref)) ref <- mean(mrs_data)
   
   if (!is.null(max_t)) {
     # move ref to the time-domain
@@ -48,7 +48,8 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
   if (p_deg == 0) {
     poly_basis <- rep(1, length(inds))
   } else if (p_deg > 0) {
-    poly_basis <- cbind(rep(1, length(inds)), stats::polym(1:length(inds), degree = p_deg))
+    poly_basis <- cbind(rep(1, length(inds)), stats::polym(1:length(inds),
+                                                           degree = p_deg))
   } else {
     poly_basis <- NULL
   }
