@@ -2093,14 +2093,13 @@ calc_peak_info_vec <- function(data_pts, interp_f) {
 #' @param xlim spectral range to be integrated (defaults to full range).
 #' @param scale units of xlim, can be : "ppm", "Hz" or "points".
 #' @param mode spectral mode, can be : "re", "im" or "mod".
-#' @param square square the data point values before summation (default = 
-#' TRUE).
+#' @param summation can be "simple" or "l2" (default).
 #' @export
 norm_mrs <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
-                     square = TRUE) {
-  amps <- int_spec(mrs_data, xlim, scale, mode, square)
+                     summation = "l2") {
+  amps <- int_spec(mrs_data, xlim, scale, mode, summation)
   amps_full <- array(rep(amps, Npts(mrs_data)), dim = dim(mrs_data$data))
-  mrs_data$data <- mrs_data$data * amps_full
+  mrs_data$data <- mrs_data$data / amps_full
   return(mrs_data)
 }
 
@@ -2109,12 +2108,11 @@ norm_mrs <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
 #' @param xlim spectral range to be integrated (defaults to full range).
 #' @param scale units of xlim, can be : "ppm", "Hz" or "points".
 #' @param mode spectral mode, can be : "re", "im" or "mod".
-#' @param square square the data point values before summation (default = 
-#' FALSE).
+#' @param summation can be "simple" (defualt) or "l2".
 #' @return an array of integral values.
 #' @export
 int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
-                     square = FALSE) {
+                     summation = "simple") {
   
   if (!is_fd(mrs_data)) {
     mrs_data <- td2fd(mrs_data)
@@ -2141,10 +2139,16 @@ int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
   } else if (mode == "mod") {
     data_arr <- Mod(data_arr)
   }
+ 
+  if (summation == "l2") {
+    data_arr <- data_arr * data_arr
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
+    res <- res ^ 0.5
+  } else {
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
+  }
   
-  if (square) data_arr <- data_arr * data_arr
-  
-  apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
+  return(res) 
 }
 
 

@@ -5,7 +5,7 @@
 \title{Integrate a spectral region.}
 \usage{
 int_spec(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
-  square = FALSE)
+  summation = "simple")
 }
 \arguments{
 \item{mrs_data}{MRS data.}
@@ -16,8 +16,7 @@ int_spec(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
 
 \item{mode}{spectral mode, can be : "re", "im" or "mod".}
 
-\item{square}{square the data point values before summation (default =
-FALSE).}
+\item{summation}{can be "simple" (defualt) or "l2".}
 }
 \value{
 an array of integral values.

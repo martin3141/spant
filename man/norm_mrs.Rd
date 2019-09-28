@@ -5,7 +5,7 @@
 \title{Normalise mrs_data to a spectral region.}
 \usage{
 norm_mrs(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
-  square = TRUE)
+  summation = "l2")
 }
 \arguments{
 \item{mrs_data}{MRS data.}
@@ -16,8 +16,7 @@ norm_mrs(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
 
 \item{mode}{spectral mode, can be : "re", "im" or "mod".}
 
-\item{square}{square the data point values before summation (default =
-TRUE).}
+\item{summation}{can be "simple" or "l2" (default).}
 }
 \description{
 Normalise mrs_data to a spectral region.
