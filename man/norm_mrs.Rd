@@ -18,6 +18,9 @@ norm_mrs(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
 
 \item{summation}{can be "simple" or "l2" (default).}
 }
+\value{
+normalised data.
+}
 \description{
 Normalise mrs_data to a spectral region.
 }

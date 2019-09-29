@@ -5,7 +5,7 @@
 \title{Integrate a spectral region.}
 \usage{
 int_spec(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
-  summation = "simple")
+  summation = "sum")
 }
 \arguments{
 \item{mrs_data}{MRS data.}
@@ -14,9 +14,9 @@ int_spec(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
 
 \item{scale}{units of xlim, can be : "ppm", "Hz" or "points".}
 
-\item{mode}{spectral mode, can be : "re", "im" or "mod".}
+\item{mode}{spectral mode, can be : "re", "im", "mod" or "cplx".}
 
-\item{summation}{can be "simple" (defualt) or "l2".}
+\item{summation}{can be "sum" (defualt), "mean" or "l2".}
 }
 \value{
 an array of integral values.

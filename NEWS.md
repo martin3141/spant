@@ -1,6 +1,7 @@
 # spant 0.16.0
 * Default rats method improved for multidimensional datasets.
-* Added norm_mrs function.
+* Added norm_mrs function to normalise the intenisty of spectral data.
+* Added bc_constant function to correct spectral baselines by a constant offset.
 
 # spant 0.15.0
 * Bug fix for using auto_phase function with a single spectrum.

@@ -2088,12 +2088,29 @@ calc_peak_info_vec <- function(data_pts, interp_f) {
   array(c(data_pts_x[peak_pos_n], peak_height, fwhm))
 }
 
+#' Remove a constant baseline offset based on a reference spectral region.
+#' @param mrs_data MRS data.
+#' @param xlim spectral range containing a flat baseline region to measure the 
+#' offset.
+#' @return baseline corrected data.
+#' @export
+bc_constant <- function(mrs_data, xlim) {
+  
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  offsets <- int_spec(mrs_data, xlim = xlim, mode = "cplx", summation = "mean")
+  offsets_rep <- array(rep(offsets, Npts(mrs_data)), dim = dim(mrs_data$data))
+  mrs_data$data <- mrs_data$data - offsets_rep
+  return(mrs_data)
+}
+
 #' Normalise mrs_data to a spectral region.
 #' @param mrs_data MRS data.
 #' @param xlim spectral range to be integrated (defaults to full range).
 #' @param scale units of xlim, can be : "ppm", "Hz" or "points".
 #' @param mode spectral mode, can be : "re", "im" or "mod".
 #' @param summation can be "simple" or "l2" (default).
+#' @return normalised data.
 #' @export
 norm_mrs <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
                      summation = "l2") {
@@ -2107,12 +2124,12 @@ norm_mrs <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
 #' @param mrs_data MRS data.
 #' @param xlim spectral range to be integrated (defaults to full range).
 #' @param scale units of xlim, can be : "ppm", "Hz" or "points".
-#' @param mode spectral mode, can be : "re", "im" or "mod".
-#' @param summation can be "simple" (defualt) or "l2".
+#' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
+#' @param summation can be "sum" (defualt), "mean" or "l2".
 #' @return an array of integral values.
 #' @export
 int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
-                     summation = "simple") {
+                     summation = "sum") {
   
   if (!is_fd(mrs_data)) {
     mrs_data <- td2fd(mrs_data)
@@ -2144,6 +2161,8 @@ int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
     data_arr <- data_arr * data_arr
     res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
     res <- res ^ 0.5
+  } else if (summation == "mean") {
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), mean)
   } else {
     res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
   }
