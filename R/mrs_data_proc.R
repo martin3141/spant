@@ -2176,7 +2176,7 @@ int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
 #' @param p p parameter.
 #' @return baseline corrected data.
 #' @export
-bc_als <- function(mrs_data, lambda = 1e6, p = 0.001) {
+bc_als <- function(mrs_data, lambda = 1e4, p = 0.001) {
   
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   

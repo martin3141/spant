@@ -4,7 +4,7 @@
 \alias{bc_als}
 \title{Baseline correction using the ALS method.}
 \usage{
-bc_als(mrs_data, lambda = 1e+06, p = 0.001)
+bc_als(mrs_data, lambda = 10000, p = 0.001)
 }
 \arguments{
 \item{mrs_data}{mrs_data object.}
