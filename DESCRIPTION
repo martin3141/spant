@@ -34,6 +34,7 @@ Imports:
     tkrplot,
     readr,
     magrittr,
+    ptw,
     tibble
 Suggests:
     oro.nifti,
@@ -41,7 +42,6 @@ Suggests:
     fastICA,
     fields,
     mmand,
-    ptw,
     viridisLite,
     viridis,
     RNifti,

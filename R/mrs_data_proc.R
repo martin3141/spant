@@ -2170,6 +2170,22 @@ int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
   return(res) 
 }
 
+#' Baseline correction using the ALS method.
+#' @param mrs_data mrs_data object.
+#' @param lambda lambda parameter.
+#' @param p p parameter.
+#' @return baseline corrected data.
+#' @export
+bc_als <- function(mrs_data, lambda = 1e6, p = 0.001) {
+  
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  apply_mrs(mrs_data, 7, bc_als_vec, lambda, p)
+}
+
+bc_als_vec <- function(vec, lambda, p) {
+  ptw::baseline.corr(Re(vec), lambda = lambda, p = p) 
+}
 
 #' Calculate the sum of squares differences between two mrs_data objects.
 #' @param mrs_data mrs_data oject.
