@@ -505,6 +505,24 @@ lb.basis_set <- function(x, lb, lg = 1) {
   mrs_data2basis(lb(basis2mrs_data(x), lb, lg), x$names)
 }
 
+#' Apply a weighting to the FID to enchance spectral resolution.
+#' @param mrs_data data to be enhanced.
+#' @param re resolution enhancement factor (rising exponential factor).
+#' @param alpha alpha factor (Guassian decay)
+#' @return resolution enhanced mrs_data.
+#' @export
+re_weighting <- function(mrs_data, re, alpha) {
+  
+  # needs to be a time-domain operation
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data) 
+  
+  t <- rep(seconds(mrs_data), each = Nspec(mrs_data))
+  
+  mrs_data$data = mrs_data$data * exp(re * t) * exp(-alpha * t ^ 2)
+  
+  return(mrs_data)
+}
+
 #' Zero-fill MRS data in the time domain.
 #' @param x input mrs_data or basis_set object.
 #' @param factor zero-filling factor, factor of 2 returns a dataset with
