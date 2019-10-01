@@ -14,9 +14,9 @@ norm_mrs(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
 
 \item{scale}{units of xlim, can be : "ppm", "Hz" or "points".}
 
-\item{mode}{spectral mode, can be : "re", "im" or "mod".}
+\item{mode}{spectral mode, can be : "re", "im", "mod" or "cplx".}
 
-\item{summation}{can be "simple" or "l2" (default).}
+\item{summation}{can be "sum", "mean" or "l2" (default).}
 }
 \value{
 normalised data.

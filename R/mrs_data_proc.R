@@ -2126,8 +2126,8 @@ bc_constant <- function(mrs_data, xlim) {
 #' @param mrs_data MRS data.
 #' @param xlim spectral range to be integrated (defaults to full range).
 #' @param scale units of xlim, can be : "ppm", "Hz" or "points".
-#' @param mode spectral mode, can be : "re", "im" or "mod".
-#' @param summation can be "simple" or "l2" (default).
+#' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
+#' @param summation can be "sum", "mean" or "l2" (default).
 #' @return normalised data.
 #' @export
 norm_mrs <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
