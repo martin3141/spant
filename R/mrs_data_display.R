@@ -289,6 +289,13 @@ stackplot <- function(x, ...) {
   UseMethod("stackplot", x)
 }
 
+#' @export
+stackplot.list <- function(x, ...) {
+  # make them all td or fd
+  combined <- append_dummy(x)
+  stackplot(combined, dim = "dummy", ...)
+}
+
 #' Stackplot plotting method for objects of class mrs_data.
 #' @param x object of class mrs_data.
 #' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
@@ -319,7 +326,7 @@ stackplot <- function(x, ...) {
 #' @export
 stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                                fd = TRUE, col = NULL, x_offset = 0,
-                               y_offset = 5, dim = "dyn", x_pos = NULL, 
+                               y_offset = 0, dim = "dyn", x_pos = NULL, 
                                y_pos = NULL, z_pos = NULL, dyn = 1, coil = 1, 
                                bty = NULL, labels = NULL, lab_cex = 1, 
                                right_marg = NULL, restore_def_par = TRUE, ...) {
@@ -394,7 +401,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
   
   if (dim == "dyn") {
-    plot_data <- t(x$data[1, x_pos, y_pos, y_pos, , coil, subset])
+    plot_data <- t(x$data[1, x_pos, y_pos, z_pos, , coil, subset])
     yN <- data_dim[5]
     y_title = "Dynamic"
   } else if (dim == "x") {
@@ -413,6 +420,10 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
     plot_data <- t(x$data[1, x_pos, y_pos, z_pos, dyn, , subset])
     yN <- data_dim[5]
     y_title = "Coil"
+  } else if (dim == "dummy") {
+    plot_data <- t(x$data[, x_pos, y_pos, z_pos, dyn, coil, subset])
+    yN <- data_dim[1]
+    y_title = "Index"
   } else {
     stop("Unrecognised dim value. Should be one of: dyn, x, y, z, coil")
   } 
@@ -455,6 +466,9 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   
   if ( x_units == "ppm" ) xlim <- rev(xlim)
   
+  #print(dim(x_scale_mat))
+  #print(length(subset))
+  
   graphics::matplot(x_scale_mat[length(subset):1,],
                     plot_data[length(subset):1,], type = "l", 
                     lty = 1, col = col, xlab = xlab, ylab = "",
@@ -477,6 +491,17 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   }
   
   if (restore_def_par) graphics::par(.pardefault)
+}
+
+#' Convenience function to plot a baseline estimate with the original data.
+#' @param orig_data the original data.
+#' @param bc_data the baseline corrected data.
+#' @param ... other arguments to pass to the stackplot function.
+#' @export
+plot_bc <- function(orig_data, bc_data, ...) {
+  bl <- orig_data - bc_data
+  combined <- append_dummy(orig_data, bl)
+  stackplot(combined, dim = "dummy", ...)
 }
 
 #' Plot a slice from a 7 dimensional array.

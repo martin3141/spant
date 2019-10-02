@@ -1272,6 +1272,31 @@ append_dyns <- function(...) {
   first_dataset
 }
 
+append_dummy <- function(...) {
+  x <- list(...)
+  
+  # were the arguments a list already? 
+  if (depth(x) == 3) x <- x[[1]]
+  
+  first_dataset <- x[[1]]
+  
+  if (is_fd(first_dataset)) {
+    first_dataset <- fd2td(first_dataset)
+  }
+  
+  # data needs to be in the same domain
+  for (n in 1:length(x)) {
+    if (is_fd(x[[n]])) {
+        x[[n]] <- fd2td(x[[n]])
+    }
+    x[[n]] <- x[[n]]$data
+  }
+  
+  new_data <- abind::abind(x, along = 1)
+  first_dataset$data <- unname(new_data)
+  first_dataset
+}
+
 split_metab_ref <- function(mrs_data) {
   metab <- mrs_data
   ref <- mrs_data
