@@ -112,11 +112,18 @@ ift_shift <- function(vec_in) {pracma::ifft(pracma::ifftshift(vec_in))}
 #' @return output matrix.
 #' @export
 ft_shift_mat <- function(mat_in) {
-  mat_in_ft = stats::mvfft(mat_in) # 33s
-  #p <- fftw::planFFT(NROW(mat_in),effort=1)
-  #mat_in_ft = apply(mat_in,2,fftw::FFT,p) # 34s
-  #mat_in_ft = fftwtools::mvfftw(mat_in) # 35s
+  mat_in_ft <- stats::mvfft(mat_in)
   mvfftshift(mat_in_ft)
+}
+
+#' Perform an ifft and ifftshift on a matrix with each column replaced by its 
+#' shifted ifft.
+#' @param mat_in matrix input.
+#' @return output matrix.
+#' @export
+ift_shift_mat <- function(mat_in) {
+  mat_in_shift <- mvifftshift(mat_in)
+  stats::mvfft(mat_in_shift, inverse = TRUE) / NROW(mat_in)
 }
 
 #' Perform a fftshift on a matrix, with each column replaced by its shifted 
@@ -126,7 +133,19 @@ ft_shift_mat <- function(mat_in) {
 #' @export
 mvfftshift <- function(x) {
   m <- NROW(x)
-  p <- ceiling(m/2)
+  p <- ceiling(m / 2)
+  idx <- c((p + 1):m, 1:p)
+  x[idx,,drop = FALSE]
+}
+
+#' Perform an ifftshift on a matrix, with each column replaced by its shifted 
+#' result.
+#' @param x matrix input.
+#' @return output matrix.
+#' @export
+mvifftshift <- function(x) {
+  m <- NROW(x)
+  p <- floor(m / 2)
   idx <- c((p + 1):m, 1:p)
   x[idx,,drop = FALSE]
 }
