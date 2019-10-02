@@ -292,8 +292,8 @@ stackplot <- function(x, ...) {
 #' @export
 stackplot.list <- function(x, ...) {
   # make them all td or fd
-  combined <- append_dummy(x)
-  stackplot(combined, dim = "dummy", ...)
+  combined <- append_scan(x)
+  stackplot(combined, dim = "scan", ...)
 }
 
 #' Stackplot plotting method for objects of class mrs_data.
@@ -420,10 +420,10 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
     plot_data <- t(x$data[1, x_pos, y_pos, z_pos, dyn, , subset])
     yN <- data_dim[5]
     y_title = "Coil"
-  } else if (dim == "dummy") {
+  } else if (dim == "scan") {
     plot_data <- t(x$data[, x_pos, y_pos, z_pos, dyn, coil, subset])
     yN <- data_dim[1]
-    y_title = "Index"
+    y_title = "Scan"
   } else {
     stop("Unrecognised dim value. Should be one of: dyn, x, y, z, coil")
   } 
@@ -500,8 +500,8 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
 #' @export
 plot_bc <- function(orig_data, bc_data, ...) {
   bl <- orig_data - bc_data
-  combined <- append_dummy(orig_data, bl)
-  stackplot(combined, dim = "dummy", ...)
+  combined <- append_scan(orig_data, bl)
+  stackplot(combined, dim = "scan", ...)
 }
 
 #' Plot a slice from a 7 dimensional array.

@@ -204,13 +204,16 @@ array2mrs_data <- function(data_array, fs = def_fs(), ft = def_ft(),
   return(mrs_data)
 }
 
-#' Convert mrs_data object to a matrix, with spectral points in the row dimension
-#' and dynamics in the column dimension.
-#' @param mrs_data MRS data object.
+#' Convert mrs_data object to a matrix, with spectral points in the column
+#' dimension and dynamics in the row dimension.
+#' @param mrs_data MRS data object or list of MRS data objects.
 #' @return MRS data matrix.
 #' @export
 mrs_data2mat <- function(mrs_data) {
-  t(as.matrix(mrs_data$data[1,1,1,1,,1,]))
+  
+  if (class(mrs_data) == "list") mrs_data <- append_dyns(mrs_data)
+  
+  as.matrix(mrs_data$data[1,1,1,1,,1,])
 }
 
 #' Convert mrs_data object to a vector.
@@ -1255,16 +1258,21 @@ append_dyns <- function(...) {
   
   first_dataset <- x[[1]]
   
-  if (is_fd(first_dataset)) {
-    first_dataset <- fd2td(first_dataset)
-  }
-  
   # data needs to be in the same domain
-  for (n in 1:length(x)) {
-    if (is_fd(x[[n]])) {
-        x[[n]] <- fd2td(x[[n]])
+  if (is_fd(first_dataset)) {
+    for (n in 1:length(x)) {
+      if (!is_fd(x[[n]])) {
+        x[[n]] <- td2fd(x[[n]])
+      }
+      x[[n]] <- x[[n]]$data
     }
-    x[[n]] <- x[[n]]$data
+  } else {
+    for (n in 1:length(x)) {
+      if (is_fd(x[[n]])) {
+        x[[n]] <- fd2td(x[[n]])
+      }
+      x[[n]] <- x[[n]]$data
+    }
   }
   
   new_data <- abind::abind(x, along = 5)
@@ -1272,7 +1280,7 @@ append_dyns <- function(...) {
   first_dataset
 }
 
-append_dummy <- function(...) {
+append_scan <- function(...) {
   x <- list(...)
   
   # were the arguments a list already? 

@@ -2,18 +2,18 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{mrs_data2mat}
 \alias{mrs_data2mat}
-\title{Convert mrs_data object to a matrix, with spectral points in the row dimension
-and dynamics in the column dimension.}
+\title{Convert mrs_data object to a matrix, with spectral points in the column
+dimension and dynamics in the row dimension.}
 \usage{
 mrs_data2mat(mrs_data)
 }
 \arguments{
-\item{mrs_data}{MRS data object.}
+\item{mrs_data}{MRS data object or list of MRS data objects.}
 }
 \value{
 MRS data matrix.
 }
 \description{
-Convert mrs_data object to a matrix, with spectral points in the row dimension
-and dynamics in the column dimension.
+Convert mrs_data object to a matrix, with spectral points in the column
+dimension and dynamics in the row dimension.
 }
