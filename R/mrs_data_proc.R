@@ -1788,17 +1788,32 @@ ecc <- function(metab, ref, rev = FALSE) {
 #' @return apodised data.
 #' @export
 apodise_xy <- function(mrs_data) {
-  # TODO check data is 2D in xy dirn and make faster...
+  mrsi_dims <- dim(mrs_data$data)
+  x_dim <- mrsi_dims[2]
+  y_dim <- mrsi_dims[3]
+  N <- mrsi_dims[7]
   
-  # put xy dims into k-space
-  mrs_data <- apply_mrs(mrs_data, 2, ft_shift)
-  mrs_data <- apply_mrs(mrs_data, 3, ft_shift)
-  # apply filter
-  mrs_data <- apply_mrs(mrs_data, 2, hamming_vec)
-  mrs_data <- apply_mrs(mrs_data, 3, hamming_vec)
+  mrs_data <- mrsi2d_img2kspace(mrs_data)
+  
+  mat <- mrs_data$data
+  mat <- drop(mat)
+  dim(mat) <- c(x_dim, y_dim * N)
+  mat <- mat * signal::hamming(x_dim)
+  
+  dim(mat) <- c(x_dim, y_dim, N)
+  mat <- aperm(mat, c(2, 1, 3))
+  dim(mat) <- c(y_dim, x_dim * N)
+  
+  mat <- mat * signal::hamming(y_dim)
+  
+  dim(mat) <- c(y_dim, x_dim, N)
+  mat <- aperm(mat, c(2, 1, 3))
+  dim(mat) <- mrsi_dims
+  mrs_data$data <- mat
+  
   # put xy dims back to space
-  mrs_data <- apply_mrs(mrs_data, 2, ift_shift)
-  apply_mrs(mrs_data, 3, ift_shift)
+  mrs_data <- mrsi2d_kspace2img(mrs_data)
+  return(mrs_data)
 }
 
 #' Zero-fill MRSI data in the k-space x-y direction.
