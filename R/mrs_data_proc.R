@@ -2258,3 +2258,51 @@ calc_spec_diff <- function(mrs_data, ref = NULL, xlim = c(4, 0.5)) {
   res <- mrs_data_crop - ref_crop
   apply_mrs(res, 7, cplx_sum_sq, data_only = TRUE)
 }
+
+#' Transform 2D MRSI data to k-space in the x-y direction.
+#' @param mrs_data 2D MRSI data.
+#' @return k-space data.
+#' @export
+mrsi2d_img2kspace <- function(mrs_data) {
+  mrsi_dims <- dim(mrs_data$data) 
+  x_dim <- mrsi_dims[2]
+  y_dim <- mrsi_dims[3]
+  N <- mrsi_dims[7]
+  mat <- mrs_data$data
+  mat <- drop(mat)
+  dim(mat) <- c(x_dim, y_dim * N)
+  mat <- ft_shift_mat(mat)
+  dim(mat) <- c(x_dim, y_dim, N)
+  mat <- aperm(mat, c(2, 1, 3))
+  dim(mat) <- c(y_dim, x_dim * N)
+  mat <- ft_shift_mat(mat)
+  dim(mat) <- c(y_dim, x_dim, N)
+  mat <- aperm(mat, c(2, 1, 3))
+  dim(mat) <- mrsi_dims
+  mrs_data$data <- mat
+  return(mrs_data)
+}
+
+#' Transform 2D MRSI data from k-space to image space in the x-y direction.
+#' @param mrs_data 2D MRSI data.
+#' @return MRSI data in image space.
+#' @export
+mrsi2d_kspace2img <- function(mrs_data) {
+  mrsi_dims <- dim(mrs_data$data) 
+  x_dim <- mrsi_dims[2]
+  y_dim <- mrsi_dims[3]
+  N <- mrsi_dims[7]
+  mat <- mrs_data$data
+  mat <- drop(mat)
+  dim(mat) <- c(x_dim, y_dim * N)
+  mat <- ift_shift_mat(mat)
+  dim(mat) <- c(x_dim, y_dim, N)
+  mat <- aperm(mat, c(2, 1, 3))
+  dim(mat) <- c(y_dim, x_dim * N)
+  mat <- ift_shift_mat(mat)
+  dim(mat) <- c(y_dim, x_dim, N)
+  mat <- aperm(mat, c(2, 1, 3))
+  dim(mat) <- mrsi_dims
+  mrs_data$data <- mat
+  return(mrs_data)
+}
