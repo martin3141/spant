@@ -496,7 +496,9 @@ lb.mrs_data <- function(x, lb, lg = 1) {
   }
   
   if (lg > 0) {
-    x$data = x$data * exp((lg * lb ^ 2 * pi ^ 2 / 4 / log(0.5)) * (t ^ 2))
+    sign <- ifelse(lb > 0, 1, -1)
+    x$data = x$data * exp((sign * lg * lb ^ 2 * pi ^ 2 / 4 / log(0.5)) * 
+                          (t ^ 2))
   }
   
   return(x)
@@ -2180,6 +2182,9 @@ bc_constant <- function(mrs_data, xlim) {
 #' @export
 norm_mrs <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
                      summation = "l2") {
+  
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
   amps <- int_spec(mrs_data, xlim, scale, mode, summation)
   amps_full <- array(rep(amps, Npts(mrs_data)), dim = dim(mrs_data$data))
   mrs_data$data <- mrs_data$data / amps_full
@@ -2320,4 +2325,28 @@ mrsi2d_kspace2img <- function(mrs_data) {
   dim(mat) <- mrsi_dims
   mrs_data$data <- mat
   return(mrs_data)
+}
+
+#' Apply line-broadening to an mrs_data object to achieve a specified linewidth.
+#' @param mrs_data data in.
+#' @param lw target linewidth in units of ppm.
+#' @param xlim region to search for peaks to obtain a linewidth estimate.
+#' @export
+set_lw <- function(mrs_data, lw, xlim = c(4, 0.5)) {
+  
+  # measure current lw and check it is narrower than requested
+  init_lw <- peak_info(mrs_data, xlim)$fwhm_ppm[1]
+  
+  if (init_lw > lw) stop("Error, target linewidth is too narrow.")
+  
+  res <- stats::optim(0, lw_obj_fn, NULL, mrs_data, lw, lower = 0, upper = 50,
+         method = "Brent")
+  
+  return(lb(mrs_data, res$par[1]))
+}
+
+lw_obj_fn <- function(lb, mrs_data, lw) {
+  mrs_data <- lb(mrs_data, lb)
+  new_lw <- peak_info(mrs_data)$fwhm_ppm[1]
+  Mod(new_lw - lw)
 }
