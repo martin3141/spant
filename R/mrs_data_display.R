@@ -191,7 +191,7 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
   x_scale <- ppm(x)
   
   if (is.null(xlim)) {
-    xlim <- c(x_scale[1], x_scale[N(x)])
+    xlim <- c(x_scale[1], x_scale[Npts(x)])
   }
   
   if (is.null(y_ticks)) {
