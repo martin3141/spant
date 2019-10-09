@@ -1,16 +1,22 @@
 read_rda <- function(fname) {
-  con = file(fname, "r")
-  n = 1
+  
+  # find out where the raw data points start by looking for
+  # ">>> End of header <<<"
+  con <- file(fname, "r")
+  n <- 1
+  # read the first line to find an offset as Windows and Linux report
+  # different positions otherwise
   while (TRUE) {
     line = readLines(con, n = 1)
     if (startsWith(line, ">>> End of header <<<")) {
-      data_pos <- seek(con)
+      data_pos <- seek(con) - start_pos + 109
       break
     }
+    if (n == 1) start_pos <- seek(con)
     n = n + 1
   }
   
-  # go back to the start
+  # go back to the start and read in the data parameters
   seek(con, 0)
   txt <- utils::read.delim(con, sep = ":", nrows = (n - 2), header = FALSE,
                     strip.white = TRUE, stringsAsFactors = FALSE,
