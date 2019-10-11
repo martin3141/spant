@@ -5,6 +5,7 @@
 * Added re_weighting function to apply a resolution enhancement weighting to the
 FID.
 * Performance improvement for apodise_xy function.
+* sd function now works for mrs_data.
 
 # spant 0.15.0
 * Bug fix for using auto_phase function with a single spectrum.

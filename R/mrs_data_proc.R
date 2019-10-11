@@ -1380,6 +1380,30 @@ mean.mrs_data <- function(x, ...) {
   x
 }
 
+#' Calculate the standard deviation spectrum from an mrs_data object.
+#' @param x object of class mrs_data.
+#' @param na.rm remove NA values.
+#' @return sd mrs_data object.
+#' @export
+sd.mrs_data <- function(x, na.rm = FALSE) {
+  data_pts <- x$data
+  data_N <- Npts(x)
+  dim(data_pts) <- c(length(data_pts) / data_N, data_N)
+  x$data <- colSdColMeans(data_pts, na.rm)
+  dim(x$data) <- c(1, 1, 1, 1, 1, 1, data_N)
+  x
+}
+
+## make an S3 generic for sd
+#' @inherit stats::sd
+#' @export
+sd <- function(x, na.rm) UseMethod("sd")
+
+## take the usual definition of sd,
+## and set it to be the default method
+#' @export
+sd.default <- stats::sd
+
 #' Collapse MRS data by concatenating spectra along the dynamic dimension.
 #' @param x data object to be collapsed (mrs_data or fit_result object).
 #' @return collapsed data with spectra or fits concatenated along the dynamic

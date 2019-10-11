@@ -411,3 +411,15 @@ magrittr::`%>%`
 #' @importFrom magrittr %$%
 #' @export
 magrittr::`%$%`
+
+# prob not as fast as functions in matrixStats but better than
+# apply
+colSdColMeans <- function(x, na.rm) {
+  if (na.rm) {
+    n <- colSums(!is.na(x)) # thanks @flodel
+  } else {
+    n <- nrow(x)
+  }
+  colVar <- colMeans(x * x, na.rm = na.rm) - (colMeans(x, na.rm = na.rm)) ^ 2
+  return(sqrt(colVar * n / (n - 1)))
+}
