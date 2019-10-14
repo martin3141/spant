@@ -127,13 +127,14 @@ get_mrsi_voi <- function(mrs_data, target_mri) {
   
   if (missing(target_mri)) {
     RNifti::orientation(voi) <- "RAS"
+    voi <- voi[]
   } else {
     voi <- resample_voi(voi, target_mri)
   }
-  voi  
+  voi
 }
 
-#' Resample a VOI to match a target image space using nearest neighbor
+#' Resample a VOI to match a target image space using nearest-neighbor
 #' interpolation.
 #' @param voi volume data as a nifti object.
 #' @param mri image data as a nifti object.
