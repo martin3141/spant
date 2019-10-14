@@ -126,21 +126,32 @@ get_mrsi_voi <- function(mrs_data, target_mri) {
   voi <- RNifti::`sform<-`(voi, structure(affine, code = 2L))
   
   if (missing(target_mri)) {
-    warning("Target MRI data has not been specified.")  
+    RNifti::orientation(voi) <- "RAS"
   } else {
     voi <- resample_voi(voi, target_mri)
   }
   voi  
 }
 
-#' Resample a VOI to match a target image space.
+#' Resample a VOI to match a target image space using nearest neighbor
+#' interpolation.
 #' @param voi volume data as a nifti object.
 #' @param mri image data as a nifti object.
 #' @return volume data as a nifti object.
 #' @export
 resample_voi <- function(voi, mri) {
-  reg_res <- RNiftyReg::niftyreg.linear(voi, mri, nLevels = 0, 
-                                        interpolation = 0, init = diag(4))$image
+  RNiftyReg::niftyreg.linear(voi, mri, nLevels = 0, interpolation = 0,
+                             init = diag(4))$image
+}
+
+#' Resample an image to match a target image space.
+#' @param source image data as a nifti object.
+#' @param target image data as a nifti object.
+#' @return resampled image data as a nifti object.
+#' @export
+resample_img <- function(source, target) {
+  RNiftyReg::niftyreg.linear(source, target, nLevels = 0,
+                                        init = diag(4))$image
 }
 
 #' Plot a volume as an image overlay.
