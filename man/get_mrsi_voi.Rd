@@ -4,12 +4,14 @@
 \alias{get_mrsi_voi}
 \title{Generate a MRSI VOI from an \code{mrs_data} object.}
 \usage{
-get_mrsi_voi(mrs_data, target_mri)
+get_mrsi_voi(mrs_data, target_mri = NULL, map = NULL)
 }
 \arguments{
 \item{mrs_data}{MRS data.}
 
 \item{target_mri}{optional image data to match the intended volume space.}
+
+\item{map}{optional voi intensity map.}
 }
 \value{
 volume data as a nifti object.

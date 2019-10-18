@@ -160,8 +160,7 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
 #' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
 #' @param mode representation of the complex numbers to be plotted, can be one
 #' of: "re", "im", "mod" or "arg".
-#' @param col Colour map to use, defaults to viridis if the package is 
-#' available.
+#' @param col Colour map to use, defaults to viridis.
 #' @param dim the dimension to display on the y-axis, can be one of: "dyn", "x",
 #' "y", "z" or "coil".
 #' @param x_pos the x index to plot.
@@ -254,15 +253,7 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
     stop("Invalid mode option, should be one of : 're', 'im', 'mod' or 'arg'") 
   }
   
-  if (is.null(col)) {
-    if (is.installed("viridis")) {
-      col <- viridis::viridis(64)
-    } else if (is.installed("viridisLite")) {
-      col <- viridisLite::viridis(64)
-    } else {
-     col <- grDevices::heat.colors(64)
-    }
-  }
+  col <- viridisLite::viridis(128)
   
   graphics::image(x_scale[subset][length(subset):1], (1:yN),
                   plot_data[length(subset):1,], xlim = xlim,
@@ -547,16 +538,16 @@ plot_slice_map <- function(data, zlim = NULL, mask_map = NULL,
   if (!is.null(zlim)) {
     data <- crop_range(data, zlim[1], zlim[2])
     breaks <- seq(from = zlim[1], to = zlim[2], length.out = 129)
-    fields::image.plot(data, col = viridis::viridis(128), useRaster = T,
+    fields::image.plot(data, col = viridisLite::viridis(128), useRaster = T,
                        asp = asp, axes = F, breaks = breaks,
                        horizontal = horizontal)
     
-    #image(data, col=viridis::viridis(128), useRaster = T, asp = 1, axes = F,
+    #image(data, col=viridisLite::viridis(128), useRaster = T, asp = 1, axes = F,
     #      breaks = breaks)
   } else {
-    fields::image.plot(data, col = viridis::viridis(128), useRaster = T,
+    fields::image.plot(data, col = viridisLite::viridis(128), useRaster = T,
                        asp = asp, axes = F, horizontal = horizontal)
     
-    #image(data, col = viridis::viridis(128), useRaster = T, asp = 1, axes = F)
+    #image(data, col = viridis::viridisLite(128), useRaster = T, asp = 1, axes = F)
   }
 }

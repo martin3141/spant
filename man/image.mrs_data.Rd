@@ -17,8 +17,7 @@
 \item{mode}{representation of the complex numbers to be plotted, can be one
 of: "re", "im", "mod" or "arg".}
 
-\item{col}{Colour map to use, defaults to viridis if the package is
-available.}
+\item{col}{Colour map to use, defaults to viridis.}
 
 \item{dim}{the dimension to display on the y-axis, can be one of: "dyn", "x",
 "y", "z" or "coil".}

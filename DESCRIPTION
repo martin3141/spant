@@ -35,18 +35,18 @@ Imports:
     readr,
     magrittr,
     ptw,
-    tibble
-Suggests:
-    oro.nifti,
-    MASS,
-    fastICA,
-    fields,
-    mmand,
     viridisLite,
-    viridis,
+    mmand,
     RNifti,
     RNiftyReg,
+    fields,
+    MASS,
+    shiny,
+    miniUI,
+    tibble
+Suggests:
     neurobase,
+    oro.nifti,
     knitr,
     rmarkdown,
     testthat
