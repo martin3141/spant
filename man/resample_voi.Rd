@@ -2,7 +2,7 @@
 % Please edit documentation in R/image_reg.R
 \name{resample_voi}
 \alias{resample_voi}
-\title{Resample a VOI to match a target image space using nearest neighbor
+\title{Resample a VOI to match a target image space using nearest-neighbor
 interpolation.}
 \usage{
 resample_voi(voi, mri)
@@ -16,6 +16,6 @@ resample_voi(voi, mri)
 volume data as a nifti object.
 }
 \description{
-Resample a VOI to match a target image space using nearest neighbor
+Resample a VOI to match a target image space using nearest-neighbor
 interpolation.
 }

@@ -151,8 +151,9 @@ resample_voi <- function(voi, mri) {
 #' @return resampled image data as a nifti object.
 #' @export
 resample_img <- function(source, target) {
-  RNiftyReg::niftyreg.linear(source, target, nLevels = 0,
-                                        init = diag(4))$image
+  res <- RNiftyReg::niftyreg.linear(source, target, nLevels = 0,
+                                    init = diag(4))$image
+  return(res)
 }
 
 #' Plot a volume as an image overlay.
@@ -252,23 +253,23 @@ get_voi_seg_psf <- function(psf, mri_seg) {
 #' @export
 spm_pve2categorical <- function(fname) {
   # check the file name makes sense
-  if (substr(basename(fname),1,1) != "c") stop("Error, filename does not begin with 'c'.")
+  if (substr(basename(fname), 1, 1) != "c") stop("Error, filename does not begin with 'c'.")
    
-  if (!(substr(basename(fname),2,2) %in% c("1","2","3","4","5","6"))) {
+  if (!(substr(basename(fname), 2, 2) %in% c("1","2","3","4","5","6"))) {
     stop("Error, filename does not follow expected pattern.")
   }
   
   # check all files are present and correct
   for (n in 1:6) {
     base <- basename(fname)
-    substr(base,2,2) <- as.character(n)
+    substr(base,2, 2) <- as.character(n)
     fname <- file.path(dirname(fname), base)
     if (!file.exists(fname)) stop(paste("Error, file does not exist :",fname))
   }
   
   cat("Reading segmentation images...\n")
   # read the first file 
-  substr(base,2,2) <- "1"
+  substr(base,2, 2) <- "1"
   fname <- file.path(dirname(fname), base)
   x <- RNifti::readNifti(fname)
   
@@ -363,4 +364,27 @@ nifti_flip_lr <- function(x) {
   lr_dim <- dim(x)[1]
   x[] <- x[lr_dim:1,,]
   return(x)
+}
+
+#' Reslice a nifti object to match the orientation of mrs data.
+#' @param mri nifti object to be resliced.
+#' @param mrs mrs_data object for the target orientation.
+#' @return resliced imaging data.
+#' @export
+reslice_to_mrs <- function(mri, mrs) {
+  mrs_affine <- RNifti::xform(get_mrsi_voi(mrs))
+  dummy <- mri
+  new_affine <- RNifti::xform(mri)
+  new_affine[1:3, 1:3] <- mrs_affine[1:3, 1:3]
+  # find the central point in the mri
+  centre <- new_affine[1:3, 4] + RNifti::xform(mri)[1:3, 1:3] %*% 
+                                 (dim(mri)[1:3] * RNifti::pixdim(mri)[1:3]) / 2
+  
+  new_pos <- centre - new_affine[1:3, 1:3] %*% (dim(mri)[1:3] *
+                                                RNifti::pixdim(mri)[1:3]) / 2
+  
+  new_affine[1:3, 4] <- new_pos
+  #RNifti::sform(dummy) <- new_affine
+  dummy <- RNifti::`sform<-`(dummy, structure(new_affine, code = 2L))
+  resample_img(mri, dummy)
 }
