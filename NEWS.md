@@ -1,6 +1,6 @@
 # spant 0.16.0
 * SNR is now defined as the max data point divided by the standard deviation of
-to noise (n.b. factor of two has been removed in-line with upcoming terminology
+the noise (n.b. factor of two has been removed in-line with upcoming terminology
 paper).
 * Default rats method improved to work with multidimensional datasets.
 * Added norm_mrs function to normalise the intenisty of spectral data.
