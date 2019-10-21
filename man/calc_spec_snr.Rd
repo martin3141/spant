@@ -28,8 +28,8 @@ signal value.}
 an array of SNR values.
 }
 \description{
-SNR is defined as the maximum signal value divided by 2 times the standard
-deviation of the noise.
+SNR is defined as the maximum signal value divided by the standard deviation
+of the noise.
 }
 \details{
 The mean noise value is subtracted from the maximum signal value to reduce DC

@@ -2055,8 +2055,8 @@ calc_coil_noise_sd <- function(noise_data) {
 
 #' Calculate the spectral SNR.
 #' 
-#' SNR is defined as the maximum signal value divided by 2 times the standard 
-#' deviation of the noise.
+#' SNR is defined as the maximum signal value divided by the standard deviation 
+#' of the noise.
 #' 
 #' The mean noise value is subtracted from the maximum signal value to reduce DC
 #' offset bias. A polynomial detrending fit (second order by default) is applied 
@@ -2091,7 +2091,7 @@ calc_spec_snr <- function(mrs_data, sig_region = c(4,0.5),
   noise_sd <- est_noise_sd(noise_data, offset = 0, n = Npts(noise_data), 
                            p_order = p_order)
   
-  snr <- max_sig / (2 * noise_sd)
+  snr <- max_sig / noise_sd
   
   # drop the last dimension for plotting functions
   snr <- abind::adrop(snr, 7)
