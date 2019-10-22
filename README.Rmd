@@ -86,7 +86,7 @@ basis <- sim_basis_1h_brain_press(mrs_proc)
 print(basis)
 
 # plot basis signals
-stackplot(basis, xlim = c(4, 0.5), labels = basis$names)
+stackplot(basis, xlim = c(4, 0.5), labels = basis$names, y_offset = 5)
 ```
 
 ```{r fitting, message = FALSE}
