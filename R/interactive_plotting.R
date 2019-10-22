@@ -186,6 +186,17 @@ plotTk <- function() {
   }
 }
 
+#' Diaply an orthographic projection plot of a nifti object.
+#' @param underlay underlay image to be shown in grayscale.
+#' @param overlay optional overlay image.
+#' @param xyz x, y, z slice coordinates to display.
+#' @param zlim underlay intensity limits.
+#' @param zlim_ol overlay intensity limits.
+#' @param alpha transparency of overlay.
+#' @param col_ol color palette of overlay.
+#' @param orient_lab display orientation labels (default TRUE).
+#' @param rescale rescale factor for the underlay and overlay images.
+#' @param crosshairs display the crosshairs (default TRUE).
 #' @export
 ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
                    zlim_ol = NULL, alpha = 1, col_ol = viridisLite::viridis(64),
@@ -309,6 +320,14 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
   }
 }
 
+#' Diaply an interactive orthographic projection plot of a nifti object.
+#' @param underlay underlay image to be shown in grayscale.
+#' @param overlay optional overlay image.
+#' @param xyz x, y, z slice coordinates to display.
+#' @param zlim underlay intensity limits.
+#' @param zlim_ol overlay intensity limits.
+#' @param alpha transparency of overlay.
+#' @param ... other options to be passed to the ortho3 function.
 #' @export
 ortho3_int <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
                        zlim_ol = NULL, alpha = 1, ...) {
