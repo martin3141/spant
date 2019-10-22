@@ -2282,6 +2282,30 @@ bc_als_vec <- function(vec, lambda, p) {
   ptw::baseline.corr(Re(vec), lambda = lambda, p = p) 
 }
 
+#' Back extrapolate time-domain points using the Burg autoregressive model
+#' @param mrs_data mrs_data object.
+#' @param n_pts number of points to extrapolate.
+#' @return back extrapolated data.
+#' @export
+back_extrap <- function(mrs_data, n_pts) {
+  
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+  
+  Np <- Npts(mrs_data) 
+  mrs_data$data <- mrs_data$data[,,,,,,Np:1, drop = FALSE]
+  mrs_data <- apply_mrs(mrs_data, 7, back_extrap_vec, n_pts)
+  mrs_data$data <- mrs_data$data[,,,,,,(Np + n_pts):1, drop = FALSE]
+  mrs_data
+}
+
+back_extrap_vec <- function(vec, n_pts) {
+  new_pts_re <- as.numeric(stats::predict(stats::ar.burg(Re(vec)),
+                                          se.fit = FALSE, n.ahead = n_pts))
+  new_pts_im <- as.numeric(stats::predict(stats::ar.burg(Im(vec)),
+                                          se.fit = FALSE, n.ahead = n_pts))
+  c(vec, new_pts_re + new_pts_im * 1i)
+}
+
 #' Calculate the sum of squares differences between two mrs_data objects.
 #' @param mrs_data mrs_data oject.
 #' @param ref reference mrs_data object to calculate differences.
