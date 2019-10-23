@@ -213,6 +213,7 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
   mrs_data
 }
 
+#' @export
 read_siemens_txt_hdr <- function(fname, version) {
   con <- file(fname, 'rb', encoding = "UTF-8")
   while (TRUE) {
@@ -231,8 +232,9 @@ read_siemens_txt_hdr <- function(fname, version) {
     }
   }
   
-  vars <- vector(mode = "list", length = 5)
-  names(vars) <- c("averages", "fs", "ft", "te", "N")
+  vars <- vector(mode = "list", length = 11)
+  names(vars) <- c("averages", "fs", "ft", "te", "N", "x_pts", "y_pts",
+                   "z_pts", "z_dim", "x_dim", "y_dim")
   
   while (TRUE) {
     line <- readLines(con, n = 1, skipNul = TRUE)
@@ -248,6 +250,18 @@ read_siemens_txt_hdr <- function(fname, version) {
       vars$te <- (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
     } else if (startsWith(line, "sSpecPara.lVectorSize")) {
       vars$N <- as.integer(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSpecPara.lFinalMatrixSizePhase")) {
+      vars$x_pts <- as.integer(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSpecPara.lFinalMatrixSizeRead")) {
+      vars$y_pts <- as.integer(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSpecPara.lFinalMatrixSizeSlice")) {
+      vars$z_pts <- as.integer(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSliceArray.asSlice[0].dThickness")) {
+      vars$z_dim <- as.integer(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSliceArray.asSlice[0].dPhaseFOV")) {
+      vars$x_dim <- as.integer(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSliceArray.asSlice[0].dReadoutFOV")) {
+      vars$y_dim <- as.integer(strsplit(line, "=")[[1]][2])
     }
   }
   close(con)
