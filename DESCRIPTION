@@ -43,6 +43,7 @@ Imports:
     MASS,
     shiny,
     miniUI,
+    oro.dicom,
     tibble
 Suggests:
     neurobase,

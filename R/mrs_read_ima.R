@@ -4,12 +4,17 @@ read_ima <- function(fname) {
   # calculate expected size of data in bytes - assuming complex 4byte floats
   data_size <- vars$x_pts * vars$y_pts * vars$z_pts * vars$N * 4 * 2
   
+  dcm_info <- oro.dicom::readDICOM(fname, pixelData = FALSE)$hdr
+  dcm_info <- as.data.frame(dcm_info)
+  padding <- 0
+  if (dcm_info[nrow(dcm_info),3] == "DataSetTrailingPadding") {
+    padding <- as.numeric(dcm_info[nrow(dcm_info),5]) + 12
+  }
+  
   con <- file(fname, 'rb')
   # assume data points are at the end of the file 
-  #seek(con, -data_size-180, origin = "end")
-  seek(con, -data_size-132, origin = "end")
+  seek(con, -data_size - padding, origin = "end")
   #print(seek(con, where = NA))
-  #seek(con, 16384*8)
   raw_pts <- readBin(con, "numeric", size = 4L, n = (vars$x_pts * vars$y_pts * 
                                                      vars$z_pts * vars$N * 2),
                      endian = "little")
