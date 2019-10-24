@@ -448,5 +448,5 @@ ortho3_int <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
     shiny::observeEvent(input$done, shiny::stopApp())
   }
   
-  shiny::runGadget(ui, server, viewer = paneViewer())
+  shiny::runGadget(ui, server, viewer = shiny::paneViewer())
 }

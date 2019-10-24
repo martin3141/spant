@@ -213,8 +213,12 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
   mrs_data
 }
 
+#' Read the text format header found in Siemens IMA and TWIW data files.
+#' @param fname file name to read.
+#' @param version software version, can be "vb" or "vd".
+#' @return a list of parameter values
 #' @export
-read_siemens_txt_hdr <- function(fname, version) {
+read_siemens_txt_hdr <- function(fname, version = "vd") {
   con <- file(fname, 'rb', encoding = "UTF-8")
   while (TRUE) {
     line <- readLines(con, n = 1 ,skipNul = TRUE)
@@ -232,9 +236,10 @@ read_siemens_txt_hdr <- function(fname, version) {
     }
   }
   
-  vars <- vector(mode = "list", length = 11)
+  vars <- vector(mode = "list", length = 18)
   names(vars) <- c("averages", "fs", "ft", "te", "N", "x_pts", "y_pts",
-                   "z_pts", "z_dim", "x_dim", "y_dim")
+                   "z_pts", "z_dim", "x_dim", "y_dim", "ip_rot", "pos_sag",
+                   "pos_cor", "pos_tra", "norm_sag", "norm_cor", "norm_tra")
   
   while (TRUE) {
     line <- readLines(con, n = 1, skipNul = TRUE)
@@ -257,11 +262,25 @@ read_siemens_txt_hdr <- function(fname, version) {
     } else if (startsWith(line, "sSpecPara.lFinalMatrixSizeSlice")) {
       vars$z_pts <- as.integer(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSliceArray.asSlice[0].dThickness")) {
-      vars$z_dim <- as.integer(strsplit(line, "=")[[1]][2])
+      vars$z_dim <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSliceArray.asSlice[0].dPhaseFOV")) {
-      vars$x_dim <- as.integer(strsplit(line, "=")[[1]][2])
+      vars$x_dim <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSliceArray.asSlice[0].dReadoutFOV")) {
-      vars$y_dim <- as.integer(strsplit(line, "=")[[1]][2])
+      vars$y_dim <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSliceArray.asSlice[0].dInPlaneRot")) {
+      vars$ip_rot <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSliceArray.asSlice[0].sPosition.dSag")) {
+      vars$pos_sag <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSliceArray.asSlice[0].sPosition.dCor")) {
+      vars$pos_cor <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSliceArray.asSlice[0].sPosition.dTra")) {
+      vars$pos_tra <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSliceArray.asSlice[0].sNormal.dSag")) {
+      vars$norm_sag <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSliceArray.asSlice[0].sNormal.dCor")) {
+      vars$norm_cor <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSliceArray.asSlice[0].sNormal.dTra")) {
+      vars$norm_tra <- as.numeric(strsplit(line, "=")[[1]][2])
     }
   }
   close(con)
