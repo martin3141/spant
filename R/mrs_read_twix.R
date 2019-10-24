@@ -236,10 +236,24 @@ read_siemens_txt_hdr <- function(fname, version = "vd") {
     }
   }
   
-  vars <- vector(mode = "list", length = 18)
-  names(vars) <- c("averages", "fs", "ft", "te", "N", "x_pts", "y_pts",
-                   "z_pts", "z_dim", "x_dim", "y_dim", "ip_rot", "pos_sag",
-                   "pos_cor", "pos_tra", "norm_sag", "norm_cor", "norm_tra")
+  vars <- list(averages = NA,
+               fs = NA,
+               ft = NA,
+               te = NA,
+               N = NA,
+               x_pts = NA,
+               y_pts = NA,
+               z_pts = NA,
+               z_dim = NA,
+               x_dim = NA,
+               y_dim = NA,
+               ip_rot = 0,
+               pos_sag = 0,
+               pos_cor = 0,
+               pos_tra = 0,
+               norm_sag = 0,
+               norm_cor = 0,
+               norm_tra = 0)
   
   while (TRUE) {
     line <- readLines(con, n = 1, skipNul = TRUE)
