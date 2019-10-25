@@ -25,7 +25,7 @@ read_mrs <- function(fname, format, ft = NULL, fs = NULL, ref = NULL,
   } else if (format == "rda") {
     return(read_rda(fname))
   } else if (format == "ima") {
-    return(read_ima(fname))
+    return(read_ima(fname, verbose))
   } else if (format == "twix") {
     return(read_twix(fname, verbose, full_data))
   } else if (format == "pfile") {

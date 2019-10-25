@@ -1247,6 +1247,41 @@ get_metab <- function(mrs_data) {
   mrs_data
 }
 
+#' Append MRS data across the coil dimension, assumes they matched across the
+#' other dimensions.
+#' @param ... MRS data objects as arguments, or a list of MRS data objects.
+#' @return a single MRS data object with the input objects concatenated together.
+#' @export
+append_coils <- function(...) {
+  x <- list(...)
+  
+  # were the arguments a list already? 
+  if (depth(x) == 3) x <- x[[1]]
+  
+  first_dataset <- x[[1]]
+  
+  # data needs to be in the same domain
+  if (is_fd(first_dataset)) {
+    for (n in 1:length(x)) {
+      if (!is_fd(x[[n]])) {
+        x[[n]] <- td2fd(x[[n]])
+      }
+      x[[n]] <- x[[n]]$data
+    }
+  } else {
+    for (n in 1:length(x)) {
+      if (is_fd(x[[n]])) {
+        x[[n]] <- fd2td(x[[n]])
+      }
+      x[[n]] <- x[[n]]$data
+    }
+  }
+  
+  new_data <- abind::abind(x, along = 6)
+  first_dataset$data <- unname(new_data)
+  first_dataset
+}
+
 #' Append MRS data across the dynamic dimension, assumes they matched across the
 #' other dimensions.
 #' @param ... MRS data objects as arguments, or a list of MRS data objects.

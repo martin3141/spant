@@ -36,7 +36,7 @@ plot_slice_fit_inter <- function(fit_res, map = NULL, slice = 1, zlim = NULL,
 plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
                                  zlim = NULL, mask_map = NULL, denom = NULL, 
                                  mask_cutoff = 20, interp = 1, mode = "re",
-                                 y_scale = FALSE, ylim = NULL) {
+                                 y_scale = FALSE, ylim = NULL, coil = 1) {
   
   # kill any existing plots
   if (exists("plot_env")) {
@@ -62,6 +62,7 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
 
   plot_env$xlim <- xlim
   plot_env$slice <- slice
+  plot_env$coil <- coil
   plot_env$mask_map <- mask_map
   plot_env$zlim <- zlim
   plot_env$denom <- denom
@@ -162,10 +163,10 @@ plotTk <- function() {
                  mask_map = plot_env$mask_map, zlim = plot_env$zlim,
                  denom = plot_env$denom, mask_cutoff = plot_env$mask_cutoff, 
                  interp = plot_env$interp,
-                 horizontal = FALSE)
+                 horizontal = FALSE, coil = plot_env$coil)
 
   graphics::points((plot_env$xPlotCoord), (plot_env$yPlotCoord), col = "white",
-                   cex = 4, lw = 3)
+                    cex = 4, lw = 3)
 
   plot_env$parPlotSize    <- graphics::par("plt")
   plot_env$parPlotSize[1] <- plot_env$parPlotSize[1] / 2 # correction for subplt
@@ -179,10 +180,11 @@ plotTk <- function() {
     graphics::plot(plot_env$mrs_data, x_pos = plot_env$x, y_pos = plot_env$y,
                    z_pos = plot_env$slice, xlim = plot_env$xlim,
                    mode = plot_env$mode, y_scale = plot_env$y_scale,
-                   ylim = plot_env$ylim)
+                   ylim = plot_env$ylim, coil = plot_env$coil)
   } else {
     graphics::plot(plot_env$mrs_data, x_pos = plot_env$x, y_pos = plot_env$y,
-                   z_pos = plot_env$slice, xlim = plot_env$xlim)
+                   z_pos = plot_env$slice, xlim = plot_env$xlim,
+                   coil = plot_env$coil)
   }
 }
 

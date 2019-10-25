@@ -1,4 +1,6 @@
-read_ima <- function(fname) {
+read_ima <- function(fname, verbose = FALSE) {
+  if (verbose) print(fname)
+  
   vars <- read_siemens_txt_hdr(fname, "vd")
   
   # calculate expected size of data in bytes - assuming complex 4byte floats
@@ -41,11 +43,11 @@ read_ima <- function(fname) {
   ima_pos  <- c(ima_vars$pos_sag,  ima_vars$pos_cor,  ima_vars$pos_tra)
   rotation <- ima_vars$ip_rot
 
-  x_dirn  <- c(1, 0, 0)
-  x_new   <- rotate_vec(x_dirn, ima_norm, -rotation)
-  col_vec <- cross(ima_norm, x_new)
-  row_vec <- cross(col_vec, ima_norm)
-  pos_vec <- ima_pos - row_vec * ( ima_vars$x_pts / 2 - 0.5) * ima_vars$x_dim /
+  x_dirn   <- c(1, 0, 0)
+  x_new    <- rotate_vec(x_dirn, ima_norm, -rotation)
+  col_vec  <- cross(ima_norm, x_new)
+  row_vec  <- cross(col_vec, ima_norm)
+  pos_vec  <- ima_pos - row_vec * ( ima_vars$x_pts / 2 - 0.5) * ima_vars$x_dim /
                      ima_vars$x_pts - col_vec * ( ima_vars$y_pts / 2 - 0.5) *
                      ima_vars$y_dim / ima_vars$y_pts 
   
@@ -56,4 +58,14 @@ read_ima <- function(fname) {
   
   class(mrs_data) <- "mrs_data"
   mrs_data
+}
+
+#' @export
+read_ima_coil_dir <- function(dir) {
+  files <- list.files(dir, full.names = TRUE)
+  warning("Coil ordering is based on file name only.")
+  files <- sort(files)
+  mrs_list <- lapply(files, read_mrs, format = "ima", verbose = TRUE)
+  mrs_data <- append_coils(mrs_list)
+  return(mrs_data)
 }
