@@ -59,6 +59,9 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
                           xaxis_lab = NULL, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
+ 
+  # remove data we don't need 
+  x <- get_voxel(x, x_pos, y_pos, z_pos, dyn, coil) 
   
   # convert to the correct domain for plotting
   if (fd & !is_fd(x)) {
@@ -108,7 +111,8 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
   
   #graphics::par("xaxs" = "i", "yaxs"="i") # tight axes limits
   graphics::par("xaxs" = "i") # tight axes limits
-  plot_data <- x$data[1, x_pos, y_pos, z_pos, dyn, coil,]
+  
+  plot_data <- x$data[1, 1, 1, 1, 1, 1,]
   
   if (mode == "re") {
     plot_data <- Re(plot_data)
