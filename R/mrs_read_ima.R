@@ -23,7 +23,9 @@ read_ima <- function(fname) {
   # make complex
   data <- raw_pts[c(TRUE, FALSE)] + 1i * raw_pts[c(FALSE, TRUE)]
   
-  data <- array(data, dim = c(vars$N, 1, 1, vars$z_pts, vars$y_pts, vars$x_pts, 1))
+  data <- array(data, dim = c(vars$N, 1, 1, vars$z_pts, vars$y_pts, vars$x_pts, 
+                              1))
+  
   data <- aperm(data, c(7,6,5,4,3,2,1))
    
   res <- c(NA, vars$x_dim / vars$x_pts, vars$y_dim / vars$y_pts,
