@@ -427,3 +427,32 @@ colSdColMeans <- function(x, na.rm) {
   colVar <- colMeans(x * x, na.rm = na.rm) - (colMeans(x, na.rm = na.rm)) ^ 2
   return(sqrt(colVar * n / (n - 1)))
 }
+
+# Rotation matrix from axis and angle
+# https://en.wikipedia.org/wiki/Rotation_matrix#cite_note-5
+rotate_vec <- function(vec_in, ax, theta) {
+  ct <- cos(theta) 
+  st <- sin(theta) 
+  rotate_mat <- matrix(NA, 3, 3)
+  rotate_mat[1,1] = ct + (ax[1] ^ 2) * (1 - ct)
+  rotate_mat[1,2] = ax[1] * ax[2] * (1 - ct) - ax[3] * st
+  rotate_mat[1,3] = ax[1] * ax[3] * (1 - ct) + ax[2] * st
+  rotate_mat[2,1] = ax[2] * ax[1] * (1 - ct) + ax[3] * st
+  rotate_mat[2,2] = ct + (ax[2] ^ 2) * (1 - ct)
+  rotate_mat[2,3] = ax[2] * ax[3] * (1 - ct) - ax[1] * st
+  rotate_mat[3,1] = ax[3] * ax[1] * (1 - ct) - ax[2] * st
+  rotate_mat[3,2] = ax[3] * ax[2] * (1 - ct) + ax[1] * st
+  rotate_mat[3,3] = ct + (ax[3] ^ 2) * (1 - ct)
+  vec_out <- rotate_mat %*% vec_in
+  vec_out <- vec_out / (sum(vec_out ^ 2) ^ 0.5)
+  vec_out
+}
+
+cross <- function(a, b) {
+  vec_out <- c(NA, NA, NA)
+  vec_out[1] <- a[2] * b[3] - a[3] * b[2]
+  vec_out[2] <- a[3] * b[1] - a[1] * b[3]
+  vec_out[3] <- a[1] * b[2] - a[2] * b[1]
+  vec_out <- vec_out / (sum(vec_out ^ 2) ^ 0.5)
+  vec_out
+}

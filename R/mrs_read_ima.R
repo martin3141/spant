@@ -34,9 +34,23 @@ read_ima <- function(fname) {
 
   ref <- def_acq_paras()$ref
   
+  
+  ima_norm <- c(ima_vars$norm_sag, ima_vars$norm_cor, ima_vars$norm_tra)
+  ima_pos  <- c(ima_vars$pos_sag,  ima_vars$pos_cor,  ima_vars$pos_tra)
+  rotation <- ima_vars$ip_rot
+
+  x_dirn  <- c(1, 0, 0)
+  x_new   <- rotate_vec(x_dirn, ima_norm, -rotation)
+  col_vec <- cross(ima_norm, x_new)
+  row_vec <- cross(col_vec, ima_norm)
+  pos_vec <- ima_pos - row_vec * ( ima_vars$x_pts / 2 - 0.5) * ima_vars$x_dim /
+                     ima_vars$x_pts - col_vec * ( ima_vars$y_pts / 2 - 0.5) *
+                     ima_vars$y_dim / ima_vars$y_pts 
+  
   mrs_data <- list(ft = vars$ft, data = data, resolution = res,
-                   te = vars$te, ref = ref, row_vec = NA, col_vec = NA,
-                   pos_vec = NA, freq_domain = freq_domain)
+                   te = vars$te, ref = ref, row_vec = row_vec,
+                   col_vec = col_vec, pos_vec = pos_vec,
+                   freq_domain = freq_domain)
   
   class(mrs_data) <- "mrs_data"
   mrs_data
