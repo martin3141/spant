@@ -13,6 +13,9 @@ set_lw(mrs_data, lw, xlim = c(4, 0.5))
 
 \item{xlim}{region to search for peaks to obtain a linewidth estimate.}
 }
+\value{
+line-broadened data.
+}
 \description{
 Apply line-broadening to an mrs_data object to achieve a specified linewidth.
 }

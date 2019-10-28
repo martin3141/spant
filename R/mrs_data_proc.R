@@ -2449,6 +2449,7 @@ mrsi2d_kspace2img <- function(mrs_data) {
 #' @param mrs_data data in.
 #' @param lw target linewidth in units of ppm.
 #' @param xlim region to search for peaks to obtain a linewidth estimate.
+#' @return line-broadened data.
 #' @export
 set_lw <- function(mrs_data, lw, xlim = c(4, 0.5)) {
   
@@ -2467,4 +2468,35 @@ lw_obj_fn <- function(lb, mrs_data, lw) {
   mrs_data <- lb(mrs_data, lb)
   new_lw <- peak_info(mrs_data)$fwhm_ppm[1]
   Mod(new_lw - lw)
+}
+
+#' Perform l2 regularisation artifact supression using the method proposed by
+#' Bilgic et al. JMRI 40(1):181-91 2014.
+#' @param mrs_data input data for artifact supression.
+#' @param A matrix of spectral data points containing the artifact basis 
+#' signals.
+#' @param b regularisation parameter.
+#' @return l2 reconstructed mrs_data object.
+#' @export
+l2_reg <- function(mrs_data, A, b) {
+  # generally done as a FD operation
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  A <- t(A)
+  if (nrow(A) != Npts(mrs_data)) stop("l2 reg. A matrix dimensions do not agree with the input data")
+  
+  orig_dim <- dim(mrs_data$data)
+  
+  # original data
+  x0 <- t(mrs_data2mat(collapse_to_dyns(mrs_data)))
+  
+  # recon. matrix 
+  recon_mat <- solve(diag(nrow(A)) + b * A %*% Conj(t(A)))
+  
+  # recon data
+  x <- recon_mat %*% x0
+  x <- t(x) 
+  dim(x) <- orig_dim
+  mrs_data$data <- x
+  return(mrs_data)
 }
