@@ -184,22 +184,6 @@ is.installed <- function(mypkg) {
   is.element(mypkg, utils::installed.packages()[,1]) 
 }
 
-rotate_vec <- function(vec_in, ax, theta) {
-  ct <- cos(theta)
-  st <- sin(theta)
-  rotate_mat <- matrix(nrow = 3, ncol = 3)
-  rotate_mat[1, 1] = ct + ax[1] * ax[1] * (1 - ct)
-  rotate_mat[1, 2] = ax[1] * ax[2] * (1 - ct) - ax[3] * st
-  rotate_mat[1, 3] = ax[1] * ax[3] * (1 - ct) + ax[2] * st
-  rotate_mat[2, 1] = ax[2] * ax[1] * (1 - ct) + ax[3] * st
-  rotate_mat[2, 2] = ct + ax[1] * ax[1] * (1 - ct)
-  rotate_mat[2, 3] = ax[2] * ax[3] * (1 - ct) - ax[1] * st
-  rotate_mat[3, 1] = ax[3] * ax[1] * (1 - ct) - ax[2] * st
-  rotate_mat[3, 2] = ax[3] * ax[2] * (1 - ct) + ax[1] * st
-  rotate_mat[3, 3] = ct + ax[3] * ax[3] * (1 - ct)
-  vec_out <- rotate_mat %*% vec_in
-  as.numeric(vec_out / sum((vec_out) ^ 2))
-}
 
 # From : http://mathworld.wolfram.com/LeastSquaresFittingExponential.html
 measure_lorentz_amp <- function(y, t, start_pnt = 10, end_pnt = 50) {
@@ -431,21 +415,20 @@ colSdColMeans <- function(x, na.rm) {
 # Rotation matrix from axis and angle
 # https://en.wikipedia.org/wiki/Rotation_matrix#cite_note-5
 rotate_vec <- function(vec_in, ax, theta) {
-  ct <- cos(theta) 
-  st <- sin(theta) 
-  rotate_mat <- matrix(NA, 3, 3)
-  rotate_mat[1,1] = ct + (ax[1] ^ 2) * (1 - ct)
-  rotate_mat[1,2] = ax[1] * ax[2] * (1 - ct) - ax[3] * st
-  rotate_mat[1,3] = ax[1] * ax[3] * (1 - ct) + ax[2] * st
-  rotate_mat[2,1] = ax[2] * ax[1] * (1 - ct) + ax[3] * st
-  rotate_mat[2,2] = ct + (ax[2] ^ 2) * (1 - ct)
-  rotate_mat[2,3] = ax[2] * ax[3] * (1 - ct) - ax[1] * st
-  rotate_mat[3,1] = ax[3] * ax[1] * (1 - ct) - ax[2] * st
-  rotate_mat[3,2] = ax[3] * ax[2] * (1 - ct) + ax[1] * st
-  rotate_mat[3,3] = ct + (ax[3] ^ 2) * (1 - ct)
+  ct <- cos(theta)
+  st <- sin(theta)
+  rotate_mat <- matrix(nrow = 3, ncol = 3)
+  rotate_mat[1, 1] = ct + ax[1] * ax[1] * (1 - ct)
+  rotate_mat[1, 2] = ax[1] * ax[2] * (1 - ct) - ax[3] * st
+  rotate_mat[1, 3] = ax[1] * ax[3] * (1 - ct) + ax[2] * st
+  rotate_mat[2, 1] = ax[2] * ax[1] * (1 - ct) + ax[3] * st
+  rotate_mat[2, 2] = ct + ax[1] * ax[1] * (1 - ct)
+  rotate_mat[2, 3] = ax[2] * ax[3] * (1 - ct) - ax[1] * st
+  rotate_mat[3, 1] = ax[3] * ax[1] * (1 - ct) - ax[2] * st
+  rotate_mat[3, 2] = ax[3] * ax[2] * (1 - ct) + ax[1] * st
+  rotate_mat[3, 3] = ct + ax[3] * ax[3] * (1 - ct)
   vec_out <- rotate_mat %*% vec_in
-  vec_out <- vec_out / (sum(vec_out ^ 2) ^ 0.5)
-  vec_out
+  as.numeric(vec_out / sum((vec_out) ^ 2) ^ 0.5)
 }
 
 cross <- function(a, b) {

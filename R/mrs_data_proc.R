@@ -1910,6 +1910,39 @@ zp_vec <- function(vector, n) {
   zp_vec
 }
 
+#' Combine coil data following phase correction based on the first data point
+#' in the FID.
+#' @param metab MRS data containing metabolite data.
+#' @param ref MRS data containing reference data (optional).
+#' @param sum_coils sum the coil elements as a final step (logical).
+#' @param ret_ref return the reference data following correction.
+#' @return MRS data.
+#' @export
+comb_coils_fp_pc <- function(metab, ref = NULL, sum_coils = TRUE,
+                             ret_ref = FALSE) {
+  
+  if (is_fd(metab)) metab <- fd2td(metab)
+  
+  if (is.null(ref)) ref <- metab
+  
+  if (is_fd(ref)) ref <- fd2td(ref)
+  
+  fp <- get_fp(ref)
+  mult <- exp(-1i * Arg(fp))
+  mult_full <- rep_array_dim(mult, 7, Npts(metab))
+  
+  metab$data <- metab$data * mult_full 
+  if (sum_coils) metab <- sum_coils(metab)
+  
+  if (ret_ref) {
+    ref$data <- ref$data * mult_full 
+    if (sum_coils) ref <- sum_coils(ref)
+    return(list(metab = metab, ref = ref))
+  } else {
+    return(metab)
+  }
+}
+
 #' Combine coil data based on the first data point of a reference signal.
 #' 
 #' By default, elements are phased and scaled prior to summation. Where a 
@@ -1951,17 +1984,19 @@ comb_coils <- function(metab, ref = NULL, noise = NULL,
   phi <- Arg(fp)
   amp <- Mod(fp)
   
-  if (!is.null(noise)) {
-    # estimate noise from noise data
-    amp <- amp / (calc_coil_noise_sd(noise) ^ 2)
-  } else {
-    # estimate noise from first FID of the metab data
-    metab_first <- get_dyns(metab, 1)
-    noise_data <- crop_spec(metab_first, c(-0.5, -2.5))
-    noise_sd <- est_noise_sd(noise_data, offset = 0, n = Npts(noise_data),
-                             p_order = 2)
-    
-    amp <- amp / (noise_sd ^ 2)
+  if (scale) {
+    if (!is.null(noise)) {
+      # estimate noise from noise data
+      amp <- amp / (calc_coil_noise_sd(noise) ^ 2)
+    } else {
+      # estimate noise from first FID of the metab data
+      metab_first <- get_dyns(metab, 1)
+      noise_data <- crop_spec(metab_first, c(-0.5, -2.5))
+      noise_sd <- est_noise_sd(noise_data, offset = 0, n = Npts(noise_data),
+                               p_order = 2)
+      
+      amp <- amp / (noise_sd ^ 2)
+    }
   }
   
   # phase and scale ref data

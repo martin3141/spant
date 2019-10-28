@@ -31,6 +31,7 @@ plot_slice_fit_inter <- function(fit_res, map = NULL, slice = 1, zlim = NULL,
 #' of: "re", "im", "mod" or "arg".
 #' @param y_scale option to display the y-axis values (logical).
 #' @param ylim intensity range to plot.
+#' @param coil coil element to plot.
 #' @export
 #' @importFrom tkrplot tkrplot
 plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
