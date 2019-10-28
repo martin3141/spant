@@ -67,7 +67,7 @@ read_ima <- function(fname, verbose = FALSE) {
 #' @export
 read_ima_coil_dir <- function(dir) {
   files <- list.files(dir, full.names = TRUE)
-  warning("coil ordering is based on file name only.")
+  #warning("coil ordering is based on file name only.")
   files <- sort(files)
   mrs_list <- lapply(files, read_mrs, format = "ima", verbose = TRUE)
   mrs_data <- append_coils(mrs_list)
