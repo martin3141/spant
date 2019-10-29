@@ -22,22 +22,22 @@ environment:
     R_ARCH: x64    
   matrix:
     - R_VERSION: devel
+      R_VER: 3.7
+      
+    - R_VERSION: release
       R_VER: 3.6
 
-    - R_VERSION: release
+    - R_VERSION: 3.5.3
+      CRAN: http://cran.rstudio.com
       R_VER: 3.5
 
-    - R_VERSION: oldrel
+    - R_VERSION: 3.4.4
       CRAN: http://cran.rstudio.com
       R_VER: 3.4
 
     - R_VERSION: 3.3.3
       CRAN: http://cran.rstudio.com
       R_VER: 3.3
-
-    - R_VERSION: 3.2.5
-      CRAN: http://cran.rstudio.com
-      R_VER: 3.2
 
 install:
   - ps: Bootstrap
