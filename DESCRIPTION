@@ -31,7 +31,6 @@ Imports:
     grDevices,
     smoother,
     svd,
-    tkrplot,
     readr,
     magrittr,
     ptw,

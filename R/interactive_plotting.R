@@ -14,6 +14,7 @@ plot_slice_fit_inter <- function(fit_res, map = NULL, slice = 1, zlim = NULL,
                        interp = interp, zlim = zlim)
 }
 
+
 #' Plot an interactive slice map from a data array where voxels can be selected
 #' to display a corresponding spectrum.
 #' @param mrs_data spectral data.
@@ -33,160 +34,109 @@ plot_slice_fit_inter <- function(fit_res, map = NULL, slice = 1, zlim = NULL,
 #' @param ylim intensity range to plot.
 #' @param coil coil element to plot.
 #' @export
-#' @importFrom tkrplot tkrplot
 plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
-                                 zlim = NULL, mask_map = NULL, denom = NULL, 
-                                 mask_cutoff = 20, interp = 1, mode = "re",
-                                 y_scale = FALSE, ylim = NULL, coil = 1) {
-  
-  # kill any existing plots
-  if (exists("plot_env")) {
-    if (exists("win1",plot_env)) {
-      tcltk::tkdestroy(plot_env$win1)
-    }
-  }
-
-  assign("plot_env", new.env(hash = TRUE), envir = baseenv())
-  #assign("plot_env", new.env(hash = TRUE), envir = globalenv())
+                                  zlim = NULL, mask_map = NULL, denom = NULL,
+                                  mask_cutoff = 20, interp = 1, mode = "re",
+                                  y_scale = FALSE, ylim = NULL, coil = 1) {
   
   if (is.null(map)) map <- int_spec(mrs_data, mode = "mod")
-
+  
   if (class(mrs_data) == "mrs_data") {
     x_scale <- ppm(mrs_data)
   } else {
     x_scale <- mrs_data$fits[[1]]$PPMScale
   }
-
+  
   if (is.null(xlim)) {
     xlim <- c(x_scale[1], x_scale[length(x_scale)])
   }
-
-  plot_env$xlim <- xlim
-  plot_env$slice <- slice
-  plot_env$coil <- coil
-  plot_env$mask_map <- mask_map
-  plot_env$zlim <- zlim
-  plot_env$denom <- denom
-  plot_env$mask_cutoff <- mask_cutoff
-  plot_env$interp <- interp
-  plot_env$mode <- mode
-  plot_env$y_scale <- y_scale
-  plot_env$ylim <- ylim
-
-  #map_data <- map[1,,,1,1,1]
-  #map_data <- pracma::fliplr(map_data)
-  #map_data <- pracma::fliplr(map_data)
-  mrs_data <- mrs_data
-
-  plot_env$map_data <- map
-  plot_env$mrs_data <- mrs_data
-
-  plot_env$x <- 1
-  plot_env$y <- 1
-
-  plot_env$win1 <- tcltk::tktoplevel(class = "spant_plot")
-
-  #plot_env$win1$env$plot <- tkrplot::tkrplot(plot_env$win1, fun = plotTk,
-  #                                           hscale = 3.0, vscale = 1.5)
-
-
-  plot_env$win1$env$plot <- tkrplot::tkrplot(plot_env$win1, fun = plotTk,
-                                             hscale = 2.5, vscale = 1.25)
-  tcltk::tkgrid(plot_env$win1$env$plot)
-
-  tcltk::tkbind(plot_env$win1$env$plot, "<Button-1>", onLeftClick)
-  tcltk::tkconfigure(plot_env$win1$env$plot, cursor = "hand2")
-}
-
-onLeftClick <- function(x, y) {
-  xClick <- x
-  yClick <- y
-  width  <- as.numeric(tcltk::tclvalue(tcltk::tkwinfo("reqwidth",
-                                                      plot_env$win1$env$plot)))
-
-  height <- as.numeric(tcltk::tclvalue(tcltk::tkwinfo("reqheight",
-                                                      plot_env$win1$env$plot)))
-
-  xMin <- plot_env$parPlotSize[1] * width
-  xMax <- plot_env$parPlotSize[2] * width
-  yMin <- plot_env$parPlotSize[3] * height
-  yMax <- plot_env$parPlotSize[4] * height
-
-  rangeX <- plot_env$usrCoords[2] - plot_env$usrCoords[1]
-  rangeY <- plot_env$usrCoords[4] - plot_env$usrCoords[3]
-
-  #imgXcoords <- (xCoords - usrCoords[1]) * (xMax - xMin) / rangeX + xMin
-  #imgYcoords <- (yCoords - usrCoords[3]) * (yMax - yMin) / rangeY + yMin
-
-  xClick <- as.numeric(xClick) + 0.5
-  yClick <- as.numeric(yClick) + 0.5
-  yClick <- height - yClick
-
-  xPlotCoord <- plot_env$usrCoords[1] + (xClick - xMin) * rangeX / (xMax - xMin)
-  yPlotCoord <- plot_env$usrCoords[3] + (yClick - yMin) * rangeY / (yMax - yMin)
-
-  #plot_env$xPlotCoord <- xPlotCoord
-  #plot_env$yPlotCoord <- yPlotCoord
-
-  #print(xPlotCoord)
-  #print(yPlotCoord)
-  x_len <- dim(plot_env$mrs_data)[2]
-  y_len <- dim(plot_env$mrs_data)[3]
   
-  plot_env$x <- round(xPlotCoord * (x_len - 1)) + 1
-  plot_env$y <- y_len - round(yPlotCoord*(y_len - 1))
-
-  plot_env$xPlotCoord <- (plot_env$x - 1)  / (x_len - 1)
-  plot_env$yPlotCoord <- -(plot_env$y - y_len) / (y_len - 1)
-
-  tkrplot::tkrreplot(plot_env$win1$env$plot)
-
-  #msg <- paste0("Label the point closest to these ",
-  #              "approximate plot coordinates: \n",
-  #              "x = ", format(xPlotCoord, digits = 2),
-  #              ", y = ", format(yPlotCoord, digits = 2), "?")
-  #mbval <- tkmessageBox(title =
-  #                 "Label Point Closest to These Approximate Plot Coordinates",
-  #                      message = msg, type = "yesno", icon = "question")
-
-  #if (tclvalue(mbval)== "yes")
-  #  labelClosestPoint(xClick, yClick, imgXcoords, imgYcoords)
-}
-
-plotTk <- function() {
-  graphics::par(mfrow = c(1,2))
-
-  #image(plot_env$map_data, col = viridis::viridis(128), useRaster = T,
-  #      asp = 1, axes = FALSE)
-
-  graphics::par(mar = c(1,1,1,6))
-  plot_slice_map(plot_env$map_data, slice = plot_env$slice,
-                 mask_map = plot_env$mask_map, zlim = plot_env$zlim,
-                 denom = plot_env$denom, mask_cutoff = plot_env$mask_cutoff, 
-                 interp = plot_env$interp,
-                 horizontal = FALSE, coil = plot_env$coil)
-
-  graphics::points((plot_env$xPlotCoord), (plot_env$yPlotCoord), col = "white",
-                    cex = 4, lw = 3)
-
-  plot_env$parPlotSize    <- graphics::par("plt")
-  plot_env$parPlotSize[1] <- plot_env$parPlotSize[1] / 2 # correction for subplt
-  plot_env$parPlotSize[2] <- plot_env$parPlotSize[2] / 2 # correction for subplt
-  plot_env$usrCoords      <- graphics::par("usr")
-  val <- plot_env$map_data[1, plot_env$x, plot_env$y, plot_env$slice, 1, 1]
-  text = paste("X=", plot_env$x, "\t Y=", plot_env$y, "\t val=", val, sep = "")
-  cat(text, "\n")
+  ui <- miniUI::miniPage(
+    miniUI::gadgetTitleBar("Select point on the map to show spectrum."),
+    miniUI::miniContentPanel(
+      shiny::fillRow(
+        shiny::plotOutput("map", height = "100%", click = "plot_click"),
+        shiny::plotOutput("spec", height = "100%")
+      )
+    )
+  )
   
-  if (class(plot_env$mrs_data) == "mrs_data") {
-    graphics::plot(plot_env$mrs_data, x_pos = plot_env$x, y_pos = plot_env$y,
-                   z_pos = plot_env$slice, xlim = plot_env$xlim,
-                   mode = plot_env$mode, y_scale = plot_env$y_scale,
-                   ylim = plot_env$ylim, coil = plot_env$coil)
-  } else {
-    graphics::plot(plot_env$mrs_data, x_pos = plot_env$x, y_pos = plot_env$y,
-                   z_pos = plot_env$slice, xlim = plot_env$xlim,
-                   coil = plot_env$coil)
+  server <- function(input, output, session) {
+    x_min <- - 1 / (Nx(mrs_data) * interp) / 2
+    x_max <- 1 + 1 / (Nx(mrs_data) * interp) / 2
+    y_min <- - 1 / (Ny(mrs_data) * interp) / 2
+    y_max <- 1 + 1 / (Ny(mrs_data) * interp) / 2
+    
+    x <- round(Nx(mrs_data) / 2)
+    y <- round(Ny(mrs_data) / 2)
+    xpos_round <- (x - 0.5) * (x_max - x_min) / Nx(mrs_data) + x_min
+    ypos_round <- (y - 0.5) * (y_max - y_min) / Ny(mrs_data) + y_min
+    
+    output$map <- shiny::renderPlot({
+      plot_slice_map(map, slice = slice, mask_map = mask_map, zlim = zlim,
+                     denom = denom, mask_cutoff = mask_cutoff, interp = interp,
+                     horizontal = FALSE, coil = coil)
+      
+      graphics::points(xpos_round, ypos_round, pch = 1, col = "white", cex = 4,
+                       lw = 3)
+    })
+    output$spec <- shiny::renderPlot({
+      if (class(mrs_data) == "mrs_data") {
+        graphics::plot(mrs_data, x_pos = x, y_pos = Ny(mrs_data) + 1 - y,
+                       z_pos = slice, xlim = xlim, mode = mode,
+                       y_scale = y_scale, ylim = ylim, coil = coil)
+      } else {
+        graphics::plot(mrs_data, x_pos = x, y_pos = Ny(mrs_data) + 1 - y,
+                       z_pos = slice, xlim = xlim, coil = coil)
+      }
+      
+    })
+    
+    shiny::observeEvent(input$plot_click, {
+      xpos <- input$plot_click$x
+      ypos <- input$plot_click$y
+      
+      # scale coordinates to be between 0.5 and Nx + 0.5, Ny + 0.5
+      x_rescale <- (xpos - x_min) / (x_max - x_min) * Nx(mrs_data) + 0.5
+      y_rescale <- (ypos - y_min) / (y_max - y_min) * Ny(mrs_data) + 0.5
+      
+      # round position to the nearest voxel coord
+      x <- round(x_rescale)
+      y <- round(y_rescale)
+      
+      if (x > Nx(mrs_data)) x <- Nx(mrs_data)
+      if (y > Ny(mrs_data)) y <- Ny(mrs_data)
+      if (x < 1) x <- 1
+      if (y < 1) y <- 1
+      
+      output$spec <- shiny::renderPlot({
+        if (class(mrs_data) == "mrs_data") {
+          graphics::plot(mrs_data, x_pos = x, y_pos = Ny(mrs_data) + 1 - y,
+                         z_pos = slice, xlim = xlim, mode = mode,
+                         y_scale = y_scale, ylim = ylim, coil = coil)
+        } else {
+          graphics::plot(mrs_data, x_pos = x, y_pos = Ny(mrs_data) + 1 - y,
+                         z_pos = slice, xlim = xlim, coil = coil)
+        }
+      })
+      
+      output$map <- shiny::renderPlot({
+        plot_slice_map(map, slice = slice, mask_map = mask_map, zlim = zlim,
+                       denom = denom, mask_cutoff = mask_cutoff, interp = interp,
+                       horizontal = FALSE, coil = coil)
+        xpos_round <- (x - 0.5) * (x_max - x_min) / Nx(mrs_data) + x_min
+        ypos_round <- (y - 0.5) * (y_max - y_min) / Ny(mrs_data) + y_min
+        graphics::points(xpos_round, ypos_round, pch = 1, col = "white", cex = 4, lw = 3)})
+    })
+    
+    # When the Done button is clicked, return a value
+    shiny::observeEvent(input$done, {
+      shiny::stopApp()
+    })
   }
+  
+  shiny::runGadget(ui, server, viewer = shiny::dialogViewer("Plot slice map", width = 1200,
+                                              height = 600))
 }
 
 #' Diaply an orthographic projection plot of a nifti object.
