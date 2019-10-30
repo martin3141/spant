@@ -120,7 +120,7 @@ print(basis)
 #> PCr,sIns,Tau
 
 # plot basis signals
-stackplot(basis, xlim = c(4, 0.5), labels = basis$names)
+stackplot(basis, xlim = c(4, 0.5), labels = basis$names, y_offset = 5)
 ```
 
 ![](README-basis_sim-1.png)<!-- -->
