@@ -518,6 +518,8 @@ plot_slice_map <- function(data, zlim = NULL, mask_map = NULL,
                            coil = 1, ref = 1, denom = NULL,
                            horizontal = FALSE) {
   
+  graphics::par(mar = c(0, 0, 0, 2))
+  
   data <- data[ref,,, slice, dyn, coil]
   data <- pracma::fliplr(data) # ?
   data <- mmand::rescale(data, interp,mmand::mnKernel())
@@ -544,13 +546,15 @@ plot_slice_map <- function(data, zlim = NULL, mask_map = NULL,
     breaks <- seq(from = zlim[1], to = zlim[2], length.out = 129)
     fields::image.plot(data, col = viridisLite::viridis(128), useRaster = T,
                        asp = asp, axes = F, breaks = breaks,
-                       horizontal = horizontal)
+                       horizontal = horizontal, legend.shrink = 0.5,
+                       legend.mar = 7)
     
     #image(data, col=viridisLite::viridis(128), useRaster = T, asp = 1, axes = F,
     #      breaks = breaks)
   } else {
     fields::image.plot(data, col = viridisLite::viridis(128), useRaster = T,
-                       asp = asp, axes = F, horizontal = horizontal)
+                       asp = asp, axes = F, horizontal = horizontal,
+                       legend.shrink = 0.5, legend.mar = 7)
     
     #image(data, col = viridis::viridisLite(128), useRaster = T, asp = 1, axes = F)
   }
