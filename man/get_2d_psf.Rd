@@ -12,7 +12,7 @@ get_2d_psf(FOV = 160, mat_size = 16, sampling = "circ",
 
 \item{mat_size}{acquisition matrix size (not interpolated).}
 
-\item{sampling}{can be eith "circ" for circular or "rect" for rectangular.}
+\item{sampling}{can be either "circ" for circular or "rect" for rectangular.}
 
 \item{hamming}{should Hamming k-space weighting be applied (default FALSE).}
 }

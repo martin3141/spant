@@ -139,7 +139,7 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
                                               height = 600))
 }
 
-#' Diaply an orthographic projection plot of a nifti object.
+#' Display an orthographic projection plot of a nifti object.
 #' @param underlay underlay image to be shown in grayscale.
 #' @param overlay optional overlay image.
 #' @param xyz x, y, z slice coordinates to display.
@@ -273,7 +273,7 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
   }
 }
 
-#' Diaply an interactive orthographic projection plot of a nifti object.
+#' Display an interactive orthographic projection plot of a nifti object.
 #' @param underlay underlay image to be shown in grayscale.
 #' @param overlay optional overlay image.
 #' @param xyz x, y, z slice coordinates to display.

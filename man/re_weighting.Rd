@@ -2,7 +2,7 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{re_weighting}
 \alias{re_weighting}
-\title{Apply a weighting to the FID to enchance spectral resolution.}
+\title{Apply a weighting to the FID to enhance spectral resolution.}
 \usage{
 re_weighting(mrs_data, re, alpha)
 }
@@ -17,5 +17,5 @@ re_weighting(mrs_data, re, alpha)
 resolution enhanced mrs_data.
 }
 \description{
-Apply a weighting to the FID to enchance spectral resolution.
+Apply a weighting to the FID to enhance spectral resolution.
 }

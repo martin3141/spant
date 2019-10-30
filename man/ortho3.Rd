@@ -2,7 +2,7 @@
 % Please edit documentation in R/interactive_plotting.R
 \name{ortho3}
 \alias{ortho3}
-\title{Diaply an orthographic projection plot of a nifti object.}
+\title{Display an orthographic projection plot of a nifti object.}
 \usage{
 ortho3(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
   zlim_ol = NULL, alpha = 1, col_ol = viridisLite::viridis(64),
@@ -30,5 +30,5 @@ ortho3(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
 \item{crosshairs}{display the crosshairs (default TRUE).}
 }
 \description{
-Diaply an orthographic projection plot of a nifti object.
+Display an orthographic projection plot of a nifti object.
 }

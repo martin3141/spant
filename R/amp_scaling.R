@@ -57,7 +57,7 @@ scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7,
   fit_result
 }
 
-#' Scale metabolite amplitudes as a ratio to the unsupressed water amplitude.
+#' Scale metabolite amplitudes as a ratio to the unsuppressed water amplitude.
 #' @param fit_result a result object generated from fitting.
 #' @param ref_data a water reference MRS data object.
 #' @return a \code{fit_result} object with a res_tab_water_ratio data table added.

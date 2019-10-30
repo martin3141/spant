@@ -143,7 +143,7 @@ get_mrsi_voi <- function(mrs_data, target_mri = NULL, map = NULL) {
   voi
 }
 
-#' Resample a VOI to match a target image space using nearest-neighbor
+#' Resample a VOI to match a target image space using nearest-neighbour
 #' interpolation.
 #' @param voi volume data as a nifti object.
 #' @param mri image data as a nifti object.

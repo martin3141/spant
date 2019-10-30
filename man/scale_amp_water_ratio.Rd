@@ -2,7 +2,7 @@
 % Please edit documentation in R/amp_scaling.R
 \name{scale_amp_water_ratio}
 \alias{scale_amp_water_ratio}
-\title{Scale metabolite amplitudes as a ratio to the unsupressed water amplitude.}
+\title{Scale metabolite amplitudes as a ratio to the unsuppressed water amplitude.}
 \usage{
 scale_amp_water_ratio(fit_result, ref_data)
 }
@@ -15,5 +15,5 @@ scale_amp_water_ratio(fit_result, ref_data)
 a \code{fit_result} object with a res_tab_water_ratio data table added.
 }
 \description{
-Scale metabolite amplitudes as a ratio to the unsupressed water amplitude.
+Scale metabolite amplitudes as a ratio to the unsuppressed water amplitude.
 }

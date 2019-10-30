@@ -2,7 +2,7 @@
 % Please edit documentation in R/interactive_plotting.R
 \name{ortho3_int}
 \alias{ortho3_int}
-\title{Diaply an interactive orthographic projection plot of a nifti object.}
+\title{Display an interactive orthographic projection plot of a nifti object.}
 \usage{
 ortho3_int(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
   zlim_ol = NULL, alpha = 1, ...)
@@ -23,5 +23,5 @@ ortho3_int(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
 \item{...}{other options to be passed to the ortho3 function.}
 }
 \description{
-Diaply an interactive orthographic projection plot of a nifti object.
+Display an interactive orthographic projection plot of a nifti object.
 }

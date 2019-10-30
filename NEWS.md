@@ -3,7 +3,7 @@
 the noise (n.b. factor of two has been removed in-line with upcoming terminology
 paper).
 * Default rats method improved to work with multidimensional datasets.
-* Added norm_mrs function to normalise the intenisty of spectral data.
+* Added norm_mrs function to normalise the intensity of spectral data.
 * Added bc_constant function to correct spectral baselines by a constant offset.
 * Added re_weighting function to apply a resolution enhancement weighting to the
 FID.

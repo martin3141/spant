@@ -510,7 +510,7 @@ lb.basis_set <- function(x, lb, lg = 1) {
   mrs_data2basis(lb(basis2mrs_data(x), lb, lg), x$names)
 }
 
-#' Apply a weighting to the FID to enchance spectral resolution.
+#' Apply a weighting to the FID to enhance spectral resolution.
 #' @param mrs_data data to be enhanced.
 #' @param re resolution enhancement factor (rising exponential factor).
 #' @param alpha alpha factor (Guassian decay)
@@ -2290,7 +2290,7 @@ norm_mrs <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
 #' @param xlim spectral range to be integrated (defaults to full range).
 #' @param scale units of xlim, can be : "ppm", "Hz" or "points".
 #' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
-#' @param summation can be "sum" (defualt), "mean" or "l2".
+#' @param summation can be "sum" (default), "mean" or "l2".
 #' @return an array of integral values.
 #' @export
 int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
@@ -2470,9 +2470,9 @@ lw_obj_fn <- function(lb, mrs_data, lw) {
   Mod(new_lw - lw)
 }
 
-#' Perform l2 regularisation artifact supression using the method proposed by
+#' Perform l2 regularisation artefact suppression using the method proposed by
 #' Bilgic et al. JMRI 40(1):181-91 2014.
-#' @param mrs_data input data for artifact supression.
+#' @param mrs_data input data for artefact suppression.
 #' @param A matrix of spectral data points containing the artifact basis 
 #' signals.
 #' @param b regularisation parameter.

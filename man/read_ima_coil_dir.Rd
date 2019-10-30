@@ -4,7 +4,7 @@
 \alias{read_ima_coil_dir}
 \title{Read a directory containing Siemens MRS IMA files and combine along the coil
 dimension. Note that the coil ID is inferred from the sorted file name and
-should be checked when consistancy is requried between two directories.}
+should be checked when consistency is required between two directories.}
 \usage{
 read_ima_coil_dir(dir)
 }
@@ -17,5 +17,5 @@ mrs_data object.
 \description{
 Read a directory containing Siemens MRS IMA files and combine along the coil
 dimension. Note that the coil ID is inferred from the sorted file name and
-should be checked when consistancy is requried between two directories.
+should be checked when consistency is required between two directories.
 }

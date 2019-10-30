@@ -16,7 +16,7 @@ int_spec(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
 
 \item{mode}{spectral mode, can be : "re", "im", "mod" or "cplx".}
 
-\item{summation}{can be "sum" (defualt), "mean" or "l2".}
+\item{summation}{can be "sum" (default), "mean" or "l2".}
 }
 \value{
 an array of integral values.

@@ -349,7 +349,7 @@ comb_csv_results <- function(pattern, supp_mess = TRUE, ...) {
 #' Get the point spread function (PSF) for a 2D phase encoded MRSI scan.
 #' @param FOV field of view in mm.
 #' @param mat_size acquisition matrix size (not interpolated).
-#' @param sampling can be eith "circ" for circular or "rect" for rectangular.
+#' @param sampling can be either "circ" for circular or "rect" for rectangular.
 #' @param hamming should Hamming k-space weighting be applied (default FALSE).
 #' @return A matrix of the PSF with 1mm resolution.
 #' @export

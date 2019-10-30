@@ -2,13 +2,13 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{l2_reg}
 \alias{l2_reg}
-\title{Perform l2 regularisation artifact supression using the method proposed by
+\title{Perform l2 regularisation artefact suppression using the method proposed by
 Bilgic et al. JMRI 40(1):181-91 2014.}
 \usage{
 l2_reg(mrs_data, A, b)
 }
 \arguments{
-\item{mrs_data}{input data for artifact supression.}
+\item{mrs_data}{input data for artefact suppression.}
 
 \item{A}{matrix of spectral data points containing the artifact basis
 signals.}
@@ -19,6 +19,6 @@ signals.}
 l2 reconstructed mrs_data object.
 }
 \description{
-Perform l2 regularisation artifact supression using the method proposed by
+Perform l2 regularisation artefact suppression using the method proposed by
 Bilgic et al. JMRI 40(1):181-91 2014.
 }
