@@ -28,8 +28,8 @@ read_ima <- function(fname, verbose = FALSE) {
   data <- array(data, dim = c(vars$N, 1, 1, vars$z_pts, vars$y_pts, vars$x_pts, 
                               1))
   
-  data <- aperm(data, c(7,6,5,4,3,2,1))
-   
+  data <- aperm(data, c(7,5,6,4,3,2,1))
+  
   res <- c(NA, vars$x_dim / vars$x_pts, vars$y_dim / vars$y_pts,
            vars$z_dim / vars$z_pts, 1, NA, 1 / vars$fs * 2)
   
