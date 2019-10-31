@@ -1895,14 +1895,16 @@ grid_shift_xy <- function(mrs_data, x_shift, y_shift) {
   mat <- mrs_data$data
   mat <- drop(mat)
   dim(mat) <- c(x_dim, y_dim * N)
-  mat <- mat * exp(1i * seq(from = 0, to = (x_dim - 1) / x_dim,
-                            length.out = x_dim) * x_shift)
+  
+  mat <- mat * exp(1i * (seq(from = 0, to = (x_dim - 1) / x_dim,
+                            length.out = x_dim) - 0.5) * x_shift * 2 * pi)
   
   dim(mat) <- c(x_dim, y_dim, N)
   mat <- aperm(mat, c(2, 1, 3))
   dim(mat) <- c(y_dim, x_dim * N)
-  mat <- mat * exp(1i * seq(from = 0, to = (y_dim - 1) / y_dim,
-                            length.out = y_dim) * y_shift)
+  
+  mat <- mat * exp(1i * (seq(from = 0, to = (y_dim - 1) / y_dim,
+                            length.out = y_dim) - 0.5) * y_shift * 2 * pi)
   
   dim(mat) <- c(y_dim, x_dim, N)
   mat <- aperm(mat, c(2, 1, 3))
