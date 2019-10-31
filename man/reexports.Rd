@@ -13,8 +13,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{RNifti}{\code{\link[RNifti]{readNifti}}}
-
   \item{magrittr}{\code{\link[magrittr]{\%>\%}}, \code{\link[magrittr]{\%$\%}}}
+
+  \item{RNifti}{\code{\link[RNifti]{readNifti}}}
 }}
 

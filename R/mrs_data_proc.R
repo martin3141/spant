@@ -1877,6 +1877,43 @@ apodise_xy <- function(mrs_data) {
   return(mrs_data)
 }
 
+#' Grid shift MRSI data in the x/y dimension.
+#' @param mrs_data MRSI data in the spatial domain.
+#' @param x_shift shift to apply in the x-direction in units of voxels.
+#' @param y_shift shift to apply in the y-direction in units of voxels.
+#' @return shifted data.
+#' @export
+grid_shift_xy <- function(mrs_data, x_shift, y_shift) {
+  # TODO adjust pos vec to match
+  mrsi_dims <- dim(mrs_data$data)
+  x_dim <- mrsi_dims[2]
+  y_dim <- mrsi_dims[3]
+  N <- mrsi_dims[7]
+  
+  mrs_data <- mrsi2d_img2kspace(mrs_data)
+  
+  mat <- mrs_data$data
+  mat <- drop(mat)
+  dim(mat) <- c(x_dim, y_dim * N)
+  mat <- mat * exp(1i * seq(from = 0, to = (x_dim - 1) / x_dim,
+                            length.out = x_dim) * x_shift)
+  
+  dim(mat) <- c(x_dim, y_dim, N)
+  mat <- aperm(mat, c(2, 1, 3))
+  dim(mat) <- c(y_dim, x_dim * N)
+  mat <- mat * exp(1i * seq(from = 0, to = (y_dim - 1) / y_dim,
+                            length.out = y_dim) * y_shift)
+  
+  dim(mat) <- c(y_dim, x_dim, N)
+  mat <- aperm(mat, c(2, 1, 3))
+  dim(mat) <- mrsi_dims
+  mrs_data$data <- mat
+  
+  # put xy dims back to space
+  mrs_data <- mrsi2d_kspace2img(mrs_data)
+  return(mrs_data)
+}
+
 #' Zero-fill MRSI data in the k-space x-y direction.
 #' @param mrs_data MRSI data.
 #' @param factor zero-filling factor, factor of 2 returns a dataset with

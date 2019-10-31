@@ -1,3 +1,6 @@
+# spant 0.17.0
+* Added a function to grid shift 2D MRSI data in the x/y direction.
+
 # spant 0.16.0
 * SNR is now defined as the max data point divided by the standard deviation of
 the noise (n.b. factor of two has been removed in-line with upcoming terminology
