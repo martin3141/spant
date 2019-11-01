@@ -62,6 +62,9 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
  
   # remove data we don't need 
   x <- get_voxel(x, x_pos, y_pos, z_pos, dyn, coil) 
+ 
+  # has this data element been masked? 
+  if (anyNA(x$data)) x$data[1,1,1,1,1,1,] <- rep(0i, Npts(x))
   
   # convert to the correct domain for plotting
   if (fd & !is_fd(x)) {
@@ -520,9 +523,16 @@ plot_slice_map <- function(data, zlim = NULL, mask_map = NULL,
   
   graphics::par(mar = c(0, 0, 0, 2))
   
+  data_mask <- is.na(data)
+  if (any(data_mask)) {
+    data[data_mask] <- 0 # set NAs to zero
+  } else {
+    data_mask <- NULL
+  }
+  
   data <- data[ref,,, slice, dyn, coil]
   data <- pracma::fliplr(data) # ?
-  data <- mmand::rescale(data, interp,mmand::mnKernel())
+  data <- mmand::rescale(data, interp, mmand::mnKernel())
   
   if (!is.null(mask_map)) {
     mask_map <- mask_map[ref,,, slice, dyn, coil]
@@ -530,6 +540,13 @@ plot_slice_map <- function(data, zlim = NULL, mask_map = NULL,
     mask_map <- mmand::rescale(mask_map, interp, mmand::mnKernel())
     max_mask <- max(mask_map)
     data <- ifelse(mask_map < (max_mask * mask_cutoff / 100), NA, data)
+  }
+  
+  if (!is.null(data_mask)) {
+    data_mask <- data_mask[ref,,, slice, dyn, coil]
+    data_mask <- pracma::fliplr(data_mask)
+    data_mask <- mmand::rescale(data_mask, interp, mmand::boxKernel())
+    data[data_mask == 1] <- NA
   }
   
   if (!is.null(denom)) {

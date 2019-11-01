@@ -4,14 +4,15 @@
 #' @param slice slice to plot in the z direction.
 #' @param zlim range of values to plot.
 #' @param interp interpolation factor.
+#' @param xlim spectral plot limits for the x axis.
 #' @export
 plot_slice_fit_inter <- function(fit_res, map = NULL, slice = 1, zlim = NULL, 
-                                 interp = 1) {
+                                 interp = 1, xlim = NULL) {
   
   if (is.null(map)) map <- get_fit_map(fit_res, "TNAA") 
   
   plot_slice_map_inter(mrs_data = fit_res, map = map, slice = slice, 
-                       interp = interp, zlim = zlim)
+                       interp = interp, zlim = zlim, xlim = xlim)
 }
 
 

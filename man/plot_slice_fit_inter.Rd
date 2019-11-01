@@ -5,7 +5,7 @@
 \title{Plot a 2D slice from an MRSI fit result object.}
 \usage{
 plot_slice_fit_inter(fit_res, map = NULL, slice = 1, zlim = NULL,
-  interp = 1)
+  interp = 1, xlim = NULL)
 }
 \arguments{
 \item{fit_res}{\code{fit_result} object.}
@@ -17,6 +17,8 @@ plot_slice_fit_inter(fit_res, map = NULL, slice = 1, zlim = NULL,
 \item{zlim}{range of values to plot.}
 
 \item{interp}{interpolation factor.}
+
+\item{xlim}{spectral plot limits for the x axis.}
 }
 \description{
 Plot a 2D slice from an MRSI fit result object.

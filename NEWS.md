@@ -1,5 +1,6 @@
 # spant 0.17.0
 * Added a function to grid shift 2D MRSI data in the x/y direction.
+* Better plotting/fitting support for masking data by setting data points to NA.
 
 # spant 0.16.0
 * SNR is now defined as the max data point divided by the standard deviation of
