@@ -4,12 +4,14 @@
 \alias{resample_img}
 \title{Resample an image to match a target image space.}
 \usage{
-resample_img(source, target)
+resample_img(source, target, interp = 3L)
 }
 \arguments{
 \item{source}{image data as a nifti object.}
 
 \item{target}{image data as a nifti object.}
+
+\item{interp}{interpolation parameter, see nifyreg.linear definition.}
 }
 \value{
 resampled image data as a nifti object.

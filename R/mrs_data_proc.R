@@ -1162,6 +1162,18 @@ crop_xy <- function(mrs_data, x_dim, y_dim) {
   return(get_subset(mrs_data, x_set = x_set, y_set = y_set))
 }
 
+#' Mask a 2D MRSI dataset in the x-y dimension.
+#' @param mrs_data MRS data object.
+#' @param mask matrix of boolean values specifying the voxels to mask.
+#' @return masked dataset.
+#' @export
+mask_xy <- function(mrs_data, mask) {
+  dim(mask) <- c(1, nrow(mask), ncol(mask), 1, 1, 1, 1)
+  mask <- rep_array_dim(mask, 7, Npts(mrs_data))
+  mrs_data$data[mask] <- NA
+  return(mrs_data)
+}
+
 #' Return the first half of a dynamic series.
 #' @param mrs_data dynamic MRS data.
 #' @return first half of the dynamic series.

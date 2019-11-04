@@ -157,11 +157,13 @@ resample_voi <- function(voi, mri) {
 #' Resample an image to match a target image space.
 #' @param source image data as a nifti object.
 #' @param target image data as a nifti object.
+#' @param interp interpolation parameter, see nifyreg.linear definition.
 #' @return resampled image data as a nifti object.
 #' @export
-resample_img <- function(source, target) {
+resample_img <- function(source, target, interp = 3L) {
   res <- RNiftyReg::niftyreg.linear(source, target, nLevels = 0,
-                                    init = diag(4))$image
+                                    init = diag(4),
+                                    interpolation = interp)$image
   return(res)
 }
 
