@@ -64,7 +64,10 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
   x <- get_voxel(x, x_pos, y_pos, z_pos, dyn, coil) 
  
   # has this data element been masked? 
-  if (anyNA(x$data)) x$data[1,1,1,1,1,1,] <- rep(0i, Npts(x))
+  if (anyNA(x$data)) {
+    plot.new()
+    return(NULL)
+  }
   
   # convert to the correct domain for plotting
   if (fd & !is_fd(x)) {

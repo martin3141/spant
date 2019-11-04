@@ -36,6 +36,11 @@ plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
   
   x <- x$fits[[n]]
   
+  if (anyNA(x)) { 
+    plot.new()
+    return(NULL)
+  }
+  
   if (is.null(xlim)) {
     xlim <- rev(range(x$PPMScale))
   }
