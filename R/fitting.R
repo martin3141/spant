@@ -237,14 +237,48 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL, opt
     }
   }
   
-  df_list_amps <- result_list[seq(from = 1, by = res_n,length.out = fit_num)]
-  amps = plyr::ldply(df_list_amps, data.frame)[-1]
-  df_list_crlbs <- result_list[seq(from = 2, by = res_n, length.out = fit_num)]
-  crlbs = plyr::ldply(df_list_crlbs, data.frame)[-1]
-  colnames(crlbs) <- paste(colnames(crlbs), ".sd", sep = "")
-  df_list_diags <- result_list[seq(from = 3, by = res_n, length.out = fit_num)]
-  diags = plyr::ldply(df_list_diags, data.frame)[-1]
   fits <- result_list[seq(from = 4, by = res_n, length.out = fit_num)]
+ 
+  # check for any masked voxels 
+  if (anyNA(fits)) {
+    na_res <- TRUE
+    na_res_vec <- is.na(fits)
+    na_res_vec_ind <- which(is.na(fits))
+    good_row <- which(!na_res_vec)[[1]]
+    rowN <- length(fits)
+  } else {
+    na_res <- FALSE
+  }
+  
+  df_list_amps  <- result_list[seq(from = 1, by = res_n, length.out = fit_num)]
+  df_list_crlbs <- result_list[seq(from = 2, by = res_n, length.out = fit_num)]
+  df_list_diags <- result_list[seq(from = 3, by = res_n, length.out = fit_num)]
+ 
+  if (na_res) {
+    amp_colnames <- colnames(df_list_amps[[good_row]])
+    amps <- as.data.frame(matrix(NA, rowN, length(amp_colnames)))
+    colnames(amps) <- amp_colnames
+    amps_not_na <- plyr::ldply(df_list_amps[!na_res_vec], data.frame)[-1]
+    amps[(!na_res_vec),] <- amps_not_na
+    
+    crlbs <- as.data.frame(matrix(NA, rowN, length(amp_colnames)))
+    crlbs_not_na <- plyr::ldply(df_list_crlbs[!na_res_vec], data.frame)[-1]
+    crlbs[(!na_res_vec),] <- crlbs_not_na
+    colnames(crlbs) <- paste(colnames(amps), ".sd", sep = "")
+    
+    diags_colnames <- colnames(df_list_diags[[good_row]])
+    diags <- as.data.frame(matrix(NA, rowN, length(diags_colnames)))
+    colnames(diags) <- diags_colnames
+    diags_not_na <- plyr::ldply(df_list_diags[!na_res_vec], data.frame)[-1]
+    diags[(!na_res_vec),] <- diags_not_na
+  } else {
+    amps <- plyr::ldply(df_list_amps, data.frame)[-1]
+  
+    crlbs <- plyr::ldply(df_list_crlbs, data.frame)[-1]
+    colnames(crlbs) <- paste(colnames(amps), ".sd", sep = "")
+  
+    diags <- plyr::ldply(df_list_diags, data.frame)[-1]
+  }
   
   res_tab <- cbind(labs, amps, crlbs, diags)
   res_tab[, 1:5] <- sapply(res_tab[, 1:5], as.numeric)

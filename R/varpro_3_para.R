@@ -2,12 +2,8 @@ varpro_3_para <- function(y, acq_paras, basis, opts = NULL) {
   mrs_data <- vec2mrs_data(y, fs = acq_paras$fs, ft = acq_paras$ft, 
                            ref = acq_paras$ref)
   
- 
-  if (is.na(y[1])) {
-     return(list(amps = t(rep(NA, 34)), crlbs = t(rep(NA, 34)),
-            diags = t(rep(NA, 7)), fit = NA))
-     #return(list(amps = NULL, crlbs = NULL, diags = NULL, fit = NA))
-  }
+  # has this data been masked?
+  if (is.na(y[1])) return(list(amps = NA, crlbs = NA, diags = NA, fit = NA))
   
   # use default fitting opts if not specified 
   if (is.null(opts)) {

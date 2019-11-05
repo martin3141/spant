@@ -45,7 +45,8 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
   if (class(mrs_data) == "mrs_data") {
     x_scale <- ppm(mrs_data)
   } else {
-    x_scale <- mrs_data$fits[[1]]$PPMScale
+    non_na_res <- which(!is.na(res$fits))[[1]]
+    x_scale <- mrs_data$fits[[non_na_res]]$PPMScale
   }
   
   if (is.null(xlim)) {
@@ -78,7 +79,7 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
                      denom = denom, mask_cutoff = mask_cutoff, interp = interp,
                      horizontal = FALSE, coil = coil)
       
-      graphics::points(xpos_round, ypos_round, pch = 1, col = "white", cex = 4,
+      graphics::points(xpos_round, ypos_round, pch = 1, col = "red", cex = 4,
                        lw = 3)
     })
     output$spec <- shiny::renderPlot({
@@ -123,11 +124,12 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
       
       output$map <- shiny::renderPlot({
         plot_slice_map(map, slice = slice, mask_map = mask_map, zlim = zlim,
-                       denom = denom, mask_cutoff = mask_cutoff, interp = interp,
-                       horizontal = FALSE, coil = coil)
+                       denom = denom, mask_cutoff = mask_cutoff, 
+                       interp = interp, horizontal = FALSE, coil = coil)
         xpos_round <- (x - 0.5) * (x_max - x_min) / Nx(mrs_data) + x_min
         ypos_round <- (y - 0.5) * (y_max - y_min) / Ny(mrs_data) + y_min
-        graphics::points(xpos_round, ypos_round, pch = 1, col = "white", cex = 4, lw = 3)})
+        graphics::points(xpos_round, ypos_round, pch = 1, col = "red", 
+                         cex = 4, lw = 3)})
     })
     
     # When the Done button is clicked, return a value
