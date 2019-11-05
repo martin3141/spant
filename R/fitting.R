@@ -36,8 +36,8 @@
 #' fit_result <- fit_mrs(svs, basis)
 #' }
 #' @export
-fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL, opts = NULL, 
-                    parallel = FALSE, cores = 4) {
+fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL,
+                    opts = NULL,  parallel = FALSE, cores = 4) {
   
   # start the clock
   ptm <- proc.time()
@@ -80,7 +80,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL, opt
   }
   
   #if (parallel) {doSNOW::registerDoSNOW(makeCluster(cores, type = "SOCK"))}
-  # if (parallel) {doMC::registerDoMC(cores = cores)}
+  #if (parallel) {doMC::registerDoMC(cores = cores)}
   #doSNOW::registerDoSNOW(makeCluster(cores, type = "SOCK"))
  
   #if (parallel)  {
