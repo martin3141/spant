@@ -1162,12 +1162,31 @@ crop_xy <- function(mrs_data, x_dim, y_dim) {
   return(get_subset(mrs_data, x_set = x_set, y_set = y_set))
 }
 
+#' Mask an MRSI dataset in the x-y direction
+#' @param mrs_data MRS data object.
+#' @param x_dim x dimension output length.
+#' @param y_dim y dimension output length.
+#' @return masked MRS data.
+#' @export
+mask_xy <- function(mrs_data, x_dim, y_dim) {
+  mid_pt_x <- Nx(mrs_data) / 2
+  mid_pt_y <- Ny(mrs_data) / 2
+  x_set <- seq(from = mid_pt_x - x_dim / 2 + 1, by = 1, length.out = x_dim)
+  y_set <- seq(from = mid_pt_y - y_dim / 2 + 1, by = 1, length.out = y_dim)
+  x_set <- floor(x_set) # could be floor or ceil, need to test
+  y_set <- floor(y_set) # could be floor or ceil, need to test
+  mask_mat <- matrix(TRUE, Nx(mrs_data), Ny(mrs_data))
+  mask_mat[x_set, y_set] <- FALSE
+  mrs_data <- mask_xy_mat(mrs_data, mask_mat)
+  return(mrs_data)
+}
+
 #' Mask a 2D MRSI dataset in the x-y dimension.
 #' @param mrs_data MRS data object.
 #' @param mask matrix of boolean values specifying the voxels to mask.
 #' @return masked dataset.
 #' @export
-mask_xy <- function(mrs_data, mask) {
+mask_xy_mat <- function(mrs_data, mask) {
   dim(mask) <- c(1, nrow(mask), ncol(mask), 1, 1, 1, 1)
   mask <- rep_array_dim(mask, 7, Npts(mrs_data))
   mrs_data$data[mask] <- NA

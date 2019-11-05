@@ -2,18 +2,20 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{mask_xy}
 \alias{mask_xy}
-\title{Mask a 2D MRSI dataset in the x-y dimension.}
+\title{Mask an MRSI dataset in the x-y direction}
 \usage{
-mask_xy(mrs_data, mask)
+mask_xy(mrs_data, x_dim, y_dim)
 }
 \arguments{
 \item{mrs_data}{MRS data object.}
 
-\item{mask}{matrix of boolean values specifying the voxels to mask.}
+\item{x_dim}{x dimension output length.}
+
+\item{y_dim}{y dimension output length.}
 }
 \value{
-masked dataset.
+masked MRS data.
 }
 \description{
-Mask a 2D MRSI dataset in the x-y dimension.
+Mask an MRSI dataset in the x-y direction
 }
