@@ -128,7 +128,6 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
                        interp = interp, horizontal = FALSE, coil = coil)
         xpos_round <- (x - 0.5) * (x_max - x_min) / Nx(mrs_data) + x_min
         ypos_round <- (y - 0.5) * (y_max - y_min) / Ny(mrs_data) + y_min
-        #print(xpos_round)
         graphics::points(xpos_round, ypos_round, pch = 1, col = "red", 
                          cex = 4, lw = 3)})
     })
