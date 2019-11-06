@@ -64,10 +64,10 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
   )
   
   server <- function(input, output, session) {
-    x_min <- - 1 / (Nx(mrs_data) * interp) / 2
-    x_max <- 1 + 1 / (Nx(mrs_data) * interp) / 2
-    y_min <- - 1 / (Ny(mrs_data) * interp) / 2
-    y_max <- 1 + 1 / (Ny(mrs_data) * interp) / 2
+    x_min <- - 1 / (Nx(mrs_data) * interp - 1) / 2
+    x_max <- 1 + 1 / (Nx(mrs_data) * interp - 1) / 2
+    y_min <- - 1 / (Ny(mrs_data) * interp - 1) / 2
+    y_max <- 1 + 1 / (Ny(mrs_data) * interp - 1) / 2
     
     x <- round(Nx(mrs_data) / 2)
     y <- round(Ny(mrs_data) / 2)
@@ -128,6 +128,7 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
                        interp = interp, horizontal = FALSE, coil = coil)
         xpos_round <- (x - 0.5) * (x_max - x_min) / Nx(mrs_data) + x_min
         ypos_round <- (y - 0.5) * (y_max - y_min) / Ny(mrs_data) + y_min
+        #print(xpos_round)
         graphics::points(xpos_round, ypos_round, pch = 1, col = "red", 
                          cex = 4, lw = 3)})
     })
