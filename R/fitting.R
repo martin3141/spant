@@ -25,8 +25,7 @@
 #' @param method 'VARPRO', 'VARPRO_3P', 'TARQUIN' or 'LCMODEL'.
 #' @param w_ref water reference data for concentration scaling (optional).
 #' @param opts options to pass to the analysis method.
-#' @param parallel perform analysis in parallel (TRUE or FALSE).
-#' @param cores number of cores to use for parallel analysis.
+#' @param parallel perform analyses in parallel (TRUE or FALSE).
 #' @return MRS analysis object.
 #' @examples
 #' fname <- system.file("extdata","philips_spar_sdat_WS.SDAT",package="spant")
@@ -37,7 +36,7 @@
 #' }
 #' @export
 fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL,
-                    opts = NULL,  parallel = FALSE, cores = 4) {
+                    opts = NULL,  parallel = FALSE) {
   
   # start the clock
   ptm <- proc.time()

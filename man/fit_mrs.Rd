@@ -5,7 +5,7 @@
 \title{Perform a fit based analysis of MRS data.}
 \usage{
 fit_mrs(metab, basis = NULL, method = "VARPRO_3P", w_ref = NULL,
-  opts = NULL, parallel = FALSE, cores = 4)
+  opts = NULL, parallel = FALSE)
 }
 \arguments{
 \item{metab}{metabolite data.}
@@ -19,9 +19,7 @@ LCModel .basis format.}
 
 \item{opts}{options to pass to the analysis method.}
 
-\item{parallel}{perform analysis in parallel (TRUE or FALSE).}
-
-\item{cores}{number of cores to use for parallel analysis.}
+\item{parallel}{perform analyses in parallel (TRUE or FALSE).}
 }
 \value{
 MRS analysis object.
