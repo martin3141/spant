@@ -4,16 +4,21 @@
 \alias{get_mrsi2d_seg}
 \title{Calculate the partial volume estimates for each voxel in a 2D MRSI dataset.}
 \usage{
-get_mrsi2d_seg(mrs_data, mri_seg)
+get_mrsi2d_seg(mrs_data, mri_seg, ker)
 }
 \arguments{
 \item{mrs_data}{2D MRSI data with multiple voxels in the x-y dimension.}
 
-\item{mri_seg}{MRI data with values corresponding to the segmetation class.}
+\item{mri_seg}{MRI data with values corresponding to the segmetation class.
+Must be 1mm isotropic resolution.}
+
+\item{ker}{MRSI PSF kernel in the x-y direction compatible with the mmand
+package, eg: mmand::shapeKernel(c(10, 10), type = "box").}
 }
 \value{
 a data frame of partial volume estimates.
 }
 \description{
-Calculate the partial volume estimates for each voxel in a 2D MRSI dataset.
+Localisation is assumed to be perfect in the z direction and determined by
+the ker input in the x-y direction.
 }

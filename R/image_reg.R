@@ -401,11 +401,18 @@ reslice_to_mrs <- function(mri, mrs) {
 }
 
 #' Calculate the partial volume estimates for each voxel in a 2D MRSI dataset.
+#' 
+#' Localisation is assumed to be perfect in the z direction and determined by
+#' the ker input in the x-y direction.
+#' 
 #' @param mrs_data 2D MRSI data with multiple voxels in the x-y dimension.
-#' @param mri_seg MRI data with values corresponding to the segmetation class.
+#' @param mri_seg MRI data with values corresponding to the segmetation class. 
+#' Must be 1mm isotropic resolution.
+#' @param ker MRSI PSF kernel in the x-y direction compatible with the mmand 
+#' package, eg: mmand::shapeKernel(c(10, 10), type = "box").
 #' @return a data frame of partial volume estimates.
 #' @export
-get_mrsi2d_seg <- function(mrs_data, mri_seg) {
+get_mrsi2d_seg <- function(mrs_data, mri_seg, ker) {
   # reformat seg data into the same space as the full MRSI voi
   voi <- get_mrsi_voi(mrs_data)
   mri_seg_crop <- resample_img(mri_seg, voi, interp = 0L)
@@ -422,7 +429,6 @@ get_mrsi2d_seg <- function(mrs_data, mri_seg) {
   mri_seg_2 <- mri_seg_2 / mri_seg_sum
   mri_seg_3 <- mri_seg_3 / mri_seg_sum
   
-  ker <- mmand::shapeKernel(c(10, 10), type = "box")
   mri_seg_0_blur <- mmand::meanFilter(mri_seg_0, ker)
   mri_seg_1_blur <- mmand::meanFilter(mri_seg_1, ker)
   mri_seg_2_blur <- mmand::meanFilter(mri_seg_2, ker)
@@ -436,17 +442,25 @@ get_mrsi2d_seg <- function(mrs_data, mri_seg) {
   mri_seg_2_blur <- mri_seg_2_blur / mri_seg_blur_sum
   mri_seg_3_blur <- mri_seg_3_blur / mri_seg_blur_sum
   
-  x_seq <- seq(from = 5, by = 10, length.out = 16)
-  y_seq <- seq(from = 5, by = 10, length.out = 16)
+  x_res <- mrs_data$resolution[2]
+  y_res <- mrs_data$resolution[3]
+  
+  x_seq <- seq(from = x_res / 2, by = x_res, length.out = Nx(mrs_data))
+  y_seq <- seq(from = y_res / 2, by = y_res, length.out = Ny(mrs_data))
     
   mri_seg_0_final <- pracma::fliplr(pracma::flipud(mri_seg_0_blur[x_seq, y_seq]))
   mri_seg_1_final <- pracma::fliplr(pracma::flipud(mri_seg_1_blur[x_seq, y_seq]))
   mri_seg_2_final <- pracma::fliplr(pracma::flipud(mri_seg_2_blur[x_seq, y_seq]))
   mri_seg_3_final <- pracma::fliplr(pracma::flipud(mri_seg_3_blur[x_seq, y_seq]))
   
+  # gray matter fraction
+  GMF <- 100 * as.numeric(mri_seg_2_final) /
+                     (as.numeric(mri_seg_2_final) + as.numeric(mri_seg_3_final))
+  
   seg_frame <- data.frame(Other = 100 * as.numeric(mri_seg_0_final),
                           CSF   = 100 * as.numeric(mri_seg_1_final),
                           GM    = 100 * as.numeric(mri_seg_2_final),
-                          WM    = 100 * as.numeric(mri_seg_3_final))
+                          WM    = 100 * as.numeric(mri_seg_3_final),
+                          GMF   = GMF)
   return(seg_frame)
 }
