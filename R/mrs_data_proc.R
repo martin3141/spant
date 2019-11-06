@@ -1460,7 +1460,7 @@ sd.mrs_data <- function(x, na.rm = FALSE) {
   x
 }
 
-## make an S3 generic for sd
+## make an S3 generic for sd (cos R Core don't do this for some reason!)
 #' @inherit stats::sd
 #' @export
 sd <- function(x, na.rm) UseMethod("sd")
