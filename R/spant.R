@@ -30,7 +30,7 @@
 }
 
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage(paste("spant", packageVersion("spant")))
+  packageStartupMessage(paste("spant", utils::packageVersion("spant")))
 }
 
 #' Check the TARQUIN binary can be run
