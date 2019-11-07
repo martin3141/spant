@@ -101,7 +101,8 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL,
     result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6), varpro, 
                                acq_paras, basis, opts, 
                                .parallel = parallel, 
-                               .paropts = list(.inorder = TRUE),
+                               .paropts = list(.inorder = TRUE,
+                                               .packages = "spant"),
                                .progress = "text", .inform = FALSE)
     
   } else if (METHOD == "VARPRO_3P") {
@@ -115,7 +116,8 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL,
     result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6),
                                varpro_3_para, acq_paras, basis, opts, 
                                .parallel = parallel, 
-                               .paropts = list(.inorder = TRUE),
+                               .paropts = list(.inorder = TRUE,
+                                               .packages = "spant"),
                                .progress = "text", .inform = FALSE)
     
   } else if (METHOD == "TARQUIN") {
@@ -149,7 +151,8 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL,
     result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6), tarquin_fit, 
                                temp_mrs, basis_file, opts, 
                                .parallel = parallel, 
-                               .paropts = list(.inorder = TRUE),
+                               .paropts = list(.inorder = TRUE,
+                                               .packages = "spant"),
                                .progress = "text", .inform = FALSE)
     
                          #.paropts = list(.options.snow=snowopts),
@@ -187,7 +190,8 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL,
     result_list <- plyr::alply(metab$data, c(2,3,4,5,6), lcmodel_fit, 
                                temp_mrs, basis_file, opts,
                                .parallel = parallel, 
-                               .paropts = list(.inorder = TRUE),
+                               .paropts = list(.inorder = TRUE,
+                                               .packages = "spant"),
                                .progress = "text", .inform = FALSE)
   } else if (exists(method)) {
     message(paste("Using custom fit method :", method))
@@ -202,7 +206,8 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL,
     result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6),
                                get(method), acq_paras, basis, opts, 
                                .parallel = parallel, 
-                               .paropts = list(.inorder = TRUE),
+                               .paropts = list(.inorder = TRUE,
+                                               .packages = "spant"),
                                .progress = "text", .inform = FALSE)
     
   } else {
