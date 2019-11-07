@@ -106,6 +106,8 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
       x <- round(x_rescale)
       y <- round(y_rescale)
       
+      cat("x = ", x, ", y = ", Ny(mrs_data) + 1 - y, "\n", sep = "")
+      
       if (x > Nx(mrs_data)) x <- Nx(mrs_data)
       if (y > Ny(mrs_data)) y <- Ny(mrs_data)
       if (x < 1) x <- 1
