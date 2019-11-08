@@ -3,6 +3,7 @@
 * Better plotting/fitting support for masking data by setting data points to NA.
 * Bug fix for interactive voxel selection position indicator.
 * Added mask_xy to mask voxels in a centered rectagular region.
+* Minor changes to improve parallel processing support.
 
 # spant 0.16.0
 * SNR is now defined as the max data point divided by the standard deviation of
