@@ -2,7 +2,7 @@
 * Added a function to grid shift 2D MRSI data in the x/y direction.
 * Better plotting/fitting support for masking data by setting data points to NA.
 * Bug fix for interactive voxel selection position indicator.
-* Added mask_xy to mask voxels in a centered rectagular region.
+* Added mask_xy to mask voxels in a centered rectangular region.
 * Minor changes to improve parallel processing support.
 
 # spant 0.16.0

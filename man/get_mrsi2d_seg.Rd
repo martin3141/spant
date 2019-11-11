@@ -9,7 +9,7 @@ get_mrsi2d_seg(mrs_data, mri_seg, ker)
 \arguments{
 \item{mrs_data}{2D MRSI data with multiple voxels in the x-y dimension.}
 
-\item{mri_seg}{MRI data with values corresponding to the segmetation class.
+\item{mri_seg}{MRI data with values corresponding to the segmentation class.
 Must be 1mm isotropic resolution.}
 
 \item{ker}{MRSI PSF kernel in the x-y direction compatible with the mmand

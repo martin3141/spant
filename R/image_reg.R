@@ -406,7 +406,7 @@ reslice_to_mrs <- function(mri, mrs) {
 #' the ker input in the x-y direction.
 #' 
 #' @param mrs_data 2D MRSI data with multiple voxels in the x-y dimension.
-#' @param mri_seg MRI data with values corresponding to the segmetation class. 
+#' @param mri_seg MRI data with values corresponding to the segmentation class. 
 #' Must be 1mm isotropic resolution.
 #' @param ker MRSI PSF kernel in the x-y direction compatible with the mmand 
 #' package, eg: mmand::shapeKernel(c(10, 10), type = "box").
