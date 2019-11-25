@@ -4,7 +4,8 @@
 \alias{get_mrsi_voi}
 \title{Generate a MRSI VOI from an \code{mrs_data} object.}
 \usage{
-get_mrsi_voi(mrs_data, target_mri = NULL, map = NULL)
+get_mrsi_voi(mrs_data, target_mri = NULL, map = NULL,
+  ker = mmand::boxKernel())
 }
 \arguments{
 \item{mrs_data}{MRS data.}
@@ -12,6 +13,8 @@ get_mrsi_voi(mrs_data, target_mri = NULL, map = NULL)
 \item{target_mri}{optional image data to match the intended volume space.}
 
 \item{map}{optional voi intensity map.}
+
+\item{ker}{kernel to rescale the map data to the target_mri.}
 }
 \value{
 volume data as a nifti object.

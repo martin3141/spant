@@ -109,9 +109,11 @@ get_mrsi_voxel_xy_psf <- function(mrs_data, target_mri, x_pos, y_pos, z_pos) {
 #' @param mrs_data MRS data.
 #' @param target_mri optional image data to match the intended volume space.
 #' @param map optional voi intensity map.
+#' @param ker kernel to rescale the map data to the target_mri.
 #' @return volume data as a nifti object.
 #' @export
-get_mrsi_voi <- function(mrs_data, target_mri = NULL, map = NULL) {
+get_mrsi_voi <- function(mrs_data, target_mri = NULL, map = NULL,
+                         ker = mmand::boxKernel()) {
   affine <- get_mrs_affine(mrs_data)
   
   rows   <- dim(mrs_data$data)[2]
@@ -126,7 +128,8 @@ get_mrsi_voi <- function(mrs_data, target_mri = NULL, map = NULL) {
     raw_data <- array(1, voi_dim)
   } else {
     # assume 2D xy map for now
-    resamp_map <- mmand::rescale(drop(map), 10, mmand::mnKernel())
+    #resamp_map <- mmand::rescale(drop(map), 10, mmand::mnKernel())
+    resamp_map <- mmand::rescale(drop(map), mrs_data$resolution[2], ker)
     resamp_map <- t(resamp_map)
     raw_data <- array(resamp_map, voi_dim) 
   }
