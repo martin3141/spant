@@ -1,6 +1,6 @@
 # spant 0.18.0
 * Added ker option to get_mrsi_voi function.
-* Added Asc and PEth simulation parameters.
+* Added Asc, Cho and PEth simulation parameters.
 
 # spant 0.17.0
 * Added a function to grid shift 2D MRSI data in the x/y direction.

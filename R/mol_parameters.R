@@ -147,6 +147,42 @@ get_asp_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
+get_cho_paras <- function(lw = NULL, lg = 0) {
+  if (is.null(lw)) lw = 2
+  nucleus <- c("1H", "14N")
+  chem_shift <- c(3.185, 0)
+  j_coupling_mat <- matrix(0, 2, 2)
+  j_coupling_mat[2,1] <- 0.57
+  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 9,
+                       lw = lw, lg = lg)
+  
+  nucleus <- c("1H", "1H", "1H", "1H", "14N")
+  chem_shift <- c(4.054, 4.054, 3.501, 3.501, 0)
+  j_coupling_mat <- matrix(0, 5, 5)
+  j_coupling_mat[2,1] <- -14.1
+  j_coupling_mat[3,1] <- 3.14
+  j_coupling_mat[4,1] <- 6.979
+  j_coupling_mat[5,1] <- 2.572
+  j_coupling_mat[3,2] <- 7.011
+  j_coupling_mat[4,2] <- 3.168
+  j_coupling_mat[5,2] <- 2.681
+  j_coupling_mat[4,3] <- -14.07
+  
+  spin_group_b <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 1,
+                       lw = lw, lg = lg)
+  
+  source <- "Corrigendum: Proton NMR chemical shifts and coupling constants for brain metabolites.
+              NMR Biomed. 2000; 13:129-153."
+  
+  paras <- list(spin_groups = list(spin_group_a, spin_group_b), name = "Cho",
+                source = source)
+  
+  class(paras) <- "mol_parameters"
+  paras
+}
+
 get_cr_paras <- function(lw = NULL, lg = 0) {
   if (is.null(lw)) lw = 2
   paras <- get_uncoupled_mol("Cr", 3.027, "1H", 3, lw, lg)
