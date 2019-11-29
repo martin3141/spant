@@ -118,8 +118,8 @@ get_asc_paras <- function(lw = NULL, lg = 0) {
                        j_coupling_mat = j_coupling_mat, scale_factor = 1,
                        lw = lw, lg = lg)
   
-  source <- "Detection of an antioxidant profile in the human brain in vivo via
-             double editing with MEGA‐PRESS. MRM. 2006; 56(6):1192-1199."
+  source <- "Detection of an antioxidant profile in the humain brain in vivo via
+             double editing with MEGA-PRESS. MRM. 2006; 56(6):1192-1199."
   
   paras <- list(spin_groups = list(spin_group_a), name = "Asc", source = source)
   class(paras) <- "mol_parameters"
