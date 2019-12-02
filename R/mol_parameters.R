@@ -336,6 +336,30 @@ get_gly_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
+get_bhb_paras <- function(lw = NULL, lg = 0) {
+  if (is.null(lw)) lw = 0.5
+  nucleus <- rep("1H", 6)
+  chem_shift <- c(2.388, 2.294, 4.133, 1.186, 1.186, 1.186)
+  j_coupling_mat <- matrix(0, 6, 6)
+  j_coupling_mat[2,1] <- -14.5
+  j_coupling_mat[3,1] <- 7.3
+  j_coupling_mat[3,2] <- 6.3
+  j_coupling_mat[4,3] <- 6.3
+  j_coupling_mat[5,3] <- 6.3
+  j_coupling_mat[6,3] <- 6.3
+  
+  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 1,
+                       lw = lw, lg = lg)
+  
+  source <- "In Vivo NMR Spectroscopy: Principles and Techniques,
+             Robin A. de Graaf"
+  
+  paras <- list(spin_groups = list(spin_group_a), name = "BHB", source = source)
+  class(paras) <- "mol_parameters"
+  paras
+}
+
 get_ins_paras <- function(lw = NULL, lg = 0) {
   if (is.null(lw)) lw = 0.5
   nucleus <- rep("1H", 6)
@@ -646,6 +670,27 @@ get_peth_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
+get_ser_paras <- function(lw = NULL, lg = 0) {
+  if (is.null(lw)) lw = 2
+  nucleus <- rep("1H", 3)
+  chem_shift <- c(3.8347, 3.9379, 3.9764)
+  j_coupling_mat <- matrix(0, 3, 3)
+  j_coupling_mat[2,1] <- 5.979
+  j_coupling_mat[3,1] <- 3.561
+  j_coupling_mat[3,2] <- -12.254
+  
+  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 1,
+                       lw = lw, lg = lg)
+  
+  source <- "Corrigendum: Proton NMR chemical shifts and coupling constants for brain metabolites.
+              NMR Biomed. 2000; 13:129-153."
+  
+  paras <- list(spin_groups = list(spin_group_a), name = "Ser", source = source)
+  class(paras) <- "mol_parameters"
+  paras
+}
+
 get_sins_paras <- function(lw = NULL, lg = 0) {
   if (is.null(lw)) lw = 2
   paras <- get_uncoupled_mol("sIns", 3.34, "1H", 6, lw, lg)
@@ -739,7 +784,7 @@ get_glu_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_a_glc_paras <- function(lw = NULL, lg = 0) {
+  get_a_glc_paras <- function(lw = NULL, lg = 0) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 7)
   chem_shift <- c(5.216, 3.519, 3.698, 3.395, 3.822, 3.826, 3.749)
