@@ -279,3 +279,16 @@ sort_basis <- function(basis) {
   basis$data <- basis$data[, names_sorted$ix]
   basis
 }
+
+#' Combine a pair of basis set objects.
+#' @param basis_a first basis.
+#' @param basis_b second basis.
+#' @return combined basis set object.
+#' @export
+append_basis <- function(basis_a, basis_b) {
+  basis_a_mrs <- basis2mrs_data(basis_a)
+  basis_b_mrs <- basis2mrs_data(basis_b)
+  basis_out_mrs <- append_dyns(basis_a_mrs, basis_b_mrs)
+  basis_out <- mrs_data2basis(basis_out_mrs, c(basis_a$names, basis_b$names))
+  return(basis_out)
+}
