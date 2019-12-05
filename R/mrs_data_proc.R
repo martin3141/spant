@@ -967,50 +967,45 @@ crop_spec <- function(mrs_data, xlim = c(4,0.5), scale = "ppm") {
 
 #' Align spectra to a reference frequency using a convolution based method.
 #' @param mrs_data data to be aligned.
-#' @param ref_peak reference frequency in ppm units.
+#' @param ref_freq reference frequency in ppm units. More than one frequency
+#' may be specified.
 #' @param zf_factor zero filling factor to increase alignment resolution.
 #' @param lb line broadening to apply to the reference signal.
 #' @param max_shift maximum allowable shift in Hz.
 #' @param ret_df return frequency shifts in addition to aligned data (logical).
 #' @return aligned data object.
 #' @export
-align <- function(mrs_data, ref_peak = 4.65, zf_factor = 2, lb = 2,
+align <- function(mrs_data, ref_freq = 4.65, zf_factor = 2, lb = 2,
                   max_shift = 20, ret_df = FALSE) {
   
   if (is_fd(mrs_data)) {
     mrs_data <- fd2td(mrs_data)
   }
   
-  # zero fill
-  #mrs_data_zf <- set_td_pts(mrs_data,zf*N(mrs_data))
   mrs_data_zf <- zf(mrs_data, zf_factor)
   mrs_data_zf <- td2fd(mrs_data_zf)
-  freq <- -(ref_peak - mrs_data$ref) * mrs_data$ft * 1.0e-6 # TODO use ppm2hz
-  #print(freq)
+  freq <- ppm2hz(ref_freq, mrs_data$ft, mrs_data$ref)
   t_zf <- seconds(mrs_data_zf)
-  ref_data <- ft_shift(exp(2i * t_zf * pi * freq - lb * t_zf * pi))
-  #plot(Re(ref_data_td),type="l")
-  window <- floor(max_shift * Npts(mrs_data_zf) * mrs_data$resolution[7])
   
-  #plot(Re(ref_data[1000:1500])/1000,type="l")
-  #lines(Re(mrs_data_zf$data[1,1,1,1,1,1,1000:1500]),type="l")
-  #shift_hz <- conv_align(mrs_data_zf$data[1,1,1,1,1,1,], ref_data, window,
-  # 1/mrs_data$resolution[7])
-  #print(shift_hz)
-  #t_orig <- seconds(mrs_data)
-  #mrs_data$data <- mrs_data$data * exp(2i*pi*t_orig*shift_hz)
+  freq_mat <- matrix(freq, length(freq), length(t_zf), byrow = FALSE)
+  t_zf_mat <- matrix(t_zf, length(freq), length(t_zf), byrow = TRUE)
+  ref_data <- ft_shift(colSums(exp(2i * t_zf_mat * pi * freq_mat - 
+                                   lb * t_zf_mat * pi)))
+  
+  window <- floor(max_shift * Npts(mrs_data_zf) * mrs_data$resolution[7])
   
   shifts <- apply_mrs(mrs_data_zf, 7, conv_align, ref_data, window,
                       1/mrs_data$resolution[7], data_only = TRUE)
   
+  t_orig <- rep(seconds(mrs_data), each = Nspec(mrs_data))
+  t_array <- array(t_orig, dim = dim(mrs_data$data))
+  shift_array <- array(shifts, dim = dim(mrs_data$data))
+  shift_array <- exp(2i * pi * t_array * shift_array)
+  mrs_data$data <- mrs_data$data * shift_array
+  
   if (ret_df) {
-    return(list(mrs_data, abind::adrop(shifts, 7)))
+    return(list(data = mrs_data, shifts = abind::adrop(shifts, 7)))
   } else {
-    t_orig <- rep(seconds(mrs_data), each = Nspec(mrs_data))
-    t_array <- array(t_orig, dim = dim(mrs_data$data))
-    shift_array <- array(shifts, dim = dim(mrs_data$data))
-    shift_array <- exp(2i * pi * t_array * shift_array)
-    mrs_data$data <- mrs_data$data * shift_array
     return(mrs_data)
   }
 }
