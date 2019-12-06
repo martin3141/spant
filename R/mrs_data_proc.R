@@ -2538,7 +2538,7 @@ lw_obj_fn <- function(lb, mrs_data, lw) {
 #' Perform l2 regularisation artefact suppression using the method proposed by
 #' Bilgic et al. JMRI 40(1):181-91 2014.
 #' @param mrs_data input data for artefact suppression.
-#' @param A matrix of spectral data points containing the artifact basis 
+#' @param A matrix of spectral data points containing the artefact basis 
 #' signals.
 #' @param b regularisation parameter.
 #' @return l2 reconstructed mrs_data object.
