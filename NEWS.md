@@ -1,4 +1,4 @@
-# spant 0.18.0
+# spant 0.19.0
 * Added Asc, BHB, Cho, PEth and Ser simulation parameters.
 * Added ker option to get_mrsi_voi function.
 * Added append_basis function to combine two basis sets objects.
