@@ -10,7 +10,7 @@ l2_reg(mrs_data, A, b)
 \arguments{
 \item{mrs_data}{input data for artefact suppression.}
 
-\item{A}{matrix of spectral data points containing the artifact basis
+\item{A}{matrix of spectral data points containing the artefact basis
 signals.}
 
 \item{b}{regularisation parameter.}
