@@ -4,8 +4,7 @@
 \alias{get_mrsi_voi}
 \title{Generate a MRSI VOI from an \code{mrs_data} object.}
 \usage{
-get_mrsi_voi(mrs_data, target_mri = NULL, map = NULL,
-  ker = mmand::boxKernel())
+get_mrsi_voi(mrs_data, target_mri = NULL, map = NULL, ker = mmand::boxKernel())
 }
 \arguments{
 \item{mrs_data}{MRS data.}

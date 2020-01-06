@@ -5,9 +5,12 @@
 \title{Return (and optionally modify using the input arguments) a list of the
 default acquisition parameters.}
 \usage{
-def_acq_paras(ft = getOption("spant.def_ft"),
-  fs = getOption("spant.def_fs"), N = getOption("spant.def_N"),
-  ref = getOption("spant.def_ref"))
+def_acq_paras(
+  ft = getOption("spant.def_ft"),
+  fs = getOption("spant.def_fs"),
+  N = getOption("spant.def_N"),
+  ref = getOption("spant.def_ref")
+)
 }
 \arguments{
 \item{ft}{specify the transmitter frequency in Hz.}

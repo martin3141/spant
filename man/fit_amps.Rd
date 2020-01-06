@@ -4,8 +4,7 @@
 \alias{fit_amps}
 \title{Extract the fit amplitudes from an object of class \code{fit_result}.}
 \usage{
-fit_amps(x, inc_index = FALSE, sort_names = TRUE,
-  append_common_1h_comb = TRUE)
+fit_amps(x, inc_index = FALSE, sort_names = TRUE, append_common_1h_comb = TRUE)
 }
 \arguments{
 \item{x}{\code{fit_result} object.}

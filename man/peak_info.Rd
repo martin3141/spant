@@ -5,8 +5,13 @@
 \title{Search for the highest peak in a spectral region and return the frequency,
 height and FWHM.}
 \usage{
-peak_info(mrs_data, xlim = c(4, 0.5), interp_f = 4, scale = "ppm",
-  mode = "real")
+peak_info(
+  mrs_data,
+  xlim = c(4, 0.5),
+  interp_f = 4,
+  scale = "ppm",
+  mode = "real"
+)
 }
 \arguments{
 \item{mrs_data}{an object of class \code{mrs_data}.}

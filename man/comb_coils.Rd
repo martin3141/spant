@@ -4,8 +4,7 @@
 \alias{comb_coils}
 \title{Combine coil data based on the first data point of a reference signal.}
 \usage{
-comb_coils(metab, ref = NULL, noise = NULL, scale = TRUE,
-  sum_coils = TRUE)
+comb_coils(metab, ref = NULL, noise = NULL, scale = TRUE, sum_coils = TRUE)
 }
 \arguments{
 \item{metab}{MRS data containing metabolite data.}

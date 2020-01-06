@@ -5,9 +5,13 @@
 \title{Simulate a basis-set suitable for 1H brain MRS analysis acquired with a PRESS
 sequence. Note, ideal pulses are assumed.}
 \usage{
-sim_basis_1h_brain(pul_seq = seq_press_ideal,
-  acq_paras = def_acq_paras(), xlim = c(0.5, 4.2),
-  lcm_compat = FALSE, ...)
+sim_basis_1h_brain(
+  pul_seq = seq_press_ideal,
+  acq_paras = def_acq_paras(),
+  xlim = c(0.5, 4.2),
+  lcm_compat = FALSE,
+  ...
+)
 }
 \arguments{
 \item{pul_seq}{pulse sequence function to use.}

@@ -4,8 +4,15 @@
 \alias{sim_resonances}
 \title{Simulate a MRS data object containing a set of simulated resonances.}
 \usage{
-sim_resonances(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
-  freq_ppm = TRUE, acq_paras = def_acq_paras())
+sim_resonances(
+  freq = 0,
+  amp = 1,
+  lw = 0,
+  lg = 0,
+  phase = 0,
+  freq_ppm = TRUE,
+  acq_paras = def_acq_paras()
+)
 }
 \arguments{
 \item{freq}{resonance frequency.}

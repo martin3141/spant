@@ -4,8 +4,14 @@
 \alias{rats}
 \title{Robust Alignment to a Target Spectrum (RATS).}
 \usage{
-rats(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
-  p_deg = 2, max_t = 0.2)
+rats(
+  mrs_data,
+  ref = NULL,
+  xlim = c(4, 0.5),
+  max_shift = 20,
+  p_deg = 2,
+  max_t = 0.2
+)
 }
 \arguments{
 \item{mrs_data}{MRS data to be corrected.}

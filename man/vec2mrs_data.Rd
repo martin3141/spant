@@ -4,8 +4,14 @@
 \alias{vec2mrs_data}
 \title{Convert a vector into a mrs_data object.}
 \usage{
-vec2mrs_data(vec, fs = def_fs(), ft = def_ft(), ref = def_ref(),
-  dyns = 1, fd = FALSE)
+vec2mrs_data(
+  vec,
+  fs = def_fs(),
+  ft = def_ft(),
+  ref = def_ref(),
+  dyns = 1,
+  fd = FALSE
+)
 }
 \arguments{
 \item{vec}{the data vector.}

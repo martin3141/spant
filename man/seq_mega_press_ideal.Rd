@@ -5,8 +5,16 @@
 \title{MEGA-PRESS sequence with ideal localisation pulses and Gaussian shaped
 editing pulse.}
 \usage{
-seq_mega_press_ideal(spin_params, ft, ref, ed_freq = 1.89, TE1 = 0.015,
-  TE2 = 0.053, BW = 110, steps = 50)
+seq_mega_press_ideal(
+  spin_params,
+  ft,
+  ref,
+  ed_freq = 1.89,
+  TE1 = 0.015,
+  TE2 = 0.053,
+  BW = 110,
+  steps = 50
+)
 }
 \arguments{
 \item{spin_params}{spin system definition.}

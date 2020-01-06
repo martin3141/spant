@@ -4,8 +4,14 @@
 \alias{get_subset}
 \title{Extract a subset of MRS data.}
 \usage{
-get_subset(mrs_data, x_set = NULL, y_set = NULL, z_set = NULL,
-  dyn_set = NULL, coil_set = NULL)
+get_subset(
+  mrs_data,
+  x_set = NULL,
+  y_set = NULL,
+  z_set = NULL,
+  dyn_set = NULL,
+  coil_set = NULL
+)
 }
 \arguments{
 \item{mrs_data}{MRS data object.}

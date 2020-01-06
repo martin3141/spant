@@ -4,8 +4,14 @@
 \alias{align}
 \title{Align spectra to a reference frequency using a convolution based method.}
 \usage{
-align(mrs_data, ref_freq = 4.65, zf_factor = 2, lb = 2,
-  max_shift = 20, ret_df = FALSE)
+align(
+  mrs_data,
+  ref_freq = 4.65,
+  zf_factor = 2,
+  lb = 2,
+  max_shift = 20,
+  ret_df = FALSE
+)
 }
 \arguments{
 \item{mrs_data}{data to be aligned.}

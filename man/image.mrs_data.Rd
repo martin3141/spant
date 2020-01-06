@@ -4,10 +4,23 @@
 \alias{image.mrs_data}
 \title{Image plot method for objects of class mrs_data.}
 \usage{
-\method{image}{mrs_data}(x, xlim = NULL, mode = "re", col = NULL,
-  dim = "dyn", x_pos = NULL, y_pos = NULL, z_pos = NULL, dyn = 1,
-  coil = 1, restore_def_par = TRUE, y_ticks = NULL, vline = NULL,
-  hline = NULL, ...)
+\method{image}{mrs_data}(
+  x,
+  xlim = NULL,
+  mode = "re",
+  col = NULL,
+  dim = "dyn",
+  x_pos = NULL,
+  y_pos = NULL,
+  z_pos = NULL,
+  dyn = 1,
+  coil = 1,
+  restore_def_par = TRUE,
+  y_ticks = NULL,
+  vline = NULL,
+  hline = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{object of class mrs_data.}

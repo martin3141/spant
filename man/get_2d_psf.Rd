@@ -4,8 +4,7 @@
 \alias{get_2d_psf}
 \title{Get the point spread function (PSF) for a 2D phase encoded MRSI scan.}
 \usage{
-get_2d_psf(FOV = 160, mat_size = 16, sampling = "circ",
-  hamming = FALSE)
+get_2d_psf(FOV = 160, mat_size = 16, sampling = "circ", hamming = FALSE)
 }
 \arguments{
 \item{FOV}{field of view in mm.}

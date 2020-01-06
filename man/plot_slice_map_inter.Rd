@@ -5,10 +5,21 @@
 \title{Plot an interactive slice map from a data array where voxels can be selected
 to display a corresponding spectrum.}
 \usage{
-plot_slice_map_inter(mrs_data, map = NULL, xlim = NULL, slice = 1,
-  zlim = NULL, mask_map = NULL, denom = NULL, mask_cutoff = 20,
-  interp = 1, mode = "re", y_scale = FALSE, ylim = NULL,
-  coil = 1)
+plot_slice_map_inter(
+  mrs_data,
+  map = NULL,
+  xlim = NULL,
+  slice = 1,
+  zlim = NULL,
+  mask_map = NULL,
+  denom = NULL,
+  mask_cutoff = 20,
+  interp = 1,
+  mode = "re",
+  y_scale = FALSE,
+  ylim = NULL,
+  coil = 1
+)
 }
 \arguments{
 \item{mrs_data}{spectral data.}

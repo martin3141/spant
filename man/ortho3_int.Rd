@@ -4,8 +4,15 @@
 \alias{ortho3_int}
 \title{Display an interactive orthographic projection plot of a nifti object.}
 \usage{
-ortho3_int(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
-  zlim_ol = NULL, alpha = 1, ...)
+ortho3_int(
+  underlay,
+  overlay = NULL,
+  xyz = NULL,
+  zlim = NULL,
+  zlim_ol = NULL,
+  alpha = 1,
+  ...
+)
 }
 \arguments{
 \item{underlay}{underlay image to be shown in grayscale.}

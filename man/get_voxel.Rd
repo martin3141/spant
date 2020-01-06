@@ -4,8 +4,7 @@
 \alias{get_voxel}
 \title{Return a single voxel from a larger mrs dataset.}
 \usage{
-get_voxel(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1, dyn = 1,
-  coil = 1)
+get_voxel(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1, dyn = 1, coil = 1)
 }
 \arguments{
 \item{mrs_data}{MRS data.}

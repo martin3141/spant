@@ -4,8 +4,7 @@
 \alias{norm_mrs}
 \title{Normalise mrs_data to a spectral region.}
 \usage{
-norm_mrs(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
-  summation = "l2")
+norm_mrs(mrs_data, xlim = NULL, scale = "ppm", mode = "re", summation = "l2")
 }
 \arguments{
 \item{mrs_data}{MRS data.}

@@ -4,11 +4,25 @@
 \alias{plot.fit_result}
 \title{Plot the fitting results of an object of class \code{fit_result}.}
 \usage{
-\method{plot}{fit_result}(x, dyn = 1, x_pos = 1, y_pos = 1,
-  z_pos = 1, coil = 1, xlim = NULL, data_only = FALSE,
-  label = NULL, plot_sigs = NULL, n = NULL, sub_bl = FALSE,
-  mar = NULL, restore_def_par = TRUE, ylim = NULL, y_scale = FALSE,
-  ...)
+\method{plot}{fit_result}(
+  x,
+  dyn = 1,
+  x_pos = 1,
+  y_pos = 1,
+  z_pos = 1,
+  coil = 1,
+  xlim = NULL,
+  data_only = FALSE,
+  label = NULL,
+  plot_sigs = NULL,
+  n = NULL,
+  sub_bl = FALSE,
+  mar = NULL,
+  restore_def_par = TRUE,
+  ylim = NULL,
+  y_scale = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{fit_result object.}

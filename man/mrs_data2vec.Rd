@@ -4,8 +4,7 @@
 \alias{mrs_data2vec}
 \title{Convert mrs_data object to a vector.}
 \usage{
-mrs_data2vec(mrs_data, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
-  coil = 1)
+mrs_data2vec(mrs_data, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1)
 }
 \arguments{
 \item{mrs_data}{MRS data object.}

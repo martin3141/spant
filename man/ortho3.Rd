@@ -4,9 +4,18 @@
 \alias{ortho3}
 \title{Display an orthographic projection plot of a nifti object.}
 \usage{
-ortho3(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
-  zlim_ol = NULL, alpha = 1, col_ol = viridisLite::viridis(64),
-  orient_lab = TRUE, rescale = 1, crosshairs = TRUE)
+ortho3(
+  underlay,
+  overlay = NULL,
+  xyz = NULL,
+  zlim = NULL,
+  zlim_ol = NULL,
+  alpha = 1,
+  col_ol = viridisLite::viridis(64),
+  orient_lab = TRUE,
+  rescale = 1,
+  crosshairs = TRUE
+)
 }
 \arguments{
 \item{underlay}{underlay image to be shown in grayscale.}

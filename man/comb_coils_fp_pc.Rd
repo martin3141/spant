@@ -5,8 +5,7 @@
 \title{Combine coil data following phase correction based on the first data point
 in the FID.}
 \usage{
-comb_coils_fp_pc(metab, ref = NULL, sum_coils = TRUE,
-  ret_ref = FALSE)
+comb_coils_fp_pc(metab, ref = NULL, sum_coils = TRUE, ret_ref = FALSE)
 }
 \arguments{
 \item{metab}{MRS data containing metabolite data.}

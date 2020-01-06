@@ -5,8 +5,7 @@
 \title{Convert a matrix (with spectral points in the row dimension and dynamics in
 the column dimensions) into a mrs_data object.}
 \usage{
-mat2mrs_data(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
-  fd = FALSE)
+mat2mrs_data(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(), fd = FALSE)
 }
 \arguments{
 \item{mat}{data matrix.}

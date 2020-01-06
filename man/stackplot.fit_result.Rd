@@ -5,11 +5,27 @@
 \title{Plot the fitting results of an object of class \code{fit_result} with
 individual basis set components shown.}
 \usage{
-\method{stackplot}{fit_result}(x, xlim = NULL, y_offset = 1, dyn = 1,
-  x_pos = 1, y_pos = 1, z_pos = 1, coil = 1, n = NULL,
-  sub_bl = FALSE, labels = FALSE, label_names = NULL,
-  sig_col = "black", restore_def_par = TRUE, omit_signals = NULL,
-  combine_lipmm = FALSE, combine_metab = FALSE, mar = NULL, ...)
+\method{stackplot}{fit_result}(
+  x,
+  xlim = NULL,
+  y_offset = 1,
+  dyn = 1,
+  x_pos = 1,
+  y_pos = 1,
+  z_pos = 1,
+  coil = 1,
+  n = NULL,
+  sub_bl = FALSE,
+  labels = FALSE,
+  label_names = NULL,
+  sig_col = "black",
+  restore_def_par = TRUE,
+  omit_signals = NULL,
+  combine_lipmm = FALSE,
+  combine_metab = FALSE,
+  mar = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{fit_result object.}

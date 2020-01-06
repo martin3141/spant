@@ -4,11 +4,27 @@
 \alias{plot.mrs_data}
 \title{Plotting method for objects of class mrs_data.}
 \usage{
-\method{plot}{mrs_data}(x, dyn = 1, x_pos = 1, y_pos = 1,
-  z_pos = 1, coil = 1, fd = TRUE, x_units = NULL, xlim = NULL,
-  y_scale = FALSE, x_ax = TRUE, mode = "re", lwd = NULL,
-  bty = NULL, label = "", restore_def_par = TRUE, mar = NULL,
-  xaxis_lab = NULL, ...)
+\method{plot}{mrs_data}(
+  x,
+  dyn = 1,
+  x_pos = 1,
+  y_pos = 1,
+  z_pos = 1,
+  coil = 1,
+  fd = TRUE,
+  x_units = NULL,
+  xlim = NULL,
+  y_scale = FALSE,
+  x_ax = TRUE,
+  mode = "re",
+  lwd = NULL,
+  bty = NULL,
+  label = "",
+  restore_def_par = TRUE,
+  mar = NULL,
+  xaxis_lab = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{object of class mrs_data.}

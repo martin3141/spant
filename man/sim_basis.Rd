@@ -4,8 +4,13 @@
 \alias{sim_basis}
 \title{Simulate a basis set object.}
 \usage{
-sim_basis(mol_list, pul_seq = seq_pulse_acquire,
-  acq_paras = def_acq_paras(), xlim = NULL, ...)
+sim_basis(
+  mol_list,
+  pul_seq = seq_pulse_acquire,
+  acq_paras = def_acq_paras(),
+  xlim = NULL,
+  ...
+)
 }
 \arguments{
 \item{mol_list}{list of \code{mol_parameter} objects.}

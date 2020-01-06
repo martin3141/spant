@@ -4,8 +4,14 @@
 \alias{fit_mrs}
 \title{Perform a fit based analysis of MRS data.}
 \usage{
-fit_mrs(metab, basis = NULL, method = "VARPRO_3P", w_ref = NULL,
-  opts = NULL, parallel = FALSE)
+fit_mrs(
+  metab,
+  basis = NULL,
+  method = "VARPRO_3P",
+  w_ref = NULL,
+  opts = NULL,
+  parallel = FALSE
+)
 }
 \arguments{
 \item{metab}{metabolite data.}

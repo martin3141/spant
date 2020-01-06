@@ -4,9 +4,16 @@
 \alias{varpro_opts}
 \title{Return a list of options for VARPRO based fitting.}
 \usage{
-varpro_opts(nstart = 20, init_g_damping = 2, maxiters = 200,
-  max_shift = 5, max_g_damping = 5, max_ind_damping = 5,
-  anal_jac = TRUE, bl_smth_pts = 80)
+varpro_opts(
+  nstart = 20,
+  init_g_damping = 2,
+  maxiters = 200,
+  max_shift = 5,
+  max_g_damping = 5,
+  max_ind_damping = 5,
+  anal_jac = TRUE,
+  bl_smth_pts = 80
+)
 }
 \arguments{
 \item{nstart}{position in the time-domain to start fitting, units of data

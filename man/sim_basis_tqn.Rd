@@ -4,8 +4,13 @@
 \alias{sim_basis_tqn}
 \title{Simulate a basis file using TARQUIN.}
 \usage{
-sim_basis_tqn(fs = def_fs(), ft = def_ft(), N = def_N(),
-  ref = def_ref(), opts = NULL)
+sim_basis_tqn(
+  fs = def_fs(),
+  ft = def_ft(),
+  N = def_N(),
+  ref = def_ref(),
+  opts = NULL
+)
 }
 \arguments{
 \item{fs}{sampling frequency}

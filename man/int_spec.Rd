@@ -4,8 +4,7 @@
 \alias{int_spec}
 \title{Integrate a spectral region.}
 \usage{
-int_spec(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
-  summation = "sum")
+int_spec(mrs_data, xlim = NULL, scale = "ppm", mode = "re", summation = "sum")
 }
 \arguments{
 \item{mrs_data}{MRS data.}

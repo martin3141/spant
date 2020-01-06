@@ -10,7 +10,7 @@ Description: Tools for reading, visualising and processing Magnetic Resonance
     Spectroscopy data.
 BugReports: https://github.com/martin3141/spant/issues
 License: GPL-3
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Roxygen: list(markdown = TRUE, roclets = c("rd", "namespace", "collate"))
 LazyData: yes
 Depends:

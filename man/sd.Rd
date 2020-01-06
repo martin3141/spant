@@ -19,7 +19,7 @@ This function computes the standard deviation of the values in
   computation proceeds.
 }
 \details{
-Like \code{\link{var}} this uses denominator \eqn{n - 1}.
+Like \code{\link[stats]{var}} this uses denominator \eqn{n - 1}.
 
   The standard deviation of a length-one or zero-length vector is \code{NA}.
 }
@@ -27,6 +27,6 @@ Like \code{\link{var}} this uses denominator \eqn{n - 1}.
 sd(1:2) ^ 2
 }
 \seealso{
-\code{\link{var}} for its square, and \code{\link{mad}}, the most
+\code{\link[stats]{var}} for its square, and \code{\link[stats]{mad}}, the most
   robust alternative.
 }
