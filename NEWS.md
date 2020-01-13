@@ -1,5 +1,7 @@
 # spant 0.20.0
 * Added reader for LCModel RAW format data.
+* Added read_mri_dyn_dir function for reading dynamic MRS exported from Siemens
+scanners.
 
 # spant 0.19.0
 * Added Asc, BHB, Cho, PEth and Ser simulation parameters.

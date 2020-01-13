@@ -73,3 +73,18 @@ read_ima_coil_dir <- function(dir) {
   mrs_data <- append_coils(mrs_list)
   return(mrs_data)
 }
+
+#' Read a directory containing Siemens MRS IMA files and combine along the
+#' dynamic dimension. Note that the coil ID is inferred from the sorted file
+#' name and should be checked when consistency is required.
+#' @param dir data directory path.
+#' @return mrs_data object.
+#' @export
+read_ima_dyn_dir <- function(dir) {
+  files <- list.files(dir, full.names = TRUE)
+  #warning("coil ordering is based on file name only.")
+  files <- sort(files)
+  mrs_list <- lapply(files, read_mrs, format = "ima", verbose = TRUE)
+  mrs_data <- append_dyns(mrs_list)
+  return(mrs_data)
+}
