@@ -2,7 +2,7 @@
 #' @param fname filename of the dpt format MRS data.
 #' @param format string describing the data format. May be one of the 
 #' following : "spar_sdat", "rda", "ima", "twix", "pfile", "list_data",
-#' "paravis", "dpt".
+#' "paravis", "dpt", "lcm_raw".
 #' @param ft transmitter frequency in Hz (required for list_data format).
 #' @param fs sampling frequency in Hz (required for list_data format).
 #' @param ref reference value for ppm scale (required for list_data format).
@@ -39,6 +39,11 @@ read_mrs <- function(fname, format, ft = NULL, fs = NULL, ref = NULL,
     return(read_mrs_dpt(fname))
   } else if (format == "paravis") {
     return(read_paravis_raw(fname))
+  } else if (format == "lcm_raw") {
+    if (is.null(ft)) stop("Please specify ft parameter for list_data format")
+    if (is.null(fs)) stop("Please specify fs parameter for list_data format")
+    if (is.null(ref)) stop("Please specify ref parameter for list_data format")
+    return(read_lcm_raw(fname, ft, fs, ref))
   } else {
     stop("Unrecognised file format.")
   }

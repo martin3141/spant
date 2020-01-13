@@ -91,9 +91,6 @@ read_list_data <- function(fname, ft, fs, ref) {
                    pos_vec = NA, freq_domain = freq_domain)
   class(metab_mrs) <- "mrs_data"
   
-  
-  
-  
   noise_mrs <- list(ft = ft, data = noise_data, resolution = res, te = NA,
                    ref = ref, row_vec = NA, col_vec = NA,
                    pos_vec = NA, freq_domain = freq_domain)

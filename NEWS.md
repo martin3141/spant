@@ -1,3 +1,6 @@
+# spant 0.20.0
+* Added reader for LCModel RAW format data.
+
 # spant 0.19.0
 * Added Asc, BHB, Cho, PEth and Ser simulation parameters.
 * Added ker option to get_mrsi_voi function.

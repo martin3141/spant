@@ -106,7 +106,7 @@ read_basis <- function(basis_file, ref = def_ref()) {
   while (length(line <- readLines(con, n = 1, warn = FALSE)) > 0) {
     if (startsWith(line, " NDATAB = ")) {
       N <- as.integer(strsplit(trimws(line), "\\s+")[[1]][3])
-      data_lines <- ceiling(2*N/6) # assume 6 cols
+      data_lines <- ceiling(2 * N / 6) # assume 6 cols
     } else if (startsWith(line, " HZPPPM = ")) {
       bas_ft <- strsplit(trimws(line), "\\s+")[[1]][3]
       bas_ft <- as.double(gsub(",", "", bas_ft))*1e6
@@ -123,9 +123,10 @@ read_basis <- function(basis_file, ref = def_ref()) {
         } else if (endsWith(line, "$END")) {
           x <- utils::read.fortran(con, "6F13.0", n = data_lines)
           data_pts <- as.vector(t(as.matrix(x)))
-          data_pts <- data_pts[seq(1, 2 * N, 2)] + 1i*data_pts[seq(2, 2 * N, 2)]
+          data_pts <- data_pts[seq(1, 2 * N, 2)] +
+                      1i * data_pts[seq(2, 2 * N, 2)]
           data_pts <- pracma::ifftshift(data_pts)
-          data <- cbind(data,data_pts)
+          data <- cbind(data, data_pts)
           break
         }
       }
