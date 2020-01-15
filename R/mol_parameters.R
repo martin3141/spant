@@ -196,6 +196,28 @@ get_cr_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
+get_cr_ch2_paras <- function(lw = NULL, lg = 0) {
+  if (is.null(lw)) lw = 2
+  paras <- get_uncoupled_mol("CrCH2", 3.913, "1H", 2, lw, lg)
+  
+  source <- "Proton NMR chemical shifts and coupling constants for brain metabolites.
+              NMR Biomed. 2000; 13:129-153."
+  
+  paras$source = source
+  paras
+}
+
+get_cr_ch3_paras <- function(lw = NULL, lg = 0) {
+  if (is.null(lw)) lw = 2
+  paras <- get_uncoupled_mol("CrCH3", 3.027, "1H", 3, lw, lg)
+  
+  source <- "Proton NMR chemical shifts and coupling constants for brain metabolites.
+              NMR Biomed. 2000; 13:129-153."
+  
+  paras$source = source
+  paras
+}
+
 get_gaba_paras <- function(lw = NULL, lg = 0) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 6)
