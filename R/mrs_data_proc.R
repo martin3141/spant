@@ -819,6 +819,12 @@ fs <- function(mrs_data) {
   1 / mrs_data$resolution[7]
 }
 
+#' Return the frequency scale of an MRS dataset in Hz.
+#' @param mrs_data MRS data.
+#' @param fs sampling frequency in Hz.
+#' @param N number of data points in the spectral dimension.
+#' @return frequency scale.
+#' @export
 hz <- function(mrs_data, fs = NULL, N = NULL) {
   if (is.null(fs)) {
     fs <- fs(mrs_data)
