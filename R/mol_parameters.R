@@ -865,6 +865,29 @@ get_lac_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
+get_lac_rt_paras <- function(lw = NULL, lg = 0) {
+  if (is.null(lw)) lw = 2
+  nucleus <- rep("1H", 4)
+  chem_shift <- c(4.0974, 1.3142, 1.3142, 1.3142)
+  j_coupling_mat <- matrix(0, 4, 4)
+  
+  j_coupling_mat[2,1] <- 6.833
+  j_coupling_mat[3,1] <- 6.833
+  j_coupling_mat[4,1] <- 6.833
+  
+  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 1,
+                       lw = lw, lg = lg)
+  
+  source <- "Proton NMR chemical shifts and coupling constants for brain metabolites.
+             NMR Biomed. 2000; 13:129-153. Modified by MW for room temperature
+             phantom scans."
+  
+  paras <- list(spin_groups = list(spin_group_a), name = "Lac", source = source)
+  class(paras) <- "mol_parameters"
+  paras
+}
+
 get_glu_paras <- function(lw = NULL, lg = 0) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 5)
