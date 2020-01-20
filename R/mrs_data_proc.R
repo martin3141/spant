@@ -826,13 +826,9 @@ fs <- function(mrs_data) {
 #' @return frequency scale.
 #' @export
 hz <- function(mrs_data, fs = NULL, N = NULL) {
-  if (is.null(fs)) {
-    fs <- fs(mrs_data)
-  }
+  if (is.null(fs)) fs <- fs(mrs_data)
   
-  if (is.null(N)) {
-    N <- Npts(mrs_data)
-  }
+  if (is.null(N)) N <- Npts(mrs_data)
      
   seq(from = -fs / 2, to = fs / 2 - fs / N, length.out = N)
 }
@@ -846,23 +842,15 @@ hz <- function(mrs_data, fs = NULL, N = NULL) {
 #' @return ppm scale.
 #' @export
 ppm <- function(mrs_data, ft = NULL, ref = NULL, fs= NULL, N = NULL) {
-   if (is.null(ft)) {
-     ft <- mrs_data$ft
-   }
+   if (is.null(ft)) ft <- mrs_data$ft
    
-   if (is.null(ref)) {
-    ref <- mrs_data$ref
-   }
+   if (is.null(ref)) ref <- mrs_data$ref
    
-   if (is.null(fs)) {
-     fs <- fs(mrs_data)
-   }
+   if (is.null(fs)) fs <- fs(mrs_data)
    
-   if (is.null(N)) {
-     N <- Npts(mrs_data)
-   }
+   if (is.null(N)) N <- Npts(mrs_data)
    
-  -hz(fs = fs, N = N) / mrs_data$ft * 1e6 + mrs_data$ref
+  -hz(fs = fs, N = N) / ft * 1e6 + ref
 }
 
 n2hz <- function(n, N, fs) {
