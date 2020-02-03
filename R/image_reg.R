@@ -248,7 +248,7 @@ get_voi_seg <- function(voi, mri_seg) {
 get_voi_seg_psf <- function(psf, mri_seg) {
   # check the image orientation etc is the same
   check_geom(psf, mri_seg)
-  mask <- (psf > 0)
+  mask <- (abs(psf) > 0)
   vals <- mri_seg[mask]
   other <- sum(as.numeric(vals == 0) * psf[mask])
   csf   <- sum(as.numeric(vals == 1) * psf[mask])
@@ -432,10 +432,10 @@ get_mrsi2d_seg <- function(mrs_data, mri_seg, ker) {
   mri_seg_2 <- mri_seg_2 / mri_seg_sum
   mri_seg_3 <- mri_seg_3 / mri_seg_sum
   
-  mri_seg_0_blur <- mmand::meanFilter(mri_seg_0, ker)
-  mri_seg_1_blur <- mmand::meanFilter(mri_seg_1, ker)
-  mri_seg_2_blur <- mmand::meanFilter(mri_seg_2, ker)
-  mri_seg_3_blur <- mmand::meanFilter(mri_seg_3, ker)
+  mri_seg_0_blur <- mmand::morph(mri_seg_0, ker, operator = "*", merge = "sum", renormalise = FALSE)
+  mri_seg_1_blur <- mmand::morph(mri_seg_1, ker, operator = "*", merge = "sum", renormalise = FALSE)
+  mri_seg_2_blur <- mmand::morph(mri_seg_2, ker, operator = "*", merge = "sum", renormalise = FALSE)
+  mri_seg_3_blur <- mmand::morph(mri_seg_3, ker, operator = "*", merge = "sum", renormalise = FALSE)
   
   mri_seg_blur_sum <- mri_seg_0_blur + mri_seg_1_blur + mri_seg_2_blur +
                       mri_seg_3_blur
