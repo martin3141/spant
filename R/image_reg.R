@@ -432,10 +432,10 @@ get_mrsi2d_seg <- function(mrs_data, mri_seg, ker) {
   mri_seg_2 <- mri_seg_2 / mri_seg_sum
   mri_seg_3 <- mri_seg_3 / mri_seg_sum
   
-  mri_seg_0_blur <- mmand::morph(mri_seg_0, ker, operator = "*", merge = "sum", renormalise = FALSE)
-  mri_seg_1_blur <- mmand::morph(mri_seg_1, ker, operator = "*", merge = "sum", renormalise = FALSE)
-  mri_seg_2_blur <- mmand::morph(mri_seg_2, ker, operator = "*", merge = "sum", renormalise = FALSE)
-  mri_seg_3_blur <- mmand::morph(mri_seg_3, ker, operator = "*", merge = "sum", renormalise = FALSE)
+  mri_seg_0_blur <- mmand::morph(mri_seg_0, ker, operator = "*", merge = "sum")
+  mri_seg_1_blur <- mmand::morph(mri_seg_1, ker, operator = "*", merge = "sum")
+  mri_seg_2_blur <- mmand::morph(mri_seg_2, ker, operator = "*", merge = "sum")
+  mri_seg_3_blur <- mmand::morph(mri_seg_3, ker, operator = "*", merge = "sum")
   
   mri_seg_blur_sum <- mri_seg_0_blur + mri_seg_1_blur + mri_seg_2_blur +
                       mri_seg_3_blur
