@@ -140,8 +140,9 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
     })
   }
   
-  shiny::runGadget(ui, server, viewer = shiny::dialogViewer("Plot slice map", width = 1200,
-                                              height = 600))
+  shiny::runGadget(ui, server, viewer = shiny::dialogViewer("Plot slice map",
+                                                            width = 1200,
+                                                            height = 600))
 }
 
 #' Display an orthographic projection plot of a nifti object.
@@ -172,7 +173,7 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
 
   cor <- underlay[img_dim[1]:1, xyz[2],]
   sag <- underlay[xyz[1], img_dim[2]:1,]
-  ax <-  underlay[img_dim[1]:1,, xyz[3]]
+  ax  <- underlay[img_dim[1]:1,, xyz[3]]
 
   xcutoff <- img_dim[1] / (img_dim[1] + img_dim[2])
   ycutoff <- img_dim[2] / (img_dim[2] + img_dim[3])
@@ -217,27 +218,27 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
     
     col_ol <- add_alpha(col_ol, alpha)
     
-    graphics::image(full_y, useRaster = TRUE, col = col_ol, axes = FALSE, asp = asp,
-          add = TRUE, zlim = zlim_ol)
+    graphics::image(full_y, useRaster = TRUE, col = col_ol, axes = FALSE,
+                    asp = asp, add = TRUE, zlim = zlim_ol)
   }
 
   if (crosshairs) {
     # top right verical
-    graphics::lines(rep(xcutoff + (img_dim[2] - xyz[2]) / img_dim[2] * (1 - xcutoff), 2),
-          c(ycutoff, 1), col = "red")
+    graphics::lines(rep(xcutoff + (img_dim[2] - xyz[2]) / img_dim[2] *
+                       (1 - xcutoff), 2), c(ycutoff, 1), col = "red")
     
     # upper left horizonal
-    graphics::lines(c(0, 1), rep(ycutoff + xyz[3] / img_dim[3] * (1 - ycutoff), 2),
-          col = "red")
+    graphics::lines(c(0, 1), rep(ycutoff + xyz[3] / img_dim[3] *
+                                (1 - ycutoff), 2), col = "red")
     
     # lower left horizontal
-    graphics::lines(c(0, xcutoff), rep(xyz[2] / img_dim[2] * ycutoff, 2), col = "red")
+    graphics::lines(c(0, xcutoff), rep(xyz[2] / img_dim[2] * ycutoff, 2),
+                    col = "red")
     
     # lower left vertical
-    graphics::lines(rep((img_dim[1] - xyz[1]) / img_dim[1] * xcutoff, 2), c(0, 1),
-          col = "red")
+    graphics::lines(rep((img_dim[1] - xyz[1]) / img_dim[1] * xcutoff, 2),
+                    c(0, 1), col = "red")
   }
-
 
   if (orient_lab) {
     cex_lab <- 0.8
@@ -246,33 +247,39 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
     lm_pos <- 1 + lab_marg
     lm_neg <- -lab_marg
     
-    graphics::text(0.0, ycutoff / 2, "R", col = "white", cex = cex_lab, adj = lm_neg,
-         font = lab_font)
+    graphics::text(0.0, ycutoff / 2, "R", col = "white", cex = cex_lab,
+                   adj = lm_neg, font = lab_font)
+    
     #text(xcutoff, ycutoff / 2, "L", col = "white", cex = cex_lab, adj = lm_pos,
     #     font = lab_font)
     
-    graphics::text(0.0, ycutoff + (1 - ycutoff) / 2, "R", col = "white", cex = cex_lab,
-         adj = lm_neg, font = lab_font)
+    graphics::text(0.0, ycutoff + (1 - ycutoff) / 2, "R", col = "white",
+                   cex = cex_lab, adj = lm_neg, font = lab_font)
+    
     #text(xcutoff, ycutoff + (1 - ycutoff) / 2, "L", col = "white", cex = cex_lab,
     #     adj = lm_pos, font = lab_font)
     
-    graphics::text(xcutoff / 2, 0, "P", col = "white", cex = cex_lab, adj = c(1, lm_neg),
-         font = lab_font)
+    graphics::text(xcutoff / 2, 0, "P", col = "white", cex = cex_lab,
+                   adj = c(1, lm_neg), font = lab_font)
+    
     #text(xcutoff / 2, ycutoff, "A", col = "white", cex = cex_lab,
     #     adj = c(1, lm_pos), font = lab_font)
     
-    graphics::text(xcutoff / 2, 1, "S", col = "white", cex = cex_lab, adj = c(1, lm_pos),
-         font = lab_font)
+    graphics::text(xcutoff / 2, 1, "S", col = "white", cex = cex_lab,
+                   adj = c(1, lm_pos), font = lab_font)
+    
     #text(xcutoff / 2, ycutoff, "I", col = "white", cex = cex_lab,
     #     adj = c(1.7, lm_neg), font = lab_font)
     
-    graphics::text(1.0, ycutoff + (1 - ycutoff) / 2, "P", col = "white", cex = cex_lab,
-         adj = lm_pos, font = lab_font)
+    graphics::text(1.0, ycutoff + (1 - ycutoff) / 2, "P", col = "white",
+                   cex = cex_lab, adj = lm_pos, font = lab_font)
+    
     #text(xcutoff, ycutoff + (1 - ycutoff) / 2, "A", col = "white", cex = cex_lab,
     #     adj = lm_neg, font = lab_font)
     
-    graphics::text(xcutoff + (1 - xcutoff) / 2, 1, "S", col = "white", cex = cex_lab,
-                   adj = c(1, lm_pos), font = lab_font)
+    graphics::text(xcutoff + (1 - xcutoff) / 2, 1, "S", col = "white",
+                   cex = cex_lab, adj = c(1, lm_pos), font = lab_font)
+    
     # text(xcutoff + (1 - xcutoff) / 2, ycutoff, "I", col = "white", cex = cex_lab,
     #     adj = c(1.9, lm_neg), font = lab_font)
   }
