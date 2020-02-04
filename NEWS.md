@@ -3,6 +3,7 @@
 * Added read_mri_dyn_dir function for reading dynamic MRS exported from Siemens
 scanners.
 * Bug fixes for 2D MRSI voxel segmentation calculation.
+* Bug fixes for Siemens IMA format reader for SVS data.
 
 # spant 0.19.0
 * Added Asc, BHB, Cho, PEth and Ser simulation parameters.
