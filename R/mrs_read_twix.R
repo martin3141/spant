@@ -255,6 +255,28 @@ read_siemens_txt_hdr <- function(fname, version = "vd") {
                norm_cor = 0,
                norm_tra = 0)
   
+  # when a parameter is missing from an ima file it means it's zero (I think)
+  slice_dPhaseFOV    <- 0
+  slice_dReadoutFOV  <- 0
+  slice_dThickness   <- 0
+  slice_dSag         <- 0
+  slice_dCor         <- 0
+  slice_dTra         <- 0
+  slice_norm_sag     <- 0
+  slice_norm_cor     <- 0
+  slice_norm_tra     <- 0
+  slice_ip_rot       <- 0
+  voi_dPhaseFOV      <- 0
+  voi_dReadoutFOV    <- 0
+  voi_dThickness     <- 0
+  voi_dSag           <- 0
+  voi_dCor           <- 0
+  voi_dTra           <- 0
+  voi_norm_sag       <- 0
+  voi_norm_cor       <- 0
+  voi_norm_tra       <- 0
+  voi_ip_rot         <- 0
+  
   while (TRUE) {
     line <- readLines(con, n = 1, skipNul = TRUE)
     if (grepl("### ASCCONV END ###", line, fixed = TRUE, useBytes = TRUE)) {
@@ -276,27 +298,79 @@ read_siemens_txt_hdr <- function(fname, version = "vd") {
     } else if (startsWith(line, "sSpecPara.lFinalMatrixSizeSlice")) {
       vars$z_pts <- as.integer(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSliceArray.asSlice[0].dThickness")) {
-      vars$z_dim <- as.numeric(strsplit(line, "=")[[1]][2])
+      slice_dThickness <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSliceArray.asSlice[0].dPhaseFOV")) {
-      vars$x_dim <- as.numeric(strsplit(line, "=")[[1]][2])
+      slice_dPhaseFOV <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSliceArray.asSlice[0].dReadoutFOV")) {
-      vars$y_dim <- as.numeric(strsplit(line, "=")[[1]][2])
+      slice_dReadoutFOV <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSpecPara.sVoI.dThickness")) {
+      voi_dThickness <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSpecPara.sVoI.dPhaseFOV")) {
+      voi_dPhaseFOV <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSpecPara.sVoI.dReadoutFOV")) {
+      voi_dReadoutFOV <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSpecPara.sVoI.dInPlaneRot")) {
+      voi_ip_rot <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSpecPara.sVoI.sPosition.dSag")) {
+      voi_dSag <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSpecPara.sVoI.sPosition.dCor")) {
+      voi_dCor <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSpecPara.sVoI.sPosition.dTra")) {
+      voi_dTra <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSpecPara.sVoI.sNormal.dSag")) {
+      voi_norm_sag <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSpecPara.sVoI.sNormal.dCor")) {
+      voi_norm_cor <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSpecPara.sVoI.sNormal.dTra")) {
+      voi_norm_tra <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSliceArray.asSlice[0].dInPlaneRot")) {
-      vars$ip_rot <- as.numeric(strsplit(line, "=")[[1]][2])
+      slice_ip_rot <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSliceArray.asSlice[0].sPosition.dSag")) {
-      vars$pos_sag <- as.numeric(strsplit(line, "=")[[1]][2])
+      slice_dSag <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSliceArray.asSlice[0].sPosition.dCor")) {
-      vars$pos_cor <- as.numeric(strsplit(line, "=")[[1]][2])
+      slice_dCor <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSliceArray.asSlice[0].sPosition.dTra")) {
-      vars$pos_tra <- as.numeric(strsplit(line, "=")[[1]][2])
+      slice_dTra <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSliceArray.asSlice[0].sNormal.dSag")) {
-      vars$norm_sag <- as.numeric(strsplit(line, "=")[[1]][2])
+      slice_norm_sag <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSliceArray.asSlice[0].sNormal.dCor")) {
-      vars$norm_cor <- as.numeric(strsplit(line, "=")[[1]][2])
+      slice_norm_cor <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSliceArray.asSlice[0].sNormal.dTra")) {
-      vars$norm_tra <- as.numeric(strsplit(line, "=")[[1]][2])
+      slice_norm_tra <- as.numeric(strsplit(line, "=")[[1]][2])
     }
   }
+  
+  # how many voxels do we expect?
+  Nvoxels <- vars$x_pts * vars$y_pts * vars$z_pts
+  
+  if (Nvoxels > 1) {
+    # looks like MRSI
+    vars$x_dim    <- slice_dPhaseFOV 
+    vars$y_dim    <- slice_dReadoutFOV 
+    vars$z_dim    <- slice_dThickness
+    vars$pos_sag  <- slice_dSag 
+    vars$pos_cor  <- slice_dCor
+    vars$pos_tra  <- slice_dTra
+    vars$norm_sag <- slice_norm_sag
+    vars$norm_cor <- slice_norm_cor
+    vars$norm_tra <- slice_norm_tra
+    vars$ip_rot   <- slice_ip_rot
+  } else if (Nvoxels == 1) {
+    # looks like SVS
+    vars$x_dim    <- voi_dPhaseFOV 
+    vars$y_dim    <- voi_dReadoutFOV 
+    vars$z_dim    <- voi_dThickness
+    vars$pos_sag  <- voi_dSag 
+    vars$pos_cor  <- voi_dCor
+    vars$pos_tra  <- voi_dTra
+    vars$norm_sag <- voi_norm_sag
+    vars$norm_cor <- voi_norm_cor
+    vars$norm_tra <- voi_norm_tra
+    vars$ip_rot   <- voi_ip_rot
+  } else {
+    stop("Unexpected number of voxels found.")
+  }
+  
   close(con)
   vars
 }
