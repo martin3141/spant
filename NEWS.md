@@ -4,6 +4,7 @@
 scanners.
 * Bug fixes for 2D MRSI voxel segmentation calculation.
 * Bug fixes for Siemens IMA format reader for SVS data.
+* Optional colourbar added to ortho3 function.
 
 # spant 0.19.0
 * Added Asc, BHB, Cho, PEth and Ser simulation parameters.

@@ -156,16 +156,19 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
 #' @param orient_lab display orientation labels (default TRUE).
 #' @param rescale rescale factor for the underlay and overlay images.
 #' @param crosshairs display the crosshairs (default TRUE).
+#' @param colourbar display a colourbar for the overlay (default TRUE).
 #' @export
 ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
                    zlim_ol = NULL, alpha = 1, col_ol = viridisLite::viridis(64),
-                   orient_lab = TRUE, rescale = 1, crosshairs = TRUE) {
+                   orient_lab = TRUE, rescale = 1, crosshairs = TRUE,
+                   colourbar = TRUE) {
   
   if ((RNifti::orientation(underlay) != "RAS") && (orient_lab)) {
     warning("Underlay image is not in RAS format, orientation labels may be incorrect.")
   }
   
-  graphics::par(bg = "black", mar = c(0,0,0,0))
+  graphics::par(bg = "black", fg = "white", col.axis = "white",
+                mar = c(0,0,0,0))
 
   img_dim <- dim(underlay)[1:3]
 
@@ -218,8 +221,14 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
     
     col_ol <- add_alpha(col_ol, alpha)
     
-    graphics::image(full_y, useRaster = TRUE, col = col_ol, axes = FALSE,
-                    asp = asp, add = TRUE, zlim = zlim_ol)
+    if (colourbar) {
+      fields::image.plot(full_y, useRaster = TRUE, col = col_ol, axes = FALSE,
+                         asp = asp, add = TRUE, zlim = zlim_ol,
+                         smallplot = c(0.50, 0.51, 0.1, 0.4))
+    } else {
+      graphics::image(full_y, useRaster = TRUE, col = col_ol, axes = FALSE,
+                      asp = asp, add = TRUE, zlim = zlim_ol)
+    }
   }
 
   if (crosshairs) {
@@ -300,14 +309,14 @@ ortho3_int <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
   img_dim <- dim(underlay)[1:3]
   if (is.null(xyz)) xyz <- ceiling(img_dim / 2)
   
-  mri_range <- signif(range(underlay), 3)
+  mri_range <- signif(range(underlay, na.rm = TRUE), 3)
   if (is.null(zlim)) zlim <- mri_range
   
   if (is.null(overlay)) {
     mri_range_y <- c(0, 1)
     zlim_ol <- c(0, 1)
   } else {
-    mri_range_y <- signif(range(overlay), 3)
+    mri_range_y <- signif(range(overlay, na.rm = TRUE), 3)
     if (is.null(zlim_ol)) zlim_ol <- mri_range_y
   }
   

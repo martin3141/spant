@@ -9,7 +9,8 @@ mask_xy_mat(mrs_data, mask)
 \arguments{
 \item{mrs_data}{MRS data object.}
 
-\item{mask}{matrix of boolean values specifying the voxels to mask.}
+\item{mask}{matrix of boolean values specifying the voxels to mask, where a
+value of TRUE indicates the voxel should be removed.}
 }
 \value{
 masked dataset.

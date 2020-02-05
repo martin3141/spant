@@ -14,7 +14,8 @@ ortho3(
   col_ol = viridisLite::viridis(64),
   orient_lab = TRUE,
   rescale = 1,
-  crosshairs = TRUE
+  crosshairs = TRUE,
+  colourbar = TRUE
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ ortho3(
 \item{rescale}{rescale factor for the underlay and overlay images.}
 
 \item{crosshairs}{display the crosshairs (default TRUE).}
+
+\item{colourbar}{display a colourbar for the overlay (default TRUE).}
 }
 \description{
 Display an orthographic projection plot of a nifti object.

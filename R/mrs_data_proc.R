@@ -1172,7 +1172,8 @@ mask_xy <- function(mrs_data, x_dim, y_dim) {
 
 #' Mask a 2D MRSI dataset in the x-y dimension.
 #' @param mrs_data MRS data object.
-#' @param mask matrix of boolean values specifying the voxels to mask.
+#' @param mask matrix of boolean values specifying the voxels to mask, where a
+#' value of TRUE indicates the voxel should be removed.
 #' @return masked dataset.
 #' @export
 mask_xy_mat <- function(mrs_data, mask) {
