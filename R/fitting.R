@@ -37,7 +37,7 @@
 #' fit_result <- fit_mrs(svs, basis)
 #' }
 #' @export
-fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL,
+fit_mrs <- function(metab, basis = NULL, method = 'abfit', w_ref = NULL,
                     opts = NULL,  parallel = FALSE, time = TRUE) {
   
   # start the clock
@@ -196,7 +196,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL,
                                                .packages = "spant"),
                                .progress = "text", .inform = FALSE)
   } else if (exists(method)) {
-    message(paste("Using custom fit method :", method))
+    message(paste("Using fit method :", method))
     
     # read basis into memory if a file
     if (is.character(basis)) {

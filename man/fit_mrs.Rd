@@ -7,7 +7,7 @@
 fit_mrs(
   metab,
   basis = NULL,
-  method = "VARPRO_3P",
+  method = "abfit",
   w_ref = NULL,
   opts = NULL,
   parallel = FALSE,
