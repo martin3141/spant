@@ -7,7 +7,7 @@
 fit_mrs(
   metab,
   basis = NULL,
-  method = "abfit",
+  method = "ABFIT",
   w_ref = NULL,
   opts = NULL,
   parallel = FALSE,
@@ -20,7 +20,8 @@ fit_mrs(
 \item{basis}{basis class object or character vector to basis file in
 LCModel .basis format.}
 
-\item{method}{'VARPRO', 'VARPRO_3P', 'TARQUIN' or 'LCMODEL'.}
+\item{method}{'ABFIT' (default), 'VARPRO', 'VARPRO_3P', 'TARQUIN' or
+'LCMODEL'.}
 
 \item{w_ref}{water reference data for concentration scaling (optional).}
 
@@ -44,7 +45,7 @@ Fitting approaches described in the following references:
 VARPRO
 van der Veen JW, de Beer R, Luyten PR, van Ormondt D. Accurate quantification
 of in vivo 31P NMR signals using the variable projection method and prior
-knowledge. Magn Reson Med 1988;6:92-98
+knowledge. Magn Reson Med 1988;6:92-98.
 
 TARQUIN
 Wilson, M., Reynolds, G., Kauppinen, R. A., Arvanitis, T. N. & Peet, A. C.
