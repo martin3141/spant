@@ -10,7 +10,8 @@ fit_mrs(
   method = "VARPRO_3P",
   w_ref = NULL,
   opts = NULL,
-  parallel = FALSE
+  parallel = FALSE,
+  time = TRUE
 )
 }
 \arguments{
@@ -26,6 +27,9 @@ LCModel .basis format.}
 \item{opts}{options to pass to the analysis method.}
 
 \item{parallel}{perform analyses in parallel (TRUE or FALSE).}
+
+\item{time}{measure the time taken for the analysis to complete
+(TRUE or FALSE).}
 }
 \value{
 MRS analysis object.

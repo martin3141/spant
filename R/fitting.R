@@ -26,6 +26,8 @@
 #' @param w_ref water reference data for concentration scaling (optional).
 #' @param opts options to pass to the analysis method.
 #' @param parallel perform analyses in parallel (TRUE or FALSE).
+#' @param time measure the time taken for the analysis to complete
+#' (TRUE or FALSE).
 #' @return MRS analysis object.
 #' @examples
 #' fname <- system.file("extdata","philips_spar_sdat_WS.SDAT",package="spant")
@@ -36,10 +38,10 @@
 #' }
 #' @export
 fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL,
-                    opts = NULL,  parallel = FALSE) {
+                    opts = NULL,  parallel = FALSE, time = TRUE) {
   
   # start the clock
-  ptm <- proc.time()
+  if (time) ptm <- proc.time()
   
   # force uppercase for matching
   METHOD <- toupper(method)
@@ -288,7 +290,11 @@ fit_mrs <- function(metab, basis = NULL, method = 'VARPRO_3P', w_ref = NULL,
   res_tab[, 1:5] <- sapply(res_tab[, 1:5], as.numeric)
   
   # stop the clock
-  proc_time <- proc.time() - ptm
+  if (time) {
+    proc_time <- proc.time() - ptm
+  } else {
+    proc_time <- NULL
+  }
   
   out <- list(res_tab = res_tab, fits = fits, 
               data = metab, basis = basis, amp_cols = ncol(amps), 
