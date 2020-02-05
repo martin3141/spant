@@ -571,11 +571,55 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
        fit = fit_frame)
 }
 
+# abfit tips
 # NLOPT_GN_DIRECT_L is perhaps more robust for algo_pre - but slower
 # NLOPT_LN_NELDERMEAD is a pretty good option
+
+#' Return a list of options for an ABFit analysis.
+#' 
+#' @param init_damping todo.
+#' @param maxiters todo.
+#' @param max_shift todo.
+#' @param max_damping todo.
+#' @param max_phase todo.
+#' @param lambda todo.
+#' @param ppm_left todo.
+#' @param ppm_right todo.
+#' @param zp todo.
+#' @param bl_ed_pppm todo.
+#' @param auto_bl_flex todo.
+#' @param bl_comps_pppm todo.
+#' @param export_sp_fit todo.
+#' @param max_asym todo.
+#' @param max_basis_shift todo.
+#' @param max_basis_damping todo.
+#' @param maxiters_pre todo.
+#' @param algo_pre todo.
+#' @param min_bl_ed_pppm todo.
+#' @param max_bl_ed_pppm todo.
+#' @param auto_bl_flex_n todo.
+#' @param pre_fit_bl_ed_pppm todo.
+#' @param remove_lip_mm_prefit todo.
+#' @param pre_align todo.
+#' @param max_pre_align_shift todo.
+#' @param pre_align_ref_freqs todo.
+#' @param noise_region todo.
+#' @param optimal_smooth_criterion todo.
+#' @param aic_smoothing_factor todo.
+#' @param anal_jac todo.
+#' @param pre_fit_ppm_left todo.
+#' @param pre_fit_ppm_right todo.
+#' @param phi1_optim todo.
+#' @param phi1_init todo.
+#' @param max_dphi1 todo.
+#' @param max_basis_shift_broad todo.
+#' @param max_basis_damping_broad todo.
+#' @return full list of options.
+#' @examples
+#' abfit_opts(ppm_left = 4.2)
 #' @export
 abfit_opts <- function(init_damping = 5, maxiters = 1024,  max_shift = 10, 
-                       max_damping = 15,  max_phase = 360, lambda = NULL, 
+                       max_damping = 15, max_phase = 360, lambda = NULL, 
                        ppm_left = 4, ppm_right = 0.2, zp = TRUE,
                        bl_ed_pppm = 2.0, auto_bl_flex = TRUE,
                        bl_comps_pppm = 15, export_sp_fit = FALSE,
