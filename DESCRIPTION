@@ -43,6 +43,9 @@ Imports:
     shiny,
     miniUI,
     oro.dicom,
+    numDeriv,
+    nloptr,
+    lsei,
     tibble
 Suggests:
     neurobase,

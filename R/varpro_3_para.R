@@ -33,8 +33,8 @@ varpro_3_para <- function(y, acq_paras, basis, opts = NULL) {
                               varpro_3_para_anal_jac, ctrl, y, basis_td, t,
                               opts$nstart)
   } else {
-    res <- minpack.lm::nls.lm(par, lower, upper, varpro_3_para_obj, NULL, ctrl, y,
-                              basis_td, t, opts$nstart)
+    res <- minpack.lm::nls.lm(par, lower, upper, varpro_3_para_obj, NULL, ctrl,
+                              y, basis_td, t, opts$nstart)
   }
   
   # apply phase to y
@@ -113,7 +113,8 @@ varpro_3_para <- function(y, acq_paras, basis, opts = NULL) {
   
   if (("Lip13a" %in% colnames(amps)) & ("Lip13b" %in% colnames(amps)) & 
         ("MM12" %in% colnames(amps)) & ("MM14" %in% colnames(amps))) {
-    amps["TLM13"] <- amps["Lip13a"] + amps["Lip13b"] + amps["MM12"] + amps["MM14"]
+    amps["TLM13"] <- amps["Lip13a"] + amps["Lip13b"] + amps["MM12"] + 
+                     amps["MM14"]
   }
   
   if (("Lip20" %in% colnames(amps)) & ("MM20" %in% colnames(amps))) {
