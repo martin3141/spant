@@ -131,6 +131,45 @@ plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
   if (restore_def_par) graphics::par(.pardefault)
 }
 
+#' @export
+summary.fit_result <- function(object, ...) {
+  x <- object
+  cat("Summary of data quality\n", sep = "")
+  cat("-----------------------\n", sep = "")
+  spectra <- nrow(stats::na.omit(x$res_tab))
+  cat("Spectra analysed : ", spectra, "\n\n", sep = "")
+  
+  mean_lw <- sprintf("%.4f", mean(x$res_tab$TNAA_lw, na.rm = TRUE))
+  sd_lw <-   sprintf("%.4f", sd(x$res_tab$TNAA_lw, na.rm = TRUE))
+  max_lw <-  sprintf("%.4f", max(x$res_tab$TNAA_lw, na.rm = TRUE))
+  min_lw <-  sprintf("%.4f", min(x$res_tab$TNAA_lw, na.rm = TRUE))
+  
+  cat("Mean FWHM : ", mean_lw, " ppm\n", sep = "")
+  cat("SD   FWHM : ", sd_lw, " ppm\n", sep = "")
+  cat("Max  FWHM : ", max_lw, " ppm\n", sep = "")
+  cat("Min  FWHM : ", min_lw, " ppm\n\n", sep = "")
+  
+  mean_snr <- sprintf("%.0f", mean(x$res_tab$SNR, na.rm = TRUE))
+  sd_snr <-   sprintf("%.0f", sd(x$res_tab$SNR, na.rm = TRUE))
+  max_snr <-  sprintf("%.0f", max(x$res_tab$SNR, na.rm = TRUE))
+  min_snr <-  sprintf("%.0f", min(x$res_tab$SNR, na.rm = TRUE))
+  
+  cat("Mean SNR  : ", mean_snr, "\n", sep = "")
+  cat("SD   SNR  : ", sd_snr, "\n", sep = "")
+  cat("Max  SNR  : ", max_snr, "\n", sep = "")
+  cat("Min  SNR  : ", min_snr, "\n\n", sep = "")
+  
+  mean_fqn <- sprintf("%.2f", mean(x$res_tab$FQN, na.rm = TRUE))
+  sd_fqn <-   sprintf("%.2f", sd(x$res_tab$FQN, na.rm = TRUE))
+  max_fqn <-  sprintf("%.2f", max(x$res_tab$FQN, na.rm = TRUE))
+  min_fqn <-  sprintf("%.2f", min(x$res_tab$FQN, na.rm = TRUE))
+  
+  cat("Mean FQN  : ", mean_fqn, "\n", sep = "")
+  cat("SD   FQN  : ", sd_fqn, "\n", sep = "")
+  cat("Max  FQN  : ", max_fqn, "\n", sep = "")
+  cat("Min  FQN  : ", min_fqn, "\n", sep = "")
+}
+
 #' Plot the fitting results of an object of class \code{fit_result} with 
 #' individual basis set components shown.
 #' @param x fit_result object.
@@ -290,11 +329,9 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1,
 #' @export
 print.fit_result <- function(x, ...) {
   cat("Fitting results\n", sep = "")
-  cat("--------------------------\n", sep = "")
+  cat("-------------------------------\n", sep = "")
   cat("Analysis duration : ", x$proc_time[3],"s\n", sep = "")
-  #cat("Mean residual     : ", mean(x$res_tab$res.deviance),"\n", sep = "")
-  #cat("Mean iterations   : ", mean(x$res_tab$res.niter),"\n", sep = "")
-  cat("Number of spectra : ", Nspec(x$data),"\n", sep = "")
+  cat("Number of spectra : ", nrow(stats::na.omit(x$res_tab)),"\n", sep = "")
   cat("Basis elements    : ", dim(x$basis$data)[2], "\n\n", sep = "")
   cat("Basis names\n", sep = "")
   cat("-------------------------------\n")
