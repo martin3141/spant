@@ -1,4 +1,6 @@
-# spant 0.20.0
+# spant 1.0.0
+* ABfit analysis method has been added, and is now default for the mrs_fit
+function.
 * Added reader for LCModel RAW format data.
 * Added read_mri_dyn_dir function for reading dynamic MRS exported from Siemens
 scanners.
