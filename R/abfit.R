@@ -585,13 +585,14 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' (Hz).
 #' @param max_phase maximum permitted value of the global zero-order phase term
 #' (degrees).
-#' @param lambda todo.
+#' @param lambda manually set the the baseline smoothness parameter.
 #' @param ppm_left downfield frequency limit for the fitting range (ppm).
 #' @param ppm_right upfield frequency limit for the fitting range (ppm).
 #' @param zp zero pad the data to twice the original length before fitting.
-#' @param bl_ed_pppm todo.
-#' @param auto_bl_flex todo.
-#' @param bl_comps_pppm todo.
+#' @param bl_ed_pppm manually set the the baseline smoothness parameter (ED per
+#' ppm).
+#' @param auto_bl_flex automatically determine the level of baseline smoothness.
+#' @param bl_comps_pppm spline basis density (signals per ppm).
 #' @param export_sp_fit add the fitted spline functions to the fit result.
 #' @param max_asym maximum allowable value of the asymetry parameter.
 #' @param max_basis_shift maximum allowable frequency shift for individual basis
@@ -600,28 +601,41 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' individual basis signals (Hz).
 #' @param maxiters_pre maximum iterations for the coarse (pre-)fit.
 #' @param algo_pre optimisation method for the coarse (pre-)fit.
-#' @param min_bl_ed_pppm todo.
-#' @param max_bl_ed_pppm todo.
-#' @param auto_bl_flex_n todo.
-#' @param pre_fit_bl_ed_pppm todo.
-#' @param remove_lip_mm_prefit todo.
-#' @param pre_align todo.
-#' @param max_pre_align_shift todo.
-#' @param pre_align_ref_freqs todo.
-#' @param noise_region todo.
-#' @param optimal_smooth_criterion todo.
-#' @param aic_smoothing_factor todo.
-#' @param anal_jac todo.
-#' @param pre_fit_ppm_left todo.
-#' @param pre_fit_ppm_right todo.
-#' @param phi1_optim todo.
-#' @param phi1_init todo.
-#' @param max_dphi1 todo.
-#' @param max_basis_shift_broad todo.
-#' @param max_basis_damping_broad todo.
+#' @param min_bl_ed_pppm minimum value for the candidate baseline flexibility
+#' analyses (ED per ppm).
+#' @param max_bl_ed_pppm minimum value for the candidate baseline flexibility
+#' analyses (ED per ppm).
+#' @param auto_bl_flex_n number of candiate baseline analyses to perform.
+#' @param pre_fit_bl_ed_pppm level of baseline flexibility to use in the coarse
+#' fitting stage of the algorithm (ED per ppm).
+#' @param remove_lip_mm_prefit remove broad signals in the coarse fitting stage
+#' of the algorithm.
+#' @param pre_align perform a pre-alignment setep before coarse fitting.
+#' @param max_pre_align_shift maximum allowable shift in the pre-aligment step
+#' (ppm).
+#' @param pre_align_ref_freqs a vector of prominant spectral frequencies used in
+#' the pre-aligment step (ppm).
+#' @param noise_region spectral region to estimate the noise level (ppm).
+#' @param optimal_smooth_criterion method to determine the optimal smoothness.
+#' @param aic_smoothing_factor modification factor for the AIC calculation.
+#' @param anal_jac use a analytical approximation to the jacobian in the 
+#' detailed fitting stage.
+#' @param pre_fit_ppm_left downfield frequency limit for the fitting range in
+#' the coarse fitting stage of the algorithm (ppm).
+#' @param pre_fit_ppm_right upfield frequency limit for the fitting range in the
+#' coarse fitting stage of the algorithm (ppm).
+#' @param phi1_optim apply and optimise a frequency dependant phase term.
+#' @param phi1_init initial value for the frequency dependant phase term (ms).
+#' @param max_dphi1 maximum allowable change from the initial frequency
+#' dependant phase term (ms).
+#' @param max_basis_shift_broad maximum allowable shift for broad signals in the
+#' basis (Hz). Determined based on thier name beginning with Lip or MM.
+#' @param max_basis_damping_broad maximum allowable Lorentzian damping for broad
+#' signals in the basis (Hz). Determined based on thier name beginning with Lip
+#' or MM.
 #' @return full list of options.
 #' @examples
-#' opts <- abfit_opts(ppm_left = 4.2)
+#' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
 #' @export
 abfit_opts <- function(init_damping = 5, maxiters = 1024,  max_shift = 10, 
                        max_damping = 15, max_phase = 360, lambda = NULL, 

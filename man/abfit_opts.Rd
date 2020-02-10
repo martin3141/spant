@@ -59,7 +59,7 @@ opimisation phase of fitting (Hz).}
 \item{max_phase}{maximum permitted value of the global zero-order phase term
 (degrees).}
 
-\item{lambda}{todo.}
+\item{lambda}{manually set the the baseline smoothness parameter.}
 
 \item{ppm_left}{downfield frequency limit for the fitting range (ppm).}
 
@@ -67,11 +67,12 @@ opimisation phase of fitting (Hz).}
 
 \item{zp}{zero pad the data to twice the original length before fitting.}
 
-\item{bl_ed_pppm}{todo.}
+\item{bl_ed_pppm}{manually set the the baseline smoothness parameter (ED per
+ppm).}
 
-\item{auto_bl_flex}{todo.}
+\item{auto_bl_flex}{automatically determine the level of baseline smoothness.}
 
-\item{bl_comps_pppm}{todo.}
+\item{bl_comps_pppm}{spline basis density (signals per ppm).}
 
 \item{export_sp_fit}{add the fitted spline functions to the fit result.}
 
@@ -87,43 +88,56 @@ individual basis signals (Hz).}
 
 \item{algo_pre}{optimisation method for the coarse (pre-)fit.}
 
-\item{min_bl_ed_pppm}{todo.}
+\item{min_bl_ed_pppm}{minimum value for the candidate baseline flexibility
+analyses (ED per ppm).}
 
-\item{max_bl_ed_pppm}{todo.}
+\item{max_bl_ed_pppm}{minimum value for the candidate baseline flexibility
+analyses (ED per ppm).}
 
-\item{auto_bl_flex_n}{todo.}
+\item{auto_bl_flex_n}{number of candiate baseline analyses to perform.}
 
-\item{pre_fit_bl_ed_pppm}{todo.}
+\item{pre_fit_bl_ed_pppm}{level of baseline flexibility to use in the coarse
+fitting stage of the algorithm (ED per ppm).}
 
-\item{remove_lip_mm_prefit}{todo.}
+\item{remove_lip_mm_prefit}{remove broad signals in the coarse fitting stage
+of the algorithm.}
 
-\item{pre_align}{todo.}
+\item{pre_align}{perform a pre-alignment setep before coarse fitting.}
 
-\item{max_pre_align_shift}{todo.}
+\item{max_pre_align_shift}{maximum allowable shift in the pre-aligment step
+(ppm).}
 
-\item{pre_align_ref_freqs}{todo.}
+\item{pre_align_ref_freqs}{a vector of prominant spectral frequencies used in
+the pre-aligment step (ppm).}
 
-\item{noise_region}{todo.}
+\item{noise_region}{spectral region to estimate the noise level (ppm).}
 
-\item{optimal_smooth_criterion}{todo.}
+\item{optimal_smooth_criterion}{method to determine the optimal smoothness.}
 
-\item{aic_smoothing_factor}{todo.}
+\item{aic_smoothing_factor}{modification factor for the AIC calculation.}
 
-\item{anal_jac}{todo.}
+\item{anal_jac}{use a analytical approximation to the jacobian in the
+detailed fitting stage.}
 
-\item{pre_fit_ppm_left}{todo.}
+\item{pre_fit_ppm_left}{downfield frequency limit for the fitting range in
+the coarse fitting stage of the algorithm (ppm).}
 
-\item{pre_fit_ppm_right}{todo.}
+\item{pre_fit_ppm_right}{upfield frequency limit for the fitting range in the
+coarse fitting stage of the algorithm (ppm).}
 
-\item{phi1_optim}{todo.}
+\item{phi1_optim}{apply and optimise a frequency dependant phase term.}
 
-\item{phi1_init}{todo.}
+\item{phi1_init}{initial value for the frequency dependant phase term (ms).}
 
-\item{max_dphi1}{todo.}
+\item{max_dphi1}{maximum allowable change from the initial frequency
+dependant phase term (ms).}
 
-\item{max_basis_shift_broad}{todo.}
+\item{max_basis_shift_broad}{maximum allowable shift for broad signals in the
+basis (Hz). Determined based on thier name beginning with Lip or MM.}
 
-\item{max_basis_damping_broad}{todo.}
+\item{max_basis_damping_broad}{maximum allowable Lorentzian damping for broad
+signals in the basis (Hz). Determined based on thier name beginning with Lip
+or MM.}
 }
 \value{
 full list of options.
@@ -132,5 +146,5 @@ full list of options.
 Return a list of options for an ABFit analysis.
 }
 \examples{
-opts <- abfit_opts(ppm_left = 4.2)
+opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
 }
