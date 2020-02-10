@@ -15,7 +15,10 @@ ortho3(
   orient_lab = TRUE,
   rescale = 1,
   crosshairs = TRUE,
-  colourbar = TRUE
+  colourbar = TRUE,
+  bg = "black",
+  mar = c(0, 0, 0, 0),
+  smallplot = c(0.5, 0.52, 0.1, 0.4)
 )
 }
 \arguments{
@@ -40,6 +43,12 @@ ortho3(
 \item{crosshairs}{display the crosshairs (default TRUE).}
 
 \item{colourbar}{display a colourbar for the overlay (default TRUE).}
+
+\item{bg}{plot background colour.}
+
+\item{mar}{plot margins.}
+
+\item{smallplot}{smallplot option for positioning the colourbar.}
 }
 \description{
 Display an orthographic projection plot of a nifti object.

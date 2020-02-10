@@ -157,19 +157,22 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
 #' @param rescale rescale factor for the underlay and overlay images.
 #' @param crosshairs display the crosshairs (default TRUE).
 #' @param colourbar display a colourbar for the overlay (default TRUE).
+#' @param bg plot background colour.
+#' @param mar plot margins.
+#' @param smallplot smallplot option for positioning the colourbar.
 #' @export
 ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
                    zlim_ol = NULL, alpha = 1, col_ol = viridisLite::viridis(64),
                    orient_lab = TRUE, rescale = 1, crosshairs = TRUE,
-                   colourbar = TRUE) {
+                   colourbar = TRUE, bg = "black", mar = c(0, 0, 0, 0),
+                   smallplot = c(0.50, 0.52, 0.1, 0.4)) {
   
   if ((RNifti::orientation(underlay) != "RAS") && (orient_lab)) {
     warning("Underlay image is not in RAS format, orientation labels may be incorrect.")
   }
   
-  graphics::par(bg = "black", fg = "white", col.axis = "white",
-                mar = c(0,0,0,0))
-
+  graphics::par(bg = bg, fg = "white", col.axis = "white", mar = mar)
+  
   img_dim <- dim(underlay)[1:3]
 
   if (is.null(xyz)) xyz <- ceiling(img_dim / 2)
@@ -224,7 +227,7 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
     if (colourbar) {
       fields::image.plot(full_y, useRaster = TRUE, col = col_ol, axes = FALSE,
                          asp = asp, add = TRUE, zlim = zlim_ol,
-                         smallplot = c(0.50, 0.51, 0.1, 0.4))
+                         smallplot = smallplot)
     } else {
       graphics::image(full_y, useRaster = TRUE, col = col_ol, axes = FALSE,
                       asp = asp, add = TRUE, zlim = zlim_ol)
