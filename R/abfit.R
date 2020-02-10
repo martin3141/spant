@@ -580,7 +580,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' (Hz). Very poorly shimmed or high field data may benefit from a larger value.
 #' @param maxiters The maximum number of iterations to run for the detailed fit.
 #' @param max_shift The maximum allowable shift to be applied in the
-#' opimisation phase of fitting (Hz).
+#' optimisation phase of fitting (Hz).
 #' @param max_damping maximum permitted value of the global damping parameter
 #' (Hz).
 #' @param max_phase maximum permitted value of the global zero-order phase term
@@ -605,15 +605,15 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' analyses (ED per ppm).
 #' @param max_bl_ed_pppm minimum value for the candidate baseline flexibility
 #' analyses (ED per ppm).
-#' @param auto_bl_flex_n number of candiate baseline analyses to perform.
+#' @param auto_bl_flex_n number of candidate baseline analyses to perform.
 #' @param pre_fit_bl_ed_pppm level of baseline flexibility to use in the coarse
 #' fitting stage of the algorithm (ED per ppm).
 #' @param remove_lip_mm_prefit remove broad signals in the coarse fitting stage
 #' of the algorithm.
 #' @param pre_align perform a pre-alignment setep before coarse fitting.
-#' @param max_pre_align_shift maximum allowable shift in the pre-aligment step
+#' @param max_pre_align_shift maximum allowable shift in the pre-alignment step
 #' (ppm).
-#' @param pre_align_ref_freqs a vector of prominant spectral frequencies used in
+#' @param pre_align_ref_freqs a vector of prominent spectral frequencies used in
 #' the pre-aligment step (ppm).
 #' @param noise_region spectral region to estimate the noise level (ppm).
 #' @param optimal_smooth_criterion method to determine the optimal smoothness.
@@ -629,9 +629,9 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param max_dphi1 maximum allowable change from the initial frequency
 #' dependant phase term (ms).
 #' @param max_basis_shift_broad maximum allowable shift for broad signals in the
-#' basis (Hz). Determined based on thier name beginning with Lip or MM.
+#' basis (Hz). Determined based on their name beginning with Lip or MM.
 #' @param max_basis_damping_broad maximum allowable Lorentzian damping for broad
-#' signals in the basis (Hz). Determined based on thier name beginning with Lip
+#' signals in the basis (Hz). Determined based on their name beginning with Lip
 #' or MM.
 #' @return full list of options.
 #' @examples

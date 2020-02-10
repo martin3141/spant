@@ -51,7 +51,7 @@ abfit_opts(
 \item{maxiters}{The maximum number of iterations to run for the detailed fit.}
 
 \item{max_shift}{The maximum allowable shift to be applied in the
-opimisation phase of fitting (Hz).}
+optimisation phase of fitting (Hz).}
 
 \item{max_damping}{maximum permitted value of the global damping parameter
 (Hz).}
@@ -94,7 +94,7 @@ analyses (ED per ppm).}
 \item{max_bl_ed_pppm}{minimum value for the candidate baseline flexibility
 analyses (ED per ppm).}
 
-\item{auto_bl_flex_n}{number of candiate baseline analyses to perform.}
+\item{auto_bl_flex_n}{number of candidate baseline analyses to perform.}
 
 \item{pre_fit_bl_ed_pppm}{level of baseline flexibility to use in the coarse
 fitting stage of the algorithm (ED per ppm).}
@@ -104,10 +104,10 @@ of the algorithm.}
 
 \item{pre_align}{perform a pre-alignment setep before coarse fitting.}
 
-\item{max_pre_align_shift}{maximum allowable shift in the pre-aligment step
+\item{max_pre_align_shift}{maximum allowable shift in the pre-alignment step
 (ppm).}
 
-\item{pre_align_ref_freqs}{a vector of prominant spectral frequencies used in
+\item{pre_align_ref_freqs}{a vector of prominent spectral frequencies used in
 the pre-aligment step (ppm).}
 
 \item{noise_region}{spectral region to estimate the noise level (ppm).}
@@ -133,10 +133,10 @@ coarse fitting stage of the algorithm (ppm).}
 dependant phase term (ms).}
 
 \item{max_basis_shift_broad}{maximum allowable shift for broad signals in the
-basis (Hz). Determined based on thier name beginning with Lip or MM.}
+basis (Hz). Determined based on their name beginning with Lip or MM.}
 
 \item{max_basis_damping_broad}{maximum allowable Lorentzian damping for broad
-signals in the basis (Hz). Determined based on thier name beginning with Lip
+signals in the basis (Hz). Determined based on their name beginning with Lip
 or MM.}
 }
 \value{
