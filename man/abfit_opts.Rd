@@ -45,23 +45,27 @@ abfit_opts(
 )
 }
 \arguments{
-\item{init_damping}{todo.}
+\item{init_damping}{initial value of the Gaussian global damping parameter
+(Hz). Very poorly shimmed or high field data may benefit from a larger value.}
 
-\item{maxiters}{todo.}
+\item{maxiters}{The maximum number of iterations to run for the detailed fit.}
 
-\item{max_shift}{todo.}
+\item{max_shift}{The maximum allowable shift to be applied in the
+opimisation phase of fitting (Hz).}
 
-\item{max_damping}{todo.}
+\item{max_damping}{maximum permitted value of the global damping parameter
+(Hz).}
 
-\item{max_phase}{todo.}
+\item{max_phase}{maximum permitted value of the global zero-order phase term
+(degrees).}
 
 \item{lambda}{todo.}
 
-\item{ppm_left}{todo.}
+\item{ppm_left}{downfield frequency limit for the fitting range (ppm).}
 
-\item{ppm_right}{todo.}
+\item{ppm_right}{upfield frequency limit for the fitting range (ppm).}
 
-\item{zp}{todo.}
+\item{zp}{zero pad the data to twice the original length before fitting.}
 
 \item{bl_ed_pppm}{todo.}
 
@@ -69,17 +73,19 @@ abfit_opts(
 
 \item{bl_comps_pppm}{todo.}
 
-\item{export_sp_fit}{todo.}
+\item{export_sp_fit}{add the fitted spline functions to the fit result.}
 
-\item{max_asym}{todo.}
+\item{max_asym}{maximum allowable value of the asymetry parameter.}
 
-\item{max_basis_shift}{todo.}
+\item{max_basis_shift}{maximum allowable frequency shift for individual basis
+signals (Hz).}
 
-\item{max_basis_damping}{todo.}
+\item{max_basis_damping}{maximum allowable Lorentzian damping factor for
+individual basis signals (Hz).}
 
-\item{maxiters_pre}{todo.}
+\item{maxiters_pre}{maximum iterations for the coarse (pre-)fit.}
 
-\item{algo_pre}{todo.}
+\item{algo_pre}{optimisation method for the coarse (pre-)fit.}
 
 \item{min_bl_ed_pppm}{todo.}
 
@@ -126,5 +132,5 @@ full list of options.
 Return a list of options for an ABFit analysis.
 }
 \examples{
-abfit_opts(ppm_left = 4.2)
+opts <- abfit_opts(ppm_left = 4.2)
 }

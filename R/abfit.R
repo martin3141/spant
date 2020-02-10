@@ -573,16 +573,15 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 
 # abfit tips
 # NLOPT_GN_DIRECT_L is perhaps more robust for algo_pre - but slower
-# NLOPT_LN_NELDERMEAD is a pretty good option
 
 #' Return a list of options for an ABFit analysis.
 #' 
-#' @param init_damping initial value of the global damping parameter (Hz). Very
-#' poorly shimmed or high field data may benefit from a larger value.
+#' @param init_damping initial value of the Gaussian global damping parameter
+#' (Hz). Very poorly shimmed or high field data may benefit from a larger value.
 #' @param maxiters The maximum number of iterations to run for the detailed fit.
 #' @param max_shift The maximum allowable shift to be applied in the
 #' opimisation phase of fitting (Hz).
-#' @param max_damping maximum permitted value of the global damping paramter
+#' @param max_damping maximum permitted value of the global damping parameter
 #' (Hz).
 #' @param max_phase maximum permitted value of the global zero-order phase term
 #' (degrees).
@@ -595,10 +594,12 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param bl_comps_pppm todo.
 #' @param export_sp_fit add the fitted spline functions to the fit result.
 #' @param max_asym maximum allowable value of the asymetry parameter.
-#' @param max_basis_shift todo.
-#' @param max_basis_damping todo.
-#' @param maxiters_pre todo.
-#' @param algo_pre todo.
+#' @param max_basis_shift maximum allowable frequency shift for individual basis
+#' signals (Hz).
+#' @param max_basis_damping maximum allowable Lorentzian damping factor for
+#' individual basis signals (Hz).
+#' @param maxiters_pre maximum iterations for the coarse (pre-)fit.
+#' @param algo_pre optimisation method for the coarse (pre-)fit.
 #' @param min_bl_ed_pppm todo.
 #' @param max_bl_ed_pppm todo.
 #' @param auto_bl_flex_n todo.
@@ -620,7 +621,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param max_basis_damping_broad todo.
 #' @return full list of options.
 #' @examples
-#' abfit_opts(ppm_left = 4.2)
+#' opts <- abfit_opts(ppm_left = 4.2)
 #' @export
 abfit_opts <- function(init_damping = 5, maxiters = 1024,  max_shift = 10, 
                        max_damping = 15, max_phase = 360, lambda = NULL, 
