@@ -577,20 +577,24 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 
 #' Return a list of options for an ABFit analysis.
 #' 
-#' @param init_damping todo.
-#' @param maxiters todo.
-#' @param max_shift todo.
-#' @param max_damping todo.
-#' @param max_phase todo.
+#' @param init_damping initial value of the global damping parameter (Hz). Very
+#' poorly shimmed or high field data may benefit from a larger value.
+#' @param maxiters The maximum number of iterations to run for the detailed fit.
+#' @param max_shift The maximum allowable shift to be applied in the
+#' opimisation phase of fitting (Hz).
+#' @param max_damping maximum permitted value of the global damping paramter
+#' (Hz).
+#' @param max_phase maximum permitted value of the global zero-order phase term
+#' (degrees).
 #' @param lambda todo.
-#' @param ppm_left todo.
-#' @param ppm_right todo.
-#' @param zp todo.
+#' @param ppm_left downfield frequency limit for the fitting range (ppm).
+#' @param ppm_right upfield frequency limit for the fitting range (ppm).
+#' @param zp zero pad the data to twice the original length before fitting.
 #' @param bl_ed_pppm todo.
 #' @param auto_bl_flex todo.
 #' @param bl_comps_pppm todo.
-#' @param export_sp_fit todo.
-#' @param max_asym todo.
+#' @param export_sp_fit add the fitted spline functions to the fit result.
+#' @param max_asym maximum allowable value of the asymetry parameter.
 #' @param max_basis_shift todo.
 #' @param max_basis_damping todo.
 #' @param maxiters_pre todo.
