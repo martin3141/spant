@@ -1021,9 +1021,14 @@ tpower <- function(x, t, p) {
   (x - t) ^ p * (x > t)
 }
 
-# Slightly adapted from "Splines, knots, and penalties", Eilers 2010
-# deg = 1 linear, deg = 2 quadratic, deg = 3 cubic
-# LCM uses cubic b-splines
+#' Generate a spline basis, slightly adapted from : "Splines, knots, and
+#' penalties", Eilers 2010.
+#'
+#' @param N number of data points.
+#' @param number number of spline functions.
+#' @param deg spline degree : deg = 1 linear, deg = 2 quadratic, deg = 3 cubic.
+#' @return spline basis as a matrix.
+#' @export
 bbase <- function(N, number, deg = 3) {
   # Construct a B-spline basis of degree
   x <- 1:N
@@ -1141,6 +1146,12 @@ calc_ed_from_lambda_stable <- function(spline_basis, deriv_mat, lambda) {
   return(sum(diag(G)))
 }
 
+#' Calculate the effective dimensions of a spline smoother from lambda.
+#' @param spline_basis spline basis.
+#' @param deriv_mat derivative matrix.
+#' @param lambda smoothing parameter.
+#' @return the effective dimension value.
+#' @export
 calc_ed_from_lambda <- function(spline_basis, deriv_mat, lambda) {
   inv_mat <- solve(t(spline_basis) %*% spline_basis +
                      lambda * (t(deriv_mat) %*% deriv_mat))
