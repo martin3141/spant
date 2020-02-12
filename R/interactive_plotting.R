@@ -156,6 +156,7 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
 #' @param orient_lab display orientation labels (default TRUE).
 #' @param rescale rescale factor for the underlay and overlay images.
 #' @param crosshairs display the crosshairs (default TRUE).
+#' @param ch_lwd crosshair linewidth.
 #' @param colourbar display a colourbar for the overlay (default TRUE).
 #' @param bg plot background colour.
 #' @param mar plot margins.
@@ -164,8 +165,8 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
 ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
                    zlim_ol = NULL, alpha = 1, col_ol = viridisLite::viridis(64),
                    orient_lab = TRUE, rescale = 1, crosshairs = TRUE,
-                   colourbar = TRUE, bg = "black", mar = c(0, 0, 0, 0),
-                   smallplot = c(0.50, 0.52, 0.1, 0.4)) {
+                   ch_lwd = 1, colourbar = TRUE, bg = "black",
+                   mar = c(0, 0, 0, 0), smallplot = c(0.50, 0.52, 0.1, 0.4)) {
   
   if ((RNifti::orientation(underlay) != "RAS") && (orient_lab)) {
     warning("Underlay image is not in RAS format, orientation labels may be incorrect.")
@@ -237,19 +238,20 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
   if (crosshairs) {
     # top right verical
     graphics::lines(rep(xcutoff + (img_dim[2] - xyz[2]) / img_dim[2] *
-                       (1 - xcutoff), 2), c(ycutoff, 1), col = "red")
+                   (1 - xcutoff), 2), c(ycutoff, 1), col = "red",
+                   lwd = ch_lwd)
     
     # upper left horizonal
     graphics::lines(c(0, 1), rep(ycutoff + xyz[3] / img_dim[3] *
-                                (1 - ycutoff), 2), col = "red")
+                                (1 - ycutoff), 2), col = "red", lwd = ch_lwd)
     
     # lower left horizontal
     graphics::lines(c(0, xcutoff), rep(xyz[2] / img_dim[2] * ycutoff, 2),
-                    col = "red")
+                    col = "red", lwd = ch_lwd)
     
     # lower left vertical
     graphics::lines(rep((img_dim[1] - xyz[1]) / img_dim[1] * xcutoff, 2),
-                    c(0, 1), col = "red")
+                    c(0, 1), col = "red", lwd = ch_lwd)
   }
 
   if (orient_lab) {

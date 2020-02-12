@@ -15,6 +15,7 @@ ortho3(
   orient_lab = TRUE,
   rescale = 1,
   crosshairs = TRUE,
+  ch_lwd = 1,
   colourbar = TRUE,
   bg = "black",
   mar = c(0, 0, 0, 0),
@@ -41,6 +42,8 @@ ortho3(
 \item{rescale}{rescale factor for the underlay and overlay images.}
 
 \item{crosshairs}{display the crosshairs (default TRUE).}
+
+\item{ch_lwd}{crosshair linewidth.}
 
 \item{colourbar}{display a colourbar for the overlay (default TRUE).}
 
