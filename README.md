@@ -126,16 +126,12 @@ stackplot(basis, xlim = c(4, 0.5), labels = basis$names, y_offset = 5)
 ![](README-basis_sim-1.png)<!-- -->
 
 ``` r
-# perform VARPRO fitting to processed data
+# perform ABfit analysis of processed data
 fit_res <- fit_mrs(mrs_proc, basis)
-#> 
-  |                                                                       
-  |                                                                 |   0%
-  |                                                                       
-  |=================================================================| 100%
+#>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
 
 # plot the fit estimate, residual and baseline
-plot(fit_res, xlim = c(4, 0.5))
+plot(fit_res)
 ```
 
 ![](README-fitting-1.png)<!-- -->
