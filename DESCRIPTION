@@ -4,8 +4,9 @@ Title: MR Spectroscopy Analysis Tools
 Version: 1.0.9000
 Date: 2020-02-17
 Authors@R: c(
-  person("Martin", "Wilson", email = "martin@pipegrep.co.uk", role = c("cre","aut")),
-  person("John", "Muschelli", role = "ctb"))
+    person("Martin", "Wilson", email = "martin@pipegrep.co.uk",
+           role = c("cre","aut")),
+    person("John", "Muschelli", role = "ctb"))
 Description: Tools for reading, visualising and processing Magnetic Resonance
     Spectroscopy data.
 BugReports: https://github.com/martin3141/spant/issues
