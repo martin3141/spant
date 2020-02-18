@@ -1,0 +1,50 @@
+---
+title: "ABfit baseline options"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{abfit-baseline-adj}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+knitr::opts_chunk$set(fig.width = 6, fig.height = 5)
+library(spant)
+```
+
+```{r read_data}
+fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
+
+# import raw data
+mrs_data <- read_mrs(fname, format = "spar_sdat")
+basis    <- sim_basis_1h_brain_press(mrs_data)
+```
+
+```{r abfit_default}
+def_res <- fit_mrs(mrs_data, basis)
+plot(def_res)
+def_res$res_tab$bl_ed_pppm
+```
+
+```{r abfit_flex}
+opts <- abfit_opts(auto_bl_flex = FALSE, bl_ed_pppm = 8)
+def_res <- fit_mrs(mrs_data, basis, opts = opts)
+plot(def_res)
+```
+```{r abfit_stiff}
+opts <- abfit_opts(auto_bl_flex = FALSE, bl_ed_pppm = 1.5)
+def_res <- fit_mrs(mrs_data, basis, opts = opts)
+plot(def_res)
+```
+```{r abfit_aic}
+opts <- abfit_opts(aic_smoothing_factor = 1)
+def_res <- fit_mrs(mrs_data, basis, opts = opts)
+plot(def_res)
+```
