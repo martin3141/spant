@@ -37,7 +37,7 @@ plot(mrs_proc, xlim = c(5, 0.5))
 ```
 
 ## Basis simulation
-```{r basis_sim, message = FALSE}
+```{r basis_sim, message = FALSE, fig.height=9}
 # simulate a typical basis set for short TE brain analysis
 basis <- sim_basis_1h_brain_press(mrs_proc)
 
@@ -45,14 +45,14 @@ basis <- sim_basis_1h_brain_press(mrs_proc)
 print(basis)
 
 # plot basis signals
-stackplot(basis, xlim = c(4, 0.5))
+stackplot(basis, xlim = c(4, 0.5), labels = basis$names, y_offset = 5)
 ```
 
 ## Fitting
 ```{r fitting, message = FALSE}
-# perform VARPRO fitting to processed data
+# perform ABfit analysis of processed data
 fit_res <- fit_mrs(mrs_proc, basis)
 
 # plot the fit estimate, residual and baseline
-plot(fit_res, xlim = c(4, 0.5))
+plot(fit_res, xlim = c(4, 0.2))
 ```
