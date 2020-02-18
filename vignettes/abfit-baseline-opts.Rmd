@@ -48,3 +48,9 @@ opts <- abfit_opts(aic_smoothing_factor = 1)
 def_res <- fit_mrs(mrs_data, basis, opts = opts)
 plot(def_res)
 ```
+
+```{r abfit_aic}
+opts <- abfit_opts(export_sp_fit = TRUE)
+def_res <- fit_mrs(mrs_data, basis, opts = opts)
+stackplot(def_res, y_offset = 0, omit_signals = basis$names)
+```
