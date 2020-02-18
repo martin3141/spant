@@ -220,6 +220,7 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1,
     n <- which(ind)
   }
   
+  opts <- x$opts
   x <- x$fits[[n]]
   
   # remove any signals that were requested
@@ -257,8 +258,13 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1,
   }
   
   if (is.null(xlim)) {
-    xlim <- rev(range(x$PPMScale))
+    if ((!is.null(opts$ppm_left)) & (!is.null(opts$ppm_right))) {
+      xlim <- c(opts$ppm_left, opts$ppm_right)
+    } else {
+      xlim <- rev(range(x$PPMScale))
+    }
   }
+  
   
   graphics::par("xaxs" = "i", "yaxs" = "i") # tight axes limits
   
