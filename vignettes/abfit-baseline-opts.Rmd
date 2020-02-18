@@ -52,5 +52,5 @@ plot(def_res)
 ```{r abfit_aic}
 opts <- abfit_opts(export_sp_fit = TRUE)
 def_res <- fit_mrs(mrs_data, basis, opts = opts)
-stackplot(def_res, y_offset = 0, omit_signals = basis$names)
+stackplot(def_res, omit_signals = basis$names)
 ```

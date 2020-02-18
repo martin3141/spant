@@ -202,7 +202,7 @@ summary.fit_result <- function(object, ...) {
 #' @param mar option to adjust the plot margins. See ?par.
 #' @param ... further arguments to plot method.
 #' @export
-stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1, 
+stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0, dyn = 1, 
                                  x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
                                  n = NULL, sub_bl = FALSE, labels = FALSE,
                                  label_names = NULL, sig_col = "black",
@@ -264,7 +264,6 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 1, dyn = 1,
       xlim <- rev(range(x$PPMScale))
     }
   }
-  
   
   graphics::par("xaxs" = "i", "yaxs" = "i") # tight axes limits
   
