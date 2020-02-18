@@ -8,7 +8,7 @@ individual basis set components shown.}
 \method{stackplot}{fit_result}(
   x,
   xlim = NULL,
-  y_offset = 1,
+  y_offset = 0,
   dyn = 1,
   x_pos = 1,
   y_pos = 1,
