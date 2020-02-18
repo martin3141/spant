@@ -87,6 +87,8 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
       basis <- read_basis(basis)
     }
     
+    # use default fitting opts if not specified 
+    if (is.null(opts)) opts <- abfit_opts()
     
     acq_paras <- get_acq_paras(metab)
     
@@ -303,7 +305,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
   
   out <- list(res_tab = res_tab, fits = fits, 
               data = metab, basis = basis, amp_cols = ncol(amps), 
-              proc_time = proc_time)
+              proc_time = proc_time, method = method, opts = opts)
   
   class(out) <- "fit_result"
   return(out)

@@ -19,7 +19,7 @@
 #' @param ... further arguments to plot method.
 #' @export
 plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
-                            coil = 1,xlim = NULL, data_only = FALSE,
+                            coil = 1, xlim = NULL, data_only = FALSE,
                             label = NULL, plot_sigs = NULL, n = NULL,
                             sub_bl = FALSE, mar = NULL, restore_def_par = TRUE, 
                             ylim = NULL, y_scale = FALSE, ...) {
@@ -34,6 +34,7 @@ plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
     n <- which(ind)
   }
   
+  opts <- x$opts
   x <- x$fits[[n]]
   
   if (anyNA(x)) { 
@@ -42,7 +43,11 @@ plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
   }
   
   if (is.null(xlim)) {
-    xlim <- rev(range(x$PPMScale))
+    if ((!is.null(opts$ppm_left)) & (!is.null(opts$ppm_right))) {
+      xlim <- c(opts$ppm_left, opts$ppm_right)
+    } else {
+      xlim <- rev(range(x$PPMScale))
+    }
   }
   
   graphics::par("xaxs" = "i", "yaxs" = "i") # tight axes limits
