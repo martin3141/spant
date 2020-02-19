@@ -2,7 +2,7 @@
 title: "ABfit baseline options"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{abfit-baseline-adj}
+  %\VignetteIndexEntry{ABfit baseline options}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -10,9 +10,10 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 5
 )
-knitr::opts_chunk$set(fig.width = 6, fig.height = 5)
 ```
 
 ## Introduction
