@@ -363,7 +363,10 @@ check_geom <- function(a, b) {
   }
 } 
 
-# VOI centre of gravity
+#' Calculate the centre of gravity for an image containing 0 and 1's.
+#' @param voi nifti object.
+#' @return triplet of x,y,z coordinates.
+#' @export
 get_voi_cog <- function(voi) {
   as.integer(colMeans(which(voi == 1, arr.ind = TRUE)))
 }
