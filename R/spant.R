@@ -4,13 +4,20 @@
 #' Magnetic Resonance Spectroscopy (MRS) data.
 #' 
 #' To get started with spant, take a look at the introduction vignette:
+#' 
 #' `vignette("spant-intro", package="spant")`
 #' 
 #' Full list of vignettes:
+#' 
 #' `browseVignettes(package = "spant")`
 #' 
 #' Full list of functions:
+#' 
 #' `help(package = spant, help_type = "html")`
+#' 
+#' An online version of the documentation is available from:
+#' 
+#' \url{https://martin3141.github.io/spant/}
 #' 
 "_PACKAGE"
 

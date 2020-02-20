@@ -68,3 +68,8 @@ Quick introduction to the basic analysis workflow :
 Short tutorials : <https://martin3141.github.io/spant/articles/>
 
 Function reference : <https://martin3141.github.io/spant/reference/>
+
+Once the spant library has been loaded with `library(spant)`, type
+`?spant` on the console for instructions on how to access the offline
+documentation. Note that offline help on the available functions can be
+quickly shown in RStudio using `?function_name`, eg `?read_mrs`.
