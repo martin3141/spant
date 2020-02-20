@@ -434,6 +434,20 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   diags$SRR <- max(fit_frame$Fit) / res_sd
   diags$FQN <- stats::var(res[1:length(sp_bas_final$inds)]) / noise_sd ^ 2 
   
+  mrs_data_corr <- td2fd(mrs_data_corr)
+  mrs_data_bl_corr <- mrs_data_corr - as.numeric(int_spec(mrs_data_corr,
+                                                          opts$noise_region,
+                                                          summation = "mean"))
+  
+  lip_reg  <- as.numeric(int_spec(mrs_data_bl_corr, xlim = c(1.8, 0.8),
+                                  summation = "mean"))
+  
+  tnaa_reg <- as.numeric(int_spec(mrs_data_bl_corr, xlim = c(2.1, 1.9),
+                                  summation = "mean"))
+  
+  lip_tnaa       <- lip_reg / tnaa_reg
+  diags$LIP_TNAA <- Mod(lip_tnaa)
+  
   # combine fit and basis signals 
   fit_frame <- cbind(fit_frame, basis_frame)
   class(fit_frame) <- c("fit_table", "data.frame")
