@@ -35,13 +35,24 @@ features are included:
 
 ## Installation
 
-You can install the stable version of spant from CRAN:
+Download and install the latest version of R
+(<https://cran.ma.imperial.ac.uk/>), or with your package manager if
+using a reasonably modern Linux distribution, eg `sudo apt install
+r-base`.
+
+It is also strongly recommended to install RStudio Desktop
+(<https://rstudio.com/products/rstudio/>) to provide a modern
+environment for interactive data analysis.
+
+Once R and RStudio have been installed, open the RStudio application and
+type the following in the Console (lower left panel) to install the
+latest stable version of spant:
 
 ``` r
 install.packages("spant", dependencies = TRUE)
 ```
 
-Or the the development version from GitHub (requires `devtools`
+Or the the development version from GitHub (requires the `devtools`
 package):
 
 ``` r
@@ -51,7 +62,7 @@ devtools::install_github("martin3141/spant")
 
 ## Documentation
 
-A quick introduction to the basic analysis workflow :
+Quick introduction to the basic analysis workflow :
 <https://martin3141.github.io/spant/articles/spant-intro.html>
 
 Short tutorials : <https://martin3141.github.io/spant/articles/>
