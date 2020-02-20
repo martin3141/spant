@@ -17,45 +17,59 @@ knitr::opts_chunk$set(
 ```
 
 ## Reading raw data and plotting
-```{r useage, message = FALSE}
+Load the spant package:
+```{r, message = FALSE}
 library(spant)
+```
+
+Get the path to a data file included with spant:
+```{r}
 fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
+```
 
-# import raw data
+Read the file and save to the workspace as ``mrs_data``:
+```{r}
 mrs_data <- read_mrs(fname, format = "spar_sdat")
+```
 
-# output basic data structure
+Output some basic information about the data:
+```{r}
 print(mrs_data)
+```
 
-# plot data in the frequency domain
+Plot the spectral region between 5 and 0.5 ppm:
+```{r}
 plot(mrs_data, xlim = c(5, 0.5))
 ```
 
 ## Basic preprocessing
-```{r processing, message = FALSE}
-# apply water filter and align to tNAA resonance
+Apply a HSVD filter to the residual water region and align the spectrum to the tNAA resonance at 2.01 ppm:
+```{r}
 mrs_proc <- hsvd_filt(mrs_data)
 mrs_proc <- align(mrs_proc, 2.01)
 plot(mrs_proc, xlim = c(5, 0.5))
 ```
 
 ## Basis simulation
-```{r basis_sim, message = FALSE, fig.height=9}
-# simulate a typical basis set for short TE brain analysis
+Simulate a typical basis set for short TE brain analysis, print some basic information and plot:
+```{r, fig.height=9}
 basis <- sim_basis_1h_brain_press(mrs_proc)
-
-# output basis info
 print(basis)
-
-# plot basis signals
 stackplot(basis, xlim = c(4, 0.5), labels = basis$names, y_offset = 5)
 ```
 
-## Fitting
-```{r fitting, message = FALSE}
-# perform ABfit analysis of processed data
+Perform ABfit analysis of the processed data (``mrs_proc``):
+```{r, results = "hide"}
 fit_res <- fit_mrs(mrs_proc, basis)
+```
 
-# plot the fit estimate, residual and baseline
+Plot the fit result: 
+```{r}
 plot(fit_res)
+```
+
+Extract the estimated amplitudes from ``fit_res`` and print as a ratio to total-creatine in column format:
+```{r}
+amps <- fit_amps(fit_res)
+print(t(amps / amps$TCr))
 ```

@@ -23,7 +23,7 @@ A good baseline estimate is a prerequisite for accurate metabolite quantitation.
 ## Default analysis
 
 Load the spant analysis package:
-```{r setup, results = "hide", message = FALSE}
+```{r setup, message = FALSE}
 library(spant)
 ```
 Read an example dataset from file and simulate matching basis set:
@@ -42,7 +42,7 @@ The above fit looks good, with a smooth baseline and no significant signals in t
 ```{r abfit_bl_value}
 fit_res$res_tab$bl_ed_pppm
 ```
-The baseline flexibility was found to be `r round(fit_res$res_tab$bl_ed_pppm, 1)` ED per ppm, where ED is the effective dimension -- analogous to the number of spline functions required per ppm. Whilst the automated fit looks reasonable at first glance, let's try and convince ourselves we can't do better.
+The baseline flexibility was found to be `r round(fit_res$res_tab$bl_ed_pppm, 1)` ED per ppm, where ED is the effective dimension -- analogous to the number of spline functions required per ppm. Whilst the automated fit looks reasonable at first glance, let's try and convince ourselves we can't do better with manual adjustments to the algorithm.
 
 ## Custom analyses
 
@@ -62,7 +62,7 @@ fit_res <- fit_mrs(mrs_data, basis, opts = opts)
 plot(fit_res)
 ```
 
-Now we have a much smoother (almost linear) baseline, which comes at the cost of a larger residual, where broad features point strongly toward unmodeled features and therefore biased metabolite levels. An alternative to manually specifying a fixed level of baseline flexibility is to adjust the criterion used for automated estimation. The ``aic_smoothing_factor`` can be set to a smaller value (default = 5) to encourage more flexible baselines, whilst still being adaptive to the specific spectrum:
+Now we have a much smoother (almost linear) baseline, which comes at the cost of having broad unmodeled signals in the residual -- ultimatly resulting in biased metabolite levels. An alternative to manually specifying a fixed level of baseline flexibility is to adjust the criterion used for automated estimation. The ``aic_smoothing_factor`` can be set to a smaller value (default = 5) to encourage more flexible baselines, whilst still being adaptive to any broad spectral features:
 
 ```{r abfit_aic, results = "hide"}
 opts    <- abfit_opts(aic_smoothing_factor = 1)
@@ -77,14 +77,14 @@ fit_res <- fit_mrs(mrs_data, basis, opts = opts)
 stackplot(fit_res, omit_signals = basis$names)
 ```
 
-The default number of spline functions for ABfit is 15 per PPM which may be varified from the above plot. Let's try increasing to 25:
+The default number of spline functions for ABfit is 15 per PPM which may be verified from the above plot. Let's try increasing to 25:
 ```{r abfit_bspline_more, results = "hide"}
 opts    <- abfit_opts(export_sp_fit = TRUE, bl_comps_pppm = 25)
 fit_res <- fit_mrs(mrs_data, basis, opts = opts)
 stackplot(fit_res, omit_signals = basis$names)
 ```
 
-Clearly the density of spline functions has increased, however the baseline smoothness remains very close the default. The general principle for ABfit (derived from P-splines) is to over specify the number of baseline modelling spline functions, and rely on a penalty factor to encourage smoothness.
+Clearly the density of spline functions has increased, however the baseline smoothness remains very close to the default. The general principle for ABfit (derived from P-splines) is to over specify the number of baseline modelling spline functions, and rely on a penalty factor to encourage smoothness.
 ```{r abfit_bl_value_more_splines}
 fit_res$res_tab$bl_ed_pppm
 ```
