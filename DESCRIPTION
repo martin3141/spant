@@ -5,7 +5,7 @@ Version: 1.0.9000
 Date: 2020-02-17
 Authors@R: c(
     person("Martin", "Wilson", email = "martin@pipegrep.co.uk",
-           role = c("cre","aut")),
+           role = c("cre", "aut")),
     person("John", "Muschelli", role = "ctb"))
 Description: Tools for reading, visualising and processing Magnetic Resonance
     Spectroscopy data.

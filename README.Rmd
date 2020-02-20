@@ -9,8 +9,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "README-",
-  fig.width = 5,
-  fig.height = 4
+  fig.width = 6,
+  fig.height = 5
 )
 ```
 Spectroscopy Analysis Tools (spant)
@@ -21,10 +21,6 @@ Spectroscopy Analysis Tools (spant)
 [![](http://cranlogs.r-pkg.org/badges/spant)](http://cran.rstudio.com/web/packages/spant/index.html)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant)
 [![Coverage Status](https://coveralls.io/repos/github/martin3141/spant/badge.svg?branch=master)](https://coveralls.io/github/martin3141/spant?branch=master)
-
-`muschellij2` badges:
-[![Travis Build Status](https://travis-ci.org/muschellij2/spant.svg?branch=master)](https://travis-ci.org/muschellij2/spant)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/muschellij2/spant?branch=master&svg=true)](https://ci.appveyor.com/project/muschellij2/spant)
 
 ## Overview
 spant provides a full suite of tools to build automated analysis pipelines for
@@ -52,47 +48,8 @@ devtools::install_github("martin3141/spant")
 ```
 
 ## Documentation
-Long form : https://martin3141.github.io/spant/articles/
+A quick introduction to the basic analysis workflow : https://martin3141.github.io/spant/articles/spant-intro.html
+
+Short tutorials : https://martin3141.github.io/spant/articles/
 
 Function reference : https://martin3141.github.io/spant/reference/
-
-## Quick introduction
-```{r import, message = FALSE}
-library(spant)
-fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
-
-# import raw data
-mrs_data <- read_mrs(fname, format = "spar_sdat")
-
-# output basic data structure
-print(mrs_data)
-
-# plot data in the frequency domain
-plot(mrs_data, xlim = c(5, 0.5))
-```
-
-```{r processing, message = FALSE}
-# apply water filter and align to tNAA resonance
-mrs_proc <- hsvd_filt(mrs_data)
-mrs_proc <- align(mrs_proc, 2.01)
-plot(mrs_proc, xlim = c(5, 0.5))
-```
-
-```{r basis_sim, message = FALSE, fig.height=9}
-# simulate a typical basis set for short TE brain analysis
-basis <- sim_basis_1h_brain_press(mrs_proc)
-
-# output basis info
-print(basis)
-
-# plot basis signals
-stackplot(basis, xlim = c(4, 0.5), labels = basis$names, y_offset = 5)
-```
-
-```{r fitting, message = FALSE}
-# perform ABfit analysis of processed data
-fit_res <- fit_mrs(mrs_proc, basis)
-
-# plot the fit estimate, residual and baseline
-plot(fit_res)
-```

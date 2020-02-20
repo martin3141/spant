@@ -2,6 +2,7 @@
 * Improved ppm labels for ABfit plot results.
 * Updated unit tests.
 * Added vignette on manually adjusting ABfit baseline smoothness.
+* Updated the introduction vignette.
 
 # spant 1.0.0
 * ABfit analysis method has been added, and is now default for the mrs_fit
