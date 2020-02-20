@@ -604,7 +604,7 @@ fit_diags <- function(x, amps = NULL) {
 #' eg TNAA = NAA + NAAG.
 #' @return a dataframe of amplitudes.
 #' @export
-fit_amps <- function(x, inc_index = FALSE, sort_names = TRUE,
+fit_amps <- function(x, inc_index = FALSE, sort_names = FALSE,
                      append_common_1h_comb = TRUE) {
   
   basis_n <- length(x$basis$names)
