@@ -54,6 +54,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/abfit-baseline-opts.html">ABfit baseline options</a>
+    </li>
+    <li>
       <a href="../articles/spant-intro.html">Introduction to spant</a>
     </li>
   </ul>
@@ -77,7 +80,6 @@
     <div class="page-header toc-ignore">
       <h1>Introduction to spant</h1>
             
-            <h4 class="date">2020-02-18</h4>
       
       
       <div class="hidden name"><code>spant-intro.Rmd</code></div>
@@ -89,77 +91,103 @@
 <div id="reading-raw-data-and-plotting" class="section level2">
 <h2 class="hasAnchor">
 <a href="#reading-raw-data-and-plotting" class="anchor"></a>Reading raw data and plotting</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(spant)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">fname &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"philips_spar_sdat_WS.SDAT"</span>, <span class="dt">package =</span> <span class="st">"spant"</span>)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># import raw data</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">mrs_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/read_mrs.html">read_mrs</a></span>(fname, <span class="dt">format =</span> <span class="st">"spar_sdat"</span>)</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co"># output basic data structure</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(mrs_data)</a></code></pre></div>
-<pre><code>## MRS Data Parameters
-## ----------------------------------
-## Trans. freq (MHz)       : 127.7861
-## FID data points         : 1024
-## X,Y,Z dimensions        : 1x1x1
-## Dynamics                : 1
-## Coils                   : 1
-## Voxel resolution (mm)   : 20x20x20
-## Sampling frequency (Hz) : 2000
-## Reference freq. (ppm)   : 4.65
-## Spectral domain         : FALSE</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># plot data in the frequency domain</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(mrs_data, <span class="dt">xlim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">5</span>, <span class="fl">0.5</span>))</a></code></pre></div>
-<p><img src="spant-intro_files/figure-html/useage-1.png" width="480"></p>
+<p>Load the spant package:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(spant)</a></code></pre></div>
+<p>Get the path to a data file included with spant:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">fname &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"philips_spar_sdat_WS.SDAT"</span>, <span class="dt">package =</span> <span class="st">"spant"</span>)</a></code></pre></div>
+<p>Read the file and save to the workspace as <code>mrs_data</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">mrs_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/read_mrs.html">read_mrs</a></span>(fname, <span class="dt">format =</span> <span class="st">"spar_sdat"</span>)</a></code></pre></div>
+<p>Output some basic information about the data:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(mrs_data)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; MRS Data Parameters</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; ----------------------------------</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; Trans. freq (MHz)       : 127.7861</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; FID data points         : 1024</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; X,Y,Z dimensions        : 1x1x1</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; Dynamics                : 1</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; Coils                   : 1</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; Voxel resolution (mm)   : 20x20x20</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; Sampling frequency (Hz) : 2000</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; Reference freq. (ppm)   : 4.65</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; Spectral domain         : FALSE</span></a></code></pre></div>
+<p>Plot the spectral region between 5 and 0.5 ppm:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(mrs_data, <span class="dt">xlim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">5</span>, <span class="fl">0.5</span>))</a></code></pre></div>
+<p><img src="spant-intro_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 </div>
 <div id="basic-preprocessing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#basic-preprocessing" class="anchor"></a>Basic preprocessing</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># apply water filter and align to tNAA resonance</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">mrs_proc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hsvd_filt.html">hsvd_filt</a></span>(mrs_data)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">mrs_proc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/align.html">align</a></span>(mrs_proc, <span class="fl">2.01</span>)</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(mrs_proc, <span class="dt">xlim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">5</span>, <span class="fl">0.5</span>))</a></code></pre></div>
-<p><img src="spant-intro_files/figure-html/processing-1.png" width="480"></p>
+<p>Apply a HSVD filter to the residual water region and align the spectrum to the tNAA resonance at 2.01 ppm:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">mrs_proc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hsvd_filt.html">hsvd_filt</a></span>(mrs_data)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">mrs_proc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/align.html">align</a></span>(mrs_proc, <span class="fl">2.01</span>)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(mrs_proc, <span class="dt">xlim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">5</span>, <span class="fl">0.5</span>))</a></code></pre></div>
+<p><img src="spant-intro_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 </div>
 <div id="basis-simulation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#basis-simulation" class="anchor"></a>Basis simulation</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># simulate a typical basis set for short TE brain analysis</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">basis &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sim_basis_1h_brain_press.html">sim_basis_1h_brain_press</a></span>(mrs_proc)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co"># output basis info</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(basis)</a></code></pre></div>
-<pre><code>## Basis set parameters
-## -------------------------------
-## Trans. freq (MHz)       : 127.786142
-## Data points             : 1024
-## Sampling frequency (Hz) : 2000
-## Elements                : 27
-## 
-## Names
-## -------------------------------
-## -CrCH2,Ala,Asp,Cr,GABA,Glc,Gln,
-## GSH,Glu,GPC,Ins,Lac,Lip09,
-## Lip13a,Lip13b,Lip20,MM09,MM12,
-## MM14,MM17,MM20,NAA,NAAG,PCh,
-## PCr,sIns,Tau</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># plot basis signals</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw"><a href="../reference/stackplot.html">stackplot</a></span>(basis, <span class="dt">xlim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">4</span>, <span class="fl">0.5</span>), <span class="dt">labels =</span> basis<span class="op">$</span>names, <span class="dt">y_offset =</span> <span class="dv">5</span>)</a></code></pre></div>
-<p><img src="spant-intro_files/figure-html/basis_sim-1.png" width="480"></p>
-</div>
-<div id="fitting" class="section level2">
-<h2 class="hasAnchor">
-<a href="#fitting" class="anchor"></a>Fitting</h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># perform ABfit analysis of processed data</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">fit_res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit_mrs.html">fit_mrs</a></span>(mrs_proc, basis)</a></code></pre></div>
-<pre><code>## 
-  |                                                                            
-  |                                                                      |   0%
-  |                                                                            
-  |======================================================================| 100%</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># plot the fit estimate, residual and baseline</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(fit_res, <span class="dt">xlim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">4</span>, <span class="fl">0.2</span>))</a></code></pre></div>
-<p><img src="spant-intro_files/figure-html/fitting-1.png" width="480"></p>
+<p>Simulate a typical basis set for short TE brain analysis, print some basic information and plot:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">basis &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sim_basis_1h_brain_press.html">sim_basis_1h_brain_press</a></span>(mrs_proc)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(basis)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; Basis set parameters</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; -------------------------------</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; Trans. freq (MHz)       : 127.786142</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; Data points             : 1024</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; Sampling frequency (Hz) : 2000</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; Elements                : 27</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; Names</span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; -------------------------------</span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt; -CrCH2,Ala,Asp,Cr,GABA,Glc,Gln,</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt; GSH,Glu,GPC,Ins,Lac,Lip09,</span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt; Lip13a,Lip13b,Lip20,MM09,MM12,</span></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt; MM14,MM17,MM20,NAA,NAAG,PCh,</span></a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt; PCr,sIns,Tau</span></a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="kw"><a href="../reference/stackplot.html">stackplot</a></span>(basis, <span class="dt">xlim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">4</span>, <span class="fl">0.5</span>), <span class="dt">labels =</span> basis<span class="op">$</span>names, <span class="dt">y_offset =</span> <span class="dv">5</span>)</a></code></pre></div>
+<p><img src="spant-intro_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
+<p>Perform ABfit analysis of the processed data (<code>mrs_proc</code>):</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">fit_res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit_mrs.html">fit_mrs</a></span>(mrs_proc, basis)</a></code></pre></div>
+<p>Plot the fit result:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(fit_res)</a></code></pre></div>
+<p><img src="spant-intro_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
+<p>Extract the estimated amplitudes from <code>fit_res</code> and print as a ratio to total-creatine in column format:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">amps &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit_amps.html">fit_amps</a></span>(fit_res)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/t.html">t</a></span>(amps <span class="op">/</span><span class="st"> </span>amps<span class="op">$</span>TCr))</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt;               [,1]</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; X.CrCH2 0.00000000</span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; Ala     0.13356579</span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt; Asp     0.58174068</span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt; Cr      0.65710983</span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt; GABA    0.27521949</span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt; Glc     0.03904656</span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt; Gln     0.05084923</span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt; GSH     0.36327698</span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt; Glu     1.06317108</span></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt; GPC     0.26200476</span></a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt; Ins     0.96229493</span></a>
+<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt; Lac     0.09522293</span></a>
+<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="co">#&gt; Lip09   0.38693990</span></a>
+<a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co">#&gt; Lip13a  0.04220361</span></a>
+<a class="sourceLine" id="cb10-18" data-line-number="18"><span class="co">#&gt; Lip13b  0.00000000</span></a>
+<a class="sourceLine" id="cb10-19" data-line-number="19"><span class="co">#&gt; Lip20   0.00000000</span></a>
+<a class="sourceLine" id="cb10-20" data-line-number="20"><span class="co">#&gt; MM09    0.16026383</span></a>
+<a class="sourceLine" id="cb10-21" data-line-number="21"><span class="co">#&gt; MM12    0.10717679</span></a>
+<a class="sourceLine" id="cb10-22" data-line-number="22"><span class="co">#&gt; MM14    0.42536118</span></a>
+<a class="sourceLine" id="cb10-23" data-line-number="23"><span class="co">#&gt; MM17    0.36667339</span></a>
+<a class="sourceLine" id="cb10-24" data-line-number="24"><span class="co">#&gt; MM20    1.50143457</span></a>
+<a class="sourceLine" id="cb10-25" data-line-number="25"><span class="co">#&gt; NAA     0.97445499</span></a>
+<a class="sourceLine" id="cb10-26" data-line-number="26"><span class="co">#&gt; NAAG    0.25596010</span></a>
+<a class="sourceLine" id="cb10-27" data-line-number="27"><span class="co">#&gt; PCh     0.00000000</span></a>
+<a class="sourceLine" id="cb10-28" data-line-number="28"><span class="co">#&gt; PCr     0.34289017</span></a>
+<a class="sourceLine" id="cb10-29" data-line-number="29"><span class="co">#&gt; sIns    0.10624364</span></a>
+<a class="sourceLine" id="cb10-30" data-line-number="30"><span class="co">#&gt; Tau     0.00000000</span></a>
+<a class="sourceLine" id="cb10-31" data-line-number="31"><span class="co">#&gt; TNAA    1.23041510</span></a>
+<a class="sourceLine" id="cb10-32" data-line-number="32"><span class="co">#&gt; TCr     1.00000000</span></a>
+<a class="sourceLine" id="cb10-33" data-line-number="33"><span class="co">#&gt; TCho    0.26200476</span></a>
+<a class="sourceLine" id="cb10-34" data-line-number="34"><span class="co">#&gt; Glx     1.11402031</span></a>
+<a class="sourceLine" id="cb10-35" data-line-number="35"><span class="co">#&gt; TLM09   0.54720373</span></a>
+<a class="sourceLine" id="cb10-36" data-line-number="36"><span class="co">#&gt; TLM13   0.57474159</span></a>
+<a class="sourceLine" id="cb10-37" data-line-number="37"><span class="co">#&gt; TLM20   1.50143457</span></a></code></pre></div>
 </div>
   </div>
 
@@ -172,7 +200,6 @@
 <li><a href="#reading-raw-data-and-plotting">Reading raw data and plotting</a></li>
       <li><a href="#basic-preprocessing">Basic preprocessing</a></li>
       <li><a href="#basis-simulation">Basis simulation</a></li>
-      <li><a href="#fitting">Fitting</a></li>
       </ul>
 </div>
       </div>
