@@ -440,13 +440,15 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                                                           summation = "mean"))
   
   lip_reg  <- as.numeric(int_spec(mrs_data_bl_corr, xlim = c(1.8, 0.8),
-                                  summation = "mean"))
+                                  summation = "l2"))
   
   tnaa_reg <- as.numeric(int_spec(mrs_data_bl_corr, xlim = c(2.1, 1.9),
-                                  summation = "mean"))
+                                  summation = "l2"))
   
-  lip_tnaa       <- lip_reg / tnaa_reg
-  diags$LIP_TNAA <- Mod(lip_tnaa)
+  diags$LIP_TNAA <- lip_reg / tnaa_reg
+  
+  # residual water
+  diags$RW_TNAA  <- Mod(fit_frame$Baseline[1]) / tnaa_reg
   
   # combine fit and basis signals 
   fit_frame <- cbind(fit_frame, basis_frame)
