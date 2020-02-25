@@ -129,7 +129,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                                           2.01)
     } else {
       lambda_end   <- calc_lambda_from_ed(sp_bas_ab$bl_bas, sp_bas_ab$deriv_mat,
-                                          opts$min_bl_ed_pppm * sp_bas_ab$ppm_range)
+                                          opts$min_bl_ed_pppm *
+                                          sp_bas_ab$ppm_range)
     }
     
     lambda_vec   <- 10 ^ (seq(log10(lambda_start), log10(lambda_end),
@@ -434,22 +435,6 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   diags$SRR <- max(fit_frame$Fit) / res_sd
   diags$FQN <- stats::var(res[1:length(sp_bas_final$inds)]) / noise_sd ^ 2 
   
-  mrs_data_corr <- td2fd(mrs_data_corr)
-  mrs_data_bl_corr <- mrs_data_corr - as.numeric(int_spec(mrs_data_corr,
-                                                          opts$noise_region,
-                                                          summation = "mean"))
-  
-  lip_reg  <- as.numeric(int_spec(mrs_data_bl_corr, xlim = c(1.8, 0.8),
-                                  summation = "l2"))
-  
-  tnaa_reg <- as.numeric(int_spec(mrs_data_bl_corr, xlim = c(2.1, 1.9),
-                                  summation = "l2"))
-  
-  diags$LIP_TNAA <- lip_reg / tnaa_reg
-  
-  # residual water
-  diags$RW_TNAA  <- Mod(fit_frame$Baseline[1]) / tnaa_reg
-  
   # combine fit and basis signals 
   fit_frame <- cbind(fit_frame, basis_frame)
   class(fit_frame) <- c("fit_table", "data.frame")
@@ -459,7 +444,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     spline_frame <- as.data.frame(Re(sp_bas_final$bl_bas) * spline_amp_mat, 
                                   row.names = NA)
     
-    colnames(spline_frame) <- paste("SP_", as.character(1:ncol(sp_bas_final$bl_bas)),
+    colnames(spline_frame) <- paste("SP_",
+                                    as.character(1:ncol(sp_bas_final$bl_bas)),
                                     sep = "")
     
     fit_frame <- cbind(fit_frame, spline_frame)
