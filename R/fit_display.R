@@ -378,7 +378,10 @@ plot_slice_fit <- function(fit_res, name, slice = 1, zlim = NULL, interp = 1) {
   col <- viridisLite::viridis(64)
   plot_map <- result_map[,, slice, 1, 1]
   plot_map <- pracma::fliplr(plot_map)
-  plot_map <- mmand::rescale(plot_map, interp, mmand::mnKernel())
+  
+  if (interp != 1) {
+    plot_map <- mmand::rescale(plot_map, interp, mmand::mnKernel())
+  }
   
   if (is.null(zlim)) { 
     fields::image.plot(plot_map, col = col, useRaster = TRUE, 
@@ -387,7 +390,8 @@ plot_slice_fit <- function(fit_res, name, slice = 1, zlim = NULL, interp = 1) {
     plot_map <- crop_range(plot_map, zlim[1], zlim[2])
     breaks <- seq(from = zlim[1], to = zlim[2], length.out = 65)
     fields::image.plot(plot_map, col = col, useRaster = TRUE, 
-                       asp = 1, axes = FALSE, legend.shrink = 0.8, breaks = breaks)
+                       asp = 1, axes = FALSE, legend.shrink = 0.8,
+                       breaks = breaks)
   }
 }
 

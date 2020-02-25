@@ -1,5 +1,6 @@
 # spant 1.1.0
 * Improved ppm labels for ABfit plot results.
+* Bug fix for plot_slice_fit when using fits from masked data.
 * Updated unit tests.
 * Added vignette on manually adjusting ABfit baseline smoothness.
 * Updated the introduction vignette.

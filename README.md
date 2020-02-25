@@ -37,8 +37,7 @@ features are included:
 
 Download and install the latest version of R
 (<https://cran.ma.imperial.ac.uk/>), or with your package manager if
-using a reasonably modern Linux distribution, eg `sudo apt install
-r-base`.
+using a recent Linux distribution, eg `sudo apt install r-base`.
 
 It is also strongly recommended to install RStudio Desktop
 (<https://rstudio.com/products/rstudio/>) to provide a modern
