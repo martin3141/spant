@@ -360,7 +360,6 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   metab_basis_fd_aug <- rbind(metab_basis_fd_cut,
                               matrix(0, sp_bas_final$bl_comps - 2, metab_comps))
   
-  
   bl_basis_final <- rbind(sp_bas_final$bl_bas, sp_bas_final$deriv_mat *
                     (lambda ^ 0.5))
   
@@ -462,16 +461,31 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                      (sp_bas_final$x_scale[1] - sp_bas_final$x_scale[2])
   }
   
+  
   #### crlb calc ####
+  
+  # calculate the analytical jacobian for the non-linear parameters
   para_crlb     <- abfit_full_anal_jac(final_par, y, raw_metab_basis,
                                        bl_basis_final, t, f, sp_bas_final$inds,
                                        sp_bas_final$bl_comps, FALSE, NULL,
                                        opts$phi1_optim)
-  
+   
   bl_comps_crlb <- sp_bas_final$bl_comps
   para_crlb     <- rbind(Re(para_crlb), matrix(0, nrow = bl_comps_crlb - 2,
                                                ncol = ncol(para_crlb)))
   amp_crlb      <- Re(full_bas)
+  
+  ## alternate method by generating spline basis with ED components in place of
+  ## the penatly matrix. Gives similar numbers to above method, so kept here as
+  ## a reference example for validation.
+  ##
+  ## ppm_range   <- opts$ppm_left - opts$ppm_right
+  ## crlb_comps  <- round(opts$bl_ed_pppm * ppm_range) - 2
+  ## sp_bas_crlb <- generate_sp_basis(mrs_data, opts$ppm_right, opts$ppm_left,
+  ##                                  crlb_comps / ppm_range)
+  ## 
+  ## bl_comps_crlb <- sp_bas_crlb$bl_comps
+  ## amp_crlb      <- cbind(sp_bas_crlb$bl_bas, Re(metab_basis_fd_cut))
   
   # remove any zero columns from para_crlb
   para_crlb <- para_crlb[,!(colSums(abs(para_crlb)) == 0)] 
@@ -480,7 +494,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   
   D <- cbind(para_crlb, amp_crlb)
   F <- t(D) %*% D / (res_sd ^ 2)
-  # F_inv <- inv(F) # sometimes F becomes singular and inv fails
+  #F_inv <- pracma::inv(F) # sometimes F becomes singular and inv fails
   F_inv <- pracma::pinv(F)
   crlbs <- diag(F_inv) ^ 0.5
   crlbs_out <- crlbs[(bl_comps_crlb + nz_paras + 1):length(crlbs)]
