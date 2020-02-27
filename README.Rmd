@@ -36,9 +36,9 @@ Magnetic Resonance Spectroscopy (MRS) data. The following features are included:
 * Voxel registration to anatomical images for partial volume concentration corrections.
 
 ## Installation
-Download and install the latest version of R (https://cran.ma.imperial.ac.uk/), or with your package manager if using a recent Linux distribution, eg `sudo apt install r-base`.
+Download and install the latest version of R (https://cloud.r-project.org/), or with your package manager if using a recent Linux distribution, eg `sudo apt install r-base`.
 
-It is also strongly recommended to install RStudio Desktop (https://rstudio.com/products/rstudio/) to provide a modern environment for interactive data analysis.
+It is also strongly recommended to install RStudio Desktop (https://rstudio.com/products/rstudio/download) to provide a modern environment for interactive data analysis.
 
 Once R and RStudio have been installed, open the RStudio application and type the following in the Console (lower left panel) to install the latest stable version of spant:
 ```{r cran, eval = FALSE}

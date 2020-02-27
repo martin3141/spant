@@ -36,11 +36,11 @@ features are included:
 ## Installation
 
 Download and install the latest version of R
-(<https://cran.ma.imperial.ac.uk/>), or with your package manager if
-using a recent Linux distribution, eg `sudo apt install r-base`.
+(<https://cloud.r-project.org/>), or with your package manager if using
+a recent Linux distribution, eg `sudo apt install r-base`.
 
 It is also strongly recommended to install RStudio Desktop
-(<https://rstudio.com/products/rstudio/>) to provide a modern
+(<https://rstudio.com/products/rstudio/download>) to provide a modern
 environment for interactive data analysis.
 
 Once R and RStudio have been installed, open the RStudio application and
