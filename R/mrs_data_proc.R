@@ -1537,7 +1537,7 @@ mean_dyn_pairs <- function(mrs_data) {
 #' @export
 sum_dyns <- function(mrs_data) {
   mrs_data$data <- aperm(mrs_data$data, c(5,1,2,3,4,6,7))
-  mrs_data$data <- colSums(mrs_data$data)
+  mrs_data$data <- colSums(mrs_data$data, na.rm = TRUE)
   new_dim <- dim(mrs_data$data)
   dim(mrs_data$data) <- c(new_dim[1:4],1,new_dim[5:6])
   mrs_data
@@ -1576,8 +1576,7 @@ recon_imag_vec <- function(data) {
   data <- fh + Conj(rev(sh))
 }
 
-conv_filt_vec <- function(fid, K = 25, ext = 1)
-{
+conv_filt_vec <- function(fid, K = 25, ext = 1) {
   k = -K:K
   filt_fun = exp(-4 * k ^ 2 / K ^ 2)
   filt_fun = filt_fun / sum(filt_fun)
