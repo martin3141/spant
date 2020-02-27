@@ -11,6 +11,7 @@ r_check_args: --as-cran
 
 r:
   - release
+  - devel
   
 r_github_packages:
   - jimhester/covr
