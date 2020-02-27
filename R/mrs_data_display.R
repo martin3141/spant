@@ -193,15 +193,11 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
   
   .pardefault <- graphics::par(no.readonly = T)
   
-  if (!is_fd(x)) {
-    x <- td2fd(x)
-  }
+  if (!is_fd(x)) x <- td2fd(x)
   
   x_scale <- ppm(x)
   
-  if (is.null(xlim)) {
-    xlim <- c(x_scale[1], x_scale[Npts(x)])
-  }
+  if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[Npts(x)])
   
   if (is.null(y_ticks)) {
     graphics::par(mar = c(3.5, 3.5, 1, 1)) # margins
@@ -215,17 +211,11 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
   
   data_dim <- dim(x$data)
   
-  if (is.null(x_pos)) {
-    x_pos <- as.integer(data_dim[2] / 2) + 1
-  }
+  if (is.null(x_pos))  x_pos <- as.integer(data_dim[2] / 2) + 1
   
-  if (is.null(y_pos)) {
-    y_pos <- as.integer(data_dim[3] / 2) + 1
-  }
+  if (is.null(y_pos)) y_pos <- as.integer(data_dim[3] / 2) + 1
   
-  if (is.null(z_pos)) {
-    z_pos <- as.integer(data_dim[4] / 2) + 1
-  }
+  if (is.null(z_pos)) z_pos <- as.integer(data_dim[4] / 2) + 1
   
   if (dim == "dyn") {
     plot_data <- t(x$data[1, x_pos, y_pos, y_pos, , coil, subset])
@@ -262,6 +252,10 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
   } else {
     stop("Invalid mode option, should be one of : 're', 'im', 'mod' or 'arg'") 
   }
+  
+  # remove any columns with NAs
+  plot_data <- t(na.omit(t(plot_data)))
+  yN <- ncol(plot_data)
   
   col <- viridisLite::viridis(128)
   
@@ -441,7 +435,10 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
     stop("Invalid mode option, should be one of : 're', 'im', 'mod' or 'arg'") 
   }
   
-  max_val <- max(abs(plot_data))
+  # remove any columns with NAs
+  plot_data <- t(na.omit(t(plot_data)))
+  
+  max_val <- max(abs(plot_data), na.rm = TRUE)
   y_offset_vec <- 0:(ncol(plot_data) - 1) * max_val * -y_offset / 100
   y_offset_mat <- matrix(y_offset_vec, nrow = nrow(plot_data),
                          ncol = ncol(plot_data), byrow = TRUE)
