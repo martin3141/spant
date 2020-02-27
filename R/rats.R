@@ -60,7 +60,7 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
   
   phases <- Re(res[,,,,,,1, drop = FALSE])
   shifts <- Re(res[,,,,,,2, drop = FALSE])
-  amps <- Re(res[,,,,,,3, drop = FALSE])
+  amps   <- Re(res[,,,,,,3, drop = FALSE])
   
   corr_spec <- ref_mod
   corr_spec$data <- res[,,,,,,4:(length(inds) + 2), drop = FALSE]
