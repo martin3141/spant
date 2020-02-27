@@ -328,11 +328,14 @@ shift <- function(mrs_data, shift, units = "ppm") {
   
   if (length(shift_hz) == 1) {
     shift_array <- array(shift_hz, dim = dim(mrs_data$data))
-  } else {
-    if (length(shift_hz) != Ndyns(mrs_data)) stop("Shift vector has an incorrect length.")
+  } else if (length(shift_hz) == Ndyns(mrs_data)) {
     # assume array should be applied in the dynamic dimension
     shift_array <- array(shift_hz, dim = c(1, 1, 1, 1, Ndyns(mrs_data), 1,
                                            Npts(mrs_data)))
+  } else if (dim(shift_hz)[1:6] && dim(mrs_data$data)[1:6]) {
+    shift_array <- array(shift_hz, dim = dim(mrs_data$data))
+  } else {
+    stop("Shift vector has an incorrect dimensions.")
   }
   
   shift_array <- exp(2i * pi * t_array * shift_array)
@@ -1493,7 +1496,7 @@ collapse_to_dyns.fit_result <- function(x) {
 #' @export
 mean_dyns <- function(mrs_data) {
   mrs_data$data <- aperm(mrs_data$data, c(5,1,2,3,4,6,7))
-  mrs_data$data <- colMeans(mrs_data$data)
+  mrs_data$data <- colMeans(mrs_data$data, na.rm = TRUE)
   new_dim <- dim(mrs_data$data)
   dim(mrs_data$data) <- c(new_dim[1:4],1,new_dim[5:6])
   mrs_data
