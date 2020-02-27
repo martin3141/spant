@@ -5,6 +5,7 @@
 * Added vignette on manually adjusting ABfit baseline smoothness.
 * Updated the introduction vignette.
 * Bug fixes for image and stackplot functions for masked MRS data.
+* Bug fix for using RATS with masked MRS data.
 
 # spant 1.0.0
 * ABfit analysis method has been added, and is now default for the mrs_fit

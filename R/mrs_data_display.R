@@ -254,7 +254,7 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
   }
   
   # remove any columns with NAs
-  plot_data <- t(na.omit(t(plot_data)))
+  plot_data <- t(stats::na.omit(t(plot_data)))
   yN <- ncol(plot_data)
   
   col <- viridisLite::viridis(128)
@@ -436,7 +436,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   }
   
   # remove any columns with NAs
-  plot_data <- t(na.omit(t(plot_data)))
+  plot_data <- t(stats::na.omit(t(plot_data)))
   
   max_val <- max(abs(plot_data), na.rm = TRUE)
   y_offset_vec <- 0:(ncol(plot_data) - 1) * max_val * -y_offset / 100

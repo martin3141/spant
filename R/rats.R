@@ -29,7 +29,7 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
   }
   
   # align to mean if ref is not given
-  if (is.null(ref)) ref <- mean(mrs_data)
+  if (is.null(ref)) ref <- mean(mrs_data, na.rm = TRUE)
   
   if (!is.null(max_t)) {
     # move ref to the time-domain
@@ -79,6 +79,10 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
 }
 
 optim_rats <- function(x, ref, t, inds, poly_basis, max_shift) {
+  
+  # masked spectra are special case
+  if (is.na(x[1])) return(c(NA, NA, NA, rep(NA, length(inds))))
+  
   # optim step
   res <- stats::optim(c(0), rats_obj_fn, gr = NULL, x, ref, t, inds, poly_basis, 
                method = "Brent", lower = -max_shift, upper = max_shift)
