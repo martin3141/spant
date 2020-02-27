@@ -303,7 +303,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   diags <- data.frame(phase = res$par[1] * 180 / pi, lw = res$par[2],
                       shift = res$par[3], asym = res$par[4],
                       res$deviance, res$niter, res$info, res$message,
-                      bl_ed_pppm = opts$bl_ed_pppm)
+                      bl_ed_pppm = opts$bl_ed_pppm, stringsAsFactors = TRUE)
   
   if (opts$auto_bl_flex) diags$max_bl_flex_used <- max_bl_flex_used
   

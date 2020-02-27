@@ -6,6 +6,7 @@
 * Updated the introduction vignette.
 * Bug fixes for image and stackplot functions for masked MRS data.
 * Bug fix for using RATS with masked MRS data.
+* Changes to prepare for for R 4.0.0.
 
 # spant 1.0.0
 * ABfit analysis method has been added, and is now default for the mrs_fit

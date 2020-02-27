@@ -130,7 +130,7 @@ varpro_3_para <- function(y, acq_paras, basis, opts = NULL) {
   
   diags <- data.frame(phase = res$par[1] * 180 / pi, damping = res$par[2],
                       shift = res$par[3], res$deviance, res$niter, res$info, 
-                      res$message)
+                      res$message, stringsAsFactors = TRUE)
   
   list(amps = amps, crlbs = t(rep(NA, length(amps))), diags = diags, fit = fit)
 }

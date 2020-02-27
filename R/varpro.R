@@ -96,7 +96,7 @@ varpro <- function(y, acq_paras, basis, opts = NULL) {
   class(fit) <- c("fit_table", "data.frame")
   
   diags <- data.frame(res$deviance, res$niter, res$info, res$deviance,
-                      res$message)
+                      res$message, stringsAsFactors = TRUE)
   
   # create some common metabolite combinations
   if (("NAA" %in% colnames(amps)) & ("NAAG" %in% colnames(amps))) {
