@@ -35,7 +35,7 @@ ortho3(
 
 \item{alpha}{transparency of overlay.}
 
-\item{col_ol}{color palette of overlay.}
+\item{col_ol}{colour palette of overlay.}
 
 \item{orient_lab}{display orientation labels (default TRUE).}
 

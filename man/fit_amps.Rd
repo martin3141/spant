@@ -19,7 +19,7 @@ fit_amps(
 \item{sort_names}{sort the basis set names alphabetically.}
 
 \item{append_common_1h_comb}{append commonly used 1H metabolite combinations
-eg TNAA = NAA + NAAG.}
+eg tNAA = NAA + NAAG.}
 }
 \value{
 a dataframe of amplitudes.

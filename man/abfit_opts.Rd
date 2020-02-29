@@ -2,7 +2,7 @@
 % Please edit documentation in R/abfit.R
 \name{abfit_opts}
 \alias{abfit_opts}
-\title{Return a list of options for an ABFit analysis.}
+\title{Return a list of options for an ABfit analysis.}
 \usage{
 abfit_opts(
   init_damping = 5,
@@ -76,7 +76,7 @@ ppm).}
 
 \item{export_sp_fit}{add the fitted spline functions to the fit result.}
 
-\item{max_asym}{maximum allowable value of the asymetry parameter.}
+\item{max_asym}{maximum allowable value of the asymmetry parameter.}
 
 \item{max_basis_shift}{maximum allowable frequency shift for individual basis
 signals (Hz).}
@@ -102,13 +102,13 @@ fitting stage of the algorithm (ED per ppm).}
 \item{remove_lip_mm_prefit}{remove broad signals in the coarse fitting stage
 of the algorithm.}
 
-\item{pre_align}{perform a pre-alignment setep before coarse fitting.}
+\item{pre_align}{perform a pre-alignment step before coarse fitting.}
 
 \item{max_pre_align_shift}{maximum allowable shift in the pre-alignment step
 (ppm).}
 
 \item{pre_align_ref_freqs}{a vector of prominent spectral frequencies used in
-the pre-aligment step (ppm).}
+the pre-alignment step (ppm).}
 
 \item{noise_region}{spectral region to estimate the noise level (ppm).}
 
@@ -143,7 +143,7 @@ or MM.}
 full list of options.
 }
 \description{
-Return a list of options for an ABFit analysis.
+Return a list of options for an ABfit analysis.
 }
 \examples{
 opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))

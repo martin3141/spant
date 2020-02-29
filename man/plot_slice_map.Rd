@@ -40,7 +40,7 @@ corresponding values should be plotted.}
 
 \item{denom}{map to use as a denominator.}
 
-\item{horizontal}{display the colorbar horizontally (logical).}
+\item{horizontal}{display the colourbar horizontally (logical).}
 }
 \description{
 Plot a slice from a 7 dimensional array.

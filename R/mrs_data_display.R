@@ -514,7 +514,7 @@ plot_bc <- function(orig_data, bc_data, ...) {
 #' @param coil the coil element number to plot.
 #' @param ref reference index to plot.
 #' @param denom map to use as a denominator.
-#' @param horizontal display the colorbar horizontally (logical).
+#' @param horizontal display the colourbar horizontally (logical).
 #' @export
 plot_slice_map <- function(data, zlim = NULL, mask_map = NULL,
                            mask_cutoff = 20, interp = 1, slice = 1, dyn = 1,

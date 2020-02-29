@@ -46,7 +46,7 @@ The baseline flexibility was found to be `r round(fit_res$res_tab$bl_ed_pppm, 1)
 
 ## Custom analyses
 
-Changing the default behavior of ABfit is achieved by supplying an options structure to the ``fit_mrs`` function. The ``abfit_opts`` function generates the default fitting options, which may be modified by supplying arguments. To manually specify the baseline flexibility we set the ``auto_bl_flex`` option to ``FALSE`` and set the ``bl_ed_pppm`` option to the desired level. A greater value results in more baseline flexibility, let's try a value of 8 ED ppm:
+Changing the default behaviour of ABfit is achieved by supplying an options structure to the ``fit_mrs`` function. The ``abfit_opts`` function generates the default fitting options, which may be modified by supplying arguments. To manually specify the baseline flexibility we set the ``auto_bl_flex`` option to ``FALSE`` and set the ``bl_ed_pppm`` option to the desired level. A greater value results in more baseline flexibility, let's try a value of 8 ED ppm:
 
 ```{r abfit_flex, results = "hide"}
 opts    <- abfit_opts(auto_bl_flex = FALSE, bl_ed_pppm = 8)
@@ -62,7 +62,7 @@ fit_res <- fit_mrs(mrs_data, basis, opts = opts)
 plot(fit_res)
 ```
 
-Now we have a much smoother (almost linear) baseline, which comes at the cost of having broad unmodeled signals in the residual -- ultimatly resulting in biased metabolite levels. An alternative to manually specifying a fixed level of baseline flexibility is to adjust the criterion used for automated estimation. The ``aic_smoothing_factor`` can be set to a smaller value (default = 5) to encourage more flexible baselines, whilst still being adaptive to any broad spectral features:
+Now we have a much smoother (almost linear) baseline, which comes at the cost of having broad unmodelled signals in the residual -- ultimately resulting in biased metabolite levels. An alternative to manually specifying a fixed level of baseline flexibility is to adjust the criterion used for automated estimation. The ``aic_smoothing_factor`` can be set to a smaller value (default = 5) to encourage more flexible baselines, whilst still being adaptive to any broad spectral features:
 
 ```{r abfit_aic, results = "hide"}
 opts    <- abfit_opts(aic_smoothing_factor = 1)
@@ -88,4 +88,4 @@ Clearly the density of spline functions has increased, however the baseline smoo
 ```{r abfit_bl_value_more_splines}
 fit_res$res_tab$bl_ed_pppm
 ```
-Inspecting the automatically determined level of baseline flexibility shows the ED per ppm value remains very close to the default analysis despite the change in spline function density -- precisely the desired behavior.
+Inspecting the automatically determined level of baseline flexibility shows the ED per ppm value remains very close to the default analysis despite the change in spline function density -- precisely the desired behaviour.

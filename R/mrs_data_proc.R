@@ -2439,7 +2439,7 @@ back_extrap_vec <- function(vec, n_pts) {
 }
 
 #' Calculate the sum of squares differences between two mrs_data objects.
-#' @param mrs_data mrs_data oject.
+#' @param mrs_data mrs_data object.
 #' @param ref reference mrs_data object to calculate differences.
 #' @param xlim spectral limits to perform calculation.
 #' @return an array of the sum of squared difference values.

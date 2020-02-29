@@ -9,8 +9,8 @@ scale_amp_ratio(fit_result, name)
 \arguments{
 \item{fit_result}{a result object generated from fitting.}
 
-\item{name}{the signal name to use as a denominator (usually, "TCr" or
-"TNAA").}
+\item{name}{the signal name to use as a denominator (usually, "tCr" or
+"tNAA").}
 }
 \value{
 a \code{fit_result} object with a res_tab_ratio data table added.

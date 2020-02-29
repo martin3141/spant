@@ -1,6 +1,6 @@
 #' Plot a 2D slice from an MRSI fit result object.
 #' @param fit_res \code{fit_result} object.
-#' @param map array of values to be plotted, defaults to a "TNAA" map.
+#' @param map array of values to be plotted, defaults to a "tNAA" map.
 #' @param slice slice to plot in the z direction.
 #' @param zlim range of values to plot.
 #' @param interp interpolation factor.
@@ -9,7 +9,7 @@
 plot_slice_fit_inter <- function(fit_res, map = NULL, slice = 1, zlim = NULL, 
                                  interp = 1, xlim = NULL) {
   
-  if (is.null(map)) map <- get_fit_map(fit_res, "TNAA") 
+  if (is.null(map)) map <- get_fit_map(fit_res, "tNAA") 
   
   plot_slice_map_inter(mrs_data = fit_res, map = map, slice = slice, 
                        interp = interp, zlim = zlim, xlim = xlim)
@@ -152,7 +152,7 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
 #' @param zlim underlay intensity limits.
 #' @param zlim_ol overlay intensity limits.
 #' @param alpha transparency of overlay.
-#' @param col_ol color palette of overlay.
+#' @param col_ol colour palette of overlay.
 #' @param orient_lab display orientation labels (default TRUE).
 #' @param rescale rescale factor for the underlay and overlay images.
 #' @param crosshairs display the crosshairs (default TRUE).

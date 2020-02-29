@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -114,7 +114,7 @@
 <div id="custom-analyses" class="section level2">
 <h2 class="hasAnchor">
 <a href="#custom-analyses" class="anchor"></a>Custom analyses</h2>
-<p>Changing the default behavior of ABfit is achieved by supplying an options structure to the <code>fit_mrs</code> function. The <code>abfit_opts</code> function generates the default fitting options, which may be modified by supplying arguments. To manually specify the baseline flexibility we set the <code>auto_bl_flex</code> option to <code>FALSE</code> and set the <code>bl_ed_pppm</code> option to the desired level. A greater value results in more baseline flexibility, let’s try a value of 8 ED ppm:</p>
+<p>Changing the default behaviour of ABfit is achieved by supplying an options structure to the <code>fit_mrs</code> function. The <code>abfit_opts</code> function generates the default fitting options, which may be modified by supplying arguments. To manually specify the baseline flexibility we set the <code>auto_bl_flex</code> option to <code>FALSE</code> and set the <code>bl_ed_pppm</code> option to the desired level. A greater value results in more baseline flexibility, let’s try a value of 8 ED ppm:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">opts    &lt;-<span class="st"> </span><span class="kw"><a href="../reference/abfit_opts.html">abfit_opts</a></span>(<span class="dt">auto_bl_flex =</span> <span class="ot">FALSE</span>, <span class="dt">bl_ed_pppm =</span> <span class="dv">8</span>)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">fit_res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit_mrs.html">fit_mrs</a></span>(mrs_data, basis, <span class="dt">opts =</span> opts)</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(fit_res)</a></code></pre></div>
@@ -124,7 +124,7 @@
 <a class="sourceLine" id="cb6-2" data-line-number="2">fit_res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit_mrs.html">fit_mrs</a></span>(mrs_data, basis, <span class="dt">opts =</span> opts)</a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(fit_res)</a></code></pre></div>
 <p><img src="abfit-baseline-opts_files/figure-html/abfit_stiff-1.png" width="576"></p>
-<p>Now we have a much smoother (almost linear) baseline, which comes at the cost of having broad unmodeled signals in the residual – ultimatly resulting in biased metabolite levels. An alternative to manually specifying a fixed level of baseline flexibility is to adjust the criterion used for automated estimation. The <code>aic_smoothing_factor</code> can be set to a smaller value (default = 5) to encourage more flexible baselines, whilst still being adaptive to any broad spectral features:</p>
+<p>Now we have a much smoother (almost linear) baseline, which comes at the cost of having broad unmodelled signals in the residual – ultimately resulting in biased metabolite levels. An alternative to manually specifying a fixed level of baseline flexibility is to adjust the criterion used for automated estimation. The <code>aic_smoothing_factor</code> can be set to a smaller value (default = 5) to encourage more flexible baselines, whilst still being adaptive to any broad spectral features:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">opts    &lt;-<span class="st"> </span><span class="kw"><a href="../reference/abfit_opts.html">abfit_opts</a></span>(<span class="dt">aic_smoothing_factor =</span> <span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">fit_res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fit_mrs.html">fit_mrs</a></span>(mrs_data, basis, <span class="dt">opts =</span> opts)</a>
 <a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(fit_res)</a></code></pre></div>
@@ -142,7 +142,7 @@
 <p>Clearly the density of spline functions has increased, however the baseline smoothness remains very close to the default. The general principle for ABfit (derived from P-splines) is to over specify the number of baseline modelling spline functions, and rely on a penalty factor to encourage smoothness.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">fit_res<span class="op">$</span>res_tab<span class="op">$</span>bl_ed_pppm</a>
 <a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt; [1] 2.276357</span></a></code></pre></div>
-<p>Inspecting the automatically determined level of baseline flexibility shows the ED per ppm value remains very close to the default analysis despite the change in spline function density – precisely the desired behavior.</p>
+<p>Inspecting the automatically determined level of baseline flexibility shows the ED per ppm value remains very close to the default analysis despite the change in spline function density – precisely the desired behaviour.</p>
 </div>
   </div>
 

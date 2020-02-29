@@ -9,7 +9,7 @@ plot_slice_fit(fit_res, name, slice = 1, zlim = NULL, interp = 1)
 \arguments{
 \item{fit_res}{\code{fit_result} object.}
 
-\item{name}{name of the quantity to plot, eg "TNAA".}
+\item{name}{name of the quantity to plot, eg "tNAA".}
 
 \item{slice}{slice to plot in the z direction.}
 

@@ -9,7 +9,7 @@ get_fit_map(fit_res, name)
 \arguments{
 \item{fit_res}{\code{fit_result} object.}
 
-\item{name}{name of the quantity to plot, eg "TNAA".}
+\item{name}{name of the quantity to plot, eg "tNAA".}
 }
 \description{
 Get a data array from a fit result.

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Apply Mod operator to an MRS dataset. — Mod.mrs_data • Spectroscopy Analysis Tools (spant)</title>
+<title>Calculate the centre of gravity for an image containing 0 and 1's. — get_voi_cog • Spectroscopy Analysis Tools (spant)</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Apply Mod operator to an MRS dataset. — Mod.mrs_data" />
-<meta property="og:description" content="Apply Mod operator to an MRS dataset." />
+<meta property="og:title" content="Calculate the centre of gravity for an image containing 0 and 1's. — get_voi_cog" />
+<meta property="og:description" content="Calculate the centre of gravity for an image containing 0 and 1's." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -118,30 +118,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Apply Mod operator to an MRS dataset.</h1>
+    <h1>Calculate the centre of gravity for an image containing 0 and 1's.</h1>
     
-    <div class="hidden name"><code>Mod.mrs_data.Rd</code></div>
+    <div class="hidden name"><code>get_voi_cog.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Apply Mod operator to an MRS dataset.</p>
+    <p>Calculate the centre of gravity for an image containing 0 and 1's.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for mrs_data</span>
-<span class='fu'><a href='https://rdrr.io/r/base/complex.html'>Mod</a></span>(<span class='no'>z</span>)</pre>
+    <pre class="usage"><span class='fu'>get_voi_cog</span>(<span class='no'>voi</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>z</th>
-      <td><p>MRS data.</p></td>
+      <th>voi</th>
+      <td><p>nifti object.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>MRS data following Mod operator.</p>
+    <p>triplet of x,y,z coordinates.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

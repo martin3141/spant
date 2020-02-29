@@ -7,7 +7,7 @@
 calc_spec_diff(mrs_data, ref = NULL, xlim = c(4, 0.5))
 }
 \arguments{
-\item{mrs_data}{mrs_data oject.}
+\item{mrs_data}{mrs_data object.}
 
 \item{ref}{reference mrs_data object to calculate differences.}
 

@@ -79,8 +79,8 @@ scale_amp_water_ratio <- function(fit_result, ref_data) {
 
 #' Scale fitted amplitudes to a ratio of signal amplitude.
 #' @param fit_result a result object generated from fitting.
-#' @param name the signal name to use as a denominator (usually, "TCr" or 
-#' "TNAA").
+#' @param name the signal name to use as a denominator (usually, "tCr" or 
+#' "tNAA").
 #' @return a \code{fit_result} object with a res_tab_ratio data table added.
 #' @export
 scale_amp_ratio <- function(fit_result, name) {

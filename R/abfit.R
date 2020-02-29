@@ -454,10 +454,10 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   amps <- data.frame(t(fit$x[(sp_bas_final$bl_comps + 1):length(fit$x)]))
   colnames(amps) <- basis$names
   
-  # TNAA_lw calc 
+  # tNAA_lw calc 
   if (("NAA" %in% colnames(amps)) & ("NAAG" %in% colnames(amps))) {
     tnaa_sig_pts <- basis_frame$NAA + basis_frame$NAAG
-    diags$TNAA_lw <- calc_peak_info_vec(tnaa_sig_pts, 2)[3] * 
+    diags$tNAA_lw <- calc_peak_info_vec(tnaa_sig_pts, 2)[3] * 
                      (sp_bas_final$x_scale[1] - sp_bas_final$x_scale[2])
   }
   
@@ -509,25 +509,25 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   
   # create some common metabolite combinations
   if (("NAA" %in% colnames(amps)) & ("NAAG" %in% colnames(amps))) {
-    amps['TNAA'] <- amps['NAA'] + amps['NAAG']
+    amps['tNAA'] <- amps['NAA'] + amps['NAAG']
     comb_sigs <- comb_sigs + 1
-    D_cut$TNAA <- D_cut$NAA + D_cut$NAAG
+    D_cut$tNAA <- D_cut$NAA + D_cut$NAAG
     D_cut$NAA <- NULL
     D_cut$NAAG <- NULL
   }
   
   if (("Cr" %in% colnames(amps)) & ("PCr" %in% colnames(amps))) {
-    amps['TCr'] <- amps['Cr'] + amps['PCr']
+    amps['tCr'] <- amps['Cr'] + amps['PCr']
     comb_sigs <- comb_sigs + 1
-    D_cut$TCr <- D_cut$Cr + D_cut$PCr
+    D_cut$tCr <- D_cut$Cr + D_cut$PCr
     D_cut$Cr <- NULL
     D_cut$PCr <- NULL
   }
   
   if (("PCh" %in% colnames(amps)) & ("GPC" %in% colnames(amps))) {
-    amps['TCho'] <- amps['PCh'] + amps['GPC']
+    amps['tCho'] <- amps['PCh'] + amps['GPC']
     comb_sigs <- comb_sigs + 1
-    D_cut$TCho <- D_cut$PCh + D_cut$GPC
+    D_cut$tCho <- D_cut$PCh + D_cut$GPC
     D_cut$PCh <- NULL
     D_cut$GPC <- NULL
   }
@@ -541,19 +541,19 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   }
   
   if (("Lip09" %in% colnames(amps)) & ("MM09" %in% colnames(amps))) {
-    amps['TLM09'] <- amps['Lip09'] + amps['MM09']
+    amps['tLM09'] <- amps['Lip09'] + amps['MM09']
     comb_sigs <- comb_sigs + 1
-    D_cut$TLM09 <- D_cut$Lip09 + D_cut$MM09
+    D_cut$tLM09 <- D_cut$Lip09 + D_cut$MM09
     D_cut$Lip09 <- NULL
     D_cut$MM09 <- NULL
   }
   
   if (("Lip13a" %in% colnames(amps)) & ("Lip13b" %in% colnames(amps)) & 
         ("MM12" %in% colnames(amps)) & ("MM14" %in% colnames(amps))) {
-    amps["TLM13"] <- amps["Lip13a"] + amps["Lip13b"] + amps["MM12"] + 
+    amps["tLM13"] <- amps["Lip13a"] + amps["Lip13b"] + amps["MM12"] + 
                      amps["MM14"]
     comb_sigs <- comb_sigs + 1
-    D_cut$TLM13 <- D_cut$Lip13a + D_cut$Lip13b + D_cut$MM12 + D_cut$MM14
+    D_cut$tLM13 <- D_cut$Lip13a + D_cut$Lip13b + D_cut$MM12 + D_cut$MM14
     D_cut$Lip13a <- NULL
     D_cut$Lip13b <- NULL
     D_cut$MM12 <- NULL
@@ -561,9 +561,9 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   }
   
   if (("Lip20" %in% colnames(amps)) & ("MM20" %in% colnames(amps))) {
-    amps['TLM20'] <- amps['Lip20'] + amps['MM20']
+    amps['tLM20'] <- amps['Lip20'] + amps['MM20']
     comb_sigs <- comb_sigs + 1
-    D_cut$TLM20 <- D_cut$Lip20 + D_cut$MM20
+    D_cut$tLM20 <- D_cut$Lip20 + D_cut$MM20
     D_cut$Lip20 <- NULL
     D_cut$MM20  <- NULL
   }
@@ -590,7 +590,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 # abfit tips
 # NLOPT_GN_DIRECT_L is perhaps more robust for algo_pre - but slower
 
-#' Return a list of options for an ABFit analysis.
+#' Return a list of options for an ABfit analysis.
 #' 
 #' @param init_damping initial value of the Gaussian global damping parameter
 #' (Hz). Very poorly shimmed or high field data may benefit from a larger value.
@@ -610,7 +610,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param auto_bl_flex automatically determine the level of baseline smoothness.
 #' @param bl_comps_pppm spline basis density (signals per ppm).
 #' @param export_sp_fit add the fitted spline functions to the fit result.
-#' @param max_asym maximum allowable value of the asymetry parameter.
+#' @param max_asym maximum allowable value of the asymmetry parameter.
 #' @param max_basis_shift maximum allowable frequency shift for individual basis
 #' signals (Hz).
 #' @param max_basis_damping maximum allowable Lorentzian damping factor for
@@ -626,11 +626,11 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' fitting stage of the algorithm (ED per ppm).
 #' @param remove_lip_mm_prefit remove broad signals in the coarse fitting stage
 #' of the algorithm.
-#' @param pre_align perform a pre-alignment setep before coarse fitting.
+#' @param pre_align perform a pre-alignment step before coarse fitting.
 #' @param max_pre_align_shift maximum allowable shift in the pre-alignment step
 #' (ppm).
 #' @param pre_align_ref_freqs a vector of prominent spectral frequencies used in
-#' the pre-aligment step (ppm).
+#' the pre-alignment step (ppm).
 #' @param noise_region spectral region to estimate the noise level (ppm).
 #' @param optimal_smooth_criterion method to determine the optimal smoothness.
 #' @param aic_smoothing_factor modification factor for the AIC calculation.

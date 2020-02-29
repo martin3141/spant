@@ -16,7 +16,7 @@ plot_slice_fit_inter(
 \arguments{
 \item{fit_res}{\code{fit_result} object.}
 
-\item{map}{array of values to be plotted, defaults to a "TNAA" map.}
+\item{map}{array of values to be plotted, defaults to a "tNAA" map.}
 
 \item{slice}{slice to plot in the z direction.}
 
