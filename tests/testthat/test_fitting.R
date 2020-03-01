@@ -33,7 +33,9 @@ test_that("Test ABfit coarse-fitting", {
   # the number of iterations and small changes in the final solution. For these
   # reasons we only consider the minimum value found, which should be more
   # stable.
-  expect_equal(fit_res$res_tab$res.deviance, 0.0001037292, tolerance = 1e-5)
+  expected <- 0.0001037292
+  expect_equal(fit_res$res_tab$res.deviance, expected, tolerance = 1e-5,
+               scale = expected)
 })
 
 test_that("Test ABfit fine-fitting", {
@@ -60,7 +62,7 @@ test_that("Test ABfit full", {
   
   fit_res  <- fit_mrs(mrs_data, basis, method = "abfit", time = FALSE)
   
-  # larger tol because the coarse-fitting stage can be slightly platform
-  # dependant
-  expect_equal_to_reference(fit_res, "fit_res_abfit.rds", tolerance = 1e-1)
+  expected <- 7.313048e-5
+  expect_equal(fit_res$res_tab$res.deviance, expected, tolerance = 1e-5,
+               scale = expected)
 })
