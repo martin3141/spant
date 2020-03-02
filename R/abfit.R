@@ -86,7 +86,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     }
     
     nloptr_opts <- list("algorithm" = opts$algo_pre,
-                        "maxeval" = opts$maxiters_pre)
+                        "maxeval" = opts$maxiters_pre,
+                        "xtol_abs" = rep(0, 3))
     
     prelim_res <- nloptr::nloptr(x0 = par, eval_f = abfit_3p_obj,
                                  eval_grad_f = NULL, lb = lower, ub = upper,
