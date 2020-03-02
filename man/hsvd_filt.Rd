@@ -4,7 +4,7 @@
 \alias{hsvd_filt}
 \title{HSVD based signal filter.}
 \usage{
-hsvd_filt(mrs_data, xlim = c(-30, 30), comps = 50, propack = FALSE)
+hsvd_filt(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE)
 }
 \arguments{
 \item{mrs_data}{MRS data to be filtered.}
@@ -13,7 +13,7 @@ hsvd_filt(mrs_data, xlim = c(-30, 30), comps = 50, propack = FALSE)
 
 \item{comps}{number of Lorentzian components to use for modelling.}
 
-\item{propack}{option to use PROPACK SVD (logical).}
+\item{irlba}{option to use irlba SVD (logical).}
 }
 \description{
 HSVD based signal filter described in:

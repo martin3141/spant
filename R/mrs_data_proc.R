@@ -1669,29 +1669,27 @@ fd_conv_filt <- function(mrs_data, K = 25, ext = 1) {
 #' @param mrs_data MRS data to be filtered.
 #' @param xlim frequency range in Hz to filter.
 #' @param comps number of Lorentzian components to use for modelling.
-#' @param propack option to use PROPACK SVD (logical).
+#' @param irlba option to use irlba SVD (logical).
 #' @export
-hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 50, propack = FALSE) {
-# TODO, region defn in ppm and allow multiple region selection
+hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE) {
   if (is_fd(mrs_data)) {
       mrs_data <- fd2td(mrs_data)
   }
   apply_mrs(mrs_data, 7, hsvd_filt_vec, fs = fs(mrs_data), region = xlim,
-            comps = comps, propack)
+            comps = comps, irlba)
 }
 
-hsvd_filt_vec <- function(fid, fs, region = c(-30,30), comps = 50, 
-                          propack = TRUE) {
+hsvd_filt_vec <- function(fid, fs, region = c(-30, 30), comps = 40, 
+                          irlba = TRUE) {
   
-  hsvd_res <- hsvd(fid, fs, K = comps, propack)  
+  hsvd_res <- hsvd(fid, fs, K = comps, irlba)  
   idx <- (hsvd_res$reson_table$frequency < region[2]) &
          (hsvd_res$reson_table$frequency > region[1] )
   model <- rowSums(hsvd_res$basis[,idx])
   fid - model
 }
 
-# TODO add option to remove -ve dampings
-hsvd <- function(y, fs, K = 50, propack = TRUE, fast_hank = TRUE) {
+hsvd <- function(y, fs, K = 40, irlba = TRUE) {
   N <- length(y)
   L <- floor(0.5 * N)
   # M <- N + 1 - L
@@ -1701,26 +1699,11 @@ hsvd <- function(y, fs, K = 50, propack = TRUE, fast_hank = TRUE) {
   y <- y / sc_factor
 
   # H is the LxM Hankel LP matrix
-  if (fast_hank) {
-    H <- matrixcalc::hankel.matrix(L + 1, y)
-    H <- H[1:L,]
-  } else {
-    H <- pracma::hankel(y[1:L], y[L:N])
-  }
+  H <- matrixcalc::hankel.matrix(L + 1, y)
+  H <- H[1:L,]
   
-  if (propack)  {
-    # K1 formulation
-    H_real <- rbind(cbind(Re(H), -Im(H)), cbind(Im(H), Re(H)))
-    #H_real <- matrix(, 2*nrow(H), 2*ncol(H))
-    #H_real[seq(1, 2*nrow(H), 2), seq(1, 2*ncol(H), 2)] <- Re(H)
-    #H_real[seq(2, 2*nrow(H), 2), seq(1, 2*ncol(H), 2)] <- -Im(H)
-    #H_real[seq(2, 2*nrow(H), 2), seq(2, 2*ncol(H), 2)] <- Re(H)
-    #H_real[seq(1, 2*nrow(H), 2), seq(2, 2*ncol(H), 2)] <- Im(H)
-    svd_res <- svd::propack.svd(H_real, neig = (K))
-    #svd_res <- svd::trlan.svd(H_real, neig = K)
-    #svd_res$u <- svd_res$u[1:(nrow(H)/2),1:(ncol(H)/2)] - 1i*svd_res$u[(nrow(H)/2):nrow(H),1:(ncol(H)/2)]
-    #svd_res <- svd(H_real)
-    #svd_res$u <- svd_res$u
+  if (irlba)  {
+    svd_res <- irlba::irlba(H, K)
   } else {
     svd_res <- svd(H)
   }

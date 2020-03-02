@@ -31,7 +31,6 @@ Imports:
     graphics,
     grDevices,
     smoother,
-    svd,
     readr,
     magrittr,
     ptw,
@@ -47,6 +46,7 @@ Imports:
     numDeriv,
     nloptr,
     lsei,
+    irlba,
     tibble
 Suggests:
     neurobase,
