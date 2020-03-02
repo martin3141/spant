@@ -1672,9 +1672,8 @@ fd_conv_filt <- function(mrs_data, K = 25, ext = 1) {
 #' @param irlba option to use irlba SVD (logical).
 #' @export
 hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE) {
-  if (is_fd(mrs_data)) {
-      mrs_data <- fd2td(mrs_data)
-  }
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+  
   apply_mrs(mrs_data, 7, hsvd_filt_vec, fs = fs(mrs_data), region = xlim,
             comps = comps, irlba)
 }

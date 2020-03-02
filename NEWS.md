@@ -1,3 +1,6 @@
+# spant 1.2.0
+* Performance improvement for HSVD water filter.
+
 # spant 1.1.0
 * Improved ppm labels for ABfit plot results.
 * Bug fix for plot_slice_fit when using fits from masked data.
