@@ -22,8 +22,7 @@ test_that("Test ABfit with default options", {
   
   fit_res  <- fit_mrs(mrs_data, sim_res$basis, method = "abfit", time = FALSE)
   
-  expect_equal_to_reference(fit_res, "abfit_res_default.rds",
-                            tolerance = 1e-2)
+  expect_equal_to_reference(fit_res, "abfit_res_default.rds", tolerance = 1e-2)
 })
 
 test_that("Test ABfit without iterative optimisation", {
@@ -37,8 +36,7 @@ test_that("Test ABfit without iterative optimisation", {
   fit_res  <- fit_mrs(mrs_data %>% phase(-130), sim_res$basis, method = "abfit",
                       opts = opts, time = FALSE)
   
-  expect_equal_to_reference(fit_res, "abfit_res_no_optim.rds",
-                            tolerance = 1e-5)
+  expect_equal_to_reference(fit_res, "abfit_res_no_optim.rds", tolerance = 1e-5)
 })
 
 test_that("Test ABfit coarse-fitting steps only", {
@@ -51,8 +49,7 @@ test_that("Test ABfit coarse-fitting steps only", {
                       time = FALSE)
   
   # this test is a bit more sensitive to differences between platforms
-  expect_equal_to_reference(fit_res, "abfit_res_coarse.rds",
-                            tolerance = 1e-2)
+  expect_equal_to_reference(fit_res, "abfit_res_coarse.rds", tolerance = 1e-2)
 })
 
 test_that("Test ABfit fine-fitting only", {
