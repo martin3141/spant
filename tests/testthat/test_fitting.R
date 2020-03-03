@@ -50,8 +50,9 @@ test_that("Test ABfit coarse-fitting steps only", {
   fit_res  <- fit_mrs(mrs_data, sim_res$basis, method = "abfit", opts = opts,
                       time = FALSE)
   
+  # this test is a bit more sensitive to differences between platforms
   expect_equal_to_reference(fit_res, "abfit_res_coarse.rds",
-                            tolerance = 1e-6)
+                            tolerance = 1e-5)
 })
 
 test_that("Test ABfit fine-fitting only", {
