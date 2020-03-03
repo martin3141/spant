@@ -10,7 +10,7 @@ test_that("Test data stimulation step", {
   # create a realistic looking spectrum
   set.seed(1)
   mrs_data <- sim_res$mrs_data %>% lb(6) %>% "/"(10) %>% phase(130) %>%
-              shift(0.1) %>% "+"(sim_noise(0.002))
+              shift(0.1) %>% "+"(sim_noise(0.001))
   
   expect_equal_to_reference(mrs_data, "abfit_sim_mrs_data.rds",
                             tolerance = 1e-6)
@@ -52,7 +52,7 @@ test_that("Test ABfit coarse-fitting steps only", {
   
   # this test is a bit more sensitive to differences between platforms
   expect_equal_to_reference(fit_res, "abfit_res_coarse.rds",
-                            tolerance = 1e-5)
+                            tolerance = 1e-6)
 })
 
 test_that("Test ABfit fine-fitting only", {
