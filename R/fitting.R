@@ -1,8 +1,8 @@
 #' Perform a fit based analysis of MRS data.
 #' 
 #' Note that TARQUIN and LCModel require these packages to be installed, and 
-#' the functions set_tqn_path and set_lcm_path (respectively) need to be used 
-#' to specify the location of these software packages.
+#' the functions set_tqn_cmd and set_lcm_cmd (respectively) need to be used to 
+#' specify the location of these software packages.
 #'
 #' Fitting approaches described in the following references:
 #' VARPRO

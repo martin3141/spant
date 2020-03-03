@@ -7,7 +7,7 @@
 set_lcm_cmd(cmd)
 }
 \arguments{
-\item{cmd}{oath to binary.}
+\item{cmd}{path to binary.}
 }
 \description{
 Set the command to run the LCModel command-line program.

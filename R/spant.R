@@ -86,7 +86,7 @@ set_tqn_cmd <- function(cmd) {
 }
 
 #' Set the command to run the LCModel command-line program.
-#' @param cmd oath to binary.
+#' @param cmd path to binary.
 #' @export
 set_lcm_cmd <- function(cmd) {
   options(spant.lcm_cmd = cmd)
