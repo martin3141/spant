@@ -8,7 +8,7 @@ Authors@R: c(
            role = c("cre", "aut")),
     person("John", "Muschelli", role = "ctb"))
 Description: Tools for reading, visualising and processing Magnetic Resonance
-    Spectroscopy data.
+    Spectroscopy data. https://martin3141.github.io/spant/.
 BugReports: https://github.com/martin3141/spant/issues
 License: GPL-3
 RoxygenNote: 7.0.2
