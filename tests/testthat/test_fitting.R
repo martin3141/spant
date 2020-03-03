@@ -1,68 +1,70 @@
 context("fitting")
 
-test_that("Test ABfit no-optim", {
-  fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
-                       package = "spant")
+test_that("Test data stimulation step", {
   
-  mrs_data <- read_mrs(fname, format = "spar_sdat")
-  basis    <- sim_basis_1h_brain_press(mrs_data)
+  # simulate some data and check consistency to a reference file
+  sim_res <- sim_brain_1h(full_output = TRUE)
   
-  # don't run any optimisation steps
-  opts <- abfit_opts(maxiters_pre = 0, maxiters = 0)
-  fit_res  <- fit_mrs(mrs_data, basis, method = "abfit", opts = opts,
-                      time = FALSE)
+  expect_equal_to_reference(sim_res, "abfit_sim_res.rds", tolerance = 1e-6)
   
-  expect_equal_to_reference(fit_res, "fit_res_abfit_no_optim.rds",
-                            tolerance = 1e-4)
+  # create a realistic looking spectrum
+  set.seed(1)
+  mrs_data <- sim_res$mrs_data %>% lb(6) %>% "/"(10) %>% phase(130) %>%
+              shift(0.1) %>% "+"(sim_noise(0.002))
+  
+  expect_equal_to_reference(mrs_data, "abfit_sim_mrs_data.rds",
+                            tolerance = 1e-6)
 })
 
-test_that("Test ABfit coarse-fitting", {
-  fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
-                       package = "spant")
+test_that("Test ABfit with default options", {
+  mrs_data <- readRDS("abfit_sim_mrs_data.rds")
+  sim_res  <- readRDS("abfit_sim_res.rds")
   
-  mrs_data <- read_mrs(fname, format = "spar_sdat")
-  basis    <- sim_basis_1h_brain_press(mrs_data)
+  fit_res  <- fit_mrs(mrs_data, sim_res$basis, method = "abfit", time = FALSE)
+  
+  expect_equal_to_reference(fit_res, "abfit_res_default.rds",
+                            tolerance = 1e-6)
+})
+
+test_that("Test ABfit without iterative optimisation", {
+  mrs_data <- readRDS("abfit_sim_mrs_data.rds")
+  sim_res  <- readRDS("abfit_sim_res.rds")
+  
+  # don't run any optimisation steps
+  opts     <- abfit_opts(maxiters_pre = 0, maxiters = 0)
+  
+  # undo the large phase error to avoid FWHM measurement warnings
+  fit_res  <- fit_mrs(mrs_data %>% phase(-130), sim_res$basis, method = "abfit",
+                      opts = opts, time = FALSE)
+  
+  expect_equal_to_reference(fit_res, "abfit_res_no_optim.rds",
+                            tolerance = 1e-6)
+})
+
+test_that("Test ABfit coarse-fitting steps only", {
+  mrs_data <- readRDS("abfit_sim_mrs_data.rds")
+  sim_res  <- readRDS("abfit_sim_res.rds")
   
   # don't run the fine fitting step
   opts <- abfit_opts(maxiters = 0)
-  fit_res  <- fit_mrs(mrs_data, basis, method = "abfit", opts = opts,
+  fit_res  <- fit_mrs(mrs_data, sim_res$basis, method = "abfit", opts = opts,
                       time = FALSE)
   
-  # this test is most sensitive to different platforms. Rounding errors can
-  # cause different optimisation paths to be taken leading to differences in 
-  # the number of iterations and small changes in the final solution. For these
-  # reasons we only consider the minimum value found, which should be more
-  # stable.
-  expected <- 0.0001037292
-  expect_equal(fit_res$res_tab$res.deviance, expected, tolerance = 1e-5,
-               scale = expected)
+  expect_equal_to_reference(fit_res, "abfit_res_coarse.rds",
+                            tolerance = 1e-6)
 })
 
-test_that("Test ABfit fine-fitting", {
-  fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
-                       package = "spant")
-  
-  mrs_data <- read_mrs(fname, format = "spar_sdat")
-  basis    <- sim_basis_1h_brain_press(mrs_data)
+test_that("Test ABfit fine-fitting only", {
+  mrs_data <- readRDS("abfit_sim_mrs_data.rds")
+  sim_res  <- readRDS("abfit_sim_res.rds")
   
   # don't run the pre fitting step
   opts <- abfit_opts(maxiters_pre = 0)
-  fit_res  <- fit_mrs(mrs_data, basis, method = "abfit", opts = opts,
-                      time = FALSE)
   
-  expect_equal_to_reference(fit_res, "fit_res_abfit_fine.rds", tolerance = 1e-4)
+  # undo the large phase error to avoid FWHM measurement warnings
+  fit_res  <- fit_mrs(mrs_data %>% phase(-120), sim_res$basis, method = "abfit",
+                      opts = opts, time = FALSE)
+  
+  expect_equal_to_reference(fit_res, "abfit_res_fine.rds", tolerance = 1e-6)
 })
 
-test_that("Test ABfit full", {
-  fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
-                       package = "spant")
-  
-  mrs_data <- read_mrs(fname, format = "spar_sdat")
-  basis    <- sim_basis_1h_brain_press(mrs_data)
-  
-  fit_res  <- fit_mrs(mrs_data, basis, method = "abfit", time = FALSE)
-  
-  expected <- 7.313048e-5
-  expect_equal(fit_res$res_tab$res.deviance, expected, tolerance = 1e-5,
-               scale = expected)
-})

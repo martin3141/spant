@@ -1,5 +1,7 @@
 # spant 1.2.0
 * Performance improvement for HSVD water filter.
+* ABfit unit tests are now run on simulated data to improve consistency between
+different platforms.
 
 # spant 1.1.0
 * Improved ppm labels for ABfit plot results.
