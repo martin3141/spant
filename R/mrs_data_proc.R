@@ -1016,9 +1016,7 @@ align <- function(mrs_data, ref_freq = 4.65, zf_factor = 2, lb = 2,
 #' @export
 get_td_amp <- function(mrs_data, nstart = 10, nend = 50) {
   
-  if (is_fd(mrs_data)) {
-      mrs_data <- fd2td(mrs_data)
-  }
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
   #t <- seconds(mrs_data)
   #amps <- apply_mrs(mrs_data, 7, measure_lorentz_amp, t, nstart, nend)$data
