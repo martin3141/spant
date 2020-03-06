@@ -357,12 +357,18 @@ n2coord <- function(n, fit_res) {
 }
 
 #' Write fit results table to a csv file.
-#' @param x fit results table.
+#' @param fit_res fit result object.
 #' @param fname filename of csv file.
-#' @param pvc output PVC or raw results (logical).
+#' @param unscaled output the unscaled result table (default = FALSE).
 #' @export
-fit_tab2csv <- function(x, fname, pvc = FALSE) {
-  utils::write.csv(x, fname, quote = FALSE, row.names = FALSE)
+fit_res2csv <- function(fit_res, fname, unscaled = FALSE) {
+  if (unscaled) {
+    out_tab <- fit_res$res_tab
+  } else {
+    out_tab <- fit_res$res_tab_unscaled
+  }
+  
+  utils::write.csv(out_tab, fname, quote = FALSE, row.names = FALSE)
 }
 
 #' Plot a 2D slice from an MRSI fit result object.

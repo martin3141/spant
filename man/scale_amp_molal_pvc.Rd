@@ -18,7 +18,7 @@ scale_amp_molal_pvc(fit_result, ref_data, p_vols, te, tr)
 \item{tr}{the MRS TR.}
 }
 \value{
-A \code{fit_result} object with a res_tab_molal_pvc data table added.
+A \code{fit_result} object with a rescaled results table.
 }
 \description{
 Apply partial volume correction to a fitting result object.

@@ -18,8 +18,7 @@ correction.}
 \item{tr}{the MRS TR.}
 }
 \value{
-a \code{fit_result} object with an added results table:
-"res_tab_molal_pvc".
+a \code{fit_result} object with a rescaled results table.
 }
 \description{
 Convert default LCM/TARQUIN concentration scaling to molal units with partial

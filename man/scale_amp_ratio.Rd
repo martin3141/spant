@@ -13,7 +13,7 @@ scale_amp_ratio(fit_result, name)
 "tNAA").}
 }
 \value{
-a \code{fit_result} object with a res_tab_ratio data table added.
+a \code{fit_result} object with a rescaled results table.
 }
 \description{
 Scale fitted amplitudes to a ratio of signal amplitude.
