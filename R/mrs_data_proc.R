@@ -227,7 +227,6 @@ array2mrs_data <- function(data_array, fs = def_fs(), ft = def_ft(),
 #' @return MRS data matrix.
 #' @export
 mrs_data2mat <- function(mrs_data) {
-  
   if (class(mrs_data) == "list") mrs_data <- append_dyns(mrs_data)
   
   as.matrix(mrs_data$data[1,1,1,1,,1,])
@@ -244,6 +243,10 @@ mrs_data2mat <- function(mrs_data) {
 #' @export
 mrs_data2vec <- function(mrs_data, dyn = 1, x_pos = 1,
                           y_pos = 1, z_pos = 1, coil = 1) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   as.vector(mrs_data$data[1, x_pos, y_pos, z_pos, dyn, coil,])
 }
 
@@ -305,6 +308,10 @@ sim_zeros <- function(fs = def_fs(), ft = def_ft(), N = def_N(),
 #' @param data_only return an array rather than an MRS data object.
 #' @export
 apply_mrs <- function(mrs_data, dims, fun, ..., data_only = FALSE) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   dims <- sort(dims)
   margins <- c(1:7)[-dims]
   mrs_data$data <- plyr::aaply(mrs_data$data, margins, fun, ..., .drop = FALSE)
@@ -329,6 +336,7 @@ apply_mrs <- function(mrs_data, dims, fun, ..., data_only = FALSE) {
 #' @return frequency shifted MRS data.
 #' @export
 shift <- function(mrs_data, shift, units = "ppm") {
+  
   # covert to time-domain
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
@@ -367,6 +375,7 @@ shift <- function(mrs_data, shift, units = "ppm") {
 #' @return MRS data with applied phase parameters.
 #' @export
 phase <- function(mrs_data, zero_order, first_order = 0) {
+  
   # check the input
   check_mrs_data(mrs_data)
   
@@ -411,9 +420,7 @@ phase <- function(mrs_data, zero_order, first_order = 0) {
 fp_phase_correct <- function(mrs_data, ret_phase = FALSE) {
   
   # needs to be a time-domain operation
-  if (is_fd(mrs_data)) {
-    mrs_data <- fd2td(mrs_data)
-  }
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
   phases <- Arg(mrs_data$data[,,,,,, 1, drop = F])
   mrs_data$data <- mrs_data$data * array(exp(-1i * phases), dim = dim(mrs_data))
@@ -430,20 +437,18 @@ fp_phase_correct <- function(mrs_data, ret_phase = FALSE) {
 #' @return first time-domain data point.
 #' @export
 get_fp <- function(mrs_data) {
+  
   # needs to be a time-domain operation
-  if (is_fd(mrs_data)) {
-    mrs_data <- fd2td(mrs_data)
-  }
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
   # drop the chem shift dimension
   mrs_data$data[,,,,,, 1, drop = F]
 }
 
 fp_mag <- function(mrs_data) {
+  
   # needs to be a time-domain operation
-  if (is_fd(mrs_data)) {
-    mrs_data <- fd2td(mrs_data)
-  }
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
   # drop the chem shift dimension
   abind::adrop(Mod(mrs_data$data[,,,,,, 1, drop = F]), 7)
@@ -455,6 +460,7 @@ fp_mag <- function(mrs_data) {
 #' @return convolved data.
 #' @export
 conv_mrs <- function(mrs_data, conv) {
+  
   # needs to be a time-domain operation
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   if (is_fd(conv)) conv <- fd2td(conv)
@@ -472,23 +478,12 @@ conv_mrs <- function(mrs_data, conv) {
 #' @return phase values in degrees.
 #' @export
 fp_phase <- function(mrs_data) {
+  
   # needs to be a time-domain operation
-  if (is_fd(mrs_data)) {
-    mrs_data <- fd2td(mrs_data)
-  }
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
   # drop the chem shift dimension
   abind::adrop(Arg(mrs_data$data[,,,,,, 1, drop = F]), 7) * 180 / pi
-}
-
-#' Conjugate MRS data.
-#' @param mrs_data input data.
-#' @return conjugated data.
-#' @export
-conj <- function(mrs_data) {
-  warning("Depreciated function, use Conj instead.") 
-  mrs_data$data = Re(mrs_data$data) - Im(mrs_data$data) * 1i
-  mrs_data
 }
 
 #' Apply line-broadening (apodisation) to MRS data or basis object.
@@ -580,10 +575,10 @@ zf.basis_set <- function(x, factor = 2) {
 #' @return MRS data with pts data points.
 #' @export
 set_td_pts <- function(mrs_data, pts) {
+  
   # needs to be a time-domain operation
-  if (is_fd(mrs_data)) {
-    mrs_data <- fd2td(mrs_data)
-  }
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+  
   data_dim <- dim(mrs_data$data)
   if (data_dim[7] > pts) {
     data_dim_trunc <- data_dim
@@ -604,6 +599,10 @@ set_td_pts <- function(mrs_data, pts) {
 #' @param ref reference value for ppm scale.
 #' @export
 set_ref <- function(mrs_data, ref) {
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
   mrs_data$ref = ref
   return(mrs_data)
 }
@@ -614,6 +613,10 @@ set_ref <- function(mrs_data, ref) {
 #' @return logical value.
 #' @export
 is_fd <- function(mrs_data) {
+  
+  # check the input is an mrs_data object
+  check_mrs_data(mrs_data)
+  
   mrs_data$freq_domain[7]
 }
 
@@ -648,9 +651,8 @@ fd2td <- function(mrs_data) {
 # recon complex td data from real part of fd data
 recon_imag <- function(mrs_data) {
   # data needs to be in the FD
-  if (!is_fd(mrs_data)) {
-    mrs_data <- td2fd(mrs_data)
-  }
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
   mrs_data <- apply_mrs(mrs_data, 7, recon_imag_vec)
   mrs_data$freq_domain[7] = FALSE
   return(mrs_data)
@@ -661,6 +663,10 @@ recon_imag <- function(mrs_data) {
 #' @return list of acquisition parameters.
 #' @export
 get_acq_paras <- function(mrs_data) {
+  
+  # check the input is an mrs_data object
+  check_mrs_data(mrs_data)
+  
   list(ft = mrs_data$ft, fs = fs(mrs_data), N = Npts(mrs_data), ref = mrs_data$ref)
 }
 
@@ -763,29 +769,14 @@ dim.mrs_data <- function(x) {
   dim(x$data)
 }
 
-#' Return the number of data points in an MRS dataset.
-#' @param mrs_data MRS data.
-#' @return number of data points.
-#' @export
-N <- function(mrs_data) {
-  #stop("N function is depricated, use Npts instead.")
-  warning("N function is depricated, use Npts instead.")
-  dim(mrs_data$data)[7]
-}
-
-#' Return the number of dynamic scans in an MRS dataset.
-#' @param mrs_data MRS data.
-#' @return number of dynamic scans.
-#' @export
-dyns <- function(mrs_data) {
-  warning("dyns function is depricated, use Ndyns instead.")
-  dim(mrs_data$data)[5]
-}
-
 #' Return the total number of spectra in an MRS dataset.
 #' @param mrs_data MRS data.
 #' @export
 Nspec <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   mrs_dims <- dim(mrs_data$data)
   (mrs_dims[1] * mrs_dims[2] * mrs_dims[3] * mrs_dims[4] * mrs_dims[5] *
    mrs_dims[6])
@@ -795,6 +786,10 @@ Nspec <- function(mrs_data) {
 #' @param mrs_data MRS data.
 #' @export
 Nx <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   dim(mrs_data$data)[2]
 }
 
@@ -802,6 +797,10 @@ Nx <- function(mrs_data) {
 #' @param mrs_data MRS data.
 #' @export
 Ny <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   dim(mrs_data$data)[3]
 }
 
@@ -809,6 +808,10 @@ Ny <- function(mrs_data) {
 #' @param mrs_data MRS data.
 #' @export
 Nz <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
   dim(mrs_data$data)[4]
 }
 
@@ -816,6 +819,10 @@ Nz <- function(mrs_data) {
 #' @param mrs_data MRS data.
 #' @export
 Ndyns <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
   dim(mrs_data$data)[5]
 }
 
@@ -823,6 +830,10 @@ Ndyns <- function(mrs_data) {
 #' @param mrs_data MRS data.
 #' @export
 Ncoils <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
   dim(mrs_data$data)[6]
 }
 
@@ -831,6 +842,10 @@ Ncoils <- function(mrs_data) {
 #' @return number of data points.
 #' @export
 Npts <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
   dim(mrs_data$data)[7]
 }
 
@@ -839,6 +854,10 @@ Npts <- function(mrs_data) {
 #' @return sampling frequency in Hz.
 #' @export
 fs <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
   1 / mrs_data$resolution[7]
 }
 
@@ -849,6 +868,10 @@ fs <- function(mrs_data) {
 #' @return frequency scale.
 #' @export
 hz <- function(mrs_data, fs = NULL, N = NULL) {
+  
+  # check the input
+  if (!missing(mrs_data)) check_mrs_data(mrs_data)
+  
   if (is.null(fs)) fs <- fs(mrs_data)
   
   if (is.null(N)) N <- Npts(mrs_data)
@@ -865,14 +888,18 @@ hz <- function(mrs_data, fs = NULL, N = NULL) {
 #' @return ppm scale.
 #' @export
 ppm <- function(mrs_data, ft = NULL, ref = NULL, fs= NULL, N = NULL) {
-   if (is.null(ft)) ft <- mrs_data$ft
-   
-   if (is.null(ref)) ref <- mrs_data$ref
-   
-   if (is.null(fs)) fs <- fs(mrs_data)
-   
-   if (is.null(N)) N <- Npts(mrs_data)
-   
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
+  if (is.null(ft)) ft <- mrs_data$ft
+  
+  if (is.null(ref)) ref <- mrs_data$ref
+  
+  if (is.null(fs)) fs <- fs(mrs_data)
+  
+  if (is.null(N)) N <- Npts(mrs_data)
+  
   -hz(fs = fs, N = N) / ft * 1e6 + ref
 }
 
@@ -923,6 +950,7 @@ get_seg_ind <- function(scale, start, end) {
 #' @return cropped \code{mrs_data} object.
 #' @export
 crop_td_pts <- function(mrs_data, start = NULL, end = NULL) {
+  
   # needs to be a TD operation
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
@@ -944,10 +972,9 @@ crop_td_pts <- function(mrs_data, start = NULL, end = NULL) {
 #' @return cropped \code{mrs_data} object.
 #' @export
 crop_spec <- function(mrs_data, xlim = c(4,0.5), scale = "ppm") {
-  # needs to be a fd operation
-  if (!is_fd(mrs_data)) {
-      mrs_data <- td2fd(mrs_data)
-  }
+  
+  # needs to be a FD operation
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
   if (scale == "ppm") {
     x_scale <- ppm(mrs_data)
@@ -995,9 +1022,7 @@ crop_spec <- function(mrs_data, xlim = c(4,0.5), scale = "ppm") {
 align <- function(mrs_data, ref_freq = 4.65, zf_factor = 2, lb = 2,
                   max_shift = 20, ret_df = FALSE) {
   
-  if (is_fd(mrs_data)) {
-    mrs_data <- fd2td(mrs_data)
-  }
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
   mrs_data_zf <- zf(mrs_data, zf_factor)
   mrs_data_zf <- td2fd(mrs_data_zf)
@@ -1069,6 +1094,10 @@ shift_hz <- function(fid_in, shifts, t) {
 #' @return MRS data containing the subset of requested dynamics.
 #' @export
 get_dyns <- function(mrs_data, subset) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   mrs_data$data <- mrs_data$data[,,,, subset,,, drop = FALSE]
   return(mrs_data)
 }
@@ -1097,6 +1126,10 @@ set_dyns <- function(mrs_data, subset, mrs_data_in) {
 #' @return MRS data without the specified dynamic scans.
 #' @export
 rm_dyns <- function(mrs_data, subset) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   mrs_data$data <- mrs_data$data[,,,, -subset,,, drop = F]
   mrs_data
 }
@@ -1111,6 +1144,10 @@ rm_dyns <- function(mrs_data, subset) {
 #' @return MRS data.
 #' @export
 get_voxel <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1, dyn = 1, coil = 1) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   mrs_data$data <- mrs_data$data[1, x_pos, y_pos, z_pos, dyn, coil, , drop = FALSE]
   return(mrs_data)
 }
@@ -1121,6 +1158,10 @@ get_voxel <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1, dyn = 1, coil =
 #' @return MRS data.
 #' @export
 get_slice <- function(mrs_data, z_pos) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   mrs_data$data <- mrs_data$data[,,,z_pos,,,, drop = FALSE]
   return(mrs_data)
 }
@@ -1136,6 +1177,9 @@ get_slice <- function(mrs_data, z_pos) {
 #' @export
 get_subset <- function(mrs_data, x_set = NULL, y_set = NULL, z_set = NULL,
                        dyn_set = NULL, coil_set = NULL) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
   
   orig_dims <- dim(mrs_data$data)
   
@@ -1157,6 +1201,10 @@ get_subset <- function(mrs_data, x_set = NULL, y_set = NULL, z_set = NULL,
 #' @return selected subset of MRS data.
 #' @export
 crop_xy <- function(mrs_data, x_dim, y_dim) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   mid_pt_x <- Nx(mrs_data) / 2
   mid_pt_y <- Ny(mrs_data) / 2
   x_set <- seq(from = mid_pt_x - x_dim / 2 + 1, by = 1, length.out = x_dim)
@@ -1179,6 +1227,10 @@ crop_xy <- function(mrs_data, x_dim, y_dim) {
 #' @return masked MRS data.
 #' @export
 mask_xy <- function(mrs_data, x_dim, y_dim) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   mid_pt_x <- Nx(mrs_data) / 2
   mid_pt_y <- Ny(mrs_data) / 2
   x_set <- seq(from = mid_pt_x - x_dim / 2 + 1, by = 1, length.out = x_dim)
@@ -1198,6 +1250,10 @@ mask_xy <- function(mrs_data, x_dim, y_dim) {
 #' @return masked dataset.
 #' @export
 mask_xy_mat <- function(mrs_data, mask) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   dim(mask) <- c(1, nrow(mask), ncol(mask), 1, 1, 1, 1)
   mask <- rep_array_dim(mask, 7, Npts(mrs_data))
   mrs_data$data[mask] <- NA
@@ -1267,6 +1323,11 @@ inv_even_dyns <- function(mrs_data) {
 #' @return combined metabolite and reference mrs_data object.
 #' @export
 comb_metab_ref <- function(metab, ref) {
+  
+  # check the input
+  check_mrs_data(metab) 
+  check_mrs_data(ref) 
+  
   metab$data <- abind::abind(metab$data, ref$data, along = 1)
   metab
 }
@@ -1276,6 +1337,10 @@ comb_metab_ref <- function(metab, ref) {
 #' @return reference component.
 #' @export
 get_ref <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   mrs_data$data <- mrs_data$data[2,,,,,,,drop = FALSE]
   mrs_data
 }
@@ -1285,6 +1350,10 @@ get_ref <- function(mrs_data) {
 #' @return metabolite component.
 #' @export
 get_metab <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   mrs_data$data <- mrs_data$data[1,,,,,,,drop = FALSE]
   mrs_data
 }
@@ -1513,6 +1582,10 @@ collapse_to_dyns.fit_result <- function(x) {
 #' @return mean dynamic data.
 #' @export
 mean_dyns <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   mrs_data$data <- aperm(mrs_data$data, c(5,1,2,3,4,6,7))
   mrs_data$data <- colMeans(mrs_data$data, na.rm = TRUE)
   new_dim <- dim(mrs_data$data)
@@ -1554,6 +1627,10 @@ mean_dyn_pairs <- function(mrs_data) {
 #' @return sum of data dynamics.
 #' @export
 sum_dyns <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   mrs_data$data <- aperm(mrs_data$data, c(5,1,2,3,4,6,7))
   mrs_data$data <- colSums(mrs_data$data, na.rm = TRUE)
   new_dim <- dim(mrs_data$data)
@@ -1566,6 +1643,10 @@ sum_dyns <- function(mrs_data) {
 #' @return sum across coil elements.
 #' @export
 sum_coils <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   mrs_data$data <- aperm(mrs_data$data, c(6,1,2,3,4,5,7))
   mrs_data$data <- colSums(mrs_data$data)
   new_dim <- dim(mrs_data$data)
@@ -1659,9 +1740,6 @@ conv_filt_vec <- function(fid, K = 25, ext = 1) {
 #' @param ext point separation for linear extrapolation.
 #' @export
 td_conv_filt <- function(mrs_data, K = 25, ext = 1) {
-  # check the input
-  check_mrs_data(mrs_data)
-  
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   apply_mrs(mrs_data, 7, conv_filt_vec, K, ext)
 }
@@ -1672,9 +1750,7 @@ td_conv_filt <- function(mrs_data, K = 25, ext = 1) {
 #' @param ext point separation for linear extrapolation.
 #' @export
 fd_conv_filt <- function(mrs_data, K = 25, ext = 1) {
-  if (!is_fd(mrs_data)) {
-      mrs_data <- td2fd(mrs_data)
-  }
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   apply_mrs(mrs_data, 7, conv_filt_vec, K, ext)
 }
 
@@ -1691,9 +1767,6 @@ fd_conv_filt <- function(mrs_data, K = 25, ext = 1) {
 #' @param irlba option to use irlba SVD (logical).
 #' @export
 hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE) {
-  
-  # check the input
-  check_mrs_data(mrs_data)
   
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
@@ -1852,7 +1925,6 @@ ecc_ref <- function(mrs_data) {
 #' @export
 ecc <- function(metab, ref, rev = FALSE) {
   if (is_fd(metab)) metab <- fd2td(metab)
-  
   if (is_fd(ref)) ref <- fd2td(ref)
   
   if (rev) ref <- Conj(ref)
@@ -1877,6 +1949,10 @@ ecc <- function(metab, ref, rev = FALSE) {
 #' @return apodised data.
 #' @export
 apodise_xy <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   mrsi_dims <- dim(mrs_data$data)
   x_dim <- mrsi_dims[2]
   y_dim <- mrsi_dims[3]
@@ -1912,6 +1988,10 @@ apodise_xy <- function(mrs_data) {
 #' @return shifted data.
 #' @export
 grid_shift_xy <- function(mrs_data, x_shift, y_shift) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   # TODO adjust pos vec to match
   mrsi_dims <- dim(mrs_data$data)
   x_dim <- mrsi_dims[2]
@@ -1953,6 +2033,9 @@ grid_shift_xy <- function(mrs_data, x_shift, y_shift) {
 zf_xy <- function(mrs_data, factor = 2) {
   # TODO check data is 2D in xy dirn and make (much) faster by using afill
   # TODO check this works for even numbers of rows and cols...
+  
+  # check the input
+  check_mrs_data(mrs_data) 
   
   # put xy dims into k-space
   mrs_data <- apply_mrs(mrs_data, 2, ft_shift)
@@ -2032,13 +2115,9 @@ comb_coils <- function(metab, ref = NULL, noise = NULL,
     metab_only <- TRUE
   }
   
-  if (is_fd(metab)) {
-      metab <- fd2td(metab)
-  }
+  if (is_fd(metab)) metab <- fd2td(metab)
   
-  if (is_fd(ref)) {
-      ref <- fd2td(ref)
-  }
+  if (is_fd(ref)) ref <- fd2td(ref)
   
   # get the first dynamic of the ref data
   # first_ref <- get_dyns(ref, 1)
@@ -2121,6 +2200,10 @@ comb_coils <- function(metab, ref = NULL, noise = NULL,
 #' @return replicated data object.
 #' @export
 rep_dyn <- function(mrs_data, times) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   mrs_data$data <- rep_array_dim(mrs_data$data, 5, times)
   mrs_data
 }
@@ -2136,6 +2219,9 @@ rep_dyn <- function(mrs_data, times) {
 #' @export
 rep_mrs <- function(mrs_data, x_rep = 1, y_rep = 1, z_rep = 1, dyn_rep = 1,
                     coil_rep = 1) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
   
   old_dims <- dim(mrs_data$data) 
   
@@ -2173,6 +2259,10 @@ est_noise_sd_vec <- function(x, n = 100, offset = 100, p_order = 2) {
 #' @return correlation matrix.
 #' @export
 calc_coil_noise_cor <- function(noise_data) {
+  
+  # check the input
+  check_mrs_data(noise_data) 
+  
   cplx_data <- drop(noise_data$data)
   # concat real and imag parts
   real_data <- cbind(Re(cplx_data), Im(cplx_data))
@@ -2184,6 +2274,10 @@ calc_coil_noise_cor <- function(noise_data) {
 #' @return array of standard deviations.
 #' @export
 calc_coil_noise_sd <- function(noise_data) {
+  
+  # check the input
+  check_mrs_data(noise_data) 
+  
   cplx_data <- drop(noise_data$data)
   # concat real and imag parts
   real_data <- cbind(Re(cplx_data), Im(cplx_data))
@@ -2363,9 +2457,7 @@ norm_mrs <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
 int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
                      summation = "sum") {
   
-  if (!is_fd(mrs_data)) {
-    mrs_data <- td2fd(mrs_data)
-  }
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
     
   if ( scale == "ppm" ) {
     x_scale <- ppm(mrs_data)
@@ -2450,16 +2542,15 @@ back_extrap_vec <- function(vec, n_pts) {
 #' @return an array of the sum of squared difference values.
 #' @export
 calc_spec_diff <- function(mrs_data, ref = NULL, xlim = c(4, 0.5)) {
-  if (!is_fd(mrs_data)) {
-    mrs_data <- td2fd(mrs_data)
-  }
+  
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
   # diff from mean dynamic if ref not given
   if (is.null(ref)) ref <- mean_dyns(mrs_data)
   
   mrs_data_crop <- crop_spec(mrs_data, xlim)
   ref_crop <- crop_spec(ref, xlim)
-  ref_crop <- rep_dyn(ref_crop, dyns(mrs_data))
+  ref_crop <- rep_dyn(ref_crop, Ndyns(mrs_data))
   res <- mrs_data_crop - ref_crop
   apply_mrs(res, 7, cplx_sum_sq, data_only = TRUE)
 }
@@ -2469,6 +2560,10 @@ calc_spec_diff <- function(mrs_data, ref = NULL, xlim = c(4, 0.5)) {
 #' @return k-space data.
 #' @export
 mrsi2d_img2kspace <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   mrsi_dims <- dim(mrs_data$data) 
   x_dim <- mrsi_dims[2]
   y_dim <- mrsi_dims[3]
@@ -2493,6 +2588,10 @@ mrsi2d_img2kspace <- function(mrs_data) {
 #' @return MRSI data in image space.
 #' @export
 mrsi2d_kspace2img <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   mrsi_dims <- dim(mrs_data$data) 
   x_dim <- mrsi_dims[2]
   y_dim <- mrsi_dims[3]
@@ -2520,6 +2619,9 @@ mrsi2d_kspace2img <- function(mrs_data) {
 #' @export
 set_lw <- function(mrs_data, lw, xlim = c(4, 0.5)) {
   
+  # check the input
+  check_mrs_data(mrs_data) 
+  
   # measure current lw and check it is narrower than requested
   init_lw <- peak_info(mrs_data, xlim)$fwhm_ppm[1]
   
@@ -2546,6 +2648,7 @@ lw_obj_fn <- function(lb, mrs_data, lw) {
 #' @return l2 reconstructed mrs_data object.
 #' @export
 l2_reg <- function(mrs_data, A, b) {
+  
   # generally done as a FD operation
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   

@@ -3,6 +3,7 @@
 * ABfit unit tests are now run on simulated data to improve consistency between
 different platforms.
 * Improvements to fit amplitude scaling code.
+* Improved checking for mrs_data processing functions.
 
 # spant 1.1.0
 * Improved ppm labels for ABfit plot results.
