@@ -100,7 +100,7 @@ scale_amp_ratio <- function(fit_result, name) {
 get_corr_factor <- function(te, tr, B0, gm_vol, wm_vol, csf_vol) {
   # Correction factor calcualted according to the method of Gasparovic et al (MRM 55:1219-1226 2006)
   # NOTE - gives concs as Mol/kg of water NOT Mol/liter of tissue like default LCM/TQN analysis.
-  if (B0 == 3.0) {
+  if ((B0 == 3.0) | (B0 == 2.9)) {
     # Wanasapura values given in Harris paper
     t1_gm    <- 1.331
     t2_gm    <- 0.110
