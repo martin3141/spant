@@ -1,3 +1,20 @@
+
+check_mrs_data <- function(mrs_data) {
+  in_class <- class(mrs_data)
+  if (in_class == "mrs_data") {
+    return()
+  } else if (in_class == "list") {
+    if (class(mrs_data[[1]]) == "mrs_data") {
+      stop("Error, input is a list of mrs_data objects. Please only pass a
+           single mrs_data object to this function.")
+    } else {
+      stop("Error, input is not mrs_data class.")
+    }
+  } else {
+    stop("Error, input is not mrs_data class.")
+  }
+}
+
 #' Simulate a MRS data object containing a set of simulated resonances.
 #' @param freq resonance frequency.
 #' @param amp resonance amplitude.
@@ -350,6 +367,9 @@ shift <- function(mrs_data, shift, units = "ppm") {
 #' @return MRS data with applied phase parameters.
 #' @export
 phase <- function(mrs_data, zero_order, first_order = 0) {
+  # check the input
+  check_mrs_data(mrs_data)
+  
   if ((first_order == 0) && (length(zero_order) == 1)) { 
     # single zero order phase term given
     mrs_data$data <- mrs_data$data * exp(1i * zero_order * pi / 180)
@@ -1639,9 +1659,10 @@ conv_filt_vec <- function(fid, K = 25, ext = 1) {
 #' @param ext point separation for linear extrapolation.
 #' @export
 td_conv_filt <- function(mrs_data, K = 25, ext = 1) {
-  if (is_fd(mrs_data)) {
-      mrs_data <- fd2td(mrs_data)
-  }
+  # check the input
+  check_mrs_data(mrs_data)
+  
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   apply_mrs(mrs_data, 7, conv_filt_vec, K, ext)
 }
 
@@ -1670,6 +1691,10 @@ fd_conv_filt <- function(mrs_data, K = 25, ext = 1) {
 #' @param irlba option to use irlba SVD (logical).
 #' @export
 hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE) {
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
   apply_mrs(mrs_data, 7, hsvd_filt_vec, fs = fs(mrs_data), region = xlim,
