@@ -11,6 +11,8 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr){
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
     fit_result$res_tab_unscaled <- fit_result$res_tab
+  } else {
+    fit_result$res_tab <- fit_result$res_tab_unscaled
   }
   
   B0 <- round(fit_result$data$ft / 42.58e6, 1)
@@ -48,6 +50,8 @@ scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880) {
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
     fit_result$res_tab_unscaled <- fit_result$res_tab
+  } else {
+    fit_result$res_tab <- fit_result$res_tab_unscaled
   }
   
   w_amp <- as.numeric(get_td_amp(ref_data))
@@ -73,6 +77,8 @@ scale_amp_water_ratio <- function(fit_result, ref_data) {
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
     fit_result$res_tab_unscaled <- fit_result$res_tab
+  } else {
+    fit_result$res_tab <- fit_result$res_tab_unscaled
   }
   
   w_amp <- as.numeric(get_td_amp(ref_data))
@@ -98,7 +104,10 @@ scale_amp_ratio <- function(fit_result, name) {
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
     fit_result$res_tab_unscaled <- fit_result$res_tab
+  } else {
+    fit_result$res_tab <- fit_result$res_tab_unscaled
   }
+  
   
   ratio_amp <- as.numeric(fit_result$res_tab[[name]])
   
@@ -186,7 +195,10 @@ apply_pvc <- function(fit_result, p_vols, te, tr){
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
     fit_result$res_tab_unscaled <- fit_result$res_tab
+  } else {
+    fit_result$res_tab <- fit_result$res_tab_unscaled
   }
+  
   #te <- result$data$te
   B0 <- round(fit_result$data$ft / 42.58e6,1)
   corr_factor <- get_corr_factor(te, tr, B0, p_vols[["GM"]], p_vols[["WM"]],
