@@ -71,5 +71,5 @@ plot(fit_res)
 Extract the estimated amplitudes from ``fit_res`` and print as a ratio to total-creatine in column format:
 ```{r}
 amps <- fit_amps(fit_res)
-print(t(amps / amps$TCr))
+print(t(amps / amps$tCr))
 ```
