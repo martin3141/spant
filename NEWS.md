@@ -4,6 +4,7 @@
 different platforms.
 * Improvements to fit amplitude scaling code.
 * Improved checking for mrs_data processing functions.
+* Added preprocessing steps vignette.
 
 # spant 1.1.0
 * Improved ppm labels for ABfit plot results.
