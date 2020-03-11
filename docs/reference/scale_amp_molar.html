@@ -72,7 +72,7 @@ quantities in millimolar (mM) units (mol/litre)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -99,6 +99,9 @@ quantities in millimolar (mM) units (mol/litre)." />
     </li>
     <li>
       <a href="../articles/spant-intro.html">Introduction to spant</a>
+    </li>
+    <li>
+      <a href="../articles/spant-preprocessing.html">Common preprocessing steps</a>
     </li>
   </ul>
 </li>
@@ -132,13 +135,7 @@ quantities in millimolar (mM) units (mol/litre).</h1>
 quantities in millimolar (mM) units (mol/litre).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>scale_amp_molar</span>(
-  <span class='no'>fit_result</span>,
-  <span class='no'>ref_data</span>,
-  <span class='kw'>w_att</span> <span class='kw'>=</span> <span class='fl'>0.7</span>,
-  <span class='kw'>w_conc</span> <span class='kw'>=</span> <span class='fl'>35880</span>,
-  <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>scale_amp_molar</span>(<span class='no'>fit_result</span>, <span class='no'>ref_data</span>, <span class='kw'>w_att</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>w_conc</span> <span class='kw'>=</span> <span class='fl'>35880</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,15 +156,11 @@ quantities in millimolar (mM) units (mol/litre).</p>
       <th>w_conc</th>
       <td><p>assumed water concentration (default = 35880).</p></td>
     </tr>
-    <tr>
-      <th>overwrite</th>
-      <td><p>overwrite unscaled values (default = FALSE).</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a <code>fit_result</code> object with a res_tab_molar data table added.</p>
+    <p>a <code>fit_result</code> object with a rescaled results table.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

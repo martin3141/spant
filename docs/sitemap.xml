@@ -16,9 +16,6 @@
     <loc>https://martin3141.github.io/spant//reference/Mod.mrs_data.html</loc>
   </url>
   <url>
-    <loc>https://martin3141.github.io/spant//reference/N.html</loc>
-  </url>
-  <url>
     <loc>https://martin3141.github.io/spant//reference/Ncoils.html</loc>
   </url>
   <url>
@@ -139,9 +136,6 @@
     <loc>https://martin3141.github.io/spant//reference/comb_metab_ref.html</loc>
   </url>
   <url>
-    <loc>https://martin3141.github.io/spant//reference/conj.html</loc>
-  </url>
-  <url>
     <loc>https://martin3141.github.io/spant//reference/conv_mrs.html</loc>
   </url>
   <url>
@@ -175,9 +169,6 @@
     <loc>https://martin3141.github.io/spant//reference/diff_mrs.html</loc>
   </url>
   <url>
-    <loc>https://martin3141.github.io/spant//reference/dyns.html</loc>
-  </url>
-  <url>
     <loc>https://martin3141.github.io/spant//reference/ecc.html</loc>
   </url>
   <url>
@@ -199,7 +190,7 @@
     <loc>https://martin3141.github.io/spant//reference/fit_mrs.html</loc>
   </url>
   <url>
-    <loc>https://martin3141.github.io/spant//reference/fit_tab2csv.html</loc>
+    <loc>https://martin3141.github.io/spant//reference/fit_res2csv.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/fp_phase.html</loc>
@@ -695,5 +686,8 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//articles/spant-intro.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//articles/spant-preprocessing.html</loc>
   </url>
 </urlset>

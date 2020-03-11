@@ -72,7 +72,7 @@ signals. J Magn Reson 1987;73:553-557." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -99,6 +99,9 @@ signals. J Magn Reson 1987;73:553-557." />
     </li>
     <li>
       <a href="../articles/spant-intro.html">Introduction to spant</a>
+    </li>
+    <li>
+      <a href="../articles/spant-preprocessing.html">Common preprocessing steps</a>
     </li>
   </ul>
 </li>
@@ -133,7 +136,7 @@ and timedomain model fitting to exponentially damped magnetic resonance
 signals. J Magn Reson 1987;73:553-557.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>hsvd_filt</span>(<span class='no'>mrs_data</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>30</span>, <span class='fl'>30</span>), <span class='kw'>comps</span> <span class='kw'>=</span> <span class='fl'>50</span>, <span class='kw'>propack</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>hsvd_filt</span>(<span class='no'>mrs_data</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>30</span>, <span class='fl'>30</span>), <span class='kw'>comps</span> <span class='kw'>=</span> <span class='fl'>40</span>, <span class='kw'>irlba</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,8 +154,8 @@ signals. J Magn Reson 1987;73:553-557.</p>
       <td><p>number of Lorentzian components to use for modelling.</p></td>
     </tr>
     <tr>
-      <th>propack</th>
-      <td><p>option to use PROPACK SVD (logical).</p></td>
+      <th>irlba</th>
+      <td><p>option to use irlba SVD (logical).</p></td>
     </tr>
     </table>
 

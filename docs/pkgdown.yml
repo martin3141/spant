@@ -4,6 +4,7 @@ pkgdown_sha: ~
 articles:
   abfit-baseline-opts: abfit-baseline-opts.html
   spant-intro: spant-intro.html
+  spant-preprocessing: spant-preprocessing.html
 urls:
   reference: https://martin3141.github.io/spant//reference
   article: https://martin3141.github.io/spant//articles
