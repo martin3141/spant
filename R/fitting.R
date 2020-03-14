@@ -29,6 +29,9 @@
 #' @param parallel perform analyses in parallel (TRUE or FALSE).
 #' @param time measure the time taken for the analysis to complete
 #' (TRUE or FALSE).
+#' @param progress option is passed to plyr::alply function to display a
+#' progress bar during fitting. Default value is "text", set to "none" to
+#' disable.
 #' @return MRS analysis object.
 #' @examples
 #' fname <- system.file("extdata","philips_spar_sdat_WS.SDAT",package="spant")
@@ -39,7 +42,8 @@
 #' }
 #' @export
 fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
-                    opts = NULL, parallel = FALSE, time = TRUE) {
+                    opts = NULL, parallel = FALSE, time = TRUE,
+                    progress = "text") {
   
   # start the clock
   if (time) ptm <- proc.time()
@@ -97,7 +101,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
                                .parallel = parallel, 
                                .paropts = list(.inorder = TRUE,
                                                .packages = "spant"),
-                               .progress = "text", .inform = FALSE)
+                               .progress = progress, .inform = FALSE)
     
   } else if (METHOD == "VARPRO") {
     # read basis into memory if a file
@@ -112,7 +116,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
                                .parallel = parallel, 
                                .paropts = list(.inorder = TRUE,
                                                .packages = "spant"),
-                               .progress = "text", .inform = FALSE)
+                               .progress = progress, .inform = FALSE)
     
   } else if (METHOD == "VARPRO_3P") {
     # read basis into memory if a file
@@ -127,7 +131,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
                                .parallel = parallel, 
                                .paropts = list(.inorder = TRUE,
                                                .packages = "spant"),
-                               .progress = "text", .inform = FALSE)
+                               .progress = progress, .inform = FALSE)
     
   } else if (METHOD == "TARQUIN") {
     if (!is.null(w_ref)) { 
@@ -162,7 +166,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
                                .parallel = parallel, 
                                .paropts = list(.inorder = TRUE,
                                                .packages = "spant"),
-                               .progress = "text", .inform = FALSE)
+                               .progress = progress, .inform = FALSE)
     
                          #.paropts = list(.options.snow=snowopts),
                          #.paropts = list(.export="N",.packages="spant"),
@@ -201,7 +205,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
                                .parallel = parallel, 
                                .paropts = list(.inorder = TRUE,
                                                .packages = "spant"),
-                               .progress = "text", .inform = FALSE)
+                               .progress = progress, .inform = FALSE)
   } else if (exists(method)) {
     message(paste("Using external fit method :", method))
     
@@ -217,7 +221,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
                                .parallel = parallel, 
                                .paropts = list(.inorder = TRUE,
                                                .packages = "spant"),
-                               .progress = "text", .inform = FALSE)
+                               .progress = progress, .inform = FALSE)
     
   } else {
     stop(paste('Fit method not found : ', method))

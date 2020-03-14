@@ -11,7 +11,8 @@ fit_mrs(
   w_ref = NULL,
   opts = NULL,
   parallel = FALSE,
-  time = TRUE
+  time = TRUE,
+  progress = "text"
 )
 }
 \arguments{
@@ -31,6 +32,10 @@ LCModel .basis format.}
 
 \item{time}{measure the time taken for the analysis to complete
 (TRUE or FALSE).}
+
+\item{progress}{option is passed to plyr::alply function to display a
+progress bar during fitting. Default value is "text", set to "none" to
+disable.}
 }
 \value{
 MRS analysis object.

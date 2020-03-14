@@ -1,3 +1,8 @@
+# spant 1.2.1
+* Added the option to display a progress bar in fit_mrs function for better
+conformance to "Writing R Extensions" in non-interactive use.
+* Changed test tolerance to accommodate differences with OSX.
+
 # spant 1.2.0
 * Performance improvement for HSVD water filter.
 * ABfit unit tests are now run on simulated data to improve consistency between
