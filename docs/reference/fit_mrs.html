@@ -71,7 +71,7 @@ specify the location of these software packages." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
@@ -141,7 +141,8 @@ specify the location of these software packages.</p>
   <span class='kw'>w_ref</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>opts</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>time</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  <span class='kw'>time</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>progress</span> <span class='kw'>=</span> <span class='st'>"text"</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -177,6 +178,12 @@ LCModel .basis format.</p></td>
       <th>time</th>
       <td><p>measure the time taken for the analysis to complete
 (TRUE or FALSE).</p></td>
+    </tr>
+    <tr>
+      <th>progress</th>
+      <td><p>option is passed to plyr::alply function to display a
+progress bar during fitting. Default value is "text", set to "none" to
+disable.</p></td>
     </tr>
     </table>
 
