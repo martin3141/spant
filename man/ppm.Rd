@@ -2,24 +2,34 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{ppm}
 \alias{ppm}
-\title{Return the ppm scale of an MRS dataset.}
+\alias{ppm.mrs_data}
+\alias{ppm.fit_result}
+\title{Return the ppm scale of an MRS dataset or fit result.}
 \usage{
-ppm(mrs_data, ft = NULL, ref = NULL, fs = NULL, N = NULL)
+ppm(x, ft = NULL, ref = NULL, fs = NULL, N = NULL)
+
+\method{ppm}{mrs_data}(x, ft = NULL, ref = NULL, fs = NULL, N = NULL)
+
+\method{ppm}{fit_result}(x, ft = NULL, ref = NULL, fs = NULL, N = NULL)
 }
 \arguments{
-\item{mrs_data}{MRS data.}
+\item{x}{MRS dataset of fit result.}
 
-\item{ft}{transmitter frequency in Hz.}
+\item{ft}{transmitter frequency in Hz, does not apply when the object is a
+fit result.}
 
-\item{ref}{reference value for ppm scale.}
+\item{ref}{reference value for ppm scale, does not apply when the object is a
+fit result.}
 
-\item{fs}{sampling frequency in Hz.}
+\item{fs}{sampling frequency in Hz, does not apply when the object is a
+fit result.}
 
-\item{N}{number of data points in the spectral dimension.}
+\item{N}{number of data points in the spectral dimension, does not apply when the object is a
+fit result.}
 }
 \value{
 ppm scale.
 }
 \description{
-Return the ppm scale of an MRS dataset.
+Return the ppm scale of an MRS dataset or fit result.
 }

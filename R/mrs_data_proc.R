@@ -879,28 +879,48 @@ hz <- function(mrs_data, fs = NULL, N = NULL) {
   seq(from = -fs / 2, to = fs / 2 - fs / N, length.out = N)
 }
 
-#' Return the ppm scale of an MRS dataset.
-#' @param mrs_data MRS data.
-#' @param ft transmitter frequency in Hz.
-#' @param ref reference value for ppm scale.
-#' @param fs sampling frequency in Hz.
-#' @param N number of data points in the spectral dimension.
+#' Return the ppm scale of an MRS dataset or fit result.
+#' @param x MRS dataset of fit result.
+#' @param ft transmitter frequency in Hz, does not apply when the object is a
+#' fit result.
+#' @param ref reference value for ppm scale, does not apply when the object is a
+#' fit result.
+#' @param fs sampling frequency in Hz, does not apply when the object is a
+#' fit result.
+#' @param N number of data points in the spectral dimension, does not apply when the object is a
+#' fit result.
 #' @return ppm scale.
 #' @export
-ppm <- function(mrs_data, ft = NULL, ref = NULL, fs= NULL, N = NULL) {
+ppm <- function(x, ft = NULL, ref = NULL, fs= NULL, N = NULL) UseMethod("ppm")
+
+#' @rdname ppm
+#' @export 
+ppm.mrs_data <- function(x, ft = NULL, ref = NULL, fs= NULL, N = NULL) {
   
   # check the input
-  check_mrs_data(mrs_data)
+  check_mrs_data(x)
   
-  if (is.null(ft)) ft <- mrs_data$ft
+  if (is.null(ft)) ft <- x$ft
   
-  if (is.null(ref)) ref <- mrs_data$ref
+  if (is.null(ref)) ref <- x$ref
   
-  if (is.null(fs)) fs <- fs(mrs_data)
+  if (is.null(fs)) fs <- fs(x)
   
-  if (is.null(N)) N <- Npts(mrs_data)
+  if (is.null(N)) N <- Npts(x)
   
   -hz(fs = fs, N = N) / ft * 1e6 + ref
+}
+
+#' @rdname ppm
+#' @export 
+ppm.fit_result <- function(x, ft = NULL, ref = NULL, fs= NULL, N = NULL) {
+  fit_is_na <- is.na(x$fits)
+  if (sum(fit_is_na) > 0) {
+    first_non_na <- which(!fit_is_na)[[1]]
+    return(x$fits[[first_non_na]]$PPMScale)
+  } else {
+    return(x$fits[[1]]$PPMScale)
+  }
 }
 
 n2hz <- function(n, N, fs) {
