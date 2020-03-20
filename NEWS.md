@@ -1,3 +1,7 @@
+# spant 1.2.2
+* Added a function to combine all fit tables in a fit_result object into a
+single dataframe.
+
 # spant 1.2.1
 * Added the option to display a progress bar in fit_mrs function for better
 conformance to "Writing R Extensions" in non-interactive use.

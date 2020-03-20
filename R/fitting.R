@@ -672,3 +672,36 @@ comb_fits <- function(fit_list) {
   class(fit_out) <- "fit_result"
   fit_out
 }
+
+#' Combine all fitting data points into a single dataframe.
+#' @param fit_res a single fit_result object.
+#' @return a dataframe containing the fit data points.
+#' @export
+get_fit_table <- function(fit_res) {
+  
+  # search for masked spectra
+  na_fits <- is.na(fit_res$fits)
+  
+  if (sum(na_fits) > 0) {
+    fit_n <- which(!na_fits)[1]
+    # create a df with consistent dimensions containing only NA's
+    na_frame <- fit_res$fits[[fit_n]]
+    na_frame[] <- NA
+    fits_w_na <- fit_res$fits
+    fits_w_na[na_fits] <- list(na_frame)
+    frows <- nrow(fits_w_na[[1]])
+    full_fit_df <- do.call("rbind", fits_w_na)
+  } else {
+    frows <- nrow(fit_res$fits[[1]])
+    full_fit_df <- do.call("rbind", fit_res$fits)
+  }
+  
+  # add some ID columns
+  full_fit_df$id <- rep(1:length(na_fits), each = frows)
+  full_fit_df$X  <- rep(fit_res$res_tab$X, each = frows)
+  full_fit_df$Y  <- rep(fit_res$res_tab$Y, each = frows)
+  full_fit_df$Z  <- rep(fit_res$res_tab$Z, each = frows)
+  full_fit_df$Dynamic <- rep(fit_res$res_tab$Dynamic, each = frows)
+  full_fit_df$Coil <- rep(fit_res$res_tab$Coil, each = frows)
+  full_fit_df
+}
