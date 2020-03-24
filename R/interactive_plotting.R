@@ -44,15 +44,17 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
   
   if (class(mrs_data) == "mrs_data") {
     x_scale <- ppm(mrs_data)
+    input_mrs_data <- TRUE
   } else if (class(mrs_data) == "fit_result") {
-    x_scale <- ppm(mrs_data)
+    x_scale  <- ppm(mrs_data)
+    fit_res  <- mrs_data
+    mrs_data <- fit_res$data
+    input_mrs_data <- FALSE
   } else {
     stop("input is not an mrs_data or fit_result object")
   }
   
-  if (is.null(xlim)) {
-    xlim <- c(x_scale[1], x_scale[length(x_scale)])
-  }
+  if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[length(x_scale)])
   
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar("Select point on the map to show spectrum."),
@@ -84,12 +86,12 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
                        lw = 3)
     })
     output$spec <- shiny::renderPlot({
-      if (class(mrs_data) == "mrs_data") {
+      if (input_mrs_data) {
         graphics::plot(mrs_data, x_pos = x, y_pos = Ny(mrs_data) + 1 - y,
                        z_pos = slice, xlim = xlim, mode = mode,
                        y_scale = y_scale, ylim = ylim, coil = coil)
       } else {
-        graphics::plot(mrs_data, x_pos = x, y_pos = Ny(mrs_data) + 1 - y,
+        graphics::plot(fit_res, x_pos = x, y_pos = Ny(mrs_data) + 1 - y,
                        z_pos = slice, xlim = xlim, coil = coil)
       }
       
@@ -115,12 +117,12 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
       if (y < 1) y <- 1
       
       output$spec <- shiny::renderPlot({
-        if (class(mrs_data) == "mrs_data") {
+        if (input_mrs_data) {
           graphics::plot(mrs_data, x_pos = x, y_pos = Ny(mrs_data) + 1 - y,
                          z_pos = slice, xlim = xlim, mode = mode,
                          y_scale = y_scale, ylim = ylim, coil = coil)
         } else {
-          graphics::plot(mrs_data, x_pos = x, y_pos = Ny(mrs_data) + 1 - y,
+          graphics::plot(fit_res, x_pos = x, y_pos = Ny(mrs_data) + 1 - y,
                          z_pos = slice, xlim = xlim, coil = coil)
         }
       })
