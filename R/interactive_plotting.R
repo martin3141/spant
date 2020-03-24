@@ -44,9 +44,10 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
   
   if (class(mrs_data) == "mrs_data") {
     x_scale <- ppm(mrs_data)
+  } else if (class(mrs_data) == "fit_result") {
+    x_scale <- ppm(mrs_data)
   } else {
-    non_na_res <- which(!is.na(mrs_data$fits))[[1]]
-    x_scale <- mrs_data$fits[[non_na_res]]$PPMScale
+    stop("input is not an mrs_data or fit_result object")
   }
   
   if (is.null(xlim)) {
