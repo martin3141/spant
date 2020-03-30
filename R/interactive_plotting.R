@@ -9,6 +9,9 @@
 plot_slice_fit_inter <- function(fit_res, map = NULL, slice = 1, zlim = NULL, 
                                  interp = 1, xlim = NULL) {
   
+  
+  if (class(map) == "character") map <- get_fit_map(fit_res, map)
+  
   if (is.null(map)) map <- get_fit_map(fit_res, "tNAA") 
   
   plot_slice_map_inter(mrs_data = fit_res, map = map, slice = slice, 
