@@ -374,9 +374,9 @@ fit_res2csv <- function(fit_res, fname, unscaled = FALSE) {
 #' Plot a 2D slice from an MRSI fit result object.
 #' @param fit_res \code{fit_result} object.
 #' @param map fit result values to display as a colour map. Can be specified as
-#' a charactor string or array of numeric values. Defaults to "tNAA".
+#' a character string or array of numeric values. Defaults to "tNAA".
 #' @param map_denom fit result values to divide the map argument by. Can be
-#' specified as a charactor string (eg "tCr") or array of numeric values.
+#' specified as a character string (eg "tCr") or array of numeric values.
 #' @param slice slice to plot in the z direction.
 #' @param zlim range of values to plot.
 #' @param interp interpolation factor.

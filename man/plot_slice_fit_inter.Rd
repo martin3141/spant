@@ -18,10 +18,10 @@ plot_slice_fit_inter(
 \item{fit_res}{\code{fit_result} object.}
 
 \item{map}{fit result values to display as a colour map. Can be specified as
-a charactor string or array of numeric values. Defaults to "tNAA".}
+a character string or array of numeric values. Defaults to "tNAA".}
 
 \item{map_denom}{fit result values to divide the map argument by. Can be
-specified as a charactor string (eg "tCr") or array of numeric values.}
+specified as a character string (eg "tCr") or array of numeric values.}
 
 \item{slice}{slice to plot in the z direction.}
 
