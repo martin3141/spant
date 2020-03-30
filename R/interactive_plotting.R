@@ -26,7 +26,6 @@ plot_slice_fit_inter <- function(fit_res, map = NULL, map_denom = NULL,
                        interp = interp, zlim = zlim, xlim = xlim)
 }
 
-
 #' Plot an interactive slice map from a data array where voxels can be selected
 #' to display a corresponding spectrum.
 #' @param mrs_data spectral data.

@@ -4,7 +4,7 @@ into a single dataframe.
 * ppm function can now be applied to fit result objects.
 * Bug fix for plot_slice_fit_inter and added the option to specify a
 denominator.
-* Added the option to specify a denominator to plot_slice_fit (TODO).
+* Added the option to specify a denominator to plot_slice_fit.
 
 # spant 1.2.1
 * Added the option to display a progress bar in fit_mrs function for better

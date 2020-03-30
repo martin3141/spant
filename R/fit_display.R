@@ -373,17 +373,30 @@ fit_res2csv <- function(fit_res, fname, unscaled = FALSE) {
 
 #' Plot a 2D slice from an MRSI fit result object.
 #' @param fit_res \code{fit_result} object.
-#' @param name name of the quantity to plot, eg "tNAA".
+#' @param map fit result values to display as a colour map. Can be specified as
+#' a charactor string or array of numeric values. Defaults to "tNAA".
+#' @param map_denom fit result values to divide the map argument by. Can be
+#' specified as a charactor string (eg "tCr") or array of numeric values.
 #' @param slice slice to plot in the z direction.
 #' @param zlim range of values to plot.
 #' @param interp interpolation factor.
 #' @export
-plot_slice_fit <- function(fit_res, name, slice = 1, zlim = NULL, interp = 1) {
-  result_map <- fit_res$res_tab[[name]]
-  dim(result_map) <- dim(fit_res$data$data)[2:6]
-  col <- viridisLite::viridis(64)
-  plot_map <- result_map[,, slice, 1, 1]
+plot_slice_fit <- function(fit_res, map, map_denom = NULL, slice = 1,
+                           zlim = NULL, interp = 1) {
+  
+  if (class(map) == "character") map <- get_fit_map(fit_res, map)
+  
+  if (class(map_denom) == "character") map_denom <- get_fit_map(fit_res,
+                                                                map_denom)
+  
+  if (is.null(map)) map <- get_fit_map(fit_res, "tNAA") 
+  
+  if (!is.null(map_denom)) map <- map / map_denom
+  
+  plot_map <- map[1,,, slice, 1, 1]
   plot_map <- pracma::fliplr(plot_map)
+  
+  col <- viridisLite::viridis(64)
   
   if (interp != 1) {
     plot_map <- mmand::rescale(plot_map, interp, mmand::mnKernel())

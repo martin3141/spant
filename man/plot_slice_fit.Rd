@@ -4,12 +4,23 @@
 \alias{plot_slice_fit}
 \title{Plot a 2D slice from an MRSI fit result object.}
 \usage{
-plot_slice_fit(fit_res, name, slice = 1, zlim = NULL, interp = 1)
+plot_slice_fit(
+  fit_res,
+  map,
+  map_denom = NULL,
+  slice = 1,
+  zlim = NULL,
+  interp = 1
+)
 }
 \arguments{
 \item{fit_res}{\code{fit_result} object.}
 
-\item{name}{name of the quantity to plot, eg "tNAA".}
+\item{map}{fit result values to display as a colour map. Can be specified as
+a charactor string or array of numeric values. Defaults to "tNAA".}
+
+\item{map_denom}{fit result values to divide the map argument by. Can be
+specified as a charactor string (eg "tCr") or array of numeric values.}
 
 \item{slice}{slice to plot in the z direction.}
 
