@@ -7,6 +7,7 @@
 plot_slice_fit_inter(
   fit_res,
   map = NULL,
+  map_denom = NULL,
   slice = 1,
   zlim = NULL,
   interp = 1,
@@ -16,7 +17,11 @@ plot_slice_fit_inter(
 \arguments{
 \item{fit_res}{\code{fit_result} object.}
 
-\item{map}{array of values to be plotted, defaults to a "tNAA" map.}
+\item{map}{fit result values to display as a colour map. Can be specified as
+a charactor string or array of numeric values. Defaults to "tNAA".}
+
+\item{map_denom}{fit result values to divide the map argument by. Can be
+specified as a charactor string (eg "tCr") or array of numeric values.}
 
 \item{slice}{slice to plot in the z direction.}
 

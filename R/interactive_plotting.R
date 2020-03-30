@@ -1,18 +1,26 @@
 #' Plot a 2D slice from an MRSI fit result object.
 #' @param fit_res \code{fit_result} object.
-#' @param map array of values to be plotted, defaults to a "tNAA" map.
+#' @param map fit result values to display as a colour map. Can be specified as
+#' a charactor string or array of numeric values. Defaults to "tNAA".
+#' @param map_denom fit result values to divide the map argument by. Can be
+#' specified as a charactor string (eg "tCr") or array of numeric values.
 #' @param slice slice to plot in the z direction.
 #' @param zlim range of values to plot.
 #' @param interp interpolation factor.
 #' @param xlim spectral plot limits for the x axis.
 #' @export
-plot_slice_fit_inter <- function(fit_res, map = NULL, slice = 1, zlim = NULL, 
-                                 interp = 1, xlim = NULL) {
-  
+plot_slice_fit_inter <- function(fit_res, map = NULL, map_denom = NULL, 
+                                 slice = 1, zlim = NULL, interp = 1,
+                                 xlim = NULL) {
   
   if (class(map) == "character") map <- get_fit_map(fit_res, map)
   
+  if (class(map_denom) == "character") map_denom <- get_fit_map(fit_res,
+                                                                map_denom)
+  
   if (is.null(map)) map <- get_fit_map(fit_res, "tNAA") 
+  
+  if (!is.null(map_denom)) map <- map / map_denom
   
   plot_slice_map_inter(mrs_data = fit_res, map = map, slice = slice, 
                        interp = interp, zlim = zlim, xlim = xlim)
