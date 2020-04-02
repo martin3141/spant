@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Apply a weighting to the FID to enhance spectral resolution. — re_weighting • Spectroscopy Analysis Tools (spant)</title>
+<title>Combine all fitting data points into a single dataframe. — get_fit_table • Spectroscopy Analysis Tools (spant)</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Apply a weighting to the FID to enhance spectral resolution. — re_weighting" />
-<meta property="og:description" content="Apply a weighting to the FID to enhance spectral resolution." />
+<meta property="og:title" content="Combine all fitting data points into a single dataframe. — get_fit_table" />
+<meta property="og:description" content="Combine all fitting data points into a single dataframe." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -121,37 +121,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Apply a weighting to the FID to enhance spectral resolution.</h1>
+    <h1>Combine all fitting data points into a single dataframe.</h1>
     
-    <div class="hidden name"><code>re_weighting.Rd</code></div>
+    <div class="hidden name"><code>get_fit_table.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Apply a weighting to the FID to enhance spectral resolution.</p>
+    <p>Combine all fitting data points into a single dataframe.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>re_weighting</span>(<span class='no'>mrs_data</span>, <span class='no'>re</span>, <span class='no'>alpha</span>)</pre>
+    <pre class="usage"><span class='fu'>get_fit_table</span>(<span class='no'>fit_res</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>mrs_data</th>
-      <td><p>data to be enhanced.</p></td>
-    </tr>
-    <tr>
-      <th>re</th>
-      <td><p>resolution enhancement factor (rising exponential factor).</p></td>
-    </tr>
-    <tr>
-      <th>alpha</th>
-      <td><p>alpha factor (Guassian decay)</p></td>
+      <th>fit_res</th>
+      <td><p>a single fit_result object.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>resolution enhanced mrs_data.</p>
+    <p>a dataframe containing the fit data points.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

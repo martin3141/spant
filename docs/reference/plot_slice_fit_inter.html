@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0</span>
       </span>
     </div>
 
@@ -133,6 +133,7 @@
     <pre class="usage"><span class='fu'>plot_slice_fit_inter</span>(
   <span class='no'>fit_res</span>,
   <span class='kw'>map</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>map_denom</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>zlim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>interp</span> <span class='kw'>=</span> <span class='fl'>1</span>,
@@ -148,7 +149,13 @@
     </tr>
     <tr>
       <th>map</th>
-      <td><p>array of values to be plotted, defaults to a "tNAA" map.</p></td>
+      <td><p>fit result values to display as a colour map. Can be specified as
+a character string or array of numeric values. Defaults to "tNAA".</p></td>
+    </tr>
+    <tr>
+      <th>map_denom</th>
+      <td><p>fit result values to divide the map argument by. Can be
+specified as a character string (eg "tCr") or array of numeric values.</p></td>
     </tr>
     <tr>
       <th>slice</th>
