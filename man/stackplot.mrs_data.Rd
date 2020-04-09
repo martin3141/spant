@@ -23,6 +23,7 @@
   labels = NULL,
   lab_cex = 1,
   right_marg = NULL,
+  bl_lty = NULL,
   restore_def_par = TRUE,
   ...
 )
@@ -68,6 +69,9 @@ Default value is 0.}
 \item{lab_cex}{label size.}
 
 \item{right_marg}{change the size of the right plot margin.}
+
+\item{bl_lty}{linetype for the y = 0 baseline trace. A default value NULL
+results in no baseline being plotted.}
 
 \item{restore_def_par}{restore default plotting par values after the plot has
 been made.}
