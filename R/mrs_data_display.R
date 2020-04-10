@@ -315,6 +315,8 @@ stackplot.list <- function(x, ...) {
 #' @param labels add labels to each data item.
 #' @param lab_cex label size.
 #' @param right_marg change the size of the right plot margin.
+#' @param bl_lty linetype for the y = 0 baseline trace. A default value NULL
+#' results in no baseline being plotted.
 #' @param restore_def_par restore default plotting par values after the plot has 
 #' been made.
 #' @param ... other arguments to pass to the matplot method.
@@ -324,7 +326,8 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                                y_offset = 0, dim = "dyn", x_pos = NULL, 
                                y_pos = NULL, z_pos = NULL, dyn = 1, coil = 1, 
                                bty = NULL, labels = NULL, lab_cex = 1, 
-                               right_marg = NULL, restore_def_par = TRUE, ...) {
+                               right_marg = NULL, bl_lty = NULL,
+                               restore_def_par = TRUE, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -445,11 +448,23 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   
   plot_data <- plot_data + y_offset_mat
   
+  # linetype for spectral data
+  lty <- rep(1, ncol(plot_data))
+  
+  # add baseline traces to the plot?
+  if (!is.null(bl_lty)) {
+    # only need one baseline trace if y_offset is zero
+    if (y_offset == 0) y_offset_mat <- y_offset_mat[, 1, drop = FALSE]
+    
+    plot_data <- cbind(plot_data, y_offset_mat)
+    lty <- c(lty, rep(bl_lty, ncol(y_offset_mat)))
+  }
+  
   x_scale_mat <- matrix(x_scale[subset], nrow = nrow(plot_data),
                         ncol = ncol(plot_data), byrow = FALSE)
   
   x_offset_mat <- matrix((0:(ncol(plot_data) - 1) * 
-                          (xlim[2] - xlim[1]) * x_offset / 100), 
+                         (xlim[2] - xlim[1]) * x_offset / 100), 
                          nrow = nrow(plot_data), ncol = ncol(plot_data),
                          byrow = TRUE)
   
@@ -469,13 +484,15 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   
   graphics::matplot(x_scale_mat[length(subset):1,],
                     plot_data[length(subset):1,], type = "l", 
-                    lty = 1, col = col, xlab = xlab, ylab = "",
+                    lty = lty, col = col, xlab = xlab, ylab = "",
                     yaxt = "n", xaxt = "n", xlim = xlim,
                     bty = bty, ...)
   
   graphics::axis(1, lwd = 0, lwd.ticks = 1)
   
   if (bty == "n") graphics::abline(h = graphics::par("usr")[3]) 
+  
+  #abline(h = y_offset_vec, lty = 2)
   
   # write text labels if provided
   if (!is.null(labels)) {

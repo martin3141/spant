@@ -2,7 +2,7 @@
 #' @param fname filename of the dpt format MRS data.
 #' @param format string describing the data format. May be one of the 
 #' following : "spar_sdat", "rda", "ima", "twix", "pfile", "list_data",
-#' "paravis", "dpt", "lcm_raw".
+#' "paravis", "dpt", "lcm_raw", "rds".
 #' @param ft transmitter frequency in Hz (required for list_data format).
 #' @param fs sampling frequency in Hz (required for list_data format).
 #' @param ref reference value for ppm scale (required for list_data format).
@@ -40,10 +40,14 @@ read_mrs <- function(fname, format, ft = NULL, fs = NULL, ref = NULL,
   } else if (format == "paravis") {
     return(read_paravis_raw(fname))
   } else if (format == "lcm_raw") {
-    if (is.null(ft)) stop("Please specify ft parameter for list_data format")
-    if (is.null(fs)) stop("Please specify fs parameter for list_data format")
-    if (is.null(ref)) stop("Please specify ref parameter for list_data format")
+    if (is.null(ft)) stop("Please specify ft parameter for lcm_raw format")
+    if (is.null(fs)) stop("Please specify fs parameter for lcm_raw format")
+    if (is.null(ref)) stop("Please specify ref parameter for lcm_raw format")
     return(read_lcm_raw(fname, ft, fs, ref))
+  } else if (format == "rds") {
+    mrs_data <- readRDS(fname)
+    if (class(mrs_data) != "mrs_data") stop("rds file is not mrs_data format")
+    return(mrs_data)
   } else {
     stop("Unrecognised file format.")
   }
@@ -271,4 +275,13 @@ write_mrs_lcm_raw <- function(fname, mrs_data, id = NA) {
     cat("\n")
   }
   sink()
+}
+
+#' Write MRS data object to file in rds format.
+#' @param fname the filename of the output rda format MRS data.
+#' @param mrs_data object to be written to file.
+#' @export
+write_mrs_rda <- function(fname, mrs_data) {
+  if (class(mrs_data) != "mrs_data") stop("data object is not mrs_data format")
+  saveRDS(mrs_data, fname)
 }
