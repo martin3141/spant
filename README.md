@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Spectroscopy Analysis Tools (spant)
+# Spectroscopy Analysis Tools (spant) <img src="man/figures/logo.png" align="right" width=140/>
 
 [![Travis Build
 Status](https://travis-ci.org/martin3141/spant.svg?branch=master)](https://travis-ci.org/martin3141/spant)
