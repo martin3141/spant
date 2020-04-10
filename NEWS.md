@@ -1,5 +1,6 @@
 # spant 1.4.0
 * Added the option to plot a y = 0 baseline trace for stackplot.mrs_data.
+* Added convenience functions to read and write mrs_data to rds format.
 
 # spant 1.3.0
 * Added get_fit_table function to combine all fit tables in a fit_result object
