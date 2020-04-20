@@ -90,6 +90,7 @@ LCModel
 LCMODEL
 levmar
 lineshape
+linetype
 linewidth
 Luyten
 Magn
@@ -131,6 +132,7 @@ pts
 pve
 rda
 RDA
+rds
 rect
 Reslice
 resliced
