@@ -52,7 +52,7 @@ test_that("Test ABfit coarse-fitting steps only", {
                       time = FALSE, progress = "none")
   
   # this test is a bit more sensitive to differences between platforms
-  expect_equal_to_reference(fit_res, "abfit_res_coarse.rds", tolerance = 1e-1)
+  expect_equal_to_reference(fit_res, "abfit_res_coarse.rds", tolerance = 2e-1)
   ref_val <- 0.2556892
   expect_equal(fit_res$res_tab$res.deviance, ref_val, tolerance = 1e-3)
 })
