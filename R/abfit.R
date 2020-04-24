@@ -1225,11 +1225,18 @@ calc_ahat <- function(a, b, k, ahat_calc_method) {
   if (ahat_calc_method == "lh_pnnls") {
     ahat <- lsei::pnnls(a, b, k = k)$x
   } else if (ahat_calc_method == "glmnet_pnnls") {
+    lower  <- rep(0, ncol(a))
+    if (k > 0) lower[1:k] <- -Inf
     fit <- glmnet::glmnet(a, b, lambda = 0, lower.limits = lower,
                           intercept = FALSE)
     ahat <- coef(fit)[-1] # -1 to remove the intercept (always zero)
   } else if (ahat_calc_method == "ls") {
     ahat <- .lm.fit(a, b)$coefficients
+  } else if (ahat_calc_method == "bvls") {
+    lower  <- rep(0, ncol(a))
+    if (k > 0) lower[1:k] <- -Inf
+    ahat <- bvls::bvls(a, b, bl = lower, bu = rep(Inf, ncol(a)))$x
+    print(ahat)
   } else {
     stop("Invalid method for calc_ahat.")
   }
