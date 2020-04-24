@@ -1225,8 +1225,9 @@ calc_ahat <- function(a, b, k, ahat_calc_method) {
   if (ahat_calc_method == "lh_pnnls") {
     ahat <- lsei::pnnls(a, b, k = k)$x
   } else if (ahat_calc_method == "glmnet_pnnls") {
-    fit <- glmnet(x, y, lambda = 0, lower.limits = 0, intercept = FALSE)
-    ahat <- coef(fit)
+    fit <- glmnet::glmnet(a, b, lambda = 0, lower.limits = lower,
+                          intercept = FALSE)
+    ahat <- coef(fit)[-1] # -1 to remove the intercept (always zero)
   } else if (ahat_calc_method == "ls") {
     ahat <- .lm.fit(a, b)$coefficients
   } else {

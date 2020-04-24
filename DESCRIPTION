@@ -46,6 +46,7 @@ Imports:
     numDeriv,
     nloptr,
     lsei,
+    glmnet,
     irlba,
     tibble
 Suggests:
