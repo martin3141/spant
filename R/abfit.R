@@ -95,7 +95,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                                  bl_basis = bl_basis_pre_fit, t = t, f = f,
                                  inds = sp_bas_pf$inds,
                                  bl_comps = sp_bas_pf$bl_comps, sum_sq = TRUE,
-                                 ret_full = FALSE)
+                                 ret_full = FALSE,
+                                 ahat_calc_method = opts$ahat_calc_method)
     
     res          <- prelim_res
     res$par      <- prelim_res$solution
@@ -153,7 +154,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                              bl_basis = bl_basis_ab, t = t, f = f,
                              inds = sp_bas_ab$inds,
                              bl_comps = sp_bas_ab$bl_comps, sum_sq = FALSE,
-                             ret_full = TRUE)
+                             ret_full = TRUE, opts$ahat_calc_method)
       
       resid_spec <- ab_res$resid
       
@@ -269,7 +270,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     res <- minpack.lm::nls.lm(par, lower, upper, abfit_full_obj, jac_fn,
                               ctrl, y, raw_metab_basis, bl_basis_full, t,
                               f, sp_bas_full$inds, sp_bas_full$bl_comps, FALSE,
-                              NULL, opts$phi1_optim)
+                              NULL, opts$phi1_optim, opts$ahat_calc_method)
   } 
   
   if (opts$maxiters == 0) {
@@ -369,12 +370,13 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   # augment spectrum with zeros to match full basis
   fit_seg <- c(Y_mod[sp_bas_final$inds], rep(0, sp_bas_final$bl_comps - 2))
   
-  # partial nnls
-  fit <- lsei::pnnls(Re(full_bas), Re(fit_seg), k = sp_bas_final$bl_comps)
-  fit$x[is.na(fit$x)] <- 0
+  # estimate amplitudes
+  ahat <- calc_ahat(Re(full_bas), Re(fit_seg), k = sp_bas_final$bl_comps,
+                    opts$ahat_calc_method)
+  ahat[is.na(ahat)] <- 0
   
   # signal estimate (fit)
-  Y_hat <- Re(full_bas) %*% fit$x
+  Y_hat <- Re(full_bas) %*% ahat
   
   # resudual
   res <- Re(fit_seg) - Y_hat
@@ -394,10 +396,10 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   diags$ppm_range <- sp_bas_final$ppm_range
   
   # baseline
-  bl <- Re(sp_bas_final$bl_bas) %*% fit$x[1:sp_bas_final$bl_comps]
+  bl <- Re(sp_bas_final$bl_bas) %*% ahat[1:sp_bas_final$bl_comps]
   
   # turn amplitudes into a matrix to scale invividual signals
-  metab_amp_mat <- matrix(fit$x[(sp_bas_final$bl_comps + 1):length(fit$x)], 
+  metab_amp_mat <- matrix(ahat[(sp_bas_final$bl_comps + 1):length(ahat)], 
                           nrow = nrow(metab_basis_fd_cut),
                           ncol = ncol(metab_basis_fd_cut), byrow = TRUE)
   
@@ -408,7 +410,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   colnames(basis_frame) <- basis$names
   
   # turn amplitudes into a matrix to scale invividual splines
-  spline_amp_mat <- matrix(fit$x[(1:sp_bas_final$bl_comps)], 
+  spline_amp_mat <- matrix(ahat[(1:sp_bas_final$bl_comps)], 
                           nrow = nrow(sp_bas_final$bl_bas),
                           ncol = ncol(sp_bas_final$bl_bas), byrow = TRUE)
   
@@ -451,7 +453,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   }
   
   # metabolite amplitudes
-  amps <- data.frame(t(fit$x[(sp_bas_final$bl_comps + 1):length(fit$x)]))
+  amps <- data.frame(t(ahat[(sp_bas_final$bl_comps + 1):length(ahat)]))
   colnames(amps) <- basis$names
   
   # tNAA_lw calc 
@@ -468,7 +470,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   para_crlb     <- abfit_full_anal_jac(final_par, y, raw_metab_basis,
                                        bl_basis_final, t, f, sp_bas_final$inds,
                                        sp_bas_final$bl_comps, FALSE, NULL,
-                                       opts$phi1_optim)
+                                       opts$phi1_optim, opts$ahat_calc_method)
    
   bl_comps_crlb <- sp_bas_final$bl_comps
   para_crlb     <- rbind(Re(para_crlb), matrix(0, nrow = bl_comps_crlb - 2,
@@ -649,6 +651,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param max_basis_damping_broad maximum allowable Lorentzian damping for broad
 #' signals in the basis (Hz). Determined based on their name beginning with Lip
 #' or MM.
+#' @param ahat_calc_method method to calculate the metabolite amplitdues. May be
+#' one of: "lh_pnnls", "glmnet_pnnls" or "ls".
 #' @return full list of options.
 #' @examples
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
@@ -670,7 +674,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024,  max_shift = 10,
                        aic_smoothing_factor = 5, anal_jac = TRUE,
                        pre_fit_ppm_left = 4, pre_fit_ppm_right = 1.8,
                        phi1_optim = FALSE, phi1_init = 0, max_dphi1 = 0.2,
-                       max_basis_shift_broad = 1, max_basis_damping_broad = 2) {
+                       max_basis_shift_broad = 1, max_basis_damping_broad = 2,
+                       ahat_calc_method = "lh_pnnls") {
                          
   list(init_damping = init_damping, maxiters = maxiters,
        max_shift = max_shift, max_damping = max_damping, max_phase = max_phase,
@@ -691,12 +696,14 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024,  max_shift = 10,
        pre_fit_ppm_right = pre_fit_ppm_right, phi1_optim = phi1_optim,
        phi1_init = phi1_init, max_dphi1 = max_dphi1,
        max_basis_shift_broad = max_basis_shift_broad,
-       max_basis_damping_broad = max_basis_damping_broad)
+       max_basis_damping_broad = max_basis_damping_broad,
+       ahat_calc_method = ahat_calc_method)
 }
 
 # objective function for 4 parameter full spine fitting method
 abfit_full_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
-                           bl_comps, sum_sq, basis_paras, phi1_optim) {
+                           bl_comps, sum_sq, basis_paras, phi1_optim,
+                           ahat_calc_method) {
   
   if (!is.null(basis_paras)) par <- c(par, basis_paras)
   
@@ -753,11 +760,12 @@ abfit_full_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   # augment signal with zeros to match basis dimensions
   fit_seg <- c(Y[inds], rep(0, bl_comps - 2))
   
-  # pnnls
-  fit <- lsei::pnnls(Re(full_bas), Re(fit_seg), k = bl_comps)
+  # estimtate amplitudes
+  ahat <- calc_ahat(Re(full_bas), Re(fit_seg), k = bl_comps,
+                    ahat_calc_method)
   
   # signal estimate 
-  Y_hat <- Re(full_bas) %*% fit$x
+  Y_hat <- Re(full_bas) %*% ahat
   
   if (sum_sq) {
     return(sum((Re(Y[inds]) - Y_hat[1:length(inds)]) ^ 2))
@@ -768,18 +776,19 @@ abfit_full_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
 
 abfit_full_num_jac <- function(par, y, raw_metab_basis, bl_basis, t, f,
                                inds, bl_comps, sum_sq, basis_paras,
-                               phi1_optim) {
+                               phi1_optim, ahat_calc_method) {
   
   numDeriv::jacobian(func = abfit_full_obj, x = par, method = "simple",
                      y = y, raw_metab_basis = raw_metab_basis,
                      bl_basis = bl_basis, t = t, f = f, inds = inds,
                      bl_comps = bl_comps, sum_sq = sum_sq, basis_paras = NULL,
-                     phi1_optim = phi1_optim)
+                     phi1_optim = phi1_optim,
+                     ahat_calc_method = ahat_calc_method)
 }
 
 abfit_partial_num_jac <- function(par, y, raw_metab_basis, bl_basis, t, f,
                                   inds, bl_comps, sum_sq, basis_paras,
-                                  phi1_optim) {
+                                  phi1_optim, ahat_calc_method) {
   
   if (phi1_optim) {
     global_paras <- par[1:5]
@@ -793,19 +802,22 @@ abfit_partial_num_jac <- function(par, y, raw_metab_basis, bl_basis, t, f,
                      y = y, raw_metab_basis = raw_metab_basis,
                      bl_basis = bl_basis, t = t, f = f, inds = inds,
                      bl_comps = bl_comps, sum_sq = sum_sq,
-                     basis_paras = basis_paras_fixed, phi1_optim = phi1_optim)
+                     basis_paras = basis_paras_fixed, phi1_optim = phi1_optim,
+                     ahat_calc_method = ahat_calc_method)
 }
 
 # attempt to calc approx Jacobian for some of the global parameters
 # seems to be less accuarate
 abfit_full_anal_jac_test <- function(par, y, raw_metab_basis, bl_basis, t,
                                      f, inds, bl_comps, sum_sq,
-                                     basis_paras, phi1_optim) {
+                                     basis_paras, phi1_optim,
+                                     ahat_calc_method) {
   
   # calculate the first 4 paras numerically
   global_paras_jac <- abfit_partial_num_jac(par, y, raw_metab_basis, bl_basis,
                                             t, f, inds, bl_comps, sum_sq,
-                                            basis_paras, phi1_optim)
+                                            basis_paras, phi1_optim,
+                                            ahat_calc_method)
   
   # apply phase parameter to data
   y <- y * exp(1i * par[1])
@@ -851,9 +863,8 @@ abfit_full_anal_jac_test <- function(par, y, raw_metab_basis, bl_basis, t,
   # augment signal with zeros to match basis dimensions
   fit_seg <- c(Y[inds], rep(0, bl_comps - 2))
   
-  # find ahat with pnnls
-  fit <- lsei::pnnls(Re(full_bas), Re(fit_seg), k = bl_comps)
-  ahat <- fit$x
+  # estimtate amplitudes
+  ahat <- calc_ahat(Re(full_bas), Re(fit_seg), k = bl_comps, ahat_calc_method)
   
   # multiply by a * 2i * pi * f * t for basis freq shifts
   freq_vec <- ahat[(bl_comps + 1):length(ahat)] * 2i * pi
@@ -888,12 +899,14 @@ abfit_full_anal_jac_test <- function(par, y, raw_metab_basis, bl_basis, t,
 
 # jacobian function for the full spine fitting method
 abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
-                                bl_comps, sum_sq, basis_paras, phi1_optim) {
+                                bl_comps, sum_sq, basis_paras, phi1_optim,
+                                ahat_calc_method) {
   
   # calculate the first 4 paras numerically
   global_paras_jac <- abfit_partial_num_jac(par, y, raw_metab_basis, bl_basis,
                                             t, f, inds, bl_comps, sum_sq,
-                                            basis_paras, phi1_optim)
+                                            basis_paras, phi1_optim,
+                                            ahat_calc_method)
   
   # apply phase parameter to data
   y <- y * exp(1i * par[1])
@@ -950,9 +963,8 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   # augment signal with zeros to match basis dimensions
   fit_seg <- c(Y[inds], rep(0, bl_comps - 2))
   
-  # find ahat with pnnls
-  fit <- lsei::pnnls(Re(full_bas), Re(fit_seg), k = bl_comps)
-  ahat <- fit$x
+  # estimtate amplitudes
+  ahat <- calc_ahat(Re(full_bas), Re(fit_seg), k = bl_comps, ahat_calc_method)
   
   # multiply by a * 2i * pi * t for basis freq shifts
   freq_vec <- ahat[(bl_comps + 1):length(ahat)] * 2i * pi
@@ -981,7 +993,7 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
 
 # objective function for 3 parameter spine fitting method
 abfit_3p_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
-                           bl_comps, sum_sq, ret_full) {
+                           bl_comps, sum_sq, ret_full, ahat_calc_method) {
   
   # apply phase parameter to data
   y <- y * exp(1i * par[1])
@@ -1013,14 +1025,14 @@ abfit_3p_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   # augment signal with zeros to match basis dimensions
   fit_seg <- c(Y[inds], rep(0, bl_comps - 2))
   
-  # pnnls
-  fit <- lsei::pnnls(Re(full_bas), Re(fit_seg), k = bl_comps)
+  # estimtate amplitudes
+  ahat <- calc_ahat(Re(full_bas), Re(fit_seg), k = bl_comps, ahat_calc_method)
   
   # signal estimate 
-  Y_hat <- Re(full_bas) %*% fit$x
+  Y_hat <- Re(full_bas) %*% ahat
   
   if (ret_full) {
-    res <- list(resid = (Re(Y[inds]) - Y_hat[1:length(inds)]), amp = fit$x)
+    res <- list(resid = (Re(Y[inds]) - Y_hat[1:length(inds)]), amp = ahat)
     return(res)
   }
   
@@ -1203,4 +1215,21 @@ generate_sp_basis <- function(mrs_data, ppm_right, ppm_left, bl_comps_pppm) {
   deriv_mat <- diff(diag(bl_comps), lag = 1, differences = 2)
   list(inds = inds, x_scale = x_scale, bl_bas = bl_bas, bl_comps = bl_comps,
        deriv_mat = deriv_mat, ppm_range = ppm_range)
+}
+
+# a - basis matrix (eg simulated metabolite signals)
+# b - response vector (eg acquired data)
+# k - the first k coefficients are not NN-restricted (eg number of spline fn's)
+# method - one of: "lh_pnnls", "glmnet_pnnls", "ls"
+calc_ahat <- function(a, b, k, ahat_calc_method) {
+  if (ahat_calc_method == "lh_pnnls") {
+    ahat <- lsei::pnnls(a, b, k = k)$x
+  } else if (method == "glmnet_pnnls") {
+    ahat <- lsei::pnnls(a, b, k = k)$x
+  } else if (method == "ls") {
+    ahat <- lsei::pnnls(a, b, k = k)$x
+  } else {
+    stop("Invalid method for calc_ahat.")
+  }
+  return(ahat)
 }
