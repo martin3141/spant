@@ -41,7 +41,8 @@ abfit_opts(
   phi1_init = 0,
   max_dphi1 = 0.2,
   max_basis_shift_broad = 1,
-  max_basis_damping_broad = 2
+  max_basis_damping_broad = 2,
+  ahat_calc_method = "lh_pnnls"
 )
 }
 \arguments{
@@ -138,6 +139,9 @@ basis (Hz). Determined based on their name beginning with Lip or MM.}
 \item{max_basis_damping_broad}{maximum allowable Lorentzian damping for broad
 signals in the basis (Hz). Determined based on their name beginning with Lip
 or MM.}
+
+\item{ahat_calc_method}{method to calculate the metabolite amplitdues. May be
+one of: "lh_pnnls", "glmnet_pnnls" or "ls".}
 }
 \value{
 full list of options.

@@ -1229,14 +1229,13 @@ calc_ahat <- function(a, b, k, ahat_calc_method) {
     if (k > 0) lower[1:k] <- -Inf
     fit <- glmnet::glmnet(a, b, lambda = 0, lower.limits = lower,
                           intercept = FALSE)
-    ahat <- coef(fit)[-1] # -1 to remove the intercept (always zero)
+    ahat <- glmnet::coef.glmnet(fit)[-1] # -1 to remove the intercept (always 0)
   } else if (ahat_calc_method == "ls") {
-    ahat <- .lm.fit(a, b)$coefficients
-  } else if (ahat_calc_method == "bvls") {
-    lower  <- rep(0, ncol(a))
-    if (k > 0) lower[1:k] <- -Inf
-    ahat <- bvls::bvls(a, b, bl = lower, bu = rep(Inf, ncol(a)))$x
-    print(ahat)
+    ahat <- stats::.lm.fit(a, b)$coefficients
+  # } else if (ahat_calc_method == "bvls") {
+  #   lower  <- rep(0, ncol(a))
+  #   if (k > 0) lower[1:k] <- -Inf
+  #   ahat <- bvls::bvls(a, b, bl = lower, bu = rep(Inf, ncol(a)))$x
   } else {
     stop("Invalid method for calc_ahat.")
   }
