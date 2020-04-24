@@ -1224,10 +1224,11 @@ generate_sp_basis <- function(mrs_data, ppm_right, ppm_left, bl_comps_pppm) {
 calc_ahat <- function(a, b, k, ahat_calc_method) {
   if (ahat_calc_method == "lh_pnnls") {
     ahat <- lsei::pnnls(a, b, k = k)$x
-  } else if (method == "glmnet_pnnls") {
-    ahat <- lsei::pnnls(a, b, k = k)$x
-  } else if (method == "ls") {
-    ahat <- lsei::pnnls(a, b, k = k)$x
+  } else if (ahat_calc_method == "glmnet_pnnls") {
+    fit <- glmnet(x, y, lambda = 0, lower.limits = 0, intercept = FALSE)
+    ahat <- coef(fit)
+  } else if (ahat_calc_method == "ls") {
+    ahat <- .lm.fit(a, b)$coefficients
   } else {
     stop("Invalid method for calc_ahat.")
   }
