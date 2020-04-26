@@ -1224,18 +1224,18 @@ generate_sp_basis <- function(mrs_data, ppm_right, ppm_left, bl_comps_pppm) {
 calc_ahat <- function(a, b, k, ahat_calc_method) {
   if (ahat_calc_method == "lh_pnnls") {
     ahat <- lsei::pnnls(a, b, k = k)$x
-  } else if (ahat_calc_method == "glmnet_pnnls") {
-    lower  <- rep(0, ncol(a))
-    if (k > 0) lower[1:k] <- -Inf
-    fit <- glmnet::glmnet(a, b, lambda = 0, lower.limits = lower,
-                          intercept = FALSE)
-    ahat <- glmnet::coef.glmnet(fit)[-1] # -1 to remove the intercept (always 0)
   } else if (ahat_calc_method == "ls") {
     ahat <- stats::.lm.fit(a, b)$coefficients
   # } else if (ahat_calc_method == "bvls") {
   #   lower  <- rep(0, ncol(a))
   #   if (k > 0) lower[1:k] <- -Inf
   #   ahat <- bvls::bvls(a, b, bl = lower, bu = rep(Inf, ncol(a)))$x
+  # } else if (ahat_calc_method == "glmnet_pnnls") {
+  #   lower  <- rep(0, ncol(a))
+  #   if (k > 0) lower[1:k] <- -Inf
+  #   fit <- glmnet::glmnet(a, b, lambda = 0, lower.limits = lower,
+  #                         intercept = FALSE)
+  #   ahat <- glmnet::coef.glmnet(fit)[-1] # -1 to remove the intercept (always 0)
   } else {
     stop("Invalid method for calc_ahat.")
   }
