@@ -1,6 +1,7 @@
 # spant 1.5.0
 * Added an option to ABfit to allow the metabolite amplitudes to be negative 
 (ahat_calc_method).
+* Removed lsei package dependency.
 
 # spant 1.4.0
 * Added the option to plot a y = 0 baseline trace for stackplot.mrs_data.
