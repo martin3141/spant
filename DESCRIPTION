@@ -13,6 +13,7 @@ BugReports: https://github.com/martin3141/spant/issues
 License: GPL-3
 RoxygenNote: 7.1.0
 Roxygen: list(markdown = TRUE, roclets = c("rd", "namespace", "collate"))
+NeedsCompilation: yes
 LazyData: yes
 Depends:
     R (>= 2.10)
@@ -45,7 +46,6 @@ Imports:
     oro.dicom,
     numDeriv,
     nloptr,
-    lsei,
     irlba,
     tibble
 Suggests:

@@ -1223,7 +1223,7 @@ generate_sp_basis <- function(mrs_data, ppm_right, ppm_left, bl_comps_pppm) {
 # method - one of: "lh_pnnls", "glmnet_pnnls", "ls"
 calc_ahat <- function(a, b, k, ahat_calc_method) {
   if (ahat_calc_method == "lh_pnnls") {
-    ahat <- lsei::pnnls(a, b, k = k)$x
+    ahat <- pnnls(a, b, k = k)$x
   } else if (ahat_calc_method == "ls") {
     ahat <- stats::.lm.fit(a, b)$coefficients
   # } else if (ahat_calc_method == "bvls") {
