@@ -651,8 +651,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param max_basis_damping_broad maximum allowable Lorentzian damping for broad
 #' signals in the basis (Hz). Determined based on their name beginning with Lip
 #' or MM.
-#' @param ahat_calc_method method to calculate the metabolite amplitdues. May be
-#' one of: "lh_pnnls", "glmnet_pnnls" or "ls".
+#' @param ahat_calc_method method to calculate the metabolite amplitudes. May be
+#' one of: "lh_pnnls" or "ls".
 #' @return full list of options.
 #' @examples
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))

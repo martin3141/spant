@@ -38,6 +38,7 @@ Useful links:
 
 Other contributors:
 \itemize{
+  \item Yong Wang [contributor]
   \item John Muschelli [contributor]
 }
 

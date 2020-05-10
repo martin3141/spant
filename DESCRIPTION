@@ -1,11 +1,12 @@
 Package: spant
 Type: Package
 Title: MR Spectroscopy Analysis Tools
-Version: 1.4.9000
-Date: 2020-04-20
+Version: 1.5.0
+Date: 2020-05-10
 Authors@R: c(
     person("Martin", "Wilson", email = "martin@pipegrep.co.uk",
            role = c("cre", "aut")),
+    person("Yong", "Wang", role = "ctb"),
     person("John", "Muschelli", role = "ctb"))
 Description: Tools for reading, visualising and processing Magnetic Resonance
     Spectroscopy data. <https://martin3141.github.io/spant/>.
