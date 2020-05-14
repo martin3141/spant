@@ -72,7 +72,7 @@ read_pfile <- function(fname, n_ref_scans = NULL) {
   
   if (hdr$rhuser19 > 0) {
     # split water and metab data for each echo
-    wref_inds <- rep(FALSE, dyns(mrs_data) / hdr$nechoes)
+    wref_inds <- rep(FALSE, Ndyns(mrs_data) / hdr$nechoes)
     wref_inds[1:hdr$rhuser] <- TRUE
     wref_inds <- rep(wref_inds, hdr$nechoes)
     

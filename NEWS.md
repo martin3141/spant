@@ -1,3 +1,6 @@
+# spant 1.6.0
+* Bug fix for GE P file reader.
+
 # spant 1.5.0
 * Added an option to ABfit to allow the metabolite amplitudes to be negative 
 (ahat_calc_method).
