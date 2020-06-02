@@ -2,7 +2,7 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{decimate_mrs}
 \alias{decimate_mrs}
-\title{Downsample an MRS signal by a factor.}
+\title{Decimate an MRS signal by a factor.}
 \usage{
 decimate_mrs(mrs_data, q = 2)
 }
@@ -12,8 +12,8 @@ decimate_mrs(mrs_data, q = 2)
 \item{q}{integer factor to downsample by (default = 2).}
 }
 \value{
-downsampled data.
+decimated data.
 }
 \description{
-Downsample an MRS signal by a factor.
+Decimate an MRS signal by a factor.
 }

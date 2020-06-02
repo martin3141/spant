@@ -745,10 +745,10 @@ Conj.mrs_data <- function(z) {
   z
 }
 
-#' Downsample an MRS signal by a factor.
+#' Decimate an MRS signal by a factor.
 #' @param mrs_data MRS data object.
 #' @param q integer factor to downsample by (default = 2).
-#' @return downsampled data.
+#' @return decimated data.
 #' @export
 decimate_mrs <- function(mrs_data, q = 2) {
   # needs to be a TD operation
@@ -760,6 +760,33 @@ decimate_mrs <- function(mrs_data, q = 2) {
   mrs_data$resolution <- mrs_data$resolution * q
   mrs_data
 }
+
+#' Downsample an MRS signal by a factor of 2 using an FFT "brick-wall" filter.
+#' @param mrs_data MRS data object.
+#' @return downsampled data.
+#' @export
+downsample_mrs <- function(mrs_data) {
+  # needs to be a FD operation
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  N <- Npts(mrs_data)
+  mrs_data <- crop_spec(mrs_data, xlim = c(N / 2 - N / 4 + 1, N / 2 + N / 4),
+                        scale = "points")
+  mrs_data
+}
+
+# alternate TD method that might cause a bit of phase distortion
+# downsample_mrs <- function(mrs_data) {
+#  # needs to be a TD operation
+#  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+#  mrs_data$data <- mrs_data$data[,,,,,,c(TRUE, FALSE), drop = FALSE] +
+#                   mrs_data$data[,,,,,,c(FALSE, TRUE), drop = FALSE]
+#  
+#  # apply half a data points worth of frequency dep phase correction
+#  # TODO
+#  
+#   mrs_data$resolution <- mrs_data$resolution * 2
+#   mrs_data
+# }
 
 ift <- function(mrs_data, dims) {
   apply_mrs(mrs_data, dims, ift_shift)
