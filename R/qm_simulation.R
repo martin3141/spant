@@ -308,7 +308,60 @@ get_1h_brain_basis_paras_v2 <- function(ft, metab_lw = NULL, lcm_compat = FALSE)
     basis_list <- list(ala, asp, cr, gaba, glc, gln, gsh, glu, gpc, ins, lac,
                        naa, naag, pch, pcr, sins, tau)
   }
+  basis_list
+}
+
+#' Return a list of \code{mol_parameter} objects suitable for 1H brain MRS
+#' analyses.
+#' @param ft transmitter frequency in Hz.
+#' @param metab_lw linewidth of metabolite signals (Hz).
+#' @param lcm_compat when TRUE, lipid, MM and -CrCH molecules will be excluded
+#' from the output.
+#' @return list of \code{mol_parameter} objects.
+#' @export
+get_1h_brain_basis_paras_v3 <- function(ft, metab_lw = NULL, lcm_compat = FALSE) {
+  if (!lcm_compat) {
+    m_cr_ch2 <- get_m_cr_ch2_paras(metab_lw)
+  }
+  ala <- get_ala_paras(metab_lw)
+  asp <- get_asp_paras(metab_lw)
+  cr <- get_cr_paras(metab_lw)
+  gaba <- get_gaba_paras(metab_lw)
+  glc <- get_glc_paras(metab_lw)
+  gln <- get_gln_paras(metab_lw)
+  gly <- get_gly_paras(metab_lw)
+  gsh <- get_gsh_paras(metab_lw)
+  glu <- get_glu_paras(metab_lw)
+  gpc <- get_gpc_paras(metab_lw)
+  ins <- get_ins_paras(metab_lw)
+  lac <- get_lac_paras(metab_lw)
+  if (!lcm_compat) {
+    lip09 <- get_lip09_paras(ft)
+    lip13a <- get_lip13a_paras(ft)
+    lip13b <- get_lip13b_paras(ft)
+    lip20 <- get_lip20_paras(ft)
+    mm09 <- get_mm09_paras(ft)
+    mm12 <- get_mm12_paras(ft)
+    mm14 <- get_mm14_paras(ft)
+    mm17 <- get_mm17_paras(ft)
+    mm20 <- get_mm20_paras(ft)
+  }
+  naa <- get_naa_paras(metab_lw)
+  naag <- get_naag_paras(metab_lw)
+  pch <- get_pch_paras(metab_lw)
+  pcr <- get_pcr_paras(metab_lw)
+  peth <- get_peth_paras(metab_lw)
+  sins <- get_sins_paras(metab_lw)
+  tau <- get_tau_paras(metab_lw)
   
+  if (!lcm_compat) {
+    basis_list <- list(m_cr_ch2, ala, asp, cr, gaba, glc, gln, gly, gsh, glu,
+                       gpc, ins, lac, lip09, lip13a, lip13b, lip20, mm09, mm12,
+                       mm14, mm17, mm20, naa, naag, pch, pcr, peth, sins, tau)
+  } else {
+    basis_list <- list(ala, asp, cr, gaba, glc, gln, gly, gsh, glu, gpc, ins,
+                       lac, naa, naag, pch, pcr, peth, sins, tau)
+  }
   basis_list
 }
 
