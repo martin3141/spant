@@ -278,10 +278,47 @@ write_mrs_lcm_raw <- function(fname, mrs_data, id = NA) {
 }
 
 #' Write MRS data object to file in rds format.
-#' @param fname the filename of the output rda format MRS data.
+#' @param fname the filename of the output rds MRS data.
 #' @param mrs_data object to be written to file.
 #' @export
-write_mrs_rda <- function(fname, mrs_data) {
+write_mrs_rds <- function(fname, mrs_data) {
   if (class(mrs_data) != "mrs_data") stop("data object is not mrs_data format")
   saveRDS(mrs_data, fname)
+}
+
+#' Write MRS data object to file in NIFTI format.
+#' @param fname the filename of the output NIFTI MRS data.
+#' @param mrs_data object to be written to file.
+#' @export
+write_mrs_nifti <- function(fname, mrs_data) {
+  if (class(mrs_data) != "mrs_data") stop("data object is not mrs_data format")
+  
+  # convert to nii
+  data_points <- mrs_data$data
+  
+  # drop the first dummy dimension
+  data_points <- abind::adrop(data_points, 1)
+  
+  # reorder the dimensions to x, y, z, t, dynamics, coil 
+  data_points <- aperm(data_points, c(1, 2, 3, 6, 4, 5))
+  
+  # add a 7th dimension
+  dim(data_points) <- c(dim(data_points), 1)
+  
+  # convert to nii
+  mrs_nii <- RNifti::asNifti(data_points)
+  
+  # get the geometry information
+  affine  <- get_mrs_affine(mrs_data, 1.5, 1.5, 1.5)
+  
+  # voxel dimensions
+  mrs_pixdim <- mrs_data$resolution[2:4]
+  mrs_nii$pixdim <- c(0, mrs_pixdim, 1, 0, 0, 0)
+  
+  # set the qform
+  mrs_nii <- RNifti::`qform<-`(mrs_nii, structure(affine, code = 2L))
+  mrs_nii$qform_code <- 1
+  
+  # write to disk
+  RNifti::writeNifti(mrs_nii, fname)
 }

@@ -169,6 +169,9 @@
     <loc>https://martin3141.github.io/spant//reference/diff_mrs.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant//reference/downsample_mrs.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant//reference/ecc.html</loc>
   </url>
   <url>
@@ -221,6 +224,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/get_1h_brain_basis_paras_v2.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/get_1h_brain_basis_paras_v3.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/get_2d_psf.html</loc>
@@ -676,7 +682,10 @@
     <loc>https://martin3141.github.io/spant//reference/write_mrs_lcm_raw.html</loc>
   </url>
   <url>
-    <loc>https://martin3141.github.io/spant//reference/write_mrs_rda.html</loc>
+    <loc>https://martin3141.github.io/spant//reference/write_mrs_nifti.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/write_mrs_rds.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/zero_nzoc.html</loc>

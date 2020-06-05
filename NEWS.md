@@ -1,6 +1,8 @@
 # spant 1.6.0
 * Bug fix for GE P file reader.
 * Added downsample_mrs function.
+* Tentative function (write_mrs_nifti) to write MRS data as a NIFTI format file 
+- for evaluation purposes only.
 
 # spant 1.5.0
 * Added an option to ABfit to allow the metabolite amplitudes to be negative 

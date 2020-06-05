@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
       </span>
     </div>
 
@@ -463,7 +463,7 @@ dynamic series.</p></td>
         <td>
           <p><code><a href="decimate_mrs.html">decimate_mrs()</a></code> </p>
         </td>
-        <td><p>Downsample an MRS signal by a factor.</p></td>
+        <td><p>Decimate an MRS signal by a factor.</p></td>
       </tr><tr>
         
         <td>
@@ -501,6 +501,12 @@ default acquisition parameters.</p></td>
           <p><code><a href="diff_mrs.html">diff_mrs()</a></code> </p>
         </td>
         <td><p>Apply the diff operator to an MRS dataset in the FID/spectral dimension.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="downsample_mrs.html">downsample_mrs()</a></code> </p>
+        </td>
+        <td><p>Downsample an MRS signal by a factor of 2 using an FFT "brick-wall" filter.</p></td>
       </tr><tr>
         
         <td>
@@ -611,6 +617,13 @@ analyses.</p></td>
         
         <td>
           <p><code><a href="get_1h_brain_basis_paras_v2.html">get_1h_brain_basis_paras_v2()</a></code> </p>
+        </td>
+        <td><p>Return a list of <code>mol_parameter</code> objects suitable for 1H brain MRS
+analyses.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_1h_brain_basis_paras_v3.html">get_1h_brain_basis_paras_v3()</a></code> </p>
         </td>
         <td><p>Return a list of <code>mol_parameter</code> objects suitable for 1H brain MRS
 analyses.</p></td>
@@ -1550,7 +1563,13 @@ individual basis set components shown.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="write_mrs_rda.html">write_mrs_rda()</a></code> </p>
+          <p><code><a href="write_mrs_nifti.html">write_mrs_nifti()</a></code> </p>
+        </td>
+        <td><p>Write MRS data object to file in NIFTI format.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="write_mrs_rds.html">write_mrs_rds()</a></code> </p>
         </td>
         <td><p>Write MRS data object to file in rds format.</p></td>
       </tr><tr>
