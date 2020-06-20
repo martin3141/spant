@@ -1,7 +1,7 @@
 Package: spant
 Type: Package
 Title: MR Spectroscopy Analysis Tools
-Version: 1.6.0
+Version: 1.6.9000
 Date: 2020-06-05
 Authors@R: c(
     person("Martin", "Wilson", email = "martin@pipegrep.co.uk",
@@ -48,7 +48,8 @@ Imports:
     numDeriv,
     nloptr,
     irlba,
-    tibble
+    tibble,
+    jsonlite
 Suggests:
     neurobase,
     oro.nifti,

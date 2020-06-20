@@ -319,6 +319,20 @@ write_mrs_nifti <- function(fname, mrs_data) {
   mrs_nii <- RNifti::`qform<-`(mrs_nii, structure(affine, code = 2L))
   mrs_nii$qform_code <- 1
   
-  # write to disk
+  # write nifti to disk
   RNifti::writeNifti(mrs_nii, fname)
+  
+  # get fname without the extension for the json sidecar file
+  fname_json <- gsub(".{6}$", "json", fname)
+  
+  # create the R list to be exported as json
+  proton_gr <- 42.5774785182e6
+  Bzero_t   <- mrs_data$ft / proton_gr
+  json_list <- list(MagneticFieldStrength = Bzero_t,
+                    EchoTime = mrs_data$te * 1e3) 
+  
+  export_json <- jsonlite::toJSON(json_list, pretty = TRUE, auto_unbox = TRUE)
+  
+  # write json to disk
+  write(export_json, fname_json)
 }
