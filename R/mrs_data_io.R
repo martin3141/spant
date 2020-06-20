@@ -2,7 +2,8 @@
 #' @param fname filename of the dpt format MRS data.
 #' @param format string describing the data format. May be one of the 
 #' following : "spar_sdat", "rda", "ima", "twix", "pfile", "list_data",
-#' "paravis", "dpt", "lcm_raw", "rds", "nifti".
+#' "paravis", "dpt", "lcm_raw", "rds", "nifti". If not specified, the format
+#' will be guessed from the filename extension.
 #' @param ft transmitter frequency in Hz (required for list_data format).
 #' @param fs sampling frequency in Hz (required for list_data format).
 #' @param ref reference value for ppm scale (required for list_data format).
@@ -14,11 +15,39 @@
 #' @return MRS data object.
 #' @examples
 #' fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
-#' mrs_data <- read_mrs(fname, format = "spar_sdat")
+#' mrs_data <- read_mrs(fname)
 #' print(mrs_data)
 #' @export
-read_mrs <- function(fname, format, ft = NULL, fs = NULL, ref = NULL,
+read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
                      n_ref_scans = NULL, full_data = FALSE, verbose = FALSE) {
+  
+  # try and guess the format from the filename extension
+  if (is.null(format)) {
+    fname_low <- tolower(fname)
+    if (stringr::str_ends(fname_low, ".nii.gz")) {
+      format <- "nifti"
+    } else if (stringr::str_ends(fname_low, ".rda")) {
+      format <- "rda"
+    } else if (stringr::str_ends(fname_low, ".ima")) {
+      format <- "ima"
+    } else if (stringr::str_ends(fname_low, ".spar")) {
+      format <- "spar_sdat"
+    } else if (stringr::str_ends(fname_low, ".sdat")) {
+      format <- "spar_sdat"
+    } else if (stringr::str_ends(fname_low, ".7")) {
+      format <- "pfile"
+    } else if (stringr::str_ends(fname_low, ".list")) {
+      format <- "list_data"
+    } else if (stringr::str_ends(fname_low, ".data")) {
+      format <- "list_data"
+    } else if (stringr::str_ends(fname_low, ".dat")) {
+      format <- "twix"
+    } else if (stringr::str_ends(fname_low, ".dpt")) {
+      format <- "dpt"
+    } else {
+      stop("Could not guess the MRS format, please specify the format argument.")
+    }
+  }
   
   if (format == "spar_sdat") {
     return(read_spar_sdat(fname))

@@ -1,4 +1,5 @@
 # spant 1.7.0
+* read_mrs function now tries to guess the format from the file extension.
 * Added json sidecar to MRS NIFTI export function.
 * Added the option to read MRS data from a NIFTI and json sidecar using the
 read_mrs function - for evaluation purposes only.
