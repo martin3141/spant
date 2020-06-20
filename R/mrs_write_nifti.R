@@ -48,7 +48,8 @@ write_mrs_nifti <- function(fname, mrs_data) {
   json_list <- list(MagneticFieldStrength = Bzero_t,
                     EchoTime = mrs_data$te * 1e3) 
   
-  export_json <- jsonlite::toJSON(json_list, pretty = TRUE, auto_unbox = TRUE)
+  export_json <- jsonlite::toJSON(json_list, pretty = TRUE, auto_unbox = TRUE,
+                                  digits = NA)
   
   # write json to disk
   write(export_json, fname_json)

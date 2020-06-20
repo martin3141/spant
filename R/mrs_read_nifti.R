@@ -1,5 +1,9 @@
 read_mrs_nifti <- function(fname) {
   
+  if (stringr::str_sub(fname, -7) != ".nii.gz") {
+    stop("filename argument must end in .nii.gz")
+  }
+  
   # get fname of the json sidecar file
   fname_json <- stringr::str_c(stringr::str_sub(fname, 1, -7), "json")
   
@@ -54,58 +58,4 @@ read_mrs_nifti <- function(fname) {
   
   class(mrs_data) <- "mrs_data"
   mrs_data
-}
-
-# this is slow and not used, but kept as a reference
-vaxf2numeric <- function(raw) {
-  sign  <- rawShift(raw[2] & as.raw(0x80), -7)
-  sign  <- readBin(sign, "integer", size = 1, signed = F)
-  expon <- readBin(rawShift(raw[2] & as.raw(0x7f), 1), "integer", size = 1,
-                   signed = F)
-  
-  expon <- expon + readBin(rawShift(raw[1] & as.raw(0x80), -7), "integer",
-                           size = 1, signed = F)
-  
-  frac  <- bitwShiftL(readBin(raw[1] & as.raw(0x7f), "integer", size = 1,
-                              signed = F), 16)
-  
-  frac  <- frac + bitwShiftL(readBin(raw[4], "integer", size = 1,
-                             signed = F), 8)
-  
-  frac  <- frac + readBin(raw[3], "integer", size = 1, signed = F)
-  
-  if (0 < expon) {
-    val <- ((-1) ^ sign) * (0.5 + (frac / 16777216)) * (2 ^ (expon - 128))
-  } else if ((expon == 0) & (sign == 0)) {
-    val <- 0
-  } else {
-    val <- 0
-    warning("Unusual VAX number found, corrupted file?")
-  }
-  val
-}
-
-# this is slow and not used, but kept as a reference
-read_sdat_slow <- function(fname) {
-  fbytes <- file.size(fname)
-  Npts <- fbytes / 4
-  raw <- readBin(fname, "raw", fbytes)
-  vec <- rep(NA, Npts)
-  for (n in 1:Npts) {
-    fpnt <- (n - 1) * 4 + 1
-    vec[n] <- vaxf2numeric(raw[fpnt:(fpnt + 4)])
-  }
-  vec[seq(1, Npts, 2)] - vec[seq(2, Npts, 2)] * 1i
-}
-
-read_sdat <- function(fname) {
-  fbytes <- file.size(fname)
-  Npts <- fbytes / 4
-  raw <- readBin(fname,"raw",fbytes)
-  # reorder bytes
-  raw <- raw[c(rbind(seq(3, fbytes, 4), seq(4, fbytes, 4), 
-                     seq(1, fbytes, 4), seq(2, fbytes, 4)))]
-  
-  vec <- readBin(raw, "double", size = 4, endian = "little", n = Npts) / 4
-  vec[seq(1, Npts, 2)] - vec[seq(2, Npts, 2)] * 1i
 }
