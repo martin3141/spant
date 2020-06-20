@@ -39,8 +39,8 @@ write_mrs_nifti <- function(fname, mrs_data) {
   # write nifti to disk
   RNifti::writeNifti(mrs_nii, fname)
   
-  # get fname without the nii.gz extension for the json sidecar file
-  fname_json <- stringr::str_sub(fname, 1, -7)
+  # get fname of the json sidecar file
+  fname_json <- stringr::str_c(stringr::str_sub(fname, 1, -7), "json")
   
   # create the R list to be exported as json
   proton_gr <- 42.5774785182e6 # TODO other nuclei

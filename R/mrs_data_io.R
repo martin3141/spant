@@ -2,7 +2,7 @@
 #' @param fname filename of the dpt format MRS data.
 #' @param format string describing the data format. May be one of the 
 #' following : "spar_sdat", "rda", "ima", "twix", "pfile", "list_data",
-#' "paravis", "dpt", "lcm_raw", "rds".
+#' "paravis", "dpt", "lcm_raw", "rds", "nifti".
 #' @param ft transmitter frequency in Hz (required for list_data format).
 #' @param fs sampling frequency in Hz (required for list_data format).
 #' @param ref reference value for ppm scale (required for list_data format).
@@ -48,6 +48,8 @@ read_mrs <- function(fname, format, ft = NULL, fs = NULL, ref = NULL,
     mrs_data <- readRDS(fname)
     if (class(mrs_data) != "mrs_data") stop("rds file is not mrs_data format")
     return(mrs_data)
+  } else if (format == "nifti") {
+    return(read_mrs_nifti(fname))
   } else {
     stop("Unrecognised file format.")
   }
