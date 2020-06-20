@@ -1,5 +1,7 @@
 # spant 1.7.0
 * Added json sidecar to MRS NIFTI export function.
+* Added the option to read MRS data from a NIFTI and json sidecar - for 
+evaluation purposes only.
 
 # spant 1.6.0
 * Bug fix for GE P file reader.
