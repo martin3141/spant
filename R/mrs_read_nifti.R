@@ -1,6 +1,4 @@
-read_nifti <- function(fname) {
-  
-  # TODO check nii and json files exist 
+read_mrs_nifti <- function(fname) {
   
   # get fname of the json sidecar file
   fname_json <- stringr::str_c(stringr::str_sub(fname, 1, -7), "json")

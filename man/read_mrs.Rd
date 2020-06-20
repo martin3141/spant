@@ -20,7 +20,7 @@ read_mrs(
 
 \item{format}{string describing the data format. May be one of the
 following : "spar_sdat", "rda", "ima", "twix", "pfile", "list_data",
-"paravis", "dpt", "lcm_raw", "rds".}
+"paravis", "dpt", "lcm_raw", "rds", "nifti".}
 
 \item{ft}{transmitter frequency in Hz (required for list_data format).}
 
