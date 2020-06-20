@@ -12,94 +12,45 @@ read_mrs_nifti <- function(fname) {
     stop("json file not found.")
   }
   
-  paras <- utils::read.delim(spar, sep = ":", comment.char = "!",
-                             header = FALSE, strip.white = TRUE,
-                             stringsAsFactors = FALSE)
-                    
-  #N <- as.integer(paras$V2[which(paras$V1 == "samples")])
-  N <- as.numeric(paras$V2[which(paras$V1 == "dim1_pnts")])
-  dyns <- as.integer(paras$V2[which(paras$V1 == "rows")])
-  ft <- as.numeric(paras$V2[which(paras$V1 == "synthesizer_frequency")])
-  fs <- as.numeric(paras$V2[which(paras$V1 == "sample_frequency")])
-  te <- as.numeric(paras$V2[which(paras$V1 == "echo_time")]) * 1e-3
-  ap_oc <- as.numeric(paras$V2[which(paras$V1 == "ap_off_center")])
-  lr_oc <- as.numeric(paras$V2[which(paras$V1 == "lr_off_center")])
-  cc_oc <- as.numeric(paras$V2[which(paras$V1 == "cc_off_center")])
-  ap_an <- as.numeric(paras$V2[which(paras$V1 == "ap_angulation")])
-  lr_an <- as.numeric(paras$V2[which(paras$V1 == "lr_angulation")])
-  cc_an <- as.numeric(paras$V2[which(paras$V1 == "cc_angulation")])
-  ap_size <- as.numeric(paras$V2[which(paras$V1 == "ap_size")])
-  lr_size <- as.numeric(paras$V2[which(paras$V1 == "lr_size")])
-  cc_size <- as.numeric(paras$V2[which(paras$V1 == "cc_size")])
-  sli_thick <- as.numeric(paras$V2[which(paras$V1 == "slice_thickness")])
-  pe_fov <- as.numeric(paras$V2[which(paras$V1 == "phase_encoding_fov")])
-  cols <- as.numeric(paras$V2[which(paras$V1 == "dim2_pnts")])
-  rows <- as.numeric(paras$V2[which(paras$V1 == "dim3_pnts")])
-  slices <- as.numeric(paras$V2[which(paras$V1 == "nr_of_slices_for_multislice")])
-  #cols <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim2_pnts")])
-  #rows <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim3_pnts")])
+  # read the nifti file
+  nii_data <- RNifti::readNifti(fname)
   
-  # May be useful...
-  # slices <- as.numeric(paras$V2[which(paras$V1 == "nr_of_slices_for_multislice")])
-  # avs <- as.integer(paras$V2[which(paras$V1 == "averages")])
-  # dim1_pts <- as.numeric(paras$V2[which(paras$V1 == "dim1_pnts")])
-  # dim1_pts <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim1_pnts")])
-  # nuc <- as.numeric(paras$V2[which(paras$V1 == "nucleus")])
+  # get the dimensions
+  pixdim <- nii_data$pixdim
   
-  # the following can be true for non localised acquisitions 
-  if (length(ap_an) == 0) ap_an <- 0
-  if (length(lr_an) == 0) lr_an <- 0
-  if (length(cc_an) == 0) cc_an <- 0
-  if (length(ap_size) == 0) ap_size <- 0
-  if (length(lr_size) == 0) lr_size <- 0
-  if (length(cc_size) == 0) cc_size <- 0
-  if (length(ap_oc) == 0) ap_oc <- 0
-  if (length(lr_oc) == 0) lr_oc <- 0
-  if (length(cc_oc) == 0) cc_oc <- 0
+  # read array values 
+  data <- nii_data[]
   
-  true_row   <- c(1,0,0)
-  true_col   <- c(0,1,0)
-  true_slice <- c(0,0,1)
-  
-  row_ori <- rotate_vec(true_row, true_slice, cc_an * pi / 180)
-  row_ori <- rotate_vec(row_ori, true_col, ap_an * pi / 180)
-  row_ori <- rotate_vec(row_ori, true_row, lr_an * pi / 180)
-  
-  col_ori <- rotate_vec(true_col, true_slice, cc_an * pi / 180)
-  col_ori <- rotate_vec(col_ori, true_col, ap_an * pi / 180)
-  col_ori <- rotate_vec(col_ori, true_row, lr_an * pi / 180)
-  
-  pos_vec <- c(lr_oc, ap_oc, cc_oc)
-  
-  data_vec <- read_sdat(sdat)
-  
-  # SVS or MRSI?
-  if ((rows == 1) & (cols == 1)) {
-    row_dim   <- ap_size
-    col_dim   <- lr_size
-    slice_dim <- cc_size
-  } else {
-    dyns <- 1
-    row_dim   <- pe_fov / cols
-    col_dim   <- pe_fov / cols
-    slice_dim <- sli_thick
-    pos_vec <- (pos_vec - col_ori * row_dim * 0.5 * (rows - 1) - 
-                row_ori * col_dim * 0.5 * (cols - 1))
+  # add any missing dimensions
+  if (length(dim(data)) < 6) {
+    zero_dims <- rep(1, 6 - length(dim(data)))
+    dim(data) <- c(dim(data), zero_dims)
   }
   
-  #data <- array(data_vec,dim = c(1, cols, rows, slices, N, 1, dyns)) 
-  data <- array(data_vec,dim = c(N, cols, rows, slices, dyns, 1, 1)) 
-  data = aperm(data,c(6, 2, 3, 4, 5, 7, 1))
+  # reorder the dimensions
+  data <- aperm(data, c(1, 2, 3, 5, 6, 4)) # TODO check coils and dyns are the
+                                           # right way round
   
-  res <- c(NA, row_dim, col_dim, slice_dim, 1, NA, 1 / fs)
+  # add a dummy dimension
+  dim(data) <- c(1, dim(data))
+  
+  # read the json file
+  json_data <- jsonlite::fromJSON(fname_json)
+  
+  res <- c(NA, NA, NA, NA, 1, NA, pixdim[5])
+  
+  # freq domain vector vector
+  freq_domain <- rep(FALSE, 7)
+
+  te <- json_data$EchoTime / 1e3
+  
+  proton_gr <- 42.5774785182e6 # TODO other nuclei
+  ft <- json_data$MagneticFieldStrength * proton_gr
   ref <- def_acq_paras()$ref
   
-  # freq domain vector
-  freq_domain <- rep(FALSE, 7)
-  
-  mrs_data <- list(ft = ft, data = data, resolution = res, te = te, ref = ref, 
-                   row_vec = row_ori, col_vec = col_ori, pos_vec = pos_vec, 
-                   freq_domain = freq_domain)
+  mrs_data <- list(ft = ft, data = data, resolution = res,
+                   te = te, ref = ref, row_vec = NA, col_vec = NA,
+                   pos_vec = NA, freq_domain = freq_domain)
   
   class(mrs_data) <- "mrs_data"
   mrs_data
