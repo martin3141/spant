@@ -1,4 +1,7 @@
 # spant 1.7.0
+* Added write_mrs function which guesses the output format from the file
+extension or can be specified as an argument. write_mrs_XXX functions have been
+depreciated.
 * read_mrs function now tries to guess the format from the file extension.
 * Added json sidecar to MRS NIFTI export function.
 * Added the option to read MRS data from a NIFTI and json sidecar using the
