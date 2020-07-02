@@ -41,15 +41,21 @@ read_mrs_nifti <- function(fname) {
   # read the json file
   json_data <- jsonlite::fromJSON(fname_json)
   
+  # TODO add voxel dims
   res <- c(NA, NA, NA, NA, 1, NA, pixdim[5])
   
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
 
-  te <- json_data$EchoTime / 1e3
+  te  <- json_data$EchoTime / 1e3
+  ft  <- json_data$TransmitterFrequency * 1e6
   
-  proton_gr <- 42.5774785182e6 # TODO other nuclei
-  ft <- json_data$MagneticFieldStrength * proton_gr
+  # check json and nifti header values for the sampling frequency are consistent
+  if (abs((1 / pixdim[5]) - json_data$SpectralWidth) > 0.01) {
+    stop("Sampling frequencies in the json sidecar and NIFTI header differ by greater than 0.01 Hz")
+  }
+  
+  # TODO get from a lookup table of defaults when not in the json sidecar
   ref <- def_acq_paras()$ref
   
   mrs_data <- list(ft = ft, data = data, resolution = res,

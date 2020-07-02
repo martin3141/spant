@@ -35,6 +35,8 @@ write_mrs_nifti <- function(fname, mrs_data) {
   # set the qform
   mrs_nii <- RNifti::`qform<-`(mrs_nii, structure(affine, code = 2L))
   mrs_nii$qform_code <- 1
+  mrs_nii$intent_name <- "mrs_level_2A" # TODO detect the correct level from the
+                                        # the available information
   
   # write nifti to disk
   RNifti::writeNifti(mrs_nii, fname)
@@ -43,9 +45,9 @@ write_mrs_nifti <- function(fname, mrs_data) {
   fname_json <- stringr::str_c(stringr::str_sub(fname, 1, -7), "json")
   
   # create the R list to be exported as json
-  proton_gr <- 42.5774785182e6 # TODO other nuclei
-  Bzero_t   <- mrs_data$ft / proton_gr
-  json_list <- list(MagneticFieldStrength = Bzero_t,
+  json_list <- list(TransmitterFrequency = mrs_data$ft / 1e6,
+                    ResonantNucleus = "1H",
+                    SpectralWidth = 1 / dwell_time,
                     EchoTime = mrs_data$te * 1e3) 
   
   export_json <- jsonlite::toJSON(json_list, pretty = TRUE, auto_unbox = TRUE,
