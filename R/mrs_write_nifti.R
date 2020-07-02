@@ -30,7 +30,7 @@ write_mrs_nifti <- function(fname, mrs_data) {
   # voxel dimensions
   mrs_pixdim <- mrs_data$resolution[2:4]
   dwell_time <- mrs_data$resolution[7]
-  mrs_nii$pixdim <- c(0, mrs_pixdim, dwell_time, 0, 0, 0)
+  mrs_nii$pixdim <- c(-1, mrs_pixdim, dwell_time, 0, 0, 0)
   
   # set the qform
   mrs_nii <- RNifti::`qform<-`(mrs_nii, structure(affine, code = 2L))

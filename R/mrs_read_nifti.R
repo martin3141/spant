@@ -41,8 +41,15 @@ read_mrs_nifti <- function(fname) {
   # read the json file
   json_data <- jsonlite::fromJSON(fname_json)
   
-  # TODO add voxel dims
-  res <- c(NA, NA, NA, NA, 1, NA, pixdim[5])
+  if ("dim_5" %in% json_data) stop("NIFTI MRS non-default dimensions are not currently supported")
+  if ("dim_6" %in% json_data) stop("NIFTI MRS non-default dimensions are not currently supported")
+  if ("dim_7" %in% json_data) stop("NIFTI MRS non-default dimensions are not currently supported")
+  
+  # TODO transfer other dimensions
+  res <- c(NA, pixdim[2], pixdim[3], pixdim[4], 1, NA, pixdim[5])
+  
+  # TODO affine information
+  
   
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
