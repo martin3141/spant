@@ -32,8 +32,7 @@ read_mrs_nifti <- function(fname) {
   }
   
   # reorder the dimensions
-  data <- aperm(data, c(1, 2, 3, 5, 6, 4)) # TODO check coils and dyns are the
-                                           # right way round
+  data <- aperm(data, c(1, 2, 3, 5, 6, 4)) 
   
   # add a dummy dimension
   dim(data) <- c(1, dim(data))
@@ -46,7 +45,7 @@ read_mrs_nifti <- function(fname) {
   if ("dim_7" %in% json_data) stop("NIFTI MRS non-default dimensions are not currently supported")
   
   # TODO transfer other dimensions
-  res <- c(NA, pixdim[2], pixdim[3], pixdim[4], 1, NA, pixdim[5])
+  res <- c(NA, pixdim[2], pixdim[3], pixdim[4], pixdim[6], NA, pixdim[5])
   
   # TODO affine information
   

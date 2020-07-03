@@ -32,6 +32,7 @@
     spant.def_ft  = 127.8e6,
     spant.def_N   = 1024,
     spant.def_ref = 4.65,
+    spant.def_nuc = "1H",
     spant.tqn_cmd = "tarquin",
     spant.lcm_cmd = file.path(Sys.getenv("HOME"), ".lcmodel", "bin", "lcmodel") 
   )
@@ -139,6 +140,13 @@ def_ft <- function() {
 #' @export
 def_N <- function() {
   options()$spant.def_N
+}
+
+#' Return the default nucleus.
+#' @return number of data points in the spectral dimension.
+#' @export
+def_nuc <- function() {
+  options()$spant.def_nuc
 }
 
 #' Set the default acquisition parameters.
