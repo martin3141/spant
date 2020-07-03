@@ -48,10 +48,9 @@ write_mrs_nifti <- function(fname, mrs_data) {
   json_list <- list(TransmitterFrequency = mrs_data$ft / 1e6,
                     ResonantNucleus = "1H",
                     SpectralWidth = 1 / dwell_time,
-                    EchoTime = mrs_data$te * 1e3) 
+                    EchoTime = jsonlite::unbox(mrs_data$te * 1e3)) 
   
-  export_json <- jsonlite::toJSON(json_list, pretty = TRUE, auto_unbox = TRUE,
-                                  digits = NA)
+  export_json <- jsonlite::toJSON(json_list, pretty = TRUE, digits = NA)
   
   # write json to disk
   write(export_json, fname_json)
