@@ -44,7 +44,7 @@ read_mrs_nifti <- function(fname) {
   if ("dim_6" %in% json_data) stop("NIFTI MRS non-default dimensions are not currently supported")
   if ("dim_7" %in% json_data) stop("NIFTI MRS non-default dimensions are not currently supported")
   
-  # TODO transfer other dimensions
+  # read voxel dimensions, dwell time and time between dynamic scans
   res <- c(NA, pixdim[2], pixdim[3], pixdim[4], pixdim[6], NA, pixdim[5])
   
   # TODO affine information
@@ -56,9 +56,14 @@ read_mrs_nifti <- function(fname) {
   te  <- json_data$EchoTime / 1e3
   ft  <- json_data$TransmitterFrequency * 1e6
   
-  # check json and nifti header values for the sampling frequency are consistent
-  if (abs((1 / pixdim[5]) - json_data$SpectralWidth) > 0.01) {
-    stop("Sampling frequencies in the json sidecar and NIFTI header differ by greater than 0.01 Hz")
+  if (exists("SpectralWidth", where = json_data)) {
+    # check json and nifti header values for the sampling frequency are consistent
+    if (abs((1 / pixdim[5]) - json_data$SpectralWidth) > 0.01) {
+      stop("Sampling frequencies in the json sidecar and NIFTI header differ by greater than 0.01 Hz")
+    }
+    res[7] <- 1 / json_data$SpectralWidth # prefer the json value if available
+                                          # due to higher precision than the
+                                          # NIFTI header (double vs float)
   }
   
   # TODO get from a lookup table of defaults when not in the json sidecar
