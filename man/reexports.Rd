@@ -13,7 +13,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{magrittr}{\code{\link[magrittr]{\%$\%}}, \code{\link[magrittr]{\%>\%}}}
+  \item{magrittr}{\code{\link[magrittr:exposition]{\%$\%}}, \code{\link[magrittr:pipe]{\%>\%}}}
 
   \item{RNifti}{\code{\link[RNifti]{readNifti}}}
 }}
