@@ -47,8 +47,11 @@ read_mrs_nifti <- function(fname) {
   # read voxel dimensions, dwell time and time between dynamic scans
   res <- c(NA, pixdim[2], pixdim[3], pixdim[4], pixdim[6], NA, pixdim[5])
   
-  # TODO affine information
-  
+  # affine and position information
+  xform_mat <- RNifti::xform(nii_data)
+  col_vec <- xform_mat[1:3, 1] / sum(xform_mat[1:3, 1] ^ 2) ^ 0.5 * c(-1, -1, 1)
+  row_vec <- xform_mat[1:3, 2] / sum(xform_mat[1:3, 2] ^ 2) ^ 0.5 * c(-1, -1, 1)
+  pos_vec <- xform_mat[1:3, 4] * c(-1, -1, 1)
   
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
@@ -70,8 +73,8 @@ read_mrs_nifti <- function(fname) {
   ref <- def_acq_paras()$ref
   
   mrs_data <- list(ft = ft, data = data, resolution = res,
-                   te = te, ref = ref, row_vec = NA, col_vec = NA,
-                   pos_vec = NA, freq_domain = freq_domain)
+                   te = te, ref = ref, row_vec = row_vec, col_vec = col_vec,
+                   pos_vec = pos_vec, freq_domain = freq_domain)
   
   class(mrs_data) <- "mrs_data"
   mrs_data

@@ -3,9 +3,9 @@
 extension or can be specified as an argument. write_mrs_XXX functions have been
 depreciated.
 * read_mrs function now tries to guess the format from the file extension.
-* Added json sidecar to MRS NIFTI export function.
-* Added the option to read MRS data from a NIFTI and json sidecar using the
-read_mrs function - for evaluation purposes only.
+* Added json sidecar to NIFTI MRS export function.
+* Added the option to read MRS data from a NIFTI file and json sidecar using the
+read_mrs function.
 
 # spant 1.6.0
 * Bug fix for GE P file reader.

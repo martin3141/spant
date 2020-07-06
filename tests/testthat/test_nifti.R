@@ -11,20 +11,24 @@ test_that("nifti MRS data can be written and read back from disk", {
   sim_mrs <- array2mrs_data(data)
   sim_mrs$resolution[2:7] <- c(9, 2, 3, 4, NA, 5e-4)
   
+  # slice is rotated at an angle of 30 degrees in the z-plane
+  sim_mrs$row_vec <- c(3 ^ 0.5 / 2, 1 / 2, 0)
+  sim_mrs$col_vec <- c(1 / 2, -3 ^ 0.5 / 2, 0)
+  sim_mrs$pos_vec <- c(0.5, -0.6, 1)
+  
   tempf <- tempfile(fileext = ".nii.gz")
   write_mrs(tempf, sim_mrs)
   
   sim_mrs_nii <- read_mrs(tempf)
   
-  # TODO add nucleus
-  
+  # TODO add nucleus to checks
   expect_equal(sim_mrs$data, sim_mrs_nii$data)
   expect_equal(sim_mrs$resolution, sim_mrs_nii$resolution)
   expect_equal(sim_mrs$ft, sim_mrs_nii$ft)
   expect_equal(sim_mrs$ref, sim_mrs_nii$ref)
   expect_equal(sim_mrs$freq_domain, sim_mrs_nii$freq_domain)
   expect_equal(sim_mrs$te, sim_mrs_nii$te)
-  # expect_equal(sim_mrs$row_vec, sim_mrs_nii$row_vec)
-  # expect_equal(sim_mrs$col_vec, sim_mrs_nii$col_vec)
-  # expect_equal(sim_mrs$pos_vec, sim_mrs_nii$pos_vec)
+  expect_equal(sim_mrs$row_vec, sim_mrs_nii$row_vec, tolerance = 1e-6)
+  expect_equal(sim_mrs$col_vec, sim_mrs_nii$col_vec, tolerance = 1e-6)
+  expect_equal(sim_mrs$pos_vec, sim_mrs_nii$pos_vec, tolerance = 1e-6)
 })
