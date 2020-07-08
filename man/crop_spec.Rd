@@ -4,13 +4,13 @@
 \alias{crop_spec}
 \title{Crop \code{mrs_data} object based on a frequency range.}
 \usage{
-crop_spec(mrs_data, xlim = c(4, 0.5), scale = "ppm")
+crop_spec(mrs_data, xlim = c(4, 0.2), scale = "ppm")
 }
 \arguments{
 \item{mrs_data}{MRS data.}
 
 \item{xlim}{range of values to crop in the spectral dimension eg
-xlim = c(4,0.5).}
+xlim = c(4, 0.2).}
 
 \item{scale}{the units to use for the frequency scale, can be one of: "ppm",
 "hz" or "points".}

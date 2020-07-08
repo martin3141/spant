@@ -6,6 +6,7 @@ depreciated.
 * Added json sidecar to NIFTI MRS export function.
 * Added the option to read MRS data from a NIFTI file and json sidecar using the
 read_mrs function.
+* Changed default crop_spec region to between 4.0 and 0.2 ppm.
 
 # spant 1.6.0
 * Bug fix for GE P file reader.

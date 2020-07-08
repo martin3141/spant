@@ -1022,12 +1022,12 @@ crop_td_pts <- function(mrs_data, start = NULL, end = NULL) {
 #' Crop \code{mrs_data} object based on a frequency range.
 #' @param mrs_data MRS data.
 #' @param xlim range of values to crop in the spectral dimension eg 
-#' xlim = c(4,0.5).
+#' xlim = c(4, 0.2).
 #' @param scale the units to use for the frequency scale, can be one of: "ppm", 
 #' "hz" or "points".
 #' @return cropped \code{mrs_data} object.
 #' @export
-crop_spec <- function(mrs_data, xlim = c(4,0.5), scale = "ppm") {
+crop_spec <- function(mrs_data, xlim = c(4, 0.2), scale = "ppm") {
   
   # needs to be a FD operation
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
