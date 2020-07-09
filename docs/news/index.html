@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
       </span>
     </div>
 
@@ -140,9 +140,21 @@
       <small>Source: <a href='https://github.com/martin3141/spant/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="spant-1-7-0" class="section level1">
+<h1 class="page-header" data-toc-text="1.7.0">
+<a href="#spant-1-7-0" class="anchor"></a>spant 1.7.0<small> Unreleased </small>
+</h1>
+<ul>
+<li>Added write_mrs function which guesses the output format from the file extension or can be specified as an argument. write_mrs_XXX functions have been depreciated.</li>
+<li>read_mrs function now tries to guess the format from the file extension.</li>
+<li>Added json sidecar to NIFTI MRS export function.</li>
+<li>Added the option to read MRS data from a NIFTI file and json sidecar using the read_mrs function.</li>
+<li>Changed default crop_spec region to between 4.0 and 0.2 ppm.</li>
+</ul>
+</div>
     <div id="spant-1-6-0" class="section level1">
 <h1 class="page-header" data-toc-text="1.6.0">
-<a href="#spant-1-6-0" class="anchor"></a>spant 1.6.0<small> Unreleased </small>
+<a href="#spant-1-6-0" class="anchor"></a>spant 1.6.0<small> 2020-06-05 </small>
 </h1>
 <ul>
 <li>Bug fix for GE P file reader.</li>

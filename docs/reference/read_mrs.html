@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
       </span>
     </div>
 
@@ -148,7 +148,7 @@
 
     <pre class="usage"><span class='fu'>read_mrs</span>(
   <span class='no'>fname</span>,
-  <span class='no'>format</span>,
+  <span class='kw'>format</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>ft</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>fs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>ref</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -166,9 +166,10 @@
     </tr>
     <tr>
       <th>format</th>
-      <td><p>string describing the data format. May be one of the
+      <td><p>string describing the data format. Must be one of the
 following : "spar_sdat", "rda", "ima", "twix", "pfile", "list_data",
-"paravis", "dpt", "lcm_raw", "rds".</p></td>
+"paravis", "dpt", "lcm_raw", "rds", "nifti". If not specified, the format
+will be guessed from the filename extension.</p></td>
     </tr>
     <tr>
       <th>ft</th>
@@ -204,7 +205,7 @@ the FID (default = FALSE).</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>fname</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"philips_spar_sdat_WS.SDAT"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"spant"</span>)
-<span class='no'>mrs_data</span> <span class='kw'>&lt;-</span> <span class='fu'>read_mrs</span>(<span class='no'>fname</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"spar_sdat"</span>)
+<span class='no'>mrs_data</span> <span class='kw'>&lt;-</span> <span class='fu'>read_mrs</span>(<span class='no'>fname</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>mrs_data</span>)</div><div class='output co'>#&gt; MRS Data Parameters
 #&gt; ----------------------------------
 #&gt; Trans. freq (MHz)       : 127.7861

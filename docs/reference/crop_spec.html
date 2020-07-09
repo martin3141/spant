@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
       </span>
     </div>
 
@@ -146,7 +146,7 @@
     <p>Crop <code>mrs_data</code> object based on a frequency range.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>crop_spec</span>(<span class='no'>mrs_data</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>4</span>, <span class='fl'>0.5</span>), <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"ppm"</span>)</pre>
+    <pre class="usage"><span class='fu'>crop_spec</span>(<span class='no'>mrs_data</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>4</span>, <span class='fl'>0.2</span>), <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"ppm"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,7 +158,7 @@
     <tr>
       <th>xlim</th>
       <td><p>range of values to crop in the spectral dimension eg
-xlim = c(4,0.5).</p></td>
+xlim = c(4, 0.2).</p></td>
     </tr>
     <tr>
       <th>scale</th>

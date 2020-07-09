@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
       </span>
     </div>
 
@@ -297,6 +297,13 @@ volume correction.</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="array2mrs_data.html">array2mrs_data()</a></code> </p>
+        </td>
+        <td><p>Convert a 7 dimensional array in into a mrs_data object. The array dimensions
+should be ordered as : dummy, X, Y, Z, dynamic, coil, FID.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="auto_phase.html">auto_phase()</a></code> </p>
         </td>
         <td><p>Perform zeroth-order phase correction based on the minimisation of the
@@ -461,6 +468,13 @@ dynamic series.</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="crossprod_3d.html">crossprod_3d()</a></code> </p>
+        </td>
+        <td><p>Compute the vector cross product between vectors x and y. Adapted from
+http://stackoverflow.com/questions/15162741/what-is-rs-crossproduct-function</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="decimate_mrs.html">decimate_mrs()</a></code> </p>
         </td>
         <td><p>Decimate an MRS signal by a factor.</p></td>
@@ -489,6 +503,12 @@ default acquisition parameters.</p></td>
           <p><code><a href="def_ft.html">def_ft()</a></code> </p>
         </td>
         <td><p>Return the default transmitter frequency in Hz.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="def_nuc.html">def_nuc()</a></code> </p>
+        </td>
+        <td><p>Return the default nucleus.</p></td>
       </tr><tr>
         
         <td>
@@ -1551,27 +1571,15 @@ individual basis set components shown.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="write_mrs_dpt_v2.html">write_mrs_dpt_v2()</a></code> </p>
+          <p><code><a href="write_mrs.html">write_mrs()</a></code> </p>
         </td>
-        <td><p>Write MRS data object to file in dangerplot (dpt) v2 format.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="write_mrs_lcm_raw.html">write_mrs_lcm_raw()</a></code> </p>
-        </td>
-        <td><p>Write MRS data object to file in a RAW format compatible with LCModel.</p></td>
+        <td><p>Write MRS data object to file.</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="write_mrs_nifti.html">write_mrs_nifti()</a></code> </p>
         </td>
         <td><p>Write MRS data object to file in NIFTI format.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="write_mrs_rds.html">write_mrs_rds()</a></code> </p>
-        </td>
-        <td><p>Write MRS data object to file in rds format.</p></td>
       </tr><tr>
         
         <td>

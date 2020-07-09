@@ -70,6 +70,9 @@
     <loc>https://martin3141.github.io/spant//reference/apply_pvc.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant//reference/array2mrs_data.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant//reference/auto_phase.html</loc>
   </url>
   <url>
@@ -148,6 +151,9 @@
     <loc>https://martin3141.github.io/spant//reference/crop_xy.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant//reference/crossprod_3d.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant//reference/decimate_mrs.html</loc>
   </url>
   <url>
@@ -161,6 +167,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/def_ft.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/def_nuc.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/def_ref.html</loc>
@@ -676,16 +685,10 @@
     <loc>https://martin3141.github.io/spant//reference/write_basis_tqn.html</loc>
   </url>
   <url>
-    <loc>https://martin3141.github.io/spant//reference/write_mrs_dpt_v2.html</loc>
-  </url>
-  <url>
-    <loc>https://martin3141.github.io/spant//reference/write_mrs_lcm_raw.html</loc>
+    <loc>https://martin3141.github.io/spant//reference/write_mrs.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/write_mrs_nifti.html</loc>
-  </url>
-  <url>
-    <loc>https://martin3141.github.io/spant//reference/write_mrs_rds.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/zero_nzoc.html</loc>
