@@ -1604,7 +1604,7 @@ sd <- function(x, na.rm) UseMethod("sd")
 ## take the usual definition of sd,
 ## and set it to be the default method
 #' @export
-sd.default <- stats::sd
+sd.default <- function(x, na.rm = FALSE) stats::sd(x, na.rm)
 
 #' Collapse MRS data by concatenating spectra along the dynamic dimension.
 #' @param x data object to be collapsed (mrs_data or fit_result object).
