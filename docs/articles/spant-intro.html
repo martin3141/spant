@@ -92,7 +92,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="spant-intro_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to spant</h1>
@@ -128,7 +128,7 @@
 <span class="co">#&gt; Reference freq. (ppm)   : 4.65</span>
 <span class="co">#&gt; Spectral domain         : FALSE</span></pre></body></html></div>
 <p>Plot the spectral region between 5 and 0.5 ppm:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mrs_data</span>, <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">5</span>, <span class="fl">0.5</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mrs_data</span>, <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">5</span>, <span class="fl">0.5</span>))</pre></body></html></div>
 <p><img src="spant-intro_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 </div>
 <div id="basic-preprocessing" class="section level2">
@@ -137,7 +137,7 @@
 <p>Apply a HSVD filter to the residual water region and align the spectrum to the tNAA resonance at 2.01 ppm:</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">mrs_proc</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/hsvd_filt.html">hsvd_filt</a></span>(<span class="no">mrs_data</span>)
 <span class="no">mrs_proc</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/align.html">align</a></span>(<span class="no">mrs_proc</span>, <span class="fl">2.01</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mrs_proc</span>, <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">5</span>, <span class="fl">0.5</span>))</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mrs_proc</span>, <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">5</span>, <span class="fl">0.5</span>))</pre></body></html></div>
 <p><img src="spant-intro_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 </div>
 <div id="basis-simulation" class="section level2">
@@ -165,46 +165,46 @@
 <p>Perform ABfit analysis of the processed data (<code>mrs_proc</code>):</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">fit_res</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span>(<span class="no">mrs_proc</span>, <span class="no">basis</span>)</pre></body></html></div>
 <p>Plot the fit result:</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">fit_res</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit_res</span>)</pre></body></html></div>
 <p><img src="spant-intro_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
 <p>Extract the estimated amplitudes from <code>fit_res</code> and print as a ratio to total-creatine in column format:</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">amps</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/fit_amps.html">fit_amps</a></span>(<span class="no">fit_res</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="no">amps</span> / <span class="no">amps</span>$<span class="no">tCr</span>))
 <span class="co">#&gt;               [,1]</span>
 <span class="co">#&gt; X.CrCH2 0.00000000</span>
-<span class="co">#&gt; Ala     0.15568264</span>
-<span class="co">#&gt; Asp     0.54915362</span>
-<span class="co">#&gt; Cr      0.66257233</span>
-<span class="co">#&gt; GABA    0.28019001</span>
-<span class="co">#&gt; Glc     0.06662807</span>
-<span class="co">#&gt; Gln     0.07633815</span>
-<span class="co">#&gt; GSH     0.35713891</span>
-<span class="co">#&gt; Glu     1.10712455</span>
-<span class="co">#&gt; GPC     0.26497636</span>
-<span class="co">#&gt; Ins     0.99255052</span>
-<span class="co">#&gt; Lac     0.09773704</span>
-<span class="co">#&gt; Lip09   0.38151907</span>
-<span class="co">#&gt; Lip13a  0.04570144</span>
+<span class="co">#&gt; Ala     0.15567982</span>
+<span class="co">#&gt; Asp     0.54916144</span>
+<span class="co">#&gt; Cr      0.66256101</span>
+<span class="co">#&gt; GABA    0.28019192</span>
+<span class="co">#&gt; Glc     0.06660729</span>
+<span class="co">#&gt; Gln     0.07633166</span>
+<span class="co">#&gt; GSH     0.35713827</span>
+<span class="co">#&gt; Glu     1.10712344</span>
+<span class="co">#&gt; GPC     0.26497421</span>
+<span class="co">#&gt; Ins     0.99253142</span>
+<span class="co">#&gt; Lac     0.09774025</span>
+<span class="co">#&gt; Lip09   0.38152428</span>
+<span class="co">#&gt; Lip13a  0.04569744</span>
 <span class="co">#&gt; Lip13b  0.00000000</span>
 <span class="co">#&gt; Lip20   0.00000000</span>
-<span class="co">#&gt; MM09    0.17020258</span>
-<span class="co">#&gt; MM12    0.11364802</span>
-<span class="co">#&gt; MM14    0.44572062</span>
-<span class="co">#&gt; MM17    0.42613271</span>
-<span class="co">#&gt; MM20    1.54887447</span>
-<span class="co">#&gt; NAA     0.97441445</span>
-<span class="co">#&gt; NAAG    0.26926141</span>
+<span class="co">#&gt; MM09    0.17019921</span>
+<span class="co">#&gt; MM12    0.11364826</span>
+<span class="co">#&gt; MM14    0.44572249</span>
+<span class="co">#&gt; MM17    0.42613186</span>
+<span class="co">#&gt; MM20    1.54887361</span>
+<span class="co">#&gt; NAA     0.97442541</span>
+<span class="co">#&gt; NAAG    0.26926173</span>
 <span class="co">#&gt; PCh     0.00000000</span>
-<span class="co">#&gt; PCr     0.33742767</span>
-<span class="co">#&gt; sIns    0.10905825</span>
+<span class="co">#&gt; PCr     0.33743899</span>
+<span class="co">#&gt; sIns    0.10905521</span>
 <span class="co">#&gt; Tau     0.00000000</span>
-<span class="co">#&gt; tNAA    1.24367586</span>
+<span class="co">#&gt; tNAA    1.24368714</span>
 <span class="co">#&gt; tCr     1.00000000</span>
-<span class="co">#&gt; tCho    0.26497636</span>
-<span class="co">#&gt; Glx     1.18346270</span>
-<span class="co">#&gt; tLM09   0.55172165</span>
-<span class="co">#&gt; tLM13   0.60507007</span>
-<span class="co">#&gt; tLM20   1.54887447</span></pre></body></html></div>
+<span class="co">#&gt; tCho    0.26497421</span>
+<span class="co">#&gt; Glx     1.18345510</span>
+<span class="co">#&gt; tLM09   0.55172349</span>
+<span class="co">#&gt; tLM13   0.60506819</span>
+<span class="co">#&gt; tLM20   1.54887361</span></pre></body></html></div>
 </div>
   </div>
 

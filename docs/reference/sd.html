@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Standard Deviation — sd • Spectroscopy Analysis Tools (spant)</title>
+<title>Calculate the standard deviation spectrum from an mrs_data object. — sd • Spectroscopy Analysis Tools (spant)</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,11 +46,8 @@
 
 
 
-<meta property="og:title" content="Standard Deviation — sd" />
-<meta property="og:description" content="This function computes the standard deviation of the values in
-  x.
-  If na.rm is TRUE then missing values are removed before
-  computation proceeds." />
+<meta property="og:title" content="Calculate the standard deviation spectrum from an mrs_data object. — sd" />
+<meta property="og:description" content="Calculate the standard deviation spectrum from an mrs_data object." />
 <meta property="og:image" content="https://martin3141.github.io/spant/logo.png" />
 
 
@@ -140,16 +137,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Standard Deviation</h1>
+    <h1>Calculate the standard deviation spectrum from an mrs_data object.</h1>
     <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/mrs_data_proc.R'><code>R/mrs_data_proc.R</code></a></small>
     <div class="hidden name"><code>sd.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function computes the standard deviation of the values in
-  <code>x</code>.
-  If <code>na.rm</code> is <code>TRUE</code> then missing values are removed before
-  computation proceeds.</p>
+    <p>Calculate the standard deviation spectrum from an mrs_data object.</p>
     </div>
 
     <pre class="usage"><span class='fu'>sd</span>(<span class='no'>x</span>, <span class='no'>na.rm</span>)</pre>
@@ -159,26 +153,18 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>a numeric vector or an <span style="R">R</span> object but not a
-    <code><a href='https://rdrr.io/r/base/factor.html'>factor</a></code> coercible to numeric by <code><a href='https://rdrr.io/r/base/double.html'>as.double(x)</a></code>.</p></td>
+      <td><p>object of class mrs_data.</p></td>
     </tr>
     <tr>
       <th>na.rm</th>
-      <td><p>logical.  Should missing values be removed?</p></td>
+      <td><p>remove NA values.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Like <code><a href='https://rdrr.io/r/stats/cor.html'>var</a></code> this uses denominator \(n - 1\).</p>
-<p>The standard deviation of a length-one or zero-length vector is <code>NA</code>.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <p>sd mrs_data object.</p>
 
-    <div class='dont-index'><p><code><a href='https://rdrr.io/r/stats/cor.html'>var</a></code> for its square, and <code><a href='https://rdrr.io/r/stats/mad.html'>mad</a></code>, the most
-  robust alternative.</p></div>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>sd</span>(<span class='fl'>1</span>:<span class='fl'>2</span>) ^ <span class='fl'>2</span></div><div class='output co'>#&gt; [1] 0.5</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

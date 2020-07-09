@@ -92,7 +92,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="abfit-baseline-opts_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>ABfit baseline options</h1>
@@ -121,7 +121,7 @@
 <span class="no">basis</span>    <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/sim_basis_1h_brain_press.html">sim_basis_1h_brain_press</a></span>(<span class="no">mrs_data</span>)</pre></body></html></div>
 <p>Run a default ABfit analysis and plot the result:</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">fit_res</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span>(<span class="no">mrs_data</span>, <span class="no">basis</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">fit_res</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit_res</span>)</pre></body></html></div>
 <p><img src="abfit-baseline-opts_files/figure-html/abfit_default-1.png" width="576"></p>
 <p>The above fit looks good, with a smooth baseline and no significant signals in the residual (top trace) above the noise level. We can find the automatically determined level of baseline smoothness by inspecting the results table in the <code>fit_res</code> object:</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">fit_res</span>$<span class="no">res_tab</span>$<span class="no">bl_ed_pppm</span>
@@ -134,17 +134,17 @@
 <p>Changing the default behaviour of ABfit is achieved by supplying an options structure to the <code>fit_mrs</code> function. The <code>abfit_opts</code> function generates the default fitting options, which may be modified by supplying arguments. To manually specify the baseline flexibility we set the <code>auto_bl_flex</code> option to <code>FALSE</code> and set the <code>bl_ed_pppm</code> option to the desired level. A greater value results in more baseline flexibility, let’s try a value of 8 ED ppm:</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">opts</span>    <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/abfit_opts.html">abfit_opts</a></span>(<span class="kw">auto_bl_flex</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">bl_ed_pppm</span> <span class="kw">=</span> <span class="fl">8</span>)
 <span class="no">fit_res</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span>(<span class="no">mrs_data</span>, <span class="no">basis</span>, <span class="kw">opts</span> <span class="kw">=</span> <span class="no">opts</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">fit_res</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit_res</span>)</pre></body></html></div>
 <p><img src="abfit-baseline-opts_files/figure-html/abfit_flex-1.png" width="576"></p>
 <p>The baseline is clearly more flexible, resulting in a slightly improved residual, however some baseline features are likely to be due to instability from noise, rather than true spectral features. For the next analysis let’s investigate 1 ED pppm:</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">opts</span>    <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/abfit_opts.html">abfit_opts</a></span>(<span class="kw">auto_bl_flex</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">bl_ed_pppm</span> <span class="kw">=</span> <span class="fl">1</span>)
 <span class="no">fit_res</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span>(<span class="no">mrs_data</span>, <span class="no">basis</span>, <span class="kw">opts</span> <span class="kw">=</span> <span class="no">opts</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">fit_res</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit_res</span>)</pre></body></html></div>
 <p><img src="abfit-baseline-opts_files/figure-html/abfit_stiff-1.png" width="576"></p>
 <p>Now we have a much smoother (almost linear) baseline, which comes at the cost of having broad unmodelled signals in the residual – ultimately resulting in biased metabolite levels. An alternative to manually specifying a fixed level of baseline flexibility is to adjust the criterion used for automated estimation. The <code>aic_smoothing_factor</code> can be set to a smaller value (default = 5) to encourage more flexible baselines, whilst still being adaptive to any broad spectral features:</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">opts</span>    <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/abfit_opts.html">abfit_opts</a></span>(<span class="kw">aic_smoothing_factor</span> <span class="kw">=</span> <span class="fl">1</span>)
 <span class="no">fit_res</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span>(<span class="no">mrs_data</span>, <span class="no">basis</span>, <span class="kw">opts</span> <span class="kw">=</span> <span class="no">opts</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">fit_res</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit_res</span>)</pre></body></html></div>
 <p><img src="abfit-baseline-opts_files/figure-html/abfit_aic-1.png" width="576"></p>
 <p>It can be informative to visualise the individual spline components used for baseline modelling by saving these in the results object:</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">opts</span>    <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/abfit_opts.html">abfit_opts</a></span>(<span class="kw">export_sp_fit</span> <span class="kw">=</span> <span class="fl">TRUE</span>)

@@ -92,7 +92,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="spant-preprocessing_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Common preprocessing steps</h1>
@@ -114,19 +114,19 @@
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">fname</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"philips_spar_sdat_WS.SDAT"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"spant"</span>)
 <span class="no">mrs_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/read_mrs.html">read_mrs</a></span>(<span class="no">fname</span>, <span class="kw">format</span> <span class="kw">=</span> <span class="st">"spar_sdat"</span>)</pre></body></html></div>
 <p>Plot the spectral region between 4 and 0.5 ppm:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mrs_data</span>, <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>, <span class="fl">0.5</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mrs_data</span>, <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>, <span class="fl">0.5</span>))</pre></body></html></div>
 <p><img src="spant-preprocessing_files/figure-html/unnamed-chunk-4-1.png" width="576"></p>
 <p>Apply a 180 degree phase adjustment and plot:</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">mrs_data_p180</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/phase.html">phase</a></span>(<span class="no">mrs_data</span>, <span class="fl">180</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mrs_data_p180</span>, <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>, <span class="fl">0.5</span>))</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mrs_data_p180</span>, <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>, <span class="fl">0.5</span>))</pre></body></html></div>
 <p><img src="spant-preprocessing_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
 <p>Apply 3 Hz Guassian line broadening:</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">mrs_data_lb</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/lb.html">lb</a></span>(<span class="no">mrs_data</span>, <span class="fl">3</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mrs_data_lb</span>, <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>, <span class="fl">0.5</span>))</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mrs_data_lb</span>, <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>, <span class="fl">0.5</span>))</pre></body></html></div>
 <p><img src="spant-preprocessing_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 <p>Zero fill the data to twice the original length and plot:</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">mrs_data_zf</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/zf.html">zf</a></span>(<span class="no">mrs_data</span>, <span class="fl">2</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mrs_data_zf</span>, <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>, <span class="fl">0.5</span>))</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mrs_data_zf</span>, <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>, <span class="fl">0.5</span>))</pre></body></html></div>
 <p><img src="spant-preprocessing_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 <p>Apply a HSVD filter to the residual water region and plot together with the original data:</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">mrs_data_filt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/hsvd_filt.html">hsvd_filt</a></span>(<span class="no">mrs_data</span>)
@@ -140,7 +140,7 @@
 <p><img src="spant-preprocessing_files/figure-html/unnamed-chunk-9-1.png" width="576"></p>
 <p>Multiple processing commands may be conveniently combined with the pipe operator “%&gt;%” :</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">mrs_data_proc</span> <span class="kw">&lt;-</span> <span class="no">mrs_data</span> <span class="kw">%&gt;%</span> <span class="no">hsvd_filt</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/lb.html">lb</a></span>(<span class="fl">2</span>) <span class="kw">%&gt;%</span> <span class="no">zf</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">mrs_data_proc</span>, <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">5</span>, <span class="fl">0.5</span>))</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mrs_data_proc</span>, <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">5</span>, <span class="fl">0.5</span>))</pre></body></html></div>
 <p><img src="spant-preprocessing_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
 </div>
   </div>
