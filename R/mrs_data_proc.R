@@ -1597,7 +1597,12 @@ sd.mrs_data <- function(x, na.rm = FALSE) {
 }
 
 ## make an S3 generic for sd (cos R Core don't do this for some reason!)
-#' @inherit stats::sd
+## see https://cran.r-project.org/doc/manuals/R-exts.html#Adding-new-generics
+
+#' Calculate the standard deviation spectrum from an mrs_data object.
+#' @param x object of class mrs_data.
+#' @param na.rm remove NA values.
+#' @return sd mrs_data object.
 #' @export
 sd <- function(x, na.rm) UseMethod("sd")
 

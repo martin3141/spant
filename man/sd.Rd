@@ -2,31 +2,18 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{sd}
 \alias{sd}
-\title{Standard Deviation}
+\title{Calculate the standard deviation spectrum from an mrs_data object.}
 \usage{
 sd(x, na.rm)
 }
 \arguments{
-\item{x}{a numeric vector or an \R object but not a
-    \code{\link{factor}} coercible to numeric by \code{as.double(x)}.}
+\item{x}{object of class mrs_data.}
 
-\item{na.rm}{logical.  Should missing values be removed?}
+\item{na.rm}{remove NA values.}
+}
+\value{
+sd mrs_data object.
 }
 \description{
-This function computes the standard deviation of the values in
-  \code{x}.
-  If \code{na.rm} is \code{TRUE} then missing values are removed before
-  computation proceeds.
-}
-\details{
-Like \code{\link[stats]{var}} this uses denominator \eqn{n - 1}.
-
-  The standard deviation of a length-one or zero-length vector is \code{NA}.
-}
-\examples{
-sd(1:2) ^ 2
-}
-\seealso{
-\code{\link[stats]{var}} for its square, and \code{\link[stats]{mad}}, the most
-  robust alternative.
+Calculate the standard deviation spectrum from an mrs_data object.
 }
