@@ -29,6 +29,8 @@ An online version of the documentation is available from:
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://martin3141.github.io/spant}
+  \item \url{https://github.com/martin3141/spant}
   \item Report bugs at \url{https://github.com/martin3141/spant/issues}
 }
 
