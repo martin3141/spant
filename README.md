@@ -3,6 +3,8 @@
 
 # Spectroscopy Analysis Tools (spant) <img src="man/figures/logo.png" align="right" width=130/>
 
+[![R build
+status](https://github.com/martin3141/spant/workflows/R-CMD-check/badge.svg)](https://github.com/martin3141/spant/actions)
 [![Travis Build
 Status](https://travis-ci.org/martin3141/spant.svg?branch=master)](https://travis-ci.org/martin3141/spant)
 [![AppVeyor Build
