@@ -1,3 +1,7 @@
+# spant 1.8.0
+* GitHub actions are now used for continuous integration instead of Travis and
+AppVeyor.
+
 # spant 1.7.0
 * Added write_mrs function which guesses the output format from the file
 extension or can be specified as an argument. write_mrs_XXX functions have been
