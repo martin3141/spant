@@ -1,4 +1,5 @@
 # spant 1.8.0
+* Geometry information is now read from Siemens twix files.
 * GitHub actions are now used for continuous integration instead of Travis and
 AppVeyor.
 

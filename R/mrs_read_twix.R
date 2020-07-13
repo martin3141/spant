@@ -198,16 +198,30 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
     data <- data[,,,,,,(ima_kspace_center_column + 1):ima_samples, drop = FALSE]
   }
   
-  res <- c(NA, NA, NA, NA, 1, NA, 1 / vars$fs)
+  res <- c(NA, vars$x_dim / vars$x_pts, vars$y_dim / vars$y_pts,
+           vars$z_dim / vars$z_pts, 1, NA, 1 / vars$fs)
   
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
 
   ref <- def_acq_paras()$ref
   
+  ima_norm <- c(vars$norm_sag, vars$norm_cor, vars$norm_tra)
+  ima_pos  <- c(vars$pos_sag,  vars$pos_cor,  vars$pos_tra)
+  rotation <- vars$ip_rot
+
+  x_dirn   <- c(1, 0, 0)
+  x_new    <- rotate_vec(x_dirn, ima_norm, -rotation)
+  col_vec  <- cross(ima_norm, x_new)
+  row_vec  <- cross(col_vec, ima_norm)
+  pos_vec  <- ima_pos - row_vec * ( vars$x_pts / 2 - 0.5) * vars$x_dim /
+              vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
+              vars$y_dim / vars$y_pts 
+  
   mrs_data <- list(ft = vars$ft, data = data, resolution = res,
-                   te = vars$te, ref = ref, row_vec = NA, col_vec = NA,
-                   pos_vec = NA, freq_domain = freq_domain)
+                   te = vars$te, ref = ref, row_vec = row_vec,
+                   col_vec = col_vec, pos_vec = pos_vec,
+                   freq_domain = freq_domain)
   
   class(mrs_data) <- "mrs_data"
   mrs_data
