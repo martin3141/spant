@@ -30,7 +30,7 @@ read_ima <- function(fname, verbose = FALSE) {
   
   data <- aperm(data, c(7,5,6,4,3,2,1))
   
-  res <- c(NA, vars$x_dim / vars$x_pts, vars$y_dim / vars$y_pts,
+  res <- c(NA, vars$y_dim / vars$y_pts, vars$x_dim / vars$x_pts,
            vars$z_dim / vars$z_pts, 1, NA, 1 / vars$fs * 2)
   
   # freq domain vector vector
@@ -46,9 +46,10 @@ read_ima <- function(fname, verbose = FALSE) {
   x_new    <- rotate_vec(x_dirn, ima_norm, -rotation)
   col_vec  <- cross(ima_norm, x_new)
   row_vec  <- cross(col_vec, ima_norm)
+  sli_vec  <- ima_norm
   pos_vec  <- ima_pos - row_vec * ( vars$x_pts / 2 - 0.5) * vars$x_dim /
                      vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
-                     vars$y_dim / vars$y_pts 
+                     vars$y_dim / vars$y_pts
   
   mrs_data <- list(ft = vars$ft, data = data, resolution = res,
                    te = vars$te, ref = ref, row_vec = row_vec,
