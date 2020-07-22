@@ -2,6 +2,7 @@
 * Geometry information is now read from Siemens twix files.
 * GitHub actions are now used for continuous integration instead of Travis and
 AppVeyor.
+* mrs_data2mat function now collapses all dimensions to dynamics by default.
 
 # spant 1.7.0
 * Added write_mrs function which guesses the output format from the file
