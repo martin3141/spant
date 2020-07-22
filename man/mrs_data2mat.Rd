@@ -5,10 +5,13 @@
 \title{Convert mrs_data object to a matrix, with spectral points in the column
 dimension and dynamics in the row dimension.}
 \usage{
-mrs_data2mat(mrs_data)
+mrs_data2mat(mrs_data, collapse = TRUE)
 }
 \arguments{
 \item{mrs_data}{MRS data object or list of MRS data objects.}
+
+\item{collapse}{collapse all other dimensions along the dynamic dimension, eg
+a 16x16 MRSI grid would be first collapsed across 256 dynamic scans.}
 }
 \value{
 MRS data matrix.
