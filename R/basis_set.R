@@ -231,7 +231,7 @@ write_basis <- function(basis, basis_file, fwhmba = 0.1) {
 basis2mrs_data <- function(basis, sum_elements = FALSE, amp = NULL,
                            shift = NULL) {
   
-  res <- mat2mrs_data(basis$data, fs = basis$fs, ft = basis$ft,
+  res <- mat2mrs_data(t(basis$data), fs = basis$fs, ft = basis$ft,
                       ref = basis$ref, fd = TRUE)
   
   # scale basis elements

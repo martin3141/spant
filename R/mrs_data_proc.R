@@ -233,10 +233,14 @@ array2mrs_data <- function(data_array, fs = def_fs(), ft = def_ft(),
 #' Convert mrs_data object to a matrix, with spectral points in the column
 #' dimension and dynamics in the row dimension.
 #' @param mrs_data MRS data object or list of MRS data objects.
+#' @param collapse collapse all other dimensions along the dynamic dimension, eg
+#' a 16x16 MRSI grid would be first collapsed across 256 dynamic scans.
 #' @return MRS data matrix.
 #' @export
-mrs_data2mat <- function(mrs_data) {
+mrs_data2mat <- function(mrs_data, collapse = TRUE) {
   if (class(mrs_data) == "list") mrs_data <- append_dyns(mrs_data)
+  
+  if (collapse) mrs_data <- collapse_to_dyns(mrs_data)
   
   as.matrix(mrs_data$data[1,1,1,1,,1,])
 }
@@ -259,8 +263,8 @@ mrs_data2vec <- function(mrs_data, dyn = 1, x_pos = 1,
   as.vector(mrs_data$data[1, x_pos, y_pos, z_pos, dyn, coil,])
 }
 
-#' Convert a matrix (with spectral points in the row dimension and dynamics in
-#' the column dimensions) into a mrs_data object.
+#' Convert a matrix (with spectral points in the column dimension and dynamics
+#' in the row dimensions) into a mrs_data object.
 #' @param mat data matrix.
 #' @param fs sampling frequency in Hz.
 #' @param ft transmitter frequency in Hz.
@@ -271,7 +275,7 @@ mrs_data2vec <- function(mrs_data, dyn = 1, x_pos = 1,
 mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
                          fd = FALSE) {
   
-  data <- array(t(mat), dim = c(1, 1, 1, 1, ncol(mat), 1, nrow(mat)))
+  data <- array(mat, dim = c(1, 1, 1, 1, nrow(mat), 1, ncol(mat)))
   res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
   mrs_data <- list(ft = ft, data = data, resolution = res, te = 0, ref = ref, 
                    row_vec = c(1,0,0), col_vec = c(0,1,0), pos_vec = c(0,0,0), 
@@ -2719,7 +2723,7 @@ l2_reg <- function(mrs_data, A, b) {
   orig_dim <- dim(mrs_data$data)
   
   # original data
-  x0 <- t(mrs_data2mat(collapse_to_dyns(mrs_data)))
+  x0 <- t(mrs_data2mat(mrs_data))
   
   # recon. matrix 
   recon_mat <- solve(diag(nrow(A)) + b * A %*% Conj(t(A)))
