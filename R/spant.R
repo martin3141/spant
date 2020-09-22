@@ -34,7 +34,9 @@
     spant.def_ref = 4.65,
     spant.def_nuc = "1H",
     spant.tqn_cmd = "tarquin",
-    spant.lcm_cmd = file.path(Sys.getenv("HOME"), ".lcmodel", "bin", "lcmodel") 
+    spant.lcm_cmd = file.path(Sys.getenv("HOME"), ".lcmodel", "bin", "lcmodel"), 
+    spant.precomp_verbose = TRUE,
+    spant.precomp_mode = "default"
   )
   toset <- !(names(op.spant) %in% names(op))
   if (any(toset)) options(op.spant[toset])
