@@ -1720,14 +1720,15 @@ sum_coils <- function(mrs_data) {
 }
 
 cplx_median <- function(input) {
-  stats::median(Re(input)) + stats::median(Im(input)) * 1i
+  stats::median(Re(input), na.rm = TRUE) +
+    stats::median(Im(input), na.rm = TRUE) * 1i
 }
 
 #' Calculate the median dynamic data.
 #' @param mrs_data dynamic MRS data.
 #' @return median dynamic data.
 #' @export
-median_dyns <- function(mrs_data, na.rm = TRUE) {
+median_dyns <- function(mrs_data) {
   return(apply_mrs(mrs_data, 5, cplx_median))
 }
 
