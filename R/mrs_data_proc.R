@@ -1727,7 +1727,7 @@ cplx_median <- function(input) {
 #' @param mrs_data dynamic MRS data.
 #' @return median dynamic data.
 #' @export
-median_dyns <- function(mrs_data) {
+median_dyns <- function(mrs_data, na.rm = TRUE) {
   return(apply_mrs(mrs_data, 5, cplx_median))
 }
 
