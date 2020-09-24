@@ -10,7 +10,10 @@ rats(
   xlim = c(4, 0.5),
   max_shift = 20,
   p_deg = 2,
-  max_t = 0.2
+  sp_N = 2,
+  sp_deg = 3,
+  max_t = 0.2,
+  basis_type = "poly"
 )
 }
 \arguments{
@@ -27,7 +30,14 @@ to use the full range.}
 \item{p_deg}{polynomial degree used for baseline modelling. Negative values
 disable baseline modelling.}
 
+\item{sp_N}{number of spline functions, note the true number will be sp_N +
+sp_deg.}
+
+\item{sp_deg}{degree of spline functions.}
+
 \item{max_t}{truncate the FID when longer than max_t to reduce time taken}
+
+\item{basis_type}{may be one of "poly" or "spline".}
 }
 \value{
 a list containing the corrected data; phase and shift values in units

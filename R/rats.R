@@ -8,12 +8,17 @@
 #' @param max_shift maximum allowable frequency shift in Hz.
 #' @param p_deg polynomial degree used for baseline modelling. Negative values
 #' disable baseline modelling.
+#' @param sp_N number of spline functions, note the true number will be sp_N +
+#' sp_deg.
+#' @param sp_deg degree of spline functions.
 #' @param max_t truncate the FID when longer than max_t to reduce time taken
+#' @param basis_type may be one of "poly" or "spline".
 #' @return a list containing the corrected data; phase and shift values in units
 #' of degrees and Hz respectively.
 #' @export
 rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
-                 p_deg = 2, max_t = 0.2) {
+                 p_deg = 2, sp_N = 2, sp_deg = 3, max_t = 0.2,
+                 basis_type = "poly") {
   
   # move mrs_data to the time-domain
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
@@ -45,17 +50,23 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
   ref_data <- as.complex(ref_mod$data)
   inds <- get_seg_ind(ppm(mrs_data_mod), xlim[1], xlim[2]) 
   
-  if (p_deg == 0) {
-    poly_basis <- rep(1, length(inds))
-  } else if (p_deg > 0) {
-    poly_basis <- cbind(rep(1, length(inds)), stats::polym(1:length(inds),
-                                                           degree = p_deg))
-  } else {
-    poly_basis <- NULL
+  if (basis_type == "poly") {
+    if (p_deg == 0) {
+      basis <- rep(1, length(inds))
+    } else if (p_deg > 0) {
+      basis <- cbind(rep(1, length(inds)), stats::polym(1:length(inds),
+                                                        degree = p_deg))
+    } else {
+      basis <- NULL
+    }
+  } else if (basis_type == "spline") {
+    basis <- bbase(length(inds), sp_N, sp_deg)
+  } else{
+    stop("I don't belong here.")
   }
   
   # optimisation step
-  res <- apply_mrs(mrs_data_mod, 7, optim_rats, ref_data, t, inds, poly_basis, 
+  res <- apply_mrs(mrs_data_mod, 7, optim_rats, ref_data, t, inds, basis, 
                    max_shift, data_only = TRUE)
   
   phases <- Re(res[,,,,,,1, drop = FALSE])
@@ -78,13 +89,13 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
        bl_matched_spec = corr_spec)
 }
 
-optim_rats <- function(x, ref, t, inds, poly_basis, max_shift) {
+optim_rats <- function(x, ref, t, inds, basis, max_shift) {
   
   # masked spectra are special case
   if (is.na(x[1])) return(c(NA, NA, NA, rep(NA, length(inds))))
   
   # optim step
-  res <- stats::optim(c(0), rats_obj_fn, gr = NULL, x, ref, t, inds, poly_basis, 
+  res <- stats::optim(c(0), rats_obj_fn, gr = NULL, x, ref, t, inds, basis, 
                method = "Brent", lower = -max_shift, upper = max_shift)
   
   # find the phase
@@ -93,29 +104,29 @@ optim_rats <- function(x, ref, t, inds, poly_basis, max_shift) {
   x <- ft_shift(x)
   x <- x[inds]
   
-  if (is.null(poly_basis)) {
-    basis <- x
-    ahat <- unname(qr.solve(basis, ref))
-    yhat <- basis * ahat
+  if (is.null(basis)) {
+    basis_mod <- x
+    ahat <- unname(qr.solve(basis_mod, ref))
+    yhat <- basis_mod * ahat
   } else {
-    basis <- cbind(x, poly_basis)
-    ahat <- unname(qr.solve(basis, ref))
-    yhat <- basis %*% ahat
+    basis_mod <- cbind(x, basis)
+    ahat <- unname(qr.solve(basis_mod, ref))
+    yhat <- basis_mod %*% ahat
   }
   
   c(Arg(ahat[1]) * 180 / pi, res$par, Mod(ahat[1]), yhat)
 }
 
-rats_obj_fn <- function(par, x, ref, t, inds, poly_basis) {
+rats_obj_fn <- function(par, x, ref, t, inds, basis) {
   shift <- par[1]
   x <- x * exp(2i * pi * shift * t)
   x <- ft_shift(x)
   x <- x[inds]
   
-  if (is.null(poly_basis)) {
-    basis <- x
+  if (is.null(basis)) {
+    basis_mod <- x
   } else {
-    basis <- cbind(x, poly_basis)
+    basis_mod <- cbind(x, basis)
   }
   
   # use ginv
@@ -123,12 +134,12 @@ rats_obj_fn <- function(par, x, ref, t, inds, poly_basis) {
   #ahat <- inv_basis %*% ref
   
   # use qr
-  ahat <- qr.solve(basis, ref)
+  ahat <- qr.solve(basis_mod, ref)
   
-  if (is.null(poly_basis)) {
-    yhat <- basis * ahat
+  if (is.null(basis)) {
+    yhat <- basis_mod * ahat
   } else {
-    yhat <- basis %*% ahat
+    yhat <- basis_mod %*% ahat
   }
   
   res <- c(Re(yhat), Im(yhat)) - c(Re(ref), Im(ref))
