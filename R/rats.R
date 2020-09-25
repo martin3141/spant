@@ -74,7 +74,10 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
   amps   <- Re(res[,,,,,,3, drop = FALSE])
   
   corr_spec <- ref_mod
-  corr_spec$data <- res[,,,,,,4:(length(inds) + 2), drop = FALSE]
+  corr_spec$data <- res[,,,,,,4:(length(inds) + 3), drop = FALSE]
+  bl_spec <- ref_mod
+  bl_spec$data <- res[,,,,,,(length(inds) + 4):(2 * length(inds) + 3),
+                      drop = FALSE]
   
   # apply to original data
   t_orig <- rep(seconds(mrs_data), each = Nspec(mrs_data))
@@ -86,7 +89,7 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
  
   # results 
   list(corrected = mrs_data, phases = -phases, shifts = -shifts, amps = amps,
-       bl_matched_spec = corr_spec)
+       bl_matched_spec = corr_spec, bl = -bl_spec)
 }
 
 optim_rats <- function(x, ref, t, inds, basis, max_shift) {
@@ -112,9 +115,10 @@ optim_rats <- function(x, ref, t, inds, basis, max_shift) {
     basis_mod <- cbind(x, basis)
     ahat <- unname(qr.solve(basis_mod, ref))
     yhat <- basis_mod %*% ahat
+    bl   <- basis_mod %*% c(0, ahat[2:length(ahat)])
   }
   
-  c(Arg(ahat[1]) * 180 / pi, res$par, Mod(ahat[1]), yhat)
+  c(Arg(ahat[1]) * 180 / pi, res$par, Mod(ahat[1]), yhat, bl)
 }
 
 rats_obj_fn <- function(par, x, ref, t, inds, basis) {

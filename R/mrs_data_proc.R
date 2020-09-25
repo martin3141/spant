@@ -1320,6 +1320,23 @@ mask_xy_mat <- function(mrs_data, mask) {
   return(mrs_data)
 }
 
+#' Mask an MRS dataset in the dynamic dimension.
+#' @param mrs_data MRS data object.
+#' @param mask vector of boolean values specifying the dynamics to mask, where a
+#' value of TRUE indicates the spectrum should be removed.
+#' @return masked dataset.
+#' @export
+mask_dyns <- function(mrs_data, mask) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
+  dim(mask) <- c(1, 1, 1, 1, length(mask), 1, 1)
+  mask <- rep_array_dim(mask, 7, Npts(mrs_data))
+  mrs_data$data[mask] <- NA
+  return(mrs_data)
+}
+
 #' Return the first half of a dynamic series.
 #' @param mrs_data dynamic MRS data.
 #' @return first half of the dynamic series.
@@ -2574,7 +2591,11 @@ bc_als <- function(mrs_data, lambda = 1e4, p = 0.001) {
 }
 
 bc_als_vec <- function(vec, lambda, p) {
-  ptw::baseline.corr(Re(vec), lambda = lambda, p = p) 
+  if (is.na(vec[1]))
+    return(vec) 
+  else {
+    return(ptw::baseline.corr(Re(vec), lambda = lambda, p = p))
+  }
 }
 
 #' Back extrapolate time-domain points using the Burg autoregressive model
