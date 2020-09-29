@@ -335,7 +335,7 @@ apply_mrs <- function(mrs_data, dims, fun, ..., data_only = FALSE) {
   
   #print(perm_vec)
   mrs_data$data <- aperm(mrs_data$data, perm_vec)
-  if ( data_only == FALSE ) {
+  if (data_only == FALSE) {
     return(mrs_data)
   } else {
     return(mrs_data$data)
