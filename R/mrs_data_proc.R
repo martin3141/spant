@@ -2709,20 +2709,38 @@ set_lw <- function(mrs_data, lw, xlim = c(4, 0.5)) {
   # check the input
   check_mrs_data(mrs_data) 
   
-  # measure current lw and check it is narrower than requested
-  init_lw <- peak_info(mrs_data, xlim)$fwhm_ppm[1]
+  # start in the frequency-domain
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
-  if (init_lw > lw) stop("Error, target linewidth is too narrow.")
+  # get an example spectrum for the data parameters 
+  single_mrs <- get_voxel(mrs_data)
   
-  res <- stats::optim(0, lw_obj_fn, NULL, mrs_data, lw, lower = 0, upper = 50,
-         method = "Brent")
+  res <- apply_mrs(mrs_data, 7, optim_set_lw, lw, xlim, single_mrs,
+                   data_only = TRUE)
   
-  return(lb(mrs_data, res$par[1]))
+  return(res)
 }
 
-lw_obj_fn <- function(lb, mrs_data, lw) {
-  mrs_data <- lb(mrs_data, lb)
-  new_lw <- peak_info(mrs_data)$fwhm_ppm[1]
+optim_set_lw <- function(x, lw, xlim, single_mrs) {
+  single_mrs$data[1,1,1,1,1,1,] <- x
+  
+  # TODO - this bit
+  # measure current lw and check it is narrower than requested
+  # init_lw <- peak_info(mrs_data, xlim)$fwhm_ppm[1]
+  # if (init_lw > lw) stop("Error, target linewidth is too narrow.")
+  
+  # convert lw to Hz to get the upper value for 1D search
+  upper_lw <- lw * single_mrs$ft / 1e6
+  
+  res <- stats::optim(0, lw_obj_fn, NULL, single_mrs, lw, xlim, lower = 0,
+                      upper = upper_lw, method = "Brent")
+  
+  return(res$par[1])
+}
+
+lw_obj_fn <- function(lb_val, mrs_data, lw, xlim) {
+  mrs_data <- lb(mrs_data, lb_val)
+  new_lw   <- peak_info(mrs_data, xlim)$fwhm_ppm[1]
   Mod(new_lw - lw)
 }
 
