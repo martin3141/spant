@@ -516,6 +516,12 @@ lb.mrs_data <- function(x, lb, lg = 1) {
     stop()
   }
   
+  # collapse to simplify 
+  lb <- as.vector(drop(lb))
+  lg <- as.vector(drop(lg))
+  orig_dim <- dim(x$data)
+  x <- collapse_to_dyns(x)
+  
   # needs to be a time-domain operation
   if (is_fd(x)) {
     x <- fd2td(x)
@@ -531,6 +537,9 @@ lb.mrs_data <- function(x, lb, lg = 1) {
     x$data = x$data * exp((sign * lg * lb ^ 2 * pi ^ 2 / 4 / log(0.5)) * 
                           (t ^ 2))
   }
+  
+  # revert back to original dims
+  dim(x$data) <- orig_dim
   
   return(x)
 }
@@ -2715,8 +2724,11 @@ set_lw <- function(mrs_data, lw, xlim = c(4, 0.5)) {
   # get an example spectrum for the data parameters 
   single_mrs <- get_voxel(mrs_data)
   
-  res <- apply_mrs(mrs_data, 7, optim_set_lw, lw, xlim, single_mrs,
+  lb_res <- apply_mrs(mrs_data, 7, optim_set_lw, lw, xlim, single_mrs,
                    data_only = TRUE)
+  
+  # apply the lb parameter to the full dataset
+  res <- lb(mrs_data, lb_res)
   
   return(res)
 }
