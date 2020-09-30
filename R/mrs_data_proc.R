@@ -540,6 +540,7 @@ lb.mrs_data <- function(x, lb, lg = 1) {
   
   # revert back to original dims
   dim(x$data) <- orig_dim
+  x$data <- unname(x$data)
   
   return(x)
 }
