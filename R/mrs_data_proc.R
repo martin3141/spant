@@ -520,6 +520,7 @@ lb.mrs_data <- function(x, lb, lg = 1) {
   lb <- as.vector(drop(lb))
   lg <- as.vector(drop(lg))
   orig_dim <- dim(x$data)
+  orig_dimnames <- dimnames(x$data)
   x <- collapse_to_dyns(x)
   
   # needs to be a time-domain operation
@@ -538,9 +539,8 @@ lb.mrs_data <- function(x, lb, lg = 1) {
                           (t ^ 2))
   }
   
-  # revert back to original dims
+  # revert back to original dims and unname
   dim(x$data) <- orig_dim
-  x$data <- unname(x$data)
   
   return(x)
 }
