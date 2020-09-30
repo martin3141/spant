@@ -2737,10 +2737,15 @@ set_lw <- function(mrs_data, lw, xlim = c(4, 0.5)) {
 optim_set_lw <- function(x, lw, xlim, single_mrs) {
   single_mrs$data[1,1,1,1,1,1,] <- x
   
-  # TODO - this bit
+  # return NA if the spectrum has been masked
+  if (is.na(x[1])) return(NA)
+  
   # measure current lw and check it is narrower than requested
-  # init_lw <- peak_info(mrs_data, xlim)$fwhm_ppm[1]
-  # if (init_lw > lw) stop("Error, target linewidth is too narrow.")
+  init_lw <- peak_info(single_mrs, xlim)$fwhm_ppm[1]
+  if (init_lw > lw) {
+    warning("Target linewidth is too narrow, masking spectrum.")
+    return(NA)
+  }
   
   # convert lw to Hz to get the upper value for 1D search
   upper_lw <- lw * single_mrs$ft / 1e6
