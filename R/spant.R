@@ -112,8 +112,9 @@ set_lcm_cmd <- function(cmd) {
 def_acq_paras <- function(ft  = getOption("spant.def_ft"),
                           fs  = getOption("spant.def_fs"),
                           N   = getOption("spant.def_N"),
-                          ref = getOption("spant.def_ref")) {
-  list(ft = ft, fs = fs, N = N, ref = ref)
+                          ref = getOption("spant.def_ref"),
+                          nuc = getOption("spant.def_nuc")) {
+  list(ft = ft, fs = fs, N = N, ref = ref, nuc = nuc)
 }
 
 #' Return the default reference value for ppm scale.
@@ -160,10 +161,12 @@ def_nuc <- function() {
 set_def_acq_paras <- function(ft  = getOption("spant.def_ft"),
                               fs  = getOption("spant.def_fs"),
                               N   = getOption("spant.def_N"),
-                              ref = getOption("spant.def_ref")) {
+                              ref = getOption("spant.def_ref"),
+                              nuc = getOption("spant.nuc")) {
   
   options(spant.def_ft  = ft)
   options(spant.def_fs  = fs)
   options(spant.def_N   = N)
   options(spant.def_ref = ref)
+  options(spant.nuc     = nuc)
 }

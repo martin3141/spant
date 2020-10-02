@@ -9,6 +9,7 @@ vec2mrs_data(
   fs = def_fs(),
   ft = def_ft(),
   ref = def_ref(),
+  nuc = def_nuc(),
   dyns = 1,
   fd = FALSE
 )

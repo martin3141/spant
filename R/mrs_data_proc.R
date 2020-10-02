@@ -91,8 +91,10 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
   data <- array(data,dim = c(1, 1, 1, 1, 1, 1, acq_paras$N))
   res <- c(NA, 1, 1, 1, 1, NA, 1 / acq_paras$fs)
   mrs_data <- list(ft = acq_paras$ft, data = data, resolution = res, te = 0, 
-                   ref = acq_paras$ref, row_vec = c(1,0,0), col_vec = c(0,1,0),
-                   pos_vec = c(0,0,0), freq_domain = rep(FALSE, 7))
+                   ref = acq_paras$ref, nuc = acq_paras$nuc,
+                   row_vec = c(1, 0, 0), col_vec = c(0, 1, 0),
+                   sli_vec = c(0, 0, 1), pos_vec = c(0, 0, 0),
+                   freq_domain = rep(FALSE, 7))
   
   class(mrs_data) <- "mrs_data"
   return(mrs_data)
@@ -100,7 +102,7 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
 
 sim_resonances_fast <- function(freq = 0, amp = 1, freq_ppm = TRUE,
                                 N = def_N(), fs = def_fs(), ft = def_ft(),
-                                ref = def_ref()) {
+                                ref = def_ref(), nuc = def_nuc()) {
   
   sig_n <- length(freq)
   if (sig_n != length(amp)) {
@@ -128,9 +130,10 @@ sim_resonances_fast <- function(freq = 0, amp = 1, freq_ppm = TRUE,
   
   data <- array(data,dim = c(1, 1, 1, 1, 1, 1, N))
   res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
-  mrs_data <- list(ft = ft, data = data, resolution = res, te = 0, ref = ref, 
-                  row_vec = c(1,0,0), col_vec = c(0,1,0), pos_vec = c(0,0,0), 
-                  freq_domain = rep(FALSE, 7))
+  mrs_data <- list(ft = ft, data = data, resolution = res, te = 0, ref = ref,
+                   nuc = nuc, row_vec = c(1, 0, 0), col_vec = c(0, 1, 0),
+                   sli_vec = c(0, 0, 1), pos_vec = c(0,0,0), 
+                   freq_domain = rep(FALSE, 7))
   
   class(mrs_data) <- "mrs_data"
   
@@ -139,7 +142,7 @@ sim_resonances_fast <- function(freq = 0, amp = 1, freq_ppm = TRUE,
 
 sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
                                  N = def_N(), fs = def_fs(), ft = def_ft(), 
-                                 ref = def_ref()) {
+                                 ref = def_ref(), nuc = def_nuc()) {
   
   sig_n <- length(freq)
   if (sig_n != length(amp)) {
@@ -174,7 +177,8 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
   data <- array(data, dim = c(1, 1, 1, 1, 1, 1, N))
   res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
   mrs_data <- list(ft = ft, data = data, resolution = res, te = 0, ref = ref, 
-                   row_vec = c(1,0,0), col_vec = c(0,1,0), pos_vec = c(0,0,0), 
+                   nuc = nuc, row_vec = c(1, 0, 0), col_vec = c(0, 1, 0), 
+                   sli_vec = c(0, 0, 1), pos_vec = c(0,0,0), 
                    freq_domain = rep(FALSE, 7))
   
   print(res$par)
@@ -193,15 +197,16 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
 #' @return mrs_data object.
 #' @export
 vec2mrs_data <- function(vec, fs = def_fs(), ft = def_ft(), ref = def_ref(),
-                         dyns = 1, fd = FALSE) {
+                         nuc = def_nuc(), dyns = 1, fd = FALSE) {
   
   data <- array(vec, dim = c(length(vec), dyns))
   data <- aperm(data,c(2, 1))
   dim(data) <- c(1, 1, 1, 1, dyns, 1, length(vec))
   res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
   mrs_data <- list(ft = ft, data = data, resolution = res, te = 0, ref = ref, 
-                  row_vec = c(1,0,0), col_vec = c(0,1,0), pos_vec = c(0,0,0), 
-                  freq_domain = c(rep(FALSE, 6), fd))
+                   nuc = nuc, row_vec = c(1, 0, 0), col_vec = c(0, 1, 0),
+                   sli_vec = c(0, 0, 1), pos_vec = c(0, 0, 0), 
+                   freq_domain = c(rep(FALSE, 6), fd))
   
   class(mrs_data) <- "mrs_data"
   return(mrs_data)
@@ -213,18 +218,20 @@ vec2mrs_data <- function(vec, fs = def_fs(), ft = def_ft(), ref = def_ref(),
 #' @param fs sampling frequency in Hz.
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.
+#' @param nuc nucleus that is resonant at the transmitter frequency.
 #' @param fd flag to indicate if the matrix is in the frequency domain (logical).
 #' @return mrs_data object.
 #' @export
 array2mrs_data <- function(data_array, fs = def_fs(), ft = def_ft(),
-                           ref = def_ref(), fd = FALSE) {
+                           ref = def_ref(), nuc = def_nuc(), fd = FALSE) {
   
   if (length(dim(data_array)) != 7) stop("Incorrect number of dimensions.")
   
   res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
   mrs_data <- list(ft = ft, data = data_array, resolution = res, te = 0,
-                   ref = ref, row_vec = c(1,0,0), col_vec = c(0,1,0),
-                   pos_vec = c(0,0,0), freq_domain = c(rep(FALSE, 6), fd))
+                   ref = ref, nuc = nuc, row_vec = c(1, 0, 0),
+                   col_vec = c(0, 1, 0), sli_vec = c(0, 0, 1),
+                   pos_vec = c(0, 0, 0), freq_domain = c(rep(FALSE, 6), fd))
   
   class(mrs_data) <- "mrs_data"
   return(mrs_data)
@@ -273,12 +280,13 @@ mrs_data2vec <- function(mrs_data, dyn = 1, x_pos = 1,
 #' @return mrs_data object.
 #' @export
 mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
-                         fd = FALSE) {
+                         nuc = def_nuc(), fd = FALSE) {
   
   data <- array(mat, dim = c(1, 1, 1, 1, nrow(mat), 1, ncol(mat)))
   res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
   mrs_data <- list(ft = ft, data = data, resolution = res, te = 0, ref = ref, 
-                   row_vec = c(1,0,0), col_vec = c(0,1,0), pos_vec = c(0,0,0), 
+                   nuc = nuc, row_vec = c(1, 0, 0), col_vec = c(0, 1, 0),
+                   sli_vec = c(0, 0, 1), pos_vec = c(0, 0, 0), 
                    freq_domain = c(rep(FALSE, 6), fd))
   
   class(mrs_data) <- "mrs_data"
@@ -301,7 +309,7 @@ sim_noise <- function(sd = 0.1, fs = def_fs(), ft = def_ft(), N = def_N(),
   data_pts <- dyns * N 
   vec <- stats::rnorm(data_pts, 0, sd) + 1i*stats::rnorm(data_pts, 0, sd)
   data_array <- array(vec, dim = c(1, 1, 1, 1, dyns, 1, N))
-  array2mrs_data(data_array, fs = fs, ft = ft, ref = ref, fd)
+  array2mrs_data(data_array, fs = fs, ft = ft, ref = ref, fd = fd)
 }
 
 sim_zeros <- function(fs = def_fs(), ft = def_ft(), N = def_N(),

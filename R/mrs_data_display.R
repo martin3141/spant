@@ -18,10 +18,12 @@ print.mrs_data <- function(x, full = FALSE, ...) {
   cat(paste(c("Sampling frequency (Hz) : ",
               1 / x$resolution[7], "\n")), sep = "")
   cat(paste(c("Reference freq. (ppm)   : ", x$ref, "\n")), sep = "")
+  cat(paste(c("Nucleus                 : ", x$nuc, "\n")), sep = "")
   cat(paste(c("Spectral domain         : ", x$freq_domain[7], "\n")), sep = "")
   if (full) {
     cat(paste(c("Row vector              :", x$row_vec, "\n")), sep = " ")
     cat(paste(c("Column vector           :", x$col_vec, "\n")), sep = " ")
+    cat(paste(c("Slice vector            :", x$sli_vec, "\n")), sep = " ")
     cat(paste(c("Position vector         :", x$pos_vec, "\n")), sep = " ")
   }
 }

@@ -10,6 +10,7 @@ array2mrs_data(
   fs = def_fs(),
   ft = def_ft(),
   ref = def_ref(),
+  nuc = def_nuc(),
   fd = FALSE
 )
 }
@@ -21,6 +22,8 @@ array2mrs_data(
 \item{ft}{transmitter frequency in Hz.}
 
 \item{ref}{reference value for ppm scale.}
+
+\item{nuc}{nucleus that is resonant at the transmitter frequency.}
 
 \item{fd}{flag to indicate if the matrix is in the frequency domain (logical).}
 }
