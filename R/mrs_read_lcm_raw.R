@@ -21,10 +21,11 @@ read_lcm_raw <- function(fname, ft, fs, ref) {
   freq_domain <- rep(FALSE, 7)
 
   te <- NA
+  nuc <- def_nuc()
   
   mrs_data <- list(ft = ft, data = data, resolution = res,
-                   te = NA, ref = ref, row_vec = NA, col_vec = NA,
-                   pos_vec = NA, freq_domain = freq_domain)
+                   te = NA, ref = ref, nuc = nuc, row_vec = NA, col_vec = NA,
+                   sli_vec = NA, pos_vec = NA, freq_domain = freq_domain)
   
   class(mrs_data) <- "mrs_data"
   mrs_data

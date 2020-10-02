@@ -1,10 +1,11 @@
 read_mrs_nifti <- function(fname) {
   
+  # check the file extension is sensible
   if (stringr::str_sub(fname, -7) != ".nii.gz") {
     stop("filename argument must end in .nii.gz")
   }
   
-  # get fname of the json sidecar file
+  # get the file name of the json sidecar file
   fname_json <- stringr::str_c(stringr::str_sub(fname, 1, -7), "json")
   
   # check both files exist
@@ -51,6 +52,7 @@ read_mrs_nifti <- function(fname) {
   xform_mat <- RNifti::xform(nii_data)
   col_vec <- xform_mat[1:3, 1] / sum(xform_mat[1:3, 1] ^ 2) ^ 0.5 * c(-1, -1, 1)
   row_vec <- xform_mat[1:3, 2] / sum(xform_mat[1:3, 2] ^ 2) ^ 0.5 * c(-1, -1, 1)
+  sli_vec <- crossprod_3d(col_vec, row_vec)
   pos_vec <- xform_mat[1:3, 4] * c(-1, -1, 1)
   
   # freq domain vector vector
@@ -68,13 +70,17 @@ read_mrs_nifti <- function(fname) {
                                           # due to higher precision than the
                                           # NIFTI header (double vs float)
   }
+ 
+  # TODO read from the file 
+  nuc <- def_nuc()
   
-  # TODO get from a lookup table of defaults when not in the json sidecar
-  ref <- def_acq_paras()$ref
+  # TODO get ref from a lookup table of defaults when not in the json sidecar
+  ref <- def_ref()
   
   mrs_data <- list(ft = ft, data = data, resolution = res,
-                   te = te, ref = ref, row_vec = row_vec, col_vec = col_vec,
-                   pos_vec = pos_vec, freq_domain = freq_domain)
+                   te = te, ref = ref, nuc = nuc, row_vec = row_vec,
+                   col_vec = col_vec, sli_vec = sli_vec, pos_vec = pos_vec,
+                   freq_domain = freq_domain)
   
   class(mrs_data) <- "mrs_data"
   mrs_data

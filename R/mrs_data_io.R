@@ -146,6 +146,7 @@ read_mrs_dpt <- function(fname) {
   cols <- as.integer(header$V2[10])
   slices <- as.integer(header$V2[11])
   pix_sp <- header$V2[12]
+  
   if (pix_sp == "Unknown") {
     row_dim <- NA
     col_dim <- NA
@@ -176,10 +177,11 @@ read_mrs_dpt <- function(fname) {
     row_vec <- IOP[1:3]
     col_vec <- IOP[4:6]
   } else {
-    row_vec = NA  
-    col_vec = NA  
+    row_vec <- NA  
+    col_vec <- NA  
   }
   pos_vec <- IPP
+  sli_vec <- crossprod_3d(row_vec, col_vec)
   
   # read the data points  
   raw_data <- utils::read.table(fname, skip = 16, as.is = TRUE)
@@ -204,9 +206,14 @@ read_mrs_dpt <- function(fname) {
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
   
+  # defaults
+  nuc <- def_nuc()
+  
   mrs_data <- list(ft = ft, data = data_arr, resolution = res, te = te,
-                   ref = ref, row_vec = row_vec, col_vec = col_vec,
-                   pos_vec = pos_vec, freq_domain = freq_domain)
+                   ref = ref, nuc = nuc, row_vec = row_vec, col_vec = col_vec,
+                   sli_vec = sli_vec, pos_vec = pos_vec,
+                   freq_domain = freq_domain)
+  
   class(mrs_data) <- "mrs_data"
   mrs_data
 }

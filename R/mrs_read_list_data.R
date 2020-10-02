@@ -60,6 +60,8 @@ read_list_data <- function(fname, ft, fs, ref) {
   
   res <- c(NA, NA, NA, NA, 1, NA, 1 / fs)
   
+  nuc <- def_nuc()
+  
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
   
@@ -73,8 +75,8 @@ read_list_data <- function(fname, ft, fs, ref) {
     ref_data <- aperm(ref_data, c(7,6,5,4,3,2,1))
     
     ref_mrs <- list(ft = ft, data = ref_data, resolution = res, te = NA,
-                   ref = ref, row_vec = NA, col_vec = NA,
-                   pos_vec = NA, freq_domain = freq_domain)
+                   ref = ref, nuc = nuc, row_vec = NA, col_vec = NA,
+                   sli_vec = NA, pos_vec = NA, freq_domain = freq_domain)
     class(ref_mrs) <- "mrs_data"
   }
   
@@ -87,13 +89,13 @@ read_list_data <- function(fname, ft, fs, ref) {
   noise_data <- aperm(noise_data, c(7,6,5,4,3,2,1))
   
   metab_mrs <- list(ft = ft, data = metab_data, resolution = res, te = NA,
-                   ref = ref, row_vec = NA, col_vec = NA,
-                   pos_vec = NA, freq_domain = freq_domain)
+                   ref = ref, nuc = nuc, row_vec = NA, col_vec = NA,
+                   sli_vec = NA, pos_vec = NA, freq_domain = freq_domain)
   class(metab_mrs) <- "mrs_data"
   
   noise_mrs <- list(ft = ft, data = noise_data, resolution = res, te = NA,
-                   ref = ref, row_vec = NA, col_vec = NA,
-                   pos_vec = NA, freq_domain = freq_domain)
+                   ref = ref, nuc = nuc, row_vec = NA, col_vec = NA,
+                   sli_vec = NA, pos_vec = NA, freq_domain = freq_domain)
   class(noise_mrs) <- "mrs_data"
   
   list(metab = metab_mrs, ref = ref_mrs, noise = noise_mrs)
