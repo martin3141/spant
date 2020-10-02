@@ -204,7 +204,10 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
 
-  ref <- def_acq_paras()$ref
+  ref <- def_ref()
+  
+  # TODO extract from the data file
+  nuc <- def_nuc()
   
   ima_norm <- c(vars$norm_sag, vars$norm_cor, vars$norm_tra)
   ima_pos  <- c(vars$pos_sag,  vars$pos_cor,  vars$pos_tra)
@@ -216,11 +219,12 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
   row_vec  <- cross(col_vec, ima_norm)
   pos_vec  <- ima_pos - row_vec * ( vars$x_pts / 2 - 0.5) * vars$x_dim /
               vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
-              vars$y_dim / vars$y_pts 
+              vars$y_dim / vars$y_pts
+  sli_vec  <- cross(col_vec, row_vec)
   
   mrs_data <- list(ft = vars$ft, data = data, resolution = res,
-                   te = vars$te, ref = ref, row_vec = row_vec,
-                   col_vec = col_vec, pos_vec = pos_vec,
+                   te = vars$te, ref = ref, nuc = nuc, row_vec = row_vec,
+                   col_vec = col_vec, sli_vec = sli_vec, pos_vec = pos_vec,
                    freq_domain = freq_domain)
   
   class(mrs_data) <- "mrs_data"

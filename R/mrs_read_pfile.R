@@ -62,11 +62,13 @@ read_pfile <- function(fname, n_ref_scans = NULL) {
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
 
-  ref <- def_acq_paras()$ref
+  ref <- def_ref()
+  nuc <- def_nuc()
   
   mrs_data <- list(ft = hdr$ps_mps_freq / 10, data = data, resolution = res,
-                   te = hdr$te, ref = ref, row_vec = NA, col_vec = NA,
-                   pos_vec = NA, freq_domain = freq_domain)
+                   te = hdr$te, ref = ref, nuc = nuc, row_vec = NA,
+                   col_vec = NA, pos_vec = NA, sli_vec = NA,
+                   freq_domain = freq_domain)
   
   class(mrs_data) <- "mrs_data"
   

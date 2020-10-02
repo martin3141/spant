@@ -85,6 +85,8 @@ read_spar_sdat <- function(fname) {
   col_ori <- rotate_vec(col_ori, true_col, ap_an * pi / 180)
   col_ori <- rotate_vec(col_ori, true_row, lr_an * pi / 180)
   
+  sli_vec <- crossprod_3d(row_ori, col_ori)
+  
   pos_vec <- c(lr_oc, ap_oc, cc_oc)
   
   data_vec <- read_sdat(sdat)
@@ -105,16 +107,20 @@ read_spar_sdat <- function(fname) {
   
   #data <- array(data_vec,dim = c(1, cols, rows, slices, N, 1, dyns)) 
   data <- array(data_vec,dim = c(N, cols, rows, slices, dyns, 1, 1)) 
-  data = aperm(data,c(6, 2, 3, 4, 5, 7, 1))
+  data <- aperm(data,c(6, 2, 3, 4, 5, 7, 1))
   
   res <- c(NA, row_dim, col_dim, slice_dim, 1, NA, 1 / fs)
-  ref <- def_acq_paras()$ref
+  ref <- def_ref()
+  
+  # TODO get from the data file
+  nuc <- def_nuc()
   
   # freq domain vector
   freq_domain <- rep(FALSE, 7)
   
   mrs_data <- list(ft = ft, data = data, resolution = res, te = te, ref = ref, 
-                   row_vec = row_ori, col_vec = col_ori, pos_vec = pos_vec, 
+                   nuc = nuc, row_vec = row_ori, col_vec = col_ori,
+                   sli_vec = sli_vec, pos_vec = pos_vec,
                    freq_domain = freq_domain)
   
   class(mrs_data) <- "mrs_data"

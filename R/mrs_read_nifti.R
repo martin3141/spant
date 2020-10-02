@@ -52,7 +52,7 @@ read_mrs_nifti <- function(fname) {
   xform_mat <- RNifti::xform(nii_data)
   col_vec <- xform_mat[1:3, 1] / sum(xform_mat[1:3, 1] ^ 2) ^ 0.5 * c(-1, -1, 1)
   row_vec <- xform_mat[1:3, 2] / sum(xform_mat[1:3, 2] ^ 2) ^ 0.5 * c(-1, -1, 1)
-  sli_vec <- crossprod_3d(col_vec, row_vec)
+  sli_vec <- crossprod_3d(row_vec, col_vec)
   pos_vec <- xform_mat[1:3, 4] * c(-1, -1, 1)
   
   # freq domain vector vector

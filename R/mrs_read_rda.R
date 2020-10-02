@@ -50,6 +50,7 @@ read_rda <- function(fname) {
   slice_vox_dim <- as.numeric(txt$V2[which(txt$V1 == "PixelSpacing3D")])
   
   pos_vec <- pos_vec + row_ori * row_vox_dim / 2 + col_ori * col_vox_dim / 2
+  sli_vec <- crossprod_3d(row_ori, col_ori)
   
   fids <- rows * cols * slices
   
@@ -65,16 +66,20 @@ read_rda <- function(fname) {
   data <- raw_vec[c(TRUE, FALSE)] + 1i * raw_vec[c(FALSE, TRUE)]
   
   dim(data) <- c(N, rows, cols, slices, 1, 1, 1)
-  data <- aperm(data, c(7,2,3,4,5,6,1))
+  data <- aperm(data, c(7, 2, 3, 4, 5, 6, 1))
   
   res <- c(NA, row_vox_dim, col_vox_dim, slice_vox_dim, 1, NA, 1 / fs)
-  ref <- def_acq_paras()$ref
+  ref <- def_ref()
+  
+  # TODO determine from the data
+  nuc <- def_nuc()
   
   # freq domain vector
   freq_domain <- rep(FALSE, 7)
   
   mrs_data <- list(ft = ft, data = data, resolution = res, te = te, ref = ref, 
-                   row_vec = row_ori, col_vec = col_ori, pos_vec = pos_vec, 
+                   nuc = nuc, row_vec = row_ori, col_vec = col_ori,
+                   sli_vec = sli_vec, pos_vec = pos_vec,
                    freq_domain = freq_domain)
   
   class(mrs_data) <- "mrs_data"
