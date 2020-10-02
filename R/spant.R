@@ -103,11 +103,13 @@ set_lcm_cmd <- function(cmd) {
 #' @param fs specify the sampling frequency in Hz.
 #' @param N specify the number of data points in the spectral dimension.
 #' @param ref specify the reference value for ppm scale.
+#' @param nuc specify the resonant nucleus.
 #' @return A list containing the following elements:
 #' * ft transmitter frequency in Hz.
 #' * fs sampling frequency in Hz.
 #' * N number of data points in the spectral dimension.
 #' * ref reference value for ppm scale.
+#' * nuc resonant nucleus.
 #' @export
 def_acq_paras <- function(ft  = getOption("spant.def_ft"),
                           fs  = getOption("spant.def_fs"),

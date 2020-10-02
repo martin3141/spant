@@ -173,8 +173,9 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
 #' @param mode representation of the complex numbers to be plotted, can be one
 #' of: "re", "im", "mod" or "arg".
 #' @param col Colour map to use, defaults to viridis.
-#' @param dim the dimension to display on the y-axis, can be one of: "dyn", "x",
-#' "y", "z" or "coil".
+#' @param plot_dim the dimension to display on the y-axis, can be one of: "dyn", 
+#' "x", "y", "z", "coil" or NULL. If NULL (the default) all spectra will be
+#' collapsed into the dynamic dimension and displayed.
 #' @param x_pos the x index to plot.
 #' @param y_pos the y index to plot.
 #' @param z_pos the z index to plot.
@@ -188,7 +189,7 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
 #' @param ... other arguments to pass to the plot method.
 #' @export
 image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL, 
-                           dim = "dyn", x_pos = NULL, y_pos = NULL,
+                           plot_dim = NULL, x_pos = NULL, y_pos = NULL,
                            z_pos = NULL, dyn = 1, coil = 1,
                            restore_def_par = TRUE, y_ticks = NULL, 
                            vline = NULL, hline = NULL, ...) { 
@@ -211,31 +212,36 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
   
   subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
   
+  if (is.null(plot_dim)) {
+    x <- collapse_to_dyns(x)
+    plot_dim = "dyn"
+  }
+  
   data_dim <- dim(x$data)
   
-  if (is.null(x_pos))  x_pos <- as.integer(data_dim[2] / 2) + 1
+  if (is.null(x_pos)) x_pos <- as.integer(data_dim[2] / 2) + 1
   
   if (is.null(y_pos)) y_pos <- as.integer(data_dim[3] / 2) + 1
   
   if (is.null(z_pos)) z_pos <- as.integer(data_dim[4] / 2) + 1
   
-  if (dim == "dyn") {
+  if (plot_dim == "dyn") {
     plot_data <- t(x$data[1, x_pos, y_pos, y_pos, , coil, subset])
     yN <- data_dim[5]
     y_title = "Dynamic"
-  } else if (dim == "x") {
+  } else if (plot_dim == "x") {
     plot_data <- t(x$data[1, , y_pos, z_pos, dyn, coil, subset])
     yN <- data_dim[2]
     y_title = "x position"
-  } else if (dim == "y") {
+  } else if (plot_dim == "y") {
     plot_data <- t(x$data[1, x_pos, , z_pos, dyn, coil, subset])
     yN <- data_dim[3]
     y_title = "y position"
-  } else if (dim == "z") {
+  } else if (plot_dim == "z") {
     plot_data <- t(x$data[1, x_pos, y_pos, , dyn, coil, subset])
     yN <- data_dim[4]
     y_title = "z position"
-  } else if (dim == "coil") {
+  } else if (plot_dim == "coil") {
     plot_data <- t(x$data[1, x_pos, y_pos, z_pos, dyn, , subset])
     yN <- data_dim[6]
     y_title = "Coil"
@@ -306,8 +312,9 @@ stackplot.list <- function(x, ...) {
 #' @param x_offset separate plots in the x-axis direction by this value. 
 #' Default value is 0.
 #' @param y_offset separate plots in the y-axis direction by this value.
-#' @param dim the dimension to stack in the y-axis direction, can be one of: 
-#' "dyn", "x", "y", "z" or "coil".
+#' @param plot_dim the dimension to display on the y-axis, can be one of: "dyn", 
+#' "x", "y", "z", "coil" or NULL. If NULL (the default) all spectra will be
+#' collapsed into the dynamic dimension and displayed.
 #' @param x_pos the x index to plot.
 #' @param y_pos the y index to plot.
 #' @param z_pos the z index to plot.
@@ -325,7 +332,7 @@ stackplot.list <- function(x, ...) {
 #' @export
 stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                                fd = TRUE, col = NULL, x_offset = 0,
-                               y_offset = 0, dim = "dyn", x_pos = NULL, 
+                               y_offset = 0, plot_dim = NULL, x_pos = NULL, 
                                y_pos = NULL, z_pos = NULL, dyn = 1, coil = 1, 
                                bty = NULL, labels = NULL, lab_cex = 1, 
                                right_marg = NULL, bl_lty = NULL,
@@ -384,43 +391,42 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   }
   xlim <- sort(xlim)
   
+  if (is.null(plot_dim)) {
+    x <- collapse_to_dyns(x)
+    plot_dim = "dyn"
+  }
+  
   data_dim <- dim(x$data)
   
-  if (is.null(x_pos)) {
-    x_pos <- as.integer(data_dim[2] / 2) + 1
-  }
+  if (is.null(x_pos)) x_pos <- as.integer(data_dim[2] / 2) + 1
   
-  if (is.null(y_pos)) {
-    y_pos <- as.integer(data_dim[3] / 2) + 1
-  }
+  if (is.null(y_pos)) y_pos <- as.integer(data_dim[3] / 2) + 1
   
-  if (is.null(z_pos)) {
-    z_pos <- as.integer(data_dim[4] / 2) + 1
-  }
+  if (is.null(z_pos)) z_pos <- as.integer(data_dim[4] / 2) + 1
   
   subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
   
-  if (dim == "dyn") {
+  if (plot_dim == "dyn") {
     plot_data <- t(x$data[1, x_pos, y_pos, z_pos, , coil, subset])
     yN <- data_dim[5]
     y_title = "Dynamic"
-  } else if (dim == "x") {
+  } else if (plot_dim == "x") {
     plot_data <- t(x$data[1, , y_pos, z_pos, dyn, coil, subset])
     yN <- data_dim[2]
     y_title = "x position"
-  } else if (dim == "y") {
+  } else if (plot_dim == "y") {
     plot_data <- t(x$data[1, x_pos, , z_pos, dyn, coil, subset])
     yN <- data_dim[3]
     y_title = "y position"
-  } else if (dim == "z") {
+  } else if (plot_dim == "z") {
     plot_data <- t(x$data[1, x_pos, y_pos, , dyn, coil, subset])
     yN <- data_dim[4]
     y_title = "z position"
-  } else if (dim == "coil") {
+  } else if (plot_dim == "coil") {
     plot_data <- t(x$data[1, x_pos, y_pos, z_pos, dyn, , subset])
     yN <- data_dim[5]
     y_title = "Coil"
-  } else if (dim == "scan") {
+  } else if (plot_dim == "scan") {
     plot_data <- t(x$data[, x_pos, y_pos, z_pos, dyn, coil, subset])
     yN <- data_dim[1]
     y_title = "Scan"
