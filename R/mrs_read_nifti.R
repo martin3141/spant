@@ -33,7 +33,9 @@ read_mrs_nifti <- function(fname) {
   }
   
   # reorder the dimensions
-  data <- aperm(data, c(1, 2, 3, 5, 6, 4)) 
+  # NIFTI MRS default dimension ordering is x, y, z, t, coil, dynamic, indirect
+  # spant MRS default dimension ordering is (dummy,) x, y, z, dynamic, coil, t
+  data <- aperm(data, c(1, 2, 3, 6, 5, 4)) 
   
   # add a dummy dimension
   dim(data) <- c(1, dim(data))
@@ -71,10 +73,11 @@ read_mrs_nifti <- function(fname) {
                                           # NIFTI header (double vs float)
   }
  
-  # TODO read from the file 
-  nuc <- def_nuc()
+  # read the nucleus
+  nuc <- json_data$ResonantNucleus
   
-  # TODO get ref from a lookup table of defaults when not in the json sidecar
+  # TODO get ref from a lookup table of defaults depending on "nuc" when not in
+  # the json sidecar
   ref <- def_ref()
   
   mrs_data <- list(ft = ft, data = data, resolution = res,
