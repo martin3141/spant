@@ -23,6 +23,8 @@ mat2mrs_data(
 
 \item{ref}{reference value for ppm scale.}
 
+\item{nuc}{resonant nucleus.}
+
 \item{fd}{flag to indicate if the matrix is in the frequency domain (logical).}
 }
 \value{

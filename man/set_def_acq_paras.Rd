@@ -20,6 +20,8 @@ set_def_acq_paras(
 \item{N}{number of data points in the spectral dimension.}
 
 \item{ref}{reference value for ppm scale.}
+
+\item{nuc}{resonant nucleus.}
 }
 \description{
 Set the default acquisition parameters.

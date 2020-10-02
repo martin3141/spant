@@ -21,6 +21,8 @@ def_acq_paras(
 \item{N}{specify the number of data points in the spectral dimension.}
 
 \item{ref}{specify the reference value for ppm scale.}
+
+\item{nuc}{specify the resonant nucleus.}
 }
 \value{
 A list containing the following elements:
@@ -29,6 +31,7 @@ A list containing the following elements:
 \item fs sampling frequency in Hz.
 \item N number of data points in the spectral dimension.
 \item ref reference value for ppm scale.
+\item nuc resonant nucleus.
 }
 }
 \description{

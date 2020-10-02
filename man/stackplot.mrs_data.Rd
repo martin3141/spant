@@ -13,7 +13,7 @@
   col = NULL,
   x_offset = 0,
   y_offset = 0,
-  dim = "dyn",
+  plot_dim = NULL,
   x_pos = NULL,
   y_pos = NULL,
   z_pos = NULL,
@@ -49,8 +49,9 @@ Default value is 0.}
 
 \item{y_offset}{separate plots in the y-axis direction by this value.}
 
-\item{dim}{the dimension to stack in the y-axis direction, can be one of:
-"dyn", "x", "y", "z" or "coil".}
+\item{plot_dim}{the dimension to display on the y-axis, can be one of: "dyn",
+"x", "y", "z", "coil" or NULL. If NULL (the default) all spectra will be
+collapsed into the dynamic dimension and displayed.}
 
 \item{x_pos}{the x index to plot.}
 

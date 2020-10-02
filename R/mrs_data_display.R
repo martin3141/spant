@@ -386,9 +386,8 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
     stop("Invalid x_units option, should be one of : 'ppm', 'hz', 'points' or 'seconds'") 
   }
   
-  if (is.null(xlim)) {
-    xlim <- c(x_scale[1], x_scale[Npts(x)])
-  }
+  if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[Npts(x)])
+  
   xlim <- sort(xlim)
   
   if (is.null(plot_dim)) {

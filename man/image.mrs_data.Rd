@@ -9,7 +9,7 @@
   xlim = NULL,
   mode = "re",
   col = NULL,
-  dim = "dyn",
+  plot_dim = NULL,
   x_pos = NULL,
   y_pos = NULL,
   z_pos = NULL,
@@ -32,8 +32,9 @@ of: "re", "im", "mod" or "arg".}
 
 \item{col}{Colour map to use, defaults to viridis.}
 
-\item{dim}{the dimension to display on the y-axis, can be one of: "dyn", "x",
-"y", "z" or "coil".}
+\item{plot_dim}{the dimension to display on the y-axis, can be one of: "dyn",
+"x", "y", "z", "coil" or NULL. If NULL (the default) all spectra will be
+collapsed into the dynamic dimension and displayed.}
 
 \item{x_pos}{the x index to plot.}
 

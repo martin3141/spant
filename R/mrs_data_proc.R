@@ -192,6 +192,7 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
 #' @param fs sampling frequency in Hz.
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.
+#' @param nuc resonant nucleus.
 #' @param dyns replicate the data across the dynamic dimension.
 #' @param fd flag to indicate if the matrix is in the frequency domain (logical).
 #' @return mrs_data object.
@@ -276,6 +277,7 @@ mrs_data2vec <- function(mrs_data, dyn = 1, x_pos = 1,
 #' @param fs sampling frequency in Hz.
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.
+#' @param nuc resonant nucleus.
 #' @param fd flag to indicate if the matrix is in the frequency domain (logical).
 #' @return mrs_data object.
 #' @export

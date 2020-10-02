@@ -159,6 +159,7 @@ def_nuc <- function() {
 #' @param fs sampling frequency in Hz.
 #' @param N number of data points in the spectral dimension.
 #' @param ref reference value for ppm scale.
+#' @param nuc resonant nucleus.
 #' @export
 set_def_acq_paras <- function(ft  = getOption("spant.def_ft"),
                               fs  = getOption("spant.def_fs"),

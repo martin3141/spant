@@ -23,6 +23,8 @@ vec2mrs_data(
 
 \item{ref}{reference value for ppm scale.}
 
+\item{nuc}{resonant nucleus.}
+
 \item{dyns}{replicate the data across the dynamic dimension.}
 
 \item{fd}{flag to indicate if the matrix is in the frequency domain (logical).}
