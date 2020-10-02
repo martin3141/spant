@@ -33,8 +33,8 @@ read_mrs_nifti <- function(fname) {
   }
   
   # reorder the dimensions
-  # NIFTI MRS default dimension ordering is x, y, z, t, coil, dynamic, indirect
-  # spant MRS default dimension ordering is (dummy,) x, y, z, dynamic, coil, t
+  # NIFTI default dimension ordering is X, Y, Z, FID, coil, dynamic, indirect
+  # spant default dimension ordering is (dummy,) X, Y, Z, dynamic, coil, FID 
   data <- aperm(data, c(1, 2, 3, 6, 5, 4)) 
   
   # add a dummy dimension

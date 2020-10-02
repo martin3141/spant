@@ -15,8 +15,8 @@ write_mrs_nifti <- function(fname, mrs_data) {
   # drop the first dummy dimension
   data_points <- abind::adrop(data_points, 1)
   
-  # reorder the dimensions to X, Y, Z, FID, dynamics, coil, indirect
-  data_points <- aperm(data_points, c(1, 2, 3, 6, 4, 5))
+  # reorder the dimensions to X, Y, Z, FID, coil, dynamics, indirect
+  data_points <- aperm(data_points, c(1, 2, 3, 6, 5, 4))
   
   # add a 7th dimension
   dim(data_points) <- c(dim(data_points), 1)
