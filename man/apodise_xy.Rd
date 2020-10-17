@@ -2,16 +2,20 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{apodise_xy}
 \alias{apodise_xy}
-\title{Apodise MRSI data in the x-y direction with a k-space hamming filter.}
+\title{Apodise MRSI data in the x-y direction with a k-space filter.}
 \usage{
-apodise_xy(mrs_data)
+apodise_xy(mrs_data, func = "hamming", w = 2.5)
 }
 \arguments{
 \item{mrs_data}{MRSI data.}
+
+\item{func}{must be "hamming" or "gaussian".}
+
+\item{w}{the reciprocal of the standard deviation for the gaussian function.}
 }
 \value{
 apodised data.
 }
 \description{
-Apodise MRSI data in the x-y direction with a k-space hamming filter.
+Apodise MRSI data in the x-y direction with a k-space filter.
 }

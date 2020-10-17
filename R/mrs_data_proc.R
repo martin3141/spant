@@ -2047,11 +2047,13 @@ ecc <- function(metab, ref, rev = FALSE) {
   get_metab(ecc_data)
 }
 
-#' Apodise MRSI data in the x-y direction with a k-space hamming filter.
+#' Apodise MRSI data in the x-y direction with a k-space filter.
 #' @param mrs_data MRSI data.
+#' @param func must be "hamming" or "gaussian".
+#' @param w the reciprocal of the standard deviation for the gaussian function.
 #' @return apodised data.
 #' @export
-apodise_xy <- function(mrs_data) {
+apodise_xy <- function(mrs_data, func = "hamming", w = 2.5) {
   
   # check the input
   check_mrs_data(mrs_data) 
@@ -2066,13 +2068,24 @@ apodise_xy <- function(mrs_data) {
   mat <- mrs_data$data
   mat <- drop(mat)
   dim(mat) <- c(x_dim, y_dim * N)
-  mat <- mat * signal::hamming(x_dim)
+  
+  if (func == "hamming") {
+    x_fun <- signal::hamming(x_dim)
+    y_fun <- signal::hamming(y_dim)
+  } else if (func == "gaussian") {
+    x_fun <- signal::gausswin(x_dim, w = w)
+    y_fun <- signal::gausswin(y_dim, w = w)
+  } else{
+    stop("error func not recognised")
+  }
+    
+  mat <- mat * x_fun
   
   dim(mat) <- c(x_dim, y_dim, N)
   mat <- aperm(mat, c(2, 1, 3))
   dim(mat) <- c(y_dim, x_dim * N)
   
-  mat <- mat * signal::hamming(y_dim)
+  mat <- mat * y_fun
   
   dim(mat) <- c(y_dim, x_dim, N)
   mat <- aperm(mat, c(2, 1, 3))
