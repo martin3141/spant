@@ -1654,25 +1654,32 @@ sd.default <- function(x, na.rm = FALSE) stats::sd(x, na.rm)
 
 #' Collapse MRS data by concatenating spectra along the dynamic dimension.
 #' @param x data object to be collapsed (mrs_data or fit_result object).
+#' @param rm_masked remove masked dynamics from the output.
 #' @return collapsed data with spectra or fits concatenated along the dynamic
 #' dimension.
 #' @rdname collapse_to_dyns
 #' @export
-collapse_to_dyns <- function(x) UseMethod("collapse_to_dyns")
+collapse_to_dyns <- function(x, rm_masked = FALSE) UseMethod("collapse_to_dyns")
 
 #' @rdname collapse_to_dyns
 #' @export
-collapse_to_dyns.mrs_data <- function(x) {
+collapse_to_dyns.mrs_data <- function(x, rm_masked = FALSE) {
   data_pts <- x$data
   data_N <- Npts(x)
   dim(data_pts) <- c(1, 1, 1, 1, length(data_pts) / data_N, 1, data_N)
   x$data <- data_pts
-  x
+  
+  if (rm_masked) {
+    keepers <- !is.na(x$data[,,,,,,1])
+    x$data <- x$data[,,,,keepers,,,drop = FALSE]
+  }
+  
+  return(x)
 }
 
 #' @rdname collapse_to_dyns
 #' @export
-collapse_to_dyns.fit_result <- function(x) {
+collapse_to_dyns.fit_result <- function(x, rm_masked = FALSE) {
   x$res_tab[c(1, 2, 3, 5)] <- 1
   dyns <- nrow(x$res_tab)
   x$res_tab[4] <- 1:dyns

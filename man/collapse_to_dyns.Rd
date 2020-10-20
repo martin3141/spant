@@ -6,14 +6,16 @@
 \alias{collapse_to_dyns.fit_result}
 \title{Collapse MRS data by concatenating spectra along the dynamic dimension.}
 \usage{
-collapse_to_dyns(x)
+collapse_to_dyns(x, rm_masked = FALSE)
 
-\method{collapse_to_dyns}{mrs_data}(x)
+\method{collapse_to_dyns}{mrs_data}(x, rm_masked = FALSE)
 
-\method{collapse_to_dyns}{fit_result}(x)
+\method{collapse_to_dyns}{fit_result}(x, rm_masked = FALSE)
 }
 \arguments{
 \item{x}{data object to be collapsed (mrs_data or fit_result object).}
+
+\item{rm_masked}{remove masked dynamics from the output.}
 }
 \value{
 collapsed data with spectra or fits concatenated along the dynamic
