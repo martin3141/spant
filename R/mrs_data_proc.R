@@ -1904,7 +1904,7 @@ hsvd_filt_vec <- function(fid, fs, region = c(-30, 30), comps = 40,
 #' and timedomain model fitting to exponentially damped magnetic resonance
 #' signals. J Magn Reson 1987;73:553-557.
 #' 
-#' @param y signal to be filtered.
+#' @param y time domain signal to be filtered.
 #' @param fs sampling frequency of y.
 #' @param comps number of Lorentzian components to use for modelling.
 #' @param irlba option to use irlba SVD (logical).

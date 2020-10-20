@@ -7,7 +7,7 @@
 hsvd(y, fs, comps = 40, irlba = TRUE, max_damp = 10)
 }
 \arguments{
-\item{y}{signal to be filtered.}
+\item{y}{time domain signal to be filtered.}
 
 \item{fs}{sampling frequency of y.}
 
