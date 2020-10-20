@@ -1876,6 +1876,7 @@ fd_conv_filt <- function(mrs_data, K = 25, ext = 1) {
 #' @param comps number of Lorentzian components to use for modelling.
 #' @param irlba option to use irlba SVD (logical).
 #' @param max_damp maximum allowable damping factor.
+#' @return filtered data.
 #' @export
 hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE,
                       max_damp = 10) {
@@ -1889,17 +1890,30 @@ hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE,
 hsvd_filt_vec <- function(fid, fs, region = c(-30, 30), comps = 40, 
                           irlba = TRUE, max_damp = 10) {
   
-  hsvd_res <- hsvd(fid, fs, K = comps, irlba)  
+  hsvd_res <- hsvd(fid, fs, comps = comps, irlba)  
   idx <- (hsvd_res$reson_table$frequency < region[2]) &
          (hsvd_res$reson_table$frequency > region[1] )
   model <- rowSums(hsvd_res$basis[,idx])
   fid - model
 }
 
-hsvd <- function(y, fs, K = 40, irlba = TRUE, max_damp = 10) {
+#' HSVD based signal filter.
+#' 
+#' HSVD based signal filter described in:
+#' Barkhuijsen H, de Beer R, van Ormondt D. Improved algorithm for noniterative 
+#' and timedomain model fitting to exponentially damped magnetic resonance
+#' signals. J Magn Reson 1987;73:553-557.
+#' 
+#' @param y signal to be filtered.
+#' @param fs sampling frequency of y.
+#' @param comps number of Lorentzian components to use for modelling.
+#' @param irlba option to use irlba SVD (logical).
+#' @param max_damp maximum allowable damping factor.
+#' @return basis matrix and signal table.
+#' @export
+hsvd <- function(y, fs, comps = 40, irlba = TRUE, max_damp = 10) {
   N <- length(y)
   L <- floor(0.5 * N)
-  # M <- N + 1 - L
   
   # scale the input vector to keep things stable
   sc_factor <- max(Mod(y))
@@ -1910,13 +1924,13 @@ hsvd <- function(y, fs, K = 40, irlba = TRUE, max_damp = 10) {
   H <- H[1:L,]
   
   if (irlba)  {
-    svd_res <- irlba::irlba(H, K)
+    svd_res <- irlba::irlba(H, comps)
   } else {
     svd_res <- svd(H)
   }
   
   # construct H of rank K
-  Uk <- svd_res$u[,1:K]
+  Uk <- svd_res$u[,1:comps]
   rows <- nrow(Uk)
   Ukt <- Uk[2:rows,]
   Ukb <- Uk[1:(rows - 1),]
@@ -1935,12 +1949,12 @@ hsvd <- function(y, fs, K = 40, irlba = TRUE, max_damp = 10) {
   dampings[dampings > max_damp] <- max_damp
   
   t <- seq(from = 0, to = (N - 1) / fs, by = 1 / fs)
-  t_mat <- matrix(t, ncol = K, nrow = N)
+  t_mat <- matrix(t, ncol = comps, nrow = N)
   
   # TODO not sure if the next line is faster
   #basis <- t(exp(t(t_mat) * (dampings + 2i * pi * frequencies)))
   
-  freq_damp <- matrix(dampings + 2i * pi * frequencies, ncol = K, nrow = N,
+  freq_damp <- matrix(dampings + 2i * pi * frequencies, ncol = comps, nrow = N,
                       byrow = TRUE)
   
   basis <- exp(t_mat * freq_damp)
@@ -1949,10 +1963,10 @@ hsvd <- function(y, fs, K = 40, irlba = TRUE, max_damp = 10) {
   
   # Undo scaling
   ahat <- ahat * sc_factor
-  #yhat <- basis%*%ahat 
+  # yhat <- basis %*% ahat 
   
   # scale basis by ahat
-  ahat_mat <- matrix(ahat, ncol = K, nrow = N, byrow = TRUE)
+  ahat_mat <- matrix(ahat, ncol = comps, nrow = N, byrow = TRUE)
   basis <- basis * ahat_mat
   
   # generate a table of resonances
