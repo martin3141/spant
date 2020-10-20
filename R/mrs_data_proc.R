@@ -1924,8 +1924,13 @@ hsvd <- function(y, fs, K = 40, irlba = TRUE) {
   q <- pracma::eig(Zp)
   q <- log(q)
   dt <- 1 / fs
-  dampings <- Re(q) / dt;
-  frequencies <- Im(q)/(2 * pi) / dt;
+  dampings <- Re(q) / dt
+  frequencies <- Im(q)/(2 * pi) / dt
+  
+  # large +ve dampings can cause stability issues where the basis signals
+  # can have values 1e88 at the end of the FID causing ginv to fail
+  # cap these positive dampings to 10
+  dampings[dampings > 10] <- 10
   
   t <- seq(from = 0, to = (N - 1) / fs, by = 1 / fs)
   t_mat <- matrix(t, ncol = K, nrow = N)
