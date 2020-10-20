@@ -1875,17 +1875,19 @@ fd_conv_filt <- function(mrs_data, K = 25, ext = 1) {
 #' @param xlim frequency range in Hz to filter.
 #' @param comps number of Lorentzian components to use for modelling.
 #' @param irlba option to use irlba SVD (logical).
+#' @param max_damp maximum allowable damping factor.
 #' @export
-hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE) {
+hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE,
+                      max_damp = 10) {
   
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
   apply_mrs(mrs_data, 7, hsvd_filt_vec, fs = fs(mrs_data), region = xlim,
-            comps = comps, irlba)
+            comps = comps, irlba, max_damp = max_damp)
 }
 
 hsvd_filt_vec <- function(fid, fs, region = c(-30, 30), comps = 40, 
-                          irlba = TRUE) {
+                          irlba = TRUE, max_damp = 10) {
   
   hsvd_res <- hsvd(fid, fs, K = comps, irlba)  
   idx <- (hsvd_res$reson_table$frequency < region[2]) &
@@ -1894,7 +1896,7 @@ hsvd_filt_vec <- function(fid, fs, region = c(-30, 30), comps = 40,
   fid - model
 }
 
-hsvd <- function(y, fs, K = 40, irlba = TRUE) {
+hsvd <- function(y, fs, K = 40, irlba = TRUE, max_damp = 10) {
   N <- length(y)
   L <- floor(0.5 * N)
   # M <- N + 1 - L
@@ -1929,8 +1931,8 @@ hsvd <- function(y, fs, K = 40, irlba = TRUE) {
   
   # large +ve dampings can cause stability issues where the basis signals
   # can have values 1e88 at the end of the FID causing ginv to fail
-  # cap these positive dampings to 10
-  dampings[dampings > 10] <- 10
+  # cap these positive dampings to max_damp
+  dampings[dampings > max_damp] <- max_damp
   
   t <- seq(from = 0, to = (N - 1) / fs, by = 1 / fs)
   t_mat <- matrix(t, ncol = K, nrow = N)

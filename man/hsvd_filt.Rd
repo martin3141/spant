@@ -4,7 +4,7 @@
 \alias{hsvd_filt}
 \title{HSVD based signal filter.}
 \usage{
-hsvd_filt(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE)
+hsvd_filt(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE, max_damp = 10)
 }
 \arguments{
 \item{mrs_data}{MRS data to be filtered.}
@@ -14,6 +14,8 @@ hsvd_filt(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE)
 \item{comps}{number of Lorentzian components to use for modelling.}
 
 \item{irlba}{option to use irlba SVD (logical).}
+
+\item{max_damp}{maximum allowable damping factor.}
 }
 \description{
 HSVD based signal filter described in:
