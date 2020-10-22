@@ -50,11 +50,10 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
                                   mask_cutoff = 20, interp = 1, mode = "re",
                                   y_scale = FALSE, ylim = NULL, coil = 1) {
   
-  mrs_data <- get_subset(mrs_data, coil_set = coil) # speeds things up
-  
-  if (is.null(map)) map <- int_spec(mrs_data, mode = "mod")
   
   if (class(mrs_data) == "mrs_data") {
+    if (is.null(map)) map <- int_spec(mrs_data, mode = "mod")
+    mrs_data <- get_subset(mrs_data, coil_set = coil) # speeds things up
     x_scale <- ppm(mrs_data)
     input_mrs_data <- TRUE
   } else if (class(mrs_data) == "fit_result") {
