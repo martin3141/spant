@@ -447,3 +447,14 @@ cross <- function(a, b) {
   vec_out <- vec_out / (sum(vec_out ^ 2) ^ 0.5)
   vec_out
 }
+
+#' Create a logical circular mask spanning the full extent of the d x d matrix.
+#' @param d diameter of the mask.
+#' @return logical d x d mask matrix.
+#' @export
+circ_mask <- function(d) {
+  g <- expand.grid(1:d, 1:d)
+  dist <- sqrt((g$Var1 - d / 2 - 0.5) ^ 2 + (g$Var2 - d / 2 - 0.5) ^ 2)
+  dist <- matrix(dist, d, d)
+  return(dist <= d / 2)
+}
