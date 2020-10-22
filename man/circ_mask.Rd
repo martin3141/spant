@@ -2,16 +2,18 @@
 % Please edit documentation in R/utils.R
 \name{circ_mask}
 \alias{circ_mask}
-\title{Create a logical circular mask spanning the full extent of the d x d matrix.}
+\title{Create a logical circular mask spanning the full extent of an n x n matrix.}
 \usage{
-circ_mask(d)
+circ_mask(d, n)
 }
 \arguments{
 \item{d}{diameter of the mask.}
+
+\item{n}{number of matrix rows and columns}
 }
 \value{
-logical d x d mask matrix.
+logical n x n mask matrix.
 }
 \description{
-Create a logical circular mask spanning the full extent of the d x d matrix.
+Create a logical circular mask spanning the full extent of an n x n matrix.
 }
