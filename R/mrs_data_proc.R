@@ -1327,16 +1327,17 @@ mask_xy <- function(mrs_data, x_dim, y_dim) {
 #' @param mrs_data MRS data object.
 #' @param mask matrix of boolean values specifying the voxels to mask, where a
 #' value of TRUE indicates the voxel should be removed.
+#' @param value the value to set masked data to (usually NA or 0).
 #' @return masked dataset.
 #' @export
-mask_xy_mat <- function(mrs_data, mask) {
+mask_xy_mat <- function(mrs_data, mask, value = NA) {
   
   # check the input
   check_mrs_data(mrs_data) 
   
   dim(mask) <- c(1, nrow(mask), ncol(mask), 1, 1, 1, 1)
   mask <- rep_array_dim(mask, 7, Npts(mrs_data))
-  mrs_data$data[mask] <- NA
+  mrs_data$data[mask] <- value
   return(mrs_data)
 }
 

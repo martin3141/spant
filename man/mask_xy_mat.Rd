@@ -4,13 +4,15 @@
 \alias{mask_xy_mat}
 \title{Mask a 2D MRSI dataset in the x-y dimension.}
 \usage{
-mask_xy_mat(mrs_data, mask)
+mask_xy_mat(mrs_data, mask, value = NA)
 }
 \arguments{
 \item{mrs_data}{MRS data object.}
 
 \item{mask}{matrix of boolean values specifying the voxels to mask, where a
 value of TRUE indicates the voxel should be removed.}
+
+\item{value}{the value to set masked data to (usually NA or 0).}
 }
 \value{
 masked dataset.
