@@ -2814,35 +2814,58 @@ lw_obj_fn <- function(lb_val, mrs_data, lw, xlim) {
   Mod(new_lw - lw)
 }
 
+#' Perform l2 regularisation artefact suppression.
+#' 
 #' Perform l2 regularisation artefact suppression using the method proposed by
 #' Bilgic et al. JMRI 40(1):181-91 2014.
 #' @param mrs_data input data for artefact suppression.
-#' @param A matrix of spectral data points containing the artefact basis 
-#' signals.
+#' @param thresh threshold parameter to extract lipid signals from mrs_data
+#' based on the integration of the full spectral width in magnitude mode.
 #' @param b regularisation parameter.
+#' @param A matrix of spectral data points containing the artefact basis 
+#' signals. The thresh parameter is ignored when A is specified.
 #' @return l2 reconstructed mrs_data object.
 #' @export
-l2_reg <- function(mrs_data, A, b) {
+l2_reg <- function(mrs_data, thresh = 0.2, b = 1e-11, A = NA) {
   
   # generally done as a FD operation
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
-  A <- t(A)
-  if (nrow(A) != Npts(mrs_data)) stop("l2 reg. A matrix dimensions do not agree with the input data")
+  # get the data dimensions per coil
+  res_dim <- dim(mrs_data$data)
+  res_dim[6] <- 1
   
-  orig_dim <- dim(mrs_data$data)
+  if (!is.na(A)) {
+    A_coil <- t(A)
+    if (nrow(A_coil) != Npts(mrs_data)) {
+      stop("l2 reg. A matrix dimensions do not agree with the input data")
+    }
+  }
   
-  # original data
-  x0 <- t(mrs_data2mat(mrs_data))
-  
-  # recon. matrix 
-  recon_mat <- solve(diag(nrow(A)) + b * A %*% Conj(t(A)))
-  
-  # recon data
-  x <- recon_mat %*% x0
-  x <- t(x) 
-  dim(x) <- orig_dim
-  mrs_data$data <- x
+  for (coil in 1:Ncoils(mrs_data)) {
+    
+    mrs_data_coil <- get_subset(mrs_data, coil_set = coil)
+    
+    if (is.na(A)) {
+      map <- drop(int_spec(mrs_data_coil, mode = "mod"))
+      map_bool <- map > (max(map) * thresh)
+      mrsi_mask <- mask_xy_mat(mrs_data_coil, mask = !map_bool)
+      A_coil <- t(stats::na.omit(mrs_data2mat(mrsi_mask)))
+    }
+    
+    # original data as a matrix
+    x0 <- t(mrs_data2mat(mrs_data_coil))
+    
+    # recon. matrix 
+    recon_mat <- solve(diag(nrow(A_coil)) + b * A_coil %*% Conj(t(A_coil)))
+    
+    # recon data
+    x <- recon_mat %*% x0
+    x <- t(x) 
+    dim(x) <- res_dim
+    mrs_data$data[,,,,,coil,] <- x
+  }
+    
   return(mrs_data)
 }
 
@@ -2859,7 +2882,8 @@ l2_reg <- function(mrs_data, A, b) {
 #' @return lipid suppressed \code{mrs_data} object.
 #' @export
 ssp <- function(mrs_data, comps = 5, xlim = c(1.5, 0.8)) {
-   # needs to be a FD operation
+  
+  # normally a FD operation
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
   # chop out the lipid region
@@ -2868,9 +2892,6 @@ ssp <- function(mrs_data, comps = 5, xlim = c(1.5, 0.8)) {
   # get the data dimensions per coil
   res_dim <- dim(mrs_data$data)
   res_dim[6] <- 1
-  
-  # this is where the results go
-  mrs_data_ssp <- mrs_data
   
   for (coil in 1:Ncoils(mrs_data)) {
     # extract the lipid region
@@ -2889,8 +2910,10 @@ ssp <- function(mrs_data, comps = 5, xlim = c(1.5, 0.8)) {
     
     # restructure back into an mrs_data object
     dim(D_supp) <- res_dim
-    mrs_data_ssp$data[,,,,,coil,] <- D_supp
+    
+    # replace the input data points
+    mrs_data$data[,,,,,coil,] <- D_supp
   }
   
-  return(mrs_data_ssp)
+  return(mrs_data)
 }
