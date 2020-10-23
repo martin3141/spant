@@ -2845,3 +2845,40 @@ l2_reg <- function(mrs_data, A, b) {
   mrs_data$data <- x
   return(mrs_data)
 }
+
+#' Signal space projection method for lipid suppression.
+#' 
+#' Signal space projection method as described in:
+#' Tsai SY, Lin YR, Lin HY, Lin FH. Reduction of lipid contamination in MR
+#' spectroscopy imaging using signal space projection. Magn Reson Med 2019
+#' Mar;81(3):1486-1498.
+#' 
+#' @param mrs_data MRS data object.
+#' @param comps the number of spatial components to use.
+#' @param xlim spectral range (in ppm) covering the lipid signals.
+#' @return lipid suppressed \code{mrs_data} object.
+#' @export
+ssp <- function(mrs_data, comps = 5, xlim = c(1.5, 0.8)) {
+   # needs to be a FD operation
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  # chop out the lipid region and collapse to a matrix
+  D_ol <- mrs_data2mat(crop_spec(mrs_data, xlim))
+  
+  # SVD
+  svd_res <- svd(D_ol)
+  
+  # get the top spatial components
+  U_m <- svd_res$u[,1:comps]
+  
+  # remove the lipids from the input
+  D_ori <- mrs_data2mat(mrs_data)
+  P <- diag(Npts(mrs_data)) - U_m %*% Conj(t(U_m))
+  D_supp <- P %*% D_ori
+  
+  # restructure back into an mrs_data object
+  dim(D_supp) <- dim(mrs_data$data)
+  D_supp_mrs <- mrs_data
+  D_supp_mrs$data <- D_supp
+  return(D_supp_mrs)
+}
