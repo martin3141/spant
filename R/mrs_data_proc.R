@@ -2862,23 +2862,35 @@ ssp <- function(mrs_data, comps = 5, xlim = c(1.5, 0.8)) {
    # needs to be a FD operation
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
-  # chop out the lipid region and collapse to a matrix
-  D_ol <- mrs_data2mat(crop_spec(mrs_data, xlim))
+  # chop out the lipid region
+  D_ol_mrs <- crop_spec(mrs_data, xlim)
   
-  # SVD
-  svd_res <- svd(D_ol)
+  # get the data dimensions per coil
+  res_dim <- dim(mrs_data$data)
+  res_dim[6] <- 1
   
-  # get the top spatial components
-  U_m <- svd_res$u[,1:comps]
+  # this is where the results go
+  mrs_data_ssp <- mrs_data
   
-  # remove the lipids from the input
-  D_ori <- mrs_data2mat(mrs_data)
-  P <- diag(Npts(mrs_data)) - U_m %*% Conj(t(U_m))
-  D_supp <- P %*% D_ori
+  for (coil in 1:Ncoils(mrs_data)) {
+    # extract the lipid region
+    D_ol <- mrs_data2mat(get_subset(D_ol_mrs, coil_set = coil))
+    
+    # SVD
+    svd_res <- svd(D_ol)
+    
+    # get the top spatial components
+    U_m <- svd_res$u[,1:comps]
+    
+    # remove the lipids from the input
+    D_ori <- mrs_data2mat(get_subset(mrs_data, coil_set = coil))
+    P <- diag(Npts(mrs_data)) - U_m %*% Conj(t(U_m))
+    D_supp <- P %*% D_ori
+    
+    # restructure back into an mrs_data object
+    dim(D_supp) <- res_dim
+    mrs_data_ssp$data[,,,,,coil,] <- D_supp
+  }
   
-  # restructure back into an mrs_data object
-  dim(D_supp) <- dim(mrs_data$data)
-  D_supp_mrs <- mrs_data
-  D_supp_mrs$data <- D_supp
-  return(D_supp_mrs)
+  return(mrs_data_ssp)
 }
