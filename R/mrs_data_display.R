@@ -52,6 +52,10 @@ print.mrs_data <- function(x, full = FALSE, ...) {
 #' been made.
 #' @param mar option to adjust the plot margins. See ?par.
 #' @param xaxis_lab x-axis label.
+#' @param xat x-axis tick label values.
+#' @param xlabs x-axis tick labels.
+#' @param yat y-axis tick label values.
+#' @param ylabs y-axis tick labels.
 #' @param ... other arguments to pass to the plot method.
 #' @export
 plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
@@ -59,7 +63,8 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
                           y_scale = FALSE, x_ax = TRUE, mode = "re",
                           lwd = NULL, bty = NULL, label = "",
                           restore_def_par = TRUE, mar = NULL,
-                          xaxis_lab = NULL, ...) {
+                          xaxis_lab = NULL, xat = NULL, xlabs = TRUE,
+                          yat = NULL, ylabs = TRUE, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
  
@@ -144,7 +149,7 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
     graphics::plot(x_scale[subset], plot_data[subset], type = 'l', xlim = xlim, 
                    xlab = xlab, ylab = "Intensity (au)", lwd = lwd, bty = bty, 
                    xaxt = "n", yaxt = "n", ...)
-    graphics::axis(2, lwd = 0, lwd.ticks = 1)
+    graphics::axis(2, lwd = 0, lwd.ticks = 1, at = yat, labels = ylabs)
   } else {
     if (is.null(mar)) graphics::par(mar = c(3.5, 1, 1, 1))
     graphics::plot(x_scale[subset], plot_data[subset], type = 'l', xlim = xlim,
@@ -152,11 +157,9 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
          ...)
   }
   
-  if (x_ax) graphics::axis(1, lwd = 0, lwd.ticks = 1)
+  if (x_ax) graphics::axis(1, lwd = 0, lwd.ticks = 1, at = xat, labels = xlabs)
   
-  if (bty == "n") {
-    graphics::abline(h = graphics::par("usr")[3]) 
-  }
+  if (bty == "n") graphics::abline(h = graphics::par("usr")[3]) 
   
   if (!is.null(label)) {
     max_dp <- max(plot_data[subset])
@@ -600,4 +603,56 @@ plot_slice_map <- function(data, zlim = NULL, mask_map = NULL,
     
     #image(data, col = viridis::viridisLite(128), useRaster = T, asp = 1, axes = F)
   }
+}
+
+#' Arrange spectral plots in a grid.
+#' @param x object for plotting.
+#' @param ... arguments to be passed to methods.
+#' @export
+gridplot <- function(x, ...) {
+  UseMethod("gridplot", x)
+}
+
+#' Arrange spectral plots in a grid.
+#' @param x object of class mrs_data.
+#' @param rows number of grid rows.
+#' @param cols number of grid columns.
+#' @param mar option to adjust the plot margins. See ?par.
+#' @param oma outer margin area.
+#' @param bty option to draw a box around the plot. See ?par.
+#' @param restore_def_par restore default plotting par values after the plot has 
+#' been made.
+#' @param ... other arguments to pass to the plot method.
+#' @export
+gridplot.mrs_data <- function(x, rows, cols, mar = c(0, 0, 0, 0),
+                              oma = c(3.5, 1, 1, 1), bty = "o",
+                              restore_def_par = TRUE, ...) {
+  
+  .pardefault <- graphics::par(no.readonly = T)
+  
+  graphics::par(mfrow = c(rows, cols), oma = oma)
+  mrs_data_dyns <- collapse_to_dyns(x)
+  
+  if (Ndyns(mrs_data_dyns) != rows * cols) {
+    warning("number of spectra does not match the specified number of rows and cols")
+    if (Ndyns(mrs_data_dyns) > rows * cols) {
+      mrs_data_dyns <- get_dyns(mrs_data_dyns, 1:(rows*cols))
+    }
+  }
+  
+  for (n in 1:Ndyns(mrs_data_dyns)) {
+    if (n > (rows*cols - cols)) {
+      x_ax = TRUE
+    } else {
+      x_ax = FALSE
+    }
+      
+    plot(mrs_data_dyns, restore_def_par = FALSE, dyn = n, mar = mar, bty = bty,
+         x_ax = x_ax, ...)
+  }
+  
+  graphics::mtext(text="Chemical shift (ppm)", side=1, line=1.8, outer=TRUE,
+                  cex = 0.8)
+  
+  if (restore_def_par) graphics::par(.pardefault)
 }

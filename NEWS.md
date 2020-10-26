@@ -5,7 +5,8 @@ AppVeyor.
 * Added precomp function to avoid repeated computation.
 * mrs_data2mat function now collapses all dimensions to dynamics by default.
 * mrs_data objects now store the nucleus.
-* Bug fixes for NIFTI MRS reader and writer.
+* Bug fixes and updates for NIFTI MRS reader and writer.
+* Added gridplot function.
 
 # spant 1.7.0
 * Added write_mrs function which guesses the output format from the file

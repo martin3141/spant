@@ -23,6 +23,10 @@
   restore_def_par = TRUE,
   mar = NULL,
   xaxis_lab = NULL,
+  xat = NULL,
+  xlabs = TRUE,
+  yat = NULL,
+  ylabs = TRUE,
   ...
 )
 }
@@ -66,6 +70,14 @@ been made.}
 \item{mar}{option to adjust the plot margins. See ?par.}
 
 \item{xaxis_lab}{x-axis label.}
+
+\item{xat}{x-axis tick label values.}
+
+\item{xlabs}{x-axis tick labels.}
+
+\item{yat}{y-axis tick label values.}
+
+\item{ylabs}{y-axis tick labels.}
 
 \item{...}{other arguments to pass to the plot method.}
 }
