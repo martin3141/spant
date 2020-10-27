@@ -4,7 +4,7 @@
 \alias{l2_reg}
 \title{Perform l2 regularisation artefact suppression.}
 \usage{
-l2_reg(mrs_data, thresh = 0.2, b = 1e-11, A = NA)
+l2_reg(mrs_data, thresh = 0.2, b = 1e-11, A = NA, xlim = NA)
 }
 \arguments{
 \item{mrs_data}{input data for artefact suppression.}
@@ -16,6 +16,9 @@ based on the integration of the full spectral width in magnitude mode.}
 
 \item{A}{matrix of spectral data points containing the artefact basis
 signals. The thresh parameter is ignored when A is specified.}
+
+\item{xlim}{spectral limits in ppm to restrict the reconstruction range.
+Defaults to the full spectral width.}
 }
 \value{
 l2 reconstructed mrs_data object.

@@ -2230,6 +2230,7 @@ comb_coils_fp_pc <- function(metab, ref = NULL, sum_coils = TRUE,
   if (sum_coils) metab <- sum_coils(metab)
   
   if (ret_ref) {
+    if (Npts(ref) != Npts(metab)) mult_full <- rep_array_dim(mult, 7, Npts(ref))
     ref$data <- ref$data * mult_full 
     if (sum_coils) ref <- sum_coils(ref)
     return(list(metab = metab, ref = ref))
@@ -2824,12 +2825,17 @@ lw_obj_fn <- function(lb_val, mrs_data, lw, xlim) {
 #' @param b regularisation parameter.
 #' @param A matrix of spectral data points containing the artefact basis 
 #' signals. The thresh parameter is ignored when A is specified.
+#' @param xlim spectral limits in ppm to restrict the reconstruction range.
+#' Defaults to the full spectral width.
 #' @return l2 reconstructed mrs_data object.
 #' @export
-l2_reg <- function(mrs_data, thresh = 0.2, b = 1e-11, A = NA) {
+l2_reg <- function(mrs_data, thresh = 0.2, b = 1e-11, A = NA, xlim = NA) {
   
   # generally done as a FD operation
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  # crop mrs_data to xlim if specified
+  if (!anyNA(xlim)) mrs_data <- crop_spec(mrs_data, xlim)
   
   # get the data dimensions per coil
   res_dim <- dim(mrs_data$data)
