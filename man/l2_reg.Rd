@@ -14,8 +14,8 @@ based on the integration of the full spectral width in magnitude mode.}
 
 \item{b}{regularisation parameter.}
 
-\item{A}{matrix of spectral data points containing the artefact basis
-signals. The thresh parameter is ignored when A is specified.}
+\item{A}{set of spectra containing the artefact basis signals. The thresh
+parameter is ignored when A is specified.}
 
 \item{xlim}{spectral limits in ppm to restrict the reconstruction range.
 Defaults to the full spectral width.}
