@@ -3,7 +3,15 @@
 #' @param ... arguments to pass to molecule definition function.
 #' @export
 get_mol_paras <- function(name, ...) {
-  get(paste("get_", tolower(name), "_paras", sep = ""))(...)
+  if (length(name) == 1) {
+    return(get(paste("get_", tolower(name), "_paras", sep = ""))(...))
+  } else {
+    out <- vector(mode = "list", length = length(name))
+    for (n in 1:length(name)) {
+      out[[n]] <- get(paste("get_", tolower(name[n]), "_paras", sep = ""))(...)
+    }
+    return(out)
+  }
 }
 
 #' Return a character array of names that may be used with the 
@@ -15,7 +23,8 @@ get_mol_names <- function() {
   funs <- funs[!funs %in% c("get_mol_paras", "get_acq_paras",
                             "get_1h_brain_basis_paras",
                             "get_1h_brain_basis_paras_v1",
-                            "get_1h_brain_basis_paras_v2")]
+                            "get_1h_brain_basis_paras_v2",
+                            "get_1h_brain_basis_paras_v3")]
   
   sub("_paras", "", sub("get_", "", funs[grep("get_.*_paras", funs)]))
 }
@@ -71,7 +80,7 @@ print.mol_parameters <- function(x, ...) {
   }
 }
 
-get_m_cr_ch2_paras <- function(lw = NULL, lg = 0) {
+get_m_cr_ch2_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   paras <- get_uncoupled_mol("-CrCH2", 3.913, "1H", -2, lw, lg)
   source <- "Proton NMR chemical shifts and coupling constants for brain metabolites.
@@ -80,7 +89,7 @@ get_m_cr_ch2_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_ala_paras <- function(lw = NULL, lg = 0) {
+get_ala_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 4)
   chem_shift <- c(3.7746, 1.4667, 1.4667, 1.4667)
@@ -104,7 +113,7 @@ get_ala_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_asc_paras <- function(lw = NULL, lg = 0) {
+get_asc_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 4)
   chem_shift <- c(4.4965, 4.0072, 3.7469, 3.7194)
@@ -126,7 +135,7 @@ get_asc_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_asp_paras <- function(lw = NULL, lg = 0) {
+get_asp_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 3)
   chem_shift <- c(3.8914, 2.8011, 2.6533)
@@ -147,7 +156,7 @@ get_asp_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_cho_paras <- function(lw = NULL, lg = 0) {
+get_cho_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- c("1H", "14N")
   chem_shift <- c(3.185, 0)
@@ -183,7 +192,7 @@ get_cho_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_cr_paras <- function(lw = NULL, lg = 0) {
+get_cr_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   paras <- get_uncoupled_mol("Cr", 3.027, "1H", 3, lw, lg)
   paras_b <- get_uncoupled_mol("Cr", 3.913, "1H", 2, lw, lg)
@@ -196,7 +205,7 @@ get_cr_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_cr_ch2_paras <- function(lw = NULL, lg = 0) {
+get_cr_ch2_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   paras <- get_uncoupled_mol("CrCH2", 3.913, "1H", 2, lw, lg)
   
@@ -207,7 +216,7 @@ get_cr_ch2_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_cr_ch3_paras <- function(lw = NULL, lg = 0) {
+get_cr_ch3_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   paras <- get_uncoupled_mol("CrCH3", 3.027, "1H", 3, lw, lg)
   
@@ -218,7 +227,7 @@ get_cr_ch3_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_gaba_paras <- function(lw = NULL, lg = 0) {
+get_gaba_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 6)
   chem_shift <- c(3.0128, 3.0128, 1.889, 1.889, 2.284, 2.284)
@@ -247,7 +256,7 @@ get_gaba_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_gaba_rt_paras <- function(lw = NULL, lg = 0) {
+get_gaba_rt_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 6)
   #chem_shift <- c(3.0128, 3.0128, 1.889, 1.889, 2.284, 2.284)
@@ -278,7 +287,7 @@ get_gaba_rt_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_gaba_jn_paras <- function(lw = NULL, lg = 0) {
+get_gaba_jn_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 6)
   chem_shift <- c(2.2840, 2.2840, 1.8880, 1.8880, 3.0130, 3.0130)
@@ -308,7 +317,7 @@ get_gaba_jn_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_gln_paras <- function(lw = NULL, lg = 0) {
+get_gln_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 5)
   chem_shift <- c(3.753, 2.129, 2.109, 2.432, 2.454)
@@ -334,7 +343,7 @@ get_gln_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_gsh_paras <- function(lw = NULL, lg = 0) {
+get_gsh_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- c("1H")
   chem_shift <- c(3.769)
@@ -378,7 +387,7 @@ get_gsh_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_gly_paras <- function(lw = NULL, lg = 0) {
+get_gly_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   paras <- get_uncoupled_mol("Gly", 3.548, "1H", 2, lw, lg)
   
@@ -389,7 +398,7 @@ get_gly_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_bhb_paras <- function(lw = NULL, lg = 0) {
+get_bhb_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 0.5
   nucleus <- rep("1H", 6)
   chem_shift <- c(2.388, 2.294, 4.133, 1.186, 1.186, 1.186)
@@ -413,7 +422,7 @@ get_bhb_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_ins_paras <- function(lw = NULL, lg = 0) {
+get_ins_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 0.5
   nucleus <- rep("1H", 6)
   chem_shift <- c(3.5217, 4.0538, 3.5217, 3.6144, 3.269, 3.6144)
@@ -437,7 +446,7 @@ get_ins_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_ins_rt_paras <- function(lw = NULL, lg = 0) {
+get_ins_rt_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 0.5
   nucleus <- rep("1H", 6)
   chem_shift <- c(3.5217, 4.0538, 3.5217, 3.608, 3.265, 3.608)
@@ -462,25 +471,25 @@ get_ins_rt_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_lip09_paras <- function(ft) {
+get_lip09_paras <- function(ft, ...) {
   paras <- get_uncoupled_mol("Lip09", 0.89, "1H", 3, 0.14 * ft / 1e6, 1)
   paras$source <- "LCModel manual."
   paras
 }
 
-get_lip13a_paras <- function(ft) {
+get_lip13a_paras <- function(ft, ...) {
   paras <- get_uncoupled_mol("Lip13a", 1.28, "1H", 2, 0.15 * ft / 1e6, 1)
   paras$source <- "LCModel manual."
   paras
 }
 
-get_lip13b_paras <- function(ft) {
+get_lip13b_paras <- function(ft, ...) {
   paras <- get_uncoupled_mol("Lip13b", 1.28, "1H", 2, 0.089 * ft / 1e6, 1)
   paras$source <- "LCModel manual."
   paras
 }
 
-get_lip20_paras <- function(ft) {
+get_lip20_paras <- function(ft, ...) {
   paras <- get_uncoupled_mol("Lip20", 2.04, "1H", 1.33, 0.15 * ft / 1e6, 1)
   paras_b <- get_uncoupled_mol("Lip20", 2.25, "1H", 0.67, 0.15 * ft / 1e6, 1)
   paras_c <- get_uncoupled_mol("Lip20", 2.8, "1H", 0.87, 0.2 * ft / 1e6, 1)
@@ -490,31 +499,31 @@ get_lip20_paras <- function(ft) {
   paras
 }
 
-get_mm09_paras <- function(ft) {
+get_mm09_paras <- function(ft, ...) {
   paras <- get_uncoupled_mol("MM09", 0.91, "1H", 3, 0.14 * ft / 1e6, 1)
   paras$source <- "LCModel manual."
   paras
 }
 
-get_mm12_paras <- function(ft) {
+get_mm12_paras <- function(ft, ...) {
   paras <- get_uncoupled_mol("MM12", 1.21, "1H", 2, 0.15 * ft / 1e6, 1)
   paras$source <- "LCModel manual."
   paras
 }
 
-get_mm14_paras <- function(ft) {
+get_mm14_paras <- function(ft, ...) {
   paras <- get_uncoupled_mol("MM14", 1.43, "1H", 2, 0.17 * ft / 1e6, 1)
   paras$source <- "LCModel manual."
   paras
 }
 
-get_mm17_paras <- function(ft) {
+get_mm17_paras <- function(ft, ...) {
   paras <- get_uncoupled_mol("MM17", 1.67, "1H", 2, 0.15 * ft / 1e6, 1)
   paras$source <- "LCModel manual."
   paras
 }
 
-get_mm20_paras <- function(ft) {
+get_mm20_paras <- function(ft, ...) {
   paras <- get_uncoupled_mol("MM20", 2.08, "1H", 1.33, 0.15 * ft / 1e6, 1)
   paras_b <- get_uncoupled_mol("MM20", 2.25, "1H", 0.33, 0.2 * ft / 1e6, 1)
   paras_c <- get_uncoupled_mol("MM20", 1.95, "1H", 0.33, 0.15 * ft / 1e6, 1)
@@ -526,7 +535,7 @@ get_mm20_paras <- function(ft) {
   paras
 }
 
-get_mm_3t_paras <- function(ft) {
+get_mm_3t_paras <- function(ft, ...) {
   paras   <- get_uncoupled_mol("MM", 0.90, "1H", 0.72, 21.20 / 128 * ft / 1e6, 1)
   paras_b <- get_uncoupled_mol("MM", 1.21, "1H", 0.28, 19.16 / 128 * ft / 1e6, 1)
   paras_c <- get_uncoupled_mol("MM", 1.38, "1H", 0.38, 15.90 / 128 * ft / 1e6, 1)
@@ -556,7 +565,7 @@ get_mm_3t_paras <- function(ft) {
   paras
 }
 
-get_naa_paras <- function(lw = NULL, lg = 0) {
+get_naa_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 0.5
   nucleus <- c("1H")
   chem_shift <- c(2.008)
@@ -584,7 +593,7 @@ get_naa_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_naa_rt_paras <- function(lw = NULL, lg = 0) {
+get_naa_rt_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 0.5
   nucleus <- c("1H")
   chem_shift <- c(2.008)
@@ -614,7 +623,7 @@ get_naa_rt_paras <- function(lw = NULL, lg = 0) {
 }
 
 # as above with the 7.82 resonance - that doesn't influence the upfield multiplets
-get_naa2_paras <- function(lw = NULL, lg = 0) {
+get_naa2_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 0.5
   nucleus <- c("1H")
   chem_shift <- c(2.008)
@@ -643,7 +652,7 @@ get_naa2_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_naag_ch3_paras <- function(lw = NULL, lg = 0) {
+get_naag_ch3_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 0.5
   paras <- get_uncoupled_mol("NAAG", 2.042, "1H", 3, lw, lg)
   
@@ -654,7 +663,7 @@ get_naag_ch3_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_naag_paras <- function(lw = NULL, lg = 0) {
+get_naag_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 0.5
   nucleus <- c("1H")
   chem_shift <- c(2.042)
@@ -700,7 +709,7 @@ get_naag_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_pch_paras <- function(lw = NULL, lg = 0) {
+get_pch_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- c("1H")
   chem_shift <- c(3.208)
@@ -737,7 +746,7 @@ get_pch_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_pcr_paras <- function(lw = NULL, lg = 0) {
+get_pcr_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   paras <- get_uncoupled_mol("PCr", 3.029, "1H", 3, lw, lg)
   paras_b <- get_uncoupled_mol("PCr", 3.930, "1H", 2, lw, lg)
@@ -750,7 +759,7 @@ get_pcr_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_peth_paras <- function(lw = NULL, lg = 0) {
+get_peth_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- c("1H", "1H", "1H", "1H", "31P", "14N")
   chem_shift <- c(3.9765, 3.9765, 3.216, 3.216, 0, 0)
@@ -777,7 +786,7 @@ get_peth_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_ser_paras <- function(lw = NULL, lg = 0) {
+get_ser_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 3)
   chem_shift <- c(3.8347, 3.9379, 3.9764)
@@ -798,7 +807,7 @@ get_ser_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_sins_paras <- function(lw = NULL, lg = 0) {
+get_sins_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   paras <- get_uncoupled_mol("sIns", 3.34, "1H", 6, lw, lg)
   
@@ -809,7 +818,7 @@ get_sins_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_suc_paras <- function(lw = NULL, lg = 0) {
+get_suc_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   paras <- get_uncoupled_mol("Suc", 2.3920, "1H", 4, lw, lg)
   
@@ -820,7 +829,7 @@ get_suc_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_tau_paras <- function(lw = NULL, lg = 0) {
+get_tau_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 4)
   chem_shift <- c(3.4206, 3.4206, 3.2459, 3.2459)
@@ -844,7 +853,7 @@ get_tau_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_lac_paras <- function(lw = NULL, lg = 0) {
+get_lac_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 4)
   chem_shift <- c(4.0974, 1.3142, 1.3142, 1.3142)
@@ -865,7 +874,7 @@ get_lac_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_lac_rt_paras <- function(lw = NULL, lg = 0) {
+get_lac_rt_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 4)
   chem_shift <- c(4.0974, 1.3142, 1.3142, 1.3142)
@@ -888,7 +897,7 @@ get_lac_rt_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_glu_paras <- function(lw = NULL, lg = 0) {
+get_glu_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 5)
   chem_shift <- c(3.7433, 2.0375, 2.1200, 2.3378, 2.352)
@@ -914,7 +923,7 @@ get_glu_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_glu_rt_paras <- function(lw = NULL, lg = 0) {
+get_glu_rt_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 5)
   chem_shift <- c(3.75, 2.0475, 2.1200, 2.3378, 2.352)
@@ -941,7 +950,7 @@ get_glu_rt_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_a_glc_paras <- function(lw = NULL, lg = 0) {
+get_a_glc_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 7)
   chem_shift <- c(5.216, 3.519, 3.698, 3.395, 3.822, 3.826, 3.749)
@@ -966,7 +975,7 @@ get_a_glc_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_b_glc_paras <- function(lw = NULL, lg = 0) {
+get_b_glc_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 7)
   chem_shift <- c(4.630, 3.230, 3.473, 3.387, 3.450, 3.882, 3.707)
@@ -991,7 +1000,7 @@ get_b_glc_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_glc_paras <- function(lw = NULL, lg = 0) {
+get_glc_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 7)
   chem_shift <- c(5.216, 3.519, 3.698, 3.395, 3.822, 3.826, 3.749)
@@ -1032,7 +1041,7 @@ get_glc_paras <- function(lw = NULL, lg = 0) {
   paras
 }
 
-get_gpc_paras <- function(lw = NULL, lg = 0) {
+get_gpc_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- c("1H")
   chem_shift <- c(3.212)
