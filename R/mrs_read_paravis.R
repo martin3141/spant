@@ -7,7 +7,7 @@ read_paravis_raw <- function(fname) {
     stop("method file not found.")
   }
   
-  # read paramters
+  # read parameters
   lines <- utils::read.delim(method_fname, sep = "=", header = FALSE, 
                       stringsAsFactors = FALSE)
   

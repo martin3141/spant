@@ -2,8 +2,8 @@
 #' @param fname filename of the dpt format MRS data.
 #' @param format string describing the data format. Must be one of the 
 #' following : "spar_sdat", "rda", "ima", "twix", "pfile", "list_data",
-#' "paravis", "dpt", "lcm_raw", "rds", "nifti". If not specified, the format
-#' will be guessed from the filename extension.
+#' "paravis", "dpt", "lcm_raw", "rds", "nifti", "varian". If not specified,
+#' the format will be guessed from the filename extension.
 #' @param ft transmitter frequency in Hz (required for list_data format).
 #' @param fs sampling frequency in Hz (required for list_data format).
 #' @param ref reference value for ppm scale (required for list_data format).
@@ -54,6 +54,8 @@ read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
     return(mrs_data)
   } else if (format == "nifti") {
     return(read_mrs_nifti(fname))
+  } else if (format == "varian") {
+    return(read_varian(fname))
   } else {
     stop("Unrecognised file format.")
   }
@@ -86,6 +88,8 @@ guess_mrs_format <- function(fname) {
     format <- "rds"
   } else if (stringr::str_ends(fname_low, ".raw")) {
     format <- "lcm_raw"
+  } else if (basename(fname_low) == "fid") {
+    format <- "varian"
   } else {
     stop("Could not guess the MRS format, please specify the format argument.")
   }
