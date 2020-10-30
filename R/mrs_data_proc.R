@@ -25,12 +25,14 @@ check_mrs_data <- function(mrs_data) {
 #' Hz are assumed.
 #' @param acq_paras list of acquisition parameters. See
 #' \code{\link{def_acq_paras}}
+#' @param fp_scale multiply the first data point by 0.5.
 #' @return MRS data object.
 #' @examples
 #' sim_data <- sim_resonances(freq = 2, lw = 5)
 #' @export
 sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0, 
-                           freq_ppm = TRUE, acq_paras = def_acq_paras()) {
+                           freq_ppm = TRUE, acq_paras = def_acq_paras(),
+                           fp_scale = TRUE) {
   
   # TODO check this works for vectors
   #if ((sum(lg > 1) + sum(lg < 0)) > 0) {
@@ -78,7 +80,7 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
   }
   
   # first point correction
-  data[1] <- data[1] * 0.5
+  if (fp_scale) data[1] <- data[1] * 0.5
   
   #if (lg < 1) {
   #  mrs_data$data = mrs_data$data*exp(-(1-lg)*lb*t*pi)
@@ -1891,28 +1893,47 @@ hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE,
 hsvd_filt_vec <- function(fid, fs, region = c(-30, 30), comps = 40, 
                           irlba = TRUE, max_damp = 10) {
   
-  hsvd_res <- hsvd(fid, fs, comps = comps, irlba)  
+  hsvd_res <- hsvd_vec(fid, fs, comps = comps, irlba)  
   idx <- (hsvd_res$reson_table$frequency < region[2]) &
          (hsvd_res$reson_table$frequency > region[1] )
   model <- rowSums(hsvd_res$basis[,idx])
   fid - model
 }
 
-#' HSVD based signal filter.
+
+#' HSVD of an mrs_data object.
 #' 
-#' HSVD based signal filter described in:
+#' HSVD method as described in:
 #' Barkhuijsen H, de Beer R, van Ormondt D. Improved algorithm for noniterative 
 #' and timedomain model fitting to exponentially damped magnetic resonance
 #' signals. J Magn Reson 1987;73:553-557.
 #' 
-#' @param y time domain signal to be filtered.
+#' @param mrs_data mrs_data object to be decomposed.
+#' @param comps number of Lorentzian components to use for modelling.
+#' @param irlba option to use irlba SVD (logical).
+#' @param max_damp maximum allowable damping factor.
+#' @return basis matrix and signal table.
+#' @export
+hsvd <- function(mrs_data, comps = 40, irlba = TRUE, max_damp = 10) {
+  hsvd_vec(mrs_data2vec(mrs_data), fs = fs(mrs_data), comps = comps,
+           irlba = irlba, max_damp = max_damp)
+}
+
+#' HSVD of a complex vector.
+#' 
+#' HSVD method as described in:
+#' Barkhuijsen H, de Beer R, van Ormondt D. Improved algorithm for noniterative 
+#' and timedomain model fitting to exponentially damped magnetic resonance
+#' signals. J Magn Reson 1987;73:553-557.
+#' 
+#' @param y time domain signal to be filtered as a vector.
 #' @param fs sampling frequency of y.
 #' @param comps number of Lorentzian components to use for modelling.
 #' @param irlba option to use irlba SVD (logical).
 #' @param max_damp maximum allowable damping factor.
 #' @return basis matrix and signal table.
 #' @export
-hsvd <- function(y, fs, comps = 40, irlba = TRUE, max_damp = 10) {
+hsvd_vec <- function(y, fs, comps = 40, irlba = TRUE, max_damp = 10) {
   N <- length(y)
   L <- floor(0.5 * N)
   
@@ -2922,4 +2943,19 @@ ssp <- function(mrs_data, comps = 5, xlim = c(1.5, 0.8)) {
   }
   
   return(mrs_data)
+}
+
+#' Generate mrs_data from a table of single Lorentzian resonances.
+#' @param reson_table as produced by the hsvd function.
+#' @param acq_paras list of acquisition parameters. See
+#' \code{\link{def_acq_paras}}
+#' @return mrs_data object.
+#' @export
+reson_table2mrs_data <- function(reson_table, acq_paras = def_acq_paras()) {
+  
+  if (class(acq_paras) == "mrs_data") acq_paras <- get_acq_paras(acq_paras)
+  
+  sim_resonances(freq = reson_table$frequency, amp = reson_table$amplitude,
+                 phase = reson_table$phase, lw = -reson_table$damping / pi,
+                 freq_ppm = FALSE, acq_paras = acq_paras, fp_scale = FALSE)
 }

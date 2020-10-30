@@ -647,8 +647,8 @@ gridplot.mrs_data <- function(x, rows, cols, mar = c(0, 0, 0, 0),
       x_ax = FALSE
     }
       
-    plot(mrs_data_dyns, restore_def_par = FALSE, dyn = n, mar = mar, bty = bty,
-         x_ax = x_ax, ...)
+    graphics::plot(mrs_data_dyns, restore_def_par = FALSE, dyn = n, mar = mar,
+                   bty = bty, x_ax = x_ax, ...)
   }
   
   graphics::mtext(text="Chemical shift (ppm)", side=1, line=1.8, outer=TRUE,

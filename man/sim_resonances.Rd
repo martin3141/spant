@@ -11,7 +11,8 @@ sim_resonances(
   lg = 0,
   phase = 0,
   freq_ppm = TRUE,
-  acq_paras = def_acq_paras()
+  acq_paras = def_acq_paras(),
+  fp_scale = TRUE
 )
 }
 \arguments{
@@ -30,6 +31,8 @@ Hz are assumed.}
 
 \item{acq_paras}{list of acquisition parameters. See
 \code{\link{def_acq_paras}}}
+
+\item{fp_scale}{multiply the first data point by 0.5.}
 }
 \value{
 MRS data object.
