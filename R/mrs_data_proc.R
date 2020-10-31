@@ -1894,8 +1894,8 @@ hsvd_filt_vec <- function(fid, fs, region = c(-30, 30), comps = 40,
                           irlba = TRUE, max_damp = 10) {
   
   hsvd_res <- hsvd_vec(fid, fs, comps = comps, irlba)  
-  idx <- (hsvd_res$reson_table$frequency < region[2]) &
-         (hsvd_res$reson_table$frequency > region[1] )
+  idx <- (hsvd_res$reson_table$frequency_hz < region[2]) &
+         (hsvd_res$reson_table$frequency_hz > region[1] )
   model <- rowSums(hsvd_res$basis[,idx])
   fid - model
 }
@@ -1915,8 +1915,12 @@ hsvd_filt_vec <- function(fid, fs, region = c(-30, 30), comps = 40,
 #' @return basis matrix and signal table.
 #' @export
 hsvd <- function(mrs_data, comps = 40, irlba = TRUE, max_damp = 10) {
-  hsvd_vec(mrs_data2vec(mrs_data), fs = fs(mrs_data), comps = comps,
-           irlba = irlba, max_damp = max_damp)
+  res <- hsvd_vec(mrs_data2vec(mrs_data), fs = fs(mrs_data), comps = comps,
+                  irlba = irlba, max_damp = max_damp)
+  res$reson_table$frequency_ppm <- hz2ppm(res$reson_table$frequency,
+                                          mrs_data$ft, mrs_data$ref)
+  res$reson_table$lw_hz <- -res$reson_table$damping / pi
+  return(res)
 }
 
 #' HSVD of a complex vector.
@@ -1993,7 +1997,7 @@ hsvd_vec <- function(y, fs, comps = 40, irlba = TRUE, max_damp = 10) {
   
   # generate a table of resonances
   reson_table <- data.frame(amplitude = Mod(ahat), phase = Arg(ahat) * 180 / pi,
-                            frequency = frequencies, damping = dampings)
+                            frequency_hz = frequencies, damping = dampings)
   
   list(basis = basis, reson_table = reson_table)
 }
@@ -2955,7 +2959,7 @@ reson_table2mrs_data <- function(reson_table, acq_paras = def_acq_paras()) {
   
   if (class(acq_paras) == "mrs_data") acq_paras <- get_acq_paras(acq_paras)
   
-  sim_resonances(freq = reson_table$frequency, amp = reson_table$amplitude,
-                 phase = reson_table$phase, lw = -reson_table$damping / pi,
-                 freq_ppm = FALSE, acq_paras = acq_paras, fp_scale = FALSE)
+  sim_resonances(freq = reson_table$frequency_ppm, amp = reson_table$amplitude,
+                 phase = reson_table$phase, lw = reson_table$lw_hz,
+                 acq_paras = acq_paras, fp_scale = FALSE)
 }
