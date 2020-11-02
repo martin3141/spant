@@ -470,6 +470,22 @@ get_fp <- function(mrs_data) {
   mrs_data$data[,,,,,, 1, drop = F]
 }
 
+#' Scale the first time-domain data point in an mrs_data object.
+#' @param mrs_data MRS data.
+#' @param scale scaling value, defaults to 0.5.
+#' @return scaled mrs_data object.
+#' @export
+fp_scale <- function(mrs_data, scale = 0.5) {
+  
+  # needs to be a time-domain operation
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+  
+  # drop the chem shift dimension
+  mrs_data$data[,,,,,, 1] <- mrs_data$data[,,,,,, 1] * scale
+  
+  return(mrs_data)
+}
+
 fp_mag <- function(mrs_data) {
   
   # needs to be a time-domain operation
@@ -702,7 +718,8 @@ get_acq_paras <- function(mrs_data) {
   # check the input is an mrs_data object
   check_mrs_data(mrs_data)
   
-  list(ft = mrs_data$ft, fs = fs(mrs_data), N = Npts(mrs_data), ref = mrs_data$ref)
+  list(ft = mrs_data$ft, fs = fs(mrs_data), N = Npts(mrs_data),
+       ref = mrs_data$ref, nuc = mrs_data$nuc)
 }
 
 ft <- function(mrs_data, dims) {
