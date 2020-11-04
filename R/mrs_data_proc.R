@@ -800,14 +800,15 @@ Conj.mrs_data <- function(z) {
 #' Decimate an MRS signal by a factor.
 #' @param mrs_data MRS data object.
 #' @param q integer factor to downsample by (default = 2).
+#' @param ... additional options passed to the signal::decimate function.
 #' @return decimated data.
 #' @export
-decimate_mrs <- function(mrs_data, q = 2) {
+decimate_mrs <- function(mrs_data, q = 2, ...) {
   # needs to be a TD operation
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
-  mrs_data_re <- apply_mrs(Re(mrs_data), 7, fun = signal::decimate, q)
-  mrs_data_im <- apply_mrs(Im(mrs_data), 7, fun = signal::decimate, q)
+  mrs_data_re <- apply_mrs(Re(mrs_data), 7, fun = signal::decimate, q, ...)
+  mrs_data_im <- apply_mrs(Im(mrs_data), 7, fun = signal::decimate, q, ...)
   mrs_data$data <- (mrs_data_re$data + 1i * mrs_data_im$data) * q
   mrs_data$resolution <- mrs_data$resolution * q
   mrs_data

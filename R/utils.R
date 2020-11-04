@@ -450,12 +450,13 @@ cross <- function(a, b) {
 
 #' Create a logical circular mask spanning the full extent of an n x n matrix.
 #' @param d diameter of the mask.
-#' @param n number of matrix rows and columns
+#' @param n number of matrix rows and columns.
+#' @param offset offset the mask center in matrix dimension units.
 #' @return logical n x n mask matrix.
 #' @export
-circ_mask <- function(d, n) {
+circ_mask <- function(d, n, offset = 0) {
   g <- expand.grid(1:n, 1:n)
-  dist <- sqrt((g$Var1 - n / 2 - 0.5) ^ 2 + (g$Var2 - n / 2 - 0.5) ^ 2)
+  dist <- sqrt((g$Var1 - n / 2 - offset) ^ 2 + (g$Var2 - n / 2 - offset) ^ 2)
   dist <- matrix(dist, n, n)
   return(dist <= d / 2)
 }

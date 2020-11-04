@@ -4,12 +4,14 @@
 \alias{decimate_mrs}
 \title{Decimate an MRS signal by a factor.}
 \usage{
-decimate_mrs(mrs_data, q = 2)
+decimate_mrs(mrs_data, q = 2, ...)
 }
 \arguments{
 \item{mrs_data}{MRS data object.}
 
 \item{q}{integer factor to downsample by (default = 2).}
+
+\item{...}{additional options passed to the signal::decimate function.}
 }
 \value{
 decimated data.
