@@ -1272,13 +1272,21 @@ get_slice <- function(mrs_data, z_pos) {
 #' @param z_set z indices to include in the output (default all). 
 #' @param dyn_set dynamic indices to include in the output (default all). 
 #' @param coil_set coil indices to include in the output (default all). 
+#' @param fd_set frequency domain data indices to include in the output (default
+#' all). 
+#' @param td_set time-domain indices to include in the output (default all). 
 #' @return selected subset of MRS data.
 #' @export
 get_subset <- function(mrs_data, x_set = NULL, y_set = NULL, z_set = NULL,
-                       dyn_set = NULL, coil_set = NULL) {
+                       dyn_set = NULL, coil_set = NULL, fd_set = NULL,
+                       td_set = NULL) {
   
   # check the input
   check_mrs_data(mrs_data) 
+  
+  if (!is.null(td_set) && !is.null(fd_set)) {
+    stop("td_set OR fd_set should be specified - not both.")
+  }
   
   orig_dims <- dim(mrs_data$data)
   
@@ -1287,9 +1295,22 @@ get_subset <- function(mrs_data, x_set = NULL, y_set = NULL, z_set = NULL,
   if (is.null(z_set)) z_set       <- 1:orig_dims[4]
   if (is.null(dyn_set)) dyn_set   <- 1:orig_dims[5]
   if (is.null(coil_set)) coil_set <- 1:orig_dims[6]
+  n_set <- 1:orig_dims[7]
+  
+  if (!is.null(fd_set)) {
+    # needs to be a FD operation
+    if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+    n_set <- fd_set
+  }
+  
+  if (!is.null(td_set)) {
+    # needs to be a TD operation
+    if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+    n_set <- td_set
+  }
   
   mrs_data$data <- mrs_data$data[, x_set, y_set, z_set, dyn_set, coil_set,
-                                 , drop = FALSE]
+                                 n_set, drop = FALSE]
   return(mrs_data)
 }
 

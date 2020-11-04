@@ -10,7 +10,9 @@ get_subset(
   y_set = NULL,
   z_set = NULL,
   dyn_set = NULL,
-  coil_set = NULL
+  coil_set = NULL,
+  fd_set = NULL,
+  td_set = NULL
 )
 }
 \arguments{
@@ -25,6 +27,11 @@ get_subset(
 \item{dyn_set}{dynamic indices to include in the output (default all).}
 
 \item{coil_set}{coil indices to include in the output (default all).}
+
+\item{fd_set}{frequency domain data indices to include in the output (default
+all).}
+
+\item{td_set}{time-domain indices to include in the output (default all).}
 }
 \value{
 selected subset of MRS data.
