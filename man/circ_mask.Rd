@@ -4,12 +4,14 @@
 \alias{circ_mask}
 \title{Create a logical circular mask spanning the full extent of an n x n matrix.}
 \usage{
-circ_mask(d, n)
+circ_mask(d, n, offset = 0)
 }
 \arguments{
 \item{d}{diameter of the mask.}
 
-\item{n}{number of matrix rows and columns}
+\item{n}{number of matrix rows and columns.}
+
+\item{offset}{offset the mask center in matrix dimension units.}
 }
 \value{
 logical n x n mask matrix.
