@@ -2759,16 +2759,17 @@ mrsi2d_img2kspace <- function(mrs_data) {
   mrsi_dims <- dim(mrs_data$data) 
   x_dim <- mrsi_dims[2]
   y_dim <- mrsi_dims[3]
+  coils <- mrsi_dims[6]
   N <- mrsi_dims[7]
   mat <- mrs_data$data
   mat <- drop(mat)
-  dim(mat) <- c(x_dim, y_dim * N)
+  dim(mat) <- c(x_dim, y_dim * N * coils)
   mat <- ft_shift_mat(mat)
-  dim(mat) <- c(x_dim, y_dim, N)
+  dim(mat) <- c(x_dim, y_dim, N * coils)
   mat <- aperm(mat, c(2, 1, 3))
-  dim(mat) <- c(y_dim, x_dim * N)
+  dim(mat) <- c(y_dim, x_dim * N * coils)
   mat <- ft_shift_mat(mat)
-  dim(mat) <- c(y_dim, x_dim, N)
+  dim(mat) <- c(y_dim, x_dim, N * coils)
   mat <- aperm(mat, c(2, 1, 3))
   dim(mat) <- mrsi_dims
   mrs_data$data <- mat
@@ -2787,16 +2788,17 @@ mrsi2d_kspace2img <- function(mrs_data) {
   mrsi_dims <- dim(mrs_data$data) 
   x_dim <- mrsi_dims[2]
   y_dim <- mrsi_dims[3]
+  coils <- mrsi_dims[6]
   N <- mrsi_dims[7]
   mat <- mrs_data$data
   mat <- drop(mat)
-  dim(mat) <- c(x_dim, y_dim * N)
+  dim(mat) <- c(x_dim, y_dim * N * coils)
   mat <- ift_shift_mat(mat)
-  dim(mat) <- c(x_dim, y_dim, N)
+  dim(mat) <- c(x_dim, y_dim, N * coils)
   mat <- aperm(mat, c(2, 1, 3))
-  dim(mat) <- c(y_dim, x_dim * N)
+  dim(mat) <- c(y_dim, x_dim * N * coils)
   mat <- ift_shift_mat(mat)
-  dim(mat) <- c(y_dim, x_dim, N)
+  dim(mat) <- c(y_dim, x_dim, N * coils)
   mat <- aperm(mat, c(2, 1, 3))
   dim(mat) <- mrsi_dims
   mrs_data$data <- mat
