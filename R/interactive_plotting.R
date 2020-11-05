@@ -46,14 +46,13 @@ plot_slice_fit_inter <- function(fit_res, map = NULL, map_denom = NULL,
 #' @param coil coil element to plot.
 #' @export
 plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
-                                  zlim = NULL, mask_map = NULL, denom = NULL,
-                                  mask_cutoff = 20, interp = 1, mode = "re",
-                                  y_scale = FALSE, ylim = NULL, coil = 1) {
-  
+                                 zlim = NULL, mask_map = NULL, denom = NULL,
+                                 mask_cutoff = 20, interp = 1, mode = "re",
+                                 y_scale = FALSE, ylim = NULL, coil = 1) {
   
   if (class(mrs_data) == "mrs_data") {
-    if (is.null(map)) map <- int_spec(mrs_data, mode = "mod")
     mrs_data <- get_subset(mrs_data, coil_set = coil) # speeds things up
+    if (is.null(map)) map <- int_spec(mrs_data, mode = "mod")
     x_scale <- ppm(mrs_data)
     input_mrs_data <- TRUE
   } else if (class(mrs_data) == "fit_result") {

@@ -1374,7 +1374,7 @@ mask_xy <- function(mrs_data, x_dim, y_dim) {
 mask_xy_mat <- function(mrs_data, mask, value = NA) {
   
   # check the input
-  check_mrs_data(mrs_data) 
+  check_mrs_data(mrs_data)
   
   dim(mask) <- c(1, nrow(mask), ncol(mask), 1, 1, 1, 1)
   mask <- rep_array_dim(mask, 7, Npts(mrs_data))

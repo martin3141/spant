@@ -454,7 +454,7 @@ cross <- function(a, b) {
 #' @param offset offset the mask center in matrix dimension units.
 #' @return logical n x n mask matrix.
 #' @export
-circ_mask <- function(d, n, offset = 0) {
+circ_mask <- function(d, n, offset = 1) {
   g <- expand.grid(1:n, 1:n)
   dist <- sqrt((g$Var1 - n / 2 - offset) ^ 2 + (g$Var2 - n / 2 - offset) ^ 2)
   dist <- matrix(dist, n, n)
