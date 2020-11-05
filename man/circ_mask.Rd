@@ -4,7 +4,7 @@
 \alias{circ_mask}
 \title{Create a logical circular mask spanning the full extent of an n x n matrix.}
 \usage{
-circ_mask(d, n, offset = 0)
+circ_mask(d, n, offset = 1)
 }
 \arguments{
 \item{d}{diameter of the mask.}
