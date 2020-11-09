@@ -355,7 +355,15 @@ read_siemens_txt_hdr <- function(fname, version = "vd") {
       slice_norm_cor <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSliceArray.asSlice[0].sNormal.dTra")) {
       slice_norm_tra <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSpecPara.ucRemoveOversampling")) {
+      rm_oversampling <- as.numeric(strsplit(line, "=")[[1]][2])
     }
+  }
+  
+  # check if the FID has been decimated
+  if (rm_oversampling == 0) {
+    vars$N <- vars$N * 2
+    vars$fs <- vars$fs * 2
   }
   
   # how many voxels do we expect?
