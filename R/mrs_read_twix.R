@@ -198,6 +198,11 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
     data <- data[,,,,,,(ima_kspace_center_column + 1):ima_samples, drop = FALSE]
   }
   
+  # check if the FID has been decimated
+  if (vars$rm_oversampling == 0) {
+    vars$fs <- vars$fs / 2
+  }
+  
   res <- c(NA, vars$y_dim / vars$y_pts, vars$x_dim / vars$x_pts,
            vars$z_dim / vars$z_pts, 1, NA, 1 / vars$fs)
   
@@ -356,12 +361,12 @@ read_siemens_txt_hdr <- function(fname, version = "vd") {
     } else if (startsWith(line, "sSliceArray.asSlice[0].sNormal.dTra")) {
       slice_norm_tra <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSpecPara.ucRemoveOversampling")) {
-      rm_oversampling <- as.numeric(strsplit(line, "=")[[1]][2])
+      vars$rm_oversampling <- as.numeric(strsplit(line, "=")[[1]][2])
     }
   }
   
   # check if the FID has been decimated
-  if (rm_oversampling == 0) {
+  if (vars$rm_oversampling == 0) {
     vars$N <- vars$N * 2
     vars$fs <- vars$fs * 2
   }
