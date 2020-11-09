@@ -2742,11 +2742,9 @@ back_extrap <- function(mrs_data, n_pts) {
 }
 
 back_extrap_vec <- function(vec, n_pts) {
-  vec_new <- vec #tail(vec, 50)
-  
-  new_pts_re <- as.numeric(stats::predict(stats::ar.burg(Re(vec_new)),
+  new_pts_re <- as.numeric(stats::predict(stats::ar.burg(Re(vec)),
                                           se.fit = FALSE, n.ahead = n_pts))
-  new_pts_im <- as.numeric(stats::predict(stats::ar.burg(Im(vec_new)),
+  new_pts_im <- as.numeric(stats::predict(stats::ar.burg(Im(vec)),
                                           se.fit = FALSE, n.ahead = n_pts))
   c(vec, new_pts_re + new_pts_im * 1i)
 }
