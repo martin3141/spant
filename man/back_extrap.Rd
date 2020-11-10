@@ -4,12 +4,14 @@
 \alias{back_extrap}
 \title{Back extrapolate time-domain points using the Burg autoregressive model}
 \usage{
-back_extrap(mrs_data, n_pts)
+back_extrap(mrs_data, extrap_pts, pred_pts = NA)
 }
 \arguments{
 \item{mrs_data}{mrs_data object.}
 
-\item{n_pts}{number of points to extrapolate.}
+\item{extrap_pts}{number of points to extrapolate.}
+
+\item{pred_pts}{number of points to base the extrapolation on.}
 }
 \value{
 back extrapolated data.

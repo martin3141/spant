@@ -2749,7 +2749,7 @@ back_extrap_vec <- function(vec, extrap_pts, pred_pts) {
   if (is.na(pred_pts)) {
     pred_vec <- vec 
   } else {
-    pred_vec <- tail(vec, pred_pts)
+    pred_vec <- utils::tail(vec, pred_pts)
   }
   
   new_pts_re <- as.numeric(stats::predict(stats::ar.burg(Re(pred_vec),
