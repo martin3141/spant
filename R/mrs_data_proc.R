@@ -2990,7 +2990,7 @@ ssp <- function(mrs_data, comps = 5, xlim = c(1.5, 0.8)) {
     
     # remove the lipids from the input
     D_ori <- mrs_data2mat(get_subset(mrs_data, coil_set = coil))
-    P <- diag(Npts(mrs_data)) - U_m %*% Conj(t(U_m))
+    P <- diag(nrow(U_m)) - U_m %*% Conj(t(U_m))
     D_supp <- P %*% D_ori
     
     # restructure back into an mrs_data object
