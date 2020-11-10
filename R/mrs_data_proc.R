@@ -2288,6 +2288,7 @@ comb_coils_fp_pc <- function(metab, ref = NULL, sum_coils = TRUE,
   
   fp <- get_fp(ref)
   mult <- exp(-1i * Arg(fp))
+  #mult <- exp(-1i * Arg(fp)) * Mod(fp)
   mult_full <- rep_array_dim(mult, 7, Npts(metab))
   
   metab$data <- metab$data * mult_full 
