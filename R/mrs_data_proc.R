@@ -2908,7 +2908,7 @@ lw_obj_fn <- function(lb_val, mrs_data, lw, xlim) {
 #' Defaults to the full spectral width.
 #' @return l2 reconstructed mrs_data object.
 #' @export
-l2_reg <- function(mrs_data, thresh = 0.2, b = 1e-11, A = NA, xlim = NA) {
+l2_reg <- function(mrs_data, thresh = 0.05, b = 1e-11, A = NA, xlim = NA) {
   
   # generally done as a FD operation
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
