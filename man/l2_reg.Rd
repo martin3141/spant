@@ -4,7 +4,7 @@
 \alias{l2_reg}
 \title{Perform l2 regularisation artefact suppression.}
 \usage{
-l2_reg(mrs_data, thresh = 0.2, b = 1e-11, A = NA, xlim = NA)
+l2_reg(mrs_data, thresh = 0.05, b = 1e-11, A = NA, xlim = NA)
 }
 \arguments{
 \item{mrs_data}{input data for artefact suppression.}
