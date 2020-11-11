@@ -9,6 +9,7 @@ comb_coils(
   ref = NULL,
   noise = NULL,
   scale = TRUE,
+  scale_method = "sig_noise_sq",
   sum_coils = TRUE,
   noise_region = c(-0.5, -2.5)
 )
@@ -22,6 +23,8 @@ comb_coils(
 
 \item{scale}{option to rescale coil elements based on the first data point
 (logical).}
+
+\item{scale_method}{one of "sig_noise_sq", "sig_noise" or "sig".}
 
 \item{sum_coils}{sum the coil elements as a final step (logical).}
 

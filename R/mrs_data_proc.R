@@ -2280,17 +2280,23 @@ zp_vec <- function(vector, n) {
 #' @param noise MRS data from a noise scan (optional).
 #' @param scale option to rescale coil elements based on the first data point
 #' (logical).
+#' @param scale_method one of "sig_noise_sq", "sig_noise" or "sig".
 #' @param sum_coils sum the coil elements as a final step (logical).
 #' @param noise_region the spectral region (in ppm) to estimate the noise.
 #' @return MRS data.
 #' @export
-comb_coils <- function(metab, ref = NULL, noise = NULL,  scale = TRUE,
-                       sum_coils = TRUE, noise_region = c(-0.5, -2.5)) {
+comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
+                       scale_method = "sig_noise_sq", sum_coils = TRUE,
+                       noise_region = c(-0.5, -2.5)) {
   
   metab_only <- FALSE
   if (is.null(ref)) {
     ref <- mean_dyns(metab)
     metab_only <- TRUE
+  }
+  
+  if (!(scale_method %in% c("sig_noise_sq", "sig_noise", "sig"))) {
+    stop("incorrect scale_method requested")
   }
   
   if (is_fd(metab)) metab <- fd2td(metab)
@@ -2308,10 +2314,15 @@ comb_coils <- function(metab, ref = NULL, noise = NULL,  scale = TRUE,
   phi <- Arg(fp)
   amp <- Mod(fp)
   
-  if (scale) {
+  if (scale & (scale_method != "sig")) {
     if (!is.null(noise)) {
       # estimate noise from noise data
-      amp <- amp / (calc_coil_noise_sd(noise) ^ 2)
+      if (scale_method == "sig_noise_sq") {
+        amp <- amp / (calc_coil_noise_sd(noise) ^ 2)
+      } else {
+        amp <- amp / calc_coil_noise_sd(noise)
+      }
+      
     } else {
       # estimate noise from first FID of the metab data
       metab_first <- get_dyns(metab, 1)
@@ -2319,7 +2330,11 @@ comb_coils <- function(metab, ref = NULL, noise = NULL,  scale = TRUE,
       noise_sd <- est_noise_sd(noise_data, offset = 0, n = Npts(noise_data),
                                p_order = 2)
       
-      amp <- amp / (noise_sd ^ 2)
+      if (scale_method == "sig_noise_sq") {
+        amp <- amp / (noise_sd ^ 2)
+      } else {
+        amp <- amp / noise_sd
+      }
     }
   }
   
