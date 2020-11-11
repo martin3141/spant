@@ -4,7 +4,14 @@
 \alias{comb_coils}
 \title{Combine coil data based on the first data point of a reference signal.}
 \usage{
-comb_coils(metab, ref = NULL, noise = NULL, scale = TRUE, sum_coils = TRUE)
+comb_coils(
+  metab,
+  ref = NULL,
+  noise = NULL,
+  scale = TRUE,
+  sum_coils = TRUE,
+  noise_region = c(-0.5, -2.5)
+)
 }
 \arguments{
 \item{metab}{MRS data containing metabolite data.}
@@ -17,6 +24,8 @@ comb_coils(metab, ref = NULL, noise = NULL, scale = TRUE, sum_coils = TRUE)
 (logical).}
 
 \item{sum_coils}{sum the coil elements as a final step (logical).}
+
+\item{noise_region}{the spectral region (in ppm) to estimate the noise.}
 }
 \value{
 MRS data.
