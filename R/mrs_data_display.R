@@ -549,6 +549,11 @@ plot_slice_map <- function(data, zlim = NULL, mask_map = NULL,
                            coil = 1, ref = 1, denom = NULL,
                            horizontal = FALSE) {
   
+  if (class(data) == "mrs_data") {
+    data <- get_subset(data, coil_set = coil) # speeds things up
+    data <- int_spec(data, mode = "mod")
+  }
+  
   graphics::par(mar = c(0, 0, 0, 2))
   
   data_mask <- is.na(data)

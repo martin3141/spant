@@ -2357,7 +2357,7 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
   ang <- rep_array_dim(phi, 7, Npts(metab))
   
   if (scale) {
-    scale_f <- rep_array_dim(amp, 7, Npts(ref))
+    scale_f <- rep_array_dim(amp, 7, Npts(metab))
     
     metab_ps <- metab
     metab_ps$data <- metab$data * exp(-1i * ang) * scale_f
