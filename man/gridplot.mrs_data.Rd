@@ -6,8 +6,8 @@
 \usage{
 \method{gridplot}{mrs_data}(
   x,
-  rows,
-  cols,
+  rows = NA,
+  cols = NA,
   mar = c(0, 0, 0, 0),
   oma = c(3.5, 1, 1, 1),
   bty = "o",
