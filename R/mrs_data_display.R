@@ -629,20 +629,30 @@ gridplot <- function(x, ...) {
 #' been made.
 #' @param ... other arguments to pass to the plot method.
 #' @export
-gridplot.mrs_data <- function(x, rows, cols, mar = c(0, 0, 0, 0),
+gridplot.mrs_data <- function(x, rows = NA, cols = NA, mar = c(0, 0, 0, 0),
                               oma = c(3.5, 1, 1, 1), bty = "o",
                               restore_def_par = TRUE, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
-  graphics::par(mfrow = c(rows, cols), oma = oma)
   mrs_data_dyns <- collapse_to_dyns(x)
+  Nspec <- Ndyns(mrs_data_dyns)
   
-  if (Ndyns(mrs_data_dyns) != rows * cols) {
-    warning("number of spectra does not match the specified number of rows and cols")
-    if (Ndyns(mrs_data_dyns) > rows * cols) {
-      mrs_data_dyns <- get_dyns(mrs_data_dyns, 1:(rows*cols))
-    }
+  # set to rows and cols to be squareish if not specified
+  if (is.na(rows) & is.na(cols)) {
+    rows <- ceiling(Nspec ^ 0.5)
+    cols <- ceiling(Nspec / rows)
+  } else if (is.na(rows)) {
+    rows <- ceiling(Nspec / cols)
+  } else if (is.na(cols)) {
+    cols <- ceiling(Nspec / rows)
+  }
+  
+  graphics::par(mfrow = c(rows, cols), oma = oma)
+  
+  if (Ndyns(mrs_data_dyns) > rows * cols) {
+    warning("not enough rows and columns to show all spectra")
+    mrs_data_dyns <- get_dyns(mrs_data_dyns, 1:(rows*cols))
   }
   
   for (n in 1:Ndyns(mrs_data_dyns)) {
