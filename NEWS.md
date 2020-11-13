@@ -1,5 +1,6 @@
 # spant 1.8.0
 * Added gridplot function.
+* New functions added for down sampling.
 * Added signal space projection method for MRSI.
 * Geometry information is now read from Siemens twix files.
 * GitHub actions are now used for continuous integration instead of Travis and

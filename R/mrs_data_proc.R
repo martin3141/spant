@@ -797,35 +797,80 @@ Conj.mrs_data <- function(z) {
   z
 }
 
-#' Decimate an MRS signal by a factor.
-#' @param mrs_data MRS data object.
-#' @param q integer factor to downsample by (default = 2).
-#' @param n filter order used in the downsampling.
-#' @param ftype	filter type, "iir" or "fir".
-#' @return decimated data.
-#' @export
-decimate_mrs <- function(mrs_data, q = 2, n = 4, ftype = "iir") {
-  # needs to be a TD operation
-  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
-  
-  mrs_data_re <- apply_mrs(Re(mrs_data), 7, fun = signal::decimate, q, n, ftype)
-  mrs_data_im <- apply_mrs(Im(mrs_data), 7, fun = signal::decimate, q, n, ftype)
-  mrs_data$data <- (mrs_data_re$data + 1i * mrs_data_im$data) * q
-  mrs_data$resolution <- mrs_data$resolution * q
-  mrs_data
-}
-
 #' Downsample an MRS signal by a factor of 2 using an FFT "brick-wall" filter.
 #' @param mrs_data MRS data object.
 #' @return downsampled data.
 #' @export
-downsample_mrs <- function(mrs_data) {
+downsample_mrs_fd <- function(mrs_data) {
   # needs to be a FD operation
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   N <- Npts(mrs_data)
   mrs_data <- crop_spec(mrs_data, xlim = c(N / 2 - N / 4 + 1, N / 2 + N / 4),
                         scale = "points")
   mrs_data
+}
+
+#' Downsample an MRS signal by a factor of 2 by removing every other data point
+#' in the time-domain. Note, signals outside the new sampling frequency will be
+#' aliased.
+#' @param mrs_data MRS data object.
+#' @return downsampled data.
+#' @export
+downsample_mrs_td <- function(mrs_data) {
+  # needs to be a TD operation
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+  
+  mrs_data <- get_subset(mrs_data, td_set = seq(1, Npts(mrs_data), 2))
+  mrs_data$resolution[7] <- mrs_data$resolution[7] * 2
+}
+
+#' Decimate an MRS signal by filtering in the time domain before downsampling.
+#' @param mrs_data MRS data object.
+#' @param q integer factor to downsample by (default = 2).
+#' @param n filter order used in the downsampling.
+#' @param ftype	filter type, "iir" or "fir".
+#' @return decimated data.
+#' @export
+decimate_mrs_td <- function(mrs_data, q = 2, n = 4, ftype = "iir") {
+  # needs to be a TD operation
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+  
+  mrs_data_re <- apply_mrs(Re(mrs_data), 7, fun = signal::decimate, q, n, ftype)
+  mrs_data_im <- apply_mrs(Im(mrs_data), 7, fun = signal::decimate, q, n, ftype)
+  mrs_data$data <- (mrs_data_re$data + 1i * mrs_data_im$data) * q
+  mrs_data$resolution[7] <- mrs_data$resolution[7] * q
+  mrs_data
+}
+
+#' Decimate an MRS signal to half the original sampling frequency by filtering
+#' in the frequency domain before down sampling.
+#' @param mrs_data MRS data object.
+#' @return decimated data at half the original sampling frequency.
+#' @export
+decimate_mrs_fd <- function(mrs_data) {
+  # needs to be a FD operation initially
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  mrs_data <- apply_mrs(mrs_data, 7, smooth_high_freq_vec)
+  mrs_data <- fd2td(mrs_data)
+  mrs_data <- downsample_mrs_td(mrs_data)
+  return(mrs_data)
+}
+
+smooth_high_freq_vec <- function(vec) {
+  vec <- pracma::ifftshift(vec) 
+  # smooth the central portion
+  N <- length(vec)
+  inds <- (N / 4 + 1):(N - N / 4)
+  vec_smooth_re <- stats::predict(stats::smooth.spline(Re(vec[inds])),
+                                  1:length(inds))$y
+  
+  vec_smooth_im <- stats::predict(stats::smooth.spline(Im(vec[inds])),
+                                  1:length(inds))$y
+  
+  vec[inds] <- vec_smooth_re + 1i * vec_smooth_im
+  vec <- pracma::fftshift(vec) 
+  return(vec)
 }
 
 # alternate TD method that might cause a bit of phase distortion
