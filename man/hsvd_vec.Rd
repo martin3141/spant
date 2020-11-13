@@ -4,7 +4,7 @@
 \alias{hsvd_vec}
 \title{HSVD of a complex vector.}
 \usage{
-hsvd_vec(y, fs, comps = 40, irlba = TRUE, max_damp = 10)
+hsvd_vec(y, fs, comps = 40, irlba = TRUE, max_damp = 0)
 }
 \arguments{
 \item{y}{time domain signal to be filtered as a vector.}
@@ -15,7 +15,8 @@ hsvd_vec(y, fs, comps = 40, irlba = TRUE, max_damp = 10)
 
 \item{irlba}{option to use irlba SVD (logical).}
 
-\item{max_damp}{maximum allowable damping factor.}
+\item{max_damp}{maximum allowable damping factor. Default value of 0 ensures
+resultant model is damped.}
 }
 \value{
 basis matrix and signal table.
