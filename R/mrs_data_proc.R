@@ -822,6 +822,7 @@ downsample_mrs_td <- function(mrs_data) {
   
   mrs_data <- get_subset(mrs_data, td_set = seq(1, Npts(mrs_data), 2))
   mrs_data$resolution[7] <- mrs_data$resolution[7] * 2
+  return(mrs_data)
 }
 
 #' Decimate an MRS signal by filtering in the time domain before downsampling.
