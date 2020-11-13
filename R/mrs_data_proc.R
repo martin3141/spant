@@ -1293,12 +1293,12 @@ rm_dyns <- function(mrs_data, subset) {
 get_voxel <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1, dyn = 1,
                       coil = 1) {
   
-  warning("get_voxel is depreciated, use get_subset instead.")
-  
   # check the input
   check_mrs_data(mrs_data) 
   
-  mrs_data$data <- mrs_data$data[1, x_pos, y_pos, z_pos, dyn, coil, , drop = FALSE]
+  mrs_data$data <- mrs_data$data[1, x_pos, y_pos, z_pos, dyn, coil, , 
+                                 drop = FALSE]
+  
   return(mrs_data)
 }
 
