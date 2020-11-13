@@ -18,7 +18,8 @@ plot_slice_map_inter(
   mode = "re",
   y_scale = FALSE,
   ylim = NULL,
-  coil = 1
+  coil = 1,
+  fd = TRUE
 )
 }
 \arguments{
@@ -50,6 +51,9 @@ of: "re", "im", "mod" or "arg".}
 \item{ylim}{intensity range to plot.}
 
 \item{coil}{coil element to plot.}
+
+\item{fd}{display data in the frequency-domain (default), or time-domain
+(logical).}
 }
 \description{
 Plot an interactive slice map from a data array where voxels can be selected

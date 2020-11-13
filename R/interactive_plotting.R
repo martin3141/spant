@@ -44,24 +44,31 @@ plot_slice_fit_inter <- function(fit_res, map = NULL, map_denom = NULL,
 #' @param y_scale option to display the y-axis values (logical).
 #' @param ylim intensity range to plot.
 #' @param coil coil element to plot.
+#' @param fd display data in the frequency-domain (default), or time-domain 
+#' (logical).
 #' @export
 plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
                                  zlim = NULL, mask_map = NULL, denom = NULL,
                                  mask_cutoff = 20, interp = 1, mode = "re",
-                                 y_scale = FALSE, ylim = NULL, coil = 1) {
+                                 y_scale = FALSE, ylim = NULL, coil = 1,
+                                 fd = TRUE) {
   
   if (class(mrs_data) == "mrs_data") {
     mrs_data <- get_subset(mrs_data, coil_set = coil) # speeds things up
     if (is.null(map)) map <- int_spec(mrs_data, mode = "mod")
-    x_scale <- ppm(mrs_data)
     input_mrs_data <- TRUE
   } else if (class(mrs_data) == "fit_result") {
-    x_scale  <- ppm(mrs_data)
     fit_res  <- mrs_data
     mrs_data <- fit_res$data
     input_mrs_data <- FALSE
   } else {
     stop("input is not an mrs_data or fit_result object")
+  }
+    
+  if (fd) {
+    x_scale <- ppm(mrs_data)
+  } else {
+    x_scale <- seconds(mrs_data) 
   }
   
   if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[length(x_scale)])
@@ -99,7 +106,7 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
       if (input_mrs_data) {
         graphics::plot(mrs_data, x_pos = x, y_pos = Ny(mrs_data) + 1 - y,
                        z_pos = slice, xlim = xlim, mode = mode,
-                       y_scale = y_scale, ylim = ylim, coil = 1)
+                       y_scale = y_scale, ylim = ylim, coil = 1, fd = fd)
       } else {
         graphics::plot(fit_res, x_pos = x, y_pos = Ny(mrs_data) + 1 - y,
                        z_pos = slice, xlim = xlim, coil = 1)
@@ -130,7 +137,7 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
         if (input_mrs_data) {
           graphics::plot(mrs_data, x_pos = x, y_pos = Ny(mrs_data) + 1 - y,
                          z_pos = slice, xlim = xlim, mode = mode,
-                         y_scale = y_scale, ylim = ylim, coil = 1)
+                         y_scale = y_scale, ylim = ylim, coil = 1, fd = fd)
         } else {
           graphics::plot(fit_res, x_pos = x, y_pos = Ny(mrs_data) + 1 - y,
                          z_pos = slice, xlim = xlim, coil = 1)
