@@ -683,6 +683,7 @@ td2fd <- function(mrs_data) {
   
   mrs_data <- ft(mrs_data, 7)
   mrs_data$freq_domain[7] = TRUE
+  dimnames(mrs_data$data) <- NULL
   return(mrs_data)
 }
 
@@ -697,6 +698,7 @@ fd2td <- function(mrs_data) {
   
   mrs_data <- ift(mrs_data, 7)
   mrs_data$freq_domain[7] = FALSE
+  dimnames(mrs_data$data) <- NULL
   return(mrs_data)
 }
 
@@ -841,6 +843,7 @@ decimate_mrs_td <- function(mrs_data, q = 2, n = 4, ftype = "iir") {
   mrs_data_im <- apply_mrs(Im(mrs_data), 7, fun = signal::decimate, q, n, ftype)
   mrs_data$data <- (mrs_data_re$data + 1i * mrs_data_im$data) * q
   mrs_data$resolution[7] <- mrs_data$resolution[7] * q
+  dimnames(mrs_data$data) <- NULL
   mrs_data
 }
 
@@ -854,6 +857,7 @@ decimate_mrs_fd <- function(mrs_data) {
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
   mrs_data <- apply_mrs(mrs_data, 7, smooth_high_freq_vec)
+  dimnames(mrs_data$data) <- NULL
   mrs_data <- fd2td(mrs_data)
   mrs_data <- downsample_mrs_td(mrs_data)
   return(mrs_data)
@@ -1153,6 +1157,8 @@ crop_spec <- function(mrs_data, xlim = c(4, 0.2), scale = "ppm") {
   # not sure why subset[2] works better than subset[1]
   new_ppm = (old_ppm[subset[length(subset)]] + old_ppm[subset[2]])/2
   mrs_data$ref <- new_ppm
+  
+  dimnames(mrs_data$data) <- NULL
     
   mrs_data
 }
@@ -1363,6 +1369,9 @@ get_subset <- function(mrs_data, x_set = NULL, y_set = NULL, z_set = NULL,
   
   mrs_data$data <- mrs_data$data[, x_set, y_set, z_set, dyn_set, coil_set,
                                  n_set, drop = FALSE]
+  
+  dimnames(mrs_data$data) <- NULL
+  
   return(mrs_data)
 }
 
@@ -2753,12 +2762,12 @@ bc_als_vec <- function(vec, lambda, p) {
 #' @param pred_pts number of points to base the extrapolation on.
 #' @param method character string specifying the method to fit the model. Must
 #' be one of the strings in the default argument (the first few characters are
-#' sufficient). Defaults to "ols".
+#' sufficient). Defaults to "burg".
 #' @param ... additional arguments to specific methods, see ?ar.
 #' @return back extrapolated data.
 #' @export
 back_extrap_ar <- function(mrs_data, extrap_pts, pred_pts = NULL,
-                           method = "ols", ...) {
+                           method = "burg", ...) {
   
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
@@ -2768,6 +2777,7 @@ back_extrap_ar <- function(mrs_data, extrap_pts, pred_pts = NULL,
   mrs_data <- apply_mrs(mrs_data, 7, back_extrap_vec, extrap_pts, pred_pts,
                         method, ...)
   mrs_data$data <- mrs_data$data[,,,,,,(Np + extrap_pts):1, drop = FALSE]
+  dimnames(mrs_data$data) <- NULL
   mrs_data
 }
 
@@ -2789,8 +2799,9 @@ back_extrap_vec <- function(vec, extrap_pts, pred_pts, method, ...) {
                                                     method = method, ...),
                                           n.ahead = extrap_pts,
                                           se.fit = FALSE))
-                                          
-  c(vec, new_pts_re + new_pts_im * 1i)
+  
+  out <- c(vec, new_pts_re + new_pts_im * 1i)
+  return(out)
 }
 
 #' Calculate the sum of squares differences between two mrs_data objects.
@@ -3031,6 +3042,7 @@ ssp <- function(mrs_data, comps = 5, xlim = c(1.5, 0.8)) {
     # replace the input data points
     mrs_data$data[,,,,,coil,] <- D_supp
   }
+  dimnames(mrs_data$data) <- NULL
   
   return(mrs_data)
 }
