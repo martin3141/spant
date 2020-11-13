@@ -2023,10 +2023,11 @@ hsvd <- function(mrs_data, comps = 40, irlba = TRUE, max_damp = 10) {
 #' @param fs sampling frequency of y.
 #' @param comps number of Lorentzian components to use for modelling.
 #' @param irlba option to use irlba SVD (logical).
-#' @param max_damp maximum allowable damping factor.
+#' @param max_damp maximum allowable damping factor. Default value of 0 ensures
+#' resultant model is damped.
 #' @return basis matrix and signal table.
 #' @export
-hsvd_vec <- function(y, fs, comps = 40, irlba = TRUE, max_damp = 10) {
+hsvd_vec <- function(y, fs, comps = 40, irlba = TRUE, max_damp = 0) {
   N <- length(y)
   L <- floor(0.5 * N)
   
