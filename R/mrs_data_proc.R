@@ -1290,7 +1290,10 @@ rm_dyns <- function(mrs_data, subset) {
 #' @param coil the coil element number to plot.
 #' @return MRS data.
 #' @export
-get_voxel <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1, dyn = 1, coil = 1) {
+get_voxel <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1, dyn = 1,
+                      coil = 1) {
+  
+  warning("get_voxel is depreciated, use get_subset instead.")
   
   # check the input
   check_mrs_data(mrs_data) 
@@ -2742,40 +2745,49 @@ bc_als_vec <- function(vec, lambda, p) {
   }
 }
 
-#' Back extrapolate time-domain points using the Burg autoregressive model
+#' Back extrapolate time-domain data points using an autoregressive model.
 #' @param mrs_data mrs_data object.
 #' @param extrap_pts number of points to extrapolate.
 #' @param pred_pts number of points to base the extrapolation on.
+#' @param method character string specifying the method to fit the model. Must
+#' be one of the strings in the default argument (the first few characters are
+#' sufficient). Defaults to "ols".
+#' @param ... additional arguments to specific methods, see ?ar.
 #' @return back extrapolated data.
 #' @export
-back_extrap <- function(mrs_data, extrap_pts, pred_pts = NA) {
+back_extrap_ar <- function(mrs_data, extrap_pts, pred_pts = NULL,
+                           method = "ols", ...) {
   
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
   Np <- Npts(mrs_data) 
   
   mrs_data$data <- mrs_data$data[,,,,,,Np:1, drop = FALSE]
-  mrs_data <- apply_mrs(mrs_data, 7, back_extrap_vec, extrap_pts, pred_pts)
+  mrs_data <- apply_mrs(mrs_data, 7, back_extrap_vec, extrap_pts, pred_pts,
+                        method, ...)
   mrs_data$data <- mrs_data$data[,,,,,,(Np + extrap_pts):1, drop = FALSE]
   mrs_data
 }
 
-back_extrap_vec <- function(vec, extrap_pts, pred_pts) {
+back_extrap_vec <- function(vec, extrap_pts, pred_pts, method, ...) {
   
   # use the full vector unless instructed otherwise
-  if (is.na(pred_pts)) {
+  if (is.null(pred_pts)) {
     pred_vec <- vec 
   } else {
     pred_vec <- utils::tail(vec, pred_pts)
   }
   
-  new_pts_re <- as.numeric(stats::predict(stats::ar.burg(Re(pred_vec),
-                                                         demean = TRUE),
-                                          se.fit = FALSE, n.ahead = extrap_pts))
+  new_pts_re <- as.numeric(stats::predict(stats::ar(Re(pred_vec),
+                                                    method = method, ...),
+                                          n.ahead = extrap_pts,
+                                          se.fit = FALSE))
   
-  new_pts_im <- as.numeric(stats::predict(stats::ar.burg(Im(pred_vec),
-                                                         demean = TRUE),
-                                          se.fit = FALSE, n.ahead = extrap_pts))
+  new_pts_im <- as.numeric(stats::predict(stats::ar(Im(pred_vec),
+                                                    method = method, ...),
+                                          n.ahead = extrap_pts,
+                                          se.fit = FALSE))
+                                          
   c(vec, new_pts_re + new_pts_im * 1i)
 }
 
