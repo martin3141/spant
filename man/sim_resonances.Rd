@@ -12,7 +12,8 @@ sim_resonances(
   phase = 0,
   freq_ppm = TRUE,
   acq_paras = def_acq_paras(),
-  fp_scale = TRUE
+  fp_scale = TRUE,
+  back_extrap_pts = 0
 )
 }
 \arguments{
@@ -33,6 +34,8 @@ Hz are assumed.}
 \code{\link{def_acq_paras}}}
 
 \item{fp_scale}{multiply the first data point by 0.5.}
+
+\item{back_extrap_pts}{number of data points to back extrapolate.}
 }
 \value{
 MRS data object.

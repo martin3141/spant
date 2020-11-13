@@ -26,13 +26,14 @@ check_mrs_data <- function(mrs_data) {
 #' @param acq_paras list of acquisition parameters. See
 #' \code{\link{def_acq_paras}}
 #' @param fp_scale multiply the first data point by 0.5.
+#' @param back_extrap_pts number of data points to back extrapolate.
 #' @return MRS data object.
 #' @examples
 #' sim_data <- sim_resonances(freq = 2, lw = 5)
 #' @export
 sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0, 
                            freq_ppm = TRUE, acq_paras = def_acq_paras(),
-                           fp_scale = TRUE) {
+                           fp_scale = TRUE, back_extrap_pts = 0) {
   
   # TODO check this works for vectors
   #if ((sum(lg > 1) + sum(lg < 0)) > 0) {
@@ -58,8 +59,8 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
   }
   
   # generate data in TD
-  t <- seq(from = 0, to = (acq_paras$N - 1) / acq_paras$fs,
-           by = 1 / acq_paras$fs)
+  t <- seq(from = -back_extrap_pts / acq_paras$fs,
+           to = (acq_paras$N - 1) / acq_paras$fs, by = 1 / acq_paras$fs)
   
   # covert freqs to Hz
   if (freq_ppm) {
@@ -68,7 +69,7 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
     f_hz <- freq
   }
   
-  data <- rep(0, acq_paras$N)
+  data <- rep(0, acq_paras$N + back_extrap_pts)
   for (n in 1:sig_n) {
     temp_data <- amp[n] * exp(1i * pi * phase[n] / 180 + 2i * pi * f_hz[n] * t)
     
@@ -90,7 +91,7 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
   #  mrs_data$data = mrs_data$data*exp(((lg*lb)^2*pi^2/4/log(0.5))*(t^2))
   #}
   
-  data <- array(data,dim = c(1, 1, 1, 1, 1, 1, acq_paras$N))
+  data <- array(data,dim = c(1, 1, 1, 1, 1, 1, acq_paras$N + back_extrap_pts))
   res <- c(NA, 1, 1, 1, 1, NA, 1 / acq_paras$fs)
   mrs_data <- list(ft = acq_paras$ft, data = data, resolution = res, te = 0, 
                    ref = acq_paras$ref, nuc = acq_paras$nuc,
@@ -3037,14 +3038,17 @@ ssp <- function(mrs_data, comps = 5, xlim = c(1.5, 0.8)) {
 #' Generate mrs_data from a table of single Lorentzian resonances.
 #' @param reson_table as produced by the hsvd function.
 #' @param acq_paras list of acquisition parameters. See
+#' @param back_extrap_pts number of data points to back extrapolate
 #' \code{\link{def_acq_paras}}
 #' @return mrs_data object.
 #' @export
-reson_table2mrs_data <- function(reson_table, acq_paras = def_acq_paras()) {
+reson_table2mrs_data <- function(reson_table, acq_paras = def_acq_paras(),
+                                 back_extrap_pts = 0) {
   
   if (class(acq_paras) == "mrs_data") acq_paras <- get_acq_paras(acq_paras)
   
   sim_resonances(freq = reson_table$frequency_ppm, amp = reson_table$amplitude,
                  phase = reson_table$phase, lw = reson_table$lw_hz,
-                 acq_paras = acq_paras, fp_scale = FALSE)
+                 acq_paras = acq_paras, fp_scale = FALSE,
+                 back_extrap_pts = back_extrap_pts)
 }

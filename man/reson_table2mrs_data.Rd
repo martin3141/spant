@@ -4,12 +4,18 @@
 \alias{reson_table2mrs_data}
 \title{Generate mrs_data from a table of single Lorentzian resonances.}
 \usage{
-reson_table2mrs_data(reson_table, acq_paras = def_acq_paras())
+reson_table2mrs_data(
+  reson_table,
+  acq_paras = def_acq_paras(),
+  back_extrap_pts = 0
+)
 }
 \arguments{
 \item{reson_table}{as produced by the hsvd function.}
 
-\item{acq_paras}{list of acquisition parameters. See
+\item{acq_paras}{list of acquisition parameters. See}
+
+\item{back_extrap_pts}{number of data points to back extrapolate
 \code{\link{def_acq_paras}}}
 }
 \value{
