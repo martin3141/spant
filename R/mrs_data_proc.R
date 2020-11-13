@@ -2884,7 +2884,8 @@ set_lw <- function(mrs_data, lw, xlim = c(4, 0.5)) {
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
   # get an example spectrum for the data parameters 
-  single_mrs <- get_voxel(mrs_data)
+  single_mrs <- get_subset(mrs_data, x_set = 1, y_set = 1, z_set = 1,
+                           dyn_set = 1, coil_set = 1)
   
   lb_res <- apply_mrs(mrs_data, 7, optim_set_lw, lw, xlim, single_mrs,
                    data_only = TRUE)

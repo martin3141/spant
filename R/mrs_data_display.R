@@ -69,7 +69,8 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
   .pardefault <- graphics::par(no.readonly = T)
  
   # remove data we don't need 
-  x <- get_voxel(x, x_pos, y_pos, z_pos, dyn, coil) 
+  x <- get_subset(x, x_set = x_pos, y_set = y_pos, z_set = z_pos, dyn_set = dyn,
+                  coil_set = coil) 
  
   # has this data element been masked? 
   if (anyNA(x$data)) {
