@@ -4,7 +4,7 @@
 \alias{back_extrap_ar}
 \title{Back extrapolate time-domain data points using an autoregressive model.}
 \usage{
-back_extrap_ar(mrs_data, extrap_pts, pred_pts = NULL, method = "ols", ...)
+back_extrap_ar(mrs_data, extrap_pts, pred_pts = NULL, method = "burg", ...)
 }
 \arguments{
 \item{mrs_data}{mrs_data object.}
@@ -15,7 +15,7 @@ back_extrap_ar(mrs_data, extrap_pts, pred_pts = NULL, method = "ols", ...)
 
 \item{method}{character string specifying the method to fit the model. Must
 be one of the strings in the default argument (the first few characters are
-sufficient). Defaults to "ols".}
+sufficient). Defaults to "burg".}
 
 \item{...}{additional arguments to specific methods, see ?ar.}
 }
