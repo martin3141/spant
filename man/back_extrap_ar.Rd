@@ -2,7 +2,7 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{back_extrap_ar}
 \alias{back_extrap_ar}
-\title{Back extrapolate time-domain points using an autoregressive model}
+\title{Back extrapolate time-domain data points using an autoregressive model.}
 \usage{
 back_extrap_ar(mrs_data, extrap_pts, pred_pts = NULL, method = "ols", ...)
 }
@@ -23,5 +23,5 @@ sufficient). Defaults to "ols".}
 back extrapolated data.
 }
 \description{
-Back extrapolate time-domain points using an autoregressive model
+Back extrapolate time-domain data points using an autoregressive model.
 }
