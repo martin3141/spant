@@ -2309,21 +2309,26 @@ grid_shift_xy <- function(mrs_data, x_shift, y_shift) {
 #' @return zero-filled data.
 #' @export
 zf_xy <- function(mrs_data, factor = 2) {
-  # TODO check data is 2D in xy dirn and make (much) faster by using afill
-  # TODO check this works for even numbers of rows and cols...
+  # TODO check this works for odd numbers of rows and cols...
   
   # check the input
-  check_mrs_data(mrs_data) 
+  check_mrs_data(mrs_data)
   
   # put xy dims into k-space
-  mrs_data <- apply_mrs(mrs_data, 2, ft_shift)
-  mrs_data <- apply_mrs(mrs_data, 3, ft_shift)
-  # apply filter
-  mrs_data <- apply_mrs(mrs_data, 2, zp_vec, dim(mrs_data)[2] * factor)
-  mrs_data <- apply_mrs(mrs_data, 3, zp_vec, dim(mrs_data)[3] * factor)
-  # put xy dims back to space
-  mrs_data <- apply_mrs(mrs_data, 2, ift_shift)
-  apply_mrs(mrs_data, 3, ift_shift)
+  mrs_data <- mrsi2d_img2kspace(mrs_data)
+  
+  orig_dims <- dim(mrs_data$data)
+  new_dims  <- orig_dims
+  new_dims[2] <- new_dims[2] * factor
+  new_dims[3] <- new_dims[3] * factor
+  new_data <- array(0, dim = new_dims)
+  x_inds <- 1:orig_dims[2] + new_dims[2] / 2 - orig_dims[2] / 2
+  y_inds <- 1:orig_dims[3] + new_dims[3] / 2 - orig_dims[3] / 2
+  new_data[,x_inds, y_inds,,,,] <- mrs_data$data
+  mrs_data$data <- new_data 
+  
+  # put xy dims back to spatial domain
+  mrs_data <- mrsi2d_kspace2img(mrs_data)
 }
 
 hamming_vec <- function(vector) {
