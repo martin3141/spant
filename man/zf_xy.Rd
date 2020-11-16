@@ -9,8 +9,10 @@ zf_xy(mrs_data, factor = 2)
 \arguments{
 \item{mrs_data}{MRSI data.}
 
-\item{factor}{zero-filling factor, factor of 2 returns a dataset with
-twice the original points in the x-y directions.}
+\item{factor}{zero-filling factor, a factor of 2 returns a dataset with
+twice the original points in the x-y directions. Factors smaller than one
+are permitted, such that a factor of 0.5 returns half the k-space points in
+the x-y directions.}
 }
 \value{
 zero-filled data.

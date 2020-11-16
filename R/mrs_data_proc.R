@@ -2304,8 +2304,10 @@ grid_shift_xy <- function(mrs_data, x_shift, y_shift) {
 
 #' Zero-fill MRSI data in the k-space x-y direction.
 #' @param mrs_data MRSI data.
-#' @param factor zero-filling factor, factor of 2 returns a dataset with
-#' twice the original points in the x-y directions.
+#' @param factor zero-filling factor, a factor of 2 returns a dataset with
+#' twice the original points in the x-y directions. Factors smaller than one
+#' are permitted, such that a factor of 0.5 returns half the k-space points in
+#' the x-y directions.
 #' @return zero-filled data.
 #' @export
 zf_xy <- function(mrs_data, factor = 2) {
@@ -2314,6 +2316,8 @@ zf_xy <- function(mrs_data, factor = 2) {
   # check the input
   check_mrs_data(mrs_data)
   
+  if (factor == 1) return(mrs_data)
+  
   # put xy dims into k-space
   mrs_data <- mrsi2d_img2kspace(mrs_data)
   
@@ -2321,11 +2325,18 @@ zf_xy <- function(mrs_data, factor = 2) {
   new_dims  <- orig_dims
   new_dims[2] <- new_dims[2] * factor
   new_dims[3] <- new_dims[3] * factor
-  new_data <- array(0, dim = new_dims)
-  x_inds <- 1:orig_dims[2] + new_dims[2] / 2 - orig_dims[2] / 2
-  y_inds <- 1:orig_dims[3] + new_dims[3] / 2 - orig_dims[3] / 2
-  new_data[,x_inds, y_inds,,,,] <- mrs_data$data
-  mrs_data$data <- new_data 
+  
+  if (factor > 1) {
+    new_data <- array(0, dim = new_dims)
+    x_inds <- 1:orig_dims[2] + new_dims[2] / 2 - orig_dims[2] / 2
+    y_inds <- 1:orig_dims[3] + new_dims[3] / 2 - orig_dims[3] / 2
+    new_data[,x_inds, y_inds,,,,] <- mrs_data$data
+    mrs_data$data <- new_data 
+  } else {
+    x_inds <- 1:new_dims[2] + orig_dims[2] / 2 - new_dims[2] / 2
+    y_inds <- 1:new_dims[3] + orig_dims[3] / 2 - new_dims[3] / 2
+    mrs_data$data <- mrs_data$data[, x_inds, y_inds,,,,,drop = FALSE]
+  }
   
   # put xy dims back to spatial domain
   mrs_data <- mrsi2d_kspace2img(mrs_data)
