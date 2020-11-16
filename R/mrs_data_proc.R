@@ -681,9 +681,13 @@ td2fd <- function(mrs_data) {
     warning("Data is alread in the frequency-domain.")
   }
   
-  mrs_data <- ft(mrs_data, 7)
-  mrs_data$freq_domain[7] = TRUE
-  dimnames(mrs_data$data) <- NULL
+  freq <- matrix(mrs_data$data, ncol = Npts(mrs_data))
+  freq <- t(ft_shift_mat(t(freq)))
+  dim(freq) <- dim(mrs_data$data)
+  mrs_data$data <- freq
+  
+  mrs_data$freq_domain[7] <- TRUE
+  unname(mrs_data$data)
   return(mrs_data)
 }
 
@@ -696,8 +700,12 @@ fd2td <- function(mrs_data) {
     warning("Data is alread in the time-domain.")
   }
   
-  mrs_data <- ift(mrs_data, 7)
-  mrs_data$freq_domain[7] = FALSE
+  time <- matrix(mrs_data$data, ncol = Npts(mrs_data))
+  time <- t(ift_shift_mat(t(time)))
+  dim(time) <- dim(mrs_data$data)
+  mrs_data$data <- time
+  
+  mrs_data$freq_domain[7] <- FALSE
   dimnames(mrs_data$data) <- NULL
   return(mrs_data)
 }
@@ -708,7 +716,7 @@ recon_imag <- function(mrs_data) {
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
   mrs_data <- apply_mrs(mrs_data, 7, recon_imag_vec)
-  mrs_data$freq_domain[7] = FALSE
+  mrs_data$freq_domain[7] <- FALSE
   return(mrs_data)
 }
 
@@ -2373,6 +2381,12 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
   
   phi <- Arg(fp)
   amp <- Mod(fp)
+  
+  # maintain original spatial scaling
+  mean_amps <- apply(amp, c(1,2,3,4,5), mean)
+  dim(mean_amps) <- c(dim(mean_amps), 1, 1)
+  mean_amps <- rep_array_dim(mean_amps, 6, Ncoils(mean_ref))
+  amp <- amp / mean_amps
   
   if (scale & (scale_method != "sig")) {
     if (!is.null(noise)) {
