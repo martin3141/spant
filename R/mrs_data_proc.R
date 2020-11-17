@@ -3094,3 +3094,76 @@ reson_table2mrs_data <- function(reson_table, acq_paras = def_acq_paras(),
                  acq_paras = acq_paras, fp_scale = FALSE,
                  back_extrap_pts = back_extrap_pts)
 }
+
+#' Papoulis-Gerchberg (PG) algorithm method for k-space extrapolation.
+#' 
+#' PG method as described in: Haupt CI, Schuff N, Weiner MW, Maudsley AA.
+#' Removal of lipid artifacts in 1H spectroscopic imaging by data extrapolation.
+#' Magn Reson Med. 1996 May;35(5):678-87. Extrapolation is performed to expand
+#' k-space coverage by a factor of 2, with the aim to reduce Gibbs ringing.
+#' 
+#' @param mrs_data MRS data object.
+#' @param img_mask a boolean matrix of voxels with strong signals to be
+#' extrapolated. Must be twice the dimensions of the input data.
+#' @param kspace_mask a boolean matrix of kspace points that have been sampled.
+#' Typically a circle for MRSI, but defaults to the full rectangular area of
+#' k-space covered by the input data. Must match the x-y dimensions of the input
+#' data.
+#' @param intensity_thresh used to define img_mask based on the strength of the
+#' signal in each voxel. Defaults to intensities greater than 15% of the
+#' maximum. Ignored if img_mask is specified as argument.
+#' @param iters number of iterations to perform.
+#' @return extrapolated \code{mrs_data} object.
+#' @export
+pg_extrap_xy <- function(mrs_data, img_mask = NULL, kspace_mask = NULL,
+                         intensity_thresh = 0.15, iters = 50) {
+  
+  # zero fill kspace by a factor of two
+  mrs_data_zf <- mrs_data %>% zf_xy
+  
+  # central mask of original k-space values
+  # would typically be circular for MRSI but we assume rectangular unless told
+  # otherwise
+  kspace_mask_full <- matrix(FALSE, Nx(mrs_data_zf), Ny(mrs_data_zf)) 
+  x_inds <- 1:Nx(mrs_data) + Nx(mrs_data_zf) / 2 - Nx(mrs_data) / 2
+  y_inds <- 1:Ny(mrs_data) + Ny(mrs_data_zf) / 2 - Nx(mrs_data) / 2
+  if (is.null(kspace_mask)) {
+    # assume rectangular
+    kspace_mask_full[x_inds, y_inds] <- TRUE
+  } else {
+    kspace_mask_full[x_inds, y_inds] <- kspace_mask
+  }
+  
+  # make sure points outside the kspace mask are zero at the start
+  mrs_data_ksp_zf <- mrsi2d_img2kspace(mrs_data_zf)
+  mrs_data_ksp_zf_zerod <- mask_xy_mat(mrs_data_ksp_zf,
+                                       mask = !kspace_mask_full, value = 0)
+  mrs_data_zf <- mrs_data_ksp_zf_zerod %>% mrsi2d_kspace2img
+ 
+  # save a copy 
+  mrs_data_zf_orig <- mrs_data_zf
+  
+  # get an image mask from the interpolated data, generally a scalp lipid mask
+  if (is.null(img_mask)) {
+    img_map  <- int_spec(mrs_data_zf, mode = "mod") %>% drop
+    img_mask <- img_map > (max(img_map) * intensity_thresh)
+  }
+  
+  for (n in 1:iters) {
+    # set all voxels not included in the image mask to zero
+    mask_only <- mask_xy_mat(mrs_data_zf, mask = !img_mask, value = 0)
+    
+    # transform to kspace
+    mask_only_ksp <- mask_only %>% mrsi2d_img2kspace
+    
+    # set inner kspace values (in the kspace_mask_full) to zero to maintain the
+    # original values in the following step
+    mask_only_ksp <- mask_xy_mat(mask_only_ksp, kspace_mask_full, value = 0)
+    
+    # add new peripheral k-space values to the original zero-filled data
+    mrs_data_zf <- mrsi2d_kspace2img(mrsi2d_img2kspace(mrs_data_zf_orig) +
+                                     mask_only_ksp)
+  }
+  
+  return(mrs_data_zf)
+}
