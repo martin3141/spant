@@ -76,7 +76,7 @@
     <loc>https://martin3141.github.io/spant//reference/auto_phase.html</loc>
   </url>
   <url>
-    <loc>https://martin3141.github.io/spant//reference/back_extrap.html</loc>
+    <loc>https://martin3141.github.io/spant//reference/back_extrap_ar.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/basis2mrs_data.html</loc>
@@ -121,13 +121,13 @@
     <loc>https://martin3141.github.io/spant//reference/check_tqn.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant//reference/circ_mask.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant//reference/collapse_to_dyns.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/comb_coils.html</loc>
-  </url>
-  <url>
-    <loc>https://martin3141.github.io/spant//reference/comb_coils_fp_pc.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/comb_csv_results.html</loc>
@@ -154,7 +154,10 @@
     <loc>https://martin3141.github.io/spant//reference/crossprod_3d.html</loc>
   </url>
   <url>
-    <loc>https://martin3141.github.io/spant//reference/decimate_mrs.html</loc>
+    <loc>https://martin3141.github.io/spant//reference/decimate_mrs_fd.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/decimate_mrs_td.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/def_N.html</loc>
@@ -178,7 +181,10 @@
     <loc>https://martin3141.github.io/spant//reference/diff_mrs.html</loc>
   </url>
   <url>
-    <loc>https://martin3141.github.io/spant//reference/downsample_mrs.html</loc>
+    <loc>https://martin3141.github.io/spant//reference/downsample_mrs_fd.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/downsample_mrs_td.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/ecc.html</loc>
@@ -209,6 +215,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/fp_phase_correct.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/fp_scale.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/fs.html</loc>
@@ -328,7 +337,19 @@
     <loc>https://martin3141.github.io/spant//reference/grid_shift_xy.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant//reference/gridplot.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/gridplot.mrs_data.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/hsvd.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant//reference/hsvd_filt.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/hsvd_vec.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/hz.html</loc>
@@ -341,6 +362,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/image.mrs_data.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/img2kspace_xy.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/int_spec.html</loc>
@@ -358,6 +382,9 @@
     <loc>https://martin3141.github.io/spant//reference/is_fd.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant//reference/kspace2img_xy.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant//reference/l2_reg.html</loc>
   </url>
   <url>
@@ -368,6 +395,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/lw2beta.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/mask_dyns.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/mask_xy.html</loc>
@@ -409,12 +439,6 @@
     <loc>https://martin3141.github.io/spant//reference/mrs_data2vec.html</loc>
   </url>
   <url>
-    <loc>https://martin3141.github.io/spant//reference/mrsi2d_img2kspace.html</loc>
-  </url>
-  <url>
-    <loc>https://martin3141.github.io/spant//reference/mrsi2d_kspace2img.html</loc>
-  </url>
-  <url>
     <loc>https://martin3141.github.io/spant//reference/mvfftshift.html</loc>
   </url>
   <url>
@@ -437,6 +461,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/peak_info.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/pg_extrap_xy.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/phase.html</loc>
@@ -470,6 +497,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/ppm.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/precomp.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/print.fit_result.html</loc>
@@ -538,6 +568,9 @@
     <loc>https://martin3141.github.io/spant//reference/reslice_to_mrs.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant//reference/reson_table2mrs_data.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant//reference/rm_dyns.html</loc>
   </url>
   <url>
@@ -598,6 +631,12 @@
     <loc>https://martin3141.github.io/spant//reference/set_lw.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant//reference/set_precomp_mode.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/set_precomp_verbose.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant//reference/set_ref.html</loc>
   </url>
   <url>
@@ -644,6 +683,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/spm_pve2categorical.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/ssp.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/stackplot.html</loc>

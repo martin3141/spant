@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
       </span>
     </div>
 
@@ -140,9 +140,25 @@
       <small>Source: <a href='https://github.com/martin3141/spant/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="spant-180" class="section level1">
+<h1 class="page-header" data-toc-text="1.8.0">
+<a href="#spant-180" class="anchor"></a>spant 1.8.0<small> Unreleased </small>
+</h1>
+<ul>
+<li>Added gridplot function.</li>
+<li>New functions added for down sampling.</li>
+<li>Added signal space projection method for MRSI.</li>
+<li>Geometry information is now read from Siemens twix files.</li>
+<li>GitHub actions are now used for continuous integration instead of Travis and AppVeyor.</li>
+<li>Added precomp function to avoid repeated computation.</li>
+<li>mrs_data2mat function now collapses all dimensions to dynamics by default.</li>
+<li>mrs_data objects now store the nucleus.</li>
+<li>Added a reader for old Varian format (fid/procpar) data.</li>
+</ul>
+</div>
     <div id="spant-170" class="section level1">
 <h1 class="page-header" data-toc-text="1.7.0">
-<a href="#spant-170" class="anchor"></a>spant 1.7.0<small> Unreleased </small>
+<a href="#spant-170" class="anchor"></a>spant 1.7.0<small> 2020-07-09 </small>
 </h1>
 <ul>
 <li>Added write_mrs function which guesses the output format from the file extension or can be specified as an argument. write_mrs_XXX functions have been depreciated.</li>
@@ -476,7 +492,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

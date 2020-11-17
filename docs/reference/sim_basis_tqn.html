@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
       </span>
     </div>
 
@@ -146,13 +146,13 @@
     <p>Simulate a basis file using TARQUIN.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sim_basis_tqn</span>(
-  <span class='kw'>fs</span> <span class='kw'>=</span> <span class='fu'><a href='def_fs.html'>def_fs</a></span>(),
-  <span class='kw'>ft</span> <span class='kw'>=</span> <span class='fu'><a href='def_ft.html'>def_ft</a></span>(),
-  <span class='kw'>N</span> <span class='kw'>=</span> <span class='fu'><a href='def_N.html'>def_N</a></span>(),
-  <span class='kw'>ref</span> <span class='kw'>=</span> <span class='fu'><a href='def_ref.html'>def_ref</a></span>(),
-  <span class='kw'>opts</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>sim_basis_tqn</span><span class='op'>(</span>
+  fs <span class='op'>=</span> <span class='fu'><a href='def_fs.html'>def_fs</a></span><span class='op'>(</span><span class='op'>)</span>,
+  ft <span class='op'>=</span> <span class='fu'><a href='def_ft.html'>def_ft</a></span><span class='op'>(</span><span class='op'>)</span>,
+  N <span class='op'>=</span> <span class='fu'><a href='def_N.html'>def_N</a></span><span class='op'>(</span><span class='op'>)</span>,
+  ref <span class='op'>=</span> <span class='fu'><a href='def_ref.html'>def_ref</a></span><span class='op'>(</span><span class='op'>)</span>,
+  opts <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -181,9 +181,10 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='write_basis_tqn.html'>write_basis_tqn</a></span>(<span class='st'>'test.basis'</span>,<span class='no'>mrs_data</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"--echo"</span>,<span class='st'>"0.04"</span>))
-}</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'><a href='write_basis_tqn.html'>write_basis_tqn</a></span><span class='op'>(</span><span class='st'>'test.basis'</span>,<span class='va'>mrs_data</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"--echo"</span>,<span class='st'>"0.04"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -199,7 +200,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

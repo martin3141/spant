@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
       </span>
     </div>
 
@@ -146,16 +146,16 @@
     <p>Return a list of options for VARPRO based fitting.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>varpro_opts</span>(
-  <span class='kw'>nstart</span> <span class='kw'>=</span> <span class='fl'>20</span>,
-  <span class='kw'>init_g_damping</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>maxiters</span> <span class='kw'>=</span> <span class='fl'>200</span>,
-  <span class='kw'>max_shift</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>max_g_damping</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>max_ind_damping</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>anal_jac</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>bl_smth_pts</span> <span class='kw'>=</span> <span class='fl'>80</span>
-)</pre>
+    <pre class="usage"><span class='fu'>varpro_opts</span><span class='op'>(</span>
+  nstart <span class='op'>=</span> <span class='fl'>20</span>,
+  init_g_damping <span class='op'>=</span> <span class='fl'>2</span>,
+  maxiters <span class='op'>=</span> <span class='fl'>200</span>,
+  max_shift <span class='op'>=</span> <span class='fl'>5</span>,
+  max_g_damping <span class='op'>=</span> <span class='fl'>5</span>,
+  max_ind_damping <span class='op'>=</span> <span class='fl'>5</span>,
+  anal_jac <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  bl_smth_pts <span class='op'>=</span> <span class='fl'>80</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -204,7 +204,8 @@ calculation.</p></td>
     <p>list of options.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>varpro_opts</span>(<span class='kw'>nstart</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; $nstart
+    <pre class="examples"><div class='input'><span class='fu'>varpro_opts</span><span class='op'>(</span>nstart <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $nstart
 #&gt; [1] 10
 #&gt; 
 #&gt; $init_g_damping
@@ -243,7 +244,7 @@ calculation.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

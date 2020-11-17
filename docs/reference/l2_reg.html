@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Perform l2 regularisation artefact suppression using the method proposed by
-Bilgic et al. JMRI 40(1):181-91 2014. — l2_reg • Spectroscopy Analysis Tools (spant)</title>
+<title>Perform l2 regularisation artefact suppression. — l2_reg • Spectroscopy Analysis Tools (spant)</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,8 +46,7 @@ Bilgic et al. JMRI 40(1):181-91 2014. — l2_reg • Spectroscopy Analysis Tools
 
 
 
-<meta property="og:title" content="Perform l2 regularisation artefact suppression using the method proposed by
-Bilgic et al. JMRI 40(1):181-91 2014. — l2_reg" />
+<meta property="og:title" content="Perform l2 regularisation artefact suppression. — l2_reg" />
 <meta property="og:description" content="Perform l2 regularisation artefact suppression using the method proposed by
 Bilgic et al. JMRI 40(1):181-91 2014." />
 <meta property="og:image" content="https://martin3141.github.io/spant/logo.png" />
@@ -83,7 +81,7 @@ Bilgic et al. JMRI 40(1):181-91 2014." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
       </span>
     </div>
 
@@ -140,8 +138,7 @@ Bilgic et al. JMRI 40(1):181-91 2014." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Perform l2 regularisation artefact suppression using the method proposed by
-Bilgic et al. JMRI 40(1):181-91 2014.</h1>
+    <h1>Perform l2 regularisation artefact suppression.</h1>
     <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/mrs_data_proc.R'><code>R/mrs_data_proc.R</code></a></small>
     <div class="hidden name"><code>l2_reg.Rd</code></div>
     </div>
@@ -151,7 +148,7 @@ Bilgic et al. JMRI 40(1):181-91 2014.</h1>
 Bilgic et al. JMRI 40(1):181-91 2014.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>l2_reg</span>(<span class='no'>mrs_data</span>, <span class='no'>A</span>, <span class='no'>b</span>)</pre>
+    <pre class="usage"><span class='fu'>l2_reg</span><span class='op'>(</span><span class='va'>mrs_data</span>, thresh <span class='op'>=</span> <span class='fl'>0.05</span>, b <span class='op'>=</span> <span class='fl'>1e-11</span>, A <span class='op'>=</span> <span class='cn'>NA</span>, xlim <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -161,13 +158,23 @@ Bilgic et al. JMRI 40(1):181-91 2014.</p>
       <td><p>input data for artefact suppression.</p></td>
     </tr>
     <tr>
-      <th>A</th>
-      <td><p>matrix of spectral data points containing the artefact basis
-signals.</p></td>
+      <th>thresh</th>
+      <td><p>threshold parameter to extract lipid signals from mrs_data
+based on the integration of the full spectral width in magnitude mode.</p></td>
     </tr>
     <tr>
       <th>b</th>
       <td><p>regularisation parameter.</p></td>
+    </tr>
+    <tr>
+      <th>A</th>
+      <td><p>set of spectra containing the artefact basis signals. The thresh
+parameter is ignored when A is specified.</p></td>
+    </tr>
+    <tr>
+      <th>xlim</th>
+      <td><p>spectral limits in ppm to restrict the reconstruction range.
+Defaults to the full spectral width.</p></td>
     </tr>
     </table>
 
@@ -190,7 +197,7 @@ signals.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

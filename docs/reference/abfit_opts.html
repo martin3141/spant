@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
       </span>
     </div>
 
@@ -146,46 +146,46 @@
     <p>Return a list of options for an ABfit analysis.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>abfit_opts</span>(
-  <span class='kw'>init_damping</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>maxiters</span> <span class='kw'>=</span> <span class='fl'>1024</span>,
-  <span class='kw'>max_shift</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>max_damping</span> <span class='kw'>=</span> <span class='fl'>15</span>,
-  <span class='kw'>max_phase</span> <span class='kw'>=</span> <span class='fl'>360</span>,
-  <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ppm_left</span> <span class='kw'>=</span> <span class='fl'>4</span>,
-  <span class='kw'>ppm_right</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
-  <span class='kw'>zp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>bl_ed_pppm</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>auto_bl_flex</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>bl_comps_pppm</span> <span class='kw'>=</span> <span class='fl'>15</span>,
-  <span class='kw'>export_sp_fit</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>max_asym</span> <span class='kw'>=</span> <span class='fl'>0.25</span>,
-  <span class='kw'>max_basis_shift</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>max_basis_damping</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>maxiters_pre</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>algo_pre</span> <span class='kw'>=</span> <span class='st'>"NLOPT_LN_NELDERMEAD"</span>,
-  <span class='kw'>min_bl_ed_pppm</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>max_bl_ed_pppm</span> <span class='kw'>=</span> <span class='fl'>7</span>,
-  <span class='kw'>auto_bl_flex_n</span> <span class='kw'>=</span> <span class='fl'>20</span>,
-  <span class='kw'>pre_fit_bl_ed_pppm</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>remove_lip_mm_prefit</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>pre_align</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>max_pre_align_shift</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
-  <span class='kw'>pre_align_ref_freqs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2.01</span>, <span class='fl'>3.03</span>, <span class='fl'>3.22</span>),
-  <span class='kw'>noise_region</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>0.5</span>, -<span class='fl'>2.5</span>),
-  <span class='kw'>optimal_smooth_criterion</span> <span class='kw'>=</span> <span class='st'>"maic"</span>,
-  <span class='kw'>aic_smoothing_factor</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>anal_jac</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>pre_fit_ppm_left</span> <span class='kw'>=</span> <span class='fl'>4</span>,
-  <span class='kw'>pre_fit_ppm_right</span> <span class='kw'>=</span> <span class='fl'>1.8</span>,
-  <span class='kw'>phi1_optim</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>phi1_init</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>max_dphi1</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
-  <span class='kw'>max_basis_shift_broad</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>max_basis_damping_broad</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>ahat_calc_method</span> <span class='kw'>=</span> <span class='st'>"lh_pnnls"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>abfit_opts</span><span class='op'>(</span>
+  init_damping <span class='op'>=</span> <span class='fl'>5</span>,
+  maxiters <span class='op'>=</span> <span class='fl'>1024</span>,
+  max_shift <span class='op'>=</span> <span class='fl'>10</span>,
+  max_damping <span class='op'>=</span> <span class='fl'>15</span>,
+  max_phase <span class='op'>=</span> <span class='fl'>360</span>,
+  lambda <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ppm_left <span class='op'>=</span> <span class='fl'>4</span>,
+  ppm_right <span class='op'>=</span> <span class='fl'>0.2</span>,
+  zp <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  bl_ed_pppm <span class='op'>=</span> <span class='fl'>2</span>,
+  auto_bl_flex <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  bl_comps_pppm <span class='op'>=</span> <span class='fl'>15</span>,
+  export_sp_fit <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  max_asym <span class='op'>=</span> <span class='fl'>0.25</span>,
+  max_basis_shift <span class='op'>=</span> <span class='fl'>1</span>,
+  max_basis_damping <span class='op'>=</span> <span class='fl'>2</span>,
+  maxiters_pre <span class='op'>=</span> <span class='fl'>1000</span>,
+  algo_pre <span class='op'>=</span> <span class='st'>"NLOPT_LN_NELDERMEAD"</span>,
+  min_bl_ed_pppm <span class='op'>=</span> <span class='cn'>NULL</span>,
+  max_bl_ed_pppm <span class='op'>=</span> <span class='fl'>7</span>,
+  auto_bl_flex_n <span class='op'>=</span> <span class='fl'>20</span>,
+  pre_fit_bl_ed_pppm <span class='op'>=</span> <span class='fl'>1</span>,
+  remove_lip_mm_prefit <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  pre_align <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  max_pre_align_shift <span class='op'>=</span> <span class='fl'>0.1</span>,
+  pre_align_ref_freqs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2.01</span>, <span class='fl'>3.03</span>, <span class='fl'>3.22</span><span class='op'>)</span>,
+  noise_region <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>0.5</span>, <span class='op'>-</span><span class='fl'>2.5</span><span class='op'>)</span>,
+  optimal_smooth_criterion <span class='op'>=</span> <span class='st'>"maic"</span>,
+  aic_smoothing_factor <span class='op'>=</span> <span class='fl'>5</span>,
+  anal_jac <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  pre_fit_ppm_left <span class='op'>=</span> <span class='fl'>4</span>,
+  pre_fit_ppm_right <span class='op'>=</span> <span class='fl'>1.8</span>,
+  phi1_optim <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  phi1_init <span class='op'>=</span> <span class='fl'>0</span>,
+  max_dphi1 <span class='op'>=</span> <span class='fl'>0.2</span>,
+  max_basis_shift_broad <span class='op'>=</span> <span class='fl'>1</span>,
+  max_basis_damping_broad <span class='op'>=</span> <span class='fl'>2</span>,
+  ahat_calc_method <span class='op'>=</span> <span class='st'>"lh_pnnls"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -370,7 +370,8 @@ one of: "lh_pnnls" or "ls".</p></td>
     <p>full list of options.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>opts</span> <span class='kw'>&lt;-</span> <span class='fu'>abfit_opts</span>(<span class='kw'>ppm_left</span> <span class='kw'>=</span> <span class='fl'>4.2</span>, <span class='kw'>noise_region</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>1</span>, -<span class='fl'>3</span>))</div></pre>
+    <pre class="examples"><div class='input'><span class='va'>opts</span> <span class='op'>&lt;-</span> <span class='fu'>abfit_opts</span><span class='op'>(</span>ppm_left <span class='op'>=</span> <span class='fl'>4.2</span>, noise_region <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>, <span class='op'>-</span><span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -386,7 +387,7 @@ one of: "lh_pnnls" or "ls".</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
       </span>
     </div>
 
@@ -254,7 +254,7 @@
         <td>
           <p><code><a href="apodise_xy.html">apodise_xy()</a></code> </p>
         </td>
-        <td><p>Apodise MRSI data in the x-y direction with a k-space hamming filter.</p></td>
+        <td><p>Apodise MRSI data in the x-y direction with a k-space filter.</p></td>
       </tr><tr>
         
         <td>
@@ -312,9 +312,9 @@ spectrum.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="back_extrap.html">back_extrap()</a></code> </p>
+          <p><code><a href="back_extrap_ar.html">back_extrap_ar()</a></code> </p>
         </td>
-        <td><p>Back extrapolate time-domain points using the Burg autoregressive model</p></td>
+        <td><p>Back extrapolate time-domain data points using an autoregressive model.</p></td>
       </tr><tr>
         
         <td>
@@ -406,6 +406,12 @@ residuals.</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="circ_mask.html">circ_mask()</a></code> </p>
+        </td>
+        <td><p>Create a logical circular mask spanning the full extent of an n x n matrix.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="collapse_to_dyns.html">collapse_to_dyns()</a></code> </p>
         </td>
         <td><p>Collapse MRS data by concatenating spectra along the dynamic dimension.</p></td>
@@ -415,13 +421,6 @@ residuals.</p></td>
           <p><code><a href="comb_coils.html">comb_coils()</a></code> </p>
         </td>
         <td><p>Combine coil data based on the first data point of a reference signal.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="comb_coils_fp_pc.html">comb_coils_fp_pc()</a></code> </p>
-        </td>
-        <td><p>Combine coil data following phase correction based on the first data point
-in the FID.</p></td>
       </tr><tr>
         
         <td>
@@ -475,9 +474,16 @@ http://stackoverflow.com/questions/15162741/what-is-rs-crossproduct-function</p>
       </tr><tr>
         
         <td>
-          <p><code><a href="decimate_mrs.html">decimate_mrs()</a></code> </p>
+          <p><code><a href="decimate_mrs_fd.html">decimate_mrs_fd()</a></code> </p>
         </td>
-        <td><p>Decimate an MRS signal by a factor.</p></td>
+        <td><p>Decimate an MRS signal to half the original sampling frequency by filtering
+in the frequency domain before down sampling.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="decimate_mrs_td.html">decimate_mrs_td()</a></code> </p>
+        </td>
+        <td><p>Decimate an MRS signal by filtering in the time domain before downsampling.</p></td>
       </tr><tr>
         
         <td>
@@ -524,9 +530,17 @@ default acquisition parameters.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="downsample_mrs.html">downsample_mrs()</a></code> </p>
+          <p><code><a href="downsample_mrs_fd.html">downsample_mrs_fd()</a></code> </p>
         </td>
         <td><p>Downsample an MRS signal by a factor of 2 using an FFT "brick-wall" filter.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="downsample_mrs_td.html">downsample_mrs_td()</a></code> </p>
+        </td>
+        <td><p>Downsample an MRS signal by a factor of 2 by removing every other data point
+in the time-domain. Note, signals outside the new sampling frequency will be
+aliased.</p></td>
       </tr><tr>
         
         <td>
@@ -588,6 +602,12 @@ default acquisition parameters.</p></td>
         </td>
         <td><p>Perform a zeroth order phase correction based on the phase of the first data
 point in the time-domain.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="fp_scale.html">fp_scale()</a></code> </p>
+        </td>
+        <td><p>Scale the first time-domain data point in an mrs_data object.</p></td>
       </tr><tr>
         
         <td>
@@ -832,9 +852,33 @@ time domain and extrapolating back to t=0.</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="gridplot.html">gridplot()</a></code> </p>
+        </td>
+        <td><p>Arrange spectral plots in a grid.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gridplot.mrs_data.html">gridplot(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Arrange spectral plots in a grid.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="hsvd.html">hsvd()</a></code> </p>
+        </td>
+        <td><p>HSVD of an mrs_data object.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="hsvd_filt.html">hsvd_filt()</a></code> </p>
         </td>
         <td><p>HSVD based signal filter.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="hsvd_vec.html">hsvd_vec()</a></code> </p>
+        </td>
+        <td><p>HSVD of a complex vector.</p></td>
       </tr><tr>
         
         <td>
@@ -860,6 +904,12 @@ shifted ifft.</p></td>
           <p><code><a href="image.mrs_data.html">image(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
         </td>
         <td><p>Image plot method for objects of class mrs_data.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="img2kspace_xy.html">img2kspace_xy()</a></code> </p>
+        </td>
+        <td><p>Transform 2D MRSI data to k-space in the x-y direction.</p></td>
       </tr><tr>
         
         <td>
@@ -894,10 +944,15 @@ frequency domain.</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="kspace2img_xy.html">kspace2img_xy()</a></code> </p>
+        </td>
+        <td><p>Transform 2D MRSI data from k-space to image space in the x-y direction.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="l2_reg.html">l2_reg()</a></code> </p>
         </td>
-        <td><p>Perform l2 regularisation artefact suppression using the method proposed by
-Bilgic et al. JMRI 40(1):181-91 2014.</p></td>
+        <td><p>Perform l2 regularisation artefact suppression.</p></td>
       </tr><tr>
         
         <td>
@@ -921,6 +976,12 @@ x * exp(-t * t * beta).</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="mask_dyns.html">mask_dyns()</a></code> </p>
+        </td>
+        <td><p>Mask an MRS dataset in the dynamic dimension.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="mask_xy.html">mask_xy()</a></code> </p>
         </td>
         <td><p>Mask an MRSI dataset in the x-y direction</p></td>
@@ -935,8 +996,8 @@ x * exp(-t * t * beta).</p></td>
         <td>
           <p><code><a href="mat2mrs_data.html">mat2mrs_data()</a></code> </p>
         </td>
-        <td><p>Convert a matrix (with spectral points in the row dimension and dynamics in
-the column dimensions) into a mrs_data object.</p></td>
+        <td><p>Convert a matrix (with spectral points in the column dimension and dynamics
+in the row dimensions) into a mrs_data object.</p></td>
       </tr><tr>
         
         <td>
@@ -1002,18 +1063,6 @@ dimension and dynamics in the row dimension.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="mrsi2d_img2kspace.html">mrsi2d_img2kspace()</a></code> </p>
-        </td>
-        <td><p>Transform 2D MRSI data to k-space in the x-y direction.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="mrsi2d_kspace2img.html">mrsi2d_kspace2img()</a></code> </p>
-        </td>
-        <td><p>Transform 2D MRSI data from k-space to image space in the x-y direction.</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="mvfftshift.html">mvfftshift()</a></code> </p>
         </td>
         <td><p>Perform a fftshift on a matrix, with each column replaced by its shifted
@@ -1064,6 +1113,12 @@ neurological format (can check with fslorient program).</p></td>
         </td>
         <td><p>Search for the highest peak in a spectral region and return the frequency,
 height and FWHM.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pg_extrap_xy.html">pg_extrap_xy()</a></code> </p>
+        </td>
+        <td><p>Papoulis-Gerchberg (PG) algorithm method for k-space extrapolation.</p></td>
       </tr><tr>
         
         <td>
@@ -1131,6 +1186,13 @@ to display a corresponding spectrum.</p></td>
           <p><code><a href="ppm.html">ppm()</a></code> </p>
         </td>
         <td><p>Return the ppm scale of an MRS dataset or fit result.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="precomp.html">precomp()</a></code> </p>
+        </td>
+        <td><p>Save function results to file and load on subsequent calls to avoid repeat
+computation.</p></td>
       </tr><tr>
         
         <td>
@@ -1265,6 +1327,12 @@ interpolation.</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="reson_table2mrs_data.html">reson_table2mrs_data()</a></code> </p>
+        </td>
+        <td><p>Generate mrs_data from a table of single Lorentzian resonances.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="rm_dyns.html">rm_dyns()</a></code> </p>
         </td>
         <td><p>Remove a subset of dynamic scans.</p></td>
@@ -1387,6 +1455,18 @@ editing pulse.</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="set_precomp_mode.html">set_precomp_mode()</a></code> </p>
+        </td>
+        <td><p>Set the precompute mode.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="set_precomp_verbose.html">set_precomp_verbose()</a></code> </p>
+        </td>
+        <td><p>Set the verbosity of the precompute function.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="set_ref.html">set_ref()</a></code> </p>
         </td>
         <td><p>Set the ppm reference value (eg ppm value at 0Hz).</p></td>
@@ -1484,6 +1564,12 @@ sequence. Note, ideal pulses are assumed.</p></td>
         </td>
         <td><p>Convert SPM style segmentation files to a single categorical image where
 the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="ssp.html">ssp()</a></code> </p>
+        </td>
+        <td><p>Signal space projection method for lipid suppression.</p></td>
       </tr><tr>
         
         <td>
@@ -1617,7 +1703,7 @@ individual basis set components shown.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

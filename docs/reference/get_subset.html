@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
       </span>
     </div>
 
@@ -146,14 +146,16 @@
     <p>Extract a subset of MRS data.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_subset</span>(
-  <span class='no'>mrs_data</span>,
-  <span class='kw'>x_set</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>y_set</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>z_set</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>dyn_set</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>coil_set</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>get_subset</span><span class='op'>(</span>
+  <span class='va'>mrs_data</span>,
+  x_set <span class='op'>=</span> <span class='cn'>NULL</span>,
+  y_set <span class='op'>=</span> <span class='cn'>NULL</span>,
+  z_set <span class='op'>=</span> <span class='cn'>NULL</span>,
+  dyn_set <span class='op'>=</span> <span class='cn'>NULL</span>,
+  coil_set <span class='op'>=</span> <span class='cn'>NULL</span>,
+  fd_set <span class='op'>=</span> <span class='cn'>NULL</span>,
+  td_set <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -182,6 +184,15 @@
       <th>coil_set</th>
       <td><p>coil indices to include in the output (default all).</p></td>
     </tr>
+    <tr>
+      <th>fd_set</th>
+      <td><p>frequency domain data indices to include in the output (default
+all).</p></td>
+    </tr>
+    <tr>
+      <th>td_set</th>
+      <td><p>time-domain indices to include in the output (default all).</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -203,7 +214,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

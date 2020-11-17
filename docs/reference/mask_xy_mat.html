@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
       </span>
     </div>
 
@@ -146,7 +146,7 @@
     <p>Mask a 2D MRSI dataset in the x-y dimension.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mask_xy_mat</span>(<span class='no'>mrs_data</span>, <span class='no'>mask</span>)</pre>
+    <pre class="usage"><span class='fu'>mask_xy_mat</span><span class='op'>(</span><span class='va'>mrs_data</span>, <span class='va'>mask</span>, value <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,6 +159,10 @@
       <th>mask</th>
       <td><p>matrix of boolean values specifying the voxels to mask, where a
 value of TRUE indicates the voxel should be removed.</p></td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td><p>the value to set masked data to (usually NA or 0).</p></td>
     </tr>
     </table>
 
@@ -181,7 +185,7 @@ value of TRUE indicates the voxel should be removed.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

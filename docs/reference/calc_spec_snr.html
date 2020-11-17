@@ -81,7 +81,7 @@ of the noise." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
       </span>
     </div>
 
@@ -148,14 +148,14 @@ of the noise." />
 of the noise.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>calc_spec_snr</span>(
-  <span class='no'>mrs_data</span>,
-  <span class='kw'>sig_region</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>4</span>, <span class='fl'>0.5</span>),
-  <span class='kw'>noise_region</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>0.5</span>, -<span class='fl'>2.5</span>),
-  <span class='kw'>p_order</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>interp_f</span> <span class='kw'>=</span> <span class='fl'>4</span>,
-  <span class='kw'>full_output</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>calc_spec_snr</span><span class='op'>(</span>
+  <span class='va'>mrs_data</span>,
+  sig_region <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>0.5</span><span class='op'>)</span>,
+  noise_region <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>0.5</span>, <span class='op'>-</span><span class='fl'>2.5</span><span class='op'>)</span>,
+  p_order <span class='op'>=</span> <span class='fl'>2</span>,
+  interp_f <span class='op'>=</span> <span class='fl'>4</span>,
+  full_output <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -214,7 +214,7 @@ to the noise region before the noise standard deviation is estimated.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
