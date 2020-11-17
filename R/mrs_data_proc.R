@@ -2225,7 +2225,7 @@ apodise_xy <- function(mrs_data, func = "hamming", w = 2.5) {
   y_dim <- mrsi_dims[3]
   N <- mrsi_dims[7]
   
-  mrs_data <- mrsi2d_img2kspace(mrs_data)
+  mrs_data <- img2kspace_xy(mrs_data)
   
   mat <- mrs_data$data
   mat <- drop(mat)
@@ -2255,7 +2255,7 @@ apodise_xy <- function(mrs_data, func = "hamming", w = 2.5) {
   mrs_data$data <- mat
   
   # put xy dims back to space
-  mrs_data <- mrsi2d_kspace2img(mrs_data)
+  mrs_data <- kspace2img_xy(mrs_data)
   return(mrs_data)
 }
 
@@ -2276,7 +2276,7 @@ grid_shift_xy <- function(mrs_data, x_shift, y_shift) {
   y_dim <- mrsi_dims[3]
   N <- mrsi_dims[7]
   
-  mrs_data <- mrsi2d_img2kspace(mrs_data)
+  mrs_data <- img2kspace_xy(mrs_data)
   
   mat <- mrs_data$data
   mat <- drop(mat)
@@ -2298,7 +2298,7 @@ grid_shift_xy <- function(mrs_data, x_shift, y_shift) {
   mrs_data$data <- mat
   
   # put xy dims back to space
-  mrs_data <- mrsi2d_kspace2img(mrs_data)
+  mrs_data <- kspace2img_xy(mrs_data)
   return(mrs_data)
 }
 
@@ -2319,7 +2319,7 @@ zf_xy <- function(mrs_data, factor = 2) {
   if (factor == 1) return(mrs_data)
   
   # put xy dims into k-space
-  mrs_data <- mrsi2d_img2kspace(mrs_data)
+  mrs_data <- img2kspace_xy(mrs_data)
   
   orig_dims <- dim(mrs_data$data)
   new_dims  <- orig_dims
@@ -2339,7 +2339,7 @@ zf_xy <- function(mrs_data, factor = 2) {
   }
   
   # put xy dims back to spatial domain
-  mrs_data <- mrsi2d_kspace2img(mrs_data)
+  mrs_data <- kspace2img_xy(mrs_data)
 }
 
 hamming_vec <- function(vector) {
@@ -2793,12 +2793,15 @@ bc_als_vec <- function(vec, lambda, p) {
 #' @param method character string specifying the method to fit the model. Must
 #' be one of the strings in the default argument (the first few characters are
 #' sufficient). Defaults to "burg".
+#' @param rem_add remove additional points from the end of the FID to maintain
+#' the original length of the dataset. Default to TRUE.
 #' @param ... additional arguments to specific methods, see ?ar.
 #' @return back extrapolated data.
 #' @export
 back_extrap_ar <- function(mrs_data, extrap_pts, pred_pts = NULL,
-                           method = "burg", ...) {
+                           method = "burg", rem_add = TRUE, ...) {
   
+  # a time-domain operation
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
   Np <- Npts(mrs_data) 
@@ -2807,8 +2810,12 @@ back_extrap_ar <- function(mrs_data, extrap_pts, pred_pts = NULL,
   mrs_data <- apply_mrs(mrs_data, 7, back_extrap_vec, extrap_pts, pred_pts,
                         method, ...)
   mrs_data$data <- mrs_data$data[,,,,,,(Np + extrap_pts):1, drop = FALSE]
+  
+  if (rem_add) mrs_data <- get_subset(mrs_data, td_set = 1:Np)
+  
   dimnames(mrs_data$data) <- NULL
-  mrs_data
+  
+  return(mrs_data)
 }
 
 back_extrap_vec <- function(vec, extrap_pts, pred_pts, method, ...) {
@@ -2858,7 +2865,7 @@ calc_spec_diff <- function(mrs_data, ref = NULL, xlim = c(4, 0.5)) {
 #' @param mrs_data 2D MRSI data.
 #' @return k-space data.
 #' @export
-mrsi2d_img2kspace <- function(mrs_data) {
+img2kspace_xy <- function(mrs_data) {
   
   # check the input
   check_mrs_data(mrs_data) 
@@ -2887,7 +2894,7 @@ mrsi2d_img2kspace <- function(mrs_data) {
 #' @param mrs_data 2D MRSI data.
 #' @return MRSI data in image space.
 #' @export
-mrsi2d_kspace2img <- function(mrs_data) {
+kspace2img_xy <- function(mrs_data) {
   
   # check the input
   check_mrs_data(mrs_data) 
@@ -3119,7 +3126,7 @@ pg_extrap_xy <- function(mrs_data, img_mask = NULL, kspace_mask = NULL,
                          intensity_thresh = 0.15, iters = 50) {
   
   # zero fill kspace by a factor of two
-  mrs_data_zf <- mrs_data %>% zf_xy
+  mrs_data_zf <- zf_xy(mrs_data)
   
   # central mask of original k-space values
   # would typically be circular for MRSI but we assume rectangular unless told
@@ -3135,17 +3142,17 @@ pg_extrap_xy <- function(mrs_data, img_mask = NULL, kspace_mask = NULL,
   }
   
   # make sure points outside the kspace mask are zero at the start
-  mrs_data_ksp_zf <- mrsi2d_img2kspace(mrs_data_zf)
+  mrs_data_ksp_zf <- img2kspace_xy(mrs_data_zf)
   mrs_data_ksp_zf_zerod <- mask_xy_mat(mrs_data_ksp_zf,
                                        mask = !kspace_mask_full, value = 0)
-  mrs_data_zf <- mrs_data_ksp_zf_zerod %>% mrsi2d_kspace2img
+  mrs_data_zf <- kspace2img_xy(mrs_data_ksp_zf_zerod)
  
   # save a copy 
   mrs_data_zf_orig <- mrs_data_zf
   
   # get an image mask from the interpolated data, generally a scalp lipid mask
   if (is.null(img_mask)) {
-    img_map  <- int_spec(mrs_data_zf, mode = "mod") %>% drop
+    img_map  <- drop(int_spec(mrs_data_zf, mode = "mod"))
     img_mask <- img_map > (max(img_map) * intensity_thresh)
   }
   
@@ -3154,14 +3161,14 @@ pg_extrap_xy <- function(mrs_data, img_mask = NULL, kspace_mask = NULL,
     mask_only <- mask_xy_mat(mrs_data_zf, mask = !img_mask, value = 0)
     
     # transform to kspace
-    mask_only_ksp <- mask_only %>% mrsi2d_img2kspace
+    mask_only_ksp <- img2kspace_xy(mask_only)
     
     # set inner kspace values (in the kspace_mask_full) to zero to maintain the
     # original values in the following step
     mask_only_ksp <- mask_xy_mat(mask_only_ksp, kspace_mask_full, value = 0)
     
     # add new peripheral k-space values to the original zero-filled data
-    mrs_data_zf <- mrsi2d_kspace2img(mrsi2d_img2kspace(mrs_data_zf_orig) +
+    mrs_data_zf <- kspace2img_xy(img2kspace_xy(mrs_data_zf_orig) +
                                      mask_only_ksp)
   }
   

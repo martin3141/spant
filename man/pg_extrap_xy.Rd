@@ -4,7 +4,13 @@
 \alias{pg_extrap_xy}
 \title{Papoulis-Gerchberg (PG) algorithm method for k-space extrapolation.}
 \usage{
-pg_extrap_xy(mrs_data, img_mask = NULL, kspace_mask = NULL, iters = 50)
+pg_extrap_xy(
+  mrs_data,
+  img_mask = NULL,
+  kspace_mask = NULL,
+  intensity_thresh = 0.15,
+  iters = 50
+)
 }
 \arguments{
 \item{mrs_data}{MRS data object.}
@@ -16,6 +22,10 @@ extrapolated. Must be twice the dimensions of the input data.}
 Typically a circle for MRSI, but defaults to the full rectangular area of
 k-space covered by the input data. Must match the x-y dimensions of the input
 data.}
+
+\item{intensity_thresh}{used to define img_mask based on the strength of the
+signal in each voxel. Defaults to intensities greater than 15\% of the
+maximum. Ignored if img_mask is specified as argument.}
 
 \item{iters}{number of iterations to perform.}
 }

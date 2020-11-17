@@ -4,7 +4,14 @@
 \alias{back_extrap_ar}
 \title{Back extrapolate time-domain data points using an autoregressive model.}
 \usage{
-back_extrap_ar(mrs_data, extrap_pts, pred_pts = NULL, method = "burg", ...)
+back_extrap_ar(
+  mrs_data,
+  extrap_pts,
+  pred_pts = NULL,
+  method = "burg",
+  rem_add = TRUE,
+  ...
+)
 }
 \arguments{
 \item{mrs_data}{mrs_data object.}
@@ -16,6 +23,9 @@ back_extrap_ar(mrs_data, extrap_pts, pred_pts = NULL, method = "burg", ...)
 \item{method}{character string specifying the method to fit the model. Must
 be one of the strings in the default argument (the first few characters are
 sufficient). Defaults to "burg".}
+
+\item{rem_add}{remove additional points from the end of the FID to maintain
+the original length of the dataset. Default to TRUE.}
 
 \item{...}{additional arguments to specific methods, see ?ar.}
 }
