@@ -29,14 +29,14 @@ An online version of the documentation is available from:
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://martin3141.github.io/spant}
-  \item \url{https://github.com/martin3141/spant}
-  \item Report bugs at \url{https://github.com/martin3141/spant/issues}
+  \item \url{https://martin3141.github.io/spant/}
+  \item \url{https://github.com/martin3141/spant/}
+  \item Report bugs at \url{https://github.com/martin3141/spant/issues/}
 }
 
 }
 \author{
-\strong{Maintainer}: Martin Wilson \email{martin@pipegrep.co.uk}
+\strong{Maintainer}: Martin Wilson \email{martin@pipegrep.co.uk} (\href{https://orcid.org/0000-0002-2089-3956}{ORCID})
 
 Other contributors:
 \itemize{
