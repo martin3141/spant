@@ -1,3 +1,5 @@
+# spant 1.9.0
+
 # spant 1.8.0
 * Added gridplot function.
 * New functions added for down sampling.

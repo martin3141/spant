@@ -1,15 +1,17 @@
 Package: spant
 Type: Package
 Title: MR Spectroscopy Analysis Tools
-Version: 1.8.0
-Date: 2020-11-17
+Version: 1.8.0.9000
+Date: 2020-11-18
 Authors@R: c(
     person("Martin", "Wilson", email = "martin@pipegrep.co.uk",
-           role = c("cre", "aut")),
+           role = c("cre", "aut"), comment = c(ORCID = "0000-0002-2089-3956")),
     person("Yong", "Wang", role = "ctb"),
     person("John", "Muschelli", role = "ctb"))
 Description: Tools for reading, visualising and processing Magnetic Resonance
-    Spectroscopy data.
+    Spectroscopy data. The package includes methods for spectral fitting: Wilson
+    (2021) <DOI:10.1002/mrm.28385> and spectral alignment: Wilson (2018)
+    <DOI:10.1002/mrm.27605>. 
 BugReports: https://github.com/martin3141/spant/issues
 License: GPL-3
 RoxygenNote: 7.1.1
@@ -62,5 +64,5 @@ VignetteBuilder:
 Encoding: UTF-8
 Language: en-GB
 URL:
-    https://martin3141.github.io/spant,
+    https://martin3141.github.io/spant/,
     https://github.com/martin3141/spant

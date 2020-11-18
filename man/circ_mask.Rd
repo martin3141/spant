@@ -11,7 +11,7 @@ circ_mask(d, n, offset = 1)
 
 \item{n}{number of matrix rows and columns.}
 
-\item{offset}{offset the mask center in matrix dimension units.}
+\item{offset}{offset the mask centre in matrix dimension units.}
 }
 \value{
 logical n x n mask matrix.
