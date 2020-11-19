@@ -375,9 +375,6 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   
   .pardefault <- graphics::par(no.readonly = T)
   
-  #x_offset <- -x_offset
-  #y_offset <- -y_offset
-  
   # convert to the correct domain for plotting
   if (fd & !is_fd(x)) {
     x <- td2fd(x)
