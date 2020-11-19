@@ -370,7 +370,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                                x_pos = NULL, y_pos = NULL, z_pos = NULL,
                                dyn = 1, coil = 1, bty = NULL, labels = NULL,
                                lab_cex = 1, right_marg = NULL, bl_lty = NULL,
-                               restore_def_par = TRUE, show_grid = TRUE,
+                               restore_def_par = TRUE, show_grid = NULL,
                                grid_nx = NULL, grid_ny = NA, lwd = NULL, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
@@ -382,8 +382,17 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
     x <- fd2td(x)
   }
   
-   # default to blue
+  # default to blue
   if (is.null(col)) col <- grDevices::rgb(0, 0.45, 0.7, 1)
+  
+  # show the grid by default unless x_offset is non-zero
+  if (is.null(show_grid)) {
+    if (x_offset == 0) {
+      show_grid = TRUE 
+    } else {
+      show_grid = FALSE
+    }
+  }
   
   # if alpha is specified, override the default value in col
   if (!is.null(alpha)) col <- add_alpha(col, alpha)
@@ -522,13 +531,10 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   xlim <- range(x_scale_mat)
   
   # bug fix for rounding errors
-  if (xlim[1] > xlim_labs[1]) xlim[1] = xlim_labs[1]
-  if (xlim[2] < xlim_labs[2]) xlim[2] = xlim_labs[2]
+  if (xlim[1] > xlim_labs[1]) xlim[1] <- xlim_labs[1]
+  if (xlim[2] < xlim_labs[2]) xlim[2] <- xlim_labs[2]
   
   if ( x_units == "ppm" ) xlim <- rev(xlim)
-  
-  #print(dim(x_scale_mat))
-  #print(length(subset))
   
   graphics::matplot(x_scale_mat[length(subset):1,],
                     plot_data[length(subset):1,], type = "l", 
@@ -538,11 +544,14 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                                                    graphics::grid(nx = grid_nx,
                                                    ny = grid_ny)}, ...)
   
-  graphics::axis(1, lwd = 0, lwd.ticks = 1)
+  graphics::axis(1, lwd = 0, lwd.ticks = 1, at = pretty(xlim_labs))
   
-  if (bty == "n") graphics::abline(h = graphics::par("usr")[3]) 
+  if (bty == "n") lines(xlim_labs, c(par("usr")[3], par("usr")[3]))
   
-  #abline(h = y_offset_vec, lty = 2)
+  if (x_offset != 0) {
+    lines(c(0, tail(as.numeric(x_offset_mat),1)),
+          c(par("usr")[3], par("usr")[3] + tail(as.numeric(y_offset_mat),1)))
+  }
   
   # write text labels if provided
   if (!is.null(labels)) {
