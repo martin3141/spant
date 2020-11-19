@@ -5,17 +5,11 @@ read_mrs_nifti <- function(fname) {
     stop("filename argument must end in .nii.gz")
   }
   
-  # get the file name of the json sidecar file
-  fname_json <- stringr::str_c(stringr::str_sub(fname, 1, -7), "json")
-  
-  # check both files exist
+  # check file exists
   if (!file.exists(fname)) {
     cat(fname)
     stop("File not found.")
-  } else if (!file.exists(fname_json)) {
-    cat(fname_json)
-    stop("json file not found.")
-  }
+  } 
   
   # read the nifti file
   nii_data <- RNifti::readNifti(fname)
@@ -40,12 +34,16 @@ read_mrs_nifti <- function(fname) {
   # add a dummy dimension
   dim(data) <- c(1, dim(data))
   
-  # read the json file
-  json_data <- jsonlite::fromJSON(fname_json)
+  ext_char <- extension(readNifti(fname), 44, "character")
   
-  if ("dim_5" %in% json_data) stop("NIFTI MRS non-default dimensions are not currently supported")
-  if ("dim_6" %in% json_data) stop("NIFTI MRS non-default dimensions are not currently supported")
-  if ("dim_7" %in% json_data) stop("NIFTI MRS non-default dimensions are not currently supported")
+  if (is.null(ext_char)) stop("NIfTI extension header for MRS not found.")
+  
+  # read the json file
+  json_data <- jsonlite::fromJSON(ext_char)
+  
+  if ("dim_5" %in% json_data) stop("NIfTI MRS non-default dimensions are not currently supported")
+  if ("dim_6" %in% json_data) stop("NIfTI MRS non-default dimensions are not currently supported")
+  if ("dim_7" %in% json_data) stop("NIfTI MRS non-default dimensions are not currently supported")
   
   # read voxel dimensions, dwell time and time between dynamic scans
   res <- c(NA, pixdim[2], pixdim[3], pixdim[4], pixdim[6], NA, pixdim[5])
@@ -63,15 +61,15 @@ read_mrs_nifti <- function(fname) {
   te  <- json_data$EchoTime / 1e3
   ft  <- json_data$TransmitterFrequency * 1e6
   
-  if (exists("SpectralWidth", where = json_data)) {
-    # check json and nifti header values for the sampling frequency are consistent
-    if (abs((1 / pixdim[5]) - json_data$SpectralWidth) > 0.01) {
-      stop("Sampling frequencies in the json sidecar and NIFTI header differ by greater than 0.01 Hz")
-    }
-    res[7] <- 1 / json_data$SpectralWidth # prefer the json value if available
-                                          # due to higher precision than the
-                                          # NIFTI header (double vs float)
-  }
+  # if (exists("SpectralWidth", where = json_data)) {
+  #   # check json and nifti header values for the sampling frequency are consistent
+  #   if (abs((1 / pixdim[5]) - json_data$SpectralWidth) > 0.01) {
+  #     stop("Sampling frequencies in the json sidecar and NIFTI header differ by greater than 0.01 Hz")
+  #   }
+  #   res[7] <- 1 / json_data$SpectralWidth # prefer the json value if available
+  #                                         # due to higher precision than the
+  #                                         # NIFTI header (double vs float)
+  # }
  
   # read the nucleus
   nuc <- json_data$ResonantNucleus

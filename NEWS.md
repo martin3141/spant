@@ -2,6 +2,7 @@
 * Default plots now have gridlines in the y-direction and the plot line is now
 thicker and colored blue.
 * Opacity option added to the plotting functions (alpha).
+* NIfTI MRS reader now uses the header extension mechanism for metadata.
 
 # spant 1.8.0
 * Added gridplot function.
