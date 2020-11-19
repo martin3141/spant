@@ -375,6 +375,9 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   
   .pardefault <- graphics::par(no.readonly = T)
   
+  #x_offset <- -x_offset
+  #y_offset <- -y_offset
+  
   # convert to the correct domain for plotting
   if (fd & !is_fd(x)) {
     x <- td2fd(x)
@@ -490,7 +493,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   plot_data <- t(stats::na.omit(t(plot_data)))
   
   max_val <- max(abs(plot_data), na.rm = TRUE)
-  y_offset_vec <- 0:(ncol(plot_data) - 1) * max_val * -y_offset / 100
+  y_offset_vec <- 0:(ncol(plot_data) - 1) * max_val * y_offset / 100
   y_offset_mat <- matrix(y_offset_vec, nrow = nrow(plot_data),
                          ncol = ncol(plot_data), byrow = TRUE)
   
@@ -512,7 +515,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                         ncol = ncol(plot_data), byrow = FALSE)
   
   x_offset_mat <- matrix((0:(ncol(plot_data) - 1) * 
-                         (xlim[2] - xlim[1]) * x_offset / 100), 
+                         (xlim[2] - xlim[1]) * -x_offset / 100), 
                          nrow = nrow(plot_data), ncol = ncol(plot_data),
                          byrow = TRUE)
   
