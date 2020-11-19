@@ -26,7 +26,7 @@
   right_marg = NULL,
   bl_lty = NULL,
   restore_def_par = TRUE,
-  show_grid = TRUE,
+  show_grid = NULL,
   grid_nx = NULL,
   grid_ny = NA,
   lwd = NULL,

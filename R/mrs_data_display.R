@@ -669,6 +669,13 @@ gridplot <- function(x, ...) {
   UseMethod("gridplot", x)
 }
 
+#' @export
+gridplot.list <- function(x, ...) {
+  # make them all td or fd
+  combined <- append_scan(x)
+  gridplot(combined, ...)
+}
+
 #' Arrange spectral plots in a grid.
 #' @param x object of class mrs_data.
 #' @param rows number of grid rows.
