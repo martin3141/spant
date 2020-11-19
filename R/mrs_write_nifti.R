@@ -40,7 +40,7 @@ write_mrs_nifti <- function(fname, mrs_data) {
                                         # the available information
   
   # write nifti to disk
-  RNifti::writeNifti(mrs_nii, fname)
+  RNifti::writeNifti(mrs_nii, fname, version = 2)
   
   # get fname of the json sidecar file
   fname_json <- stringr::str_c(stringr::str_sub(fname, 1, -7), "json")
