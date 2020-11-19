@@ -11,6 +11,7 @@
   x_units = NULL,
   fd = TRUE,
   col = NULL,
+  alpha = NULL,
   x_offset = 0,
   y_offset = 0,
   plot_dim = NULL,
@@ -25,6 +26,10 @@
   right_marg = NULL,
   bl_lty = NULL,
   restore_def_par = TRUE,
+  show_grid = TRUE,
+  grid_nx = NULL,
+  grid_ny = NA,
+  lwd = NULL,
   ...
 )
 }
@@ -42,7 +47,10 @@ of: "re", "im", "mod" or "arg".}
 \item{fd}{display data in the frequency-domain (default), or time-domain
 (logical).}
 
-\item{col}{set the colour of the line, eg col = rgb(1,0,0,0.5).}
+\item{col}{set the colour of the line, eg col = rgb(1, 0, 0, 0.5).}
+
+\item{alpha}{set the line transparency, eg alpha = 0.5 is 50\% transparency.
+Overrides any transparency levels set by col.}
 
 \item{x_offset}{separate plots in the x-axis direction by this value.
 Default value is 0.}
@@ -76,6 +84,17 @@ results in no baseline being plotted.}
 
 \item{restore_def_par}{restore default plotting par values after the plot has
 been made.}
+
+\item{show_grid}{plot gridlines behind the data (logical). Defaults to TRUE.}
+
+\item{grid_nx}{number of cells of the grid in x and y direction. When NULL
+the grid aligns with the tick marks on the corresponding default axis (i.e.,
+tickmarks as computed by axTicks). When NA, no grid lines are drawn in the
+corresponding direction.}
+
+\item{grid_ny}{as above.}
+
+\item{lwd}{plot linewidth.}
 
 \item{...}{other arguments to pass to the matplot method.}
 }

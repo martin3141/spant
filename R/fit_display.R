@@ -16,13 +16,20 @@
 #' been made.
 #' @param ylim range of values to display on the y-axis, eg ylim = c(0,10).
 #' @param y_scale option to display the y-axis values (logical).
+#' @param show_grid plot gridlines behind the data (logical). Defaults to TRUE.
+#' @param grid_nx number of cells of the grid in x and y direction. When NULL
+#' the grid aligns with the tick marks on the corresponding default axis (i.e.,
+#' tickmarks as computed by axTicks). When NA, no grid lines are drawn in the
+#' corresponding direction.
+#' @param grid_ny as above.
 #' @param ... further arguments to plot method.
 #' @export
 plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
                             coil = 1, xlim = NULL, data_only = FALSE,
                             label = NULL, plot_sigs = NULL, n = NULL,
                             sub_bl = FALSE, mar = NULL, restore_def_par = TRUE, 
-                            ylim = NULL, y_scale = FALSE, ...) {
+                            ylim = NULL, y_scale = FALSE, show_grid = TRUE,
+                            grid_nx = NULL, grid_ny = NA, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -83,9 +90,12 @@ plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
     max_dp <- max(x$Data[ind])
     min_dp <- min(x$Data[ind])
     marg = (max_dp - min_dp) * 0.02
+    
     graphics::plot(x$PPMScale, x$Data, type = 'l', xlim = xlim, 
          ylim = c(min_dp - marg, max_dp + marg), yaxt = yaxt, ylab = ylab,
-         xlab = "Chemical shift (ppm)", ...)
+         xlab = "Chemical shift (ppm)",
+         panel.first = {if (show_grid) graphics::grid(nx = grid_nx,
+                                                      ny = grid_ny)}, ...)
     
     if (!is.null(label)) {
       graphics::par(xpd = TRUE)
@@ -120,7 +130,10 @@ plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
     
     graphics::plot(x$PPMScale, x$Data, type = 'l', xlim = xlim, 
          ylim = c(min_dp,max_dp + res_range), yaxt = yaxt, ylab = ylab,
-         xlab = "Chemical shift (ppm)", ...)
+         xlab = "Chemical shift (ppm)",
+         panel.first = {if (show_grid) graphics::grid(nx = grid_nx,
+                                                      ny = grid_ny)}, ...)
+    
     graphics::lines(x$PPMScale, fit_line, col = 'Red', lw = 2)
     if (!sub_bl) {
       graphics::lines(x$PPMScale, x$Baseline)
@@ -200,6 +213,12 @@ summary.fit_result <- function(object, ...) {
 #' @param combine_metab combine all basis signals with names not starting with
 #' "Lip" or "MM".
 #' @param mar option to adjust the plot margins. See ?par.
+#' @param show_grid plot gridlines behind the data (logical). Defaults to TRUE.
+#' @param grid_nx number of cells of the grid in x and y direction. When NULL
+#' the grid aligns with the tick marks on the corresponding default axis (i.e.,
+#' tickmarks as computed by axTicks). When NA, no grid lines are drawn in the
+#' corresponding direction.
+#' @param grid_ny as above.
 #' @param ... further arguments to plot method.
 #' @export
 stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0, dyn = 1, 
@@ -208,7 +227,8 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0, dyn = 1,
                                  label_names = NULL, sig_col = "black",
                                  restore_def_par = TRUE, omit_signals = NULL,
                                  combine_lipmm = FALSE, combine_metab = FALSE,
-                                 mar = NULL, ...) {
+                                 mar = NULL, show_grid = TRUE, grid_nx = NULL,
+                                 grid_ny = NA,...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -304,8 +324,11 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0, dyn = 1,
   }
   
   graphics::plot(x$PPMScale, x$Data, type = 'l', xlim = xlim, 
-       ylim = c(min_basis - basis_yoff, max_dp + res_range), yaxt = "n", ylab = "",
-       xlab = "Chemical shift (ppm)", ...)
+       ylim = c(min_basis - basis_yoff, max_dp + res_range), yaxt = "n",
+       ylab = "", xlab = "Chemical shift (ppm)", panel.first = {if (show_grid)
+                                                    graphics::grid(nx = grid_nx,
+                                                    ny = grid_ny)}, ...)
+  
   graphics::lines(x$PPMScale, fit_line, col = 'Red', lw = 2)
   
   if (!sub_bl) {

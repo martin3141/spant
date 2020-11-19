@@ -24,6 +24,9 @@ individual basis set components shown.}
   combine_lipmm = FALSE,
   combine_metab = FALSE,
   mar = NULL,
+  show_grid = TRUE,
+  grid_nx = NULL,
+  grid_ny = NA,
   ...
 )
 }
@@ -68,6 +71,15 @@ or "MM".}
 "Lip" or "MM".}
 
 \item{mar}{option to adjust the plot margins. See ?par.}
+
+\item{show_grid}{plot gridlines behind the data (logical). Defaults to TRUE.}
+
+\item{grid_nx}{number of cells of the grid in x and y direction. When NULL
+the grid aligns with the tick marks on the corresponding default axis (i.e.,
+tickmarks as computed by axTicks). When NA, no grid lines are drawn in the
+corresponding direction.}
+
+\item{grid_ny}{as above.}
 
 \item{...}{further arguments to plot method.}
 }

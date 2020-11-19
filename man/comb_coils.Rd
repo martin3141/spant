@@ -11,7 +11,8 @@ comb_coils(
   scale = TRUE,
   scale_method = "sig_noise_sq",
   sum_coils = TRUE,
-  noise_region = c(-0.5, -2.5)
+  noise_region = c(-0.5, -2.5),
+  average_ref_dyns = TRUE
 )
 }
 \arguments{
@@ -29,6 +30,9 @@ comb_coils(
 \item{sum_coils}{sum the coil elements as a final step (logical).}
 
 \item{noise_region}{the spectral region (in ppm) to estimate the noise.}
+
+\item{average_ref_dyns}{take the mean of the reference scans in the dynamic
+dimension before use.}
 }
 \value{
 MRS data.

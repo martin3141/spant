@@ -2367,15 +2367,17 @@ zp_vec <- function(vector, n) {
 #' @param scale_method one of "sig_noise_sq", "sig_noise" or "sig".
 #' @param sum_coils sum the coil elements as a final step (logical).
 #' @param noise_region the spectral region (in ppm) to estimate the noise.
+#' @param average_ref_dyns take the mean of the reference scans in the dynamic
+#' dimension before use.
 #' @return MRS data.
 #' @export
 comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
                        scale_method = "sig_noise_sq", sum_coils = TRUE,
-                       noise_region = c(-0.5, -2.5)) {
+                       noise_region = c(-0.5, -2.5), average_ref_dyns = TRUE) {
   
   metab_only <- FALSE
   if (is.null(ref)) {
-    ref <- mean_dyns(metab)
+    ref <- metab
     metab_only <- TRUE
   }
   
@@ -2387,21 +2389,18 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
   
   if (is_fd(ref)) ref <- fd2td(ref)
   
-  # get the first dynamic of the ref data
-  # first_ref <- get_dyns(ref, 1)
-  # fp <- get_fp(first_ref)
+  # get the dynamic mean of the ref data (better to take the first dynamic in
+  # some cases?)
+  if (average_ref_dyns) ref <- mean_dyns(ref)
   
-  # get the dynamic mean of the ref data
-  mean_ref <- mean_dyns(ref)
-  fp <- get_fp(mean_ref)
-  
+  fp <- get_fp(ref)
   phi <- Arg(fp)
   amp <- Mod(fp)
   
   # maintain original spatial scaling
   mean_amps <- apply(amp, c(1,2,3,4,5), mean)
   dim(mean_amps) <- c(dim(mean_amps), 1, 1)
-  mean_amps <- rep_array_dim(mean_amps, 6, Ncoils(mean_ref))
+  mean_amps <- rep_array_dim(mean_amps, 6, Ncoils(ref))
   amp <- amp / mean_amps
   
   if (scale & (scale_method != "sig")) {

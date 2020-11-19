@@ -21,6 +21,9 @@
   restore_def_par = TRUE,
   ylim = NULL,
   y_scale = FALSE,
+  show_grid = TRUE,
+  grid_nx = NULL,
+  grid_ny = NA,
   ...
 )
 }
@@ -57,6 +60,15 @@ been made.}
 \item{ylim}{range of values to display on the y-axis, eg ylim = c(0,10).}
 
 \item{y_scale}{option to display the y-axis values (logical).}
+
+\item{show_grid}{plot gridlines behind the data (logical). Defaults to TRUE.}
+
+\item{grid_nx}{number of cells of the grid in x and y direction. When NULL
+the grid aligns with the tick marks on the corresponding default axis (i.e.,
+tickmarks as computed by axTicks). When NA, no grid lines are drawn in the
+corresponding direction.}
+
+\item{grid_ny}{as above.}
 
 \item{...}{further arguments to plot method.}
 }

@@ -1,4 +1,7 @@
 # spant 1.9.0
+* Default plots now have gridlines in the y-direction and the plot line is now
+thicker and colored blue.
+* Opacity option added to the plotting functions (alpha).
 
 # spant 1.8.0
 * Added gridplot function.

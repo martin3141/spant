@@ -27,6 +27,11 @@
   xlabs = TRUE,
   yat = NULL,
   ylabs = TRUE,
+  show_grid = TRUE,
+  grid_nx = NULL,
+  grid_ny = NA,
+  col = NULL,
+  alpha = NULL,
   ...
 )
 }
@@ -78,6 +83,20 @@ been made.}
 \item{yat}{y-axis tick label values.}
 
 \item{ylabs}{y-axis tick labels.}
+
+\item{show_grid}{plot gridlines behind the data (logical). Defaults to TRUE.}
+
+\item{grid_nx}{number of cells of the grid in x and y direction. When NULL
+the grid aligns with the tick marks on the corresponding default axis (i.e.,
+tickmarks as computed by axTicks). When NA, no grid lines are drawn in the
+corresponding direction.}
+
+\item{grid_ny}{as above.}
+
+\item{col}{set the line color, eg col = rgb(0.5, 0.5, 0.5).}
+
+\item{alpha}{set the line transparency, eg alpha = 0.5 is 50\% transparency.
+Overrides any transparency levels set by col.}
 
 \item{...}{other arguments to pass to the plot method.}
 }
