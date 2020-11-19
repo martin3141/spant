@@ -34,7 +34,7 @@ read_mrs_nifti <- function(fname) {
   # add a dummy dimension
   dim(data) <- c(1, dim(data))
   
-  ext_char <- extension(readNifti(fname), 44, "character")
+  ext_char <- RNifti::extension(readNifti(fname), 44, "character")
   
   if (is.null(ext_char)) stop("NIfTI extension header for MRS not found.")
   
