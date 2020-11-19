@@ -321,7 +321,7 @@ stackplot <- function(x, ...) {
 stackplot.list <- function(x, ...) {
   # make them all td or fd
   combined <- append_scan(x)
-  stackplot(combined, dim = "scan", ...)
+  stackplot(combined, plot_dim = "scan", ...)
 }
 
 #' Stackplot plotting method for objects of class mrs_data.
