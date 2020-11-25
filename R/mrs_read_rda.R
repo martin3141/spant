@@ -45,8 +45,8 @@ read_rda <- function(fname) {
   col_ori[2] <- as.numeric(txt$V2[which(txt$V1 == "ColumnVector[1]")])
   col_ori[3] <- as.numeric(txt$V2[which(txt$V1 == "ColumnVector[2]")])
   
-  row_vox_dim <- as.numeric(txt$V2[which(txt$V1 == "PixelSpacingCol")])
-  col_vox_dim <- as.numeric(txt$V2[which(txt$V1 == "PixelSpacingRow")])
+  col_vox_dim <- as.numeric(txt$V2[which(txt$V1 == "PixelSpacingCol")])
+  row_vox_dim <- as.numeric(txt$V2[which(txt$V1 == "PixelSpacingRow")])
   slice_vox_dim <- as.numeric(txt$V2[which(txt$V1 == "PixelSpacing3D")])
   
   pos_vec <- pos_vec + row_ori * row_vox_dim / 2 + col_ori * col_vox_dim / 2

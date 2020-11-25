@@ -203,7 +203,7 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
     vars$fs <- vars$fs / 2
   }
   
-  res <- c(NA, vars$y_dim / vars$y_pts, vars$x_dim / vars$x_pts,
+  res <- c(NA, vars$x_dim / vars$x_pts, vars$y_dim / vars$y_pts,
            vars$z_dim / vars$z_pts, 1, NA, 1 / vars$fs)
   
   # freq domain vector vector
