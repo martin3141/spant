@@ -2428,10 +2428,15 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
   }
   
   # phase and scale ref data
+  
+  # repeat across the FID and dynamic dimensions
   ang <- rep_array_dim(phi, 7, Npts(ref))
+  if (Ndyns(ref) > 1) ang <- rep_array_dim(ang, 5, Ndyns(ref))
   
   if (scale) {
+    # repeat across the FID and dynamic dimensions
     scale_f <- rep_array_dim(amp, 7, Npts(ref))
+    if (Ndyns(ref) > 1) scale_f <- rep_array_dim(scale_f, 5, Ndyns(ref))
     
     ref_ps <- ref
     ref_ps$data <- ref$data * exp(-1i * ang) * scale_f
@@ -2443,10 +2448,15 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
   if (sum_coils) ref_ps <- sum_coils(ref_ps)
   
   # phase and scale metab data
+  
+  # repeat across the FID and dynamic dimensions
   ang <- rep_array_dim(phi, 7, Npts(metab))
+  if (Ndyns(metab) > 1) ang <- rep_array_dim(ang, 5, Ndyns(metab))
   
   if (scale) {
+    # repeat across the FID and dynamic dimensions
     scale_f <- rep_array_dim(amp, 7, Npts(metab))
+    if (Ndyns(metab) > 1) scale_f <- rep_array_dim(scale_f, 5, Ndyns(metab))
     
     metab_ps <- metab
     metab_ps$data <- metab$data * exp(-1i * ang) * scale_f

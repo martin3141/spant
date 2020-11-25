@@ -3,6 +3,7 @@
 thicker and colored blue.
 * Opacity option added to the plotting functions (alpha).
 * NIfTI MRS reader and writer now uses the header extension for metadata.
+* Bug fix for comb_coils with SVS data.
 
 # spant 1.8.0
 * Added gridplot function.
