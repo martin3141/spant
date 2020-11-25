@@ -211,9 +211,6 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
 
   ref <- def_ref()
   
-  # TODO extract from the data file
-  nuc <- def_nuc()
-  
   ima_norm <- c(vars$norm_sag, vars$norm_cor, vars$norm_tra)
   ima_pos  <- c(vars$pos_sag,  vars$pos_cor,  vars$pos_tra)
   rotation <- vars$ip_rot
@@ -221,16 +218,19 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
   x_dirn   <- c(1, 0, 0)
   x_new    <- rotate_vec(x_dirn, ima_norm, -rotation)
   col_vec  <- cross(ima_norm, x_new)
-  row_vec  <- cross(col_vec, ima_norm)
+  row_vec  <- cross(ima_norm, col_vec)
+  sli_vec  <- ima_norm
   pos_vec  <- ima_pos - row_vec * ( vars$x_pts / 2 - 0.5) * vars$x_dim /
-              vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
-              vars$y_dim / vars$y_pts
-  sli_vec  <- cross(col_vec, row_vec)
+                        vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
+                        vars$y_dim / vars$y_pts
   
   mrs_data <- list(ft = vars$ft, data = data, resolution = res,
                    te = vars$te, ref = ref, nuc = nuc, row_vec = row_vec,
                    col_vec = col_vec, sli_vec = sli_vec, pos_vec = pos_vec,
                    freq_domain = freq_domain)
+  
+  # TODO extract from the data file
+  nuc <- def_nuc()
   
   class(mrs_data) <- "mrs_data"
   mrs_data

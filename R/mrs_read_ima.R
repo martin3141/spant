@@ -48,8 +48,8 @@ read_ima <- function(fname, verbose = FALSE) {
   row_vec  <- cross(ima_norm, col_vec)
   sli_vec  <- ima_norm
   pos_vec  <- ima_pos - row_vec * ( vars$x_pts / 2 - 0.5) * vars$x_dim /
-                     vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
-                     vars$y_dim / vars$y_pts
+                        vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
+                        vars$y_dim / vars$y_pts
   
   # TODO parse from the data file
   nuc <- def_nuc()
