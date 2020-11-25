@@ -50,7 +50,7 @@ read_rda <- function(fname) {
   slice_vox_dim <- as.numeric(txt$V2[which(txt$V1 == "PixelSpacing3D")])
   
   pos_vec <- pos_vec + row_ori * row_vox_dim / 2 + col_ori * col_vox_dim / 2
-  sli_vec <- crossprod_3d(row_ori, col_ori)
+  sli_vec <- crossprod_3d(col_ori, row_ori)
   
   fids <- rows * cols * slices
   

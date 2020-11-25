@@ -224,13 +224,13 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
                         vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
                         vars$y_dim / vars$y_pts
   
+  # TODO extract from the data file
+  nuc <- def_nuc()
+  
   mrs_data <- list(ft = vars$ft, data = data, resolution = res,
                    te = vars$te, ref = ref, nuc = nuc, row_vec = row_vec,
                    col_vec = col_vec, sli_vec = sli_vec, pos_vec = pos_vec,
                    freq_domain = freq_domain)
-  
-  # TODO extract from the data file
-  nuc <- def_nuc()
   
   class(mrs_data) <- "mrs_data"
   mrs_data
