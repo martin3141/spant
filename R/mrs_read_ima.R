@@ -45,7 +45,7 @@ read_ima <- function(fname, verbose = FALSE) {
   x_dirn   <- c(1, 0, 0)
   x_new    <- rotate_vec(x_dirn, ima_norm, -rotation)
   col_vec  <- cross(ima_norm, x_new)
-  row_vec  <- cross(col_vec, ima_norm)
+  row_vec  <- cross(ima_norm, col_vec)
   sli_vec  <- ima_norm
   pos_vec  <- ima_pos - row_vec * ( vars$x_pts / 2 - 0.5) * vars$x_dim /
                      vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
