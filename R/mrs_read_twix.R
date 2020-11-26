@@ -309,6 +309,7 @@ read_siemens_txt_hdr <- function(fname, version = "vd") {
   voi_norm_cor       <- 0
   voi_norm_tra       <- 0
   voi_ip_rot         <- 0
+  scan_reg_pos_tra   <- 0
   
   while (TRUE) {
     line <- readLines(con, n = 1, skipNul = TRUE)
