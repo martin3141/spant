@@ -218,13 +218,21 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
   x_dirn   <- c(1, 0, 0)
   x_new    <- rotate_vec(x_dirn, ima_norm, -rotation)
   col_vec  <- cross(ima_norm, x_new)
-  # sometimes this swaps around - not sure why
-  row_vec  <- cross(col_vec, ima_norm)
-  #row_vec  <- cross(ima_norm, col_vec)
+  # sometimes this swaps around - don't know why
+  #row_vec  <- cross(col_vec, ima_norm)
+  row_vec  <- cross(ima_norm, col_vec)
   sli_vec  <- ima_norm
-  pos_vec  <- ima_pos - row_vec * ( vars$x_pts / 2 - 0.5) * vars$x_dim /
-                        vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
-                        vars$y_dim / vars$y_pts
+  
+  # ima_pos corresponds to VOIPositionXXX in the RDA file
+  # the following line translates to PositionVector in the RDA file
+  pos_vec <- ima_pos - row_vec * vars$y_dim / 2 - col_vec * vars$x_dim / 2
+  
+  # this is needed - don't know why
+  pos_vec <- pos_vec + row_vec * vars$x_dim / 2 + col_vec * vars$y_dim / 2
+  
+  pos_vec <- pos_vec - row_vec * (vars$x_pts / 2 - 0.5) * vars$x_dim /
+                       vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
+                       vars$y_dim / vars$y_pts
   
   # TODO extract from the data file
   nuc <- def_nuc()
@@ -342,6 +350,8 @@ read_siemens_txt_hdr <- function(fname, version = "vd") {
       voi_dCor <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSpecPara.sVoI.sPosition.dTra")) {
       voi_dTra <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "lScanRegionPosTra")) {
+      scan_reg_pos_tra <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSpecPara.sVoI.sNormal.dSag")) {
       voi_norm_sag <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSpecPara.sVoI.sNormal.dCor")) {
@@ -383,7 +393,7 @@ read_siemens_txt_hdr <- function(fname, version = "vd") {
     vars$z_dim    <- slice_dThickness
     vars$pos_sag  <- slice_dSag 
     vars$pos_cor  <- slice_dCor
-    vars$pos_tra  <- slice_dTra
+    vars$pos_tra  <- slice_dTra + scan_reg_pos_tra # don't ask
     vars$norm_sag <- slice_norm_sag
     vars$norm_cor <- slice_norm_cor
     vars$norm_tra <- slice_norm_tra
@@ -395,7 +405,7 @@ read_siemens_txt_hdr <- function(fname, version = "vd") {
     vars$z_dim    <- voi_dThickness
     vars$pos_sag  <- voi_dSag 
     vars$pos_cor  <- voi_dCor
-    vars$pos_tra  <- voi_dTra
+    vars$pos_tra  <- voi_dTra + scan_reg_pos_tra # don't ask
     vars$norm_sag <- voi_norm_sag
     vars$norm_cor <- voi_norm_cor
     vars$norm_tra <- voi_norm_tra
