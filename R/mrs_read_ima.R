@@ -53,12 +53,23 @@ read_ima <- function(fname, verbose = FALSE) {
   sli_vec  <- cross(row_vec, col_vec)
   sli_vec  <- l2_norm_vec(sli_vec)
   
-  Q_mat <- t(unname(rbind(row_vec, col_vec, sli_vec)))
-  Q_mat_det <- det(Q_mat)
-  if (Q_mat_det < 0) {
-    warning("det condition triggered")
-    Q_mat[,3] <- Q_mat[,3] * -1
-  }
+  #if (sum((ima_norm + sli_vec)^2 < 1e-10)) {
+  #  row_vec <- -row_vec
+  #}
+  #print(ima_norm)
+  #print(sli_vec)
+  #print(rotation)
+  #print(ima_norm)
+  #print(row_vec)
+  #print(col_vec)
+  
+  #Q_mat <- t(unname(rbind(row_vec, col_vec, sli_vec)))
+  #Q_mat_det <- det(Q_mat)
+  #print(Q_mat_det)
+  #if (Q_mat_det < 0) {
+  #  warning("det condition triggered")
+  #  Q_mat[,3] <- Q_mat[,3] * -1
+  #}
   
   # ima_pos corresponds to VOIPositionXXX in the RDA file
   # the following line translates to PositionVector in the RDA file
