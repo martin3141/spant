@@ -217,11 +217,20 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
 
   x_dirn   <- c(1, 0, 0)
   x_new    <- rotate_vec(x_dirn, ima_norm, -rotation)
+  x_new    <- l2_norm_vec(x_new)
   col_vec  <- cross(ima_norm, x_new)
-  # sometimes this swaps around - don't know why
-  #row_vec  <- cross(col_vec, ima_norm)
+  col_vec  <- l2_norm_vec(col_vec)
   row_vec  <- cross(ima_norm, col_vec)
-  sli_vec  <- ima_norm
+  row_vec  <- l2_norm_vec(row_vec)
+  sli_vec  <- cross(row_vec, col_vec)
+  sli_vec  <- l2_norm_vec(sli_vec)
+  
+  Q_mat <- t(unname(rbind(row_vec, col_vec, sli_vec)))
+  Q_mat_det <- det(Q_mat)
+  if (Q_mat_det < 0) {
+    warning("det condition triggered")
+    Q_mat[,3] <- Q_mat[,3] * -1
+  }
   
   # ima_pos corresponds to VOIPositionXXX in the RDA file
   # the following line translates to PositionVector in the RDA file
@@ -234,7 +243,7 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
                        vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
                        vars$y_dim / vars$y_pts
   
-  # TODO extract from the data file
+  # TODO parse from the data file
   nuc <- def_nuc()
   
   mrs_data <- list(ft = vars$ft, data = data, resolution = res,

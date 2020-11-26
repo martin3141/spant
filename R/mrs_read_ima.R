@@ -39,16 +39,19 @@ read_ima <- function(fname, verbose = FALSE) {
   ref <- def_acq_paras()$ref
   
   ima_norm <- c(vars$norm_sag, vars$norm_cor, vars$norm_tra)
+  ima_norm <- l2_norm_vec(ima_norm)
   ima_pos  <- c(vars$pos_sag,  vars$pos_cor,  vars$pos_tra)
   rotation <- vars$ip_rot
 
   x_dirn   <- c(1, 0, 0)
   x_new    <- rotate_vec(x_dirn, ima_norm, -rotation)
+  x_new    <- l2_norm_vec(x_new)
   col_vec  <- cross(ima_norm, x_new)
-  # sometimes this swaps around - don't know why
-  #row_vec  <- cross(col_vec, ima_norm)
+  col_vec  <- l2_norm_vec(col_vec)
   row_vec  <- cross(ima_norm, col_vec)
+  row_vec  <- l2_norm_vec(row_vec)
   sli_vec  <- cross(row_vec, col_vec)
+  sli_vec  <- l2_norm_vec(sli_vec)
   
   Q_mat <- t(unname(rbind(row_vec, col_vec, sli_vec)))
   Q_mat_det <- det(Q_mat)
