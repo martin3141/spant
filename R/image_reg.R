@@ -328,7 +328,7 @@ spm_pve2categorical <- function(fname) {
 
 # generate an sform affine for nifti generation
 get_mrs_affine <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1) {
-  # l1 norm
+  # l2 norm
   col_vec <- mrs_data$col_vec/sqrt(sum(mrs_data$col_vec ^ 2))
   row_vec <- mrs_data$row_vec/sqrt(sum(mrs_data$row_vec ^ 2))
   col_vec[1:2] <- col_vec[1:2] * -1

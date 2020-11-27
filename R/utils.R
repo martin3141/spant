@@ -255,6 +255,10 @@ add_alpha <- function(col, alpha = 1) {
         function(x) grDevices::rgb(x[1], x[2], x[3], alpha = alpha))  
 }
 
+l2_norm_vec <- function(x) {
+  return(x / norm(x, "2"))
+}
+
 crop_range <- function(map, lower, upper) {
   # TODO check upper > lower and both are >0<1
   map_range <- range(map, na.rm = TRUE)
