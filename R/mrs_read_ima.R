@@ -34,7 +34,7 @@ read_ima <- function(fname, verbose = FALSE) {
   freq_domain <- rep(FALSE, 7)
 
   # get the resolution and geom info
-  paras <- calc_siemens_paras(vars)
+  paras <- calc_siemens_paras(vars, TRUE)
   
   mrs_data <- list(ft = vars$ft, data = data, resolution = paras$res,
                    te = vars$te, ref = paras$ref, nuc = paras$nuc,

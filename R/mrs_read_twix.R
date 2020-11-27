@@ -1,25 +1,34 @@
-calc_siemens_paras <- function(vars) {
+calc_siemens_paras <- function(vars, is_ima) {
+  
+  # correct fs if the FID has been decimated for ima data
+  if (vars$rm_oversampling & is_ima) vars$fs <- vars$fs / 2
+  
   res <- c(NA, vars$x_dim / vars$x_pts, vars$y_dim / vars$y_pts,
-           vars$z_dim / vars$z_pts, 1, NA, 1 / vars$fs * 2)
+           vars$z_dim / vars$z_pts, 1, NA, 1 / vars$fs)
   
   ima_norm <- c(vars$norm_sag, vars$norm_cor, vars$norm_tra)
+  ima_norm <- l2_norm_vec(ima_norm)
   ima_pos  <- c(vars$pos_sag,  vars$pos_cor,  vars$pos_tra)
   rotation <- vars$ip_rot
+  
+  # here be dragons >
 
   x_dirn   <- c(1, 0, 0)
   x_new    <- rotate_vec(x_dirn, ima_norm, -rotation)
+  x_new    <- l2_norm_vec(x_new)
   col_vec  <- cross(ima_norm, x_new)
-  # sometimes this swaps around - don't know why
-  #row_vec  <- cross(col_vec, ima_norm)
+  col_vec  <- l2_norm_vec(col_vec)
   row_vec  <- cross(ima_norm, col_vec)
+  row_vec  <- l2_norm_vec(row_vec)
   sli_vec  <- cross(row_vec, col_vec)
+  sli_vec  <- l2_norm_vec(sli_vec)
   
-  Q_mat <- t(unname(rbind(row_vec, col_vec, sli_vec)))
-  Q_mat_det <- det(Q_mat)
-  if (Q_mat_det < 0) {
-    warning("det condition triggered")
-    Q_mat[,3] <- Q_mat[,3] * -1
-  }
+  #Q_mat <- t(unname(rbind(row_vec, col_vec, sli_vec)))
+  #Q_mat_det <- det(Q_mat)
+  #if (Q_mat_det < 0) {
+  #  warning("det condition triggered")
+  #  Q_mat[,3] <- Q_mat[,3] * -1
+  #}
   
   # ima_pos corresponds to VOIPositionXXX in the RDA file
   # the following line translates to PositionVector in the RDA file
@@ -240,16 +249,11 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
     data <- data[,,,,,,(ima_kspace_center_column + 1):ima_samples, drop = FALSE]
   }
   
-  # check if the FID has been decimated
-  if (vars$rm_oversampling == 0) {
-    vars$fs <- vars$fs / 2
-  }
-  
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
   
   # get the resolution and geom info
-  paras <- calc_siemens_paras(vars)
+  paras <- calc_siemens_paras(vars, FALSE)
 
   mrs_data <- list(ft = vars$ft, data = data, resolution = paras$res,
                    te = vars$te, ref = paras$ref, nuc = paras$nuc,
@@ -392,13 +396,7 @@ read_siemens_txt_hdr <- function(fname, version = "vd") {
       vars$rm_oversampling <- as.numeric(strsplit(line, "=")[[1]][2])
     }
   }
-  
-  # check if the FID has been decimated
-  if (vars$rm_oversampling == 0) {
-    vars$N <- vars$N * 2
-    vars$fs <- vars$fs * 2
-  }
-  
+ 
   # how many voxels do we expect?
   Nvoxels <- vars$x_pts * vars$y_pts * vars$z_pts
   
