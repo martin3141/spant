@@ -1,3 +1,45 @@
+calc_siemens_paras <- function(vars) {
+  res <- c(NA, vars$x_dim / vars$x_pts, vars$y_dim / vars$y_pts,
+           vars$z_dim / vars$z_pts, 1, NA, 1 / vars$fs * 2)
+  
+  ima_norm <- c(vars$norm_sag, vars$norm_cor, vars$norm_tra)
+  ima_pos  <- c(vars$pos_sag,  vars$pos_cor,  vars$pos_tra)
+  rotation <- vars$ip_rot
+
+  x_dirn   <- c(1, 0, 0)
+  x_new    <- rotate_vec(x_dirn, ima_norm, -rotation)
+  col_vec  <- cross(ima_norm, x_new)
+  # sometimes this swaps around - don't know why
+  #row_vec  <- cross(col_vec, ima_norm)
+  row_vec  <- cross(ima_norm, col_vec)
+  sli_vec  <- cross(row_vec, col_vec)
+  
+  Q_mat <- t(unname(rbind(row_vec, col_vec, sli_vec)))
+  Q_mat_det <- det(Q_mat)
+  if (Q_mat_det < 0) {
+    warning("det condition triggered")
+    Q_mat[,3] <- Q_mat[,3] * -1
+  }
+  
+  # ima_pos corresponds to VOIPositionXXX in the RDA file
+  # the following line translates to PositionVector in the RDA file
+  pos_vec <- ima_pos - row_vec * vars$y_dim / 2 - col_vec * vars$x_dim / 2
+  
+  # this is needed - don't know why
+  pos_vec <- pos_vec + row_vec * vars$x_dim / 2 + col_vec * vars$y_dim / 2
+  
+  pos_vec <- pos_vec - row_vec * (vars$x_pts / 2 - 0.5) * vars$x_dim /
+                       vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
+                       vars$y_dim / vars$y_pts
+  
+  # TODO parse from the data file and use sensible ref based on nuc
+  nuc <- def_nuc()
+  ref <- def_ref()
+  
+  return(list(res = res, pos_vec = pos_vec, row_vec = row_vec,
+              col_vec = col_vec, sli_vec = sli_vec, nuc = nuc, ref = ref))
+}
+
 read_twix <- function(fname, verbose, full_data = FALSE) {
   # check the file size
   fbytes <- file.size(fname)
@@ -203,43 +245,16 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
     vars$fs <- vars$fs / 2
   }
   
-  res <- c(NA, vars$x_dim / vars$x_pts, vars$y_dim / vars$y_pts,
-           vars$z_dim / vars$z_pts, 1, NA, 1 / vars$fs)
-  
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
+  
+  # get the resolution and geom info
+  paras <- calc_siemens_paras(vars)
 
-  ref <- def_ref()
-  
-  ima_norm <- c(vars$norm_sag, vars$norm_cor, vars$norm_tra)
-  ima_pos  <- c(vars$pos_sag,  vars$pos_cor,  vars$pos_tra)
-  rotation <- vars$ip_rot
-
-  x_dirn   <- c(1, 0, 0)
-  x_new    <- rotate_vec(x_dirn, ima_norm, -rotation)
-  col_vec  <- cross(ima_norm, x_new)
-  # sometimes this swaps around - don't know why
-  #row_vec  <- cross(col_vec, ima_norm)
-  row_vec  <- cross(ima_norm, col_vec)
-  sli_vec  <- ima_norm
-  
-  # ima_pos corresponds to VOIPositionXXX in the RDA file
-  # the following line translates to PositionVector in the RDA file
-  pos_vec <- ima_pos - row_vec * vars$y_dim / 2 - col_vec * vars$x_dim / 2
-  
-  # this is needed - don't know why
-  pos_vec <- pos_vec + row_vec * vars$x_dim / 2 + col_vec * vars$y_dim / 2
-  
-  pos_vec <- pos_vec - row_vec * (vars$x_pts / 2 - 0.5) * vars$x_dim /
-                       vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
-                       vars$y_dim / vars$y_pts
-  
-  # TODO extract from the data file
-  nuc <- def_nuc()
-  
-  mrs_data <- list(ft = vars$ft, data = data, resolution = res,
-                   te = vars$te, ref = ref, nuc = nuc, row_vec = row_vec,
-                   col_vec = col_vec, sli_vec = sli_vec, pos_vec = pos_vec,
+  mrs_data <- list(ft = vars$ft, data = data, resolution = paras$res,
+                   te = vars$te, ref = paras$ref, nuc = paras$nuc,
+                   row_vec = paras$row_vec, col_vec = paras$col_vec,
+                   sli_vec = paras$sli_vec, pos_vec = paras$pos_vec,
                    freq_domain = freq_domain)
   
   class(mrs_data) <- "mrs_data"
