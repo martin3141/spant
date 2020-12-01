@@ -46,8 +46,8 @@ write_mrs_nifti <- function(fname, mrs_data) {
                     SpectralWidth = 1 / dwell_time,
                     EchoTime = jsonlite::unbox(mrs_data$te * 1e3)) 
   
-  extension(mrs_nii, 44) <- jsonlite::toJSON(json_list, digits = NA)
+  RNifti::extension(mrs_nii, 44) <- jsonlite::toJSON(json_list, digits = NA)
   
-   # write nifti to disk
+  # write nifti to disk
   RNifti::writeNifti(mrs_nii, fname, version = 2)
 }
