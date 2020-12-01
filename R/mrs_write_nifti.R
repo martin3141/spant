@@ -33,17 +33,9 @@ write_mrs_nifti <- function(fname, mrs_data) {
   dyn_interval <- mrs_data$resolution[5]
   mrs_nii$pixdim <- c(-1, mrs_pixdim, dwell_time, dyn_interval, 0, -1)
   
-  # set the qform
-  mrs_nii <- RNifti::`qform<-`(mrs_nii, structure(affine, code = 2L))
-  mrs_nii$qform_code <- 1
-  mrs_nii$intent_name <- "mrs_level_2A" # TODO detect the correct level from the
-                                        # the available information
-  
-  # write nifti to disk
-  RNifti::writeNifti(mrs_nii, fname, version = 2)
-  
-  # get fname of the json sidecar file
-  fname_json <- stringr::str_c(stringr::str_sub(fname, 1, -7), "json")
+  # set the sform
+  mrs_nii <- RNifti::`sform<-`(mrs_nii, structure(affine, code = 2L))
+  mrs_nii$intent_name <- "mrs_v0_2"
   
   # set the nucleus to a default value if not specified in mrs_data
   if (!exists("nuc", where = mrs_data)) mrs_data$nuc <- def_nuc()
@@ -54,8 +46,8 @@ write_mrs_nifti <- function(fname, mrs_data) {
                     SpectralWidth = 1 / dwell_time,
                     EchoTime = jsonlite::unbox(mrs_data$te * 1e3)) 
   
-  export_json <- jsonlite::toJSON(json_list, pretty = TRUE, digits = NA)
+  extension(mrs_nii, 44) <- jsonlite::toJSON(json_list, digits = NA)
   
-  # write json to disk
-  write(export_json, fname_json)
+   # write nifti to disk
+  RNifti::writeNifti(mrs_nii, fname, version = 2)
 }

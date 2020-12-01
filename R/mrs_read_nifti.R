@@ -61,16 +61,6 @@ read_mrs_nifti <- function(fname) {
   te  <- json_data$EchoTime / 1e3
   ft  <- json_data$TransmitterFrequency * 1e6
   
-  # if (exists("SpectralWidth", where = json_data)) {
-  #   # check json and nifti header values for the sampling frequency are consistent
-  #   if (abs((1 / pixdim[5]) - json_data$SpectralWidth) > 0.01) {
-  #     stop("Sampling frequencies in the json sidecar and NIFTI header differ by greater than 0.01 Hz")
-  #   }
-  #   res[7] <- 1 / json_data$SpectralWidth # prefer the json value if available
-  #                                         # due to higher precision than the
-  #                                         # NIFTI header (double vs float)
-  # }
- 
   # read the nucleus
   nuc <- json_data$ResonantNucleus
   
