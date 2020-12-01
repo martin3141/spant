@@ -1,8 +1,9 @@
 # spant 1.9.0
+* NIfTI MRS reader and writer now uses the header extension for metadata. Thanks
+to Jon Clayden for adding extension read/write support to the RNifti package.
 * Default plots now have gridlines in the y-direction and the plot line is now
 thicker and colored blue.
 * Opacity option added to the plotting functions (alpha).
-* NIfTI MRS reader and writer now uses the header extension for metadata.
 * Bug fix for comb_coils with SVS data.
 * Bug fixes for Siemens geometry information.
 
