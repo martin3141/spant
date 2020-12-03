@@ -172,10 +172,21 @@ resample_img <- function(source, target, interp = 3L) {
 
 #' Plot a volume as an image overlay.
 #' @export
-#' @param voi volume data as a nifti object.
-#' @param mri image data as a nifti object.
+#' @param voi volume data as a nifti object or path to data file.
+#' @param mri image data as a nifti object or path to data file.
 #' @param flip_lr flip the image in the left-right direction.
-plot_voi_overlay <- function(voi, mri, flip_lr = TRUE) {
+#' @param export_path optional path to save the image in png format.
+plot_voi_overlay <- function(voi, mri, flip_lr = TRUE, export_path = NULL) {
+  
+  if ("character" %in% class(mri)) mri <- RNifti::readNifti(mri)
+  
+  if ("character" %in% class(voi)) {
+    mrs_data <- read_mrs(voi)
+    voi <- get_svs_voi(mrs_data, mri)
+  } else if (class(voi)[1] == "mrs_data") {
+    voi <- get_svs_voi(voi, mri)
+  }
+  
   # check the image orientation etc is the same
   check_geom(voi, mri)
  
@@ -189,16 +200,31 @@ plot_voi_overlay <- function(voi, mri, flip_lr = TRUE) {
   vox_inds <- get_voi_cog(voi)
   plot_col <- add_alpha(grDevices::heat.colors(10), 0.4)
   mri_oro <- neurobase::robust_window(oro.nifti::nifti(mri))
+  
+  if (!is.null(export_path)) grDevices::png(export_path)
   neurobase::ortho2(mri_oro, oro.nifti::nifti(voi), xyz = vox_inds, 
                     col.y = plot_col, zlim.y = c(1, 2))
+  if (!is.null(export_path)) grDevices::dev.off()
 }
 
 #' Plot a volume as an overlay on a segmented brain volume.
 #' @param voi volume data as a nifti object.
 #' @param mri_seg segmented brain volume as a nifti object.
 #' @param flip_lr flip the image in the left-right direction.
+#' @param export_path optional path to save the image in png format.
 #' @export
-plot_voi_overlay_seg <- function(voi, mri_seg, flip_lr = TRUE) {
+plot_voi_overlay_seg <- function(voi, mri_seg, flip_lr = TRUE,
+                                 export_path = NULL) {
+  
+  if ("character" %in% class(mri_seg)) mri_seg <- RNifti::readNifti(mri_seg)
+  
+  if ("character" %in% class(voi)) {
+    mrs_data <- read_mrs(voi)
+    voi <- get_svs_voi(mrs_data, mri_seg)
+  } else if (class(voi)[1] == "mrs_data") {
+    voi <- get_svs_voi(voi, mri_seg)
+  }
+  
   # check the image orientation etc is the same
   check_geom(voi, mri_seg)
   
@@ -218,12 +244,16 @@ plot_voi_overlay_seg <- function(voi, mri_seg, flip_lr = TRUE) {
                  sprintf("%.1f", pvs[["Other"]]),'%', sep = "")
   
   plot_col <- add_alpha(grDevices::heat.colors(10), 0.4)
+  
+  if (!is.null(export_path)) grDevices::png(export_path)
   neurobase::ortho2(oro.nifti::nifti(mri_seg), oro.nifti::nifti(voi),
                     xyz = vox_inds, col.y = plot_col, zlim.y = c(1, 2))
   
   graphics::par(xpd = NA)
   graphics::text(x = 0.55, y = 0.12, labels = c(table), col = "white", pos = 4, 
                  cex = 1.5)
+  
+  if (!is.null(export_path)) grDevices::dev.off()
 }
 
 #' Return the white matter, gray matter and CSF composition of a volume.
