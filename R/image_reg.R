@@ -254,6 +254,8 @@ plot_voi_overlay_seg <- function(voi, mri_seg, flip_lr = TRUE,
                  cex = 1.5)
   
   if (!is.null(export_path)) grDevices::dev.off()
+  
+  return(pvs)
 }
 
 #' Return the white matter, gray matter and CSF composition of a volume.
