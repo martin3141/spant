@@ -1,7 +1,5 @@
 context("nifti")
 
-skip("nifti writer needs updating")
-
 test_that("nifti MRS data can be written and read back from disk", {
   
   set.seed(1)
