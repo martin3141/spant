@@ -41,12 +41,20 @@ calc_siemens_paras <- function(vars, is_ima) {
                        vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
                        vars$y_dim / vars$y_pts
   
+  affine <- cbind(c(mrs$row_vec * res[3], 0),
+                  c(mrs$col_vec * res[2], 0),
+                  c(mrs$sli_vec * res[4], 0),
+                  c(ima_pos, 1))
+  
+  affine[1:2,] <- -affine[1:2,]
+  
   # TODO parse from the data file and use sensible ref based on nuc
   nuc <- def_nuc()
   ref <- def_ref()
   
   return(list(res = res, pos_vec = pos_vec, row_vec = row_vec,
-              col_vec = col_vec, sli_vec = sli_vec, nuc = nuc, ref = ref))
+              col_vec = col_vec, sli_vec = sli_vec, nuc = nuc, ref = ref,
+              affine = affine))
 }
 
 read_twix <- function(fname, verbose, full_data = FALSE) {
@@ -259,7 +267,7 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
                    te = vars$te, ref = paras$ref, nuc = paras$nuc,
                    row_vec = paras$row_vec, col_vec = paras$col_vec,
                    sli_vec = paras$sli_vec, pos_vec = paras$pos_vec,
-                   freq_domain = freq_domain)
+                   freq_domain = freq_domain, affine = paras$affine)
   
   class(mrs_data) <- "mrs_data"
   mrs_data

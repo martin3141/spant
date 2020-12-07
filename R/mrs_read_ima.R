@@ -40,7 +40,7 @@ read_ima <- function(fname, verbose = FALSE) {
                    te = vars$te, ref = paras$ref, nuc = paras$nuc,
                    row_vec = paras$row_vec, col_vec = paras$col_vec,
                    sli_vec = paras$sli_vec, pos_vec = paras$pos_vec,
-                   freq_domain = freq_domain)
+                   freq_domain = freq_domain, affine = paras$affine)
   
   class(mrs_data) <- "mrs_data"
   mrs_data
