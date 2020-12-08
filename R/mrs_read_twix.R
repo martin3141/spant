@@ -18,7 +18,8 @@ calc_siemens_paras <- function(vars, is_ima) {
   x_new    <- l2_norm_vec(x_new)
   col_vec  <- cross(ima_norm, x_new)
   col_vec  <- l2_norm_vec(col_vec)
-  row_vec  <- cross(ima_norm, col_vec)
+  #row_vec  <- cross(col_vec, ima_norm) # better for MRSI
+  row_vec  <- cross(ima_norm, col_vec) # works for SVS
   row_vec  <- l2_norm_vec(row_vec)
   sli_vec  <- cross(row_vec, col_vec)
   sli_vec  <- l2_norm_vec(sli_vec)
@@ -41,9 +42,12 @@ calc_siemens_paras <- function(vars, is_ima) {
                        vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
                        vars$y_dim / vars$y_pts
   
-  affine <- cbind(c(mrs$row_vec * res[3], 0),
-                  c(mrs$col_vec * res[2], 0),
-                  c(mrs$sli_vec * res[4], 0),
+  Q <- rbind(row_vec, col_vec, sli_vec)
+  print(Q)
+  
+  affine <- cbind(c(row_vec * res[3], 0),
+                  c(col_vec * res[2], 0),
+                  c(sli_vec * res[4], 0),
                   c(ima_pos, 1))
   
   affine[1:2,] <- -affine[1:2,]
