@@ -11,9 +11,6 @@ calc_siemens_paras <- function(vars, is_ima) {
   ima_pos  <- c(vars$pos_sag,  vars$pos_cor,  vars$pos_tra)
   rotation <- vars$ip_rot
   
-  print(ima_pos)
-  
-  
   # here be dragons >
 
   x_dirn   <- c(1, 0, 0)
@@ -46,7 +43,6 @@ calc_siemens_paras <- function(vars, is_ima) {
                        vars$y_dim / vars$y_pts
   
   Q <- rbind(row_vec, col_vec, sli_vec)
-  print(Q)
   
   x <- fGSLCalcPRS(ima_norm, rotation)
   col_vec <- x$dGp
@@ -295,8 +291,12 @@ read_siemens_txt_hdr <- function(fname, version = "vd") {
     line <- readLines(con, n = 1 ,skipNul = TRUE, warn = FALSE)
     if (length(line) == 0) break
     if (startsWith(line, "ulVersion") && version == 'vb') break
-    
+
     if (startsWith(line, "ulVersion") && version == 'vd') {
+      line_no_sp <- gsub(" ", "", line)
+      line_no_sp_no_tab <- gsub("\t", "", line_no_sp)
+      # skip if there isn't an equal sign once spaces have been removed
+      if (!startsWith(line_no_sp_no_tab, "ulVersion=")) next
       tSequenceFilename <- readLines(con, n = 1)
       tProtocolName <- readLines(con, n = 1)
       last_ulVersion_pos <- seek(con)
