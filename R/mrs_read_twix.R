@@ -11,6 +11,8 @@ calc_siemens_paras <- function(vars, is_ima) {
   ima_pos  <- c(vars$pos_sag,  vars$pos_cor,  vars$pos_tra)
   rotation <- vars$ip_rot
   
+  print(ima_pos)
+  
   # here be dragons >
 
   x_dirn   <- c(1, 0, 0)
@@ -277,7 +279,7 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
   mrs_data
 }
 
-#' Read the text format header found in Siemens IMA and TWIW data files.
+#' Read the text format header found in Siemens IMA and TWIX data files.
 #' @param fname file name to read.
 #' @param version software version, can be "vb" or "vd".
 #' @return a list of parameter values
@@ -285,20 +287,26 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
 read_siemens_txt_hdr <- function(fname, version = "vd") {
   con <- file(fname, 'rb', encoding = "UTF-8")
   while (TRUE) {
-    line <- readLines(con, n = 1 ,skipNul = TRUE)
-    if (startsWith(line, "ulVersion") && version == 'vb') {
-      break
-    }
+    line <- readLines(con, n = 1 ,skipNul = TRUE, warn = FALSE)
+    if (length(line) == 0) break
+    if (startsWith(line, "ulVersion") && version == 'vb') break
     
     if (startsWith(line, "ulVersion") && version == 'vd') {
       tSequenceFilename <- readLines(con, n = 1)
       tProtocolName <- readLines(con, n = 1)
-      if ((tProtocolName != "tProtocolName\t = \t\"AdjCoilSens\"") && (tProtocolName != "tProtocolName\t = \t\"CBU_MPRAGE_32chn\"")) {
+      last_ulVersion_pos <- seek(con)
+      #if ((tProtocolName != "tProtocolName\t = \t\"AdjCoilSens\"") && (tProtocolName != "tProtocolName\t = \t\"CBU_MPRAGE_32chn\"")) {
         #print(tProtocolName)
-        break
-      }
+      #  break
+      #}
     }
   }
+  
+  # TODO reads the whole file looking for "ulVersion" and then
+  # tracks back to the last one. Must be a better way of finding the
+  # last one without reading all the spectral data. This is particularly
+  # bad for ima data when there will only ever be one set.
+  if (version == 'vd') seek(con, where = last_ulVersion_pos)
   
   vars <- list(averages = NA,
                fs = NA,
