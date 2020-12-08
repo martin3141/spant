@@ -9,7 +9,7 @@
 fGSLAlmEqual <- function(dArg1, dArg2) {
   dTmp <- dArg1 - dArg2
   bOut <- (dTmp >= -1.0e-6)  &  (dTmp <= 1.0e-6)
-  return(Out)
+  return(bOut)
 }
 
 # R implementation of:
@@ -55,14 +55,16 @@ fGSLAlmEqual <- function(dArg1, dArg2) {
 # double  dTraComp,	   /* IMP: Transverse component of normal vector        */
 # Out:
 # long *  plCase       /* EXP: Case (0=Sagittal, 1=Coronal or 2=Transverse) */
-fGSLClassOri <- function(dSagComp, dCorComp, dTraComp, DEBUG) {
-  if (DEBUG) sprintf('Normal vector = {dSagComp : %10.7f} {dCorComp : %10.7f} {dTraComp : %10.7f}.',
-                     dSagComp, dCorComp, dTraComp)
+fGSLClassOri <- function(dSagComp, dCorComp, dTraComp, DEBUG = FALSE) {
+  if (DEBUG) {
+    print(sprintf('Normal vector = {dSagComp : %10.7f} {dCorComp : %10.7f} {dTraComp : %10.7f}.',
+                     dSagComp, dCorComp, dTraComp))
+  }
   
   #Compute some temporary values
-  dAbsSagComp     <- np.abs(dSagComp)
-  dAbsCorComp     <- np.abs(dCorComp)
-  dAbsTraComp     <- np.abs(dTraComp)
+  dAbsSagComp     <- abs(dSagComp)
+  dAbsCorComp     <- abs(dCorComp)
+  dAbsTraComp     <- abs(dTraComp)
   
   bAlmEqualSagCor <- fGSLAlmEqual(dAbsSagComp, dAbsCorComp)
   bAlmEqualSagTra <- fGSLAlmEqual(dAbsSagComp, dAbsTraComp)
@@ -96,8 +98,8 @@ fGSLClassOri <- function(dSagComp, dCorComp, dTraComp, DEBUG) {
             ((dAbsCorComp < dAbsTraComp)  &  (dAbsTraComp < dAbsSagComp))) { 
     
     # Mainly sagittal...
-    if (DEBUG) print('Mainly coronal.')
-    plcase <- 0 # CASE = 0: Sagital
+    if (DEBUG) print('Mainly Sagittal.')
+    plcase <- 0 # CASE = 0: Sagittal
   } else {
     # Invalid slice orientation...
     stop('Error: Invalid slice orientation')    
@@ -155,8 +157,8 @@ fGSLClassOri <- function(dSagComp, dCorComp, dTraComp, DEBUG) {
 #   dGp: The Gp vector
 #   dGr: The Gr vector
 # From libGSL.h
-fGSLCalcPRS <- function(dGs, dPhi, DEBUG) {
-  # patient axes                                                          */
+fGSLCalcPRS <- function(dGs, dPhi, DEBUG = FALSE) {
+  # patient axes
   SAGITTAL   <- 0
   CORONAL    <- 1
   TRANSVERSE <- 2
@@ -192,17 +194,17 @@ fGSLCalcPRS <- function(dGs, dPhi, DEBUG) {
   
   if (DEBUG) {
     print('Before rotation around S:')
-    sprintf('GP = %10.7f %10.7f %10.7f', dGp[1], dGp[2], dGp[3])
-    sprintf('GR = %10.7f %10.7f %10.7f', dGr[1], dGr[2], dGr[3])
-    sprintf('GS = %10.7f %10.7f %10.7f', dGs[1], dGs[2], dGs[3])
+    print(sprintf('GP = %10.7f %10.7f %10.7f', dGp[1], dGp[2], dGp[3]))
+    print(sprintf('GR = %10.7f %10.7f %10.7f', dGr[1], dGr[2], dGr[3]))
+    print(sprintf('GS = %10.7f %10.7f %10.7f', dGs[1], dGs[2], dGs[3]))
   }
   
   # Rotation
   if (dPhi != 0.0) {
     #Rotate around the S axis                                             
     if (DEBUG) {
-      tmp <- dPhi * 180.0 / np.pi
-      sprintf('PHI = {tmp:%10.7f}', tmp)
+      tmp <- dPhi * 180.0 / pi
+      print(sprintf('PHI = %10.7f', tmp))
     }
   }
   
@@ -217,9 +219,9 @@ fGSLCalcPRS <- function(dGs, dPhi, DEBUG) {
   
   if (DEBUG) {
     print('After the Rotation around S:')
-    sprintf('GP = %10.7f %10.7f %10.7f', dGp[1], dGp[2], dGp[3])
-    sprintf('GR = %10.7f %10.7f %10.7f', dGr[1], dGr[2], dGr[3])
-    sprintf('GS = %10.7f %10.7f %10.7f', dGs[1], dGs[2], dGs[3])
+    print(sprintf('GP = %10.7f %10.7f %10.7f', dGp[1], dGp[2], dGp[3]))
+    print(sprintf('GR = %10.7f %10.7f %10.7f', dGr[1], dGr[2], dGr[3]))
+    print(sprintf('GS = %10.7f %10.7f %10.7f', dGs[1], dGs[2], dGs[3]))
   }
   
   return(list(dGp = dGp, dGr = dGr))
