@@ -13,6 +13,7 @@ calc_siemens_paras <- function(vars, is_ima) {
   
   print(ima_pos)
   
+  
   # here be dragons >
 
   x_dirn   <- c(1, 0, 0)
@@ -46,6 +47,10 @@ calc_siemens_paras <- function(vars, is_ima) {
   
   Q <- rbind(row_vec, col_vec, sli_vec)
   print(Q)
+  
+  x <- fGSLCalcPRS(ima_norm, rotation)
+  col_vec <- x$dGp
+  row_vec <- x$dGr
   
   affine <- cbind(c(row_vec * res[3], 0),
                   c(col_vec * res[2], 0),
