@@ -48,6 +48,13 @@ calc_siemens_paras <- function(vars, is_ima) {
   col_vec <- x$dGp
   row_vec <- x$dGr
   
+  # following is needed for MRSI - don't know why but doesn't seem to break SVS
+  row_vec <- -x$dGr
+  sli_vec <- ima_norm
+  ima_pos <- ima_pos - row_vec * (vars$x_pts / 2 - 0.5) * vars$x_dim /
+                       vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
+                       vars$y_dim / vars$y_pts
+  
   affine <- cbind(c(row_vec * res[3], 0),
                   c(col_vec * res[2], 0),
                   c(sli_vec * res[4], 0),

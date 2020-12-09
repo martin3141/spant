@@ -25,7 +25,8 @@ write_mrs_nifti <- function(fname, mrs_data) {
   mrs_nii <- RNifti::asNifti(data_points)
   
   # get the geometry information
-  affine  <- get_mrs_affine(mrs_data, 1.5, 1.5, 1.5)
+  #affine  <- get_mrs_affine(mrs_data, 1.5, 1.5, 1.5) # old version
+  affine  <- mrs_data$affine
   
   # voxel dimensions
   mrs_pixdim <- mrs_data$resolution[2:4]
