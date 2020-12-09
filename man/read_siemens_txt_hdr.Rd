@@ -2,7 +2,7 @@
 % Please edit documentation in R/mrs_read_twix.R
 \name{read_siemens_txt_hdr}
 \alias{read_siemens_txt_hdr}
-\title{Read the text format header found in Siemens IMA and TWIW data files.}
+\title{Read the text format header found in Siemens IMA and TWIX data files.}
 \usage{
 read_siemens_txt_hdr(fname, version = "vd")
 }
@@ -15,5 +15,5 @@ read_siemens_txt_hdr(fname, version = "vd")
 a list of parameter values
 }
 \description{
-Read the text format header found in Siemens IMA and TWIW data files.
+Read the text format header found in Siemens IMA and TWIX data files.
 }
