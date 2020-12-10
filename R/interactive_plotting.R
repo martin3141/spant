@@ -275,7 +275,7 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
   }
 
   if (orient_lab) {
-    cex_lab <- 0.8
+    cex_lab <- 0.7
     lab_marg <- 0.5
     lab_font <- 2
     lm_pos <- 1 + lab_marg
