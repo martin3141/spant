@@ -4,7 +4,7 @@
 \alias{plot_voi_overlay_seg}
 \title{Plot a volume as an overlay on a segmented brain volume.}
 \usage{
-plot_voi_overlay_seg(voi, mri_seg, flip_lr = TRUE, export_path = NULL)
+plot_voi_overlay_seg(voi, mri_seg, flip_lr = FALSE, export_path = NULL)
 }
 \arguments{
 \item{voi}{volume data as a nifti object.}
