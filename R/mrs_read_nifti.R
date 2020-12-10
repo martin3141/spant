@@ -54,6 +54,8 @@ read_mrs_nifti <- function(fname) {
   row_vec <- xform_mat[1:3, 2] / sum(xform_mat[1:3, 2] ^ 2) ^ 0.5 * c(-1, -1, 1)
   sli_vec <- crossprod_3d(row_vec, col_vec)
   pos_vec <- xform_mat[1:3, 4] * c(-1, -1, 1)
+  affine  <- xform_mat
+  attr(affine, "code") <- NULL
   
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
@@ -71,7 +73,7 @@ read_mrs_nifti <- function(fname) {
   mrs_data <- list(ft = ft, data = data, resolution = res,
                    te = te, ref = ref, nuc = nuc, row_vec = row_vec,
                    col_vec = col_vec, sli_vec = sli_vec, pos_vec = pos_vec,
-                   freq_domain = freq_domain)
+                   freq_domain = freq_domain, affine = affine)
   
   class(mrs_data) <- "mrs_data"
   mrs_data
