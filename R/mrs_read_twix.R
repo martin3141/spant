@@ -11,7 +11,8 @@ calc_siemens_paras <- function(vars, is_ima) {
   ima_pos  <- c(vars$pos_sag,  vars$pos_cor,  vars$pos_tra)
   rotation <- vars$ip_rot
   
-  # here be dragons and should be removed soon >
+  # here be dragons and should be removed soon and replaced with the affine
+  # method >
 
   x_dirn   <- c(1, 0, 0)
   x_new    <- rotate_vec(x_dirn, ima_norm, -rotation)
