@@ -199,12 +199,11 @@ plot_voi_overlay <- function(voi, mri, flip_lr = TRUE, export_path = NULL) {
   # get the centre of gravity coords
   vox_inds <- get_voi_cog(voi)
   plot_col <- grDevices::heat.colors(10)
-  mri_oro  <- neurobase::robust_window(oro.nifti::nifti(mri))
+  
+  zlim <- stats::quantile(mri, probs = c(0, 0.999))
   
   if (!is.null(export_path)) grDevices::png(export_path)
-  #neurobase::ortho2(mri_oro, oro.nifti::nifti(voi), xyz = vox_inds, 
-  #                  col.y = plot_col, zlim.y = c(1, 2))
-  ortho3(mri_oro, oro.nifti::nifti(voi), xyz = vox_inds, col_ol = plot_col,
+  ortho3(mri, voi, xyz = vox_inds, col_ol = plot_col, zlim = zlim,
          zlim_ol = c(0.99, 2), alpha = 0.4, colourbar = FALSE)
   if (!is.null(export_path)) grDevices::dev.off()
 }
@@ -248,12 +247,13 @@ plot_voi_overlay_seg <- function(voi, mri_seg, flip_lr = TRUE,
   plot_col <- add_alpha(grDevices::heat.colors(10), 0.4)
   
   if (!is.null(export_path)) grDevices::png(export_path)
-  neurobase::ortho2(oro.nifti::nifti(mri_seg), oro.nifti::nifti(voi),
-                    xyz = vox_inds, col.y = plot_col, zlim.y = c(1, 2))
+ 
+  ortho3(mri_seg, voi, xyz = vox_inds, col_ol = plot_col,
+         zlim_ol = c(0.99, 2), alpha = 0.4, colourbar = FALSE)
   
   graphics::par(xpd = NA)
-  graphics::text(x = 0.55, y = 0.12, labels = c(table), col = "white", pos = 4, 
-                 cex = 1.5)
+  graphics::text(x = 0.55, y = 0.22, labels = c(table), col = "white", pos = 4, 
+                 cex = 1.2)
   
   if (!is.null(export_path)) grDevices::dev.off()
   

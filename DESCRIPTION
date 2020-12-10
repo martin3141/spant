@@ -53,8 +53,6 @@ Suggests:
     viridisLite,
     shiny,
     miniUI,
-    neurobase,
-    oro.nifti,
     knitr,
     rmarkdown,
     testthat,

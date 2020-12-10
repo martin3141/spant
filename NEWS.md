@@ -8,6 +8,7 @@ thicker and colored blue.
 * Bug fixes for Siemens geometry information.
 * Changed the ordering of arguments to write_mrs and write_mrs_nifti to improve 
 consistency with other functions.
+* Internal function (ortho3) now used to plot voxel locations on MRI.
 
 # spant 1.8.0
 * Added gridplot function.
