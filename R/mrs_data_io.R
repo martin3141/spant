@@ -97,13 +97,13 @@ guess_mrs_format <- function(fname) {
 }
 
 #' Write MRS data object to file.
-#' @param fname the filename of the output.
 #' @param mrs_data object to be written to file.
+#' @param fname the filename of the output.
 #' @param format string describing the data format. Must be one of the 
 #' following : "nifti", "dpt", "lcm_raw", "rds". If not specified, the format
 #' will be guessed from the filename extension.
 #' @export
-write_mrs <- function(fname, mrs_data, format = NULL) {
+write_mrs <- function(mrs_data, fname, format = NULL) {
   
   if (class(mrs_data) != "mrs_data") stop("data object is not mrs_data format")
   
@@ -115,7 +115,7 @@ write_mrs <- function(fname, mrs_data, format = NULL) {
   } else if (format == "lcm_raw") {
     write_mrs_lcm_raw(fname, mrs_data)
   } else if (format == "nifti") {
-    write_mrs_nifti(fname, mrs_data)
+    write_mrs_nifti(mrs_data, fname)
   } else if (format == "rds") {
     write_mrs_rds(fname, mrs_data)
   } else {

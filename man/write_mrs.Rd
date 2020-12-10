@@ -4,12 +4,12 @@
 \alias{write_mrs}
 \title{Write MRS data object to file.}
 \usage{
-write_mrs(fname, mrs_data, format = NULL)
+write_mrs(mrs_data, fname, format = NULL)
 }
 \arguments{
-\item{fname}{the filename of the output.}
-
 \item{mrs_data}{object to be written to file.}
+
+\item{fname}{the filename of the output.}
 
 \item{format}{string describing the data format. Must be one of the
 following : "nifti", "dpt", "lcm_raw", "rds". If not specified, the format

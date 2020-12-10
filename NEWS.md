@@ -6,6 +6,8 @@ thicker and colored blue.
 * Opacity option added to the plotting functions (alpha).
 * Bug fix for comb_coils with SVS data.
 * Bug fixes for Siemens geometry information.
+* Changed the ordering of arguments to write_mrs and write_mrs_nifti to improve 
+consistency with other functions.
 
 # spant 1.8.0
 * Added gridplot function.

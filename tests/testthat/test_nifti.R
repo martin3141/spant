@@ -19,7 +19,7 @@ test_that("nifti MRS data can be written and read back from disk", {
   sim_mrs$affine <- diag(1, 4, 4)
   
   tempf <- tempfile(fileext = ".nii.gz")
-  write_mrs(tempf, sim_mrs)
+  write_mrs(sim_mrs, tempf)
   
   sim_mrs_nii <- read_mrs(tempf)
   

@@ -4,12 +4,12 @@
 \alias{write_mrs_nifti}
 \title{Write MRS data object to file in NIFTI format.}
 \usage{
-write_mrs_nifti(fname, mrs_data)
+write_mrs_nifti(mrs_data, fname)
 }
 \arguments{
-\item{fname}{the filename of the output NIFTI MRS data.}
-
 \item{mrs_data}{object to be written to file.}
+
+\item{fname}{the filename of the output NIFTI MRS data.}
 }
 \description{
 Write MRS data object to file in NIFTI format.
