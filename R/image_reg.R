@@ -176,7 +176,7 @@ resample_img <- function(source, target, interp = 3L) {
 #' @param mri image data as a nifti object or path to data file.
 #' @param flip_lr flip the image in the left-right direction.
 #' @param export_path optional path to save the image in png format.
-plot_voi_overlay <- function(voi, mri, flip_lr = TRUE, export_path = NULL) {
+plot_voi_overlay <- function(voi, mri, flip_lr = FALSE, export_path = NULL) {
   
   if ("character" %in% class(mri)) mri <- RNifti::readNifti(mri)
   
@@ -214,7 +214,7 @@ plot_voi_overlay <- function(voi, mri, flip_lr = TRUE, export_path = NULL) {
 #' @param flip_lr flip the image in the left-right direction.
 #' @param export_path optional path to save the image in png format.
 #' @export
-plot_voi_overlay_seg <- function(voi, mri_seg, flip_lr = TRUE,
+plot_voi_overlay_seg <- function(voi, mri_seg, flip_lr = FALSE,
                                  export_path = NULL) {
   
   if ("character" %in% class(mri_seg)) mri_seg <- RNifti::readNifti(mri_seg)
