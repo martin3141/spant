@@ -11,7 +11,7 @@ calc_siemens_paras <- function(vars, is_ima) {
   ima_pos  <- c(vars$pos_sag,  vars$pos_cor,  vars$pos_tra)
   rotation <- vars$ip_rot
   
-  # here be dragons >
+  # here be dragons and should be removed soon >
 
   x_dirn   <- c(1, 0, 0)
   x_new    <- rotate_vec(x_dirn, ima_norm, -rotation)
@@ -44,9 +44,11 @@ calc_siemens_paras <- function(vars, is_ima) {
   
   Q <- rbind(row_vec, col_vec, sli_vec)
   
+  # most of the above should be removed at some point
+  
   x <- fGSLCalcPRS(ima_norm, rotation)
   col_vec <- x$dGp
-  row_vec <- x$dGr
+  # row_vec <- x$dGr # this is more consistent with spec2nii as of Dec 2020
   
   # following is needed for MRSI - don't know why but doesn't seem to break SVS
   row_vec <- -x$dGr
@@ -60,6 +62,7 @@ calc_siemens_paras <- function(vars, is_ima) {
                   c(sli_vec * res[4], 0),
                   c(ima_pos, 1))
   
+  # NIfTI sign swap
   affine[1:2,] <- -affine[1:2,]
   
   # TODO parse from the data file and use sensible ref based on nuc
