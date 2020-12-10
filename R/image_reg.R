@@ -4,8 +4,9 @@
 #' @return volume data as a nifti object.
 #' @export
 get_svs_voi <- function(mrs_data, target_mri) {
-  affine <- get_mrs_affine(mrs_data)
-  raw_data <- array(1, c(mrs_data$resolution[2:4]))
+  affine <- get_mrs_affine_v2(mrs_data)
+  #raw_data <- array(1, c(mrs_data$resolution[2:4])) old method
+  raw_data <- array(1, c(mrs_data$resolution[c(3, 2, 4)]))
   voi <- RNifti::retrieveNifti(raw_data)
   voi <- RNifti::`sform<-`(voi, structure(affine, code = 2L))
   
@@ -398,27 +399,15 @@ get_mrs_affine <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1) {
 #' @return affine matrix.
 #' @export
 get_mrs_affine_v2 <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1) {
-  # l2 norm
-  col_vec <- mrs_data$col_vec/sqrt(sum(mrs_data$col_vec ^ 2))
-  row_vec <- mrs_data$row_vec/sqrt(sum(mrs_data$row_vec ^ 2))
-  col_vec[1:2] <- col_vec[1:2] * -1
-  row_vec[1:2] <- row_vec[1:2] * -1
-  slice_vec <- crossprod_3d(row_vec, col_vec)
-  slice_vec <- slice_vec / sqrt(sum(slice_vec ^ 2))
-  pos_vec <- mrs_data$pos_vec
-  pos_vec[1:2] <- pos_vec[1:2] * -1
-  affine <- diag(4)
-  affine[1:3, 1] <- col_vec
-  affine[1:3, 2] <- row_vec
-  affine[1:3, 3] <- slice_vec
-  rows <- dim(mrs_data$data)[2]
-  cols <- dim(mrs_data$data)[3]
-  slices <- dim(mrs_data$data)[4]
+  affine <- mrs_data$affine
   
-  affine[1:3, 4] <- pos_vec -
-                    (mrs_data$resolution[2] * (-(x_pos - 1) + 0.5)) * row_vec -
-                    (mrs_data$resolution[3] * (-(y_pos - 1) + 0.5)) * col_vec -
-                    (mrs_data$resolution[4] * (-(z_pos - 1) + 0.5)) * slice_vec
+  affine[1:3, 1] <- l2_norm_vec(affine[1:3, 1])
+  affine[1:3, 2] <- l2_norm_vec(affine[1:3, 2])
+  affine[1:3, 3] <- l2_norm_vec(affine[1:3, 3])
+  affine[1:3, 4] <- affine[1:3, 4] - mrs_data$affine[1:3, 1] / 2 -
+                                     mrs_data$affine[1:3, 2] / 2 -
+                                     mrs_data$affine[1:3, 3] / 2 
+  
   return(affine)
 }
 
