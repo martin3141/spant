@@ -55,8 +55,8 @@ calc_siemens_paras <- function(vars, is_ima) {
                        vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
                        vars$y_dim / vars$y_pts
   
-  affine <- cbind(c(row_vec * res[3], 0),
-                  c(col_vec * res[2], 0),
+  affine <- cbind(c(row_vec * res[2], 0),
+                  c(col_vec * res[3], 0),
                   c(sli_vec * res[4], 0),
                   c(ima_pos, 1))
   
@@ -434,8 +434,8 @@ read_siemens_txt_hdr <- function(fname, version = "vd") {
   
   if (Nvoxels > 1) {
     # looks like MRSI
-    vars$x_dim    <- slice_dPhaseFOV 
-    vars$y_dim    <- slice_dReadoutFOV 
+    vars$x_dim    <- slice_dReadoutFOV 
+    vars$y_dim    <- slice_dPhaseFOV 
     vars$z_dim    <- slice_dThickness
     vars$pos_sag  <- slice_dSag 
     vars$pos_cor  <- slice_dCor
@@ -446,8 +446,8 @@ read_siemens_txt_hdr <- function(fname, version = "vd") {
     vars$ip_rot   <- slice_ip_rot
   } else if (Nvoxels == 1) {
     # looks like SVS
-    vars$x_dim    <- voi_dPhaseFOV 
-    vars$y_dim    <- voi_dReadoutFOV 
+    vars$x_dim    <- voi_dReadoutFOV 
+    vars$y_dim    <- voi_dPhaseFOV 
     vars$z_dim    <- voi_dThickness
     vars$pos_sag  <- voi_dSag 
     vars$pos_cor  <- voi_dCor

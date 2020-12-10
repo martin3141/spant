@@ -5,8 +5,7 @@
 #' @export
 get_svs_voi <- function(mrs_data, target_mri) {
   affine <- get_mrs_affine_v2(mrs_data)
-  #raw_data <- array(1, c(mrs_data$resolution[2:4])) old method
-  raw_data <- array(1, c(mrs_data$resolution[c(3, 2, 4)]))
+  raw_data <- array(1, c(mrs_data$resolution[2:4]))
   voi <- RNifti::retrieveNifti(raw_data)
   voi <- RNifti::`sform<-`(voi, structure(affine, code = 2L))
   
