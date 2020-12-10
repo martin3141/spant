@@ -412,6 +412,10 @@ magrittr::`%$%`
 #' @export
 RNifti::readNifti
 
+#' @importFrom RNifti writeNifti
+#' @export
+RNifti::writeNifti
+
 # prob not as fast as functions in matrixStats but better than
 # apply
 colSdColMeans <- function(x, na.rm) {

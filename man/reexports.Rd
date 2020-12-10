@@ -6,6 +6,7 @@
 \alias{\%>\%}
 \alias{\%$\%}
 \alias{readNifti}
+\alias{writeNifti}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -15,6 +16,6 @@ below to see their documentation.
 \describe{
   \item{magrittr}{\code{\link[magrittr:exposition]{\%$\%}}, \code{\link[magrittr:pipe]{\%>\%}}}
 
-  \item{RNifti}{\code{\link[RNifti]{readNifti}}}
+  \item{RNifti}{\code{\link[RNifti]{readNifti}}, \code{\link[RNifti]{writeNifti}}}
 }}
 
