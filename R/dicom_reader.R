@@ -7,9 +7,18 @@ read_raw <- function(fname, endian = "little") {
   return(readBin(fname, "raw", n = as.integer(fsize), endian = endian))
 }
 
-# extracted from the file eg tags <- list(spec_data = "7FE1,1010",
-#                                         pat_name = "0010,0010")
-# A named list is returned containing the raw binary data is returned.
+#' A very simple DICOM reader.
+#' 
+#' Note this reader is very basic and does not use a DICOM dictionary or try to
+#' convert the data to the correct datatype. For a more robust and sophisticated
+#' reader use the oro.dicom package.
+#' @param input either a file path or raw binary object.
+#' @param tags a named list of tags to be extracted from the file.
+#' eg tags <- list(spec_data = "7FE1,1010", pat_name = "0010,0010")
+#' @param endian can be "little" or "big".
+#' @param debug print out some debugging information, can be "little" or "big".
+#' @return a list with the same structure as the input, but with tag codes
+#' replaced with the corresponding data in a raw format.
 #' @export
 dicom_reader <- function(input, tags = list(sop_class_uid = "0008,0016"),
                          endian = "little", debug = FALSE) {
@@ -17,7 +26,7 @@ dicom_reader <- function(input, tags = list(sop_class_uid = "0008,0016"),
   # assume as file path if input is character, otherwise assume raw
   if (is.character(input)) {
     fsize <- file.info(input)$size
-    fraw <- readBin(input, "raw", n = as.integer(fsize), endian = endian)
+    fraw  <- readBin(input, "raw", n = as.integer(fsize), endian = endian)
   } else {
     fraw <- input 
   }
@@ -55,7 +64,9 @@ dicom_reader <- function(input, tags = list(sop_class_uid = "0008,0016"),
     # tentatively read in the VR - only used for explicit VRs
     vr <- rawToChar(fraw[pos + 5:6])
     
-    # 5600,0020 is a hack that seems to be needed for Siemens SpectroscopyData
+    # 5600,0020 is a hack that seems to be needed for Siemens SpectroscopyData.
+    # (because MRS export implementations are far too important to adhere to
+    # standards)
     if (vr %in% short_vrs | tag_str == "5600,0020") {
       # explicit VR with two bytes of zero padding
       length_raw <- fraw[pos + 9:12]
