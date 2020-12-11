@@ -10,6 +10,7 @@ thicker and colored blue.
 consistency with other functions.
 * Internal function (ortho3) now used to plot voxel locations on MRI.
 * Internal dicom reader function added.
+* Tentative support for Siemens DICOM MRS format added.
 
 # spant 1.8.0
 * Added gridplot function.
