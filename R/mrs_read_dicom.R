@@ -29,18 +29,18 @@ read_dicom <- function(fname, verbose) {
 read_siemens_dicom <- function(fraw) {
   
   # list of tags to pull from the dicom file
-  tags <- list(data = "5600,0020",
-               fs = "0018,9052",
-               ft = "0018,9098",
-               ipp = "0020,0032",
-               iop = "0020,0037",
-               pixsp = "0028,0030",
+  tags <- list(data    = "5600,0020",
+               fs      = "0018,9052",
+               ft      = "0018,9098",
+               ipp     = "0020,0032",
+               iop     = "0020,0037",
+               pixsp   = "0028,0030",
                slice_t = "0018,0050",
-               rows = "0028,0010",
-               cols = "0028,0011",
-               slices = "0018,9159",
-               Npt = "0028,9002",
-               te = "0018,9082")
+               rows    = "0028,0010",
+               cols    = "0028,0011",
+               slices  = "0018,9159",
+               Npt     = "0028,9002",
+               te      = "0018,9082")
 
   # read em out
   res  <- dicom_reader(fraw, tags)
