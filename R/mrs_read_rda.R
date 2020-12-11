@@ -70,7 +70,7 @@ read_rda <- function(fname) {
   dim(data) <- c(N, rows, cols, slices, 1, 1, 1)
   data <- aperm(data, c(7, 2, 3, 4, 5, 6, 1))
   
-  res <- c(NA, row_vox_dim, col_vox_dim, slice_vox_dim, 1, NA, 1 / fs)
+  res <- c(NA, col_vox_dim, row_vox_dim, slice_vox_dim, 1, NA, 1 / fs)
   ref <- def_ref()
   
   # TODO determine from the data
@@ -79,10 +79,10 @@ read_rda <- function(fname) {
   # freq domain vector
   freq_domain <- rep(FALSE, 7)
   
-  pos_vec_affine <- pos_vec_file + row_ori * res[3] / 2 + col_ori * res[2] / 2
+  pos_vec_affine <- pos_vec_file + row_ori * res[2] / 2 + col_ori * res[3] / 2
   
-  affine <- cbind(c(row_ori * res[3], 0),
-                  c(col_ori * res[2], 0),
+  affine <- cbind(c(row_ori * res[2], 0),
+                  c(col_ori * res[3], 0),
                   c(sli_vec * res[4], 0),
                   c(pos_vec_affine, 1))
   affine[1:2,] <- -affine[1:2,]
