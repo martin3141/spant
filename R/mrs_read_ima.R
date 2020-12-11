@@ -6,21 +6,9 @@ read_ima <- function(fname, verbose = FALSE) {
   # calculate expected size of data in bytes - assuming complex 4byte floats
   data_size <- vars$x_pts * vars$y_pts * vars$z_pts * vars$N * 4 * 2
   
-  dcm_info <- oro.dicom::readDICOM(fname, pixelData = FALSE)$hdr
-  dcm_info <- as.data.frame(dcm_info)
-  padding <- 0
-  if (dcm_info[nrow(dcm_info),3] == "DataSetTrailingPadding") {
-    padding <- as.numeric(dcm_info[nrow(dcm_info),5]) + 12
-  }
-  
-  con <- file(fname, 'rb')
-  # assume data points are at the end of the file 
-  seek(con, -data_size - padding, origin = "end")
-  #print(seek(con, where = NA))
-  raw_pts <- readBin(con, "numeric", size = 4L, n = (vars$x_pts * vars$y_pts * 
-                                                     vars$z_pts * vars$N * 2),
-                     endian = "little")
-  close(con)
+  tags <- list(spec_data = "7FE1,1010")
+  res <- dicom_reader(fname, tags)
+  raw_pts <- readBin(res$spec_data, what = "double", n = data_size, size = 4L)
   
   # make complex
   data <- raw_pts[c(TRUE, FALSE)] + 1i * raw_pts[c(FALSE, TRUE)]

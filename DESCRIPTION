@@ -43,7 +43,6 @@ Imports:
     RNiftyReg,
     fields,
     MASS,
-    oro.dicom,
     numDeriv,
     nloptr,
     irlba,

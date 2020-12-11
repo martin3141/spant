@@ -9,6 +9,7 @@ thicker and colored blue.
 * Changed the ordering of arguments to write_mrs and write_mrs_nifti to improve 
 consistency with other functions.
 * Internal function (ortho3) now used to plot voxel locations on MRI.
+* Internal dicom reader function added.
 
 # spant 1.8.0
 * Added gridplot function.
