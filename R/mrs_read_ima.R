@@ -7,7 +7,7 @@ read_ima <- function(fname, verbose = FALSE) {
   data_size <- vars$x_pts * vars$y_pts * vars$z_pts * vars$N * 4 * 2
   
   tags <- list(spec_data = "7FE1,1010")
-  res <- dicom_reader(fname, tags)
+  res  <- dicom_reader(fname, tags)
   raw_pts <- readBin(res$spec_data, what = "double", n = data_size, size = 4L)
   
   # make complex
