@@ -26,9 +26,11 @@ read_dicom <- function(fname, verbose) {
   }
 }
 
-
 read_siemens_dicom <- function(fraw) {
-  print("siemens dicom")
+  tags <- list(spec_data =  "5600,0020")
+  res  <- dicom_reader(fraw, tags)
+  
+  break
   
   # find out where the raw data points start by looking for
   # ">>> End of header <<<"
