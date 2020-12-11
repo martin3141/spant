@@ -292,14 +292,19 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
 }
 
 #' Read the text format header found in Siemens IMA and TWIX data files.
-#' @param fname file name to read.
+#' @param input file name to read or raw data.
 #' @param version software version, can be "vb" or "vd".
 #' @return a list of parameter values
 #' @export
-read_siemens_txt_hdr <- function(fname, version = "vd") {
-  con <- file(fname, 'rb', encoding = "UTF-8")
+read_siemens_txt_hdr <- function(input, version = "vd") {
+  if (is.character(input)) {
+    con <- file(input, 'rb', encoding = "UTF-8")
+  } else {
+    # assume binary
+    con <- rawConnection(input, "rb")
+  }
   while (TRUE) {
-    line <- readLines(con, n = 1 ,skipNul = TRUE, warn = FALSE)
+    line <- readLines(con, n = 1, skipNul = TRUE, warn = FALSE)
     if (length(line) == 0) break
     if (startsWith(line, "ulVersion") && version == 'vb') break
 

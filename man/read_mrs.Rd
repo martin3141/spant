@@ -19,7 +19,7 @@ read_mrs(
 \item{fname}{filename of the dpt format MRS data.}
 
 \item{format}{string describing the data format. Must be one of the
-following : "spar_sdat", "rda", "ima", "twix", "pfile", "list_data",
+following : "spar_sdat", "rda", "dicom", "twix", "pfile", "list_data",
 "paravis", "dpt", "lcm_raw", "rds", "nifti", "varian". If not specified,
 the format will be guessed from the filename extension.}
 

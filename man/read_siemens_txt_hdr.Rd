@@ -4,10 +4,10 @@
 \alias{read_siemens_txt_hdr}
 \title{Read the text format header found in Siemens IMA and TWIX data files.}
 \usage{
-read_siemens_txt_hdr(fname, version = "vd")
+read_siemens_txt_hdr(input, version = "vd")
 }
 \arguments{
-\item{fname}{file name to read.}
+\item{input}{file name to read or raw data.}
 
 \item{version}{software version, can be "vb" or "vd".}
 }

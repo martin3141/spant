@@ -1,7 +1,7 @@
 #' Read MRS data from a file.
 #' @param fname filename of the dpt format MRS data.
 #' @param format string describing the data format. Must be one of the 
-#' following : "spar_sdat", "rda", "ima", "twix", "pfile", "list_data",
+#' following : "spar_sdat", "rda", "dicom", "twix", "pfile", "list_data",
 #' "paravis", "dpt", "lcm_raw", "rds", "nifti", "varian". If not specified,
 #' the format will be guessed from the filename extension.
 #' @param ft transmitter frequency in Hz (required for list_data format).
@@ -28,8 +28,8 @@ read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
     return(read_spar_sdat(fname))
   } else if (format == "rda") {
     return(read_rda(fname))
-  } else if (format == "ima") {
-    return(read_ima(fname, verbose))
+  } else if (format == "dicom") {
+    return(read_dicom(fname, verbose))
   } else if (format == "twix") {
     return(read_twix(fname, verbose, full_data))
   } else if (format == "pfile") {
@@ -69,7 +69,9 @@ guess_mrs_format <- function(fname) {
   } else if (stringr::str_ends(fname_low, ".rda")) {
     format <- "rda"
   } else if (stringr::str_ends(fname_low, ".ima")) {
-    format <- "ima"
+    format <- "dicom"
+  } else if (stringr::str_ends(fname_low, ".dcm")) {
+    format <- "dicom"
   } else if (stringr::str_ends(fname_low, ".spar")) {
     format <- "spar_sdat"
   } else if (stringr::str_ends(fname_low, ".sdat")) {
