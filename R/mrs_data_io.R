@@ -2,9 +2,9 @@
 mrs_data <- function(data, ft, resolution, te, ref, nuc, freq_domain, affine,
                      meta) {
   
-  mrs_data <- list(data = data, ft = ft, resolution = res, te = te, ref = ref, 
-                   nuc = nuc, freq_domain = freq_domain, affine = affine,
-                   meta = meta)
+  mrs_data <- list(data = data, ft = ft, resolution = resolution, te = te,
+                   ref = ref, nuc = nuc, freq_domain = freq_domain,
+                   affine = affine, meta = meta)
   
   class(mrs_data) <- "mrs_data"
   return(mrs_data)
