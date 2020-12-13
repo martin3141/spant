@@ -93,7 +93,8 @@ guess_mrs_format <- function(fname) {
   } else if (basename(fname_low) == "fid") {
     format <- "varian"
   } else {
-    stop("Could not guess the MRS format, please specify the format argument.")
+    # if all else fails, assume DICOM
+    format <- "dicom"
   }
   return(format)
 }

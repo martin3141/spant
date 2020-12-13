@@ -19,10 +19,21 @@ read_dicom <- function(fname, verbose) {
       # MR Spectroscopy Storage
       return(read_siemens_dicom(fraw))
     } else {
-      stop("Incorrect SOP class UID, this doesn't look like MRS data.")
+      stop(paste0("Unsupported SOP class UID : ", sop_class_uid,
+                  ". This doesn't look like MRS data."))
+    }
+  } else if (grepl("Philips", manuf)) {
+    if (sop_class_uid == "1.3.46.670589.11.0.0.12.1") {
+      return(read_philips_priv_dicom(fraw))
+    } else if (sop_class_uid == "1.2.840.10008.5.1.4.1.1.4.2") {
+      stop("Philips DICOM MRS is not currently supported. Please contact the author with example data if you would like spant to support this format.")
+    } else {
+      stop(paste0("Unsupported SOP class UID : ", sop_class_uid,
+                  ". This doesn't look like MRS data."))
     }
   } else {
-    stop("DICOM MRS manufacturer format not currently supported.") 
+    stop(paste0("DICOM MRS manufacturer format: \"", trimws(manuf),
+                "\" is not currently supported."))
   }
 }
 
