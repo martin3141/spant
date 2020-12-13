@@ -64,10 +64,8 @@ dicom_reader <- function(input, tags = list(sop_class_uid = "0008,0016"),
     # tentatively read in the VR - only used for explicit VRs
     vr <- rawToChar(fraw[pos + 5:6])
     
-    # 5600,0020 is a hack that seems to be needed for Siemens SpectroscopyData.
-    # (because MRS export implementations are far too important to adhere to
-    # standards)
-    if (vr %in% short_vrs | tag_str == "5600,0020") {
+    # SpectroscopyData seems to be a special case
+    if (vr %in% short_vrs | tag_str %in% c("5600,0020", "2005,1270")) {
       # explicit VR with two bytes of zero padding
       length_raw <- fraw[pos + 9:12]
       length <- read_uint32(length_raw)
@@ -88,7 +86,7 @@ dicom_reader <- function(input, tags = list(sop_class_uid = "0008,0016"),
     if (rawToHex(length_raw) %in% c("FFFFFFFF", "00000A00")) length <- 0 
       
     if (length == 0) {
-      start_byte <- NA
+      start_byte <- pos + 1
       end_byte   <- NA
     } else {
       start_byte <- pos + 1
