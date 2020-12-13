@@ -1,3 +1,15 @@
+# constructor for mrs_data
+mrs_data <- function(data, ft, resolution, te, ref, nuc, freq_domain, affine,
+                     meta) {
+  
+  mrs_data <- list(data = data, ft = ft, resolution = res, te = te, ref = ref, 
+                   nuc = nuc, freq_domain = freq_domain, affine = affine,
+                   meta = meta)
+  
+  class(mrs_data) <- "mrs_data"
+  return(mrs_data)
+}
+
 #' Read MRS data from a file.
 #' @param fname filename of the dpt format MRS data.
 #' @param format string describing the data format. Must be one of the 
