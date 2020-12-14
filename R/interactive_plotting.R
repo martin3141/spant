@@ -183,7 +183,7 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
 #' @param smallplot smallplot option for positioning the colourbar.
 #' @export
 ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
-                   zlim_ol = NULL, alpha = 1, col_ol = viridisLite::viridis(64),
+                   zlim_ol = NULL, alpha = 0.7, col_ol = viridisLite::viridis(64),
                    orient_lab = TRUE, rescale = 1, crosshairs = TRUE,
                    ch_lwd = 1, colourbar = TRUE, bg = "black",
                    mar = c(0, 0, 0, 0), smallplot = c(0.50, 0.52, 0.1, 0.4)) {
@@ -196,8 +196,16 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
   
   img_dim <- dim(underlay)[1:3]
 
-  if (is.null(xyz)) xyz <- ceiling(img_dim / 2)
-
+  if (is.null(xyz)) {
+    if (!is.null(overlay)) {
+      # create map of zero and ones to calc cog
+      overlay_bin <- (overlay > mean(overlay)) * 1
+      xyz <- get_voi_cog(overlay_bin)
+    } else {
+      xyz <- ceiling(img_dim / 2)
+    }
+  }
+  
   cor <- underlay[img_dim[1]:1, xyz[2],]
   sag <- underlay[xyz[1], img_dim[2]:1,]
   ax  <- underlay[img_dim[1]:1,, xyz[3]]
@@ -219,7 +227,7 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
     full[full < zlim[1]] <- zlim[1]
     full[full > zlim[2]] <- zlim[2]
   }
-
+  
   asp <- dim(full)[2] / dim(full)[1]
   graphics::image(full, useRaster = TRUE, col = grDevices::gray(0:64 / 64),
                   axes = FALSE, asp = asp, zlim = zlim)
@@ -239,7 +247,7 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
     }
     
     if (is.null(zlim_ol)) zlim_ol <- range(full_y, na.rm = TRUE)
-      
+    
     full_y[full_y <= zlim_ol[1]] <- NA
     full_y[full_y > zlim_ol[2]] <- zlim_ol[2]
     
@@ -254,24 +262,27 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
                       asp = asp, add = TRUE, zlim = zlim_ol)
     }
   }
+  
+  crosshairs_col <- grDevices::gray(0.5)
 
   if (crosshairs) {
     # top right verical
     graphics::lines(rep(xcutoff + (img_dim[2] - xyz[2]) / img_dim[2] *
-                   (1 - xcutoff), 2), c(ycutoff, 1), col = "red",
+                   (1 - xcutoff), 2), c(ycutoff, 1), col = crosshairs_col,
                    lwd = ch_lwd)
     
     # upper left horizonal
     graphics::lines(c(0, 1), rep(ycutoff + xyz[3] / img_dim[3] *
-                                (1 - ycutoff), 2), col = "red", lwd = ch_lwd)
+                                (1 - ycutoff), 2), col = crosshairs_col,
+                    lwd = ch_lwd)
     
     # lower left horizontal
     graphics::lines(c(0, xcutoff), rep(xyz[2] / img_dim[2] * ycutoff, 2),
-                    col = "red", lwd = ch_lwd)
+                    col = crosshairs_col, lwd = ch_lwd)
     
     # lower left vertical
     graphics::lines(rep((img_dim[1] - xyz[1]) / img_dim[1] * xcutoff, 2),
-                    c(0, 1), col = "red", lwd = ch_lwd)
+                    c(0, 1), col = crosshairs_col, lwd = ch_lwd)
   }
 
   if (orient_lab) {

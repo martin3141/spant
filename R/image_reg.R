@@ -4,7 +4,7 @@
 #' @return volume data as a nifti object.
 #' @export
 get_svs_voi <- function(mrs_data, target_mri) {
-  affine <- get_mrs_affine_v2(mrs_data)
+  affine <- get_mrs_affine(mrs_data)
   raw_data <- array(1, c(mrs_data$resolution[2:4]))
   voi <- RNifti::retrieveNifti(raw_data)
   voi <- RNifti::`sform<-`(voi, structure(affine, code = 2L))
@@ -114,6 +114,7 @@ get_mrsi_voxel_xy_psf <- function(mrs_data, target_mri, x_pos, y_pos, z_pos) {
 #' @export
 get_mrsi_voi <- function(mrs_data, target_mri = NULL, map = NULL,
                          ker = mmand::boxKernel()) {
+  #affine <- get_mrs_affine(mrs_data)
   affine <- get_mrs_affine(mrs_data)
   
   rows   <- dim(mrs_data$data)[2]
@@ -130,7 +131,6 @@ get_mrsi_voi <- function(mrs_data, target_mri = NULL, map = NULL,
     # assume 2D xy map for now
     #resamp_map <- mmand::rescale(drop(map), 10, mmand::mnKernel())
     resamp_map <- mmand::rescale(drop(map), mrs_data$resolution[2], ker)
-    resamp_map <- t(resamp_map)
     raw_data <- array(resamp_map, voi_dim) 
   }
   
@@ -368,38 +368,6 @@ spm_pve2categorical <- function(fname) {
 #' @return affine matrix.
 #' @export
 get_mrs_affine <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1) {
-  # l2 norm
-  col_vec <- mrs_data$col_vec/sqrt(sum(mrs_data$col_vec ^ 2))
-  row_vec <- mrs_data$row_vec/sqrt(sum(mrs_data$row_vec ^ 2))
-  col_vec[1:2] <- col_vec[1:2] * -1
-  row_vec[1:2] <- row_vec[1:2] * -1
-  slice_vec <- crossprod_3d(row_vec, col_vec)
-  slice_vec <- slice_vec / sqrt(sum(slice_vec ^ 2))
-  pos_vec <- mrs_data$pos_vec
-  pos_vec[1:2] <- pos_vec[1:2] * -1
-  affine <- diag(4)
-  affine[1:3, 1] <- col_vec
-  affine[1:3, 2] <- row_vec
-  affine[1:3, 3] <- slice_vec
-  rows <- dim(mrs_data$data)[2]
-  cols <- dim(mrs_data$data)[3]
-  slices <- dim(mrs_data$data)[4]
-  
-  affine[1:3, 4] <- pos_vec -
-                    (mrs_data$resolution[2] * (-(x_pos - 1) + 0.5)) * row_vec -
-                    (mrs_data$resolution[3] * (-(y_pos - 1) + 0.5)) * col_vec -
-                    (mrs_data$resolution[4] * (-(z_pos - 1) + 0.5)) * slice_vec
-  return(affine)
-}
-
-#' Generate an sform affine for nifti generation.
-#' @param mrs_data input data.
-#' @param x_pos x_position coordinate.
-#' @param y_pos y_position coordinate.
-#' @param z_pos z_position coordinate.
-#' @return affine matrix.
-#' @export
-get_mrs_affine_v2 <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1) {
   affine <- mrs_data$affine
   
   affine[1:3, 1] <- l2_norm_vec(affine[1:3, 1])
@@ -407,7 +375,11 @@ get_mrs_affine_v2 <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1) {
   affine[1:3, 3] <- l2_norm_vec(affine[1:3, 3])
   affine[1:3, 4] <- affine[1:3, 4] - mrs_data$affine[1:3, 1] / 2 -
                                      mrs_data$affine[1:3, 2] / 2 -
-                                     mrs_data$affine[1:3, 3] / 2 
+                                     mrs_data$affine[1:3, 3] / 2
+  
+  affine[1:3, 4] <- affine[1:3, 4] + (x_pos - 1) * mrs_data$affine[1:3, 1] +
+                                     (y_pos - 1) * mrs_data$affine[1:3, 2] +
+                                     (z_pos - 1) * mrs_data$affine[1:3, 3]
   
   return(affine)
 }

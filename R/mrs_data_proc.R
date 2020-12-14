@@ -1402,9 +1402,13 @@ crop_xy <- function(mrs_data, x_dim, y_dim) {
   y_set <- floor(y_set) # could be floor or ceil, need to test
   x_offset <- x_set[1] - 1
   y_offset <- y_set[1] - 1
-  mrs_data$pos_vec <- mrs_data$pos_vec +
-                      x_offset * mrs_data$row_vec * mrs_data$resolution[2] +
-                      y_offset * mrs_data$col_vec * mrs_data$resolution[3]
+  
+  affine <- mrs_data$affine
+  
+  affine[1:3, 4] <- affine[1:3, 4] + mrs_data$affine[1:3, 1] * x_offset +
+                                     mrs_data$affine[1:3, 2] * y_offset
+  
+  mrs_data$affine <- affine
   
   return(get_subset(mrs_data, x_set = x_set, y_set = y_set))
 }

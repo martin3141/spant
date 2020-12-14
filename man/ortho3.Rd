@@ -10,7 +10,7 @@ ortho3(
   xyz = NULL,
   zlim = NULL,
   zlim_ol = NULL,
-  alpha = 1,
+  alpha = 0.7,
   col_ol = viridisLite::viridis(64),
   orient_lab = TRUE,
   rescale = 1,
