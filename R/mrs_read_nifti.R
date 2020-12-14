@@ -75,9 +75,17 @@ read_mrs_nifti <- function(fname) {
   # the json sidecar
   ref <- def_ref()
   
+  # get all metadata
+  meta <- json_data
+  # remove any data that is explicitly part of the mrs_data structure
+  # TODO add ref when we decide what it is called
+  meta$EchoTime <- NULL
+  meta$TransmitterFrequency <- NULL
+  meta$ResonantNucleus <- NULL
+  
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, te = te,
                        ref = ref, nuc = nuc, freq_domain = freq_domain,
-                       affine = affine, meta = NULL)
+                       affine = affine, meta = meta)
   
   return(mrs_data)
 }

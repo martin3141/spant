@@ -49,8 +49,10 @@ write_mrs_nifti <- function(mrs_data, fname) {
   
   json_list <- list(TransmitterFrequency = mrs_data$ft / 1e6,
                     ResonantNucleus = mrs_data$nuc,
-                    SpectralWidth = 1 / dwell_time,
-                    EchoTime = jsonlite::unbox(te_val)) 
+                    EchoTime = jsonlite::unbox(te_val))
+  
+  # append any additional meta information
+  json_list <- c(json_list, mrs_data$meta)
   
   RNifti::extension(mrs_nii, 44) <- jsonlite::toJSON(json_list, digits = NA,
                                                      null = "null")
