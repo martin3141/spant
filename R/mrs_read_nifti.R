@@ -60,8 +60,13 @@ read_mrs_nifti <- function(fname) {
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
 
-  te  <- json_data$EchoTime / 1e3
-  ft  <- json_data$TransmitterFrequency * 1e6
+  if (is.null(json_data$EchoTime)) {
+    te <- json_data$EchoTime
+  } else {
+    te <- json_data$EchoTime / 1e3
+  }
+  
+  ft <- json_data$TransmitterFrequency * 1e6
   
   # read the nucleus
   nuc <- json_data$ResonantNucleus
@@ -70,11 +75,9 @@ read_mrs_nifti <- function(fname) {
   # the json sidecar
   ref <- def_ref()
   
-  mrs_data <- list(ft = ft, data = data, resolution = res,
-                   te = te, ref = ref, nuc = nuc, row_vec = row_vec,
-                   col_vec = col_vec, sli_vec = sli_vec, pos_vec = pos_vec,
-                   freq_domain = freq_domain, affine = affine)
+  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, te = te,
+                       ref = ref, nuc = nuc, freq_domain = freq_domain,
+                       affine = affine, meta = NULL)
   
-  class(mrs_data) <- "mrs_data"
-  mrs_data
+  return(mrs_data)
 }

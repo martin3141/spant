@@ -24,14 +24,12 @@ read_ima <- function(fraw, verbose = FALSE) {
   # get the resolution and geom info
   paras <- calc_siemens_paras(vars, TRUE)
   
-  mrs_data <- list(ft = vars$ft, data = data, resolution = paras$res,
-                   te = vars$te, ref = paras$ref, nuc = paras$nuc,
-                   row_vec = paras$row_vec, col_vec = paras$col_vec,
-                   sli_vec = paras$sli_vec, pos_vec = paras$pos_vec,
-                   freq_domain = freq_domain, affine = paras$affine)
+  mrs_data <- mrs_data(data = data, ft = paras$ft, resolution = paras$res,
+                       te = paras$te, ref = paras$ref, nuc = paras$nuc,
+                       freq_domain = freq_domain, affine = paras$affine,
+                       meta = NULL)
   
-  class(mrs_data) <- "mrs_data"
-  mrs_data
+  return(mrs_data)
 }
 
 #' Read a directory containing Siemens MRS IMA files and combine along the coil

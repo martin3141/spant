@@ -228,13 +228,17 @@ read_mrs_dpt <- function(fname) {
   # defaults
   nuc <- def_nuc()
   
-  mrs_data <- list(ft = ft, data = data_arr, resolution = res, te = te,
-                   ref = ref, nuc = nuc, row_vec = row_vec, col_vec = col_vec,
-                   sli_vec = sli_vec, pos_vec = pos_vec,
-                   freq_domain = freq_domain)
+  # mrs_data <- list(ft = ft, data = data_arr, resolution = res, te = te,
+  #                  ref = ref, nuc = nuc, row_vec = row_vec, col_vec = col_vec,
+  #                  sli_vec = sli_vec, pos_vec = pos_vec,
+  #                  freq_domain = freq_domain)
+  # class(mrs_data) <- "mrs_data"
   
-  class(mrs_data) <- "mrs_data"
-  mrs_data
+  mrs_data <- mrs_data(data = data_arr, ft = ft, resolution = res, te = te,
+                       ref = ref, nuc = nuc, freq_domain = freq_domain,
+                       affine = NULL, meta = NULL)
+  
+  return(mrs_data)
 }
 
 #' Read MRS data using the TARQUIN software package.

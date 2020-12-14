@@ -87,11 +87,9 @@ read_rda <- function(fname) {
                   c(pos_vec_affine, 1))
   affine[1:2,] <- -affine[1:2,]
   
-  mrs_data <- list(ft = ft, data = data, resolution = res, te = te, ref = ref, 
-                   nuc = nuc, row_vec = row_ori, col_vec = col_ori,
-                   sli_vec = sli_vec, pos_vec = pos_vec,
-                   freq_domain = freq_domain, affine = affine)
+  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, te = te,
+                       ref = ref, nuc = nuc, freq_domain = freq_domain,
+                       affine = affine, meta = NULL)
   
-  class(mrs_data) <- "mrs_data"
-  mrs_data
+  return(mrs_data)
 }

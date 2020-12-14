@@ -11,42 +11,6 @@ calc_siemens_paras <- function(vars, is_ima) {
   ima_pos  <- c(vars$pos_sag,  vars$pos_cor,  vars$pos_tra)
   rotation <- vars$ip_rot
   
-  # here be dragons and should be removed soon and replaced with the affine
-  # method >
-
-  x_dirn   <- c(1, 0, 0)
-  x_new    <- rotate_vec(x_dirn, ima_norm, -rotation)
-  x_new    <- l2_norm_vec(x_new)
-  col_vec  <- cross(ima_norm, x_new)
-  col_vec  <- l2_norm_vec(col_vec)
-  #row_vec  <- cross(col_vec, ima_norm) # better for MRSI
-  row_vec  <- cross(ima_norm, col_vec) # works for SVS
-  row_vec  <- l2_norm_vec(row_vec)
-  sli_vec  <- cross(row_vec, col_vec)
-  sli_vec  <- l2_norm_vec(sli_vec)
-  
-  #Q_mat <- t(unname(rbind(row_vec, col_vec, sli_vec)))
-  #Q_mat_det <- det(Q_mat)
-  #if (Q_mat_det < 0) {
-  #  warning("det condition triggered")
-  #  Q_mat[,3] <- Q_mat[,3] * -1
-  #}
-  
-  # ima_pos corresponds to VOIPositionXXX in the RDA file
-  # the following line translates to PositionVector in the RDA file
-  pos_vec <- ima_pos - row_vec * vars$y_dim / 2 - col_vec * vars$x_dim / 2
-  
-  # this is needed - don't know why
-  pos_vec <- pos_vec + row_vec * vars$x_dim / 2 + col_vec * vars$y_dim / 2
-  
-  pos_vec <- pos_vec - row_vec * (vars$x_pts / 2 - 0.5) * vars$x_dim /
-                       vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
-                       vars$y_dim / vars$y_pts
-  
-  Q <- rbind(row_vec, col_vec, sli_vec)
-  
-  # most of the above should be removed at some point
-  
   x <- fGSLCalcPRS(ima_norm, rotation)
   col_vec <- x$dGp
   # row_vec <- x$dGr # this is more consistent with spec2nii as of Dec 2020
@@ -70,8 +34,7 @@ calc_siemens_paras <- function(vars, is_ima) {
   nuc <- def_nuc()
   ref <- def_ref()
   
-  return(list(res = res, pos_vec = pos_vec, row_vec = row_vec,
-              col_vec = col_vec, sli_vec = sli_vec, nuc = nuc, ref = ref,
+  return(list(res = res, nuc = nuc, ref = ref,
               affine = affine))
 }
 
@@ -281,14 +244,12 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
   # get the resolution and geom info
   paras <- calc_siemens_paras(vars, FALSE)
 
-  mrs_data <- list(ft = vars$ft, data = data, resolution = paras$res,
-                   te = vars$te, ref = paras$ref, nuc = paras$nuc,
-                   row_vec = paras$row_vec, col_vec = paras$col_vec,
-                   sli_vec = paras$sli_vec, pos_vec = paras$pos_vec,
-                   freq_domain = freq_domain, affine = paras$affine)
+  mrs_data <- mrs_data(data = data, ft = paras$ft, resolution = paras$res,
+                       te = paras$te, ref = paras$ref, nuc = paras$nuc,
+                       freq_domain = freq_domain, affine = paras$affine,
+                       meta = NULL)
   
-  class(mrs_data) <- "mrs_data"
-  mrs_data
+  return(mrs_data)
 }
 
 #' Read the text format header found in Siemens IMA and TWIX data files.

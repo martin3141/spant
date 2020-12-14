@@ -12,9 +12,9 @@ test_that("nifti MRS data can be written and read back from disk", {
   sim_mrs$resolution[2:7] <- c(9, 2, 3, 4, NA, 5e-4)
   
   # slice is rotated at an angle of 30 degrees in the z-plane
-  sim_mrs$row_vec <- c(3 ^ 0.5 / 2, 1 / 2, 0)
-  sim_mrs$col_vec <- c(1 / 2, -3 ^ 0.5 / 2, 0)
-  sim_mrs$pos_vec <- c(0.5, -0.6, 1)
+  #sim_mrs$row_vec <- c(3 ^ 0.5 / 2, 1 / 2, 0)
+  #sim_mrs$col_vec <- c(1 / 2, -3 ^ 0.5 / 2, 0)
+  #sim_mrs$pos_vec <- c(0.5, -0.6, 1)
   
   sim_mrs$affine <- diag(1, 4, 4)
   

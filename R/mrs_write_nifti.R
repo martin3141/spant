@@ -41,13 +41,19 @@ write_mrs_nifti <- function(mrs_data, fname) {
   # set the nucleus to a default value if not specified in mrs_data
   if (!exists("nuc", where = mrs_data)) mrs_data$nuc <- def_nuc()
   
-  # create the R list to be exported as json
+  if (is.null(mrs_data$te)) {
+    te_val <- mrs_data$te
+  } else {
+    te_val <- mrs_data$te * 1e3
+  }
+  
   json_list <- list(TransmitterFrequency = mrs_data$ft / 1e6,
                     ResonantNucleus = mrs_data$nuc,
                     SpectralWidth = 1 / dwell_time,
-                    EchoTime = jsonlite::unbox(mrs_data$te * 1e3)) 
+                    EchoTime = jsonlite::unbox(te_val)) 
   
-  RNifti::extension(mrs_nii, 44) <- jsonlite::toJSON(json_list, digits = NA)
+  RNifti::extension(mrs_nii, 44) <- jsonlite::toJSON(json_list, digits = NA,
+                                                     null = "null")
   
   # write nifti to disk
   RNifti::writeNifti(mrs_nii, fname, version = 2)

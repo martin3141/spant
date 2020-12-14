@@ -360,13 +360,12 @@ spm_pve2categorical <- function(fname) {
   x
 }
 
-#' Generate an sform affine for nifti generation.
+#' Generate an affine for nifti generation.
 #' @param mrs_data input data.
 #' @param x_pos x_position coordinate.
 #' @param y_pos y_position coordinate.
 #' @param z_pos z_position coordinate.
 #' @return affine matrix.
-#' @export
 get_mrs_affine <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1) {
   affine <- mrs_data$affine
   

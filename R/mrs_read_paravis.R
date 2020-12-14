@@ -52,14 +52,14 @@ read_paravis_raw <- function(fname) {
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
 
-  ref <- def_acq_paras()$ref
+  ref <- def_ref()
+  nuc <- def_nuc()
   
-  mrs_data <- list(ft = ft, data = data, resolution = res, te = te,
-                   ref = ref, row_vec = NA, col_vec = NA,
-                   pos_vec = NA, freq_domain = freq_domain)
+  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, te = te,
+                       ref = ref, nuc = nuc, freq_domain = freq_domain,
+                       affine = NULL, meta = NULL)
   
-  class(mrs_data) <- "mrs_data"
-  mrs_data
+  return(mrs_data)
 }
 
 get_para_val <- function(lines, name_str) {

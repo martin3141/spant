@@ -2,7 +2,7 @@
 % Please edit documentation in R/image_reg.R
 \name{get_mrs_affine}
 \alias{get_mrs_affine}
-\title{Generate an sform affine for nifti generation.}
+\title{Generate an affine for nifti generation.}
 \usage{
 get_mrs_affine(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1)
 }
@@ -19,5 +19,5 @@ get_mrs_affine(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1)
 affine matrix.
 }
 \description{
-Generate an sform affine for nifti generation.
+Generate an affine for nifti generation.
 }
