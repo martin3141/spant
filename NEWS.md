@@ -11,6 +11,8 @@ consistency with other functions.
 * Internal function (ortho3) now used to plot voxel locations on MRI.
 * Internal dicom reader function added.
 * Tentative support for Siemens DICOM MRS format added.
+* Tentative support for Philips private DICOM MRS format added.
+* Internal changes to the way orientation information is handled.
 
 # spant 1.8.0
 * Added gridplot function.
