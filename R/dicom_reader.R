@@ -69,12 +69,23 @@ dicom_reader <- function(input, tags = list(sop_class_uid = "0008,0016"),
     # tentatively read in the VR - only used for explicit VRs
     vr <- try(rawToChar(fraw[pos + 5:6]), TRUE)
     
-    # SpectroscopyData seems to be a special case
-    # 5600,0020 is the standard data tag for MRS
-    # 2005,1270 is for private Philips DICOM MRS
+    # MRS is a special case where we need to check for zero padding
+    # 5600,0020 - standard dicom MRS data tag
+    # 2005,1270 - Philips private dicom MRS data tag
     if (tag_str %in% c("5600,0020", "2005,1270")) {
-      if (vr %in% c("OF")) {
-        # assume explicit VR without padding
+      # check for zero padding
+      zp <- is.na(pos[7]) & is.na(pos[8])
+      print(tag_str)
+      print(zp)
+      print(vr)
+      if ((vr %in% c(long_vrs, short_vrs)) & zp) {
+        # explicit VR with two bytes of zero padding
+        length_raw <- fraw[pos + 9:12]
+        length <- read_uint32(length_raw)
+        # move pos to start of the value
+        pos <- pos + 12
+      } else if (vr %in% c(long_vrs, short_vrs)) {
+        # explicit VR without zero padding
         length_raw <- fraw[pos + 7:8]
         length <- readBin(length_raw, "integer", size = 2, signed = FALSE)
         pos <- pos + 8
@@ -85,7 +96,7 @@ dicom_reader <- function(input, tags = list(sop_class_uid = "0008,0016"),
         pos <- pos + 8
       }
     } else { 
-      if (vr %in% short_vrs) {
+      if (vr %in% c(short_vrs)) {
         # explicit VR with two bytes of zero padding
         length_raw <- fraw[pos + 9:12]
         length <- read_uint32(length_raw)
