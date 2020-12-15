@@ -229,7 +229,7 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
   }
 
   if (is.null(zlim)) {
-    zlim <- range(underlay)
+    zlim <- stats::quantile(underlay, probs = c(0, 0.999))
   } else {
     full[full < zlim[1]] <- zlim[1]
     full[full > zlim[2]] <- zlim[2]
