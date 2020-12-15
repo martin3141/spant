@@ -197,14 +197,13 @@ plot_voi_overlay <- function(voi, mri, flip_lr = FALSE, export_path = NULL) {
   }
   
   # get the centre of gravity coords
-  vox_inds <- get_voi_cog(voi)
   plot_col <- grDevices::heat.colors(10)
   
   zlim <- stats::quantile(mri, probs = c(0, 0.999))
   
   if (!is.null(export_path)) grDevices::png(export_path)
-  ortho3(mri, voi, xyz = vox_inds, col_ol = plot_col, zlim = zlim,
-         zlim_ol = c(0.99, 2), alpha = 0.4, colourbar = FALSE)
+  ortho3(mri, voi, col_ol = plot_col, zlim = zlim, zlim_ol = c(0.99, 2),
+         alpha = 0.4, colourbar = FALSE)
   if (!is.null(export_path)) grDevices::dev.off()
 }
 
@@ -235,9 +234,6 @@ plot_voi_overlay_seg <- function(voi, mri_seg, flip_lr = FALSE,
     mri_seg <- nifti_flip_lr(mri_seg)
   }
   
-  # get the centre of gravity coords
-  vox_inds <- get_voi_cog(voi)
-  
   pvs <- get_voi_seg(voi, mri_seg)
   table <- paste("WM\t\t=  ", sprintf("%.1f", pvs[["WM"]]), "%\nGM\t\t=  ", 
                  sprintf("%.1f", pvs[["GM"]]), "%\nCSF\t=  ", 
@@ -248,8 +244,8 @@ plot_voi_overlay_seg <- function(voi, mri_seg, flip_lr = FALSE,
   
   if (!is.null(export_path)) grDevices::png(export_path)
  
-  ortho3(mri_seg, voi, xyz = vox_inds, col_ol = plot_col,
-         zlim_ol = c(0.99, 2), alpha = 0.4, colourbar = FALSE)
+  ortho3(mri_seg, voi, col_ol = plot_col, zlim_ol = c(0.99, 2), alpha = 0.4,
+         colourbar = FALSE)
   
   graphics::par(xpd = NA)
   graphics::text(x = 0.55, y = 0.22, labels = c(table), col = "white", pos = 4, 
