@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
       </span>
     </div>
 
@@ -92,7 +92,7 @@
 
       
 
-      </header><script src="spant-intro_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="spant-intro_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+      </header><script src="spant-intro_files/header-attrs-2.5/header-attrs.js"></script><link href="spant-intro_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
 <script src="spant-intro_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -111,7 +111,7 @@
 <a href="#reading-raw-data-and-plotting" class="anchor"></a>Reading raw data and plotting</h2>
 <p>Load the spant package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://martin3141.github.io/spant">spant</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://martin3141.github.io/spant/">spant</a></span><span class="op">)</span></code></pre></div>
 <p>Get the path to a data file included with spant:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"philips_spar_sdat_WS.SDAT"</span>, package <span class="op">=</span> <span class="st">"spant"</span><span class="op">)</span></code></pre></div>
@@ -184,39 +184,39 @@
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">amps</span> <span class="op">/</span> <span class="va">amps</span><span class="op">$</span><span class="va">tCr</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;               [,1]</span>
 <span class="co">#&gt; X.CrCH2 0.00000000</span>
-<span class="co">#&gt; Ala     0.13263635</span>
-<span class="co">#&gt; Asp     0.57930239</span>
-<span class="co">#&gt; Cr      0.65613370</span>
-<span class="co">#&gt; GABA    0.27511716</span>
-<span class="co">#&gt; Glc     0.03886132</span>
-<span class="co">#&gt; Gln     0.04960294</span>
-<span class="co">#&gt; GSH     0.36407276</span>
-<span class="co">#&gt; Glu     1.06360039</span>
-<span class="co">#&gt; GPC     0.26212372</span>
-<span class="co">#&gt; Ins     0.96287369</span>
-<span class="co">#&gt; Lac     0.09488773</span>
-<span class="co">#&gt; Lip09   0.39105696</span>
-<span class="co">#&gt; Lip13a  0.04416544</span>
+<span class="co">#&gt; Ala     0.13263618</span>
+<span class="co">#&gt; Asp     0.57930247</span>
+<span class="co">#&gt; Cr      0.65613351</span>
+<span class="co">#&gt; GABA    0.27511715</span>
+<span class="co">#&gt; Glc     0.03886092</span>
+<span class="co">#&gt; Gln     0.04960254</span>
+<span class="co">#&gt; GSH     0.36407265</span>
+<span class="co">#&gt; Glu     1.06359979</span>
+<span class="co">#&gt; GPC     0.26212366</span>
+<span class="co">#&gt; Ins     0.96287314</span>
+<span class="co">#&gt; Lac     0.09488779</span>
+<span class="co">#&gt; Lip09   0.39105705</span>
+<span class="co">#&gt; Lip13a  0.04416531</span>
 <span class="co">#&gt; Lip13b  0.00000000</span>
 <span class="co">#&gt; Lip20   0.00000000</span>
-<span class="co">#&gt; MM09    0.15617583</span>
-<span class="co">#&gt; MM12    0.10599999</span>
-<span class="co">#&gt; MM14    0.42512964</span>
-<span class="co">#&gt; MM17    0.36527912</span>
-<span class="co">#&gt; MM20    1.49722036</span>
-<span class="co">#&gt; NAA     0.97895893</span>
-<span class="co">#&gt; NAAG    0.25450364</span>
+<span class="co">#&gt; MM09    0.15617567</span>
+<span class="co">#&gt; MM12    0.10599997</span>
+<span class="co">#&gt; MM14    0.42512960</span>
+<span class="co">#&gt; MM17    0.36527891</span>
+<span class="co">#&gt; MM20    1.49721969</span>
+<span class="co">#&gt; NAA     0.97895883</span>
+<span class="co">#&gt; NAAG    0.25450385</span>
 <span class="co">#&gt; PCh     0.00000000</span>
-<span class="co">#&gt; PCr     0.34386630</span>
-<span class="co">#&gt; sIns    0.10613135</span>
+<span class="co">#&gt; PCr     0.34386649</span>
+<span class="co">#&gt; sIns    0.10613129</span>
 <span class="co">#&gt; Tau     0.00000000</span>
-<span class="co">#&gt; tNAA    1.23346257</span>
+<span class="co">#&gt; tNAA    1.23346269</span>
 <span class="co">#&gt; tCr     1.00000000</span>
-<span class="co">#&gt; tCho    0.26212372</span>
-<span class="co">#&gt; Glx     1.11320334</span>
-<span class="co">#&gt; tLM09   0.54723280</span>
-<span class="co">#&gt; tLM13   0.57529507</span>
-<span class="co">#&gt; tLM20   1.49722036</span></code></pre></div>
+<span class="co">#&gt; tCho    0.26212366</span>
+<span class="co">#&gt; Glx     1.11320233</span>
+<span class="co">#&gt; tLM09   0.54723272</span>
+<span class="co">#&gt; tLM13   0.57529487</span>
+<span class="co">#&gt; tLM20   1.49721969</span></code></pre></div>
 </div>
   </div>
 

@@ -1,11 +1,11 @@
-pandoc: 2.7.3
+pandoc: 2.11.2
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   abfit-baseline-opts: abfit-baseline-opts.html
   spant-intro: spant-intro.html
   spant-preprocessing: spant-preprocessing.html
-last_built: 2020-11-17T15:16Z
+last_built: 2020-12-15T14:00Z
 urls:
   reference: https://martin3141.github.io/spant//reference
   article: https://martin3141.github.io/spant//articles

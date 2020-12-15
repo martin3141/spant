@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
       </span>
     </div>
 
@@ -92,7 +92,7 @@
 
       
 
-      </header><script src="spant-preprocessing_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="spant-preprocessing_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+      </header><script src="spant-preprocessing_files/header-attrs-2.5/header-attrs.js"></script><link href="spant-preprocessing_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
 <script src="spant-preprocessing_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -111,7 +111,7 @@
 <a href="#reading-raw-data-and-plotting" class="anchor"></a>Reading raw data and plotting</h2>
 <p>Load the spant package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://martin3141.github.io/spant">spant</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://martin3141.github.io/spant/">spant</a></span><span class="op">)</span></code></pre></div>
 <p>Load some example data for preprocessing:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"philips_spar_sdat_WS.SDAT"</span>, package <span class="op">=</span> <span class="st">"spant"</span><span class="op">)</span>
@@ -138,13 +138,13 @@
 <p>Apply a HSVD filter to the residual water region and plot together with the original data:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mrs_data_filt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hsvd_filt.html">hsvd_filt</a></span><span class="op">(</span><span class="va">mrs_data</span><span class="op">)</span>
-<span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="fu"><a href="../reference/append_dyns.html">append_dyns</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">mrs_data_filt</span><span class="op">)</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">0.5</span><span class="op">)</span>, y_offset <span class="op">=</span> <span class="fl">10</span>,
+<span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">mrs_data_filt</span><span class="op">)</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">0.5</span><span class="op">)</span>, y_offset <span class="op">=</span> <span class="fl">10</span>,
           col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"red"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"original"</span>, <span class="st">"filtered"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-preprocessing_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
 <p>Apply a 0.1 ppm frequency shift and plot together with the original data:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mrs_data_shift</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/shift.html">shift</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="fl">0.1</span>, <span class="st">"ppm"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="fu"><a href="../reference/append_dyns.html">append_dyns</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">mrs_data_shift</span><span class="op">)</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span>, y_offset <span class="op">=</span> <span class="fl">10</span>,
+<span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">mrs_data_shift</span><span class="op">)</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span>, y_offset <span class="op">=</span> <span class="fl">10</span>,
           col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"red"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"original"</span>, <span class="st">"shifted"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-preprocessing_files/figure-html/unnamed-chunk-9-1.png" width="576"></p>
 <p>Multiple processing commands may be conveniently combined with the pipe operator “%&gt;%” :</p>

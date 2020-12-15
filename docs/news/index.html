@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
       </span>
     </div>
 
@@ -140,9 +140,26 @@
       <small>Source: <a href='https://github.com/martin3141/spant/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="spant-190" class="section level1">
+<h1 class="page-header" data-toc-text="1.9.0">
+<a href="#spant-190" class="anchor"></a>spant 1.9.0<small> Unreleased </small>
+</h1>
+<ul>
+<li>NIfTI MRS reader and writer now uses the header extension for metadata. Thanks to Jon Clayden for adding extension read/write support to the RNifti package.</li>
+<li>Default plots now have gridlines in the y-direction and the plot line is now thicker and colored blue.</li>
+<li>Opacity option added to the plotting functions (alpha).</li>
+<li>Bug fix for comb_coils with SVS data.</li>
+<li>Bug fixes for Siemens geometry information.</li>
+<li>Changed the ordering of arguments to write_mrs and write_mrs_nifti to improve consistency with other functions.</li>
+<li>Internal function (ortho3) now used to plot voxel locations on MRI.</li>
+<li>Internal dicom reader function added.</li>
+<li>Tentative support for Siemens and Philips DICOM MRS format added.</li>
+<li>Internal changes to the way orientation information is handled.</li>
+</ul>
+</div>
     <div id="spant-180" class="section level1">
 <h1 class="page-header" data-toc-text="1.8.0">
-<a href="#spant-180" class="anchor"></a>spant 1.8.0<small> Unreleased </small>
+<a href="#spant-180" class="anchor"></a>spant 1.8.0<small> 2020-11-18 </small>
 </h1>
 <ul>
 <li>Added gridplot function.</li>

@@ -178,6 +178,9 @@
     <loc>https://martin3141.github.io/spant//reference/def_ref.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant//reference/dicom_reader.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant//reference/diff_mrs.html</loc>
   </url>
   <url>
@@ -281,6 +284,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/get_mol_paras.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/get_mrs_affine.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/get_mrsi2d_seg.html</loc>
