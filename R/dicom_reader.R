@@ -49,6 +49,11 @@ dicom_reader <- function(input, tags = list(sop_class_uid = "0008,0016"),
   long_vrs  <- c("AE","AS","AT","CS","DA","DS","DT","FL","FD","IS","LO",
                  "LT","OF","PN","SH","SL","SS","ST","TM","UI","UL","US")
   
+  # for implicit dicom we don't know when we have hit a sequence without
+  # prior knowledge - this is a list that should work for Philips DICOM MRS
+  seq_tags <- c("5200,9229", "0020,9116", "5200,9230", "0018,9114",
+                "0020,9113", "2005,140F")
+  
   # current position in the data
   pos <- 0
   
@@ -62,28 +67,53 @@ dicom_reader <- function(input, tags = list(sop_class_uid = "0008,0016"),
     tag_str <- paste(group, element, sep = ",") 
     
     # tentatively read in the VR - only used for explicit VRs
-    vr <- rawToChar(fraw[pos + 5:6])
+    vr <- try(rawToChar(fraw[pos + 5:6]), TRUE)
     
     # SpectroscopyData seems to be a special case
-    if (vr %in% short_vrs | tag_str %in% c("5600,0020", "2005,1270")) {
-      # explicit VR with two bytes of zero padding
-      length_raw <- fraw[pos + 9:12]
-      length <- read_uint32(length_raw)
-      # move pos to start of the value
-      pos <- pos + 12
-    } else if (vr %in% long_vrs) {
-      # explicit VR without zero padding
-      length_raw <- fraw[pos + 7:8]
-      length <- readBin(length_raw, "integer", size = 2, signed = FALSE)
-      pos <- pos + 8
-    } else {
-      # looks like implicit VR
-      length_raw <- fraw[pos + 5:8]
-      length <- read_uint32(length_raw)
-      pos <- pos + 8
+    # 5600,0020 is the standard data tag for MRS
+    # 2005,1270 is for private Philips DICOM MRS
+    if (tag_str %in% c("5600,0020", "2005,1270")) {
+      if (vr %in% c("OF")) {
+        # assume explicit VR without padding
+        length_raw <- fraw[pos + 7:8]
+        length <- readBin(length_raw, "integer", size = 2, signed = FALSE)
+        pos <- pos + 8
+      } else {
+        # looks like implicit VR
+        length_raw <- fraw[pos + 5:8]
+        length <- read_uint32(length_raw)
+        pos <- pos + 8
+      }
+    } else { 
+      if (vr %in% short_vrs) {
+        # explicit VR with two bytes of zero padding
+        length_raw <- fraw[pos + 9:12]
+        length <- read_uint32(length_raw)
+        # move pos to start of the value
+        pos <- pos + 12
+      } else if (vr %in% long_vrs) {
+        # explicit VR without zero padding
+        length_raw <- fraw[pos + 7:8]
+        length <- readBin(length_raw, "integer", size = 2, signed = FALSE)
+        pos <- pos + 8
+      } else {
+        # looks like implicit VR
+        length_raw <- fraw[pos + 5:8]
+        length <- read_uint32(length_raw)
+        pos <- pos + 8
+      }
     }
     
     if (rawToHex(length_raw) %in% c("FFFFFFFF", "00000A00")) length <- 0 
+    
+    # don't skip over sequences
+    if (vr %in% c("SQ")) length <- 0
+    
+    # don't skip over items
+    if (tag_str %in% c("FFFE,E000")) length <- 0
+    
+    # only needed for implicit DICOM
+    if (tag_str %in% seq_tags) length <- 0
       
     if (length == 0) {
       start_byte <- pos + 1
@@ -101,12 +131,10 @@ dicom_reader <- function(input, tags = list(sop_class_uid = "0008,0016"),
     
     # check if current tag is the in list of those to be returned
     search_res <- grep(tag_str, tags) 
-    if (length(search_res) == 1) {
-      out[[search_res]] <- fraw[start_byte:end_byte]
-    }
+    
+    if (length(search_res) == 1) out[[search_res]] <- fraw[start_byte:end_byte]
     
     pos <- pos + length
-    
   }
   
   if (debug) print(debug_table)
