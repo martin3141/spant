@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
       </span>
     </div>
 
@@ -146,18 +146,18 @@
     <p>Write MRS data object to file.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>write_mrs</span><span class='op'>(</span><span class='va'>fname</span>, <span class='va'>mrs_data</span>, format <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>write_mrs</span><span class='op'>(</span><span class='va'>mrs_data</span>, <span class='va'>fname</span>, format <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>fname</th>
-      <td><p>the filename of the output.</p></td>
-    </tr>
-    <tr>
       <th>mrs_data</th>
       <td><p>object to be written to file.</p></td>
+    </tr>
+    <tr>
+      <th>fname</th>
+      <td><p>the filename of the output.</p></td>
     </tr>
     <tr>
       <th>format</th>

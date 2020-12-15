@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
       </span>
     </div>
 
@@ -164,6 +164,9 @@
   restore_def_par <span class='op'>=</span> <span class='cn'>TRUE</span>,
   ylim <span class='op'>=</span> <span class='cn'>NULL</span>,
   y_scale <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  show_grid <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  grid_nx <span class='op'>=</span> <span class='cn'>NULL</span>,
+  grid_ny <span class='op'>=</span> <span class='cn'>NA</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -234,6 +237,21 @@ been made.</p></td>
     <tr>
       <th>y_scale</th>
       <td><p>option to display the y-axis values (logical).</p></td>
+    </tr>
+    <tr>
+      <th>show_grid</th>
+      <td><p>plot gridlines behind the data (logical). Defaults to TRUE.</p></td>
+    </tr>
+    <tr>
+      <th>grid_nx</th>
+      <td><p>number of cells of the grid in x and y direction. When NULL
+the grid aligns with the tick marks on the corresponding default axis (i.e.,
+tickmarks as computed by axTicks). When NA, no grid lines are drawn in the
+corresponding direction.</p></td>
+    </tr>
+    <tr>
+      <th>grid_ny</th>
+      <td><p>as above.</p></td>
     </tr>
     <tr>
       <th>...</th>

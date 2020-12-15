@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
       </span>
     </div>
 
@@ -154,6 +154,7 @@
   x_units <span class='op'>=</span> <span class='cn'>NULL</span>,
   fd <span class='op'>=</span> <span class='cn'>TRUE</span>,
   col <span class='op'>=</span> <span class='cn'>NULL</span>,
+  alpha <span class='op'>=</span> <span class='cn'>NULL</span>,
   x_offset <span class='op'>=</span> <span class='fl'>0</span>,
   y_offset <span class='op'>=</span> <span class='fl'>0</span>,
   plot_dim <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -168,6 +169,10 @@
   right_marg <span class='op'>=</span> <span class='cn'>NULL</span>,
   bl_lty <span class='op'>=</span> <span class='cn'>NULL</span>,
   restore_def_par <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  show_grid <span class='op'>=</span> <span class='cn'>NULL</span>,
+  grid_nx <span class='op'>=</span> <span class='cn'>NULL</span>,
+  grid_ny <span class='op'>=</span> <span class='cn'>NA</span>,
+  lwd <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -199,7 +204,12 @@ of: "re", "im", "mod" or "arg".</p></td>
     </tr>
     <tr>
       <th>col</th>
-      <td><p>set the colour of the line, eg col = rgb(1,0,0,0.5).</p></td>
+      <td><p>set the colour of the line, eg col = rgb(1, 0, 0, 0.5).</p></td>
+    </tr>
+    <tr>
+      <th>alpha</th>
+      <td><p>set the line transparency, eg alpha = 0.5 is 50% transparency.
+Overrides any transparency levels set by col.</p></td>
     </tr>
     <tr>
       <th>x_offset</th>
@@ -261,6 +271,25 @@ results in no baseline being plotted.</p></td>
       <th>restore_def_par</th>
       <td><p>restore default plotting par values after the plot has
 been made.</p></td>
+    </tr>
+    <tr>
+      <th>show_grid</th>
+      <td><p>plot gridlines behind the data (logical). Defaults to TRUE.</p></td>
+    </tr>
+    <tr>
+      <th>grid_nx</th>
+      <td><p>number of cells of the grid in x and y direction. When NULL
+the grid aligns with the tick marks on the corresponding default axis (i.e.,
+tickmarks as computed by axTicks). When NA, no grid lines are drawn in the
+corresponding direction.</p></td>
+    </tr>
+    <tr>
+      <th>grid_ny</th>
+      <td><p>as above.</p></td>
+    </tr>
+    <tr>
+      <th>lwd</th>
+      <td><p>plot linewidth.</p></td>
     </tr>
     <tr>
       <th>...</th>

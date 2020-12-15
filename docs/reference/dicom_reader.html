@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Save function results to file and load on subsequent calls to avoid repeat
-computation. — precomp • Spectroscopy Analysis Tools (spant)</title>
+<title>A very simple DICOM reader. — dicom_reader • Spectroscopy Analysis Tools (spant)</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,10 +46,10 @@ computation. — precomp • Spectroscopy Analysis Tools (spant)</title>
 
 
 
-<meta property="og:title" content="Save function results to file and load on subsequent calls to avoid repeat
-computation. — precomp" />
-<meta property="og:description" content="Save function results to file and load on subsequent calls to avoid repeat
-computation." />
+<meta property="og:title" content="A very simple DICOM reader. — dicom_reader" />
+<meta property="og:description" content="Note this reader is very basic and does not use a DICOM dictionary or try to
+convert the data to the correct datatype. For a more robust and sophisticated
+reader use the oro.dicom package." />
 <meta property="og:image" content="https://martin3141.github.io/spant/logo.png" />
 
 
@@ -140,36 +139,50 @@ computation." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Save function results to file and load on subsequent calls to avoid repeat
-computation.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/precomp.R'><code>R/precomp.R</code></a></small>
-    <div class="hidden name"><code>precomp.Rd</code></div>
+    <h1>A very simple DICOM reader.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/dicom_reader.R'><code>R/dicom_reader.R</code></a></small>
+    <div class="hidden name"><code>dicom_reader.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Save function results to file and load on subsequent calls to avoid repeat
-computation.</p>
+    <p>Note this reader is very basic and does not use a DICOM dictionary or try to
+convert the data to the correct datatype. For a more robust and sophisticated
+reader use the oro.dicom package.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>precomp</span><span class='op'>(</span><span class='va'>file</span>, <span class='va'>fun</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>dicom_reader</span><span class='op'>(</span>
+  <span class='va'>input</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>sop_class_uid <span class='op'>=</span> <span class='st'>"0008,0016"</span><span class='op'>)</span>,
+  endian <span class='op'>=</span> <span class='st'>"little"</span>,
+  debug <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>file</th>
-      <td><p>file name to write the results.</p></td>
+      <th>input</th>
+      <td><p>either a file path or raw binary object.</p></td>
     </tr>
     <tr>
-      <th>fun</th>
-      <td><p>function to run.</p></td>
+      <th>tags</th>
+      <td><p>a named list of tags to be extracted from the file.
+eg tags &lt;- list(spec_data = "7FE1,1010", pat_name = "0010,0010")</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>arguments to be passed to fun.</p></td>
+      <th>endian</th>
+      <td><p>can be "little" or "big".</p></td>
+    </tr>
+    <tr>
+      <th>debug</th>
+      <td><p>print out some debugging information, can be "little" or "big".</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a list with the same structure as the input, but with tag codes
+replaced with the corresponding data in a raw format.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

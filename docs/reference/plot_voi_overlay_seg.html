@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
       </span>
     </div>
 
@@ -146,7 +146,7 @@
     <p>Plot a volume as an overlay on a segmented brain volume.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_voi_overlay_seg</span><span class='op'>(</span><span class='va'>voi</span>, <span class='va'>mri_seg</span>, flip_lr <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>plot_voi_overlay_seg</span><span class='op'>(</span><span class='va'>voi</span>, <span class='va'>mri_seg</span>, flip_lr <span class='op'>=</span> <span class='cn'>FALSE</span>, export_path <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,6 +162,10 @@
     <tr>
       <th>flip_lr</th>
       <td><p>flip the image in the left-right direction.</p></td>
+    </tr>
+    <tr>
+      <th>export_path</th>
+      <td><p>optional path to save the image in png format.</p></td>
     </tr>
     </table>
 

@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Save function results to file and load on subsequent calls to avoid repeat
-computation. — precomp • Spectroscopy Analysis Tools (spant)</title>
+<title>Generate an affine for nifti generation. — get_mrs_affine • Spectroscopy Analysis Tools (spant)</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,10 +46,8 @@ computation. — precomp • Spectroscopy Analysis Tools (spant)</title>
 
 
 
-<meta property="og:title" content="Save function results to file and load on subsequent calls to avoid repeat
-computation. — precomp" />
-<meta property="og:description" content="Save function results to file and load on subsequent calls to avoid repeat
-computation." />
+<meta property="og:title" content="Generate an affine for nifti generation. — get_mrs_affine" />
+<meta property="og:description" content="Generate an affine for nifti generation." />
 <meta property="og:image" content="https://martin3141.github.io/spant/logo.png" />
 
 
@@ -140,36 +137,41 @@ computation." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Save function results to file and load on subsequent calls to avoid repeat
-computation.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/precomp.R'><code>R/precomp.R</code></a></small>
-    <div class="hidden name"><code>precomp.Rd</code></div>
+    <h1>Generate an affine for nifti generation.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/image_reg.R'><code>R/image_reg.R</code></a></small>
+    <div class="hidden name"><code>get_mrs_affine.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Save function results to file and load on subsequent calls to avoid repeat
-computation.</p>
+    <p>Generate an affine for nifti generation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>precomp</span><span class='op'>(</span><span class='va'>file</span>, <span class='va'>fun</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_mrs_affine</span><span class='op'>(</span><span class='va'>mrs_data</span>, x_pos <span class='op'>=</span> <span class='fl'>1</span>, y_pos <span class='op'>=</span> <span class='fl'>1</span>, z_pos <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>file</th>
-      <td><p>file name to write the results.</p></td>
+      <th>mrs_data</th>
+      <td><p>input data.</p></td>
     </tr>
     <tr>
-      <th>fun</th>
-      <td><p>function to run.</p></td>
+      <th>x_pos</th>
+      <td><p>x_position coordinate.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>arguments to be passed to fun.</p></td>
+      <th>y_pos</th>
+      <td><p>y_position coordinate.</p></td>
+    </tr>
+    <tr>
+      <th>z_pos</th>
+      <td><p>z_position coordinate.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>affine matrix.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

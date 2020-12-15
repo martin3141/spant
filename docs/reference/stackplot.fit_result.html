@@ -83,7 +83,7 @@ individual basis set components shown." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
       </span>
     </div>
 
@@ -171,6 +171,9 @@ individual basis set components shown.</p>
   combine_lipmm <span class='op'>=</span> <span class='cn'>FALSE</span>,
   combine_metab <span class='op'>=</span> <span class='cn'>FALSE</span>,
   mar <span class='op'>=</span> <span class='cn'>NULL</span>,
+  show_grid <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  grid_nx <span class='op'>=</span> <span class='cn'>NULL</span>,
+  grid_ny <span class='op'>=</span> <span class='cn'>NA</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -253,6 +256,21 @@ or "MM".</p></td>
     <tr>
       <th>mar</th>
       <td><p>option to adjust the plot margins. See ?par.</p></td>
+    </tr>
+    <tr>
+      <th>show_grid</th>
+      <td><p>plot gridlines behind the data (logical). Defaults to TRUE.</p></td>
+    </tr>
+    <tr>
+      <th>grid_nx</th>
+      <td><p>number of cells of the grid in x and y direction. When NULL
+the grid aligns with the tick marks on the corresponding default axis (i.e.,
+tickmarks as computed by axTicks). When NA, no grid lines are drawn in the
+corresponding direction.</p></td>
+    </tr>
+    <tr>
+      <th>grid_ny</th>
+      <td><p>as above.</p></td>
     </tr>
     <tr>
       <th>...</th>
