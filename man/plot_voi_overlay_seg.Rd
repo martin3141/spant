@@ -4,16 +4,16 @@
 \alias{plot_voi_overlay_seg}
 \title{Plot a volume as an overlay on a segmented brain volume.}
 \usage{
-plot_voi_overlay_seg(voi, mri_seg, flip_lr = FALSE, export_path = NULL)
+plot_voi_overlay_seg(voi, mri_seg, export_path = NULL, ...)
 }
 \arguments{
 \item{voi}{volume data as a nifti object.}
 
 \item{mri_seg}{segmented brain volume as a nifti object.}
 
-\item{flip_lr}{flip the image in the left-right direction.}
-
 \item{export_path}{optional path to save the image in png format.}
+
+\item{...}{additional arguments to the ortho3 function.}
 }
 \description{
 Plot a volume as an overlay on a segmented brain volume.

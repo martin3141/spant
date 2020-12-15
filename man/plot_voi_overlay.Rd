@@ -4,16 +4,18 @@
 \alias{plot_voi_overlay}
 \title{Plot a volume as an image overlay.}
 \usage{
-plot_voi_overlay(voi, mri, flip_lr = FALSE, export_path = NULL)
+plot_voi_overlay(voi, mri, export_path = NULL, zlim = NULL, ...)
 }
 \arguments{
 \item{voi}{volume data as a nifti object or path to data file.}
 
 \item{mri}{image data as a nifti object or path to data file.}
 
-\item{flip_lr}{flip the image in the left-right direction.}
-
 \item{export_path}{optional path to save the image in png format.}
+
+\item{zlim}{underlay intensity limits.}
+
+\item{...}{additional arguments to the ortho3 function.}
 }
 \description{
 Plot a volume as an image overlay.

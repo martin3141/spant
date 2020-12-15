@@ -175,6 +175,8 @@ resample_img <- function(source, target, interp = 3L) {
 #' @param voi volume data as a nifti object or path to data file.
 #' @param mri image data as a nifti object or path to data file.
 #' @param export_path optional path to save the image in png format.
+#' @param zlim underlay intensity limits.
+#' @param ... additional arguments to the ortho3 function.
 plot_voi_overlay <- function(voi, mri, export_path = NULL, zlim = NULL, ...) {
   
   if ("character" %in% class(mri)) mri <- RNifti::readNifti(mri)
@@ -204,6 +206,7 @@ plot_voi_overlay <- function(voi, mri, export_path = NULL, zlim = NULL, ...) {
 #' @param voi volume data as a nifti object.
 #' @param mri_seg segmented brain volume as a nifti object.
 #' @param export_path optional path to save the image in png format.
+#' @param ... additional arguments to the ortho3 function.
 #' @export
 plot_voi_overlay_seg <- function(voi, mri_seg, export_path = NULL, ...) {
   
