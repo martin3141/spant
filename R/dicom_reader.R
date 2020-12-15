@@ -75,9 +75,6 @@ dicom_reader <- function(input, tags = list(sop_class_uid = "0008,0016"),
     if (tag_str %in% c("5600,0020", "2005,1270")) {
       # check for zero padding
       zp <- is.na(pos[7]) & is.na(pos[8])
-      print(tag_str)
-      print(zp)
-      print(vr)
       if ((vr %in% c(long_vrs, short_vrs)) & zp) {
         # explicit VR with two bytes of zero padding
         length_raw <- fraw[pos + 9:12]
