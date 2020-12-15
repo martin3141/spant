@@ -19,7 +19,7 @@ ortho3(
   colourbar = TRUE,
   bg = "black",
   mar = c(0, 0, 0, 0),
-  smallplot = c(0.5, 0.52, 0.1, 0.4)
+  smallplot = c(0.63, 0.65, 0.07, 0.42)
 )
 }
 \arguments{

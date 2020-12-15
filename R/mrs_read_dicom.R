@@ -77,7 +77,7 @@ read_siemens_dicom <- function(fraw) {
   fids <- rows * cols * slices
   
   if (N * 2 * fids * 4 != length(dcm_res$data)) {
-    error("Unexpected number of data points.")
+    stop("Unexpected number of data points.")
   }
   
   # read the fid points 
