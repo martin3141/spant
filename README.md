@@ -16,22 +16,22 @@ spant provides a full suite of tools to build automated analysis
 pipelines for Magnetic Resonance Spectroscopy (MRS) data. The following
 features and algorithms are included:
 
-  - Advanced fully-automated metabolite fitting algorithm - ABfit
+-   Advanced fully-automated metabolite fitting algorithm - ABfit
     (in-press at Magnetic Resonance in Medicine)
     <https://www.biorxiv.org/content/10.1101/2020.02.17.949495v2>.
-  - Robust retrospective frequency and phase correction - RATS
+-   Robust retrospective frequency and phase correction - RATS
     <https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.27605>.
-  - Flexible data types to support single voxel, dynamic and
+-   Flexible data types to support single voxel, dynamic and
     spectroscopic imaging data types.
-  - Raw data import/export.
-  - Publication quality plotting.
-  - Extensive set of pre-processing steps (phasing, coil-combination,
+-   Raw data import/export.
+-   Publication quality plotting.
+-   Extensive set of pre-processing steps (phasing, coil-combination,
     zero-filling, HSVD filtering…)
-  - Quantum mechanical based simulation for experimental design and
+-   Quantum mechanical based simulation for experimental design and
     basis-set generation.
-  - Set of metabolite, macromolecule and lipid parameters for typical
+-   Set of metabolite, macromolecule and lipid parameters for typical
     brain analyses.
-  - Voxel registration to anatomical images for partial volume
+-   Voxel registration to anatomical images for partial volume
     concentration corrections.
 
 ## Installation
