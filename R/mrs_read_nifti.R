@@ -66,7 +66,7 @@ read_mrs_nifti <- function(fname) {
     te <- json_data$EchoTime / 1e3
   }
   
-  ft <- json_data$TransmitterFrequency * 1e6
+  ft <- json_data$SpectrometerFrequency * 1e6
   
   # read the nucleus
   nuc <- json_data$ResonantNucleus

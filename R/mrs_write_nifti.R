@@ -47,7 +47,7 @@ write_mrs_nifti <- function(mrs_data, fname) {
     te_val <- mrs_data$te * 1e3
   }
   
-  json_list <- list(TransmitterFrequency = mrs_data$ft / 1e6,
+  json_list <- list(SpectrometerFrequency = mrs_data$ft / 1e6,
                     ResonantNucleus = mrs_data$nuc,
                     EchoTime = jsonlite::unbox(te_val))
   
