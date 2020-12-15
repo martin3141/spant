@@ -181,12 +181,19 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
 #' @param bg plot background colour.
 #' @param mar plot margins.
 #' @param smallplot smallplot option for positioning the colourbar.
+#' @param reorient code to reorient the input images. Set to FALSE to disable.
 #' @export
 ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
                    zlim_ol = NULL, alpha = 0.7, col_ol = viridisLite::viridis(64),
                    orient_lab = TRUE, rescale = 1, crosshairs = TRUE,
                    ch_lwd = 1, colourbar = TRUE, bg = "black",
-                   mar = c(0, 0, 0, 0), smallplot = c(0.63, 0.65, 0.07, 0.42)) {
+                   mar = c(0, 0, 0, 0), smallplot = c(0.63, 0.65, 0.07, 0.42),
+                   reorient = "RAS") {
+  
+  if (!(reorient == FALSE)) {
+    RNifti::orientation(underlay) <- reorient
+    RNifti::orientation(overlay)  <- reorient
+  }
   
   if ((RNifti::orientation(underlay) != "RAS") && (orient_lab)) {
     warning("Underlay image is not in RAS format, orientation labels may be incorrect.")

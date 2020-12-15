@@ -1,5 +1,6 @@
 # spant 1.10.0
 * Fix for NIfTI MRS reader/writer.
+* ortho3 now reorienates input images to RAS by default.
 
 # spant 1.9.0
 * NIfTI MRS reader and writer now uses the header extension for metadata. Thanks
