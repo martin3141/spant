@@ -181,23 +181,15 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
 #' @param bg plot background colour.
 #' @param mar plot margins.
 #' @param smallplot smallplot option for positioning the colourbar.
-#' @param reorient code to reorient the input images. Set to FALSE to disable.
 #' @export
 ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
                    zlim_ol = NULL, alpha = 0.7, col_ol = viridisLite::viridis(64),
                    orient_lab = TRUE, rescale = 1, crosshairs = TRUE,
                    ch_lwd = 1, colourbar = TRUE, bg = "black",
-                   mar = c(0, 0, 0, 0), smallplot = c(0.63, 0.65, 0.07, 0.42),
-                   reorient = "RAS") {
+                   mar = c(0, 0, 0, 0), smallplot = c(0.63, 0.65, 0.07, 0.42)) {
   
-  if (!(reorient == FALSE)) {
-    RNifti::orientation(underlay) <- reorient
-    RNifti::orientation(overlay)  <- reorient
-  }
-  
-  if ((RNifti::orientation(underlay) != "RAS") && (orient_lab)) {
-    warning("Underlay image is not in RAS format, orientation labels may be incorrect.")
-  }
+  # check the images are comparable
+  if (!is.null(overlay)) check_geom(underlay, overlay)
   
   graphics::par(bg = bg, fg = "white", col.axis = "white", mar = mar)
   
@@ -240,9 +232,6 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
                   axes = FALSE, asp = asp, zlim = zlim)
   
   if (!is.null(overlay)) {
-    if ((RNifti::orientation(overlay) != "RAS") && (orient_lab)) {
-      warning("Overlay image is not in RAS format, orientation labels may be incorrect.")
-    }
     cor_y <- overlay[img_dim[1]:1, xyz[2],]
     sag_y <- overlay[xyz[1], img_dim[2]:1,]
     ax_y <-  overlay[img_dim[1]:1,, xyz[3]]
@@ -299,37 +288,61 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
     lm_pos <- 1 + lab_marg
     lm_neg <- -lab_marg
     
-    graphics::text(0.0, ycutoff / 2, "R", col = "white", cex = cex_lab,
+    ori_code <- orientation(underlay)
+    if (grepl("R", ori_code)) {
+      ori_code_inv <- sub("R", "L", ori_code)
+    } else {
+      ori_code_inv <- sub("L", "R", ori_code)
+    }
+    
+    if (grepl("A", ori_code_inv)) { 
+      ori_code_inv <- sub("A", "P", ori_code_inv)
+    } else {
+      ori_code_inv <- sub("P", "A", ori_code_inv)
+    }
+    
+    if (grepl("S", ori_code_inv)) { 
+      ori_code_inv <- sub("S", "I", ori_code_inv)
+    } else {
+      ori_code_inv <- sub("I", "S", ori_code_inv)
+    }
+    
+    left_labs   <- substr(ori_code, 1, 1)
+    right_labs  <- substr(ori_code_inv, 2, 2)
+    bottom_labs <- substr(ori_code_inv, 2, 2)
+    top_labs    <- substr(ori_code, 3, 3)
+    
+    graphics::text(0.0, ycutoff / 2, left_labs, col = "white", cex = cex_lab,
                    adj = lm_neg, font = lab_font)
     
     #text(xcutoff, ycutoff / 2, "L", col = "white", cex = cex_lab, adj = lm_pos,
     #     font = lab_font)
     
-    graphics::text(0.0, ycutoff + (1 - ycutoff) / 2, "R", col = "white",
+    graphics::text(0.0, ycutoff + (1 - ycutoff) / 2, left_labs, col = "white",
                    cex = cex_lab, adj = lm_neg, font = lab_font)
     
     #text(xcutoff, ycutoff + (1 - ycutoff) / 2, "L", col = "white", cex = cex_lab,
     #     adj = lm_pos, font = lab_font)
     
-    graphics::text(xcutoff / 2, 0, "P", col = "white", cex = cex_lab,
+    graphics::text(xcutoff / 2, 0, bottom_labs, col = "white", cex = cex_lab,
                    adj = c(1, lm_neg), font = lab_font)
     
     #text(xcutoff / 2, ycutoff, "A", col = "white", cex = cex_lab,
     #     adj = c(1, lm_pos), font = lab_font)
     
-    graphics::text(xcutoff / 2, 1, "S", col = "white", cex = cex_lab,
+    graphics::text(xcutoff / 2, 1, top_labs, col = "white", cex = cex_lab,
                    adj = c(1, lm_pos), font = lab_font)
     
     #text(xcutoff / 2, ycutoff, "I", col = "white", cex = cex_lab,
     #     adj = c(1.7, lm_neg), font = lab_font)
     
-    graphics::text(1.0, ycutoff + (1 - ycutoff) / 2, "P", col = "white",
+  graphics::text(1.0, ycutoff + (1 - ycutoff) / 2, right_labs, col = "white",
                    cex = cex_lab, adj = lm_pos, font = lab_font)
     
     #text(xcutoff, ycutoff + (1 - ycutoff) / 2, "A", col = "white", cex = cex_lab,
     #     adj = lm_neg, font = lab_font)
     
-    graphics::text(xcutoff + (1 - xcutoff) / 2, 1, "S", col = "white",
+    graphics::text(xcutoff + (1 - xcutoff) / 2, 1, top_labs, col = "white",
                    cex = cex_lab, adj = c(1, lm_pos), font = lab_font)
     
     # text(xcutoff + (1 - xcutoff) / 2, ycutoff, "I", col = "white", cex = cex_lab,
