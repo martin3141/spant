@@ -233,7 +233,7 @@ plot_voi_overlay_seg <- function(voi, mri_seg, export_path = NULL, ...) {
   if (!is.null(export_path)) grDevices::png(export_path)
   
   ortho3(mri_seg, voi, col_ol = plot_col, zlim_ol = c(0.99, 2), alpha = 0.4,
-         colourbar = FALSE, zlim = range(voi), ...)
+         colourbar = FALSE, zlim = range(mri_seg), ...)
   
   graphics::par(xpd = NA)
   graphics::text(x = 0.55, y = 0.22, labels = c(table), col = "white", pos = 4, 
