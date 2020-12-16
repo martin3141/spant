@@ -13,11 +13,18 @@ calc_siemens_paras <- function(vars, is_ima) {
   
   x <- fGSLCalcPRS(ima_norm, rotation)
   col_vec <- x$dGp
-  # row_vec <- x$dGr # this is more consistent with spec2nii as of Dec 2020
   
-  # following is needed for MRSI - don't know why but doesn't seem to break SVS
-  row_vec <- -x$dGr
-  sli_vec <- ima_norm
+  # to get agreement with spec2nii we need to make SVS and MRSI special cases
+  if (vars$x_pts * vars$y_pts * vars$z_pts == 1) {
+    # SVS
+    row_vec <- x$dGr
+  } else {
+    # MRSI
+    row_vec <- -x$dGr
+  }
+  
+  # sli_vec <- ima_norm
+  sli_vec <- cross(row_vec, col_vec)
   ima_pos <- ima_pos - row_vec * (vars$x_pts / 2 - 0.5) * vars$x_dim /
                        vars$x_pts - col_vec * (vars$y_pts / 2 - 0.5) *
                        vars$y_dim / vars$y_pts
