@@ -1,6 +1,7 @@
 # spant 1.10.0
 * Fix for NIfTI MRS reader/writer.
 * ortho3 now shows correct labels for orientations other than RAS.
+* Regression fix for partial volume segmentation plotting.
 
 # spant 1.9.0
 * NIfTI MRS reader and writer now uses the header extension for metadata. Thanks
