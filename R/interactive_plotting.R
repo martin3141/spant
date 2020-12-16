@@ -288,7 +288,7 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
     lm_pos <- 1 + lab_marg
     lm_neg <- -lab_marg
     
-    ori_code <- orientation(underlay)
+    ori_code <- RNifti::orientation(underlay)
     if (grepl("R", ori_code)) {
       ori_code_inv <- sub("R", "L", ori_code)
     } else {
