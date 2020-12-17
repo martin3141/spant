@@ -221,11 +221,11 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
   }
 
   if (is.null(zlim)) {
-    zlim <- stats::quantile(underlay, probs = c(0, 0.999))
-  } else {
-    full[full < zlim[1]] <- zlim[1]
-    full[full > zlim[2]] <- zlim[2]
+    zlim <- stats::quantile(underlay, probs = c(0, 0.999), na.rm = TRUE)
   }
+    
+  full[full < zlim[1]] <- zlim[1]
+  full[full > zlim[2]] <- zlim[2]
   
   asp <- dim(full)[2] / dim(full)[1]
   graphics::image(full, useRaster = TRUE, col = grDevices::gray(0:64 / 64),
@@ -360,13 +360,15 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
 #' @param ... other options to be passed to the ortho3 function.
 #' @export
 ortho3_int <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
-                       zlim_ol = NULL, alpha = 1, ...) {
+                       zlim_ol = NULL, alpha = 0.7, ...) {
   
   img_dim <- dim(underlay)[1:3]
   if (is.null(xyz)) xyz <- ceiling(img_dim / 2)
   
   mri_range <- signif(range(underlay, na.rm = TRUE), 3)
-  if (is.null(zlim)) zlim <- mri_range
+  
+  if (is.null(zlim)) zlim <- stats::quantile(underlay, probs = c(0, 0.999),
+                                             na.rm = TRUE)
   
   if (is.null(overlay)) {
     mri_range_y <- c(0, 1)
