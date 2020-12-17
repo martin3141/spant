@@ -359,8 +359,8 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
 #' @param alpha transparency of overlay.
 #' @param ... other options to be passed to the ortho3 function.
 #' @export
-ortho3_int <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
-                       zlim_ol = NULL, alpha = 0.7, ...) {
+ortho3_inter <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
+                         zlim_ol = NULL, alpha = 0.7, ...) {
   
   img_dim <- dim(underlay)[1:3]
   if (is.null(xyz)) xyz <- ceiling(img_dim / 2)

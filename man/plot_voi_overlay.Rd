@@ -4,12 +4,12 @@
 \alias{plot_voi_overlay}
 \title{Plot a volume as an image overlay.}
 \usage{
-plot_voi_overlay(voi, mri, export_path = NULL, zlim = NULL, ...)
+plot_voi_overlay(mri, voi, export_path = NULL, zlim = NULL, ...)
 }
 \arguments{
-\item{voi}{volume data as a nifti object or path to data file.}
-
 \item{mri}{image data as a nifti object or path to data file.}
+
+\item{voi}{volume data as a nifti object or path to data file.}
 
 \item{export_path}{optional path to save the image in png format.}
 

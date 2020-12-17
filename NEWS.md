@@ -1,6 +1,9 @@
 # spant 1.10.0
 * Fix for NIfTI MRS reader/writer.
 * ortho3 now shows correct labels for orientations other than RAS.
+* ortho3_int function renamed to ortho3_inter.
+* Argument order change to plot_voi_overlay and plot_voi_overlay_seg to be more
+consistent with ortho3.
 * Regression fix for partial volume segmentation plotting.
 
 # spant 1.9.0
