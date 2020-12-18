@@ -199,7 +199,6 @@ apply_pvc <- function(fit_result, p_vols, te, tr){
     fit_result$res_tab <- fit_result$res_tab_unscaled
   }
   
-  #te <- result$data$te
   B0 <- round(fit_result$data$ft / 42.58e6,1)
   corr_factor <- get_corr_factor(te, tr, B0, p_vols[["GM"]], p_vols[["WM"]],
                                  p_vols[["CSF"]])

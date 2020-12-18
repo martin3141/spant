@@ -24,10 +24,11 @@ read_ima <- function(fraw, verbose = FALSE) {
   # get the resolution and geom info
   paras <- calc_siemens_paras(vars, TRUE)
   
+  meta = list(EchoTime = paras$te)
+  
   mrs_data <- mrs_data(data = data, ft = vars$ft, resolution = paras$res,
-                       te = paras$te, ref = paras$ref, nuc = paras$nuc,
-                       freq_domain = freq_domain, affine = paras$affine,
-                       meta = NULL)
+                       nuc = paras$nuc, freq_domain = freq_domain,
+                       affine = paras$affine, meta = meta)
   
   return(mrs_data)
 }

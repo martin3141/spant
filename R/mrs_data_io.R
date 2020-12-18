@@ -1,10 +1,10 @@
 # constructor for mrs_data
-mrs_data <- function(data, ft, resolution, te, ref, nuc, freq_domain, affine,
+mrs_data <- function(data, ft, resolution, ref, nuc, freq_domain, affine,
                      meta) {
   
-  mrs_data <- list(data = data, ft = ft, resolution = resolution, te = te,
-                   ref = ref, nuc = nuc, freq_domain = freq_domain,
-                   affine = affine, meta = meta)
+  mrs_data <- list(data = data, ft = ft, resolution = resolution, ref = ref,
+                   nuc = nuc, freq_domain = freq_domain, affine = affine,
+                   meta = meta)
   
   class(mrs_data) <- "mrs_data"
   return(mrs_data)
@@ -228,15 +228,9 @@ read_mrs_dpt <- function(fname) {
   # defaults
   nuc <- def_nuc()
   
-  # mrs_data <- list(ft = ft, data = data_arr, resolution = res, te = te,
-  #                  ref = ref, nuc = nuc, row_vec = row_vec, col_vec = col_vec,
-  #                  sli_vec = sli_vec, pos_vec = pos_vec,
-  #                  freq_domain = freq_domain)
-  # class(mrs_data) <- "mrs_data"
-  
-  mrs_data <- mrs_data(data = data_arr, ft = ft, resolution = res, te = te,
-                       ref = ref, nuc = nuc, freq_domain = freq_domain,
-                       affine = NULL, meta = NULL)
+  mrs_data <- mrs_data(data = data_arr, ft = ft, resolution = res, ref = ref,
+                       nuc = nuc, freq_domain = freq_domain, affine = NULL,
+                       meta = NULL)
   
   return(mrs_data)
 }
@@ -319,7 +313,7 @@ write_mrs_dpt_v2 <- function(fname, mrs_data) {
   fs <- 1 / mrs_data$resolution[7]
   ft <-  mrs_data$ft
   ref <- mrs_data$ref
-  te <- mrs_data$te
+  te <- mrs_data$meta$te
   sink(fname)
   cat("Dangerplot_version\t2.0\n")
   cat(paste("Number_of_points\t", N, "\n", sep = ""))

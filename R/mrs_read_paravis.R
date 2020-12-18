@@ -55,9 +55,11 @@ read_paravis_raw <- function(fname) {
   ref <- def_ref()
   nuc <- def_nuc()
   
-  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, te = te,
-                       ref = ref, nuc = nuc, freq_domain = freq_domain,
-                       affine = NULL, meta = NULL)
+  meta <- list(EchoTime = te)
+  
+  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
+                       nuc = nuc, freq_domain = freq_domain, affine = NULL,
+                       meta = NULL)
   
   return(mrs_data)
 }

@@ -61,11 +61,11 @@ read_mrs_nifti <- function(fname) {
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
 
-  if (is.null(json_data$EchoTime)) {
-    te <- json_data$EchoTime
-  } else {
-    te <- json_data$EchoTime / 1e3
-  }
+  # if (is.null(json_data$EchoTime)) {
+  #   te <- json_data$EchoTime
+  # } else {
+  #   te <- json_data$EchoTime / 1e3
+  # }
   
   ft <- json_data$SpectrometerFrequency * 1e6
   
@@ -80,13 +80,13 @@ read_mrs_nifti <- function(fname) {
   meta <- json_data
   # remove any data that is explicitly part of the mrs_data structure
   # TODO add ref when we decide what it is called
-  meta$EchoTime <- NULL
+  # meta$TxOff <- NULL
   meta$TransmitterFrequency <- NULL
   meta$ResonantNucleus <- NULL
   
-  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, te = te,
-                       ref = ref, nuc = nuc, freq_domain = freq_domain,
-                       affine = affine, meta = meta)
+  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
+                       nuc = nuc, freq_domain = freq_domain, affine = affine,
+                       meta = meta)
   
   return(mrs_data)
 }

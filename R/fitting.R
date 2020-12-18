@@ -59,7 +59,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
       lcm_compat = FALSE
     }
     TE1 = 0.01
-    TE2 = metab$te - TE1
+    TE2 = metab$meta$EchoTime - TE1
     warning("Basis set not specified, so simulating default PRESS brain basis.")
     basis <- sim_basis_1h_brain_press(metab, lcm_compat = lcm_compat, TE1 = TE1, 
                                       TE2 = TE2) 

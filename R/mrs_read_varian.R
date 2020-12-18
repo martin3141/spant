@@ -66,9 +66,9 @@ read_varian <- function(fname) {
   te <- NA
   nuc <- def_nuc()
   
-  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, te = NULL,
-                       ref = ref, nuc = nuc, freq_domain = freq_domain,
-                       affine = NULL, meta = NULL)
+  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
+                       nuc = nuc, freq_domain = freq_domain, affine = NULL,
+                       meta = NULL)
   
   return(mrs_data)
 }

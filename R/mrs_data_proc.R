@@ -95,7 +95,7 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
   res <- c(NA, 1, 1, 1, 1, NA, 1 / acq_paras$fs)
   
   mrs_data <- mrs_data(data = data, ft = acq_paras$ft, resolution = res,
-                       te = NULL, ref = acq_paras$ref, nuc = acq_paras$nuc,
+                       ref = acq_paras$ref, nuc = acq_paras$nuc,
                        freq_domain = rep(FALSE, 7), affine = NULL, meta = NULL)
   
   return(mrs_data)
@@ -132,9 +132,9 @@ sim_resonances_fast <- function(freq = 0, amp = 1, freq_ppm = TRUE,
   data <- array(data,dim = c(1, 1, 1, 1, 1, 1, N))
   res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
     
-  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, te = NULL,
-                       ref = ref, nuc = nuc, freq_domain = rep(FALSE, 7),
-                       affine = NULL, meta = NULL)
+  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
+                       nuc = nuc, freq_domain = rep(FALSE, 7), affine = NULL,
+                       meta = NULL)
   
   return(mrs_data)
 }
@@ -176,9 +176,9 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
   data <- array(data, dim = c(1, 1, 1, 1, 1, 1, N))
   res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
   
-  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, te = NULL,
-                       ref = ref, nuc = nuc, freq_domain = rep(FALSE, 7),
-                       affine = NULL, meta = NULL)
+  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
+                       nuc = nuc, freq_domain = rep(FALSE, 7), affine = NULL,
+                       meta = NULL)
   
   return(mrs_data)
 }
@@ -201,9 +201,9 @@ vec2mrs_data <- function(vec, fs = def_fs(), ft = def_ft(), ref = def_ref(),
   dim(data) <- c(1, 1, 1, 1, dyns, 1, length(vec))
   res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
   
-  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, te = NA,
-                       ref = ref, nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
-                       affine = NA, meta = NA)
+  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
+                       nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
+                       affine = NULL, meta = NULL)
   
   return(mrs_data)
 }
@@ -225,8 +225,8 @@ array2mrs_data <- function(data_array, fs = def_fs(), ft = def_ft(),
   
   res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
   
-  mrs_data <- mrs_data(data = data_array, ft = ft, resolution = res, te = NULL,
-                       ref = ref, nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
+  mrs_data <- mrs_data(data = data_array, ft = ft, resolution = res, ref = ref,
+                       nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
                        affine = NULL, meta = NULL)
   
   return(mrs_data)
@@ -281,8 +281,8 @@ mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
   data <- array(mat, dim = c(1, 1, 1, 1, nrow(mat), 1, ncol(mat)))
   res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
   
-  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, te = NULL,
-                       ref = ref, nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
+  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
+                       nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
                        affine = NULL, meta = NULL)
   
   return(mrs_data)
@@ -1603,7 +1603,11 @@ append_dyns <- function(...) {
   x <- list(...)
   
   # were the arguments a list already? 
-  if (depth(x) == 3) x <- x[[1]]
+  if (class(x[[1]]) == "list") x <- x[[1]]
+  
+  # were the arguments a list already? 
+  # this doesn't work now we have the meta field :(
+  # if (depth(x) == 3) x <- x[[1]]
   
   first_dataset <- x[[1]]
   
@@ -1633,7 +1637,10 @@ append_scan <- function(...) {
   x <- list(...)
   
   # were the arguments a list already? 
-  if (depth(x) == 3) x <- x[[1]]
+  if (class(x[[1]]) == "list") x <- x[[1]]
+  
+  # this doesn't work now we have the meta field :(
+  # if (depth(x) == 3) x <- x[[1]]
   
   first_dataset <- x[[1]]
   

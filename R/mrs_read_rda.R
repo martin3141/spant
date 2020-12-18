@@ -87,9 +87,11 @@ read_rda <- function(fname) {
                   c(pos_vec_affine, 1))
   affine[1:2,] <- -affine[1:2,]
   
-  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, te = te,
-                       ref = ref, nuc = nuc, freq_domain = freq_domain,
-                       affine = affine, meta = NULL)
+  meta = list(EchoTime = te)
+  
+  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
+                       nuc = nuc, freq_domain = freq_domain, affine = affine,
+                       meta = meta)
   
   return(mrs_data)
 }

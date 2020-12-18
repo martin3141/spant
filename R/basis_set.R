@@ -154,7 +154,7 @@ write_basis <- function(basis, basis_file, fwhmba = 0.1) {
   cat(" $SEQPAR\n", sep = "")
   cat(" FWHMBA =  ", fwhmba, " ,\n", sep = "")
   cat(" HZPPPM =  ",mrs_data$ft * 1e-6,",\n", sep = "")
-  cat(" ECHOT =  ",mrs_data$te * 1000,",\n", sep = "")
+  cat(" ECHOT =  ",mrs_data$meta$EchoTime * 1000,",\n", sep = "")
   cat(" SEQ = 'PRESS' $END\n", sep = "")
   cat(" $BASIS1\n", sep = "")
   cat(" IDBASI = 'SPANT',\n", sep = "")

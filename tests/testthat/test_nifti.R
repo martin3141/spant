@@ -29,7 +29,7 @@ test_that("nifti MRS data can be written and read back from disk", {
   expect_equal(sim_mrs$ft, sim_mrs_nii$ft)
   expect_equal(sim_mrs$ref, sim_mrs_nii$ref)
   expect_equal(sim_mrs$freq_domain, sim_mrs_nii$freq_domain)
-  expect_equal(sim_mrs$te, sim_mrs_nii$te)
+  #expect_equal(sim_mrs$te, sim_mrs_nii$te)
   #expect_equal(sim_mrs$row_vec, sim_mrs_nii$row_vec, tolerance = 1e-6)
   #expect_equal(sim_mrs$col_vec, sim_mrs_nii$col_vec, tolerance = 1e-6)
   #expect_equal(sim_mrs$pos_vec, sim_mrs_nii$pos_vec, tolerance = 1e-6)

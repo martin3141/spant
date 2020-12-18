@@ -106,9 +106,11 @@ read_siemens_dicom <- function(fraw) {
                   c(pos_vec_affine, 1))
   affine[1:2,] <- -affine[1:2,]
   
-  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, te = te,
-                       ref = ref, nuc = nuc, freq_domain = freq_domain,
-                       affine = affine, meta = NULL)
+  meta <- list(EchoTime = te)
+  
+  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
+                       nuc = nuc, freq_domain = freq_domain, affine = affine,
+                       meta = meta)
   
   return(mrs_data)
 }
@@ -184,9 +186,11 @@ read_philips_dicom <- function(fraw) {
                   c(pos_vec_affine, 1))
   affine[1:2,] <- -affine[1:2,]
   
-  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, te = te,
-                       ref = ref, nuc = nuc, freq_domain = freq_domain,
-                       affine = affine, meta = NULL)
+  meta <- list(EchoTime = te)
+  
+  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
+                       nuc = nuc, freq_domain = freq_domain, affine = affine,
+                       meta = meta)
   
   return(mrs_data)
 }
@@ -223,8 +227,10 @@ read_philips_priv_dicom <- function(fraw) {
   # freq domain vector
   freq_domain <- rep(FALSE, 7)
   
-  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, te = te,
-                       ref = ref, nuc = nuc, freq_domain = freq_domain,
-                       affine = NULL, meta = NULL)
+  meta <- list(EchoTime = te)
+  
+  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
+                       nuc = nuc, freq_domain = freq_domain, affine = NULL,
+                       meta = meta)
   return(mrs_data)
 }
