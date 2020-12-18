@@ -5,6 +5,7 @@
 * Argument order change to plot_voi_overlay and plot_voi_overlay_seg to be more
 consistent with ortho3.
 * Regression fix for partial volume segmentation plotting.
+* Echo time parameter is now stored in the meta structure.
 
 # spant 1.9.0
 * NIfTI MRS reader and writer now uses the header extension for metadata. Thanks
