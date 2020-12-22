@@ -18,7 +18,7 @@ features and algorithms are included:
 
 -   Advanced fully-automated metabolite fitting algorithm - ABfit
     (in-press at Magnetic Resonance in Medicine)
-    <https://www.biorxiv.org/content/10.1101/2020.02.17.949495v2>.
+    <https://onlinelibrary.wiley.com/doi/10.1002/mrm.28385>.
 -   Robust retrospective frequency and phase correction - RATS
     <https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.27605>.
 -   Flexible data types to support single voxel, dynamic and
