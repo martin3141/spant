@@ -5,6 +5,10 @@
 #' specify the location of these software packages.
 #'
 #' Fitting approaches described in the following references:
+#' ABfit
+#' Wilson, M. Adaptive baseline fitting for 1H MR spectroscopy analysis. Magn
+#' Reson Med 2012;85:13-29.
+#' 
 #' VARPRO
 #' van der Veen JW, de Beer R, Luyten PR, van Ormondt D. Accurate quantification
 #' of in vivo 31P NMR signals using the variable projection method and prior 
