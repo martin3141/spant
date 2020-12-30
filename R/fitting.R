@@ -100,12 +100,22 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
     
     acq_paras <- get_acq_paras(metab)
     
-    result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6), abfit, 
-                               acq_paras, basis, opts, 
-                               .parallel = parallel, 
-                               .paropts = list(.inorder = TRUE,
-                                               .packages = "spant"),
-                               .progress = progress, .inform = FALSE)
+    plyr <- TRUE
+    if (plyr) {
+      result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6), abfit,
+                                 acq_paras, basis, opts,
+                                 .parallel = parallel,
+                                 .paropts = list(.inorder = TRUE,
+                                                 .packages = "spant"),
+                                 .progress = progress, .inform = FALSE)
+    } else {
+      result_list <- apply(metab$data, c(2, 3, 4, 5, 6), abfit, acq_paras,
+                           basis, opts)
+      labs <- which(array(TRUE, dim(result_list)), arr.ind = TRUE)
+      result_list <- result_list[,,,,]
+      attr(result_list, "split_labels") <- labs
+      names(result_list) <- seq_len(nrow(labs))
+    }
     
   } else if (METHOD == "VARPRO") {
     # read basis into memory if a file
@@ -226,6 +236,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
                                .paropts = list(.inorder = TRUE,
                                                .packages = "spant"),
                                .progress = progress, .inform = FALSE)
+    
     
   } else {
     stop(paste('Fit method not found : ', method))
