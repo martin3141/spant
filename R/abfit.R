@@ -9,6 +9,17 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   
   # use default fitting opts if not specified 
   if (is.null(opts)) opts <- abfit_opts()
+  
+  # check the noise_region is within the spectral range
+  ppm_sc <- -hz(fs = acq_paras$fs, N = acq_paras$N) / acq_paras$ft * 1e6 +
+             acq_paras$ref
+  ppm_lim <- sort(range(ppm_sc))
+  noise_reg_lim <- sort(opts$noise_region)
+  if ((noise_reg_lim[1] < ppm_lim[1]) | (noise_reg_lim[2] > ppm_lim[2])) {
+    stop(paste0("The spectral range for the noise region estimate is outside",
+                " the acquired spectral width. Change the noise_region",
+                " parameter in the fitting options."))
+  }
  
   # zero pad input to twice length
   if (opts$zp) y <- c(y, rep(0, length(y))) 
