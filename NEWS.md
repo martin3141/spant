@@ -6,6 +6,8 @@
 consistent with ortho3.
 * Regression fix for partial volume segmentation plotting.
 * Echo time parameter is now stored in the meta structure.
+* ABfit now performs a 1D phase parameter search before the prefit stage to
+improve reliability. May be disabled with the prefit_phase_search fit option.
 
 # spant 1.9.0
 * NIfTI MRS reader and writer now uses the header extension for metadata. Thanks

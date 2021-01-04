@@ -609,9 +609,6 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
        fit = fit_frame)
 }
 
-# abfit tips
-# NLOPT_GN_DIRECT_L is perhaps more robust for algo_pre - but slower
-
 #' Return a list of options for an ABfit analysis.
 #' 
 #' @param init_damping initial value of the Gaussian global damping parameter
@@ -621,8 +618,9 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' optimisation phase of fitting (Hz).
 #' @param max_damping maximum permitted value of the global damping parameter
 #' (Hz).
-#' @param max_phase maximum permitted value of the global zero-order phase term
-#' (degrees).
+#' @param max_phase the maximum absolute permitted value of the global
+#' zero-order phase term (degrees). Note, the prefit_phase_search option is not
+#' constrained by this term.
 #' @param lambda manually set the the baseline smoothness parameter.
 #' @param ppm_left downfield frequency limit for the fitting range (ppm).
 #' @param ppm_right upfield frequency limit for the fitting range (ppm).
@@ -698,7 +696,7 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024,  max_shift = 10,
                        phi1_optim = FALSE, phi1_init = 0, max_dphi1 = 0.2,
                        max_basis_shift_broad = 1, max_basis_damping_broad = 2,
                        ahat_calc_method = "lh_pnnls",
-                       prefit_phase_search = FALSE) {
+                       prefit_phase_search = TRUE) {
                          
   list(init_damping = init_damping, maxiters = maxiters,
        max_shift = max_shift, max_damping = max_damping, max_phase = max_phase,

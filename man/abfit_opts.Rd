@@ -43,7 +43,7 @@ abfit_opts(
   max_basis_shift_broad = 1,
   max_basis_damping_broad = 2,
   ahat_calc_method = "lh_pnnls",
-  prefit_phase_search = FALSE
+  prefit_phase_search = TRUE
 )
 }
 \arguments{
@@ -58,8 +58,9 @@ optimisation phase of fitting (Hz).}
 \item{max_damping}{maximum permitted value of the global damping parameter
 (Hz).}
 
-\item{max_phase}{maximum permitted value of the global zero-order phase term
-(degrees).}
+\item{max_phase}{the maximum absolute permitted value of the global
+zero-order phase term (degrees). Note, the prefit_phase_search option is not
+constrained by this term.}
 
 \item{lambda}{manually set the the baseline smoothness parameter.}
 
