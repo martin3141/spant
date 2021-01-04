@@ -1,4 +1,4 @@
-read_list_data <- function(fname, ft, fs, ref) {
+read_list_data <- function(fname, ft, fs, ref, extra) {
   # generate matching data and list files
   ext <- stringr::str_sub(fname, -5)
   name <- stringr::str_sub(fname, 1, -6)
@@ -76,7 +76,7 @@ read_list_data <- function(fname, ft, fs, ref) {
     
     ref_mrs <- mrs_data(data = ref_data, ft = ft, resolution = res, ref = ref,
                         nuc = nuc, freq_domain = freq_domain, affine = NULL,
-                        meta = NULL)
+                        meta = NULL, extra = extra)
   }
   
   metab_data <- cplx_vec[metab_start:metab_end]
@@ -89,11 +89,11 @@ read_list_data <- function(fname, ft, fs, ref) {
   
   metab_mrs <- mrs_data(data = metab_data, ft = ft, resolution = res, ref = ref,
                         nuc = nuc, freq_domain = freq_domain, affine = NULL,
-                        meta = NULL)
+                        meta = NULL, extra = extra)
   
   noise_mrs <- mrs_data(data = noise_data, ft = ft, resolution = res, ref = ref,
                         nuc = nuc, freq_domain = freq_domain, affine = NULL,
-                        meta = NULL)
+                        meta = NULL, extra = extra)
   
   list(metab = metab_mrs, ref = ref_mrs, noise = noise_mrs)
 }

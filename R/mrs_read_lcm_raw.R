@@ -1,4 +1,4 @@
-read_lcm_raw <- function(fname, ft, fs, ref) {
+read_lcm_raw <- function(fname, ft, fs, ref, extra) {
   in_nmid <- FALSE 
   con <- file(fname, "rb")
   while (length(line <- readLines(con, n = 1, warn = FALSE)) > 0) {
@@ -26,7 +26,7 @@ read_lcm_raw <- function(fname, ft, fs, ref) {
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = NULL,
-                       meta = NULL)
+                       meta = NULL, extra = extra)
   
   return(mrs_data)
 }

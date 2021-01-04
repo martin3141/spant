@@ -36,6 +36,9 @@
 #' @param progress option is passed to plyr::alply function to display a
 #' progress bar during fitting. Default value is "text", set to "none" to
 #' disable.
+#' @param extra an optional data frame with one row to provide additional
+#' variables to be used in subsequent analysis steps, eg id or grouping
+#' variables.
 #' @return MRS analysis object.
 #' @examples
 #' fname <- system.file("extdata","philips_spar_sdat_WS.SDAT",package="spant")
@@ -47,7 +50,7 @@
 #' @export
 fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
                     opts = NULL, parallel = FALSE, time = TRUE,
-                    progress = "text") {
+                    progress = "text", extra = NULL) {
   
   # start the clock
   if (time) ptm <- proc.time()
@@ -327,9 +330,9 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
     proc_time <- NULL
   }
   
-  out <- list(res_tab = res_tab, fits = fits, 
-              data = metab, basis = basis, amp_cols = ncol(amps), 
-              proc_time = proc_time, method = method, opts = opts)
+  out <- list(res_tab = res_tab, fits = fits,  data = metab, basis = basis,
+              amp_cols = ncol(amps), proc_time = proc_time, method = method,
+              opts = opts, extra = extra)
   
   class(out) <- "fit_result"
   return(out)

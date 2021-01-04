@@ -1,4 +1,4 @@
-read_rda <- function(fname) {
+read_rda <- function(fname, extra) {
   
   # find out where the raw data points start by looking for
   # ">>> End of header <<<"
@@ -91,7 +91,7 @@ read_rda <- function(fname) {
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = affine,
-                       meta = meta)
+                       meta = meta, extra = extra)
   
   return(mrs_data)
 }

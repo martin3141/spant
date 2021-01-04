@@ -2,7 +2,7 @@
 # when nechoes = 2 we're probally dealing with MEGA-PRESS data, where edited
 # pairs are not interleaved but occupy the first and second half of the data
 
-read_pfile <- function(fname, n_ref_scans = NULL) {
+read_pfile <- function(fname, n_ref_scans = NULL, extra) {
   # check the file size
   fbytes <- file.size(fname)
   
@@ -69,7 +69,7 @@ read_pfile <- function(fname, n_ref_scans = NULL) {
   
   mrs_data <- mrs_data(data = data, ft = hdr$ps_mps_freq / 10, resolution = res,
                        ref = ref, nuc = nuc, freq_domain = freq_domain,
-                       affine = NULL, meta = meta)
+                       affine = NULL, meta = meta, extra = extra)
   
   if (hdr$rhuser19 > 0) {
     # split water and metab data for each echo

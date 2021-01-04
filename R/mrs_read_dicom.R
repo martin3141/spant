@@ -1,4 +1,4 @@
-read_dicom <- function(fname, verbose) {
+read_dicom <- function(fname, verbose, extra) {
   
   # read full file as raw 
   fsize <- file.info(fname)$size
@@ -14,19 +14,19 @@ read_dicom <- function(fname, verbose) {
   if (grepl("SIEMENS", manuf)) {
     if (sop_class_uid == "1.3.12.2.1107.5.9.1") {
       # SiemensPrivateCSA Non-ImageStorage - AKA ima format
-      return(read_ima(fraw))
+      return(read_ima(fraw, extra))
     } else if (sop_class_uid == "1.2.840.10008.5.1.4.1.1.4.2") { 
       # MR Spectroscopy Storage
-      return(read_siemens_dicom(fraw))
+      return(read_siemens_dicom(fraw, extra))
     } else {
       stop(paste0("Unsupported SOP class UID : ", sop_class_uid,
                   ". This doesn't look like MRS data."))
     }
   } else if (grepl("Philips", manuf)) {
     if (sop_class_uid == "1.3.46.670589.11.0.0.12.1") {
-      return(read_philips_priv_dicom(fraw))
+      return(read_philips_priv_dicom(fraw, extra))
     } else if (sop_class_uid == "1.2.840.10008.5.1.4.1.1.4.2") {
-      return(read_philips_dicom(fraw))
+      return(read_philips_dicom(fraw, extra))
     } else {
       stop(paste0("Unsupported SOP class UID : ", sop_class_uid,
                   ". This doesn't look like MRS data."))
@@ -37,7 +37,7 @@ read_dicom <- function(fname, verbose) {
   }
 }
 
-read_siemens_dicom <- function(fraw) {
+read_siemens_dicom <- function(fraw, extra) {
   
   # list of tags to pull from the dicom file
   tags <- list(data    = "5600,0020",
@@ -110,12 +110,12 @@ read_siemens_dicom <- function(fraw) {
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = affine,
-                       meta = meta)
+                       meta = meta, extra = extra)
   
   return(mrs_data)
 }
 
-read_philips_dicom <- function(fraw) {
+read_philips_dicom <- function(fraw, extra) {
   
   # list of tags to pull from the dicom file
   tags <- list(data    = "5600,0020",
@@ -190,13 +190,13 @@ read_philips_dicom <- function(fraw) {
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = affine,
-                       meta = meta)
+                       meta = meta, extra = extra)
   
   return(mrs_data)
 }
   
 
-read_philips_priv_dicom <- function(fraw) {
+read_philips_priv_dicom <- function(fraw, extra) {
   
   # list of tags to pull from the dicom file
   tags <- list(data    = "2005,1270",
@@ -231,6 +231,6 @@ read_philips_priv_dicom <- function(fraw) {
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = NULL,
-                       meta = meta)
+                       meta = meta, extra = extra)
   return(mrs_data)
 }

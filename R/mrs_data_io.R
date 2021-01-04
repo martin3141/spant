@@ -1,10 +1,10 @@
 # constructor for mrs_data
 mrs_data <- function(data, ft, resolution, ref, nuc, freq_domain, affine,
-                     meta) {
+                     meta, extra) {
   
   mrs_data <- list(data = data, ft = ft, resolution = resolution, ref = ref,
                    nuc = nuc, freq_domain = freq_domain, affine = affine,
-                   meta = meta)
+                   meta = meta, extra = extra)
   
   class(mrs_data) <- "mrs_data"
   return(mrs_data)
@@ -24,6 +24,9 @@ mrs_data <- function(data, ft, resolution, ref, nuc, freq_domain, affine,
 #' @param full_data export all data points, including those before the start of
 #' the FID (default = FALSE).
 #' @param verbose print data file information (default = FALSE).
+#' @param extra an optional data frame with one row to provide additional
+#' variables to be used in subsequent analysis steps, eg id or grouping
+#' variables.
 #' @return MRS data object.
 #' @examples
 #' fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
@@ -31,43 +34,45 @@ mrs_data <- function(data, ft, resolution, ref, nuc, freq_domain, affine,
 #' print(mrs_data)
 #' @export
 read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
-                     n_ref_scans = NULL, full_data = FALSE, verbose = FALSE) {
+                     n_ref_scans = NULL, full_data = FALSE, verbose = FALSE,
+                     extra = NULL) {
   
   # try and guess the format from the filename extension
   if (is.null(format)) format <- guess_mrs_format(fname) 
   
   if (format == "spar_sdat") {
-    return(read_spar_sdat(fname))
+    return(read_spar_sdat(fname, extra))
   } else if (format == "rda") {
-    return(read_rda(fname))
+    return(read_rda(fname, extra))
   } else if (format == "dicom") {
-    return(read_dicom(fname, verbose))
+    return(read_dicom(fname, verbose, extra))
   } else if (format == "twix") {
-    return(read_twix(fname, verbose, full_data))
+    return(read_twix(fname, verbose, full_data, extra))
   } else if (format == "pfile") {
-    return(read_pfile(fname, n_ref_scans))
+    return(read_pfile(fname, n_ref_scans, extra))
   } else if (format == "list_data") {
     if (is.null(ft)) stop("Please specify ft parameter for list_data format")
     if (is.null(fs)) stop("Please specify fs parameter for list_data format")
     if (is.null(ref)) stop("Please specify ref parameter for list_data format")
-    return(read_list_data(fname, ft, fs, ref))
+    return(read_list_data(fname, ft, fs, ref, extra))
   } else if (format == "dpt") {
-    return(read_mrs_dpt(fname))
+    return(read_mrs_dpt(fname, extra))
   } else if (format == "paravis") {
-    return(read_paravis_raw(fname))
+    return(read_paravis_raw(fname, extra))
   } else if (format == "lcm_raw") {
     if (is.null(ft)) stop("Please specify ft parameter for lcm_raw format")
     if (is.null(fs)) stop("Please specify fs parameter for lcm_raw format")
     if (is.null(ref)) stop("Please specify ref parameter for lcm_raw format")
-    return(read_lcm_raw(fname, ft, fs, ref))
+    return(read_lcm_raw(fname, ft, fs, ref, extra))
   } else if (format == "rds") {
     mrs_data <- readRDS(fname)
+    mrs_data$extra <- extra
     if (class(mrs_data) != "mrs_data") stop("rds file is not mrs_data format")
     return(mrs_data)
   } else if (format == "nifti") {
-    return(read_mrs_nifti(fname))
+    return(read_mrs_nifti(fname, extra))
   } else if (format == "varian") {
-    return(read_varian(fname))
+    return(read_varian(fname, extra))
   } else {
     stop("Unrecognised file format.")
   }
@@ -138,14 +143,7 @@ write_mrs <- function(mrs_data, fname, format = NULL) {
   }
 }
  
-#' Read MRS data stored in dangerplot (dpt) v3 format.
-#' @param fname filename of the dpt format MRS data.
-#' @return MRS data object.
-#' @examples
-#' \dontrun{
-#' mrs_data <- read_mrs_dpt(system.file("extdata","svs.dpt",package="spant"))
-#' }
-read_mrs_dpt <- function(fname) {
+read_mrs_dpt <- function(fname, extra) {
   header <- utils::read.table(fname, nrows = 15, as.is = TRUE)
   
   # Check dpt version number
@@ -230,7 +228,7 @@ read_mrs_dpt <- function(fname) {
   
   mrs_data <- mrs_data(data = data_arr, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = NULL,
-                       meta = NULL)
+                       meta = NULL, extra = extra)
   
   return(mrs_data)
 }

@@ -96,7 +96,8 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
   
   mrs_data <- mrs_data(data = data, ft = acq_paras$ft, resolution = res,
                        ref = acq_paras$ref, nuc = acq_paras$nuc,
-                       freq_domain = rep(FALSE, 7), affine = NULL, meta = NULL)
+                       freq_domain = rep(FALSE, 7), affine = NULL, meta = NULL,
+                       extra = NULL)
   
   return(mrs_data)
 }
@@ -134,7 +135,7 @@ sim_resonances_fast <- function(freq = 0, amp = 1, freq_ppm = TRUE,
     
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = rep(FALSE, 7), affine = NULL,
-                       meta = NULL)
+                       meta = NULL, extra = NULL)
   
   return(mrs_data)
 }
@@ -178,7 +179,7 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = rep(FALSE, 7), affine = NULL,
-                       meta = NULL)
+                       meta = NULL, extra = NULL)
   
   return(mrs_data)
 }
@@ -203,7 +204,7 @@ vec2mrs_data <- function(vec, fs = def_fs(), ft = def_ft(), ref = def_ref(),
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
-                       affine = NULL, meta = NULL)
+                       affine = NULL, meta = NULL, extra = NULL)
   
   return(mrs_data)
 }
@@ -227,7 +228,7 @@ array2mrs_data <- function(data_array, fs = def_fs(), ft = def_ft(),
   
   mrs_data <- mrs_data(data = data_array, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
-                       affine = NULL, meta = NULL)
+                       affine = NULL, meta = NULL, extra = NULL)
   
   return(mrs_data)
 }
@@ -283,7 +284,7 @@ mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
-                       affine = NULL, meta = NULL)
+                       affine = NULL, meta = NULL, extra = NULL)
   
   return(mrs_data)
 }

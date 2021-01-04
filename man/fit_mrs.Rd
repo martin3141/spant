@@ -12,7 +12,8 @@ fit_mrs(
   opts = NULL,
   parallel = FALSE,
   time = TRUE,
-  progress = "text"
+  progress = "text",
+  extra = NULL
 )
 }
 \arguments{
@@ -36,6 +37,10 @@ LCModel .basis format.}
 \item{progress}{option is passed to plyr::alply function to display a
 progress bar during fitting. Default value is "text", set to "none" to
 disable.}
+
+\item{extra}{an optional data frame with one row to provide additional
+variables to be used in subsequent analysis steps, eg id or grouping
+variables.}
 }
 \value{
 MRS analysis object.

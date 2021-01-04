@@ -1,4 +1,4 @@
-read_mrs_nifti <- function(fname) {
+read_mrs_nifti <- function(fname, extra) {
   
   # check the file extension is sensible
   if (stringr::str_sub(fname, -7) != ".nii.gz") {
@@ -86,7 +86,7 @@ read_mrs_nifti <- function(fname) {
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = affine,
-                       meta = meta)
+                       meta = meta, extra = extra)
   
   return(mrs_data)
 }

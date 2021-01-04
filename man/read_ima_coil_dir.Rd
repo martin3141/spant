@@ -6,10 +6,14 @@
 dimension. Note that the coil ID is inferred from the sorted file name and
 should be checked when consistency is required between two directories.}
 \usage{
-read_ima_coil_dir(dir)
+read_ima_coil_dir(dir, extra = NULL)
 }
 \arguments{
 \item{dir}{data directory path.}
+
+\item{extra}{an optional data frame with one row to provide additional
+variables to be used in subsequent analysis steps, eg id or grouping
+variables.}
 }
 \value{
 mrs_data object.

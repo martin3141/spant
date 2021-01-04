@@ -12,7 +12,8 @@ read_mrs(
   ref = NULL,
   n_ref_scans = NULL,
   full_data = FALSE,
-  verbose = FALSE
+  verbose = FALSE,
+  extra = NULL
 )
 }
 \arguments{
@@ -36,6 +37,10 @@ the file header (GE p-file only).}
 the FID (default = FALSE).}
 
 \item{verbose}{print data file information (default = FALSE).}
+
+\item{extra}{an optional data frame with one row to provide additional
+variables to be used in subsequent analysis steps, eg id or grouping
+variables.}
 }
 \value{
 MRS data object.

@@ -1,4 +1,4 @@
-read_paravis_raw <- function(fname) {
+read_paravis_raw <- function(fname, extra) {
   # find the method file in the same directory
   method_fname <- file.path(dirname(fname), "method")
   
@@ -59,7 +59,7 @@ read_paravis_raw <- function(fname) {
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = NULL,
-                       meta = NULL)
+                       meta = NULL, extra = extra)
   
   return(mrs_data)
 }

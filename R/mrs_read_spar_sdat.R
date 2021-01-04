@@ -1,4 +1,4 @@
-read_spar_sdat <- function(fname) {
+read_spar_sdat <- function(fname, extra) {
   # generate matching SPAR and SDAT files
   ext <- stringr::str_sub(fname, -5)
   name <- stringr::str_sub(fname, 1, -6)
@@ -122,7 +122,7 @@ read_spar_sdat <- function(fname) {
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = NULL,
-                       meta = meta)
+                       meta = meta, extra = extra)
   
   return(mrs_data)
 }

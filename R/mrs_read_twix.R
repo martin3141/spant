@@ -45,7 +45,7 @@ calc_siemens_paras <- function(vars, is_ima) {
               affine = affine))
 }
 
-read_twix <- function(fname, verbose, full_data = FALSE) {
+read_twix <- function(fname, verbose, full_data = FALSE, extra) {
   # check the file size
   fbytes <- file.size(fname)
   
@@ -256,7 +256,7 @@ read_twix <- function(fname, verbose, full_data = FALSE) {
   mrs_data <- mrs_data(data = data, ft = vars$ft, resolution = paras$res,
                        ref = paras$ref, nuc = paras$nuc,
                        freq_domain = freq_domain, affine = paras$affine,
-                       meta = meta)
+                       meta = meta, extra = extra)
   
   return(mrs_data)
 }

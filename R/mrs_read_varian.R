@@ -1,4 +1,4 @@
-read_varian <- function(fname) {
+read_varian <- function(fname, extra) {
   
   # open the file
   con <- file(fname, "rb")
@@ -68,7 +68,7 @@ read_varian <- function(fname) {
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = NULL,
-                       meta = NULL)
+                       meta = NULL, extra = extra)
   
   return(mrs_data)
 }

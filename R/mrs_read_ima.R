@@ -1,4 +1,4 @@
-read_ima <- function(fraw, verbose = FALSE) {
+read_ima <- function(fraw, verbose = FALSE, extra) {
   
   tags <- list(ascii_hdr = "0029,1120", spec_data = "7FE1,1010")
   res  <- dicom_reader(fraw, tags)
@@ -29,7 +29,7 @@ read_ima <- function(fraw, verbose = FALSE) {
   mrs_data <- mrs_data(data = data, ft = vars$ft, resolution = paras$res,
                        ref = paras$ref, nuc = paras$nuc,
                        freq_domain = freq_domain, affine = paras$affine,
-                       meta = meta)
+                       meta = meta, extra = extra)
   
   return(mrs_data)
 }
@@ -38,13 +38,17 @@ read_ima <- function(fraw, verbose = FALSE) {
 #' dimension. Note that the coil ID is inferred from the sorted file name and
 #' should be checked when consistency is required between two directories.
 #' @param dir data directory path.
+#' @param extra an optional data frame with one row to provide additional
+#' variables to be used in subsequent analysis steps, eg id or grouping
+#' variables.
 #' @return mrs_data object.
 #' @export
-read_ima_coil_dir <- function(dir) {
+read_ima_coil_dir <- function(dir, extra = NULL) {
   files <- list.files(dir, full.names = TRUE)
   #warning("coil ordering is based on file name only.")
   files <- sort(files)
-  mrs_list <- lapply(files, read_mrs, format = "ima", verbose = TRUE)
+  mrs_list <- lapply(files, read_mrs, format = "ima", verbose = TRUE,
+                     extra = extra)
   mrs_data <- append_coils(mrs_list)
   return(mrs_data)
 }
@@ -53,13 +57,17 @@ read_ima_coil_dir <- function(dir) {
 #' dynamic dimension. Note that the coil ID is inferred from the sorted file
 #' name and should be checked when consistency is required.
 #' @param dir data directory path.
+#' @param extra an optional data frame with one row to provide additional
+#' variables to be used in subsequent analysis steps, eg id or grouping
+#' variables.
 #' @return mrs_data object.
 #' @export
-read_ima_dyn_dir <- function(dir) {
+read_ima_dyn_dir <- function(dir, extra = NULL) {
   files <- list.files(dir, full.names = TRUE)
   #warning("coil ordering is based on file name only.")
   files <- sort(files)
-  mrs_list <- lapply(files, read_mrs, format = "ima", verbose = TRUE)
+  mrs_list <- lapply(files, read_mrs, format = "ima", verbose = TRUE,
+                     extra = extra)
   mrs_data <- append_dyns(mrs_list)
   return(mrs_data)
 }
