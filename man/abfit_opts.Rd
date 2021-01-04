@@ -42,7 +42,8 @@ abfit_opts(
   max_dphi1 = 0.2,
   max_basis_shift_broad = 1,
   max_basis_damping_broad = 2,
-  ahat_calc_method = "lh_pnnls"
+  ahat_calc_method = "lh_pnnls",
+  prefit_phase_search = FALSE
 )
 }
 \arguments{
@@ -142,6 +143,9 @@ or MM.}
 
 \item{ahat_calc_method}{method to calculate the metabolite amplitudes. May be
 one of: "lh_pnnls" or "ls".}
+
+\item{prefit_phase_search}{perform a 1D search for the optimal phase in the
+prefit stage of the algorithm.}
 }
 \value{
 full list of options.

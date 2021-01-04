@@ -85,6 +85,26 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       metab_basis_pre <- raw_metab_basis
     }
     
+    # Do a 1D search to improve the starting value of the phase estimate.
+    # Note, this is not part of the published method, but was added in Jan 2021
+    # to avoid issues with the simplex "prefit" getting stuck in a local minima
+    # in rare cases.
+    if (opts$prefit_phase_search) {
+      # 5 degree increments between -175 to 180
+      phi_zero  <- seq(-pi + 2 * pi / 72, pi, length.out = 72)
+      par_frame <- data.frame(phi_zero, opts$init_damping, init_shift)
+      
+      phase_res <- apply(par_frame, 1, abfit_3p_obj, y = y,
+                         raw_metab_basis = metab_basis_pre,
+                         bl_basis = bl_basis_pre_fit, t = t, f = f,
+                         inds = sp_bas_pf$inds, bl_comps = sp_bas_pf$bl_comps,
+                         sum_sq = TRUE, ret_full = FALSE,
+                         ahat_calc_method = opts$ahat_calc_method)
+      
+      # find the optimum value and update the starting value for the next step
+      par[1] <- phi_zero[which.min(phase_res)]
+    }
+    
     nloptr_opts <- list("algorithm" = opts$algo_pre,
                         "maxeval" = opts$maxiters_pre)
     
@@ -653,6 +673,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' or MM.
 #' @param ahat_calc_method method to calculate the metabolite amplitudes. May be
 #' one of: "lh_pnnls" or "ls".
+#' @param prefit_phase_search perform a 1D search for the optimal phase in the
+#' prefit stage of the algorithm.
 #' @return full list of options.
 #' @examples
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
@@ -675,7 +697,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024,  max_shift = 10,
                        pre_fit_ppm_left = 4, pre_fit_ppm_right = 1.8,
                        phi1_optim = FALSE, phi1_init = 0, max_dphi1 = 0.2,
                        max_basis_shift_broad = 1, max_basis_damping_broad = 2,
-                       ahat_calc_method = "lh_pnnls") {
+                       ahat_calc_method = "lh_pnnls",
+                       prefit_phase_search = FALSE) {
                          
   list(init_damping = init_damping, maxiters = maxiters,
        max_shift = max_shift, max_damping = max_damping, max_phase = max_phase,
@@ -697,7 +720,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024,  max_shift = 10,
        phi1_init = phi1_init, max_dphi1 = max_dphi1,
        max_basis_shift_broad = max_basis_shift_broad,
        max_basis_damping_broad = max_basis_damping_broad,
-       ahat_calc_method = ahat_calc_method)
+       ahat_calc_method = ahat_calc_method,
+       prefit_phase_search = prefit_phase_search)
 }
 
 # objective function for 4 parameter full spine fitting method
