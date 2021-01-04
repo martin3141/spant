@@ -1,3 +1,7 @@
+# spant 1.11.0
+* Options added to allow extra information to attached to mrs_data and
+fit_result objects as a data frame. 
+
 # spant 1.10.0
 * Fix for NIfTI MRS reader/writer.
 * ortho3 now shows correct labels for orientations other than RAS.
