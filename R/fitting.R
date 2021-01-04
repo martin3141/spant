@@ -50,7 +50,7 @@
 #' @export
 fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
                     opts = NULL, parallel = FALSE, time = TRUE,
-                    progress = "text", extra = NULL) {
+                    progress = "text", extra = metab$extra) {
   
   # start the clock
   if (time) ptm <- proc.time()
