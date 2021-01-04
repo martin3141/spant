@@ -8,6 +8,10 @@
 #' @export
 scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr){
   
+  if (!identical(dim(fit_res_sc$data$data)[2:6], dim(ref_data$data)[2:6])) {
+    stop("Mismatch between fit result and reference data dimensions.")
+  }
+  
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
     fit_result$res_tab_unscaled <- fit_result$res_tab
@@ -24,7 +28,7 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr){
   w_amp <- as.numeric(get_td_amp(ref_data))
   
   if (length(w_amp) != nrow(fit_result$res_tab)) {
-    stop("Mismatch between metabolite and reference data dimensions.")
+    stop("Mismatch between fit result and reference data.")
   }
   
   fit_result$res_tab$w_amp <- w_amp
@@ -61,6 +65,10 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr){
 #' @export
 scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880) {
   
+  if (!identical(dim(fit_res_sc$data$data)[2:6], dim(ref_data$data)[2:6])) {
+    stop("Mismatch between fit result and reference data dimensions.")
+  }
+  
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
     fit_result$res_tab_unscaled <- fit_result$res_tab
@@ -71,7 +79,7 @@ scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880) {
   w_amp <- as.numeric(get_td_amp(ref_data))
   
   if (length(w_amp) != nrow(fit_result$res_tab)) {
-    stop("Mismatch between metabolite and reference data dimensions.")
+    stop("Mismatch between fit result and reference data.")
   }
   
   fit_result$res_tab$w_amp <- w_amp
@@ -92,6 +100,10 @@ scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880) {
 #' @export
 scale_amp_water_ratio <- function(fit_result, ref_data) {
   
+  if (!identical(dim(fit_res_sc$data$data)[2:6], dim(ref_data$data)[2:6])) {
+    stop("Mismatch between fit result and reference data dimensions.")
+  }
+  
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
     fit_result$res_tab_unscaled <- fit_result$res_tab
@@ -102,7 +114,7 @@ scale_amp_water_ratio <- function(fit_result, ref_data) {
   w_amp <- as.numeric(get_td_amp(ref_data))
   
   if (length(w_amp) != nrow(fit_result$res_tab)) {
-    stop("Mismatch between metabolite and reference data dimensions.")
+    stop("Mismatch between fit result and reference data.")
   }
   
   fit_result$res_tab$w_amp <- w_amp
