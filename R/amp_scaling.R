@@ -24,10 +24,19 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr){
   w_amp <- as.numeric(get_td_amp(ref_data))
   fit_result$res_tab$w_amp <- w_amp
   
-  fit_result$res_tab$GM_vol <- p_vols[["GM"]]
-  fit_result$res_tab$WM_vol <- p_vols[["WM"]]
-  fit_result$res_tab$CSF_vol <- p_vols[["CSF"]]
+  fit_result$res_tab$GM_vol    <- p_vols[["GM"]]
+  fit_result$res_tab$WM_vol    <- p_vols[["WM"]]
+  fit_result$res_tab$CSF_vol   <- p_vols[["CSF"]]
   fit_result$res_tab$Other_vol <- p_vols[["Other"]]
+  fit_result$res_tab$GM_frac   <- p_vols[["GM"]] / 
+                                 (p_vols[["GM"]] + p_vols[["WM"]])
+  
+  fit_result$res_tab_unscaled$GM_vol    <- p_vols[["GM"]]
+  fit_result$res_tab_unscaled$WM_vol    <- p_vols[["WM"]]
+  fit_result$res_tab_unscaled$CSF_vol   <- p_vols[["CSF"]]
+  fit_result$res_tab_unscaled$Other_vol <- p_vols[["Other"]]
+  fit_result$res_tab_unscaled$GM_frac   <- p_vols[["GM"]] / 
+                                          (p_vols[["GM"]] + p_vols[["WM"]])
   
   # append tables with %GM, %WM, %CSF and %Other
   pvc_cols <- 6:(5 + amp_cols * 2)
