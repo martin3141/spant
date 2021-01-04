@@ -22,6 +22,11 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr){
   amp_cols <- fit_result$amp_cols
   
   w_amp <- as.numeric(get_td_amp(ref_data))
+  
+  if (length(w_amp) != nrow(fit_result$res_tab)) {
+    stop("Mismatch between metabolite and reference data dimensions.")
+  }
+  
   fit_result$res_tab$w_amp <- w_amp
   
   fit_result$res_tab$GM_vol    <- p_vols[["GM"]]
@@ -65,6 +70,10 @@ scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880) {
   
   w_amp <- as.numeric(get_td_amp(ref_data))
   
+  if (length(w_amp) != nrow(fit_result$res_tab)) {
+    stop("Mismatch between metabolite and reference data dimensions.")
+  }
+  
   fit_result$res_tab$w_amp <- w_amp
   
   amp_cols <- fit_result$amp_cols
@@ -92,6 +101,10 @@ scale_amp_water_ratio <- function(fit_result, ref_data) {
   
   w_amp <- as.numeric(get_td_amp(ref_data))
   
+  if (length(w_amp) != nrow(fit_result$res_tab)) {
+    stop("Mismatch between metabolite and reference data dimensions.")
+  }
+  
   fit_result$res_tab$w_amp <- w_amp
   
   amp_cols <- fit_result$amp_cols
@@ -116,7 +129,6 @@ scale_amp_ratio <- function(fit_result, name) {
   } else {
     fit_result$res_tab <- fit_result$res_tab_unscaled
   }
-  
   
   ratio_amp <- as.numeric(fit_result$res_tab[[name]])
   
