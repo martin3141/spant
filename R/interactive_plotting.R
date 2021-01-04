@@ -57,21 +57,31 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
     mrs_data <- get_subset(mrs_data, coil_set = coil) # speeds things up
     if (is.null(map)) map <- int_spec(mrs_data, mode = "mod")
     input_mrs_data <- TRUE
+    
+    if (fd) {
+      x_scale <- ppm(mrs_data)
+    } else {
+      x_scale <- seconds(mrs_data) 
+    }
+    
+    if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[length(x_scale)])
   } else if (class(mrs_data) == "fit_result") {
     fit_res  <- mrs_data
     mrs_data <- fit_res$data
     input_mrs_data <- FALSE
+    
+    if ((!is.null(fit_res$opts$ppm_left)) &
+        (!is.null(fit_res$opts$ppm_right))) {
+      xlim <- c(fit_res$opts$ppm_left, fit_res$opts$ppm_right)
+    } else {
+      xlim <- rev(range(ppm(fit_res)))
+    }
+      
+    x_scale <- ppm(fit_res)
+    
   } else {
     stop("input is not an mrs_data or fit_result object")
   }
-    
-  if (fd) {
-    x_scale <- ppm(mrs_data)
-  } else {
-    x_scale <- seconds(mrs_data) 
-  }
-  
-  if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[length(x_scale)])
   
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar("Select point on the map to show spectrum."),
