@@ -724,6 +724,16 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024,  max_shift = 10,
        prefit_phase_search = prefit_phase_search)
 }
 
+#' Return a list of options for an ABfit analysis to maintain comparability with
+#' analyses performed with version 1.9.0 (and earlier) of spant.
+#' @param ... arguments passed to [spant::abfit_opts].
+#' @return full list of options.
+#' @export
+abfit_opts_v1_9_0 <- function(...) {
+  opts <- abfit_opts(prefit_phase_search = FALSE, ...)
+  return(opts)
+}
+
 # objective function for 4 parameter full spine fitting method
 abfit_full_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
                            bl_comps, sum_sq, basis_paras, phi1_optim,
