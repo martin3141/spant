@@ -13,9 +13,9 @@ scale_amp_molal_pvc(fit_result, ref_data, p_vols, te, tr)
 
 \item{p_vols}{a numeric vector of partial volumes.}
 
-\item{te}{the MRS TE.}
+\item{te}{the MRS TE in seconds.}
 
-\item{tr}{the MRS TR.}
+\item{tr}{the MRS TR in seconds.}
 }
 \value{
 A \code{fit_result} object with a rescaled results table.

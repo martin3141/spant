@@ -2,8 +2,8 @@
 #' @param fit_result result object generated from fitting.
 #' @param ref_data water reference MRS data object.
 #' @param p_vols a numeric vector of partial volumes.
-#' @param te the MRS TE.
-#' @param tr the MRS TR.
+#' @param te the MRS TE in seconds.
+#' @param tr the MRS TR in seconds.
 #' @return A \code{fit_result} object with a rescaled results table.
 #' @export
 scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr){
