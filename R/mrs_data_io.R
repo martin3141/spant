@@ -24,9 +24,8 @@ mrs_data <- function(data, ft, resolution, ref, nuc, freq_domain, affine,
 #' @param full_data export all data points, including those before the start of
 #' the FID (default = FALSE).
 #' @param verbose print data file information (default = FALSE).
-#' @param extra an optional data frame with one row to provide additional
-#' variables to be used in subsequent analysis steps, eg id or grouping
-#' variables.
+#' @param extra an optional data frame to provide additional variables for use
+#' in subsequent analysis steps, eg id or grouping variables.
 #' @return MRS data object.
 #' @examples
 #' fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")

@@ -11,9 +11,8 @@ read_ima_coil_dir(dir, extra = NULL)
 \arguments{
 \item{dir}{data directory path.}
 
-\item{extra}{an optional data frame with one row to provide additional
-variables to be used in subsequent analysis steps, eg id or grouping
-variables.}
+\item{extra}{an optional data frame to provide additional variables for use
+in subsequent analysis steps, eg id or grouping variables.}
 }
 \value{
 mrs_data object.

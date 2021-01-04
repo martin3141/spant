@@ -38,9 +38,8 @@ read_ima <- function(fraw, verbose = FALSE, extra) {
 #' dimension. Note that the coil ID is inferred from the sorted file name and
 #' should be checked when consistency is required between two directories.
 #' @param dir data directory path.
-#' @param extra an optional data frame with one row to provide additional
-#' variables to be used in subsequent analysis steps, eg id or grouping
-#' variables.
+#' @param extra an optional data frame to provide additional variables for use
+#' in subsequent analysis steps, eg id or grouping variables.
 #' @return mrs_data object.
 #' @export
 read_ima_coil_dir <- function(dir, extra = NULL) {
@@ -57,9 +56,8 @@ read_ima_coil_dir <- function(dir, extra = NULL) {
 #' dynamic dimension. Note that the coil ID is inferred from the sorted file
 #' name and should be checked when consistency is required.
 #' @param dir data directory path.
-#' @param extra an optional data frame with one row to provide additional
-#' variables to be used in subsequent analysis steps, eg id or grouping
-#' variables.
+#' @param extra an optional data frame to provide additional variables for use
+#' in subsequent analysis steps, eg id or grouping variables.
 #' @return mrs_data object.
 #' @export
 read_ima_dyn_dir <- function(dir, extra = NULL) {

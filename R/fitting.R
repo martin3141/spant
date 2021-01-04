@@ -36,9 +36,8 @@
 #' @param progress option is passed to plyr::alply function to display a
 #' progress bar during fitting. Default value is "text", set to "none" to
 #' disable.
-#' @param extra an optional data frame with one row to provide additional
-#' variables to be used in subsequent analysis steps, eg id or grouping
-#' variables.
+#' @param extra an optional data frame to provide additional variables for use 
+#' in subsequent analysis steps, eg id or grouping variables.
 #' @return MRS analysis object.
 #' @examples
 #' fname <- system.file("extdata","philips_spar_sdat_WS.SDAT",package="spant")

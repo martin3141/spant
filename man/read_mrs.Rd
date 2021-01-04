@@ -38,9 +38,8 @@ the FID (default = FALSE).}
 
 \item{verbose}{print data file information (default = FALSE).}
 
-\item{extra}{an optional data frame with one row to provide additional
-variables to be used in subsequent analysis steps, eg id or grouping
-variables.}
+\item{extra}{an optional data frame to provide additional variables for use
+in subsequent analysis steps, eg id or grouping variables.}
 }
 \value{
 MRS data object.

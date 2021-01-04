@@ -38,9 +38,8 @@ LCModel .basis format.}
 progress bar during fitting. Default value is "text", set to "none" to
 disable.}
 
-\item{extra}{an optional data frame with one row to provide additional
-variables to be used in subsequent analysis steps, eg id or grouping
-variables.}
+\item{extra}{an optional data frame to provide additional variables for use
+in subsequent analysis steps, eg id or grouping variables.}
 }
 \value{
 MRS analysis object.
