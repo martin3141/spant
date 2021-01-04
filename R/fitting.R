@@ -57,6 +57,11 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
   
   # let's assume a PRESS basis and simulate if one isn't specified
   if (is.null(basis)) {
+    
+    if (is.null(metab$meta$EchoTime)) {
+      stop("Echo time not found, please specify a basis.")
+    }
+    
     if (METHOD == "LCMODEL") {
       lcm_compat = TRUE
     } else {
