@@ -27,8 +27,9 @@ read_ima <- function(fraw, verbose = FALSE) {
   meta = list(EchoTime = paras$te)
   
   mrs_data <- mrs_data(data = data, ft = vars$ft, resolution = paras$res,
-                       nuc = paras$nuc, freq_domain = freq_domain,
-                       affine = paras$affine, meta = meta)
+                       ref = paras$ref, nuc = paras$nuc,
+                       freq_domain = freq_domain, affine = paras$affine,
+                       meta = meta)
   
   return(mrs_data)
 }
