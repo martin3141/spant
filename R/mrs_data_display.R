@@ -62,7 +62,7 @@ print.mrs_data <- function(x, full = FALSE, ...) {
 #' tickmarks as computed by axTicks). When NA, no grid lines are drawn in the
 #' corresponding direction.
 #' @param grid_ny as above.
-#' @param col set the line color, eg col = rgb(0.5, 0.5, 0.5).
+#' @param col set the line colour, eg col = rgb(0.5, 0.5, 0.5).
 #' @param alpha set the line transparency, eg alpha = 0.5 is 50% transparency.
 #' Overrides any transparency levels set by col.
 #' @param ... other arguments to pass to the plot method.

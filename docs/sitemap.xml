@@ -43,6 +43,9 @@
     <loc>https://martin3141.github.io/spant//reference/abfit_opts.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant//reference/abfit_opts_v1_9_0.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant//reference/acquire.html</loc>
   </url>
   <url>
@@ -463,7 +466,7 @@
     <loc>https://martin3141.github.io/spant//reference/ortho3.html</loc>
   </url>
   <url>
-    <loc>https://martin3141.github.io/spant//reference/ortho3_int.html</loc>
+    <loc>https://martin3141.github.io/spant//reference/ortho3_inter.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/peak_info.html</loc>

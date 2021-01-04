@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.10.0</span>
       </span>
     </div>
 
@@ -87,7 +87,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -119,7 +119,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/martin3141/spant/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -140,13 +140,27 @@
       <small>Source: <a href='https://github.com/martin3141/spant/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="spant-1100" class="section level1">
+<h1 class="page-header" data-toc-text="1.10.0">
+<a href="#spant-1100" class="anchor"></a>spant 1.10.0<small> Unreleased </small>
+</h1>
+<ul>
+<li>Fix for NIfTI MRS reader/writer.</li>
+<li>ortho3 now shows correct labels for orientations other than RAS.</li>
+<li>ortho3_int function renamed to ortho3_inter.</li>
+<li>Argument order change to plot_voi_overlay and plot_voi_overlay_seg to be more consistent with ortho3.</li>
+<li>Regression fix for partial volume segmentation plotting.</li>
+<li>Echo time parameter is now stored in the meta structure.</li>
+<li>ABfit now performs a 1D phase parameter search before the prefit stage to improve reliability. May be disabled with the prefit_phase_search fit option.</li>
+</ul>
+</div>
     <div id="spant-190" class="section level1">
 <h1 class="page-header" data-toc-text="1.9.0">
-<a href="#spant-190" class="anchor"></a>spant 1.9.0<small> Unreleased </small>
+<a href="#spant-190" class="anchor"></a>spant 1.9.0<small> 2020-12-15 </small>
 </h1>
 <ul>
 <li>NIfTI MRS reader and writer now uses the header extension for metadata. Thanks to Jon Clayden for adding extension read/write support to the RNifti package.</li>
-<li>Default plots now have gridlines in the y-direction and the plot line is now thicker and colored blue.</li>
+<li>Default plots now have gridlines in the y-direction and the plot line is now thicker and coloured blue.</li>
 <li>Opacity option added to the plotting functions (alpha).</li>
 <li>Bug fix for comb_coils with SVS data.</li>
 <li>Bug fixes for Siemens geometry information.</li>

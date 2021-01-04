@@ -93,7 +93,7 @@ corresponding direction.}
 
 \item{grid_ny}{as above.}
 
-\item{col}{set the line color, eg col = rgb(0.5, 0.5, 0.5).}
+\item{col}{set the line colour, eg col = rgb(0.5, 0.5, 0.5).}
 
 \item{alpha}{set the line transparency, eg alpha = 0.5 is 50\% transparency.
 Overrides any transparency levels set by col.}

@@ -13,7 +13,7 @@ improve reliability. May be disabled with the prefit_phase_search fit option.
 * NIfTI MRS reader and writer now uses the header extension for metadata. Thanks
 to Jon Clayden for adding extension read/write support to the RNifti package.
 * Default plots now have gridlines in the y-direction and the plot line is now
-thicker and colored blue.
+thicker and coloured blue.
 * Opacity option added to the plotting functions (alpha).
 * Bug fix for comb_coils with SVS data.
 * Bug fixes for Siemens geometry information.
