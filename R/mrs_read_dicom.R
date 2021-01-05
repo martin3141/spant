@@ -14,7 +14,7 @@ read_dicom <- function(fname, verbose, extra) {
   if (grepl("SIEMENS", manuf)) {
     if (sop_class_uid == "1.3.12.2.1107.5.9.1") {
       # SiemensPrivateCSA Non-ImageStorage - AKA ima format
-      return(read_ima(fraw, extra))
+      return(read_ima(fraw, verbose, extra))
     } else if (sop_class_uid == "1.2.840.10008.5.1.4.1.1.4.2") { 
       # MR Spectroscopy Storage
       return(read_siemens_dicom(fraw, extra))
