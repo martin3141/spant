@@ -2,7 +2,7 @@
 % Please edit documentation in R/fitting.R
 \name{comb_fit_tables}
 \alias{comb_fit_tables}
-\title{Combine all fitting data points into a single dataframe.}
+\title{Combine all fitting data points into a single data frame.}
 \usage{
 comb_fit_tables(fit_res)
 }
@@ -10,8 +10,8 @@ comb_fit_tables(fit_res)
 \item{fit_res}{a single fit_result object.}
 }
 \value{
-a dataframe containing the fit data points.
+a data frame containing the fit data points.
 }
 \description{
-Combine all fitting data points into a single dataframe.
+Combine all fitting data points into a single data frame.
 }

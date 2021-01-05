@@ -697,6 +697,7 @@ comb_fit_list_dyn <- function(fit_list) {
 
 #' Combine all fitting data points from a list of fits into a single data frame.
 #' @param fit_list list of fit_result objects.
+#' @param add_extra add variables in the extra data frame to the output (TRUE).
 #' @return a data frame containing the fit data points.
 #' @export
 comb_fit_list_fit_tables <- function(fit_list, add_extra = TRUE) {

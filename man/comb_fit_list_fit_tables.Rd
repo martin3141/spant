@@ -2,16 +2,18 @@
 % Please edit documentation in R/fitting.R
 \name{comb_fit_list_fit_tables}
 \alias{comb_fit_list_fit_tables}
-\title{Combine all fitting data points from a list of fits into a single dataframe.}
+\title{Combine all fitting data points from a list of fits into a single data frame.}
 \usage{
-comb_fit_list_fit_tables(fit_list)
+comb_fit_list_fit_tables(fit_list, add_extra = TRUE)
 }
 \arguments{
 \item{fit_list}{list of fit_result objects.}
+
+\item{add_extra}{add variables in the extra data frame to the output (TRUE).}
 }
 \value{
-a dataframe containing the fit data points.
+a data frame containing the fit data points.
 }
 \description{
-Combine all fitting data points from a list of fits into a single dataframe.
+Combine all fitting data points from a list of fits into a single data frame.
 }
