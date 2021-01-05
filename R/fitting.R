@@ -730,11 +730,12 @@ get_fit_table <- function(fit_res) {
 
 #' Combine the fit result tables from a list of fit results.
 #' @param fit_res_list a list of fit_result objects.
+#' @param add_extra add variables in the extra data frame to the output (TRUE).
 #' @return a data frame combine all fit result tables with an additional id
 #' column to differentiate between data sets. Any variables in the extra data
-#' frame will also be added to the result.
+#' frame may be optionally added to the result.
 #' @export
-combine_result_tables <- function(fit_res_list) {
+comb_result_tables <- function(fit_res_list, add_extra = TRUE) {
   
   # extract a list of result tables
   df_list <- lapply(fit_res_list, '[[', 'res_tab')
@@ -742,9 +743,11 @@ combine_result_tables <- function(fit_res_list) {
   # add id variable to each item
   df_list <- mapply(cbind, df_list, "id" = seq(df_list), SIMPLIFY = F)
   
-  # add extra variables
-  extra_list <- lapply(fit_res_list, '[[', 'extra')
-  df_list    <- mapply(cbind, df_list, extra_list, SIMPLIFY = F)
+  # add extra variables if requested and sensible
+  if ((!is.null(fit_res_list[[1]]$extra)) & add_extra) {
+    extra_list <- lapply(fit_res_list, '[[', 'extra')
+    df_list    <- mapply(cbind, df_list, extra_list, SIMPLIFY = F)
+  }
   
   # combine into a single data frame
   out <- do.call("rbind", df_list)
