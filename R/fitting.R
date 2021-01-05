@@ -716,6 +716,7 @@ comb_fit_list_fit_tables <- function(fit_list, add_extra = TRUE) {
   }
   
   out <- do.call("rbind", fit_table_list)
+  out$id <- as.factor(out$id)
   return(out)
 }
   
@@ -776,6 +777,6 @@ comb_fit_list_result_tables <- function(fit_list, add_extra = TRUE) {
   
   # combine into a single data frame
   out <- do.call("rbind", df_list)
-  
+  out$id <- as.factor(out$id)
   return(out)
 }
