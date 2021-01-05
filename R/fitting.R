@@ -677,7 +677,7 @@ fit_amps <- function(x, inc_index = FALSE, sort_names = FALSE,
 #' @param fit_list list of fit_result objects.
 #' @return fit_result object.
 #' @export
-comb_fits <- function(fit_list) {
+comb_fits_dyn <- function(fit_list) {
   res_tab <- do.call(rbind, lapply(fit_list, `[[`, "res_tab"))
   res_tab$Dynamic <- 1:length(fit_list)
   fits <- unlist(lapply(fit_list, `[[`, "fits"), FALSE)
@@ -726,4 +726,28 @@ get_fit_table <- function(fit_res) {
   full_fit_df$Dynamic <- rep(fit_res$res_tab$Dynamic, each = frows)
   full_fit_df$Coil <- rep(fit_res$res_tab$Coil, each = frows)
   full_fit_df
+}
+
+#' Combine the fit result tables from a list of fit results.
+#' @param fit_res_list a list of fit_result objects.
+#' @return a data frame combine all fit result tables with an additional id
+#' column to differentiate between data sets. Any variables in the extra data
+#' frame will also be added to the result.
+#' @export
+combine_result_tables <- function(fit_res_list) {
+  
+  # extract a list of result tables
+  df_list <- lapply(fit_res_list, '[[', 'res_tab')
+  
+  # add id variable to each item
+  df_list <- mapply(cbind, df_list, "id" = seq(df_list), SIMPLIFY = F)
+  
+  # add extra variables
+  extra_list <- lapply(fit_res_list, '[[', 'extra')
+  df_list    <- mapply(cbind, df_list, extra_list, SIMPLIFY = F)
+  
+  # combine into a single data frame
+  out <- do.call("rbind", df_list)
+  
+  return(out)
 }
