@@ -4,7 +4,7 @@
 \alias{comb_fit_list_fit_tables}
 \title{Combine all fitting data points from a list of fits into a single data frame.}
 \usage{
-comb_fit_list_fit_tables(fit_list, add_extra = TRUE)
+comb_fit_list_fit_tables(fit_list, add_extra = TRUE, harmonise_ppm = TRUE)
 }
 \arguments{
 \item{fit_list}{list of fit_result objects.}

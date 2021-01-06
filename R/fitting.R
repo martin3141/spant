@@ -675,11 +675,21 @@ fit_amps <- function(x, inc_index = FALSE, sort_names = FALSE,
 #' Combine all fitting data points from a list of fits into a single data frame.
 #' @param fit_list list of fit_result objects.
 #' @param add_extra add variables in the extra data frame to the output (TRUE).
+#' @param harmonise_ppm ensure the ppm scale for each fit is identical to the
+#' first.
 #' @return a data frame containing the fit data points.
 #' @export
-comb_fit_list_fit_tables <- function(fit_list, add_extra = TRUE) {
+comb_fit_list_fit_tables <- function(fit_list, add_extra = TRUE,
+                                     harmonise_ppm = TRUE) {
   
   fit_table_list <- lapply(fit_list, comb_fit_tables)
+  
+  if (harmonise_ppm) {
+    # get the first ppm scale 
+    ppm <- fit_table_list[[1]]$PPMScale
+    fit_table_list <- lapply(fit_table_list, function(x) {x$PPMScale = ppm; x})
+  }
+  
   fit_table_list <- mapply(cbind, fit_table_list, "id" = seq(fit_table_list),
                            SIMPLIFY = FALSE)
   
@@ -695,6 +705,8 @@ comb_fit_list_fit_tables <- function(fit_list, add_extra = TRUE) {
   
   out <- do.call("rbind", fit_table_list)
   out$id <- as.factor(out$id)
+  
+  
   return(out)
 }
   
