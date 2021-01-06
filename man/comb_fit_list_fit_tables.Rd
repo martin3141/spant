@@ -10,6 +10,9 @@ comb_fit_list_fit_tables(fit_list, add_extra = TRUE, harmonise_ppm = TRUE)
 \item{fit_list}{list of fit_result objects.}
 
 \item{add_extra}{add variables in the extra data frame to the output (TRUE).}
+
+\item{harmonise_ppm}{ensure the ppm scale for each fit is identical to the
+first.}
 }
 \value{
 a data frame containing the fit data points.
