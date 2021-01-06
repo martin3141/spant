@@ -672,29 +672,6 @@ fit_amps <- function(x, inc_index = FALSE, sort_names = FALSE,
   out
 }
 
-#' Combine a list of fit_result objects into a single fit object containing a 
-#' dynamic series.
-#' @param fit_list list of fit_result objects.
-#' @return fit_result object.
-#' @export
-comb_fit_list_dyn <- function(fit_list) {
-  res_tab <- do.call(rbind, lapply(fit_list, `[[`, "res_tab"))
-  res_tab$Dynamic <- 1:length(fit_list)
-  fits <- unlist(lapply(fit_list, `[[`, "fits"), FALSE)
-  data <- append_dyns(lapply(fit_list, `[[`, "data"))
-  proc_time <- fit_list[[1]]$proc_time
-  for (n in 2:length(fit_list)) {
-    proc_time <- proc_time + fit_list[[n]]$proc_time
-  }
-  
-  fit_out <- list(res_tab = res_tab, fits = fits, data = data,
-                  basis = fit_list[[1]]$basis,
-                  amp_cols = fit_list[[1]]$amp_cols, proc_time = proc_time)
-  
-  class(fit_out) <- "fit_result"
-  fit_out
-}
-
 #' Combine all fitting data points from a list of fits into a single data frame.
 #' @param fit_list list of fit_result objects.
 #' @param add_extra add variables in the extra data frame to the output (TRUE).
