@@ -704,7 +704,7 @@ comb_fit_list_fit_tables <- function(fit_list, add_extra = TRUE) {
   
   fit_table_list <- lapply(fit_list, comb_fit_tables)
   fit_table_list <- mapply(cbind, fit_table_list, "id" = seq(fit_table_list),
-                           SIMPLIFY = F)
+                           SIMPLIFY = FALSE)
   
   # add extra variables if requested and sensible
   if ((!is.null(fit_list[[1]]$extra)) & add_extra) {
@@ -712,7 +712,8 @@ comb_fit_list_fit_tables <- function(fit_list, add_extra = TRUE) {
       stop("unable to combine extra data, set add_extra to FALSE")
     }
     extra_list <- lapply(fit_list, '[[', 'extra')
-    fit_table_list <- mapply(cbind, fit_table_list, extra_list, SIMPLIFY = F)
+    fit_table_list <- mapply(cbind, fit_table_list, extra_list,
+                             SIMPLIFY = FALSE)
   }
   
   out <- do.call("rbind", fit_table_list)
@@ -767,12 +768,12 @@ comb_fit_list_result_tables <- function(fit_list, add_extra = TRUE) {
   df_list <- lapply(fit_list, '[[', 'res_tab')
   
   # add id variable to each item
-  df_list <- mapply(cbind, df_list, "id" = seq(df_list), SIMPLIFY = F)
+  df_list <- mapply(cbind, df_list, "id" = seq(df_list), SIMPLIFY = FALSE)
   
   # add extra variables if requested and sensible
   if ((!is.null(fit_list[[1]]$extra)) & add_extra) {
     extra_list <- lapply(fit_list, '[[', 'extra')
-    df_list    <- mapply(cbind, df_list, extra_list, SIMPLIFY = F)
+    df_list    <- mapply(cbind, df_list, extra_list, SIMPLIFY = FALSE)
   }
   
   # combine into a single data frame
