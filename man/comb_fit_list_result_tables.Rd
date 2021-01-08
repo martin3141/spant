@@ -4,12 +4,15 @@
 \alias{comb_fit_list_result_tables}
 \title{Combine the fit result tables from a list of fit results.}
 \usage{
-comb_fit_list_result_tables(fit_list, add_extra = TRUE)
+comb_fit_list_result_tables(fit_list, add_extra = TRUE, add_res_id = TRUE)
 }
 \arguments{
 \item{fit_list}{a list of fit_result objects.}
 
 \item{add_extra}{add variables in the extra data frame to the output (TRUE).}
+
+\item{add_res_id}{add a res_id column to the output to distinguish between
+datasets.}
 }
 \value{
 a data frame combine all fit result tables with an additional id

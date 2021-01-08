@@ -677,12 +677,22 @@ fit_amps <- function(x, inc_index = FALSE, sort_names = FALSE,
 #' @param add_extra add variables in the extra data frame to the output (TRUE).
 #' @param harmonise_ppm ensure the ppm scale for each fit is identical to the
 #' first.
+#' @param inc_basis_sigs include the individual fitting basis signals in the
+#' output table, defaults to FALSE.
+#' @param inc_indices include indices such as X, Y and coil in the output,
+#' defaults to TRUE. These are generally not useful for SVS analysis.
+#' @param add_res_id add a res_id column to the output to distinguish between
+#' datasets.
 #' @return a data frame containing the fit data points.
 #' @export
 comb_fit_list_fit_tables <- function(fit_list, add_extra = TRUE,
-                                     harmonise_ppm = TRUE) {
+                                     harmonise_ppm = TRUE,
+                                     inc_basis_sigs = FALSE, inc_indices = TRUE,
+                                     add_res_id = TRUE) {
   
-  fit_table_list <- lapply(fit_list, comb_fit_tables)
+  fit_table_list <- lapply(fit_list, comb_fit_tables,
+                           inc_basis_sigs = inc_basis_sigs,
+                           inc_indices = inc_indices)
   
   if (harmonise_ppm) {
     # get the first ppm scale 
@@ -690,8 +700,10 @@ comb_fit_list_fit_tables <- function(fit_list, add_extra = TRUE,
     fit_table_list <- lapply(fit_table_list, function(x) {x$PPMScale = ppm; x})
   }
   
-  fit_table_list <- mapply(cbind, fit_table_list, "id" = seq(fit_table_list),
-                           SIMPLIFY = FALSE)
+  if (add_res_id) {
+    fit_table_list <- mapply(cbind, fit_table_list,
+                             "res_id" = seq(fit_table_list), SIMPLIFY = FALSE)
+  }
   
   # add extra variables if requested and sensible
   if ((!is.null(fit_list[[1]]$extra)) & add_extra) {
@@ -704,17 +716,22 @@ comb_fit_list_fit_tables <- function(fit_list, add_extra = TRUE,
   }
   
   out <- do.call("rbind", fit_table_list)
-  out$id <- as.factor(out$id)
   
+  if (add_res_id) out$res_id <- as.factor(out$res_id)
   
   return(out)
 }
   
 #' Combine all fitting data points into a single data frame.
 #' @param fit_res a single fit_result object.
+#' @param inc_basis_sigs include the individual fitting basis signals in the
+#' output table, defaults to FALSE.
+#' @param inc_indices include indices such as X, Y and coil in the output,
+#' defaults to TRUE. These are generally not useful for SVS analysis.
 #' @return a data frame containing the fit data points.
 #' @export
-comb_fit_tables <- function(fit_res) {
+comb_fit_tables <- function(fit_res, inc_basis_sigs = FALSE,
+                            inc_indices = TRUE) {
   
   # search for masked spectra
   na_fits <- is.na(fit_res$fits)
@@ -733,31 +750,44 @@ comb_fit_tables <- function(fit_res) {
     full_fit_df <- do.call("rbind", fit_res$fits)
   }
   
-  # add some ID columns
-  full_fit_df$N  <- as.factor(rep(1:length(na_fits), each = frows))
-  full_fit_df$X  <- as.factor(rep(fit_res$res_tab$X, each = frows))
-  full_fit_df$Y  <- as.factor(rep(fit_res$res_tab$Y, each = frows))
-  full_fit_df$Z  <- as.factor(rep(fit_res$res_tab$Z, each = frows))
-  full_fit_df$Dynamic <- as.factor(rep(fit_res$res_tab$Dynamic, each = frows))
-  full_fit_df$Coil <- as.factor(rep(fit_res$res_tab$Coil, each = frows))
+  # remove basis signals if requested
+  if (!inc_basis_sigs) full_fit_df <- full_fit_df[,1:4]
+  
+  if (inc_indices) {
+    # add some ID columns
+    full_fit_df$N  <- as.factor(rep(1:length(na_fits), each = frows))
+    full_fit_df$X  <- as.factor(rep(fit_res$res_tab$X, each = frows))
+    full_fit_df$Y  <- as.factor(rep(fit_res$res_tab$Y, each = frows))
+    full_fit_df$Z  <- as.factor(rep(fit_res$res_tab$Z, each = frows))
+    full_fit_df$Dynamic <- as.factor(rep(fit_res$res_tab$Dynamic, each = frows))
+    full_fit_df$Coil <- as.factor(rep(fit_res$res_tab$Coil, each = frows))
+  }
+  
+  # this could be a bad idea 
   full_fit_df <- stats::na.omit(full_fit_df)
+  
   return(full_fit_df)
 }
 
 #' Combine the fit result tables from a list of fit results.
 #' @param fit_list a list of fit_result objects.
 #' @param add_extra add variables in the extra data frame to the output (TRUE).
+#' @param add_res_id add a res_id column to the output to distinguish between
+#' datasets.
 #' @return a data frame combine all fit result tables with an additional id
 #' column to differentiate between data sets. Any variables in the extra data
 #' frame may be optionally added to the result.
 #' @export
-comb_fit_list_result_tables <- function(fit_list, add_extra = TRUE) {
+comb_fit_list_result_tables <- function(fit_list, add_extra = TRUE,
+                                        add_res_id = TRUE) {
   
   # extract a list of result tables
   df_list <- lapply(fit_list, '[[', 'res_tab')
   
-  # add id variable to each item
-  df_list <- mapply(cbind, df_list, "id" = seq(df_list), SIMPLIFY = FALSE)
+  # add a result id variable to each item
+  if (add_res_id) {
+    df_list <- mapply(cbind, df_list, "res_id" = seq(df_list), SIMPLIFY = FALSE)
+  }
   
   # add extra variables if requested and sensible
   if ((!is.null(fit_list[[1]]$extra)) & add_extra) {
@@ -767,6 +797,8 @@ comb_fit_list_result_tables <- function(fit_list, add_extra = TRUE) {
   
   # combine into a single data frame
   out <- do.call("rbind", df_list)
-  out$id <- as.factor(out$id)
+  
+  if (add_res_id) out$res_id <- as.factor(out$res_id)
+  
   return(out)
 }

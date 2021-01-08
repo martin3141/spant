@@ -4,10 +4,16 @@
 \alias{comb_fit_tables}
 \title{Combine all fitting data points into a single data frame.}
 \usage{
-comb_fit_tables(fit_res)
+comb_fit_tables(fit_res, inc_basis_sigs = FALSE, inc_indices = TRUE)
 }
 \arguments{
 \item{fit_res}{a single fit_result object.}
+
+\item{inc_basis_sigs}{include the individual fitting basis signals in the
+output table, defaults to FALSE.}
+
+\item{inc_indices}{include indices such as X, Y and coil in the output,
+defaults to TRUE. These are generally not useful for SVS analysis.}
 }
 \value{
 a data frame containing the fit data points.
