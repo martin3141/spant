@@ -1,8 +1,8 @@
 # spant 1.11.0
 * Options added to allow extra information to attached to mrs_data and
 fit_result objects as a data frame.
-* comb_result_tables function added to combine fit result tables from a list of
-fit objects.
+* New functions (combine_fit_XXX) for working with multiple fit results
+contained within a list structure.
 
 # spant 1.10.0
 * Fix for NIfTI MRS reader/writer.
