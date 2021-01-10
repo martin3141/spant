@@ -1,4 +1,3 @@
-
 #' @export
 svs_1h_preproc <- function(metab, ref = NULL, decimate = FALSE,
                            rats_corr = TRUE, ecc = FALSE, comb_dyns = TRUE,
@@ -42,9 +41,19 @@ svs_1h_preproc <- function(metab, ref = NULL, decimate = FALSE,
   }
 }
 
-# svs_1h_batch_fit <- function(metab_fname, ref_fname, format, basis, fit_method,
-#                              fit_opts, preproc_fn = svs_1h_preproc, ...) {
+# TODO
+# what if metab fname results in metab + ref file, eg GE data?
+# options to add, fit_opts, fit_method, format (GE, Siemens etc)
+# allow lists of mrs_data objects, or file paths as input
+# add extra option for id vars
+
+#' @export
+svs_1h_batch_fit <- function(metab, ref = NULL, basis,
+                             preproc_fn = svs_1h_preproc, ...) {
   
-  # what if metab fname results in metab + ref file, eg GE data?
+  if (!is.null(ref_fname) & (length(metab_fname) != length(ref_fname))) {
+    stop("Number of metabolite and reference files do not match.")
+  }
   
-# }
+  
+}
