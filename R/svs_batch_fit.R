@@ -1,7 +1,6 @@
 #' @export
-svs_1h_preproc <- function(metab, ref = NULL, decimate = FALSE,
-                           rats_corr = TRUE, ecc = FALSE, comb_dyns = TRUE,
-                           hsvd_filt = FALSE) {
+svs_1h_fit <- function(metab, ref = NULL, decimate = FALSE, rats_corr = TRUE,
+                       ecc = FALSE, comb_dyns = TRUE, hsvd_filt = FALSE) {
   
   # combine coils if needed
   if (Ncoils(metab) > 1) {
@@ -48,12 +47,42 @@ svs_1h_preproc <- function(metab, ref = NULL, decimate = FALSE,
 # add extra option for id vars
 
 #' @export
-svs_1h_batch_fit <- function(metab, ref = NULL, basis,
-                             preproc_fn = svs_1h_preproc, ...) {
+svs_1h_batch_fit <- function(metab_paths, ref_paths = NULL, mri_paths = NULL,
+                             mri_seg_paths = NULL, output_dirs = NULL, ...) {
   
-  if (!is.null(ref_fname) & (length(metab_fname) != length(ref_fname))) {
-    stop("Number of metabolite and reference files do not match.")
+  # check input it sensible
+  metab_n <- length(metab_paths)
+  
+  if (!is.null(ref_paths) & length(ref_paths) != metab_n) {
+    stop("Incorrect number of ref items.")
   }
   
+  if (!is.null(mri_paths) & length(mri_paths) != metab_n) {
+    stop("Incorrect number of mri items.")
+  }
   
+  if (!is.null(mri_seg_paths) & length(mri_seg_paths) != metab_n) {
+    stop("Incorrect number of mri_seg items.")
+  }
+  
+  if (!is.null(output_dirs) & length(output_dirs) != metab_n) {
+    stop("Incorrect number of output_dir items.")
+  }
+  
+  # check file paths exist TODO write a function to return bad paths
+  # metab_paths[which(!file.exists(metab_paths))]
+  
+  # convert file paths to a list of mrs_data objects
+  metab_list <- lapply(metab_paths, read_mrs)
+  
+  if (is.null(ref_paths)) {
+    ref_list <- vector("list", metab_n)
+  } else {
+    ref_list <- lapply(ref_paths, read_mrs)
+  }
+  
+  fit_list <- mapply(svs_1h_fit, metab = metab_list, ref = ref_list,
+                     MoreArgs = ..., SIMPLIFY = FALSE)
+  
+  return(fit_list)
 }
