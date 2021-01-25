@@ -1,22 +1,24 @@
 #' @export
-svs_1h_fit <- function(metab, ref = NULL, decimate = FALSE, rats_corr = TRUE,
-                       ecc = FALSE, comb_dyns = TRUE, hsvd_filt = FALSE) {
+svs_1h_analysis <- function(metab, basis, w_ref = NULL, mri_seg = NULL,
+                            decimate = FALSE, rats_corr = TRUE, ecc = FALSE,
+                            comb_dyns = TRUE, hsvd_filt = FALSE,
+                            scale_amps = TRUE) {
   
   # combine coils if needed
   if (Ncoils(metab) > 1) {
-    coil_comb_res <- comb_coils(metab, ref)
-    if (is.null(ref)) {
+    coil_comb_res <- comb_coils(metab, w_ref)
+    if (is.null(w_ref)) {
       metab <- coil_comb_res
     } else {
       metab <- coil_comb_res$metab
-      ref   <- coil_comb_res$ref
+      w_ref   <- coil_comb_res$ref
     }
   }
   
   # decimate x2 if requested
   if (decimate) {
     metab <- decimate_mrs_fd(metab)
-    if (!is.null(ref)) ref <- decimate_mrs_fd(ref)
+    if (!is.null(w_ref)) w_ref <- decimate_mrs_fd(w_ref)
   }
   
   # rats
@@ -25,7 +27,7 @@ svs_1h_fit <- function(metab, ref = NULL, decimate = FALSE, rats_corr = TRUE,
   # TODO plot of shifts?
   
   # eddy current correction
-  if (ecc & (!is.null(ref))) metab <- ecc(metab, ref)
+  if (ecc & (!is.null(w_ref))) metab <- ecc(metab, w_ref)
   
   # combine dynamic scans
   if (comb_dyns) metab <- mean_dyns(metab)
@@ -33,11 +35,27 @@ svs_1h_fit <- function(metab, ref = NULL, decimate = FALSE, rats_corr = TRUE,
   # HSVD residual water removal
   if (hsvd_filt) metab <- hsvd_filt(metab)
   
-  if (is.null(ref)) {
-    return(metab)
-  } else {
-    return(list(metab = metab, ref = ref))
-  }
+  # TODO fitting
+  fit_res <- fit_mrs(metab, basis = basis)
+  
+  # if (scale_amps) {
+  #   if (is.null(w_ref)) {
+  #     
+  #   } else {
+  #     if (is.null())
+  #     
+  #   }
+  # }
+  
+  # if water file but no seg file then scale using
+  
+  # otherwise scale to tCr
+  
+  # TODO optional pvc
+  
+  # TODO optional amp scaling
+  
+  return(fit_res)
 }
 
 # TODO
@@ -47,13 +65,14 @@ svs_1h_fit <- function(metab, ref = NULL, decimate = FALSE, rats_corr = TRUE,
 # add extra option for id vars
 
 #' @export
-svs_1h_batch_fit <- function(metab_paths, ref_paths = NULL, mri_paths = NULL,
-                             mri_seg_paths = NULL, output_dirs = NULL, ...) {
+svs_1h_batch_analysis <- function(metab_paths, w_ref_paths = NULL,
+                                  mri_paths = NULL, mri_seg_paths = NULL,
+                                  output_dirs = NULL, ...) {
   
   # check input it sensible
   metab_n <- length(metab_paths)
   
-  if (!is.null(ref_paths) & length(ref_paths) != metab_n) {
+  if (!is.null(w_ref_paths) & length(w_ref_paths) != metab_n) {
     stop("Incorrect number of ref items.")
   }
   
@@ -75,14 +94,14 @@ svs_1h_batch_fit <- function(metab_paths, ref_paths = NULL, mri_paths = NULL,
   # convert file paths to a list of mrs_data objects
   metab_list <- lapply(metab_paths, read_mrs)
   
-  if (is.null(ref_paths)) {
-    ref_list <- vector("list", metab_n)
+  if (is.null(w_ref_paths)) {
+    w_ref_list <- vector("list", metab_n)
   } else {
-    ref_list <- lapply(ref_paths, read_mrs)
+    w_ref_list <- lapply(w_ref_paths, read_mrs)
   }
   
-  fit_list <- mapply(svs_1h_fit, metab = metab_list, ref = ref_list,
-                     MoreArgs = ..., SIMPLIFY = FALSE)
+  fit_list <- mapply(svs_1h_analysis, metab = metab_list, ref = w_ref_list,
+                     mri_seg = mri_seg_list, MoreArgs = ..., SIMPLIFY = FALSE)
   
   return(fit_list)
 }
