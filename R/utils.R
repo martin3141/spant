@@ -466,3 +466,6 @@ circ_mask <- function(d, n, offset = 1) {
   dist <- matrix(dist, n, n)
   return(dist <= d / 2)
 }
+
+#' @export
+is.def <- function(x) !is.null(x)

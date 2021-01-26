@@ -1,8 +1,15 @@
+# TODO add option to explicity specify the type of metabolite scaling to perform
+# include "auto" version which guesses based on the input
+
 #' @export
 svs_1h_analysis <- function(metab, basis, w_ref = NULL, mri_seg = NULL,
-                            decimate = FALSE, rats_corr = TRUE, ecc = FALSE,
-                            comb_dyns = TRUE, hsvd_filt = FALSE,
-                            scale_amps = TRUE) {
+                            mri = NULL, decimate = FALSE, rats_corr = TRUE,
+                            ecc = FALSE, comb_dyns = TRUE, hsvd_filt = FALSE,
+                            scale_amps = TRUE, te = NULL, tr = NULL,
+                            output_dir = NULL) {
+  
+  ws_path <- as.character(ws_path)  # possibly needed to stop issues when
+                                    # cbinding fit tables later on
   
   # combine coils if needed
   if (Ncoils(metab) > 1) {
@@ -35,25 +42,30 @@ svs_1h_analysis <- function(metab, basis, w_ref = NULL, mri_seg = NULL,
   # HSVD residual water removal
   if (hsvd_filt) metab <- hsvd_filt(metab)
   
-  # TODO fitting
+  # TODO fitting options
   fit_res <- fit_mrs(metab, basis = basis)
   
-  # if (scale_amps) {
-  #   if (is.null(w_ref)) {
-  #     
-  #   } else {
-  #     if (is.null())
-  #     
-  #   }
-  # }
-  
-  # if water file but no seg file then scale using
-  
-  # otherwise scale to tCr
-  
-  # TODO optional pvc
-  
-  # TODO optional amp scaling
+  if (scale_amps) {
+    if (is.def(w_ref) & is.def(mri_seg)) {
+      
+      if (is.null(te)) stop("te not given, amplitude scaling failed")
+        
+      if (is.null(tr)) stop("tr not given, amplitude scaling failed")
+      
+      # generate the svs voi in the segmented image space
+      voi <- get_svs_voi(metab, mri_seg)
+      # calculate partial volumes
+      seg <- get_voi_seg(voi, mri_seg)
+      # do pvc
+      fit_res <- scale_amp_molal_pvc(fit_res, w_ref, seg, te, tr)
+    } else if (is.def(w_ref) & !is.def(mri_seg)) {
+      # do straight w scaling default LCM style
+      fit_res <- scale_amp_molar(fit_res, w_ref)
+    } else {
+      # scale to tCr
+      fit_res <- scale_amp_ratio(fit_res, "tCr")
+    }
+  }
   
   return(fit_res)
 }
@@ -100,8 +112,14 @@ svs_1h_batch_analysis <- function(metab_paths, w_ref_paths = NULL,
     w_ref_list <- lapply(w_ref_paths, read_mrs)
   }
   
-  fit_list <- mapply(svs_1h_analysis, metab = metab_list, ref = w_ref_list,
-                     mri_seg = mri_seg_list, MoreArgs = ..., SIMPLIFY = FALSE)
+  if (is.null(mri_seg_paths)) {
+    mri_seg_list <- vector("list", metab_n)
+  } else {
+    mri_seg_list <- lapply(mri_seg_paths, readNifti)
+  }
+  
+  fit_list <- mapply(svs_1h_analysis, metab = metab_list, w_ref = w_ref_list,
+                     mri_seg = mri_seg_list, MoreArgs = list(...), SIMPLIFY = FALSE)
   
   return(fit_list)
 }

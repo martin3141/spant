@@ -20,6 +20,11 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                 " the acquired spectral width. Change the noise_region",
                 " parameter in the fitting options."))
   }
+  
+  # check the basis has the correct number of data points
+  if (length(y) != nrow(basis$data)) {
+    stop("Data points in the basis and acquired data do not match.")
+  }
  
   # zero pad input to twice length
   if (opts$zp) y <- c(y, rep(0, length(y))) 
