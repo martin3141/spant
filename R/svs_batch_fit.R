@@ -3,17 +3,16 @@
 
 #' @export
 svs_1h_analysis <- function(metab, basis, w_ref = NULL, mri_seg = NULL,
-                            mri = NULL, decimate = FALSE, rats_corr = TRUE,
-                            ecc = FALSE, comb_dyns = TRUE, hsvd_filt = FALSE,
-                            scale_amps = TRUE, te = NULL, tr = NULL,
-                            output_dir = NULL) {
+                            mri = NULL, output_dir = NULL, extra = NULL,
+                            decimate = FALSE, rats_corr = TRUE, ecc = FALSE,
+                            comb_dyns = TRUE, hsvd_filt = FALSE,
+                            scale_amps = TRUE, te = NULL, tr = NULL) {
   
-  # TODO check metab is not an mrs_data object first
-  # metab <- as.character(metab)    # possibly needed to stop issues when
-                                    # cbinding fit tables later on
- 
   # read the data file if not already an mrs_data object
   if (class(metab)[[1]] != "mrs_data") metab <- read_mrs(metab)
+  
+  # remove fs_path types as they cause problems with comb_fit_list_fit_tables
+  extra[] = lapply(extra, as.character)
   
   # read the ref data file if not already an mrs_data object
   if (is.def(w_ref) & (class(w_ref)[[1]] != "mrs_data")) {
@@ -60,7 +59,7 @@ svs_1h_analysis <- function(metab, basis, w_ref = NULL, mri_seg = NULL,
   if (hsvd_filt) metab <- hsvd_filt(metab)
   
   # TODO fitting options
-  fit_res <- fit_mrs(metab, basis = basis)
+  fit_res <- fit_mrs(metab, basis = basis, extra = extra)
   
   if (scale_amps) {
     if (is.def(w_ref) & is.def(mri_seg)) {
@@ -96,7 +95,7 @@ svs_1h_analysis <- function(metab, basis, w_ref = NULL, mri_seg = NULL,
 #' @export
 svs_1h_batch_analysis <- function(metab_list, w_ref_list = NULL,
                                   mri_list = NULL, mri_seg_list = NULL,
-                                  output_dir = NULL, ...) {
+                                  output_dir = NULL, extra = NULL, ...) {
   
   # check input it sensible
   metab_n <- length(metab_list)
@@ -117,6 +116,10 @@ svs_1h_batch_analysis <- function(metab_list, w_ref_list = NULL,
     stop("Incorrect number of output_dir_list items.")
   }
   
+  if (is.def(extra) & length(extra) != metab_n) {
+    stop("Incorrect number of rows in extra.")
+  }
+  
   # check file paths exist TODO write a function to return bad paths
   
   if (is.null(w_ref_list)) w_ref_list <- vector("list", metab_n)
@@ -129,8 +132,8 @@ svs_1h_batch_analysis <- function(metab_list, w_ref_list = NULL,
   
   fit_list <- mapply(svs_1h_analysis, metab = metab_list, w_ref = w_ref_list,
                      mri_seg = mri_seg_list, mri = mri_list,
-                     output_dir = output_dir_list,
-                     MoreArgs = list(...), SIMPLIFY = FALSE)
+                     output_dir = output_dir_list, extra = extra,
+                     MoreArgs = list(...), SIMPLIFY = FALSE, USE.NAMES = FALSE)
   
   return(fit_list)
 }
