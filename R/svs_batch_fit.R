@@ -13,10 +13,12 @@ svs_1h_analysis <- function(metab, basis, w_ref = NULL, mri_seg = NULL,
                                     # cbinding fit tables later on
  
   # read the data file if not already an mrs_data object
-  if (class(metab) != "mrs_data") metab <- read_mrs(metab)
+  if (class(metab)[[1]] != "mrs_data") metab <- read_mrs(metab)
   
   # read the ref data file if not already an mrs_data object
-  if (is.def(w_ref) & (class(w_ref) != "mrs_data")) w_ref <- read_mrs(w_ref)
+  if (is.def(w_ref) & (class(w_ref)[[1]] != "mrs_data")) {
+    w_ref <- read_mrs(w_ref)
+  }
   
   if (is.def(mri) & (!("niftiImage" %in% class(mri)))) mri <- readNifti(mri)
   
