@@ -2,11 +2,14 @@
 # include "auto" version which guesses based on the input
 
 #' @export
-svs_1h_analysis <- function(metab, basis, w_ref = NULL, mri_seg = NULL,
+svs_1h_analysis <- function(metab, basis = NULL, w_ref = NULL, mri_seg = NULL,
                             mri = NULL, output_dir = NULL, extra = NULL,
                             decimate = FALSE, rats_corr = TRUE, ecc = FALSE,
                             comb_dyns = TRUE, hsvd_filt = FALSE,
-                            scale_amps = TRUE, te = NULL, tr = NULL) {
+                            scale_amps = TRUE, te = NULL, tr = NULL,
+                            preproc_only = FALSE) {
+  
+  if (!preproc_only & is.null(basis)) stop("basis argument not set")
   
   # read the data file if not already an mrs_data object
   if (class(metab)[[1]] != "mrs_data") metab <- read_mrs(metab)
@@ -57,6 +60,9 @@ svs_1h_analysis <- function(metab, basis, w_ref = NULL, mri_seg = NULL,
   
   # HSVD residual water removal
   if (hsvd_filt) metab <- hsvd_filt(metab)
+  
+  # end here if we're only interested in the preprocessed data
+  if (preproc_only) return(metab)
   
   # TODO fitting options
   fit_res <- fit_mrs(metab, basis = basis, extra = extra)
