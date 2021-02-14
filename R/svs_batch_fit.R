@@ -43,7 +43,7 @@ svs_1h_analysis <- function(metab, basis = NULL, w_ref = NULL, mri_seg = NULL,
   
   # if the spectral width exceeds 20 PPM, then it should be ok
   # to decimate the signal to improve analysis speed
-  if (is.null(decimate) & ((fs(metab) / matab$ft * 1e6) > 20)) {
+  if (is.null(decimate) & ((fs(metab) / metab$ft * 1e6) > 20)) {
     decimate <- TRUE
   } else {
     decimate <- FALSE
