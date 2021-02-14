@@ -4,7 +4,7 @@
 #' @export
 svs_1h_analysis <- function(metab, basis = NULL, w_ref = NULL, mri_seg = NULL,
                             mri = NULL, output_dir = NULL, extra = NULL,
-                            decimate = FALSE, rats_corr = TRUE, ecc = FALSE,
+                            decimate = NULL, rats_corr = TRUE, ecc = FALSE,
                             comb_dyns = TRUE, hsvd_filt = FALSE,
                             scale_amps = TRUE, te = NULL, tr = NULL,
                             preproc_only = FALSE) {
@@ -41,7 +41,14 @@ svs_1h_analysis <- function(metab, basis = NULL, w_ref = NULL, mri_seg = NULL,
     }
   }
   
-  # decimate x2 if requested
+  # if the spectral width exceeds 20 PPM, then it should be ok
+  # to decimate the signal to improve analysis speed
+  if (is.null(decimate) & ((fs(metab) / matab$ft * 1e6) > 20)) {
+    decimate <- TRUE
+  } else {
+    decimate <- FALSE
+  }
+  
   if (decimate) {
     metab <- decimate_mrs_fd(metab)
     if (!is.null(w_ref)) w_ref <- decimate_mrs_fd(w_ref)
@@ -88,7 +95,6 @@ svs_1h_analysis <- function(metab, basis = NULL, w_ref = NULL, mri_seg = NULL,
       fit_res <- scale_amp_ratio(fit_res, "tCr")
     }
   }
-  
   return(fit_res)
 }
 
