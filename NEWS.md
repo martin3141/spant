@@ -4,6 +4,7 @@ fit_result objects as a data frame.
 * New functions (combine_fit_XXX) for working with multiple fit results
 contained within a list structure.
 * Basis set and noise region are now checked for validity in ABfit.
+* Added spant_abfit_benchmark function.
 
 # spant 1.10.0
 * Fix for NIfTI MRS reader/writer.
