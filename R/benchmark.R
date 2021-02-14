@@ -26,7 +26,7 @@ spant_abfit_benchmark <- function(noise_reps = 10, return_res = FALSE,
   start_time <- Sys.time()
   fit_res    <- fit_mrs(metab_rep, sim_res$basis, opts = opts)
   end_time   <- Sys.time()
-  diff_time  <- as.double(end_time - start_time)
+  diff_time  <- as.double(end_time - start_time, units = "secs")
   
   # output results
   cat("Total fit time    :", diff_time, "seconds.\n")
