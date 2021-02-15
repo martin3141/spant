@@ -467,5 +467,7 @@ circ_mask <- function(d, n, offset = 1) {
   return(dist <= d / 2)
 }
 
-#' @export
+#' Check if an object is defined, which is the same as being not NULL.
+#' @param x object to test for being NULL.
+#' @return logical value.
 is.def <- function(x) !is.null(x)

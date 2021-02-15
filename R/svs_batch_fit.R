@@ -1,18 +1,22 @@
 # TODO add option to explicity specify the type of metabolite scaling to perform
 # include "auto" version which guesses based on the input
 
+#' Standard SVS 1H brain analysis pipeline.
 #' @export
-svs_1h_analysis <- function(metab, basis = NULL, w_ref = NULL, mri_seg = NULL,
-                            mri = NULL, output_dir = NULL, extra = NULL,
-                            decimate = NULL, rats_corr = TRUE, ecc = FALSE,
-                            comb_dyns = TRUE, hsvd_filt = FALSE,
-                            scale_amps = TRUE, te = NULL, tr = NULL,
-                            preproc_only = FALSE) {
+svs_1h_brain_analysis <- function(metab, basis = NULL, w_ref = NULL,
+                                  mri_seg = NULL, mri = NULL, output_dir = NULL,
+                                  extra = NULL, decimate = NULL,
+                                  rats_corr = TRUE, ecc = FALSE,
+                                  comb_dyns = TRUE, hsvd_filt = FALSE,
+                                  scale_amps = TRUE, te = NULL, tr = NULL,
+                                  preproc_only = FALSE) {
   
   if (!preproc_only & is.null(basis)) stop("basis argument not set")
   
   # read the data file if not already an mrs_data object
   if (class(metab)[[1]] != "mrs_data") metab <- read_mrs(metab)
+  
+  # TODO check for combined metab + water ref. data, eg GE
   
   # remove fs_path types as they cause problems with comb_fit_list_fit_tables
   extra[] = lapply(extra, as.character)
@@ -101,15 +105,28 @@ svs_1h_analysis <- function(metab, basis = NULL, w_ref = NULL, mri_seg = NULL,
 # TODO
 # what if metab fname results in metab + ref file, eg GE data?
 # options to add, fit_opts, fit_method, format (GE, Siemens etc)
-# allow lists of mrs_data objects, or file paths as input
-# add extra option for id vars
 
+#' Batch interface to the standard SVS 1H brain analysis pipeline.
+#' @param metab_list a list of filepaths or mrs_data objects containing MRS 
+#' metabolite data.
+#' @param w_ref_list a list of filepaths or mrs_data objects containing MRS 
+#' water reference data.
+#' @param mri_list a list of filepaths or nifti objects containing anatomical
+#' MRI data.
+#' @param mri_seg_list a list of filepaths or nifti objects containing segmented
+#' MRI data.
+#' @param output_dir a list of filepaths to output fitting results.
+#' @param extra a data.frame with one row, containing additional information to
+#' be attached to the fit results table.
+#' @param ... additional options to be passed to the svs_1h_brain_analysis
+#' function.
+#' @return a list of fit_result objects.
 #' @export
-svs_1h_batch_analysis <- function(metab_list, w_ref_list = NULL,
-                                  mri_list = NULL, mri_seg_list = NULL,
-                                  output_dir = NULL, extra = NULL, ...) {
+svs_1h_brain_batch_analysis <- function(metab_list, w_ref_list = NULL,
+                                        mri_list = NULL, mri_seg_list = NULL,
+                                        output_dir = NULL, extra = NULL, ...) {
   
-  # check input it sensible
+  # check input is sensible
   metab_n <- length(metab_list)
   
   if (is.def(w_ref_list) & length(w_ref_list) != metab_n) {
@@ -124,7 +141,7 @@ svs_1h_batch_analysis <- function(metab_list, w_ref_list = NULL,
     stop("Incorrect number of mri_seg_list items.")
   }
   
-  if (is.def(output_dir) & length(output_dir) != metab_n) {
+  if (is.def(output_dir_list) & length(output_dir_list) != metab_n) {
     stop("Incorrect number of output_dir_list items.")
   }
   
@@ -140,10 +157,10 @@ svs_1h_batch_analysis <- function(metab_list, w_ref_list = NULL,
   
   if (is.null(mri_list)) mri_list <- vector("list", metab_n)
   
-  if (is.null(output_dir)) output_dir_list <- vector("list", metab_n)
+  if (is.null(output_dir_list)) output_dir_list <- vector("list", metab_n)
   
-  fit_list <- mapply(svs_1h_analysis, metab = metab_list, w_ref = w_ref_list,
-                     mri_seg = mri_seg_list, mri = mri_list,
+  fit_list <- mapply(svs_1h_brain_analysis, metab = metab_list,
+                     w_ref = w_ref_list, mri_seg = mri_seg_list, mri = mri_list,
                      output_dir = output_dir_list, extra = extra,
                      MoreArgs = list(...), SIMPLIFY = FALSE, USE.NAMES = FALSE)
   

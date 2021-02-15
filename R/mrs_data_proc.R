@@ -289,7 +289,7 @@ mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
   return(mrs_data)
 }
 
-#' Simulate a time-domain mrs_data object containing simulated Gaussian noise.
+#' Simulate an mrs_data object containing simulated Gaussian noise.
 #' @param sd standard deviation of the noise.
 #' @param fs sampling frequency in Hz.
 #' @param ft transmitter frequency in Hz.

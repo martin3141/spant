@@ -1,3 +1,8 @@
+#' Simulate and fit some spectra with ABfit for benchmarking purposes. Basic
+#' timing and performance metrics will be printed.
+#' @param noise_reps number of spectra to fit with differing noise samples.
+#' @param return_res return a list of fit_result objects.
+#' @param opts ABfit options structure.
 #' @export
 spant_abfit_benchmark <- function(noise_reps = 10, return_res = FALSE,
                                   opts = abfit_opts()) {

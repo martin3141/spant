@@ -2,7 +2,7 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{sim_noise}
 \alias{sim_noise}
-\title{Simulate a time-domain mrs_data object containing simulated Gaussian noise.}
+\title{Simulate an mrs_data object containing simulated Gaussian noise.}
 \usage{
 sim_noise(
   sd = 0.1,
@@ -33,5 +33,5 @@ sim_noise(
 mrs_data object.
 }
 \description{
-Simulate a time-domain mrs_data object containing simulated Gaussian noise.
+Simulate an mrs_data object containing simulated Gaussian noise.
 }
