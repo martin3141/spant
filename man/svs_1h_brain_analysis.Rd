@@ -23,6 +23,48 @@ svs_1h_brain_analysis(
   preproc_only = FALSE
 )
 }
+\arguments{
+\item{metab}{filepath or mrs_data object containing MRS metabolite data.}
+
+\item{basis}{basis set object to use for analysis.}
+
+\item{w_ref}{filepath or mrs_data object containing MRS water reference data.}
+
+\item{mri_seg}{filepath or nifti object containing segmented MRI data.}
+
+\item{mri}{filepath or nifti object containing anatomical MRI data.}
+
+\item{output_dir}{directory path to output fitting results.}
+
+\item{extra}{data.frame with one row containing additional information to be
+attached to the fit results table.}
+
+\item{decimate}{option to decimate the input data by a factor of two. The
+default value of NULL does not perform decimation unless the spectral width
+is greater than 20 PPM.}
+
+\item{rats_corr}{option to perform rats correction, defaults to TRUE.}
+
+\item{ecc}{option to perform water reference based eddy current correction,
+defaults to FALSE.}
+
+\item{comb_dyns}{option to combine dynamic scans, defaults to TRUE.}
+
+\item{hsvd_filt}{option to apply hsvd water removal, defaults to FALSE.}
+
+\item{scale_amps}{option to scale metabolite amplitude estimates, defaults to
+TRUE.}
+
+\item{te}{metabolite mrs data echo time in seconds.}
+
+\item{tr}{metabolite mrs data repetition time in seconds.}
+
+\item{preproc_only}{only perform the preprocessing steps and omit fitting.
+The preprocessed metabolite data will be returned in this case.}
+}
+\value{
+a fit_result or mrs_data object depending on the preproc_only option.
+}
 \description{
 Standard SVS 1H brain analysis pipeline.
 }

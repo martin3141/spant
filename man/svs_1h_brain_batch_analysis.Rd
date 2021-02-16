@@ -7,30 +7,30 @@
 svs_1h_brain_batch_analysis(
   metab_list,
   w_ref_list = NULL,
-  mri_list = NULL,
   mri_seg_list = NULL,
+  mri_list = NULL,
   output_dir = NULL,
   extra = NULL,
   ...
 )
 }
 \arguments{
-\item{metab_list}{a list of filepaths or mrs_data objects containing MRS
+\item{metab_list}{list of file paths or mrs_data objects containing MRS
 metabolite data.}
 
-\item{w_ref_list}{a list of filepaths or mrs_data objects containing MRS
+\item{w_ref_list}{list of file paths or mrs_data objects containing MRS
 water reference data.}
 
-\item{mri_list}{a list of filepaths or nifti objects containing anatomical
+\item{mri_seg_list}{list of file paths or nifti objects containing segmented
 MRI data.}
 
-\item{mri_seg_list}{a list of filepaths or nifti objects containing segmented
+\item{mri_list}{list of file paths or nifti objects containing anatomical
 MRI data.}
 
-\item{output_dir}{a list of filepaths to output fitting results.}
+\item{output_dir}{list of directory paths to output fitting results.}
 
-\item{extra}{a data.frame with one row, containing additional information to
-be attached to the fit results table.}
+\item{extra}{list of data.frames with one row containing additional
+information to be attached to the fit results table.}
 
 \item{...}{additional options to be passed to the svs_1h_brain_analysis
 function.}

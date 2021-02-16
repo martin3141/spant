@@ -1,7 +1,30 @@
-# TODO add option to explicity specify the type of metabolite scaling to perform
+# TODO add option to explicitly specify the type of metabolite scaling to perform
 # include "auto" version which guesses based on the input
 
 #' Standard SVS 1H brain analysis pipeline.
+#' @param metab filepath or mrs_data object containing MRS metabolite data.
+#' @param basis basis set object to use for analysis.
+#' @param w_ref filepath or mrs_data object containing MRS water reference data.
+#' @param mri_seg filepath or nifti object containing segmented MRI data.
+#' @param mri filepath or nifti object containing anatomical MRI data.
+#' @param output_dir directory path to output fitting results.
+#' @param extra data.frame with one row containing additional information to be
+#' attached to the fit results table.
+#' @param decimate option to decimate the input data by a factor of two. The 
+#' default value of NULL does not perform decimation unless the spectral width
+#' is greater than 20 PPM.
+#' @param rats_corr option to perform rats correction, defaults to TRUE.
+#' @param ecc option to perform water reference based eddy current correction,
+#' defaults to FALSE.
+#' @param comb_dyns option to combine dynamic scans, defaults to TRUE.
+#' @param hsvd_filt option to apply hsvd water removal, defaults to FALSE.
+#' @param scale_amps option to scale metabolite amplitude estimates, defaults to
+#' TRUE.
+#' @param te metabolite mrs data echo time in seconds.
+#' @param tr metabolite mrs data repetition time in seconds.
+#' @param preproc_only only perform the preprocessing steps and omit fitting.
+#' The preprocessed metabolite data will be returned in this case.
+#' @return a fit_result or mrs_data object depending on the preproc_only option.
 #' @export
 svs_1h_brain_analysis <- function(metab, basis = NULL, w_ref = NULL,
                                   mri_seg = NULL, mri = NULL, output_dir = NULL,
@@ -107,23 +130,23 @@ svs_1h_brain_analysis <- function(metab, basis = NULL, w_ref = NULL,
 # options to add, fit_opts, fit_method, format (GE, Siemens etc)
 
 #' Batch interface to the standard SVS 1H brain analysis pipeline.
-#' @param metab_list a list of filepaths or mrs_data objects containing MRS 
+#' @param metab_list list of file paths or mrs_data objects containing MRS 
 #' metabolite data.
-#' @param w_ref_list a list of filepaths or mrs_data objects containing MRS 
+#' @param w_ref_list list of file paths or mrs_data objects containing MRS 
 #' water reference data.
-#' @param mri_list a list of filepaths or nifti objects containing anatomical
+#' @param mri_seg_list list of file paths or nifti objects containing segmented
 #' MRI data.
-#' @param mri_seg_list a list of filepaths or nifti objects containing segmented
+#' @param mri_list list of file paths or nifti objects containing anatomical
 #' MRI data.
-#' @param output_dir a list of filepaths to output fitting results.
-#' @param extra a data.frame with one row, containing additional information to
-#' be attached to the fit results table.
+#' @param output_dir list of directory paths to output fitting results.
+#' @param extra list of data.frames with one row containing additional
+#' information to be attached to the fit results table.
 #' @param ... additional options to be passed to the svs_1h_brain_analysis
 #' function.
 #' @return a list of fit_result objects.
 #' @export
 svs_1h_brain_batch_analysis <- function(metab_list, w_ref_list = NULL,
-                                        mri_list = NULL, mri_seg_list = NULL,
+                                        mri_seg_list = NULL, mri_list = NULL,
                                         output_dir = NULL, extra = NULL, ...) {
   
   # check input is sensible
