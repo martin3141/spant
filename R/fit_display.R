@@ -50,8 +50,12 @@ plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
   }
   
   if (is.null(xlim)) {
-    if ((!is.null(opts$ppm_left)) & (!is.null(opts$ppm_right))) {
-      xlim <- c(opts$ppm_left, opts$ppm_right)
+    if (exists("opts$ppm_left")) {
+      if ((!is.null(opts$ppm_left)) & (!is.null(opts$ppm_right))) {
+        xlim <- c(opts$ppm_left, opts$ppm_right)
+      } else {
+        xlim <- rev(range(x$PPMScale))
+      }
     } else {
       xlim <- rev(range(x$PPMScale))
     }

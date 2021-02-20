@@ -446,7 +446,7 @@ lcmodel_fit <- function(element, temp_mrs, basis_file, opts) {
   sink()
   
   # used for debugging
-  #file.copy(control_f, "~/control.file")
+  #file.copy(control_f, "~/control.file", overwrite = TRUE)
   
   # run LCModel
   cmd <- paste(getOption("spant.lcm_cmd"), "<", control_f)
@@ -462,7 +462,7 @@ lcmodel_fit <- function(element, temp_mrs, basis_file, opts) {
   }
   
   # used for debugging
-  #file.copy(coord_f, "~/coord.file")
+  #file.copy(coord_f, "~/coord.file", overwrite = TRUE)
   
   coord_res <- read_lcm_coord(coord_f)
   res_tab <- coord_res$res_tab
