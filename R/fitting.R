@@ -424,6 +424,7 @@ lcmodel_fit <- function(element, temp_mrs, basis_file, opts) {
   
   sink(control_f)
   cat("$LCMODL\n")
+  cat(paste0("key=210387309\n"))
   cat(paste0("nunfil=", dim(metab$data)[7], "\n"))
   cat(paste0("deltat=", metab$resolution[7],"\n"))
   cat(paste0("hzpppm=", metab$ft / 1e6, "\n"))
@@ -449,9 +450,11 @@ lcmodel_fit <- function(element, temp_mrs, basis_file, opts) {
   
   # run LCModel
   cmd <- paste(getOption("spant.lcm_cmd"), "<", control_f)
-  res = system(cmd, intern = TRUE, ignore.stderr = TRUE, ignore.stdout = TRUE)
+  res <- system(cmd, intern = TRUE, ignore.stderr = TRUE, ignore.stdout = TRUE)
   
+  # used for debugging 
   #print(cmd)
+  
   if (!file.exists(coord_f)) {
     print(res)
     print(cmd)
@@ -528,14 +531,14 @@ read_lcm_coord <- function(coord_f) {
     }
   }
   
-  FWHM <- as.double(strsplit(trimws(line_reader[signals + 8]),"  *")[[1]][3])
-  SNR <- as.double(strsplit(trimws(line_reader[signals + 8]),"  *")[[1]][7])
+  FWHM <- as.double(strsplit(trimws(line_reader[signals + 6]),"  *")[[1]][3])
+  SNR <- as.double(strsplit(trimws(line_reader[signals + 6]),"  *")[[1]][7])
   diags <- data.frame(FWHM = FWHM, SNR = SNR)
   
   #print(coord_f)  
   # -1 width needed to avoid issues when the metab name is
   # prefixed with a + or -
-  metab_table <- utils::read.fwf(coord_f, widths = c(9, 5, 8, -1, 40), skip = 6, 
+  metab_table <- utils::read.fwf(coord_f, widths = c(9, 5, 8, -1, 40), skip = 4, 
                                  n = signals, header = FALSE, 
                                  col.names = c("amp", "SD", "TCr_ratio", "Metab")
                                  , row.names = "Metab")
@@ -571,10 +574,10 @@ read_lcm_coord <- function(coord_f) {
     colnames <- c(colnames, name)
     n = n + 1
   }
-  colnames[1] = "PPMScale"
-  colnames[2] = "Data"
-  colnames[3] = "Fit"
-  colnames[4] = "Baseline"
+  colnames[1] <- "PPMScale"
+  colnames[2] <- "Data"
+  colnames[3] <- "Fit"
+  colnames[4] <- "Baseline"
   names(fit_tab_list) <- colnames
   fit_tab <- stats::na.omit(as.data.frame(fit_tab_list))
   fit_tab$Fit <- fit_tab$Fit - fit_tab$Baseline
