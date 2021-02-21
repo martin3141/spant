@@ -455,10 +455,13 @@ lcmodel_fit <- function(element, temp_mrs, basis_file, opts) {
   # used for debugging 
   #print(cmd)
   
-  # res <- system(cmd, intern = TRUE, ignore.stderr = TRUE, ignore.stdout = TRUE)
   
-  # good for windows
-  res <- shell(cmd, intern = TRUE, ignore.stderr = TRUE, ignore.stdout = TRUE)
+  if(.Platform$OS.type == "unix") {
+    res <- system(cmd, intern = TRUE, ignore.stderr = TRUE,
+                  ignore.stdout = TRUE)
+  } else {
+    res <- shell(cmd, intern = TRUE, ignore.stderr = TRUE, ignore.stdout = TRUE)
+  }
   
   if (!file.exists(coord_f)) {
     print(res)
