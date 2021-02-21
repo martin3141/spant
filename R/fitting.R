@@ -40,8 +40,9 @@
 #' in subsequent analysis steps, eg id or grouping variables.
 #' @return MRS analysis object.
 #' @examples
-#' fname <- system.file("extdata","philips_spar_sdat_WS.SDAT",package="spant")
-#' svs <- read_mrs(fname, format="spar_sdat")
+#' fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package =
+#' "spant")
+#' svs <- read_mrs(fname)
 #' \dontrun{
 #' basis <- sim_basis_1h_brain_press(svs)
 #' fit_result <- fit_mrs(svs, basis)
@@ -450,10 +451,14 @@ lcmodel_fit <- function(element, temp_mrs, basis_file, opts) {
   
   # run LCModel
   cmd <- paste(getOption("spant.lcm_cmd"), "<", control_f)
-  res <- system(cmd, intern = TRUE, ignore.stderr = TRUE, ignore.stdout = TRUE)
   
   # used for debugging 
   #print(cmd)
+  
+  # res <- system(cmd, intern = TRUE, ignore.stderr = TRUE, ignore.stdout = TRUE)
+  
+  # good for windows
+  res <- shell(cmd, intern = TRUE, ignore.stderr = TRUE, ignore.stdout = TRUE)
   
   if (!file.exists(coord_f)) {
     print(res)
