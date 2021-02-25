@@ -455,7 +455,6 @@ lcmodel_fit <- function(element, temp_mrs, basis_file, opts) {
   # used for debugging 
   #print(cmd)
   
-  
   if(.Platform$OS.type == "unix") {
     res <- system(cmd, intern = TRUE, ignore.stderr = TRUE,
                   ignore.stdout = TRUE)
