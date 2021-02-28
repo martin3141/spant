@@ -9,7 +9,7 @@ svs_1h_brain_batch_analysis(
   w_ref_list = NULL,
   mri_seg_list = NULL,
   mri_list = NULL,
-  output_dir = NULL,
+  output_dir_list = NULL,
   extra = NULL,
   ...
 )
@@ -27,10 +27,10 @@ MRI data.}
 \item{mri_list}{list of file paths or nifti objects containing anatomical
 MRI data.}
 
-\item{output_dir}{list of directory paths to output fitting results.}
+\item{output_dir_list}{list of directory paths to output fitting results.}
 
-\item{extra}{list of data.frames with one row containing additional
-information to be attached to the fit results table.}
+\item{extra}{a data frame with the same number of rows as metab_list,
+containing additional information to be attached to the fit results table.}
 
 \item{...}{additional options to be passed to the svs_1h_brain_analysis
 function.}

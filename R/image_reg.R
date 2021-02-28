@@ -371,11 +371,17 @@ get_mrs_affine <- function(mrs_data, x_pos = 1, y_pos = 1, z_pos = 1) {
 
 # check two nifti images are in the same space
 check_geom <- function(a, b) {
-  eq_xform <- max(Mod(RNifti::xform(a) - RNifti::xform(b))) < 1e-6
+  eq_xform <- max(Mod(RNifti::xform(a) - RNifti::xform(b))) < 1e-5
   eq_dim <- identical(dim(a), dim(b))
   eq_pix_dim <- identical(RNifti::pixdim(a), RNifti::pixdim(b))
   
   if ( !eq_xform | !eq_dim | !eq_pix_dim ) {
+    print(RNifti::xform(a))
+    print(RNifti::xform(b))
+    print(dim(a))
+    print(dim(b))
+    print(RNifti::pixdim(a))
+    print(RNifti::pixdim(b))
     stop("Inconsistant image geometry.")
   }
 } 

@@ -44,18 +44,27 @@ svs_1h_brain_analysis <- function(metab, basis = NULL, w_ref = NULL,
   # remove fs_path types as they cause problems with comb_fit_list_fit_tables
   extra[] = lapply(extra, as.character)
   
+  # create the output dir if it doesn't exist
+  if (is.def(output_dir)) {
+    if(!dir.exists(output_dir)) dir.create(output_dir)
+  }
+  
   # read the ref data file if not already an mrs_data object
   if (is.def(w_ref) & (class(w_ref)[[1]] != "mrs_data")) {
     w_ref <- read_mrs(w_ref)
   }
   
-  if (is.def(mri) & (!("niftiImage" %in% class(mri)))) mri <- readNifti(mri)
+  if (is.def(mri) & (!("niftiImage" %in% class(mri)))) {
+    mri <- readNifti(mri)
+  }
   
   if (is.def(mri_seg) & (!("niftiImage" %in% class(mri_seg)))) {
     mri_seg <- readNifti(mri_seg)
   }
   
-  # TODO reorient images?
+  if (is.def(mri)) RNifti::orientation(mri) <- "RAS"
+  
+  if (is.def(mri_seg)) RNifti::orientation(mri_seg) <- "RAS"
   
   # combine coils if needed
   if (Ncoils(metab) > 1) {
@@ -82,7 +91,7 @@ svs_1h_brain_analysis <- function(metab, basis = NULL, w_ref = NULL,
   }
   
   # rats
-  if (rats_corr) metab <- rats(metab)$corrected
+  if (rats_corr & (Ndyns(metab)> 1)) metab <- rats(metab)$corrected
   
   # TODO plot of shifts?
   
@@ -101,6 +110,21 @@ svs_1h_brain_analysis <- function(metab, basis = NULL, w_ref = NULL,
   # TODO fitting options
   fit_res <- fit_mrs(metab, basis = basis, extra = extra)
   
+  # plot the fit result and output csv
+  if (is.def(output_dir)) {
+    grDevices::pdf(file.path(output_dir, "fit_plot.pdf"))
+    plot(fit_res)
+    grDevices::dev.off()
+    utils::write.csv(fit_res$res_tab, file.path(output_dir, "fit_res.csv"))
+  }
+  
+  # plot the voxel location on the mri
+  if (is.def(mri) & is.def(output_dir)) {
+    # generate the svs voi in the segmented image space
+    voi <- get_svs_voi(metab, mri)
+    plot_voi_overlay(mri, voi, file.path(output_dir, "vox_plot.png"))
+  }
+  
   if (scale_amps) {
     if (is.def(w_ref) & is.def(mri_seg)) {
       
@@ -109,11 +133,18 @@ svs_1h_brain_analysis <- function(metab, basis = NULL, w_ref = NULL,
       if (is.null(tr)) stop("tr not given, amplitude scaling failed")
       
       # generate the svs voi in the segmented image space
-      voi <- get_svs_voi(metab, mri_seg)
+      voi_seg <- get_svs_voi(metab, mri_seg)
+      
       # calculate partial volumes
-      seg <- get_voi_seg(voi, mri_seg)
+      seg <- get_voi_seg(voi_seg, mri_seg)
       # do pvc
       fit_res <- scale_amp_molal_pvc(fit_res, w_ref, seg, te, tr)
+      
+      if (is.def(output_dir)) {
+        plot_voi_overlay_seg(mri_seg, voi_seg, file.path(output_dir,
+                                                     "vox_seg_plot.png"))
+      }
+      
     } else if (is.def(w_ref) & !is.def(mri_seg)) {
       # do straight w scaling default LCM style
       fit_res <- scale_amp_molar(fit_res, w_ref)
@@ -138,16 +169,17 @@ svs_1h_brain_analysis <- function(metab, basis = NULL, w_ref = NULL,
 #' MRI data.
 #' @param mri_list list of file paths or nifti objects containing anatomical
 #' MRI data.
-#' @param output_dir list of directory paths to output fitting results.
-#' @param extra list of data.frames with one row containing additional
-#' information to be attached to the fit results table.
+#' @param output_dir_list list of directory paths to output fitting results.
+#' @param extra a data frame with the same number of rows as metab_list,
+#' containing additional information to be attached to the fit results table.
 #' @param ... additional options to be passed to the svs_1h_brain_analysis
 #' function.
 #' @return a list of fit_result objects.
 #' @export
 svs_1h_brain_batch_analysis <- function(metab_list, w_ref_list = NULL,
                                         mri_seg_list = NULL, mri_list = NULL,
-                                        output_dir = NULL, extra = NULL, ...) {
+                                        output_dir_list = NULL, extra = NULL, 
+                                        ...) {
   
   # check input is sensible
   metab_n <- length(metab_list)
@@ -168,8 +200,11 @@ svs_1h_brain_batch_analysis <- function(metab_list, w_ref_list = NULL,
     stop("Incorrect number of output_dir_list items.")
   }
   
-  if (is.def(extra) & length(extra) != metab_n) {
+  if (is.def(extra) & nrow(extra) != metab_n) {
     stop("Incorrect number of rows in extra.")
+  } else {
+    # split into a list suitable for mapply
+    extra <- split(extra, seq(nrow(extra)))
   }
   
   # check file paths exist TODO write a function to return bad paths
@@ -181,6 +216,8 @@ svs_1h_brain_batch_analysis <- function(metab_list, w_ref_list = NULL,
   if (is.null(mri_list)) mri_list <- vector("list", metab_n)
   
   if (is.null(output_dir_list)) output_dir_list <- vector("list", metab_n)
+  
+  if (is.null(extra)) extra <- vector("list", metab_n)
   
   fit_list <- mapply(svs_1h_brain_analysis, metab = metab_list,
                      w_ref = w_ref_list, mri_seg = mri_seg_list, mri = mri_list,
