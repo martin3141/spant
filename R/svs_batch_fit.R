@@ -32,7 +32,8 @@ svs_1h_brain_analysis <- function(metab, basis = NULL, w_ref = NULL,
                                   rats_corr = TRUE, ecc = FALSE,
                                   comb_dyns = TRUE, hsvd_filt = FALSE,
                                   scale_amps = TRUE, te = NULL, tr = NULL,
-                                  preproc_only = FALSE) {
+                                  preproc_only = FALSE, method = "ABFIT",
+                                  opts = NULL) {
   
   if (!preproc_only & is.null(basis)) stop("basis argument not set")
   
@@ -107,8 +108,8 @@ svs_1h_brain_analysis <- function(metab, basis = NULL, w_ref = NULL,
   # end here if we're only interested in the preprocessed data
   if (preproc_only) return(metab)
   
-  # TODO fitting options
-  fit_res <- fit_mrs(metab, basis = basis, extra = extra)
+  fit_res <- fit_mrs(metab, basis = basis, extra = extra, method = method,
+                     opts = opts)
   
   # plot the fit result and output csv
   if (is.def(output_dir)) {
