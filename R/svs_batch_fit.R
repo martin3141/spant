@@ -25,6 +25,8 @@
 #' @param preproc_only only perform the preprocessing steps and omit fitting.
 #' The preprocessed metabolite data will be returned in this case.
 #' @return a fit_result or mrs_data object depending on the preproc_only option.
+#' @param method analysis method to use, see fit_mrs help.
+#' @param opts options to pass to the analysis method.
 #' @export
 svs_1h_brain_analysis <- function(metab, basis = NULL, w_ref = NULL,
                                   mri_seg = NULL, mri = NULL, output_dir = NULL,

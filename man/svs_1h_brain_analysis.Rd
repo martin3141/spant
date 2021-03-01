@@ -20,7 +20,9 @@ svs_1h_brain_analysis(
   scale_amps = TRUE,
   te = NULL,
   tr = NULL,
-  preproc_only = FALSE
+  preproc_only = FALSE,
+  method = "ABFIT",
+  opts = NULL
 )
 }
 \arguments{
@@ -61,6 +63,10 @@ TRUE.}
 
 \item{preproc_only}{only perform the preprocessing steps and omit fitting.
 The preprocessed metabolite data will be returned in this case.}
+
+\item{method}{analysis method to use, see fit_mrs help.}
+
+\item{opts}{options to pass to the analysis method.}
 }
 \value{
 a fit_result or mrs_data object depending on the preproc_only option.
