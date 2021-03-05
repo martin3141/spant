@@ -620,6 +620,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   
   if (opts$auto_bl_flex) diags <- cbind(diags, resid_vec_frame)
   
+  p()
+  
   # construct output
   list(amps = amps, crlbs = t(crlbs_out), diags = diags,
        fit = fit_frame)

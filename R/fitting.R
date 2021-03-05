@@ -108,7 +108,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
     
     acq_paras <- get_acq_paras(metab)
     
-    plyr <- TRUE
+    plyr <- FALSE
     if (plyr) {
       result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6), abfit,
                                  acq_paras, basis, opts,
@@ -117,8 +117,17 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
                                                  .packages = "spant"),
                                  .progress = progress, .inform = FALSE)
     } else {
-      result_list <- apply(metab$data, c(2, 3, 4, 5, 6), abfit, acq_paras,
-                           basis, opts)
+      #result_list <- apply(metab$data, c(2, 3, 4, 5, 6), abfit, acq_paras,
+      #                     basis, opts)
+      
+      # try
+      # https://github.com/HenrikBengtsson/progressr
+    
+      #p <<- progressor(along = metab$data)
+      p <<- progressor(4)
+      
+      result_list <- future.apply::future_apply(metab$data, c(2, 3, 4, 5, 6),
+                                                abfit, acq_paras, basis, opts)
       labs <- which(array(TRUE, dim(result_list)), arr.ind = TRUE)
       result_list <- result_list[,,,,]
       attr(result_list, "split_labels") <- labs
