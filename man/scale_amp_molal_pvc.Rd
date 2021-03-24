@@ -4,7 +4,7 @@
 \alias{scale_amp_molal_pvc}
 \title{Apply partial volume correction to a fitting result object.}
 \usage{
-scale_amp_molal_pvc(fit_result, ref_data, p_vols, te, tr)
+scale_amp_molal_pvc(fit_result, ref_data, p_vols, te, tr, ...)
 }
 \arguments{
 \item{fit_result}{result object generated from fitting.}
@@ -16,6 +16,8 @@ scale_amp_molal_pvc(fit_result, ref_data, p_vols, te, tr)
 \item{te}{the MRS TE in seconds.}
 
 \item{tr}{the MRS TR in seconds.}
+
+\item{...}{additional arguments to get_td_amp function.}
 }
 \value{
 A \code{fit_result} object with a rescaled results table.

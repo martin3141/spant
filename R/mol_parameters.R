@@ -257,9 +257,8 @@ get_gaba_paras <- function(lw = NULL, lg = 0, ...) {
 }
 
 get_gaba_rt_paras <- function(lw = NULL, lg = 0, ...) {
-  if (is.null(lw)) lw = 2
+  if (is.null(lw)) lw = 0.5 
   nucleus <- rep("1H", 6)
-  #chem_shift <- c(3.0128, 3.0128, 1.889, 1.889, 2.284, 2.284)
   chem_shift <- c(3.005, 3.005, 1.889, 1.889, 2.284, 2.284)
   j_coupling_mat <- matrix(0, 6, 6)
   j_coupling_mat[2,1] <- -12.021
@@ -875,7 +874,7 @@ get_lac_paras <- function(lw = NULL, lg = 0, ...) {
 }
 
 get_lac_rt_paras <- function(lw = NULL, lg = 0, ...) {
-  if (is.null(lw)) lw = 2
+  if (is.null(lw)) lw = 0.5 
   nucleus <- rep("1H", 4)
   chem_shift <- c(4.0974, 1.3142, 1.3142, 1.3142)
   j_coupling_mat <- matrix(0, 4, 4)
@@ -924,7 +923,7 @@ get_glu_paras <- function(lw = NULL, lg = 0, ...) {
 }
 
 get_glu_rt_paras <- function(lw = NULL, lg = 0, ...) {
-  if (is.null(lw)) lw = 2
+  if (is.null(lw)) lw = 0.5 
   nucleus <- rep("1H", 5)
   chem_shift <- c(3.75, 2.0475, 2.1200, 2.3378, 2.352)
   j_coupling_mat <- matrix(0,5,5)

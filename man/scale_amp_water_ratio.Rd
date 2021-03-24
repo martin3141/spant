@@ -4,12 +4,14 @@
 \alias{scale_amp_water_ratio}
 \title{Scale metabolite amplitudes as a ratio to the unsuppressed water amplitude.}
 \usage{
-scale_amp_water_ratio(fit_result, ref_data)
+scale_amp_water_ratio(fit_result, ref_data, ...)
 }
 \arguments{
 \item{fit_result}{a result object generated from fitting.}
 
 \item{ref_data}{a water reference MRS data object.}
+
+\item{...}{additional arguments to get_td_amp function.}
 }
 \value{
 a \code{fit_result} object with a rescaled results table.

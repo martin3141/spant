@@ -4,9 +4,10 @@
 #' @param p_vols a numeric vector of partial volumes.
 #' @param te the MRS TE in seconds.
 #' @param tr the MRS TR in seconds.
+#' @param ... additional arguments to get_td_amp function.
 #' @return A \code{fit_result} object with a rescaled results table.
 #' @export
-scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr){
+scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr, ...){
   
   if (!identical(dim(fit_result$data$data)[2:6], dim(ref_data$data)[2:6])) {
     stop("Mismatch between fit result and reference data dimensions.")
@@ -25,7 +26,7 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr){
   
   amp_cols <- fit_result$amp_cols
   
-  w_amp <- as.numeric(get_td_amp(ref_data))
+  w_amp <- as.numeric(get_td_amp(ref_data, ...))
   
   if (length(w_amp) != nrow(fit_result$res_tab)) {
     stop("Mismatch between fit result and reference data.")
@@ -61,9 +62,11 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr){
 #' @param ref_data water reference MRS data object.
 #' @param w_att water attenuation factor (default = 0.7).
 #' @param w_conc assumed water concentration (default = 35880).
+#' @param ... additional arguments to get_td_amp function.
 #' @return a \code{fit_result} object with a rescaled results table.
 #' @export
-scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880) {
+scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880,
+                            ...) {
   
   if (!identical(dim(fit_result$data$data)[2:6], dim(ref_data$data)[2:6])) {
     stop("Mismatch between fit result and reference data dimensions.")
@@ -76,7 +79,7 @@ scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880) {
     fit_result$res_tab <- fit_result$res_tab_unscaled
   }
   
-  w_amp <- as.numeric(get_td_amp(ref_data))
+  w_amp <- as.numeric(get_td_amp(ref_data, ...))
   
   if (length(w_amp) != nrow(fit_result$res_tab)) {
     stop("Mismatch between fit result and reference data.")
@@ -96,9 +99,10 @@ scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880) {
 #' Scale metabolite amplitudes as a ratio to the unsuppressed water amplitude.
 #' @param fit_result a result object generated from fitting.
 #' @param ref_data a water reference MRS data object.
+#' @param ... additional arguments to get_td_amp function.
 #' @return a \code{fit_result} object with a rescaled results table.
 #' @export
-scale_amp_water_ratio <- function(fit_result, ref_data) {
+scale_amp_water_ratio <- function(fit_result, ref_data, ...) {
   
   if (!identical(dim(fit_result$data$data)[2:6], dim(ref_data$data)[2:6])) {
     stop("Mismatch between fit result and reference data dimensions.")
@@ -111,7 +115,7 @@ scale_amp_water_ratio <- function(fit_result, ref_data) {
     fit_result$res_tab <- fit_result$res_tab_unscaled
   }
   
-  w_amp <- as.numeric(get_td_amp(ref_data))
+  w_amp <- as.numeric(get_td_amp(ref_data, ...))
   
   if (length(w_amp) != nrow(fit_result$res_tab)) {
     stop("Mismatch between fit result and reference data.")
