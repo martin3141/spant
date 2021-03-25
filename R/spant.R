@@ -27,6 +27,13 @@
   # set default options unless already set
   # by the user
   op <- options()
+  
+  if(.Platform$OS.type == "unix") {
+    lcm_cmd <- "lcmodel"
+  } else {
+    lcm_cmd <- "LCModel.exe"
+  }
+  
   op.spant <- list(
     spant.def_fs  = 2000,
     spant.def_ft  = 127.8e6,
@@ -34,7 +41,7 @@
     spant.def_ref = 4.65,
     spant.def_nuc = "1H",
     spant.tqn_cmd = "tarquin",
-    spant.lcm_cmd = file.path(Sys.getenv("HOME"), ".lcmodel", "bin", "lcmodel"), 
+    spant.lcm_cmd = lcm_cmd,
     spant.precomp_verbose = TRUE,
     spant.precomp_mode = "default"
   )
@@ -95,6 +102,18 @@ set_tqn_cmd <- function(cmd) {
 #' @export
 set_lcm_cmd <- function(cmd) {
   options(spant.lcm_cmd = cmd)
+}
+
+#' Print the command to run the TARQUIN command-line program.
+#' @export
+get_tqn_cmd <- function() {
+  getOption("spant.tqn_cmd")
+}
+
+#' Print the command to run the LCModel command-line program.
+#' @export
+get_lcm_cmd <- function() {
+  getOption("spant.lcm_cmd")
 }
 
 #' Return (and optionally modify using the input arguments) a list of the 
