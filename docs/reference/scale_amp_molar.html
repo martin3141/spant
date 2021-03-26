@@ -83,7 +83,7 @@ quantities in millimolar (mM) units (mol/litre)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.10.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.11.0</span>
       </span>
     </div>
 
@@ -151,7 +151,7 @@ quantities in millimolar (mM) units (mol/litre).</h1>
 quantities in millimolar (mM) units (mol/litre).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>scale_amp_molar</span><span class='op'>(</span><span class='va'>fit_result</span>, <span class='va'>ref_data</span>, w_att <span class='op'>=</span> <span class='fl'>0.7</span>, w_conc <span class='op'>=</span> <span class='fl'>35880</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>scale_amp_molar</span><span class='op'>(</span><span class='va'>fit_result</span>, <span class='va'>ref_data</span>, w_att <span class='op'>=</span> <span class='fl'>0.7</span>, w_conc <span class='op'>=</span> <span class='fl'>35880</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,6 +171,10 @@ quantities in millimolar (mM) units (mol/litre).</p>
     <tr>
       <th>w_conc</th>
       <td><p>assumed water concentration (default = 35880).</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>additional arguments to get_td_amp function.</p></td>
     </tr>
     </table>
 

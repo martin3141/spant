@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.10.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.11.0</span>
       </span>
     </div>
 
@@ -92,7 +92,7 @@
 
       
 
-      </header><script src="abfit-baseline-opts_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
+      </header><script src="abfit-baseline-opts_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>ABfit baseline options</h1>
@@ -168,7 +168,7 @@
 <p>Clearly the density of spline functions has increased, however the baseline smoothness remains very close to the default. The general principle for ABfit (derived from P-splines) is to over specify the number of baseline modelling spline functions, and rely on a penalty factor to encourage smoothness.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">bl_ed_pppm</span>
-<span class="co">#&gt; [1] 2.276357</span></code></pre></div>
+<span class="co">#&gt; [1] 2.276356</span></code></pre></div>
 <p>Inspecting the automatically determined level of baseline flexibility shows the ED per ppm value remains very close to the default analysis despite the change in spline function density – precisely the desired behaviour.</p>
 </div>
   </div>

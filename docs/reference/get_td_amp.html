@@ -83,7 +83,7 @@ time domain and extrapolating back to t=0." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.10.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.11.0</span>
       </span>
     </div>
 
@@ -151,7 +151,7 @@ time domain and extrapolating back to t=0.</h1>
 time domain and extrapolating back to t=0.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_td_amp</span><span class='op'>(</span><span class='va'>mrs_data</span>, nstart <span class='op'>=</span> <span class='fl'>10</span>, nend <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_td_amp</span><span class='op'>(</span><span class='va'>mrs_data</span>, nstart <span class='op'>=</span> <span class='fl'>10</span>, nend <span class='op'>=</span> <span class='fl'>50</span>, method <span class='op'>=</span> <span class='st'>"spline"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -167,6 +167,10 @@ time domain and extrapolating back to t=0.</p>
     <tr>
       <th>nend</th>
       <td><p>last data point to fit.</p></td>
+    </tr>
+    <tr>
+      <th>method</th>
+      <td><p>method for measuring the amplitude, one of "spline" or "exp".</p></td>
     </tr>
     </table>
 

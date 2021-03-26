@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.10.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.11.0</span>
       </span>
     </div>
 
@@ -154,7 +154,8 @@
   ref <span class='op'>=</span> <span class='cn'>NULL</span>,
   n_ref_scans <span class='op'>=</span> <span class='cn'>NULL</span>,
   full_data <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  extra <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -196,6 +197,11 @@ the FID (default = FALSE).</p></td>
     <tr>
       <th>verbose</th>
       <td><p>print data file information (default = FALSE).</p></td>
+    </tr>
+    <tr>
+      <th>extra</th>
+      <td><p>an optional data frame to provide additional variables for use
+in subsequent analysis steps, eg id or grouping variables.</p></td>
     </tr>
     </table>
 
