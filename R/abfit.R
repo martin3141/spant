@@ -121,25 +121,38 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       par[1] <- phi_zero[which.min(phase_res)]
     }
     
-    nloptr_opts <- list("algorithm" = opts$algo_pre,
-                        "maxeval" = opts$maxiters_pre)
-    
-    prelim_res <- nloptr::nloptr(x0 = par, eval_f = abfit_3p_obj,
-                                 eval_grad_f = NULL, lb = lower, ub = upper,
-                                 opts = nloptr_opts, y = y,
-                                 raw_metab_basis = metab_basis_pre,
-                                 bl_basis = bl_basis_pre_fit, t = t, f = f,
-                                 inds = sp_bas_pf$inds,
-                                 bl_comps = sp_bas_pf$bl_comps, sum_sq = TRUE,
-                                 ret_full = FALSE,
-                                 ahat_calc_method = opts$ahat_calc_method)
-    
-    res          <- prelim_res
-    res$par      <- prelim_res$solution
-    res$deviance <- prelim_res$objective
-    res$niter    <- prelim_res$iterations
-    res$info     <- prelim_res$status
-    
+    if (opts$algo_pre == "levmar") {
+      # get the default nnls control paras
+      ctrl <- minpack.lm::nls.lm.control()
+      ctrl$maxiter <- opts$maxiters_pre
+      
+      prelim_res <- minpack.lm::nls.lm(par, lower, upper, abfit_3p_obj, NULL,
+                                       ctrl, y, metab_basis_pre,
+                                       bl_basis_pre_fit, t, f, sp_bas_pf$inds,
+                                       sp_bas_pf$bl_comps, FALSE, FALSE,
+                                       opts$ahat_calc_method)
+      
+      res        <- prelim_res
+    } else {
+      nloptr_opts <- list("algorithm" = opts$algo_pre,
+                          "maxeval" = opts$maxiters_pre)
+      
+      prelim_res <- nloptr::nloptr(x0 = par, eval_f = abfit_3p_obj,
+                                   eval_grad_f = NULL, lb = lower, ub = upper,
+                                   opts = nloptr_opts, y = y,
+                                   raw_metab_basis = metab_basis_pre,
+                                   bl_basis = bl_basis_pre_fit, t = t, f = f,
+                                   inds = sp_bas_pf$inds,
+                                   bl_comps = sp_bas_pf$bl_comps, sum_sq = TRUE,
+                                   ret_full = FALSE,
+                                   ahat_calc_method = opts$ahat_calc_method)
+      
+      res          <- prelim_res
+      res$par      <- prelim_res$solution
+      res$deviance <- prelim_res$objective
+      res$niter    <- prelim_res$iterations
+      res$info     <- prelim_res$status
+    }
   } else {
     # starting values for the full fit if prefit hasn't been done
     res <- NULL
