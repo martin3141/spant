@@ -315,6 +315,24 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     } else {
       jac_fn <- abfit_full_num_jac
     }
+   
+    if (FALSE) { 
+      # apply best guess for phase parameter to data
+      y_mod_noise_est <- y * exp(1i * res$par[1])
+      
+      # apply best guess shift parameter to data
+      y_mod_noise_est <- y_mod_noise_est * exp(2i * pi * t * res$par[3])
+      mrs_data_corr_noise_est <- vec2mrs_data(y_mod_noise_est,
+                                              fs = acq_paras$fs,
+                                              ft = acq_paras$ft, 
+                                              ref = acq_paras$ref)
+      
+      # estimate the noise sd 
+      noise_sd_est <- as.numeric(calc_spec_snr(mrs_data_corr_noise_est,
+                                               noise_region = opts$noise_region,
+                                               full_output = TRUE)$noise_sd)
+    }
+    
     
     res <- minpack.lm::nls.lm(par, lower, upper, abfit_full_obj, jac_fn,
                               ctrl, y, raw_metab_basis, bl_basis_full, t,
