@@ -331,8 +331,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       noise_sd_est <- as.numeric(calc_spec_snr(mrs_data_corr_noise_est,
                                                noise_region = opts$noise_region,
                                                full_output = TRUE)$noise_sd)
-      print(noise_sd_est)
-      freq_reg_scaled <- 1
+      freq_reg_scaled <- opts$freq_reg
     } else {
       freq_reg_scaled <- NULL
     }
@@ -817,10 +816,12 @@ abfit_full_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   t_mat <- matrix(t, nrow = N, ncol = Nbasis)
   
   if (phi1_optim) {
-    freq_vec <- 2i * pi * par[6:(5 + Nbasis)]
+    freq_shifts <- par[6:(5 + Nbasis)]
+    freq_vec <- 2i * pi * freq_shifts
     lb_vec <- lw2alpha(par[(6 + Nbasis):(5 + 2 * Nbasis)])
   } else {
-    freq_vec <- 2i * pi * par[5:(4 + Nbasis)]
+    freq_shifts <- par[5:(4 + Nbasis)]
+    freq_vec <- 2i * pi * freq_shifts
     lb_vec <- lw2alpha(par[(5 + Nbasis):(4 + 2 * Nbasis)])
   }
   
@@ -856,10 +857,10 @@ abfit_full_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   if (sum_sq) {
     return(sum((Re(Y[inds]) - Y_hat[1:length(inds)]) ^ 2))
   } else {
-    if (is.def(freq_reg)) {
-      return(c(Re(Y[inds]) - Y_hat[1:length(inds)], 7))
-    } else {
+    if (is.null(freq_reg)) {
       return(Re(Y[inds]) - Y_hat[1:length(inds)])
+    } else {
+      return(c(Re(Y[inds]) - Y_hat[1:length(inds)], freq_reg * freq_shifts))
     }
   }
 }
@@ -1078,13 +1079,15 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   # cut out fitting region
   lb_jac <- -Re(lb_jac[inds,,drop = FALSE])
   
-  ret_mat <- cbind(global_paras_jac, freq_jac, lb_jac)
-  
   if (is.null(freq_reg)) {
-    return(ret_mat)
+    ret_mat <- cbind(global_paras_jac, freq_jac, lb_jac)
   } else {
-    return(rbind(ret_mat, matrix(0, nrow = 1, ncol = ncol(ret_mat))))
+    ret_mat <- cbind(global_paras_jac,
+                     rbind(freq_jac, matrix(0, ncol = Nbasis, nrow = Nbasis)),
+                     rbind(lb_jac,   matrix(0, ncol = Nbasis, nrow = Nbasis)))
   }
+  
+  return(ret_mat)
 }
 
 # objective function for 3 parameter spine fitting method
