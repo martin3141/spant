@@ -331,7 +331,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       noise_sd_est <- as.numeric(calc_spec_snr(mrs_data_corr_noise_est,
                                                noise_region = opts$noise_region,
                                                full_output = TRUE)$noise_sd)
-      freq_reg_scaled <- opts$freq_reg
+      # convert ppm sd to Hz
+      freq_reg_scaled <- noise_sd_est / (opts$freq_reg * acq_paras$ft * 1e-6)
     } else {
       freq_reg_scaled <- NULL
     }
@@ -366,7 +367,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   }
   
   #### fit resut ####
-  # apply fit parameters to data and basis and contstruct fit result object
+  # apply fit parameters to data and basis and construct fit result object
   
   final_par <- res$par
   
@@ -448,7 +449,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   # signal estimate (fit)
   Y_hat <- Re(full_bas) %*% ahat
   
-  # resudual
+  # residual
   res <- Re(fit_seg) - Y_hat
   full_res <- sum(res ^ 2) # full residual inc. penalty
   diags$full_res <- full_res
