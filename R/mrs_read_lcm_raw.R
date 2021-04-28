@@ -15,8 +15,6 @@ read_lcm_raw <- function(fname, ft, fs, ref, extra) {
   data <- x$V1 + x$V2 * 1i
   dim(data) <- c(1, 1, 1, 1, 1, 1, N)
   
-  ref <- def_ref()
-  
   res <- c(NA, NA, NA, NA, 1, NA, 1 / fs)
   
   # freq domain vector vector

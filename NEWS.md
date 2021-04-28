@@ -1,3 +1,6 @@
+# spant 1.12.0
+* Bug fix for setting the ppm reference when reading LCModel RAW files.
+
 # spant 1.11.0
 * Options added to allow extra information to attached to mrs_data and
 fit_result objects as a data frame.
