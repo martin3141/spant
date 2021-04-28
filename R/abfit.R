@@ -647,7 +647,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     D_cut <- as.matrix(D_cut)
     F_cut <- t(D_cut) %*% D_cut / (res_sd ^ 2)
     # F_cut_inv <- inv(F_cut) # sometimes F becomes singular and inv fails
-    F_cut_inv <- pracma::pinv(F)
+    F_cut_inv <- pracma::pinv(F_cut)
     crlbs_cut <- diag(F_cut_inv) ^ 0.5
     crlb_n <- length(crlbs_cut)
     # append combined CRLB estimates
