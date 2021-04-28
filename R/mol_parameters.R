@@ -900,7 +900,7 @@ get_glu_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("1H", 5)
   chem_shift <- c(3.7433, 2.0375, 2.1200, 2.3378, 2.352)
-  j_coupling_mat <- matrix(0,5,5)
+  j_coupling_mat <- matrix(0, 5, 5)
   j_coupling_mat[2,1] <- 7.331 
   j_coupling_mat[3,1] <- 4.651
   j_coupling_mat[3,2] <- -14.849
@@ -926,7 +926,7 @@ get_glu_rt_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 0.5 
   nucleus <- rep("1H", 5)
   chem_shift <- c(3.75, 2.0475, 2.1200, 2.3378, 2.352)
-  j_coupling_mat <- matrix(0,5,5)
+  j_coupling_mat <- matrix(0, 5, 5)
   j_coupling_mat[2,1] <- 7.331 
   j_coupling_mat[3,1] <- 4.651
   j_coupling_mat[3,2] <- -14.849
@@ -1089,6 +1089,33 @@ get_gpc_paras <- function(lw = NULL, lg = 0, ...) {
   class(paras) <- "mol_parameters"
   paras
 }
+
+get_2hg_paras <- function(lw = NULL, lg = 0, ...) {
+  if (is.null(lw)) lw = 2
+  nucleus <- rep("1H", 5)
+  chem_shift <- c(4.022, 1.825, 1.977, 2.221, 2.272)
+  j_coupling_mat <- matrix(0, 5, 5)
+  j_coupling_mat[2,1] <- 7
+  j_coupling_mat[3,1] <- 4.1
+  j_coupling_mat[3,2] <- -14
+  j_coupling_mat[4,2] <- 5.3
+  j_coupling_mat[5,2] <- 10.6
+  j_coupling_mat[4,3] <- 10.4
+  j_coupling_mat[5,3] <- 6
+  j_coupling_mat[5,4] <- -15
+  
+  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 1,
+                       lw = lw, lg = lg)
+  
+  source <- "2-hydroxyglutarate detection by magnetic resonance spectroscopy in subjects with IDH-mutated gliomas.
+             Nat Med. 2012 Jan 26;18(4):624-9. Numbers are given in the supplementary materials."
+  
+  paras <- list(spin_groups = list(spin_group_a), name = "2HG", source = source)
+  class(paras) <- "mol_parameters"
+  paras
+}
+
 
 # get_10spin_paras <- function(lw = NULL, lg = 0) {
 #   if (is.null(lw)) lw = 2

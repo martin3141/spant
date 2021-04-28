@@ -43,7 +43,8 @@ abfit_opts(
   max_basis_shift_broad = 1,
   max_basis_damping_broad = 2,
   ahat_calc_method = "lh_pnnls",
-  prefit_phase_search = TRUE
+  prefit_phase_search = TRUE,
+  freq_reg = NULL
 )
 }
 \arguments{
@@ -147,6 +148,8 @@ one of: "lh_pnnls" or "ls".}
 
 \item{prefit_phase_search}{perform a 1D search for the optimal phase in the
 prefit stage of the algorithm.}
+
+\item{freq_reg}{frequency shift parameter.}
 }
 \value{
 full list of options.
