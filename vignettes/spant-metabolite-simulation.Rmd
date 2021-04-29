@@ -1,0 +1,83 @@
+---
+title: "Metabolite simulation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Metabolite simulation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 5,
+  dev = "ragg_png"
+)
+```
+
+## Simple simulation
+Load the spant package:
+```{r, message = FALSE}
+library(spant)
+```
+
+Get a list of pre-defined molecules available for simulation:
+
+```{r, message = FALSE}
+get_mol_names()
+```
+
+Get and print the spin system for myo-inositol:
+
+```{r, message = FALSE}
+ins <- get_mol_paras("ins")
+print(ins)
+```
+
+Simulate and plot the simulation at 7 Tesla for a pulse acquire sequence
+(seq_pulse_acquire), apply 2 Hz line-broadening and plot.
+```{r, message = FALSE}
+sim_mol(ins, ft = 300e6, N = 4096) %>% lb(2) %>% plot(xlim = c(3.8, 3.1))
+```
+
+Other pulse sequences may be simulated including: seq_cpmg_ideal,
+seq_mega_press_ideal, seq_press_ideal, seq_slaser_ideal, seq_spin_echo_ideal,
+seq_steam_ideal. Note all these sequences assume chemical shift displacement is
+negligible. Next we simulate a 30 ms spin-echo sequence and plot:
+
+```{r, message = FALSE}
+ins_sim <- sim_mol(ins, seq_spin_echo_ideal, ft = 300e6, N = 4086, TE = 0.03)
+ins_sim %>% lb(2) %>% plot(xlim = c(3.8, 3.1))
+```
+
+Finally we simulate a range of echo-times and plot all results together to see
+the phase evolution:
+
+```{r, message = FALSE, fig.height = 8}
+sim_fn <- function(TE) {
+  te_sim <- sim_mol(ins, seq_spin_echo_ideal, ft = 300e6, N = 4086, TE = TE)
+  lb(te_sim, 2)
+}
+
+te_vals <- seq(0, 2, 0.4)
+
+lapply(te_vals, sim_fn) %>% stackplot(y_offset = 150, xlim = c(3.8, 3.1),
+                                      labels = paste(te_vals * 100, "ms"))
+```
+
+One or more resonances without J-coupling may be easily simulated with the
+`sim_resonances` function:
+
+```{r, message = FALSE}
+sim_resonances(freq = c(2, 3, 3.2), amp = c(1, 2, 3), phase = c(0, 0, -90), 
+               lw = c(5, 5, 10)) %>% plot(xlim = c(4, 0.5))
+```
+
+The addition of noise may be useful for Monte-Carlo style analyses:
+
+```{r, message = FALSE}
+noise_reson <- sim_resonances(freq = c(2, 3), lw = 5) + sim_noise(sd = 0.2)
+plot(noise_reson, xlim = c(4, 0.5))
+```
