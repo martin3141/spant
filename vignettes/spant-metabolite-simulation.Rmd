@@ -67,17 +67,13 @@ lapply(te_vals, sim_fn) %>% stackplot(y_offset = 150, xlim = c(3.8, 3.1),
                                       labels = paste(te_vals * 100, "ms"))
 ```
 
-One or more resonances without J-coupling may be easily simulated with the
-`sim_resonances` function:
+For simple signals that do not require J-coupling evolution, for example
+singlets or approximations to macromolecule or lipid resonances, the
+`get_uncoupled_mol` function may be used. In this example we simulated two broad
+Gaussian resonances at 1.3 and 1.4 ppm with differing amplitudes:
 
 ```{r, message = FALSE}
-sim_resonances(freq = c(2, 3, 3.2), amp = c(1, 2, 3), phase = c(0, 0, -90), 
-               lw = c(5, 5, 10)) %>% plot(xlim = c(4, 0.5))
-```
+get_uncoupled_mol("Lip13", c(1.3, 1.4), c("1H", "1H"), c(2, 1), c(10, 10),
+                  c(1, 1)) %>% sim_mol %>% plot(xlim = c(2, 0.8))
 
-The addition of noise may be useful for Monte-Carlo style analyses:
-
-```{r, message = FALSE}
-noise_reson <- sim_resonances(freq = c(2, 3), lw = 5) + sim_noise(sd = 0.2)
-plot(noise_reson, xlim = c(4, 0.5))
 ```

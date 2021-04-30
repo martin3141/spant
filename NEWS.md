@@ -1,5 +1,5 @@
 # spant 1.12.0
-* Added 2hg simulation parameters. e.g. get_mol_paras("2hg").
+* Added 2hg and citrate simulation parameters. e.g. get_mol_paras("2hg").
 * Bug fix for setting the ppm reference when reading LCModel RAW files.
 * Bug fix for ABfit CRLB calculation of combined signals, eg tNAA, tCr.
 * Better print output for molecular definitions.

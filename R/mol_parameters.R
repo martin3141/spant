@@ -30,15 +30,20 @@ get_mol_names <- function() {
 }
 
 #' Generate a \code{mol_parameters} object for a simple spin system with one resonance.
-#' @param name name of the molecule.
+#' @param name abbreviated name of the molecule.
 #' @param chem_shift chemical shift of the resonance (PPM).
 #' @param nucleus nucleus (1H, 31P...).
 #' @param scale_factor multiplicative scaling factor.
 #' @param lw linewidth in Hz.
 #' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1).
+#' @param full_name long name of the molecule (optional).
 #' @return mol_parameters object.
 #' @export
-get_uncoupled_mol <- function(name, chem_shift, nucleus, scale_factor, lw, lg) {
+get_uncoupled_mol <- function(name, chem_shift, nucleus, scale_factor, lw, lg,
+                              full_name = NULL) {
+  
+  if (is.null(full_name)) full_name <- name
+  
   j_coupling_mat <- matrix(0, 1, 1)
   spin_groups <- vector("list", length(chem_shift))
   for (n in 1:length(chem_shift)) {
@@ -47,16 +52,18 @@ get_uncoupled_mol <- function(name, chem_shift, nucleus, scale_factor, lw, lg) {
                        scale_factor = scale_factor[n], lw = lw[n], lg = lg[n])
     spin_groups[[n]] <- spin_group
   }
-  paras <- list(spin_groups = spin_groups, name = name)
+  paras <- list(spin_groups = spin_groups, name = name, full_name = full_name)
   class(paras) <- "mol_parameters"
   paras
 }
 
+#' @export
 print.mol_parameters <- function(x, ...) {
   cat(paste(c("Name        : ", x$name, "\n")), sep = "")
-  cat(paste(c("Source      : ", x$source, "\n")), sep = "")
+  cat(paste(c("Full name   : ", x$full_name, "\n")), sep = "")
   cat(paste(c("Spin groups : ", length(x$spin_groups), "\n")), sep = "")
-  for (n in 1:length(x$spin_groups)) {
+  cat(paste(c("Source      : ", x$source, "\n")), sep = "")
+  for (n in seq_len(length(x$spin_groups))) {
     cat("\n")
     cat(paste(c("Spin group ", n, "\n")), sep = "")
     cat("------------\n")
@@ -74,7 +81,6 @@ print.mol_parameters <- function(x, ...) {
       j_mat <- x$spin_groups[[n]]$j_coupling_ma
       j_mat[upper.tri(j_mat, diag = TRUE)] <- NA
       j_mat[j_mat == 0] <- NA
-      #j_mat <- t(j_mat)t
       print(j_mat, na.print = "-")
     }
   }
@@ -82,9 +88,10 @@ print.mol_parameters <- function(x, ...) {
 
 get_m_cr_ch2_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
-  paras <- get_uncoupled_mol("-CrCH2", 3.913, "1H", -2, lw, lg)
+  paras <- get_uncoupled_mol("-CrCH2", 3.913, "1H", -2, lw, lg,
+                             "Inverted creatine CH2 group")
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153."
   paras$source = source
   paras
 }
@@ -106,9 +113,10 @@ get_ala_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13: 129-153."
+              metabolites. NMR Biomed. 2000; 13: 129-153."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "Ala", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "Ala", source = source,
+                full_name = "Alanine")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -128,9 +136,10 @@ get_asc_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Detection of an antioxidant profile in the humain brain in vivo via
-               double editing with MEGA-PRESS. MRM. 2006; 56(6):1192-1199."
+              double editing with MEGA-PRESS. MRM. 2006; 56(6):1192-1199."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "Asc", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "Asc", source = source,
+                full_name = "Ascorbate")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -149,9 +158,10 @@ get_asp_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "Asp", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "Asp", source = source,
+                full_name = "Aspartate")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -183,10 +193,10 @@ get_cho_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Corrigendum: Proton NMR chemical shifts and coupling constants for
-               brain metabolites. NMR Biomed. 2000; 13:129-153."
+              brain metabolites. NMR Biomed. 2000; 13:129-153."
   
   paras <- list(spin_groups = list(spin_group_a, spin_group_b), name = "Cho",
-                source = source)
+                source = source, full_name = "Choline")
   
   class(paras) <- "mol_parameters"
   paras
@@ -194,12 +204,12 @@ get_cho_paras <- function(lw = NULL, lg = 0, ...) {
 
 get_cr_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
-  paras <- get_uncoupled_mol("Cr", 3.027, "1H", 3, lw, lg)
+  paras <- get_uncoupled_mol("Cr", 3.027, "1H", 3, lw, lg, "Creatine")
   paras_b <- get_uncoupled_mol("Cr", 3.913, "1H", 2, lw, lg)
   paras$spin_groups[[2]] <- paras_b$spin_groups[[1]]
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153."
   
   paras$source = source
   paras
@@ -207,10 +217,11 @@ get_cr_paras <- function(lw = NULL, lg = 0, ...) {
 
 get_cr_ch2_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
-  paras <- get_uncoupled_mol("CrCH2", 3.913, "1H", 2, lw, lg)
+  paras <- get_uncoupled_mol("CrCH2", 3.913, "1H", 2, lw, lg,
+                             "Creatine CH2 group")
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153."
   
   paras$source = source
   paras
@@ -218,10 +229,11 @@ get_cr_ch2_paras <- function(lw = NULL, lg = 0, ...) {
 
 get_cr_ch3_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
-  paras <- get_uncoupled_mol("CrCH3", 3.027, "1H", 3, lw, lg)
+  paras <- get_uncoupled_mol("CrCH3", 3.027, "1H", 3, lw, lg,
+                             "Creatine CH2 group")
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153."
   
   paras$source = source
   paras
@@ -249,9 +261,10 @@ get_gaba_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Corrigendum: Proton NMR chemical shifts and coupling constants for
-               brain metabolites. NMR Biomed. 2000; 13: 129-153."
+              brain metabolites. NMR Biomed. 2000; 13: 129-153."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "GABA", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "GABA",
+                source = source, full_name = "gamma-Aminobutyric acid")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -278,10 +291,11 @@ get_gaba_rt_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153. Modified by MW for
-               room temperature phantom scans."
+              metabolites. NMR Biomed. 2000; 13:129-153. Modified by MW for
+              room temperature phantom scans."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "GABA", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "GABA",
+                source = source, full_name = "gamma-Aminobutyric acid")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -308,9 +322,10 @@ get_gaba_jn_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "J-Difference Editing of Gamma-Aminobutyric Acid (GABA): Simulated
-               and Experimental Multiplet Patterns. MRM 2013; 70:1183-1191."
+              and Experimental Multiplet Patterns. MRM 2013; 70:1183-1191."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "GABA", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "GABA",
+                source = source, full_name = "gamma-Aminobutyric acid")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -334,9 +349,10 @@ get_gln_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "Gln", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "Gln",
+                source = source, full_name = "Glutamine")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -376,10 +392,10 @@ get_gsh_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153."
   
   paras <- list(spin_groups = list(spin_group_a, spin_group_b, spin_group_c),
-                name = "GSH", source = source)
+                name = "GSH", source = source, full_name = "Glutathione")
   
   class(paras) <- "mol_parameters"
   paras
@@ -387,10 +403,10 @@ get_gsh_paras <- function(lw = NULL, lg = 0, ...) {
 
 get_gly_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
-  paras <- get_uncoupled_mol("Gly", 3.548, "1H", 2, lw, lg)
+  paras <- get_uncoupled_mol("Gly", 3.548, "1H", 2, lw, lg, "Glycine")
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153."
   
   paras$source <- source
   paras
@@ -413,9 +429,10 @@ get_bhb_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "In Vivo NMR Spectroscopy: Principles and Techniques,
-               Robin A. de Graaf"
+              Robin A. de Graaf"
   
-  paras <- list(spin_groups = list(spin_group_a), name = "BHB", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "BHB",
+                source = source, full_name = "beta-Hydroxybutyrate")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -437,9 +454,10 @@ get_ins_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "Ins", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "Ins",
+                source = source, full_name = "myo-Inositol")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -461,34 +479,39 @@ get_ins_rt_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153. Modified by MW for
-               room temperature phantom scans."
+              metabolites. NMR Biomed. 2000; 13:129-153. Modified by MW for
+              room temperature phantom scans."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "Ins", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "Ins", source = source,
+                full_name = "myo-Inositol")
   class(paras) <- "mol_parameters"
   paras
 }
 
 get_lip09_paras <- function(ft, ...) {
-  paras <- get_uncoupled_mol("Lip09", 0.89, "1H", 3, 0.14 * ft / 1e6, 1)
+  paras <- get_uncoupled_mol("Lip09", 0.89, "1H", 3, 0.14 * ft / 1e6, 1,
+                             "Lipid at 0.9 ppm")
   paras$source <- "LCModel manual."
   paras
 }
 
 get_lip13a_paras <- function(ft, ...) {
-  paras <- get_uncoupled_mol("Lip13a", 1.28, "1H", 2, 0.15 * ft / 1e6, 1)
+  paras <- get_uncoupled_mol("Lip13a", 1.28, "1H", 2, 0.15 * ft / 1e6, 1,
+                             "Lipid at 1.3 ppm - component a")
   paras$source <- "LCModel manual."
   paras
 }
 
 get_lip13b_paras <- function(ft, ...) {
-  paras <- get_uncoupled_mol("Lip13b", 1.28, "1H", 2, 0.089 * ft / 1e6, 1)
+  paras <- get_uncoupled_mol("Lip13b", 1.28, "1H", 2, 0.089 * ft / 1e6, 1,
+                             "Lipid at 1.3 ppm - component b")
   paras$source <- "LCModel manual."
   paras
 }
 
 get_lip20_paras <- function(ft, ...) {
-  paras <- get_uncoupled_mol("Lip20", 2.04, "1H", 1.33, 0.15 * ft / 1e6, 1)
+  paras <- get_uncoupled_mol("Lip20", 2.04, "1H", 1.33, 0.15 * ft / 1e6, 1,
+                             "Lipid at 2.0 ppm")
   paras_b <- get_uncoupled_mol("Lip20", 2.25, "1H", 0.67, 0.15 * ft / 1e6, 1)
   paras_c <- get_uncoupled_mol("Lip20", 2.8, "1H", 0.87, 0.2 * ft / 1e6, 1)
   paras$spin_groups[[2]] <- paras_b$spin_groups[[1]]
@@ -498,31 +521,36 @@ get_lip20_paras <- function(ft, ...) {
 }
 
 get_mm09_paras <- function(ft, ...) {
-  paras <- get_uncoupled_mol("MM09", 0.91, "1H", 3, 0.14 * ft / 1e6, 1)
+  paras <- get_uncoupled_mol("MM09", 0.91, "1H", 3, 0.14 * ft / 1e6, 1,
+                             "Macromolecule at 0.9 ppm")
   paras$source <- "LCModel manual."
   paras
 }
 
 get_mm12_paras <- function(ft, ...) {
-  paras <- get_uncoupled_mol("MM12", 1.21, "1H", 2, 0.15 * ft / 1e6, 1)
+  paras <- get_uncoupled_mol("MM12", 1.21, "1H", 2, 0.15 * ft / 1e6, 1,
+                             "Macromolecule at 1.2 ppm")
   paras$source <- "LCModel manual."
   paras
 }
 
 get_mm14_paras <- function(ft, ...) {
-  paras <- get_uncoupled_mol("MM14", 1.43, "1H", 2, 0.17 * ft / 1e6, 1)
+  paras <- get_uncoupled_mol("MM14", 1.43, "1H", 2, 0.17 * ft / 1e6, 1,
+                             "Macromolecule at 1.4 ppm")
   paras$source <- "LCModel manual."
   paras
 }
 
 get_mm17_paras <- function(ft, ...) {
-  paras <- get_uncoupled_mol("MM17", 1.67, "1H", 2, 0.15 * ft / 1e6, 1)
+  paras <- get_uncoupled_mol("MM17", 1.67, "1H", 2, 0.15 * ft / 1e6, 1,
+                             "Macromolecule at 1.7 ppm")
   paras$source <- "LCModel manual."
   paras
 }
 
 get_mm20_paras <- function(ft, ...) {
-  paras <- get_uncoupled_mol("MM20", 2.08, "1H", 1.33, 0.15 * ft / 1e6, 1)
+  paras <- get_uncoupled_mol("MM20", 2.08, "1H", 1.33, 0.15 * ft / 1e6, 1,
+                             "Macromolecule at 2.0 ppm")
   paras_b <- get_uncoupled_mol("MM20", 2.25, "1H", 0.33, 0.2 * ft / 1e6, 1)
   paras_c <- get_uncoupled_mol("MM20", 1.95, "1H", 0.33, 0.15 * ft / 1e6, 1)
   paras_d <- get_uncoupled_mol("MM20", 3.0, "1H", 0.4, 0.2 * ft / 1e6, 1)
@@ -534,19 +562,32 @@ get_mm20_paras <- function(ft, ...) {
 }
 
 get_mm_3t_paras <- function(ft, ...) {
-  paras   <- get_uncoupled_mol("MM", 0.90, "1H", 0.72, 21.20 / 128 * ft / 1e6, 1)
-  paras_b <- get_uncoupled_mol("MM", 1.21, "1H", 0.28, 19.16 / 128 * ft / 1e6, 1)
-  paras_c <- get_uncoupled_mol("MM", 1.38, "1H", 0.38, 15.90 / 128 * ft / 1e6, 1)
-  paras_d <- get_uncoupled_mol("MM", 1.63, "1H", 0.05,  7.50 / 128 * ft / 1e6, 1)
-  paras_e <- get_uncoupled_mol("MM", 2.01, "1H", 0.45, 29.03 / 128 * ft / 1e6, 1)
-  paras_f <- get_uncoupled_mol("MM", 2.09, "1H", 0.36, 20.53 / 128 * ft / 1e6, 1)
-  paras_g <- get_uncoupled_mol("MM", 2.25, "1H", 0.36, 17.89 / 128 * ft / 1e6, 1)
-  paras_h <- get_uncoupled_mol("MM", 2.61, "1H", 0.04,  5.30 / 128 * ft / 1e6, 1)
-  paras_i <- get_uncoupled_mol("MM", 2.96, "1H", 0.20, 14.02 / 128 * ft / 1e6, 1)
-  paras_j <- get_uncoupled_mol("MM", 3.11, "1H", 0.11, 17.89 / 128 * ft / 1e6, 1)
-  paras_k <- get_uncoupled_mol("MM", 3.67, "1H", 0.64, 33.52 / 128 * ft / 1e6, 1)
-  paras_l <- get_uncoupled_mol("MM", 3.80, "1H", 0.07, 11.85 / 128 * ft / 1e6, 1)
-  paras_m <- get_uncoupled_mol("MM", 3.96, "1H", 1.00, 37.48 / 128 * ft / 1e6, 1)
+  paras   <- get_uncoupled_mol("MM", 0.90, "1H", 0.72, 21.20 / 128 * ft / 1e6,
+                               1, "Macromolecule signal at 3 Tesla")
+  paras_b <- get_uncoupled_mol("MM", 1.21, "1H", 0.28, 19.16 / 128 * ft / 1e6,
+                               1)
+  paras_c <- get_uncoupled_mol("MM", 1.38, "1H", 0.38, 15.90 / 128 * ft / 1e6,
+                               1)
+  paras_d <- get_uncoupled_mol("MM", 1.63, "1H", 0.05,  7.50 / 128 * ft / 1e6,
+                               1)
+  paras_e <- get_uncoupled_mol("MM", 2.01, "1H", 0.45, 29.03 / 128 * ft / 1e6,
+                               1)
+  paras_f <- get_uncoupled_mol("MM", 2.09, "1H", 0.36, 20.53 / 128 * ft / 1e6,
+                               1)
+  paras_g <- get_uncoupled_mol("MM", 2.25, "1H", 0.36, 17.89 / 128 * ft / 1e6,
+                               1)
+  paras_h <- get_uncoupled_mol("MM", 2.61, "1H", 0.04,  5.30 / 128 * ft / 1e6,
+                               1)
+  paras_i <- get_uncoupled_mol("MM", 2.96, "1H", 0.20, 14.02 / 128 * ft / 1e6,
+                               1)
+  paras_j <- get_uncoupled_mol("MM", 3.11, "1H", 0.11, 17.89 / 128 * ft / 1e6,
+                               1)
+  paras_k <- get_uncoupled_mol("MM", 3.67, "1H", 0.64, 33.52 / 128 * ft / 1e6,
+                               1)
+  paras_l <- get_uncoupled_mol("MM", 3.80, "1H", 0.07, 11.85 / 128 * ft / 1e6,
+                               1)
+  paras_m <- get_uncoupled_mol("MM", 3.96, "1H", 1.00, 37.48 / 128 * ft / 1e6,
+                               1)
   paras$spin_groups[[2]] <- paras_b$spin_groups[[1]]
   paras$spin_groups[[3]] <- paras_c$spin_groups[[1]]
   paras$spin_groups[[4]] <- paras_d$spin_groups[[1]]
@@ -583,10 +624,11 @@ get_naa_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153. Exlcuding the resonance
+              at 7.82 ppm."
   
   paras <- list(spin_groups = list(spin_group_a,spin_group_b), name = "NAA",
-                source = source)
+                source = source, full_name = "N-acetylaspartate")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -611,16 +653,16 @@ get_naa_rt_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153. Modified by MW for
-               room temperature phantom scans."
+              metabolites. NMR Biomed. 2000; 13:129-153. Modified by MW for
+              room temperature phantom scans. Exlcuding the resonance at 7.82
+              ppm."
   
   paras <- list(spin_groups = list(spin_group_a,spin_group_b), name = "NAA",
-                source = source)
+                source = source, full_name = "N-acetylaspartate")
   class(paras) <- "mol_parameters"
   paras
 }
 
-# as above with the 7.82 resonance - that doesn't influence the upfield multiplets
 get_naa2_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 0.5
   nucleus <- c("1H")
@@ -642,21 +684,23 @@ get_naa2_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153. Including the
+              resonance at 7.82 ppm."
   
   paras <- list(spin_groups = list(spin_group_a,spin_group_b), name = "NAA",
-                source = source)
+                source = source, full_name = "N-acetylaspartate")
   class(paras) <- "mol_parameters"
   paras
 }
 
 get_naag_ch3_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 0.5
-  paras <- get_uncoupled_mol("NAAG", 2.042, "1H", 3, lw, lg)
+  paras <- get_uncoupled_mol("NAAG", 2.042, "1H", 3, lw, lg,
+                             "N-acetylaspartylglutamate")
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153. Note, only the acetyl
-               moiety is simualted."
+              metabolites. NMR Biomed. 2000; 13:129-153. Note, only the acetyl
+              moiety is simualted."
   
   paras$source <- source
   paras
@@ -698,13 +742,14 @@ get_naag_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Chemical shifts are from the Govindaraju paper, J-couplings are
-               from : Characterisation of the 1H and 13C NMR spectra of N-
-               acetylaspartylglutamate and its detection in urine from patients
-               with Canavan disease, J Pharm Biomed Anal. 2003 Mar
-               10;31(3):455-63."
+              from : Characterisation of the 1H and 13C NMR spectra of N-
+              acetylaspartylglutamate and its detection in urine from patients
+              with Canavan disease, J Pharm Biomed Anal. 2003 Mar
+              10;31(3):455-63."
   
   paras <- list(spin_groups = list(spin_group_a, spin_group_b, spin_group_c),
-                name = "NAAG", source = source)
+                name = "NAAG", source = source,
+                full_name = "N-acetylaspartylglutamate")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -737,10 +782,10 @@ get_pch_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Corrigendum: Proton NMR chemical shifts and coupling constants for
-               brain metabolites. NMR Biomed. 2000; 13:129-153."
+              brain metabolites. NMR Biomed. 2000; 13:129-153."
   
   paras <- list(spin_groups = list(spin_group_a, spin_group_b), name = "PCh",
-                source = source)
+                source = source, full_name = "Phosphocholine")
   
   class(paras) <- "mol_parameters"
   paras
@@ -748,12 +793,13 @@ get_pch_paras <- function(lw = NULL, lg = 0, ...) {
 
 get_pcr_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
-  paras <- get_uncoupled_mol("PCr", 3.029, "1H", 3, lw, lg)
+  paras <- get_uncoupled_mol("PCr", 3.029, "1H", 3, lw, lg,
+                             full_name = "Phosphocreatine")
   paras_b <- get_uncoupled_mol("PCr", 3.930, "1H", 2, lw, lg)
   paras$spin_groups[[2]] <- paras_b$spin_groups[[1]]
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153."
   
   paras$source <- source
   paras
@@ -779,9 +825,10 @@ get_peth_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Corrigendum: Proton NMR chemical shifts and coupling constants for
-               brain metabolites. NMR Biomed. 2000; 13:129-153."
+              brain metabolites. NMR Biomed. 2000; 13:129-153."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "PEth", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "PEth",
+                source = source, full_name = "Phosphoethanolamine")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -800,19 +847,20 @@ get_ser_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Corrigendum: Proton NMR chemical shifts and coupling constants for
-               brain metabolites. NMR Biomed. 2000; 13:129-153."
+              brain metabolites. NMR Biomed. 2000; 13:129-153."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "Ser", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "Ser", source = source,
+                full_name = "Serine")
   class(paras) <- "mol_parameters"
   paras
 }
 
 get_sins_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
-  paras <- get_uncoupled_mol("sIns", 3.34, "1H", 6, lw, lg)
+  paras <- get_uncoupled_mol("sIns", 3.34, "1H", 6, lw, lg, "scyllo-Inositol")
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153."
   
   paras$source <- source
   paras
@@ -820,10 +868,10 @@ get_sins_paras <- function(lw = NULL, lg = 0, ...) {
 
 get_suc_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
-  paras <- get_uncoupled_mol("Suc", 2.3920, "1H", 4, lw, lg)
+  paras <- get_uncoupled_mol("Suc", 2.3920, "1H", 4, lw, lg, "Succinate")
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153."
   
   paras$source <- source
   paras
@@ -848,7 +896,8 @@ get_tau_paras <- function(lw = NULL, lg = 0, ...) {
   source <- "Corrigendum: Proton NMR chemical shifts and coupling constants for
                brain metabolites. NMR Biomed. 2000; 13:129-153."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "Tau", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "Tau", source = source,
+                full_name = "Taurine")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -867,9 +916,10 @@ get_lac_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "Lac", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "Lac", source = source,
+                full_name = "Lactate")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -889,10 +939,11 @@ get_lac_rt_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153. Modified by MW for
-               room temperature phantom scans."
+              metabolites. NMR Biomed. 2000; 13:129-153. Modified by MW for
+              room temperature phantom scans."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "Lac", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "Lac", source = source,
+                full_name = "Lactate")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -916,9 +967,10 @@ get_glu_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "Glu", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "Glu", source = source,
+                full_name = "Glutamate")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -942,10 +994,11 @@ get_glu_rt_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153. Modified by MW for
-               room temperature phantom scans."
+              metabolites. NMR Biomed. 2000; 13:129-153. Modified by MW for
+              room temperature phantom scans."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "Glu", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "Glu", source = source,
+                full_name = "Glutamate")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -968,9 +1021,10 @@ get_a_glc_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "aGlc", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "aGlc",
+                source = source, full_name = "alpha-D-glucose")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -993,9 +1047,10 @@ get_b_glc_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153."
+              metabolites. NMR Biomed. 2000; 13:129-153."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "bGlc", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "bGlc",
+                source = source, full_name = "beta-D-glucose")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -1033,10 +1088,11 @@ get_glc_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-               metabolites. NMR Biomed. 2000; 13:129-153. This is a combination
-               of alpha-glc (36%) and beta-glc (64%)."
+              metabolites. NMR Biomed. 2000; 13:129-153. This is a combination
+              of alpha-glc (36%) and beta-glc (64%)."
   
-  paras <- list(spin_groups = list(spin_group_a, spin_group_b), name = "Glc", source = source)
+  paras <- list(spin_groups = list(spin_group_a, spin_group_b), name = "Glc",
+                source = source, full_name = "Glucose")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -1083,10 +1139,11 @@ get_gpc_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Corrigendum: Proton NMR chemical shifts and coupling constants for
-               brain metabolites. NMR Biomed. 2000; 13:129-153."
+              brain metabolites. NMR Biomed. 2000; 13:129-153."
   
   paras <- list(spin_groups = list(spin_group_a, spin_group_b, spin_group_c),
-                name = "GPC", source = source)
+                name = "GPC", source = source,
+                full_name = "Glycerophosphocholine")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -1110,36 +1167,41 @@ get_2hg_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "2-hydroxyglutarate detection by magnetic resonance spectroscopy
-               in subjects with IDH-mutated gliomas. Nat Med. 2012 Jan
-               26;18(4):624-9. Numbers are given in the supplementary
-               materials."
+              in subjects with IDH-mutated gliomas. Nat Med. 2012 Jan
+              26;18(4):624-9. Numbers are given in the supplementary
+              materials."
   
-  paras <- list(spin_groups = list(spin_group_a), name = "2HG", source = source)
+  paras <- list(spin_groups = list(spin_group_a), name = "2HG", source = source,
+                full_name = "2-hydroxyglutarate")
   class(paras) <- "mol_parameters"
   paras
 }
 
-#' @export
-print.mol_parameters <- function(x, ...) {
-  cat("Name         :", x$name, "\n")
-  n_groups <- length(x$spin_groups)
-  cat("Spin groups  :", n_groups, "\n\n")
+get_cit_paras <- function(lw = NULL, lg = 0, ...) {
+  if (is.null(lw)) lw = 2
+  nucleus <- rep("1H", 2)
+  chem_shift <- c(2.6735, 2.5265)
+  j_coupling_mat <- matrix(0, 2, 2)
+  j_coupling_mat[2,1] <- -16.1
   
-  for (n in seq_len(n_groups)) {
-    cat("Spin group   :", n, "\n")
-    cat("Scale factor :", x$spin_groups[[n]]$scale_factor, "\n")
-    cat("LW (Hz)      :", x$spin_groups[[n]]$lw, "\n")
-    cat("LG factor    :", x$spin_groups[[n]]$lg, "\n")
-    cat("Nucleus      :", x$spin_groups[[n]]$nucleus, "\n")
-    cat("Chem. shift  :", x$spin_groups[[n]]$chem_shift, "\n\n")
-    
-    cat("J-coupling matrix\n")
-    print(x$spin_groups[[n]]$j_coupling_mat)
-    cat("\n")
-  }
+  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 1,
+                       lw = lw, lg = lg)
   
-  cat("Source       :", x$source)
+  source <- "Optimizing PRESS localized citrate detection at 3 Tesla. Magn Reson
+              Med. 2005 Jul;54(1):51-8 and van der Graaf M, Heerschap A. Effect
+              of Cation Binding on the Proton Chemical Shifts and the Spin-Spin
+              Coupling Constant of Citrate. J Magn Reson B. 1996
+              Jul;112(1):58-62. Central frequency assumed to be 2.6 ppm, delta
+              chemical shift of 0.147 ppm and j-coupling value of 16.1 Hz."
+  
+  paras <- list(spin_groups = list(spin_group_a), name = "Cit", source = source,
+                full_name = "Citrate")
+  class(paras) <- "mol_parameters"
+  paras
 }
+
+
 
 # get_10spin_paras <- function(lw = NULL, lg = 0) {
 #   if (is.null(lw)) lw = 2
