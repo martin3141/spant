@@ -55,6 +55,7 @@ Suggests:
     knitr,
     rmarkdown,
     testthat,
+    ragg,
     doParallel
 VignetteBuilder:
     knitr
