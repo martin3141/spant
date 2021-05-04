@@ -1,0 +1,30 @@
+---
+title: "Basis simulation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Basis simulation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+library(ragg)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 5,
+  dev = "ragg_png"
+)
+```
+
+## Basis simulation
+
+Basis simulation is necessary step for modern MRS analysis and the this vignette will explain how to perform this step with spant. It is advisable to follow the examples given in the [metabolite simulation vignette](spant-metabolite-simulation.html) before following this guide.
+
+Load the spant package:
+```{r, message = FALSE}
+library(spant)
+```
+
+TODO
