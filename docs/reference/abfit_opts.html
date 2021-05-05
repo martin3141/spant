@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.11.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.12.0</span>
       </span>
     </div>
 
@@ -106,7 +106,13 @@
       <a href="../articles/abfit-baseline-opts.html">ABfit baseline options</a>
     </li>
     <li>
+      <a href="../articles/spant-basis-simulation.html">Basis simulation</a>
+    </li>
+    <li>
       <a href="../articles/spant-intro.html">Introduction to spant</a>
+    </li>
+    <li>
+      <a href="../articles/spant-metabolite-simulation.html">Metabolite simulation</a>
     </li>
     <li>
       <a href="../articles/spant-preprocessing.html">Common preprocessing steps</a>
@@ -185,7 +191,8 @@
   max_basis_shift_broad <span class='op'>=</span> <span class='fl'>1</span>,
   max_basis_damping_broad <span class='op'>=</span> <span class='fl'>2</span>,
   ahat_calc_method <span class='op'>=</span> <span class='st'>"lh_pnnls"</span>,
-  prefit_phase_search <span class='op'>=</span> <span class='cn'>TRUE</span>
+  prefit_phase_search <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  freq_reg <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -369,6 +376,10 @@ one of: "lh_pnnls" or "ls".</p></td>
       <th>prefit_phase_search</th>
       <td><p>perform a 1D search for the optimal phase in the
 prefit stage of the algorithm.</p></td>
+    </tr>
+    <tr>
+      <th>freq_reg</th>
+      <td><p>frequency shift parameter.</p></td>
     </tr>
     </table>
 

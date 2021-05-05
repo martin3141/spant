@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.11.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.12.0</span>
       </span>
     </div>
 
@@ -105,7 +105,13 @@
       <a href="../articles/abfit-baseline-opts.html">ABfit baseline options</a>
     </li>
     <li>
+      <a href="../articles/spant-basis-simulation.html">Basis simulation</a>
+    </li>
+    <li>
       <a href="../articles/spant-intro.html">Introduction to spant</a>
+    </li>
+    <li>
+      <a href="../articles/spant-metabolite-simulation.html">Metabolite simulation</a>
     </li>
     <li>
       <a href="../articles/spant-preprocessing.html">Common preprocessing steps</a>
@@ -140,9 +146,21 @@
       <small>Source: <a href='https://github.com/martin3141/spant/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="spant-1120" class="section level1">
+<h1 class="page-header" data-toc-text="1.12.0">
+<a href="#spant-1120" class="anchor"></a>spant 1.12.0<small> Unreleased </small>
+</h1>
+<ul>
+<li>Added 2HG and citrate simulation parameters. e.g. get_mol_paras(“2hg”).</li>
+<li>Better print output for molecular definitions.</li>
+<li>Added metabolite and basis simulation vignettes.</li>
+<li>Bug fix for setting the ppm reference when reading LCModel RAW files.</li>
+<li>Bug fix for ABfit CRLB calculation of combined signals, eg tNAA, tCr.</li>
+</ul>
+</div>
     <div id="spant-1110" class="section level1">
 <h1 class="page-header" data-toc-text="1.11.0">
-<a href="#spant-1110" class="anchor"></a>spant 1.11.0<small> Unreleased </small>
+<a href="#spant-1110" class="anchor"></a>spant 1.11.0<small> 2021-03-28 </small>
 </h1>
 <ul>
 <li>Options added to allow extra information to attached to mrs_data and fit_result objects as a data frame.</li>

@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.11.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.12.0</span>
       </span>
     </div>
 
@@ -106,7 +106,13 @@
       <a href="../articles/abfit-baseline-opts.html">ABfit baseline options</a>
     </li>
     <li>
+      <a href="../articles/spant-basis-simulation.html">Basis simulation</a>
+    </li>
+    <li>
       <a href="../articles/spant-intro.html">Introduction to spant</a>
+    </li>
+    <li>
+      <a href="../articles/spant-metabolite-simulation.html">Metabolite simulation</a>
     </li>
     <li>
       <a href="../articles/spant-preprocessing.html">Common preprocessing steps</a>
@@ -146,14 +152,22 @@
     <p>Generate a <code>mol_parameters</code> object for a simple spin system with one resonance.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_uncoupled_mol</span><span class='op'>(</span><span class='va'>name</span>, <span class='va'>chem_shift</span>, <span class='va'>nucleus</span>, <span class='va'>scale_factor</span>, <span class='va'>lw</span>, <span class='va'>lg</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_uncoupled_mol</span><span class='op'>(</span>
+  <span class='va'>name</span>,
+  <span class='va'>chem_shift</span>,
+  <span class='va'>nucleus</span>,
+  <span class='va'>scale_factor</span>,
+  <span class='va'>lw</span>,
+  <span class='va'>lg</span>,
+  full_name <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>name</th>
-      <td><p>name of the molecule.</p></td>
+      <td><p>abbreviated name of the molecule.</p></td>
     </tr>
     <tr>
       <th>chem_shift</th>
@@ -174,6 +188,10 @@
     <tr>
       <th>lg</th>
       <td><p>Lorentz-Gauss lineshape parameter (between 0 and 1).</p></td>
+    </tr>
+    <tr>
+      <th>full_name</th>
+      <td><p>long name of the molecule (optional).</p></td>
     </tr>
     </table>
 
