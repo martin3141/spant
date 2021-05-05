@@ -37,7 +37,7 @@ mol_list <- list(get_mol_paras("lac"),
                  get_mol_paras("gpc"))
 ```
 
-In the next step we convert these chemical properties into a collection of signals (a spant `basis_set` object) with the `sim_basis` function. When fitting, the signal parameters (e.g. sampling frequency) and pulse sequence (e.g. echo-time) must match the MRS data acqusition protocol.
+In the next step we convert these chemical properties into a collection of signals (a spant `basis_set` object) with the `sim_basis` function. When fitting, the signal parameters (e.g. sampling frequency) and pulse sequence (e.g. echo-time) must match the MRS data acquisition protocol.
 
 ```{r}
 basis <- sim_basis(mol_list, pul_seq = seq_slaser_ideal,
