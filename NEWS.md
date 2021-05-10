@@ -1,3 +1,7 @@
+# spant 1.13.0
+* Frequency shifts limits are now specified in ppm rather than Hz to improve
+consistency between field strengths (when using default settings).
+
 # spant 1.12.0
 * Added 2HG and citrate simulation parameters. e.g. get_mol_paras("2hg").
 * Better print output for molecular definitions.

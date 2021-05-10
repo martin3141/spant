@@ -7,7 +7,7 @@
 abfit_opts(
   init_damping = 5,
   maxiters = 1024,
-  max_shift = 10,
+  max_shift = 0.078,
   max_damping = 15,
   max_phase = 360,
   lambda = NULL,
@@ -19,7 +19,7 @@ abfit_opts(
   bl_comps_pppm = 15,
   export_sp_fit = FALSE,
   max_asym = 0.25,
-  max_basis_shift = 1,
+  max_basis_shift = 0.0078,
   max_basis_damping = 2,
   maxiters_pre = 1000,
   algo_pre = "NLOPT_LN_NELDERMEAD",
@@ -40,7 +40,7 @@ abfit_opts(
   phi1_optim = FALSE,
   phi1_init = 0,
   max_dphi1 = 0.2,
-  max_basis_shift_broad = 1,
+  max_basis_shift_broad = 0.0078,
   max_basis_damping_broad = 2,
   ahat_calc_method = "lh_pnnls",
   prefit_phase_search = TRUE,
@@ -55,7 +55,7 @@ abfit_opts(
 \item{maxiters}{The maximum number of iterations to run for the detailed fit.}
 
 \item{max_shift}{The maximum allowable shift to be applied in the
-optimisation phase of fitting (Hz).}
+optimisation phase of fitting (ppm).}
 
 \item{max_damping}{maximum permitted value of the global damping parameter
 (Hz).}
@@ -84,7 +84,7 @@ ppm).}
 \item{max_asym}{maximum allowable value of the asymmetry parameter.}
 
 \item{max_basis_shift}{maximum allowable frequency shift for individual basis
-signals (Hz).}
+signals (ppm).}
 
 \item{max_basis_damping}{maximum allowable Lorentzian damping factor for
 individual basis signals (Hz).}
@@ -138,7 +138,7 @@ coarse fitting stage of the algorithm (ppm).}
 dependant phase term (ms).}
 
 \item{max_basis_shift_broad}{maximum allowable shift for broad signals in the
-basis (Hz). Determined based on their name beginning with Lip or MM.}
+basis (ppm). Determined based on their name beginning with Lip or MM.}
 
 \item{max_basis_damping_broad}{maximum allowable Lorentzian damping for broad
 signals in the basis (Hz). Determined based on their name beginning with Lip

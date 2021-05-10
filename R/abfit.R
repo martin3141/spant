@@ -67,10 +67,10 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   # set phase, damping and shift limits for the pre-fit
   par   <- c(0, opts$init_damping, init_shift)
   upper <- c(opts$max_phase * pi / 180, opts$max_damping,
-             init_shift + opts$max_shift)
+             init_shift + opts$max_shift * acq_paras$ft * 1e-6)
   
   lower <- c(-opts$max_phase * pi / 180, 0,
-             init_shift -opts$max_shift)
+             init_shift - opts$max_shift * acq_paras$ft * 1e-6)
   
   #### 2 approx iter fit ####
   # 3 para pre-fit with flexable bl and no broad signals in basis
@@ -287,8 +287,10 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     # different parameter limits
     broad_indices <- c(grep("^Lip", basis$names), grep("^MM", basis$names))
     
-    max_basis_shifts <- rep(opts$max_basis_shift, Nbasis)
-    max_basis_shifts[broad_indices] <- opts$max_basis_shift_broad
+    max_basis_shifts <- rep(opts$max_basis_shift, Nbasis) * acq_paras$ft * 1e-6
+    
+    max_basis_shifts[broad_indices] <- opts$max_basis_shift_broad * 
+                                       acq_paras$ft * 1e-6
     
     max_basis_dampings <- rep(opts$max_basis_damping, Nbasis)
     max_basis_dampings[broad_indices] <- opts$max_basis_damping_broad
@@ -373,9 +375,10 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   
   # diagnostic info frame 
   diags <- data.frame(phase = res$par[1] * 180 / pi, lw = res$par[2],
-                      shift = res$par[3], asym = res$par[4],
-                      res$deviance, res$niter, res$info, res$message,
-                      bl_ed_pppm = opts$bl_ed_pppm, stringsAsFactors = TRUE)
+                      shift = (res$par[3] + init_shift) / acq_paras$ft * 1e6,
+                      asym = res$par[4], res$deviance, res$niter, res$info,
+                      res$message, bl_ed_pppm = opts$bl_ed_pppm,
+                      stringsAsFactors = TRUE)
   
   if (opts$auto_bl_flex) diags$max_bl_flex_used <- max_bl_flex_used
   
@@ -664,9 +667,10 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   
   if (opts$output_all_paras) {
     # vector of shifts
-    names(freq_vec_hz) <- paste(basis$names, "shift.hz", sep = ".")
+    freq_vec_ppm <- freq_vec_hz / acq_paras$ft * 1e6
+    names(freq_vec_ppm) <- paste(basis$names, "shift.ppm", sep = ".")
     names(lb_vec_hz)   <- paste(basis$names, "lb.hz", sep = ".")
-    diags <- cbind(diags, t(freq_vec_hz))
+    diags <- cbind(diags, t(freq_vec_ppm))
     diags <- cbind(diags, t(lb_vec_hz))
   }
   
@@ -680,7 +684,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' (Hz). Very poorly shimmed or high field data may benefit from a larger value.
 #' @param maxiters The maximum number of iterations to run for the detailed fit.
 #' @param max_shift The maximum allowable shift to be applied in the
-#' optimisation phase of fitting (Hz).
+#' optimisation phase of fitting (ppm).
 #' @param max_damping maximum permitted value of the global damping parameter
 #' (Hz).
 #' @param max_phase the maximum absolute permitted value of the global
@@ -697,7 +701,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param export_sp_fit add the fitted spline functions to the fit result.
 #' @param max_asym maximum allowable value of the asymmetry parameter.
 #' @param max_basis_shift maximum allowable frequency shift for individual basis
-#' signals (Hz).
+#' signals (ppm).
 #' @param max_basis_damping maximum allowable Lorentzian damping factor for
 #' individual basis signals (Hz).
 #' @param maxiters_pre maximum iterations for the coarse (pre-)fit.
@@ -730,7 +734,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param max_dphi1 maximum allowable change from the initial frequency
 #' dependant phase term (ms).
 #' @param max_basis_shift_broad maximum allowable shift for broad signals in the
-#' basis (Hz). Determined based on their name beginning with Lip or MM.
+#' basis (ppm). Determined based on their name beginning with Lip or MM.
 #' @param max_basis_damping_broad maximum allowable Lorentzian damping for broad
 #' signals in the basis (Hz). Determined based on their name beginning with Lip
 #' or MM.
@@ -745,12 +749,12 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @examples
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
 #' @export
-abfit_opts <- function(init_damping = 5, maxiters = 1024,  max_shift = 10, 
+abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078, 
                        max_damping = 15, max_phase = 360, lambda = NULL, 
                        ppm_left = 4, ppm_right = 0.2, zp = TRUE,
                        bl_ed_pppm = 2.0, auto_bl_flex = TRUE,
                        bl_comps_pppm = 15, export_sp_fit = FALSE,
-                       max_asym = 0.25, max_basis_shift = 1,
+                       max_asym = 0.25, max_basis_shift = 0.0078,
                        max_basis_damping = 2, maxiters_pre = 1000,
                        algo_pre = "NLOPT_LN_NELDERMEAD", min_bl_ed_pppm = NULL,
                        max_bl_ed_pppm = 7, auto_bl_flex_n = 20, 
@@ -762,7 +766,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024,  max_shift = 10,
                        aic_smoothing_factor = 5, anal_jac = TRUE,
                        pre_fit_ppm_left = 4, pre_fit_ppm_right = 1.8,
                        phi1_optim = FALSE, phi1_init = 0, max_dphi1 = 0.2,
-                       max_basis_shift_broad = 1, max_basis_damping_broad = 2,
+                       max_basis_shift_broad = 0.0078,
+                       max_basis_damping_broad = 2,
                        ahat_calc_method = "lh_pnnls",
                        prefit_phase_search = TRUE, freq_reg = NULL,
                        output_all_paras = FALSE) {
