@@ -665,7 +665,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   if (opts$output_all_paras) {
     # vector of shifts
     names(freq_vec_hz) <- paste(basis$names, "shift.hz", sep = ".")
-    names(lb_vec_hz)   <- paste(basis$names, "lb.hz", seq= ".")
+    names(lb_vec_hz)   <- paste(basis$names, "lb.hz", sep = ".")
     diags <- cbind(diags, t(freq_vec_hz))
     diags <- cbind(diags, t(lb_vec_hz))
   }
