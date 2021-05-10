@@ -75,3 +75,19 @@ Extract the estimated amplitudes from ``fit_res`` and print as a ratio to total-
 amps <- fit_amps(fit_res)
 print(t(amps / amps$tCr))
 ```
+
+Unscaled amplitudes, CRLB error estimates and other fitting diagnostics, such as SNR, are given in the results table:
+
+```{r}
+fit_res$res_tab
+```
+
+Spectral SNR:
+```{r}
+fit_res$res_tab$SNR
+```
+
+Linewidth of the tNAA resonance in PPM:
+```{r}
+fit_res$res_tab$tNAA_lw
+```

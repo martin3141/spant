@@ -44,7 +44,8 @@ abfit_opts(
   max_basis_damping_broad = 2,
   ahat_calc_method = "lh_pnnls",
   prefit_phase_search = TRUE,
-  freq_reg = NULL
+  freq_reg = NULL,
+  output_all_paras = FALSE
 )
 }
 \arguments{
@@ -150,6 +151,9 @@ one of: "lh_pnnls" or "ls".}
 prefit stage of the algorithm.}
 
 \item{freq_reg}{frequency shift parameter.}
+
+\item{output_all_paras}{include more fitting parameters in the fit table,
+e.g. individual shift and damping factors for each basis set element.}
 }
 \value{
 full list of options.

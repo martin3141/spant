@@ -405,12 +405,15 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   t_mat <- matrix(t, nrow = N, ncol = Nbasis)
   
   if (opts$phi1_optim) {
-    freq_vec <- 2i * pi * res$par[6:(5 + Nbasis)]
-    lb_vec <- lw2alpha(res$par[(6 + Nbasis):(5 + 2 * Nbasis)])
+    freq_vec_hz <- res$par[6:(5 + Nbasis)]
+    lb_vec_hz   <- res$par[(6 + Nbasis):(5 + 2 * Nbasis)]
   } else {
-    freq_vec <- 2i * pi * res$par[5:(4 + Nbasis)]
-    lb_vec <- lw2alpha(res$par[(5 + Nbasis):(4 + 2 * Nbasis)])
+    freq_vec_hz <- res$par[5:(4 + Nbasis)]
+    lb_vec_hz   <- res$par[(5 + Nbasis):(4 + 2 * Nbasis)]
   }
+  
+  freq_vec      <- 2i * pi * freq_vec_hz
+  lb_vec        <- lw2alpha(lb_vec_hz)
   
   freq_lb_mat <- matrix(freq_vec - lb_vec, nrow = N, ncol = Nbasis,
                         byrow = TRUE) 
@@ -485,7 +488,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                           nrow = nrow(sp_bas_final$bl_bas),
                           ncol = ncol(sp_bas_final$bl_bas), byrow = TRUE)
   
-  # remove augumented data points for plotting
+  # remove augmented data points for plotting
   bl_plot <- as.vector(bl[1:length(sp_bas_final$inds)])
   Y_plot <- as.vector(Re(Y_mod[sp_bas_final$inds]))
   Y_hat_plot <- as.vector(Y_hat[1:length(sp_bas_final$inds)])
@@ -564,6 +567,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   
   # remove any zero columns from para_crlb
   para_crlb <- para_crlb[,!(colSums(abs(para_crlb)) == 0)] 
+  
   # non-zero paras in jacobian
   nz_paras <- dim(para_crlb)[2]
   
@@ -655,11 +659,19 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                               crlbs_cut[(crlb_n - comb_sigs + 1):crlb_n]))
   }
   
+  # vector of coarse fit residuals at differing levels of baseline flexibility
   if (opts$auto_bl_flex) diags <- cbind(diags, resid_vec_frame)
   
+  if (opts$output_all_paras) {
+    # vector of shifts
+    names(freq_vec_hz) <- paste(basis$names, "shift.hz", sep = ".")
+    names(lb_vec_hz)   <- paste(basis$names, "lb.hz", seq= ".")
+    diags <- cbind(diags, t(freq_vec_hz))
+    diags <- cbind(diags, t(lb_vec_hz))
+  }
+  
   # construct output
-  list(amps = amps, crlbs = t(crlbs_out), diags = diags,
-       fit = fit_frame)
+  list(amps = amps, crlbs = t(crlbs_out), diags = diags, fit = fit_frame)
 }
 
 #' Return a list of options for an ABfit analysis.
@@ -726,8 +738,10 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' one of: "lh_pnnls" or "ls".
 #' @param prefit_phase_search perform a 1D search for the optimal phase in the
 #' prefit stage of the algorithm.
-#' @return full list of options.
 #' @param freq_reg frequency shift parameter.
+#' @param output_all_paras include more fitting parameters in the fit table,
+#' e.g. individual shift and damping factors for each basis set element.
+#' @return full list of options.
 #' @examples
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
 #' @export
@@ -750,7 +764,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024,  max_shift = 10,
                        phi1_optim = FALSE, phi1_init = 0, max_dphi1 = 0.2,
                        max_basis_shift_broad = 1, max_basis_damping_broad = 2,
                        ahat_calc_method = "lh_pnnls",
-                       prefit_phase_search = TRUE, freq_reg = NULL) {
+                       prefit_phase_search = TRUE, freq_reg = NULL,
+                       output_all_paras = FALSE) {
                          
   list(init_damping = init_damping, maxiters = maxiters,
        max_shift = max_shift, max_damping = max_damping, max_phase = max_phase,
@@ -773,7 +788,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024,  max_shift = 10,
        max_basis_shift_broad = max_basis_shift_broad,
        max_basis_damping_broad = max_basis_damping_broad,
        ahat_calc_method = ahat_calc_method,
-       prefit_phase_search = prefit_phase_search, freq_reg = freq_reg)
+       prefit_phase_search = prefit_phase_search, freq_reg = freq_reg,
+       output_all_paras = output_all_paras)
 }
 
 #' Return a list of options for an ABfit analysis to maintain comparability with
