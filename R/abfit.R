@@ -538,8 +538,10 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     tnaa_sig_pts <- basis_frame$NAA + basis_frame$NAAG
     diags$tNAA_lw <- calc_peak_info_vec(tnaa_sig_pts, 2)[3] * 
                      (sp_bas_final$x_scale[1] - sp_bas_final$x_scale[2])
+  } else if ("NAA" %in% colnames(amps)) {
+    diags$NAA_lw <- calc_peak_info_vec(basis_frame$NAA, 2)[3] * 
+                    (sp_bas_final$x_scale[1] - sp_bas_final$x_scale[2])
   }
-  
   
   #### crlb calc ####
   

@@ -1,6 +1,8 @@
 # spant 1.13.0
 * Frequency shifts limits are now specified in ppm rather than Hz to improve
 consistency between field strengths (when using default settings).
+* NAA linewidth is now estimated and output by ABfit when NAAG is absent - 
+useful for braino phantom scans.
 
 # spant 1.12.0
 * Added 2HG and citrate simulation parameters. e.g. get_mol_paras("2hg").
