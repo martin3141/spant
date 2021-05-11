@@ -375,7 +375,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   
   # diagnostic info frame 
   diags <- data.frame(phase = res$par[1] * 180 / pi, lw = res$par[2],
-                      shift = (res$par[3] + init_shift) / acq_paras$ft * 1e6,
+                      shift = -res$par[3] / acq_paras$ft * 1e6,
                       asym = res$par[4], res$deviance, res$niter, res$info,
                       res$message, bl_ed_pppm = opts$bl_ed_pppm,
                       stringsAsFactors = TRUE)
@@ -667,9 +667,9 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   
   if (opts$output_all_paras) {
     # vector of shifts
-    freq_vec_ppm <- freq_vec_hz / acq_paras$ft * 1e6
+    freq_vec_ppm <- -freq_vec_hz / acq_paras$ft * 1e6
     names(freq_vec_ppm) <- paste(basis$names, "shift.ppm", sep = ".")
-    names(lb_vec_hz)   <- paste(basis$names, "lb.hz", sep = ".")
+    names(lb_vec_hz)    <- paste(basis$names, "lb.hz", sep = ".")
     diags <- cbind(diags, t(freq_vec_ppm))
     diags <- cbind(diags, t(lb_vec_hz))
   }
