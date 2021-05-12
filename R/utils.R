@@ -307,7 +307,7 @@ sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal_v1",
   
   basis <- sim_basis(brain_basis_paras, pul_seq, acq_paras, xlim = xlim, ...)
 
-  mrs_data <- basis2mrs_data(basis, sum_elements = TRUE, amp = amps)
+  mrs_data <- basis2mrs_data(basis, sum_elements = TRUE, amps = amps)
   
   if (!full_output) {
     return(mrs_data)
