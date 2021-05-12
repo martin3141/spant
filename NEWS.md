@@ -3,6 +3,9 @@
 consistency between field strengths (when using default settings).
 * NAA linewidth is now estimated and output by ABfit when NAAG is absent - 
 useful for braino phantom scans.
+* Warning now given when spectra are mathematically combined and are not both
+in the same time/frequency domain.
+* sum_mrs function added to simplify combining spectra within a pipe.
 
 # spant 1.12.0
 * Added 2HG and citrate simulation parameters. e.g. get_mol_paras("2hg").

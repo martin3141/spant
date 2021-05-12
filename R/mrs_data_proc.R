@@ -1684,9 +1684,40 @@ bc <- function(mrs_data, lambda = 1e3, p = 0.1) {
   apply_mrs(mrs_data, 7, ptw::baseline.corr, lambda, p)
 }
 
+#' Sum two mrs_data objects.
+#' @param a first mrs_data object to be summed.
+#' @param b second mrs_data object to be summed.
+#' @param force set to TRUE to force mrs_data objects to be summed, even if they
+#' are in different time/frequency domains.
+#' @return a + b 
+#' @export
+sum_mrs <- function(a, b, force = FALSE) {
+ 
+  if (class(a) != "mrs_data") stop("a argument is not an mrs_data object")
+  
+  if (class(b) != "mrs_data") stop("b argument is not an mrs_data object")
+  
+  # if they are not in the same domain and we are not forcing, then swap b to 
+  # match a
+  if ((is_fd(a) != is_fd(b)) & !force) {
+    if (is_fd(b)) {
+      b <- fd2td(b)
+    } else {
+      b <- td2fd(b)
+    }
+  }
+  
+  a$data <- a$data + b$data
+  
+  return(a)
+}
+  
 #' @export
 `+.mrs_data` <- function(a, b) {
   if (class(b) == "mrs_data" ) {
+    if (is_fd(a) != is_fd(b)) {
+      warning("sum warning, spectral domains do not match")
+    }
     a$data <- a$data + b$data
   } else if (class(b) == "numeric") {
     a$data <- a$data + b
@@ -1697,6 +1728,9 @@ bc <- function(mrs_data, lambda = 1e3, p = 0.1) {
 #' @export
 `-.mrs_data` <- function(a, b = NULL) {
   if (class(b) == "mrs_data" ) {
+    if (is_fd(a) != is_fd(b)) {
+      warning("subtract warning, time/frequency domains do not match")
+    }
     a$data = a$data - b$data
   } else if (is.null(b)) {
     a$data = -a$data
@@ -1709,6 +1743,9 @@ bc <- function(mrs_data, lambda = 1e3, p = 0.1) {
 #' @export
 `*.mrs_data` <- function(a, b) {
   if (class(b) == "mrs_data" ) {
+    if (is_fd(a) != is_fd(b)) {
+      warning("multiply warning, time/frequency domains do not match")
+    }
     a$data <- a$data * b$data
   } else if ( class(b) == "numeric") {
     a$data <- a$data * b
@@ -1719,6 +1756,9 @@ bc <- function(mrs_data, lambda = 1e3, p = 0.1) {
 #' @export
 `/.mrs_data` <- function(a, b) {
   if (class(b) == "mrs_data" ) {
+    if (is_fd(a) != is_fd(b)) {
+      warning("divide warning, time/frequency domains do not match")
+    }
     a$data <- a$data / b$data
   } else if (class(b) == "numeric") {
     a$data <- a$data / b
@@ -2682,7 +2722,9 @@ calc_peak_info_vec <- function(data_pts, interp_f) {
   hh <- peak_height / 2
   
   # right side of peak
-  rs <- peak_pos_n + min(which((data_pts < hh)[peak_pos_n:length(data_pts)])) - 1
+  rs <- peak_pos_n + 
+        min(which((data_pts < hh)[peak_pos_n:length(data_pts)])) - 1
+  
   rs_slope <- (data_pts[rs] - data_pts[rs - 1])
   rs_intercept <- data_pts[rs] - rs_slope * rs
   rs_x_hh <- (hh - rs_intercept) / rs_slope

@@ -14,7 +14,7 @@ basis2mrs_data(basis, sum_elements = FALSE, amps = NULL, shifts = NULL)
 
 \item{amps}{a vector of scaling factors to apply to each basis element.}
 
-\item{shifts}{a vector of frequency shifts (in PPM) to apply to each basis
+\item{shifts}{a vector of frequency shifts (in ppm) to apply to each basis
 element.}
 }
 \value{
