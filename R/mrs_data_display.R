@@ -298,8 +298,8 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
                   col = col, ...)
   
   if (!is.null(y_ticks)) {
-    graphics::axis(4, at = y_ticks, labels=F, col = NA, col.ticks = "red")
-    graphics::axis(2, at = y_ticks, labels=F, col = NA, col.ticks = "red")
+    graphics::axis(4, at = y_ticks, labels = F, col = NA, col.ticks = "red")
+    graphics::axis(2, at = y_ticks, labels = F, col = NA, col.ticks = "red")
   }
   
   if (!is.null(vline)) graphics::abline(v = vline, col = "white")
