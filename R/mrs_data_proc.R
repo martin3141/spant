@@ -308,6 +308,28 @@ sim_noise <- function(sd = 0.1, fs = def_fs(), ft = def_ft(), N = def_N(),
   array2mrs_data(data_array, fs = fs, ft = ft, ref = ref, fd = fd)
 }
 
+#' Add noise to an mrs_data object.
+#' @param mrs_data data to add noise to.
+#' @param sd standard deviation of the noise.
+#' @param fd generate the noise samples in the frequency-domain (TRUE) or
+#' time-domain (FALSE). This is required since the absolute value of the 
+#' standard deviation of noise samples changes when data is Fourier transformed.
+#' @return mrs_data object with additive normally distributed noise.
+#' @export
+add_noise <- function(mrs_data, sd = 0.1, fd = TRUE) {
+  
+  # covert data to the frequency domain if needed
+  if (fd & !is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  # covert data to the time domain if needed
+  if (!fd & is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+ 
+  data_pts <- length(mrs_data$data)
+  noise <- stats::rnorm(data_pts, 0, sd) + 1i*stats::rnorm(data_pts, 0, sd)
+  mrs_data$data <- mrs_data$data + noise
+  mrs_data
+}
+
 sim_zeros <- function(fs = def_fs(), ft = def_ft(), N = def_N(),
                       ref = def_ref(), dyns = 1) {
   
@@ -2029,19 +2051,38 @@ fd_conv_filt <- function(mrs_data, K = 25, ext = 1) {
 #' signals. J Magn Reson 1987;73:553-557.
 #' 
 #' @param mrs_data MRS data to be filtered.
-#' @param xlim frequency range in Hz to filter.
+#' @param xlim frequency range to filter, default units are Hz which can be
+#' changed to ppm using the "scale" argument.
 #' @param comps number of Lorentzian components to use for modelling.
 #' @param irlba option to use irlba SVD (logical).
 #' @param max_damp maximum allowable damping factor.
-#' @return filtered data.
+#' @param scale either "hz" or "ppm" to set the frequency units of xlim.
+#' @param return_model by default the filtered spectrum is returned. Set
+#' return_model to TRUE to return the HSVD model of the data.
+#' @return filtered data or model depending on the return_model argument.
 #' @export
 hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE,
-                      max_damp = 10) {
+                      max_damp = 10, scale = "hz", return_model = FALSE) {
   
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
-  apply_mrs(mrs_data, 7, hsvd_filt_vec, fs = fs(mrs_data), region = xlim,
-            comps = comps, irlba, max_damp = max_damp)
+  if ( scale == "ppm" ) {
+    xlim <- ppm2hz(xlim, mrs_data$ft, mrs_data$ref) 
+  } else if (scale != "hz") {
+    stop("Invalid scale option, should be 'ppm' or 'hz'.")
+  }
+  
+  xlim <- sort(xlim)
+  
+  filt <- apply_mrs(mrs_data, 7, hsvd_filt_vec, fs = fs(mrs_data),
+                    region = xlim, comps = comps, irlba, max_damp = max_damp)
+  
+  if (return_model) {
+    model <- sum_mrs(mrs_data, -filt)
+    return(model)
+  } else {
+    return(filt)
+  }
 }
 
 hsvd_filt_vec <- function(fid, fs, region = c(-30, 30), comps = 40, 

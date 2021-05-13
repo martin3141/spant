@@ -9,8 +9,9 @@ test_that("Test data stimulation step", {
   
   # create a realistic looking spectrum
   set.seed(1)
+  
   mrs_data <- sim_res$mrs_data %>% lb(6) %>% "/"(10) %>% phase(130) %>%
-              shift(0.1) %>% "+"(sim_noise(0.001))
+              shift(0.1) %>% add_noise(0.001, fd = FALSE)
   
   expect_equal_to_reference(mrs_data, "abfit_sim_mrs_data.rds",
                             tolerance = 1e-6)

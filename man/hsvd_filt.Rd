@@ -4,21 +4,35 @@
 \alias{hsvd_filt}
 \title{HSVD based signal filter.}
 \usage{
-hsvd_filt(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE, max_damp = 10)
+hsvd_filt(
+  mrs_data,
+  xlim = c(-30, 30),
+  comps = 40,
+  irlba = TRUE,
+  max_damp = 10,
+  scale = "hz",
+  return_model = FALSE
+)
 }
 \arguments{
 \item{mrs_data}{MRS data to be filtered.}
 
-\item{xlim}{frequency range in Hz to filter.}
+\item{xlim}{frequency range to filter, default units are Hz which can be
+changed to ppm using the "scale" argument.}
 
 \item{comps}{number of Lorentzian components to use for modelling.}
 
 \item{irlba}{option to use irlba SVD (logical).}
 
 \item{max_damp}{maximum allowable damping factor.}
+
+\item{scale}{either "hz" or "ppm" to set the frequency units of xlim.}
+
+\item{return_model}{by default the filtered spectrum is returned. Set
+return_model to TRUE to return the HSVD model of the data.}
 }
 \value{
-filtered data.
+filtered data or model depending on the return_model argument.
 }
 \description{
 HSVD based signal filter described in:

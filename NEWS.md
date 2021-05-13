@@ -6,6 +6,10 @@ useful for braino phantom scans.
 * Warning now given when spectra are mathematically combined and are not both
 in the same time/frequency domain.
 * sum_mrs function added to simplify combining spectra within a pipe.
+* add_noise function added to simplify generating simulated data with pipe
+operators.
+* hsvd_filt function now accepts a frequency range in ppm units and gives the
+option to return the model rather than the filtered data.
 
 # spant 1.12.0
 * Added 2HG and citrate simulation parameters. e.g. get_mol_paras("2hg").
