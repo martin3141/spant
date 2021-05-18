@@ -58,10 +58,16 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr, ...){
   
 #' Apply water reference scaling to a fitting results object to yield metabolite 
 #' quantities in millimolar (mM) units (mol/litre).
+#' 
+#' See the LCModel manual section on water-scaling for details on the
+#' assumptions and relevant references.
+#' 
 #' @param fit_result a result object generated from fitting.
 #' @param ref_data water reference MRS data object.
 #' @param w_att water attenuation factor (default = 0.7).
-#' @param w_conc assumed water concentration (default = 35880).
+#' @param w_conc assumed water concentration (default = 35880). Default value
+#' corresponds to typical white matter. Set to 43300 for gray matter, and 55556 
+#' for phantom measurements.
 #' @param ... additional arguments to get_td_amp function.
 #' @return a \code{fit_result} object with a rescaled results table.
 #' @export

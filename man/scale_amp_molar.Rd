@@ -14,7 +14,9 @@ scale_amp_molar(fit_result, ref_data, w_att = 0.7, w_conc = 35880, ...)
 
 \item{w_att}{water attenuation factor (default = 0.7).}
 
-\item{w_conc}{assumed water concentration (default = 35880).}
+\item{w_conc}{assumed water concentration (default = 35880). Default value
+corresponds to typical white matter. Set to 43300 for gray matter, and 55556
+for phantom measurements.}
 
 \item{...}{additional arguments to get_td_amp function.}
 }
@@ -22,6 +24,6 @@ scale_amp_molar(fit_result, ref_data, w_att = 0.7, w_conc = 35880, ...)
 a \code{fit_result} object with a rescaled results table.
 }
 \description{
-Apply water reference scaling to a fitting results object to yield metabolite
-quantities in millimolar (mM) units (mol/litre).
+See the LCModel manual section on water-scaling for details on the
+assumptions and relevant references.
 }
