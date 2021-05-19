@@ -10,6 +10,7 @@ in the same time/frequency domain.
 * add_noise function added to simplify generating simulated data with a pipe.
 * hsvd_filt function now accepts a frequency range in ppm units and gives the
 option to return the model rather than the filtered data.
+* Bug fix for hsvd_filt function where the max_damp argument was ignored.
 
 # spant 1.12.0
 * Added 2HG and citrate simulation parameters. e.g. get_mol_paras("2hg").
