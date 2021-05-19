@@ -1,13 +1,13 @@
 # spant 1.13.0
-* Frequency shifts limits are now specified in ppm rather than Hz to improve
-consistency between field strengths (when using default settings).
+* ABfit frequency shifts limits are now specified in ppm rather than Hz to
+improve consistency between field strengths.
 * NAA linewidth is now estimated and output by ABfit when NAAG is absent - 
-useful for braino phantom scans.
+useful for BRAINO phantom scans.
 * Warning now given when spectra are mathematically combined and are not both
 in the same time/frequency domain.
 * sum_mrs function added to simplify combining spectra within a pipe.
-* add_noise function added to simplify generating simulated data with pipe
-operators.
+* scale_mrs function added to simplify scaling a spectrum within a pipe.
+* add_noise function added to simplify generating simulated data with a pipe.
 * hsvd_filt function now accepts a frequency range in ppm units and gives the
 option to return the model rather than the filtered data.
 

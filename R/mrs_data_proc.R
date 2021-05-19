@@ -1733,6 +1733,22 @@ sum_mrs <- function(a, b, force = FALSE) {
   
   return(a)
 }
+
+#' Scale an mrs_data object by a constant.
+#' @param mrs_data data to be scaled.
+#' @param scale multiplicative factor.
+#' @return mrs_data multiplied by the scale factor.
+#' @export
+scale_mrs <- function(mrs_data, scale) {
+ 
+  if (class(mrs_data) != "mrs_data") {
+    stop("first argument is not an mrs_data object")
+  }
+  
+  mrs_data$data <- mrs_data$data * scale
+  
+  return(mrs_data)
+}
   
 #' @export
 `+.mrs_data` <- function(a, b) {
