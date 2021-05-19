@@ -2104,13 +2104,16 @@ hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE,
 hsvd_filt_vec <- function(fid, fs, region = c(-30, 30), comps = 40, 
                           irlba = TRUE, max_damp = 10) {
   
-  hsvd_res <- hsvd_vec(fid, fs, comps = comps, irlba)  
-  idx <- (hsvd_res$reson_table$frequency_hz < region[2]) &
-         (hsvd_res$reson_table$frequency_hz > region[1] )
-  model <- rowSums(hsvd_res$basis[,idx])
+  hsvd_res <- hsvd_vec(fid, fs, comps = comps, irlba, max_damp)
+  if (is.null(region)) {
+    model <- rowSums(hsvd_res$basis)
+  } else {
+    idx <- (hsvd_res$reson_table$frequency_hz < region[2]) &
+           (hsvd_res$reson_table$frequency_hz > region[1] )
+    model <- rowSums(hsvd_res$basis[,idx])
+  }
   fid - model
 }
-
 
 #' HSVD of an mrs_data object.
 #' 
@@ -2184,7 +2187,7 @@ hsvd_vec <- function(y, fs, comps = 40, irlba = TRUE, max_damp = 0) {
   # large +ve dampings can cause stability issues where the basis signals
   # can have values 1e88 at the end of the FID causing ginv to fail
   # cap these positive dampings to max_damp
-  dampings[dampings > max_damp] <- max_damp
+  if (!is.null(max_damp)) dampings[dampings > max_damp] <- max_damp
   
   t <- seq(from = 0, to = (N - 1) / fs, by = 1 / fs)
   t_mat <- matrix(t, ncol = comps, nrow = N)
