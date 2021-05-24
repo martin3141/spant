@@ -21,8 +21,10 @@ mrs_data <- function(data, ft, resolution, ref, nuc, freq_domain, affine,
 #' @param ref reference value for ppm scale (required for list_data format).
 #' @param n_ref_scans override the number of water reference scans detected in
 #' the file header (GE p-file only).
-#' @param full_data export all data points, including those before the start of
-#' the FID (default = FALSE).
+#' @param full_fid export all data points, including those before the start
+#' of the FID (default = FALSE), TWIX format only.
+#' @param omit_svs_ref_scans remove any reference scans sometimes saved in
+#' SVS twix data (default = TRUE).
 #' @param verbose print data file information (default = FALSE).
 #' @param extra an optional data frame to provide additional variables for use
 #' in subsequent analysis steps, eg id or grouping variables.
@@ -33,7 +35,8 @@ mrs_data <- function(data, ft, resolution, ref, nuc, freq_domain, affine,
 #' print(mrs_data)
 #' @export
 read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
-                     n_ref_scans = NULL, full_data = FALSE, verbose = FALSE,
+                     n_ref_scans = NULL, full_fid = FALSE,
+                     omit_svs_ref_scans = TRUE, verbose = FALSE,
                      extra = NULL) {
   
   # try and guess the format from the filename extension
@@ -46,7 +49,8 @@ read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
   } else if (format == "dicom") {
     return(read_dicom(fname, verbose, extra))
   } else if (format == "twix") {
-    return(read_twix(fname, verbose, full_data, extra))
+    return(read_twix(fname, verbose, full_fid, omit_svs_ref_scans,
+                     extra))
   } else if (format == "pfile") {
     return(read_pfile(fname, n_ref_scans, extra))
   } else if (format == "list_data") {

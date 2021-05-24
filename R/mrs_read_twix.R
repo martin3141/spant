@@ -45,7 +45,9 @@ calc_siemens_paras <- function(vars, is_ima) {
               affine = affine))
 }
 
-read_twix <- function(fname, verbose, full_data = FALSE, extra) {
+read_twix <- function(fname, verbose, full_fid = FALSE,
+                      omit_svs_ref_scans = TRUE, extra) {
+  
   # check the file size
   fbytes <- file.size(fname)
   
@@ -266,7 +268,7 @@ read_twix <- function(fname, verbose, full_data = FALSE, extra) {
   data <- array(data, dim = c(ima_samples, ima_coils, dynamics, 1, 1, 1, 1))
   data <- aperm(data, c(7,6,5,4,3,2,1))
    
-  if (!full_data & (floor(ima_kspace_center_column / 2) > 0)) {
+  if (!full_fid & (floor(ima_kspace_center_column / 2) > 0)) {
     #data <- data[,,,,,,(fid_offset + 1):ima_samples, drop = FALSE]
     data <- data[,,,,,,(ima_kspace_center_column + 1):ima_samples, drop = FALSE]
   }
@@ -291,6 +293,13 @@ read_twix <- function(fname, verbose, full_data = FALSE, extra) {
                  "Ida", "Idb", "Idc", "Idd", "Ide")
   
   names(mrs_data$twix_inds) <- ind_names
+  
+  # remove SVS ref scans if required
+  if (omit_svs_ref_scans & (max(mrs_data$twix_inds$Phs) == 1) &
+      max(mrs_data$twix_inds$Ave) > 0) {
+    
+    mrs_data <- get_dyns(mrs_data, mrs_data$twix_inds$Phs == 1)
+  }
   
   return(mrs_data)
 }

@@ -11,7 +11,8 @@ read_mrs(
   fs = NULL,
   ref = NULL,
   n_ref_scans = NULL,
-  full_data = FALSE,
+  full_fid = FALSE,
+  omit_svs_ref_scans = TRUE,
   verbose = FALSE,
   extra = NULL
 )
@@ -33,8 +34,11 @@ the format will be guessed from the filename extension.}
 \item{n_ref_scans}{override the number of water reference scans detected in
 the file header (GE p-file only).}
 
-\item{full_data}{export all data points, including those before the start of
-the FID (default = FALSE).}
+\item{full_fid}{export all data points, including those before the start
+of the FID (default = FALSE), TWIX format only.}
+
+\item{omit_svs_ref_scans}{remove any reference scans sometimes saved in
+SVS twix data (default = TRUE).}
 
 \item{verbose}{print data file information (default = FALSE).}
 

@@ -11,6 +11,7 @@ in the same time/frequency domain.
 * hsvd_filt function now accepts a frequency range in ppm units and gives the
 option to return the model rather than the filtered data.
 * Bug fix for hsvd_filt function where the max_damp argument was ignored.
+* SVS reference scans, found in some TWIX files, are now removed by default.
 
 # spant 1.12.0
 * Added 2HG and citrate simulation parameters. e.g. get_mol_paras("2hg").
