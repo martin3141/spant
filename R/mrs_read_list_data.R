@@ -38,7 +38,8 @@ read_list_data <- function(fname, ft, fs, ref, extra) {
   colnames(data_ind_tab) <- col_names
   
   fid_num <- nrow(data_ind_tab)
-  chans <- max(data_ind_tab$chan) + 1
+  # chans <- max(data_ind_tab$chan) + 1
+  chans <- length(unique(data_ind_tab$chan))
   ref_inds <- which(data_ind_tab$typ == "STD" & data_ind_tab$mix == 1)
   metab_inds <- which(data_ind_tab$typ == "STD" & data_ind_tab$mix == 0)
   noise_inds <- which(data_ind_tab$typ == "NOI" & data_ind_tab$mix == 0)
@@ -71,7 +72,7 @@ read_list_data <- function(fname, ft, fs, ref, extra) {
     ref_mrs <- NA
   } else {
     ref_data <- cplx_vec[ref_start:ref_end]
-    dim(ref_data) <- c(N, chans, ref_N/chans, 1, 1, 1, 1)
+    dim(ref_data) <- c(N, chans, ref_N / chans, 1, 1, 1, 1)
     ref_data <- aperm(ref_data, c(7,6,5,4,3,2,1))
     
     ref_mrs <- mrs_data(data = ref_data, ft = ft, resolution = res, ref = ref,
