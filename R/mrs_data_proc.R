@@ -2175,7 +2175,7 @@ hsvd_vec <- function(y, fs, comps = 40, irlba = TRUE, max_damp = 0) {
   rows <- nrow(Uk)
   Ukt <- Uk[2:rows,]
   Ukb <- Uk[1:(rows - 1),]
-  Zp = MASS::ginv(Ukb) %*% Ukt
+  Zp <- MASS::ginv(Ukb) %*% Ukt
 
   # find the poles
   q <- pracma::eig(Zp)
