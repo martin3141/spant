@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.12.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.13.0</span>
       </span>
     </div>
 
@@ -146,9 +146,26 @@
       <small>Source: <a href='https://github.com/martin3141/spant/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="spant-1130" class="section level1">
+<h1 class="page-header" data-toc-text="1.13.0">
+<a href="#spant-1130" class="anchor"></a>spant 1.13.0<small> Unreleased </small>
+</h1>
+<ul>
+<li>ABfit frequency shifts limits are now specified in ppm rather than Hz to improve consistency between field strengths.</li>
+<li>NAA linewidth is now estimated and output by ABfit when NAAG is absent - useful for BRAINO phantom scans.</li>
+<li>Warning now given when spectra are mathematically combined and are not both in the same time/frequency domain.</li>
+<li>sum_mrs function added to simplify combining spectra within a pipe.</li>
+<li>scale_mrs function added to simplify scaling a spectrum within a pipe.</li>
+<li>add_noise function added to simplify generating simulated data with a pipe.</li>
+<li>hsvd_filt function now accepts a frequency range in ppm units and gives the option to return the model rather than the filtered data.</li>
+<li>Bug fix for hsvd_filt function where the max_damp argument was ignored.</li>
+<li>SVS reference scans, found in some TWIX files, are now removed by default.</li>
+<li>Bug fix for reading list/data when only one coil element is used.</li>
+</ul>
+</div>
     <div id="spant-1120" class="section level1">
 <h1 class="page-header" data-toc-text="1.12.0">
-<a href="#spant-1120" class="anchor"></a>spant 1.12.0<small> Unreleased </small>
+<a href="#spant-1120" class="anchor"></a>spant 1.12.0<small> 2021-05-05 </small>
 </h1>
 <ul>
 <li>Added 2HG and citrate simulation parameters. e.g. get_mol_paras(“2hg”).</li>

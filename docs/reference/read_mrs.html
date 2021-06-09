@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.12.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.13.0</span>
       </span>
     </div>
 
@@ -159,7 +159,8 @@
   fs <span class='op'>=</span> <span class='cn'>NULL</span>,
   ref <span class='op'>=</span> <span class='cn'>NULL</span>,
   n_ref_scans <span class='op'>=</span> <span class='cn'>NULL</span>,
-  full_data <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  full_fid <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  omit_svs_ref_scans <span class='op'>=</span> <span class='cn'>TRUE</span>,
   verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
   extra <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
@@ -196,9 +197,14 @@ the format will be guessed from the filename extension.</p></td>
 the file header (GE p-file only).</p></td>
     </tr>
     <tr>
-      <th>full_data</th>
-      <td><p>export all data points, including those before the start of
-the FID (default = FALSE).</p></td>
+      <th>full_fid</th>
+      <td><p>export all data points, including those before the start
+of the FID (default = FALSE), TWIX format only.</p></td>
+    </tr>
+    <tr>
+      <th>omit_svs_ref_scans</th>
+      <td><p>remove any reference scans sometimes saved in
+SVS twix data (default = TRUE).</p></td>
     </tr>
     <tr>
       <th>verbose</th>

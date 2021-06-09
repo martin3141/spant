@@ -49,8 +49,8 @@ quantities in millimolar (mM) units (mol/litre). — scale_amp_molar • Spectro
 
 <meta property="og:title" content="Apply water reference scaling to a fitting results object to yield metabolite
 quantities in millimolar (mM) units (mol/litre). — scale_amp_molar" />
-<meta property="og:description" content="Apply water reference scaling to a fitting results object to yield metabolite
-quantities in millimolar (mM) units (mol/litre)." />
+<meta property="og:description" content="See the LCModel manual section on water-scaling for details on the
+assumptions and relevant references." />
 <meta property="og:image" content="https://martin3141.github.io/spant/logo.png" />
 
 
@@ -83,7 +83,7 @@ quantities in millimolar (mM) units (mol/litre)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.12.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.13.0</span>
       </span>
     </div>
 
@@ -153,8 +153,8 @@ quantities in millimolar (mM) units (mol/litre).</h1>
     </div>
 
     <div class="ref-description">
-    <p>Apply water reference scaling to a fitting results object to yield metabolite
-quantities in millimolar (mM) units (mol/litre).</p>
+    <p>See the LCModel manual section on water-scaling for details on the
+assumptions and relevant references.</p>
     </div>
 
     <pre class="usage"><span class='fu'>scale_amp_molar</span><span class='op'>(</span><span class='va'>fit_result</span>, <span class='va'>ref_data</span>, w_att <span class='op'>=</span> <span class='fl'>0.7</span>, w_conc <span class='op'>=</span> <span class='fl'>35880</span>, <span class='va'>...</span><span class='op'>)</span></pre>
@@ -176,7 +176,9 @@ quantities in millimolar (mM) units (mol/litre).</p>
     </tr>
     <tr>
       <th>w_conc</th>
-      <td><p>assumed water concentration (default = 35880).</p></td>
+      <td><p>assumed water concentration (default = 35880). Default value
+corresponds to typical white matter. Set to 43300 for gray matter, and 55556
+for phantom measurements.</p></td>
     </tr>
     <tr>
       <th>...</th>

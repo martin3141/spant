@@ -83,7 +83,7 @@ signals. J Magn Reson 1987;73:553-557." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.12.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.13.0</span>
       </span>
     </div>
 
@@ -158,7 +158,15 @@ and timedomain model fitting to exponentially damped magnetic resonance
 signals. J Magn Reson 1987;73:553-557.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>hsvd_filt</span><span class='op'>(</span><span class='va'>mrs_data</span>, xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>30</span>, <span class='fl'>30</span><span class='op'>)</span>, comps <span class='op'>=</span> <span class='fl'>40</span>, irlba <span class='op'>=</span> <span class='cn'>TRUE</span>, max_damp <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>hsvd_filt</span><span class='op'>(</span>
+  <span class='va'>mrs_data</span>,
+  xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>30</span>, <span class='fl'>30</span><span class='op'>)</span>,
+  comps <span class='op'>=</span> <span class='fl'>40</span>,
+  irlba <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  max_damp <span class='op'>=</span> <span class='fl'>10</span>,
+  scale <span class='op'>=</span> <span class='st'>"hz"</span>,
+  return_model <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,7 +177,8 @@ signals. J Magn Reson 1987;73:553-557.</p>
     </tr>
     <tr>
       <th>xlim</th>
-      <td><p>frequency range in Hz to filter.</p></td>
+      <td><p>frequency range to filter, default units are Hz which can be
+changed to ppm using the "scale" argument.</p></td>
     </tr>
     <tr>
       <th>comps</th>
@@ -183,11 +192,20 @@ signals. J Magn Reson 1987;73:553-557.</p>
       <th>max_damp</th>
       <td><p>maximum allowable damping factor.</p></td>
     </tr>
+    <tr>
+      <th>scale</th>
+      <td><p>either "hz" or "ppm" to set the frequency units of xlim.</p></td>
+    </tr>
+    <tr>
+      <th>return_model</th>
+      <td><p>by default the filtered spectrum is returned. Set
+return_model to TRUE to return the HSVD model of the data.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>filtered data.</p>
+    <p>filtered data or model depending on the return_model argument.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
