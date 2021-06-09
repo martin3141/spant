@@ -1,3 +1,5 @@
+# spant 1.14.0
+
 # spant 1.13.0
 * ABfit frequency shifts limits are now specified in ppm rather than Hz to
 improve consistency between field strengths.
