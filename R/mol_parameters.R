@@ -477,7 +477,7 @@ get_glyc_paras <- function(lw = NULL, lg = 0, ...) {
               Robin A. de Graaf"
   
   paras <- list(spin_groups = list(spin_group_a), name = "Glyc",
-                source = source)
+                source = source, full_name = "Glycerol")
   class(paras) <- "mol_parameters"
   paras
 }
