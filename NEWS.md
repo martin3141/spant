@@ -1,5 +1,6 @@
 # spant 1.14.0
 * Added glycerol simulation parameters, e.g. get_mol_paras("glyc").
+* Bug fix for read_ima_* funtions.
 
 # spant 1.13.0
 * ABfit frequency shifts limits are now specified in ppm rather than Hz to

@@ -46,7 +46,7 @@ read_ima_coil_dir <- function(dir, extra = NULL) {
   files <- list.files(dir, full.names = TRUE)
   #warning("coil ordering is based on file name only.")
   files <- sort(files)
-  mrs_list <- lapply(files, read_mrs, format = "ima", verbose = TRUE,
+  mrs_list <- lapply(files, read_mrs, format = "dicom", verbose = TRUE,
                      extra = extra)
   mrs_data <- append_coils(mrs_list)
   return(mrs_data)
@@ -64,7 +64,7 @@ read_ima_dyn_dir <- function(dir, extra = NULL) {
   files <- list.files(dir, full.names = TRUE)
   #warning("coil ordering is based on file name only.")
   files <- sort(files)
-  mrs_list <- lapply(files, read_mrs, format = "ima", verbose = TRUE,
+  mrs_list <- lapply(files, read_mrs, format = "dicom", verbose = TRUE,
                      extra = extra)
   mrs_data <- append_dyns(mrs_list)
   return(mrs_data)
