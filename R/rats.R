@@ -11,7 +11,8 @@
 #' @param sp_N number of spline functions, note the true number will be sp_N +
 #' sp_deg.
 #' @param sp_deg degree of spline functions.
-#' @param max_t truncate the FID when longer than max_t to reduce time taken
+#' @param max_t truncate the FID when longer than max_t to reduce time taken,
+#' set to NULL to use the entire FID.
 #' @param basis_type may be one of "poly" or "spline".
 #' @return a list containing the corrected data; phase and shift values in units
 #' of degrees and Hz respectively.
