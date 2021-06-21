@@ -1734,21 +1734,31 @@ sum_mrs <- function(a, b, force = FALSE) {
   return(a)
 }
 
-#' Scale an mrs_data object by a constant.
+#' Scale an mrs_data object by a scalar amplitude.
 #' @param mrs_data data to be scaled.
-#' @param scale multiplicative factor.
-#' @return mrs_data multiplied by the scale factor.
+#' @param amp multiplicative factor, must have length equal to 1 or
+#' Nspec(mrs_data).
+#' @return mrs_data multiplied by the amplitude scale factor.
 #' @export
-scale_mrs <- function(mrs_data, scale) {
+scale_mrs <- function(mrs_data, amp) {
  
   if (class(mrs_data) != "mrs_data") {
     stop("first argument is not an mrs_data object")
   }
   
-  mrs_data$data <- mrs_data$data * scale
+  if (length(amp) == 1) {
+    mrs_data$data <- mrs_data$data * amp
+  } else if (length(amp) == Nspec(mrs_data)) {
+    amps_full <- array(rep(amp, Npts(mrs_data)), dim = dim(mrs_data$data))
+    mrs_data$data <- mrs_data$data * amps_full
+  } else {
+    stop("scale should either have length equal to 1 or Nspec(mrs_data)")
+  }
   
   return(mrs_data)
 }
+
+
   
 #' @export
 `+.mrs_data` <- function(a, b) {
