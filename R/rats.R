@@ -89,8 +89,8 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
   mrs_data$data <- mrs_data$data * mod_array
  
   # rescale bl_matched_spec and bl to original intensities 
-  corr_spec <- scale_mrs(corr_spec, 1 / amps)
-  bl_spec   <- scale_mrs(bl_spec, 1 / amps)
+  # corr_spec <- scale_mrs(corr_spec, 1 / amps)
+  # bl_spec   <- scale_mrs(bl_spec, 1 / amps)
   
   # results 
   list(corrected = mrs_data, phases = -phases, shifts = -shifts, amps = amps,
