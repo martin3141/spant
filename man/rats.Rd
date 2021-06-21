@@ -35,7 +35,8 @@ sp_deg.}
 
 \item{sp_deg}{degree of spline functions.}
 
-\item{max_t}{truncate the FID when longer than max_t to reduce time taken}
+\item{max_t}{truncate the FID when longer than max_t to reduce time taken,
+set to NULL to use the entire FID.}
 
 \item{basis_type}{may be one of "poly" or "spline".}
 }

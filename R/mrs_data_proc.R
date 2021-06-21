@@ -1897,6 +1897,16 @@ mean_dyns <- function(mrs_data) {
   mrs_data
 }
 
+#' Subtract the mean dynamic spectrum from a dynamic series.
+#' @param mrs_data dynamic MRS data.
+#' @return subtracted data.
+#' @export
+sub_mean_dyns <- function(mrs_data) {
+  mean_mrs_data <- mean_dyns(mrs_data)
+  mrs_data_mean_sub <- mrs_data - rep_dyn(mean_mrs_data, Ndyns(mrs_data))
+  return(mrs_data_mean_sub)
+}
+
 #' Calculate the mean of adjacent dynamic scans.
 #' @param mrs_data dynamic MRS data.
 #' @param block_size number of adjacent dynamics scans to average over.
