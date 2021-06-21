@@ -14,12 +14,14 @@
 #' @param max_t truncate the FID when longer than max_t to reduce time taken,
 #' set to NULL to use the entire FID.
 #' @param basis_type may be one of "poly" or "spline".
+#' @param rescale rescale the bl_matched_spec and bl output to improve
+#' consistency between dynamic scans.
 #' @return a list containing the corrected data; phase and shift values in units
 #' of degrees and Hz respectively.
 #' @export
 rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
                  p_deg = 2, sp_N = 2, sp_deg = 3, max_t = 0.2,
-                 basis_type = "poly") {
+                 basis_type = "poly", rescale_output = TRUE) {
   
   # move mrs_data to the time-domain
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
@@ -88,9 +90,11 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
   mod_array <- exp(2i * pi * t_array * shift_array + 1i * phase_array * pi / 180)
   mrs_data$data <- mrs_data$data * mod_array
  
-  # rescale bl_matched_spec and bl to original intensities 
-  # corr_spec <- scale_mrs(corr_spec, 1 / amps)
-  # bl_spec   <- scale_mrs(bl_spec, 1 / amps)
+  # maintain original intensities for bl_matched_spec and bl output
+  if (!rescale) {
+    corr_spec <- scale_mrs(corr_spec, 1 / amps)
+    bl_spec   <- scale_mrs(bl_spec,   1 / amps)
+  }
   
   # results 
   list(corrected = mrs_data, phases = -phases, shifts = -shifts, amps = amps,
