@@ -1192,12 +1192,19 @@ crop_spec <- function(mrs_data, xlim = c(4, 0.2), scale = "ppm") {
 #' @param lb line broadening to apply to the reference signal.
 #' @param max_shift maximum allowable shift in Hz.
 #' @param ret_df return frequency shifts in addition to aligned data (logical).
+#' @param mean_dyns align the mean spectrum and apply the same shift to each
+#' dyanmic.
 #' @return aligned data object.
 #' @export
 align <- function(mrs_data, ref_freq = 4.65, zf_factor = 2, lb = 2,
-                  max_shift = 20, ret_df = FALSE) {
+                  max_shift = 20, ret_df = FALSE, mean_dyns = FALSE) {
   
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+  
+  if (mean_dyns) {
+    mrs_data_orig <- mrs_data
+    mrs_data <- mean_dyns(mrs_data)
+  }
   
   mrs_data_zf <- zf(mrs_data, zf_factor)
   mrs_data_zf <- td2fd(mrs_data_zf)
@@ -1212,7 +1219,9 @@ align <- function(mrs_data, ref_freq = 4.65, zf_factor = 2, lb = 2,
   window <- floor(max_shift * Npts(mrs_data_zf) * mrs_data$resolution[7])
   
   shifts <- apply_mrs(mrs_data_zf, 7, conv_align, ref_data, window,
-                      1/mrs_data$resolution[7], data_only = TRUE)
+                      1 / mrs_data$resolution[7], data_only = TRUE)
+  
+  if (mean_dyns) mrs_data <- mrs_data_orig
   
   t_orig <- rep(seconds(mrs_data), each = Nspec(mrs_data))
   t_array <- array(t_orig, dim = dim(mrs_data$data))
