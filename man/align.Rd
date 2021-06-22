@@ -10,7 +10,8 @@ align(
   zf_factor = 2,
   lb = 2,
   max_shift = 20,
-  ret_df = FALSE
+  ret_df = FALSE,
+  mean_dyns = FALSE
 )
 }
 \arguments{
@@ -26,6 +27,9 @@ may be specified.}
 \item{max_shift}{maximum allowable shift in Hz.}
 
 \item{ret_df}{return frequency shifts in addition to aligned data (logical).}
+
+\item{mean_dyns}{align the mean spectrum and apply the same shift to each
+dyanmic.}
 }
 \value{
 aligned data object.

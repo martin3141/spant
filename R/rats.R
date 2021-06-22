@@ -92,8 +92,8 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
  
   # maintain original intensities for bl_matched_spec and bl output
   if (!rescale_output) {
-    corr_spec <- scale_mrs(corr_spec, 1 / amps)
-    bl_spec   <- scale_mrs(bl_spec,   1 / amps)
+    corr_spec <- scale_mrs_amp(corr_spec, 1 / amps)
+    bl_spec   <- scale_mrs_amp(bl_spec,   1 / amps)
   }
   
   # results 
