@@ -3409,3 +3409,14 @@ pg_extrap_xy <- function(mrs_data, img_mask = NULL, kspace_mask = NULL,
   
   return(mrs_data_zf)
 }
+
+#' Return the mean of a list of mrs_data objects.
+#' @param mrs_list list of mrs_data objects.
+#' @return mean \code{mrs_data} object.
+#' @export
+mean_mrs_list <- function(mrs_list) {
+  mean_mrs <- mrs_list[[1]]
+  for (n in (2:length(mrs_list))) mean_mrs <- sum_mrs(mean_mrs, mrs_list[[n]])
+  mean_mrs <- mean_mrs / length(mrs_list)
+  return(mean_mrs)
+}
