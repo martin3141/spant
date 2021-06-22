@@ -1734,13 +1734,142 @@ sum_mrs <- function(a, b, force = FALSE) {
   return(a)
 }
 
-#' Scale an mrs_data object by a scalar amplitude.
+# TODO depreciate function and swap with scale_mrs
+
+#' Normalise mrs_data to a spectral region.
+#' @param mrs_data MRS data.
+#' @param xlim spectral range to be integrated (defaults to full range).
+#' @param scale units of xlim, can be : "ppm", "Hz" or "points".
+#' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
+#' @param summation can be "sum", "mean" or "l2" (default).
+#' @return normalised data.
+#' @export
+norm_mrs <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
+                     summation = "l2") {
+  
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  amps <- int_spec(mrs_data, xlim, scale, mode, summation)
+  amps_full <- array(rep(amps, Npts(mrs_data)), dim = dim(mrs_data$data))
+  mrs_data$data <- mrs_data$data / amps_full
+  return(mrs_data)
+}
+
+# TODO depreciate following function and replace with spec_op
+
+#' Integrate a spectral region.
+#' @param mrs_data MRS data.
+#' @param xlim spectral range to be integrated (defaults to full range).
+#' @param scale units of xlim, can be : "ppm", "hz" or "points".
+#' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
+#' @param summation can be "sum" (default), "mean" or "l2".
+#' @return an array of integral values.
+#' @export
+int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
+                     summation = "sum") {
+  
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+    
+  if ( scale == "ppm" ) {
+    x_scale <- ppm(mrs_data)
+  } else if (scale == "hz") {
+    x_scale <- hz(mrs_data)
+  } else if (scale == "points") {
+    x_scale <- pts(mrs_data)
+  }
+  
+  if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[Npts(mrs_data)])
+  
+  subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
+  
+  data_arr <- mrs_data$data[,,,,,, subset, drop = F]
+  
+  if (mode == "re") {
+    data_arr <- Re(data_arr)
+  } else if (mode == "im") {
+    data_arr <- Im(data_arr)
+  } else if (mode == "mod") {
+    data_arr <- Mod(data_arr)
+  }
+ 
+  if (summation == "l2") {
+    data_arr <- data_arr * data_arr
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
+    res <- res ^ 0.5
+  } else if (summation == "mean") {
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), mean)
+  } else {
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
+  }
+  
+  return(res) 
+}
+
+#' Perform a mathematical operation on a spectral region.
+#' @param mrs_data MRS data.
+#' @param xlim spectral range to be integrated (defaults to full range).
+#' @param operator can be "sum" (default), "mean", "l2", "max", "min" or
+#' "max-min".
+#' @param freq_scale units of xlim, can be : "ppm", "hz" or "points".
+#' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
+#' @return an array of integral values.
+#' @export
+spec_op <- function(mrs_data, xlim = NULL, operator = "sum", freq_scale = "ppm",
+                    mode = "re") {
+  
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+    
+  if (freq_scale == "ppm") {
+    x_scale <- ppm(mrs_data)
+  } else if (freq_scale == "hz") {
+    x_scale <- hz(mrs_data)
+  } else if (freq_scale == "points") {
+    x_scale <- pts(mrs_data)
+  }
+  
+  if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[Npts(mrs_data)])
+  
+  subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
+  
+  data_arr <- mrs_data$data[,,,,,, subset, drop = F]
+  
+  if (mode == "re") {
+    data_arr <- Re(data_arr)
+  } else if (mode == "im") {
+    data_arr <- Im(data_arr)
+  } else if (mode == "mod") {
+    data_arr <- Mod(data_arr)
+  }
+ 
+  if (operator == "l2") {
+    data_arr <- data_arr * data_arr
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
+    res <- res ^ 0.5
+  } else if (operator == "mean") {
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), mean)
+  } else if (operator == "sum") {
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
+  } else if (operator == "max") {
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), max)
+  } else if (operator == "min") {
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), min)
+  } else if (operator == "max-min") {
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), max) - 
+           apply(data_arr, c(1, 2, 3, 4, 5, 6), min)
+  } else {
+    stop("unknown operator argument for spec_op function") 
+  }
+  
+  return(res) 
+}
+
+#' Scale an mrs_data object by a scalar or vector or amplitudes.
 #' @param mrs_data data to be scaled.
 #' @param amp multiplicative factor, must have length equal to 1 or
 #' Nspec(mrs_data).
-#' @return mrs_data multiplied by the amplitude scale factor.
+#' @return mrs_data object multiplied by the amplitude scale factor.
 #' @export
-scale_mrs <- function(mrs_data, amp) {
+scale_mrs_amp <- function(mrs_data, amp) {
  
   if (class(mrs_data) != "mrs_data") {
     stop("first argument is not an mrs_data object")
@@ -1758,8 +1887,32 @@ scale_mrs <- function(mrs_data, amp) {
   return(mrs_data)
 }
 
-
+#' Scale mrs_data to a spectral region.
+#' @param mrs_data MRS data.
+#' @param xlim spectral range to be integrated (defaults to full range).
+#' @param operator can be "sum" (default), "mean", "l2", "max", "min" or
+#' "max-min".
+#' @param freq_scale units of xlim, can be : "ppm", "Hz" or "points".
+#' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
+#' @param mean_dyns mean the dynamic scans before applying the operator. The
+#' same scaling value will be applied to each individual dynamic.
+#' @return normalised data.
+#' @export
+scale_spec <- function(mrs_data, xlim = NULL, operator = "sum",
+                       freq_scale = "ppm", mode = "re", mean_dyns = TRUE) {
   
+  if (mean_dyns) {
+    amp <- spec_op(mean_dyns(mrs_data), xlim, operator, freq_scale, mode)
+    amp <- as.numeric(amp)
+  } else {
+    amp <- spec_op(mrs_data, xlim, operator, freq_scale, mode)
+  }
+  
+  mrs_data <- scale_mrs_amp(mrs_data, 1 / amp)
+  
+  return(mrs_data)
+}
+
 #' @export
 `+.mrs_data` <- function(a, b) {
   if (class(b) == "mrs_data" ) {
@@ -2836,72 +2989,7 @@ bc_constant <- function(mrs_data, xlim) {
   return(mrs_data)
 }
 
-#' Normalise mrs_data to a spectral region.
-#' @param mrs_data MRS data.
-#' @param xlim spectral range to be integrated (defaults to full range).
-#' @param scale units of xlim, can be : "ppm", "Hz" or "points".
-#' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
-#' @param summation can be "sum", "mean" or "l2" (default).
-#' @return normalised data.
-#' @export
-norm_mrs <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
-                     summation = "l2") {
-  
-  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
-  
-  amps <- int_spec(mrs_data, xlim, scale, mode, summation)
-  amps_full <- array(rep(amps, Npts(mrs_data)), dim = dim(mrs_data$data))
-  mrs_data$data <- mrs_data$data / amps_full
-  return(mrs_data)
-}
 
-#' Integrate a spectral region.
-#' @param mrs_data MRS data.
-#' @param xlim spectral range to be integrated (defaults to full range).
-#' @param scale units of xlim, can be : "ppm", "Hz" or "points".
-#' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
-#' @param summation can be "sum" (default), "mean" or "l2".
-#' @return an array of integral values.
-#' @export
-int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
-                     summation = "sum") {
-  
-  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
-    
-  if ( scale == "ppm" ) {
-    x_scale <- ppm(mrs_data)
-  } else if (scale == "hz") {
-    x_scale <- hz(mrs_data)
-  } else if (scale == "points") {
-    x_scale <- pts(mrs_data)
-  }
-  
-  if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[Npts(mrs_data)])
-  
-  subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
-  
-  data_arr <- mrs_data$data[,,,,,, subset, drop = F]
-  
-  if (mode == "re") {
-    data_arr <- Re(data_arr)
-  } else if (mode == "im") {
-    data_arr <- Im(data_arr)
-  } else if (mode == "mod") {
-    data_arr <- Mod(data_arr)
-  }
- 
-  if (summation == "l2") {
-    data_arr <- data_arr * data_arr
-    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
-    res <- res ^ 0.5
-  } else if (summation == "mean") {
-    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), mean)
-  } else {
-    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
-  }
-  
-  return(res) 
-}
 
 #' Baseline correction using the ALS method.
 #' @param mrs_data mrs_data object.

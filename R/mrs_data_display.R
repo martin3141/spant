@@ -572,9 +572,11 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   if (!is.null(bl_lty)) {
     # only need one baseline trace if y_offset is zero
     if (y_offset == 0) {
-      abline(h = 0, lty = bl_lty, lwd = 0.5)
+      graphics::abline(h = 0, lty = bl_lty, lwd = 0.5)
     } else {
-      for (offset in y_offset_vec) abline(h = offset, lty = bl_lty, lwd = 0.5)
+      for (offset in y_offset_vec) {
+        graphics::abline(h = offset, lty = bl_lty, lwd = 0.5)
+      }
     }
   }
   

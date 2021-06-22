@@ -13,7 +13,8 @@ rats(
   sp_N = 2,
   sp_deg = 3,
   max_t = 0.2,
-  basis_type = "poly"
+  basis_type = "poly",
+  rescale_output = TRUE
 )
 }
 \arguments{
@@ -39,6 +40,9 @@ sp_deg.}
 set to NULL to use the entire FID.}
 
 \item{basis_type}{may be one of "poly" or "spline".}
+
+\item{rescale_output}{rescale the bl_matched_spec and bl output to improve
+consistency between dynamic scans.}
 }
 \value{
 a list containing the corrected data; phase and shift values in units

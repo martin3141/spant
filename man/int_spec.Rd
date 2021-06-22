@@ -11,7 +11,7 @@ int_spec(mrs_data, xlim = NULL, scale = "ppm", mode = "re", summation = "sum")
 
 \item{xlim}{spectral range to be integrated (defaults to full range).}
 
-\item{scale}{units of xlim, can be : "ppm", "Hz" or "points".}
+\item{scale}{units of xlim, can be : "ppm", "hz" or "points".}
 
 \item{mode}{spectral mode, can be : "re", "im", "mod" or "cplx".}
 

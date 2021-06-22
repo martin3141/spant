@@ -14,7 +14,7 @@
 #' @param max_t truncate the FID when longer than max_t to reduce time taken,
 #' set to NULL to use the entire FID.
 #' @param basis_type may be one of "poly" or "spline".
-#' @param rescale rescale the bl_matched_spec and bl output to improve
+#' @param rescale_output rescale the bl_matched_spec and bl output to improve
 #' consistency between dynamic scans.
 #' @return a list containing the corrected data; phase and shift values in units
 #' of degrees and Hz respectively.
