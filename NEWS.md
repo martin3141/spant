@@ -5,6 +5,8 @@
 * Deprecated norm_mrs function and replaced with scale_spec for simple data
 scaling tasks, eg scaling based on the integration of a spectral region.
 * Deprecated int_spec function and replaced with spec_op.
+* Changed the name of scale_mrs function to scale_mrs_amp.
+* Added mean_mrs_list function.
 
 # spant 1.13.0
 * ABfit frequency shifts limits are now specified in ppm rather than Hz to
