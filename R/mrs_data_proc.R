@@ -1743,77 +1743,6 @@ sum_mrs <- function(a, b, force = FALSE) {
   return(a)
 }
 
-# TODO depreciate function and swap with scale_mrs
-
-#' Normalise mrs_data to a spectral region.
-#' @param mrs_data MRS data.
-#' @param xlim spectral range to be integrated (defaults to full range).
-#' @param scale units of xlim, can be : "ppm", "Hz" or "points".
-#' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
-#' @param summation can be "sum", "mean" or "l2" (default).
-#' @return normalised data.
-#' @export
-norm_mrs <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
-                     summation = "l2") {
-  
-  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
-  
-  amps <- int_spec(mrs_data, xlim, scale, mode, summation)
-  amps_full <- array(rep(amps, Npts(mrs_data)), dim = dim(mrs_data$data))
-  mrs_data$data <- mrs_data$data / amps_full
-  return(mrs_data)
-}
-
-# TODO depreciate following function and replace with spec_op
-
-#' Integrate a spectral region.
-#' @param mrs_data MRS data.
-#' @param xlim spectral range to be integrated (defaults to full range).
-#' @param scale units of xlim, can be : "ppm", "hz" or "points".
-#' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
-#' @param summation can be "sum" (default), "mean" or "l2".
-#' @return an array of integral values.
-#' @export
-int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
-                     summation = "sum") {
-  
-  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
-    
-  if ( scale == "ppm" ) {
-    x_scale <- ppm(mrs_data)
-  } else if (scale == "hz") {
-    x_scale <- hz(mrs_data)
-  } else if (scale == "points") {
-    x_scale <- pts(mrs_data)
-  }
-  
-  if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[Npts(mrs_data)])
-  
-  subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
-  
-  data_arr <- mrs_data$data[,,,,,, subset, drop = F]
-  
-  if (mode == "re") {
-    data_arr <- Re(data_arr)
-  } else if (mode == "im") {
-    data_arr <- Im(data_arr)
-  } else if (mode == "mod") {
-    data_arr <- Mod(data_arr)
-  }
- 
-  if (summation == "l2") {
-    data_arr <- data_arr * data_arr
-    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
-    res <- res ^ 0.5
-  } else if (summation == "mean") {
-    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), mean)
-  } else {
-    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
-  }
-  
-  return(res) 
-}
-
 #' Perform a mathematical operation on a spectral region.
 #' @param mrs_data MRS data.
 #' @param xlim spectral range to be integrated (defaults to full range).
@@ -2992,7 +2921,10 @@ bc_constant <- function(mrs_data, xlim) {
   
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
-  offsets <- int_spec(mrs_data, xlim = xlim, mode = "cplx", summation = "mean")
+  # offsets <- int_spec(mrs_data, xlim = xlim, mode = "cplx",
+  #                     summation = "mean")
+  
+  offsets <- spec_op(mrs_data, xlim = xlim, mode = "cplx", operator = "mean")
   offsets_rep <- array(rep(offsets, Npts(mrs_data)), dim = dim(mrs_data$data))
   mrs_data$data <- mrs_data$data - offsets_rep
   return(mrs_data)
@@ -3247,7 +3179,8 @@ l2_reg <- function(mrs_data, thresh = 0.05, b = 1e-11, A = NA, xlim = NA) {
     mrs_data_coil <- get_subset(mrs_data, coil_set = coil)
     
     if (anyNA(A)) {
-      map <- drop(int_spec(mrs_data_coil, mode = "mod"))
+      # map <- drop(int_spec(mrs_data_coil, mode = "mod"))
+      map <- drop(spec_op(mrs_data_coil, mode = "mod"))
       map_bool <- map > (max(map) * thresh)
       mrsi_mask <- mask_xy_mat(mrs_data_coil, mask = !map_bool)
       A_coil <- t(stats::na.omit(mrs_data2mat(mrsi_mask)))
@@ -3387,7 +3320,8 @@ pg_extrap_xy <- function(mrs_data, img_mask = NULL, kspace_mask = NULL,
   
   # get an image mask from the interpolated data, generally a scalp lipid mask
   if (is.null(img_mask)) {
-    img_map  <- drop(int_spec(mrs_data_zf, mode = "mod"))
+    # img_map  <- drop(int_spec(mrs_data_zf, mode = "mod"))
+    img_map  <- drop(spec_op(mrs_data_zf, mode = "mod"))
     img_mask <- img_map > (max(img_map) * intensity_thresh)
   }
   
