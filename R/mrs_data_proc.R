@@ -685,6 +685,39 @@ is_fd <- function(mrs_data) {
   mrs_data$freq_domain[7]
 }
 
+#' Apply the Fourier transform over the dynamic dimension.
+#' @param mrs_data MRS data where the dynamic dimension is in the time-domain.
+#' @param ft_shift apply FT shift to the output, default is FALSE.
+#' @return transformed MRS data.
+#' @export
+ft_dyn <- function(mrs_data, ft_shift = FALSE) {
+  data <- mrs_data$data
+  
+  # permute the dynamic dimension to be the last (7th)
+  data <- aperm(data, c(1, 2, 3, 4, 6, 7, 5)) 
+  data_dim <- dim(data)
+  
+  # convert to a matrix and transform
+  data <- matrix(data, ncol = Ndyns(mrs_data))
+  
+  # fft and shift if requested
+  if (ft_shift) {
+    data <- t(ft_shift_mat(t(data)))
+  } else {
+    data <- t(stats::mvfft(t(data)))
+  }
+  
+  # revert back to an array
+  dim(data) <- data_dim
+  
+  # permute the dynamic dimension to be 5th
+  data <- aperm(data, c(1, 2, 3, 4, 7, 5, 6)) 
+  
+  mrs_data$data <- data
+  
+  return(mrs_data)
+}
+
 #' Transform time-domain data to the frequency-domain.
 #' @param mrs_data MRS data in time-domain representation.
 #' @return MRS data in frequency-domain representation.
@@ -1991,10 +2024,10 @@ mean_dyns <- function(mrs_data) {
   # check the input
   check_mrs_data(mrs_data) 
   
-  mrs_data$data <- aperm(mrs_data$data, c(5,1,2,3,4,6,7))
+  mrs_data$data <- aperm(mrs_data$data, c(5, 1, 2, 3, 4, 6, 7))
   mrs_data$data <- colMeans(mrs_data$data, na.rm = TRUE)
   new_dim <- dim(mrs_data$data)
-  dim(mrs_data$data) <- c(new_dim[1:4],1,new_dim[5:6])
+  dim(mrs_data$data) <- c(new_dim[1:4], 1, new_dim[5:6])
   mrs_data
 }
 
