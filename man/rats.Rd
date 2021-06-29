@@ -14,7 +14,8 @@ rats(
   sp_deg = 3,
   max_t = 0.2,
   basis_type = "poly",
-  rescale_output = TRUE
+  rescale_output = TRUE,
+  phase_corr = TRUE
 )
 }
 \arguments{
@@ -43,6 +44,9 @@ set to NULL to use the entire FID.}
 
 \item{rescale_output}{rescale the bl_matched_spec and bl output to improve
 consistency between dynamic scans.}
+
+\item{phase_corr}{apply phase correction (in addition to frequency). TRUE by
+default.}
 }
 \value{
 a list containing the corrected data; phase and shift values in units

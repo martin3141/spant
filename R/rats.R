@@ -16,12 +16,15 @@
 #' @param basis_type may be one of "poly" or "spline".
 #' @param rescale_output rescale the bl_matched_spec and bl output to improve
 #' consistency between dynamic scans.
+#' @param phase_corr apply phase correction (in addition to frequency). TRUE by
+#' default.
 #' @return a list containing the corrected data; phase and shift values in units
 #' of degrees and Hz respectively.
 #' @export
 rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
                  p_deg = 2, sp_N = 2, sp_deg = 3, max_t = 0.2,
-                 basis_type = "poly", rescale_output = TRUE) {
+                 basis_type = "poly", rescale_output = TRUE,
+                 phase_corr = TRUE) {
   
   # move mrs_data to the time-domain
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
@@ -86,6 +89,9 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
   t_orig <- rep(seconds(mrs_data), each = Nspec(mrs_data))
   t_array <- array(t_orig, dim = dim(mrs_data$data))
   shift_array <- array(shifts, dim = dim(mrs_data$data))
+  
+  if (!phase_corr) phases <- 0
+  
   phase_array <- array(phases, dim = dim(mrs_data$data))
   mod_array <- exp(2i * pi * t_array * shift_array + 1i * phase_array * pi / 180)
   mrs_data$data <- mrs_data$data * mod_array
