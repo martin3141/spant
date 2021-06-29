@@ -2,9 +2,10 @@
 * Added glycerol simulation parameters, e.g. get_mol_paras("glyc").
 * Bug fix for read_ima_* functions.
 * Improved y = 0 baseline for stackplot when setting bl_lty parameter.
-* Deprecated norm_mrs function and replaced with scale_spec for simple data
+* Removed norm_mrs function and replaced with scale_spec for simple data
 scaling tasks, eg scaling based on the integration of a spectral region.
-* Deprecated int_spec function and replaced with spec_op.
+* Added spec_op function for performing simple summary operations on spectral
+segments.
 * Changed the name of scale_mrs function to scale_mrs_amp.
 * Added mean_mrs_list function.
 

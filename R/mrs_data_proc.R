@@ -1834,6 +1834,24 @@ spec_op <- function(mrs_data, xlim = NULL, operator = "sum", freq_scale = "ppm",
   return(res) 
 }
 
+#' Integrate a spectral region.
+#' 
+#' See spec_op function for a more complete set of spectral operations.
+#' 
+#' @param mrs_data MRS data.
+#' @param xlim spectral range to be integrated (defaults to full range).
+#' @param freq_scale units of xlim, can be : "ppm", "hz" or "points".
+#' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
+#' @return an array of integral values.
+#' @export
+int_spec <- function(mrs_data, xlim = NULL, freq_scale = "ppm", mode = "re") {
+  
+  res <- spec_op(mrs_data = mrs_data, xlim = xlim, operator = "sum",
+                 freq_scale = freq_scale, mode = mode)
+  
+  return(res) 
+}
+
 #' Scale an mrs_data object by a scalar or vector or amplitudes.
 #' @param mrs_data data to be scaled.
 #' @param amp multiplicative factor, must have length equal to 1 or
