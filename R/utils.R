@@ -467,6 +467,27 @@ circ_mask <- function(d, n, offset = 1) {
   return(dist <= d / 2)
 }
 
+# equation for following function taken from:
+# https://math.stackexchange.com/questions/2645689/what-is-the-parametric-equation-of-a-rotated-ellipse-given-the-angle-of-rotatio
+
+#' Create an elliptical mask stored as a matrix of logical values.
+#' @param xN number of pixels in the x dimension.
+#' @param yN number of pixels in the y dimension.
+#' @param x0 centre of ellipse in the x direction in units of pixels.
+#' @param y0 centre of ellipse in the y direction in units of pixels.
+#' @param rx radius in the x direction in units of pixels.
+#' @param ry radius in the y direction in units of pixels.
+#' @param angle angle of rotation in degrees.
+#' @return logical mask matrix with dimensions fov_yN x fov_xN.
+#' @export
+elliptical_mask <- function(xN, yN, x0, y0, rx, ry, angle) {
+  g <- pracma::meshgrid(0:(xN - 1), 0:(yN - 1))
+  phi <- angle / 180 * pi
+  mask <- (((g$X - x0) * cos(phi) + (g$Y - y0) * sin(phi))  ^ 2 / rx ^ 2 + 
+          (((g$X - x0) * sin(phi) - (g$Y - y0) * cos(phi))) ^ 2 / ry ^ 2) <= 1
+  return(mask)
+}
+
 #' Check if an object is defined, which is the same as being not NULL.
 #' @param x object to test for being NULL.
 #' @return logical value.
