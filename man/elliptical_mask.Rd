@@ -4,7 +4,7 @@
 \alias{elliptical_mask}
 \title{Create an elliptical mask stored as a matrix of logical values.}
 \usage{
-elliptical_mask(xN, yN, x0, y0, rx, ry, angle)
+elliptical_mask(xN, yN, x0, y0, xr, yr, angle)
 }
 \arguments{
 \item{xN}{number of pixels in the x dimension.}
@@ -15,9 +15,9 @@ elliptical_mask(xN, yN, x0, y0, rx, ry, angle)
 
 \item{y0}{centre of ellipse in the y direction in units of pixels.}
 
-\item{rx}{radius in the x direction in units of pixels.}
+\item{xr}{radius in the x direction in units of pixels.}
 
-\item{ry}{radius in the y direction in units of pixels.}
+\item{yr}{radius in the y direction in units of pixels.}
 
 \item{angle}{angle of rotation in degrees.}
 }
