@@ -1242,19 +1242,19 @@ align <- function(mrs_data, ref_freq = 4.65, zf_factor = 2, lb = 2,
   }
   
   mrs_data_zf <- zf(mrs_data, zf_factor)
-  mrs_data_zf <- td2fd(mrs_data_zf)
+  
   freq <- ppm2hz(ref_freq, mrs_data$ft, mrs_data$ref)
   t_zf <- seconds(mrs_data_zf)
   
   freq_mat <- matrix(freq, length(freq), length(t_zf), byrow = FALSE)
   t_zf_mat <- matrix(t_zf, length(freq), length(t_zf), byrow = TRUE)
-  ref_data <- ft_shift(colSums(exp(2i * t_zf_mat * pi * freq_mat - 
-                                   lb * t_zf_mat * pi)))
+  
+  ref_data <- colSums(exp(2i * t_zf_mat * pi * freq_mat - lb * t_zf_mat * pi))
   
   window <- floor(max_shift * Npts(mrs_data_zf) * mrs_data$resolution[7])
   
   shifts <- apply_mrs(mrs_data_zf, 7, conv_align, ref_data, window,
-                      1 / mrs_data$resolution[7], TRUE, data_only = TRUE)
+                      1 / mrs_data$resolution[7], FALSE, data_only = TRUE)
   
   if (mean_dyns) mrs_data <- mrs_data_orig
   

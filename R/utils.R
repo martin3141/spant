@@ -520,6 +520,6 @@ gausswin_2d <- function(xN, yN, x0, y0, xw, yw) {
 is.def <- function(x) !is.null(x)
 
 convolve_td <- function(x, y) {
-  x <- fft(x * Conj(y) * length(x))
+  x <- stats::fft(x * Conj(y) * length(x))
   return(x)
 }
