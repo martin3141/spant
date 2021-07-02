@@ -41,6 +41,8 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
   #  stop()
   #}
   
+  if (class(acq_paras) == "mrs_data") acq_paras <- get_acq_paras(acq_paras)
+  
   sig_n <- length(freq)
   if (sig_n != length(amp)) {
     amp <- rep_len(amp, sig_n)
