@@ -1254,7 +1254,7 @@ align <- function(mrs_data, ref_freq = 4.65, zf_factor = 2, lb = 2,
   window <- floor(max_shift * Npts(mrs_data_zf) * mrs_data$resolution[7])
   
   shifts <- apply_mrs(mrs_data_zf, 7, conv_align, ref_data, window,
-                      1 / mrs_data$resolution[7], data_only = TRUE)
+                      1 / mrs_data$resolution[7], TRUE, data_only = TRUE)
   
   if (mean_dyns) mrs_data <- mrs_data_orig
   
@@ -1296,8 +1296,12 @@ get_td_amp <- function(mrs_data, nstart = 10, nend = 50, method = "spline") {
   amps
 }
 
-conv_align <- function(acq, ref, window, fs) {
-  conv <- pracma::fftshift(Mod(stats::convolve(acq, ref)))
+conv_align <- function(acq, ref, window, fs, fd) {
+  if (fd) {
+    conv <- pracma::fftshift(Mod(stats::convolve(acq, ref)))
+  } else {
+    conv <- pracma::fftshift(Mod(convolve_td(acq, ref)))
+  }
   conv_crop <- array(conv[(length(acq) / 2 - window + 1):(length(acq) / 2 +
                      window + 1)])
   #plot(conv_crop)

@@ -518,3 +518,8 @@ gausswin_2d <- function(xN, yN, x0, y0, xw, yw) {
 #' @param x object to test for being NULL.
 #' @return logical value.
 is.def <- function(x) !is.null(x)
+
+convolve_td <- function(x, y) {
+  x <- fft(x * Conj(y) * length(x))
+  return(x)
+}
