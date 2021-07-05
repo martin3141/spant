@@ -41,7 +41,7 @@ write_basis_tqn <- function(basis_file, metab_data, opts = NULL) {
 sim_basis_tqn <- function(fs = def_fs(), ft = def_ft(), N = def_N(),
                           ref = def_ref(), opts = NULL) {
   
-  metab_data <- sim_zeros(fs = fs, ft = ft, N = N, ref = ref)
+  metab_data <- sim_zero(fs = fs, ft = ft, N = N, ref = ref)
   
   # write the metab data to a temp dpt file
   metab_file <- tempfile()

@@ -444,7 +444,7 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
   fs  <- acq_paras$fs
   N   <- acq_paras$N
     
-  basis_mrs_data <- sim_zeros(ft = ft, ref = ref, fs = fs, N = N,
+basis_mrs_data <- sim_zero(ft = ft, ref = ref, fs = fs, N = N,
                               dyns = length(mol_list))
   
   for (n in 1:length(mol_list)) {
@@ -470,7 +470,7 @@ sim_mol <- function(mol, pul_seq = seq_pulse_acquire, ft = def_ft(),
                     ref = def_ref(), fs = def_fs(), N = def_N(),
                     xlim = NULL, ...) {
   # create empty fid
-  mrs_data <- sim_zeros(fs = fs, N = N, ft = ft, ref = ref)
+  mrs_data <- sim_zero(fs = fs, N = N, ft = ft, ref = ref)
   for (group in mol$spin_groups) {
     res <- pul_seq(group, ft, ref, ...)
     

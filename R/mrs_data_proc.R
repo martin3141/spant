@@ -332,7 +332,15 @@ add_noise <- function(mrs_data, sd = 0.1, fd = TRUE) {
   mrs_data
 }
 
-sim_zeros <- function(fs = def_fs(), ft = def_ft(), N = def_N(),
+#' Simulate an mrs_data object containing complex zero valued samples.
+#' @param fs sampling frequency in Hz.
+#' @param ft transmitter frequency in Hz.
+#' @param N number of data points in the spectral dimension.
+#' @param ref reference value for ppm scale.
+#' @param dyns number of dynamic scans to generate.
+#' @return mrs_data object.
+#' @export
+sim_zero <- function(fs = def_fs(), ft = def_ft(), N = def_N(),
                       ref = def_ref(), dyns = 1) {
   
   data_pts <- dyns * N 
@@ -1517,6 +1525,44 @@ mask_xy_mat <- function(mrs_data, mask, value = NA) {
   dim(mask) <- c(1, nrow(mask), ncol(mask), 1, 1, 1, 1)
   mask <- rep_array_dim(mask, 7, Npts(mrs_data))
   mrs_data$data[mask] <- value
+  return(mrs_data)
+}
+
+#' Set the masked voxels in a 2D MRSI dataset to given spectrum.
+#' @param mrs_data MRSI data object.
+#' @param mask matrix of boolean values specifying the voxels to set, where a
+#' value of TRUE indicates the voxel should be set to mask_mrs_data.
+#' @param mask_mrs_data the spectral data to be assigned to the masked voxels.
+#' @return updated dataset.
+#' @export
+set_mask_xy_mat <- function(mrs_data, mask, mask_mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  check_mrs_data(mask_mrs_data)
+  
+  if (Nspec(mask_mrs_data) > 1) {
+    stop("mask_mrs_data should only contain one spectrum")
+  }
+  
+  if (Npts(mrs_data) != Npts(mask_mrs_data)) {
+    stop("mrs_data and mask_mrs_data don't have the same number of data points")
+  }
+  
+  # make sure mask_mrs_data is in the same domain as mrs_data 
+  if (is_fd(mrs_data) & !is_fd(mask_mrs_data)) {
+    mask_mrs_data <- td2fd(mask_mrs_data)
+  }
+  
+  if (!is_fd(mrs_data) & is_fd(mask_mrs_data)) {
+    mask_mrs_data <- fd2td(mask_mrs_data)
+  }
+  
+  voxels <- sum(mask)
+  
+  dim(mask) <- c(1, nrow(mask), ncol(mask), 1, 1, 1, 1)
+  mask <- rep_array_dim(mask, 7, Npts(mrs_data))
+  mrs_data$data[mask] <- rep(drop(mask_mrs_data$data), each = voxels)
   return(mrs_data)
 }
 
