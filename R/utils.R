@@ -488,6 +488,30 @@ elliptical_mask <- function(xN, yN, x0, y0, xr, yr, angle) {
   return(mask)
 }
 
+#' Create a rectangular mask stored as a matrix of logical values.
+#' @param xN number of pixels in the x dimension.
+#' @param yN number of pixels in the y dimension.
+#' @param x0 centre of rectangle in the x direction in units of pixels.
+#' @param y0 centre of rectangle in the y direction in units of pixels.
+#' @param xw width in the x direction in units of pixels.
+#' @param yw width in the y direction in units of pixels.
+#' @param angle angle of rotation in degrees.
+#' @return logical mask matrix with dimensions fov_yN x fov_xN.
+#' @export
+rectangular_mask <- function(xN, yN, x0, y0, xw, yw, angle) {
+  g <- pracma::meshgrid(0:(xN - 1) - xN / 2, 0:(yN - 1) - yN / 2)
+  phi <- angle / 180 * pi
+  
+  x_mask <- (((g$X - x0) * cos(phi) + (g$Y - y0) * sin(phi)) ^ 2 / 
+               (xw / 2) ^ 2 <= 1) 
+  
+  y_mask <- (((g$X - x0) * sin(phi) - (g$Y - y0) * cos(phi)) ^ 2 /
+               (yw / 2) ^ 2 <= 1)
+  
+  mask <- x_mask & y_mask
+  return(mask)
+}
+
 #' Create a two dimensional Gaussian window function stored as a matrix.
 #' @param xN number of pixels in the x dimension.
 #' @param yN number of pixels in the y dimension.
