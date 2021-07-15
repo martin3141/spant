@@ -104,24 +104,49 @@ read_basis <- function(basis_file, ref = def_ref()) {
   data <- vector()
   
   while (length(line <- readLines(con, n = 1, warn = FALSE)) > 0) {
-    if (startsWith(line, " NDATAB = ")) {
-      N <- as.integer(strsplit(trimws(line), "\\s+")[[1]][3])
-      data_lines <- ceiling(2 * N / 6) # assume 6 cols
-    } else if (startsWith(line, " HZPPPM = ")) {
-      bas_ft <- strsplit(trimws(line), "\\s+")[[1]][3]
-      bas_ft <- as.double(gsub(",", "", bas_ft))*1e6
-    } else if (startsWith(line, " BADELT = ")) {
-      bas_fs <- strsplit(trimws(line), "\\s+")[[1]][3]
-      bas_fs <- 1/as.double(gsub(",", "",bas_fs))
+    
+    # ARC 2021-07-15 : handle varying parameter spacing and column layout 
+    line<-trimws(line);
+    # split by "=", surrounded by arbitrary whitespace.
+    # some lines have a "," suffix; we can cut this out in the same operation
+    tokens <- strsplit(line, "[[:space:]]*[=,][[:space:]]*")[[1]]
+    if (is.na(tokens[1])) {
+      # empty line
+      next;
+    }         
+    param <- toupper(tokens[1])
+    if (param=="NDATAB") {
+      N <- as.integer(tokens[2])
+    } else if (param=="HZPPPM") {
+      bas_ft <- as.double(tokens[2])*1e6
+    } else if (param=="BADELT") {
+      bas_fs <- 1/as.double(tokens[2])
     } else if (endsWith(line, "$BASIS")) {
       while (length(line <- readLines(con, n = 1, warn = FALSE)) > 0) {
-        if (startsWith(line, " ID = ")) {
-          id <- (strsplit(trimws(line), " ")[[1]][3])
-          id <- gsub(",", "",id)
-          id <- gsub("'", "",id)
+        line <- trimws(line);
+        tokens <- strsplit(line, "[[:space:]]*[=,][[:space:]]*")[[1]]
+        param <- toupper(tokens[1]);
+        if (is.na(tokens[1])) {
+          next;
+        }
+        if (param=="METABO") { # formerly ID
+          id <- trimws(gsub("'", "",tokens[2]))
           names <- c(names, id)
         } else if (endsWith(line, "$END")) {
-          x <- utils::read.fortran(con, "6F13.0", n = data_lines)
+          # ARC 2021-07-15: auto-detect column layout {{{
+          # read a single line, then rewind
+          fp <- seek(con,origin='current')
+          l1 <- readLines(con,n=1,warn=FALSE); 
+          fpn <- seek(con,origin='start',where=fp);
+
+          tokens <- strsplit(trimws(l1),"[[:space:]]+")[[1]];
+          cols <- length(tokens);
+          width <- ceiling(nchar(l1)/cols);
+          fmt <- sprintf("%dF%d.0",cols,width);
+          # }}}
+
+          data_lines <- ceiling(2 * N / cols)
+          x <- utils::read.fortran(con, fmt, n = data_lines)
           data_pts <- as.vector(t(as.matrix(x)))
           data_pts <- data_pts[seq(1, 2 * N, 2)] +
                       1i * data_pts[seq(2, 2 * N, 2)]
