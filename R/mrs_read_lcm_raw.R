@@ -5,14 +5,30 @@ read_lcm_raw <- function(fname, ft, fs, ref, extra) {
     if (endsWith(line, "$NMID")) {
       in_nmid <- TRUE
     } else if (endsWith(line, "$END") && in_nmid) {
-      x <- utils::read.fortran(con, "2F15.0")
+      
+      # ARC 2021-07-15: auto-detect column layout {{{
+      # read a single line, then rewind
+      fp <- seek(con, origin='current')
+      l1 <- readLines(con, n=1, warn=FALSE);
+      fpn <- seek(con, origin='start', where=fp);
+  
+      tokens <- strsplit(trimws(l1),"[[:space:]]+")[[1]];
+      cols <- length(tokens);
+      width <- ceiling(nchar(l1)/cols);
+      fmt <- sprintf("%dF%d.0", cols, width);
+      # }}}
+          
+      x <- utils::read.fortran(con, fmt);
       break
     }
   }
   close(con)
+
+  data <- as.vector(t(as.matrix(x)))
+  N <- length(data)/2
+  data <- data[seq(1, 2 * N, 2)] +
+          1i * data[seq(2, 2 * N, 2)]
   
-  N <- nrow(x)
-  data <- x$V1 + x$V2 * 1i
   dim(data) <- c(1, 1, 1, 1, 1, 1, N)
   
   res <- c(NA, NA, NA, NA, 1, NA, 1 / fs)
