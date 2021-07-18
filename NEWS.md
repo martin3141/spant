@@ -8,6 +8,7 @@ scaling tasks, eg scaling based on the integration of a spectral region.
 segments.
 * Changed the name of scale_mrs function to scale_mrs_amp.
 * Added mean_mrs_list function.
+* Improved LCM RAW and BASIS readers (Alex Craven).
 
 # spant 1.13.0
 * ABfit frequency shifts limits are now specified in ppm rather than Hz to
