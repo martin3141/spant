@@ -2533,7 +2533,7 @@ ecc <- function(metab, ref, rev = FALSE) {
 #' Apodise MRSI data in the x-y direction with a k-space filter.
 #' @param mrs_data MRSI data.
 #' @param func must be "hamming" or "gaussian".
-#' @param w the reciprocal of the standard deviation for the gaussian function.
+#' @param w the reciprocal of the standard deviation for the Gaussian function.
 #' @return apodised data.
 #' @export
 apodise_xy <- function(mrs_data, func = "hamming", w = 2.5) {
@@ -3341,7 +3341,13 @@ ssp <- function(mrs_data, comps = 5, xlim = c(1.5, 0.8)) {
     
     # remove the lipids from the input
     D_ori <- mrs_data2mat(get_subset(mrs_data, coil_set = coil))
-    P <- diag(nrow(U_m)) - U_m %*% Conj(t(U_m))
+    
+    if (is.matrix(U_m)) {
+      P <- diag(nrow(U_m)) - U_m %*% Conj(t(U_m))
+    } else{
+      P <- diag(U_m) - U_m %*% Conj(t(U_m))
+    }
+    
     D_supp <- P %*% D_ori
     
     # restructure back into an mrs_data object
