@@ -86,6 +86,8 @@ guess_mrs_format <- function(fname) {
   fname_low <- tolower(fname)
   if (stringr::str_ends(fname_low, ".nii.gz")) {
     format <- "nifti"
+  } else if (stringr::str_ends(fname_low, ".nii")) {
+    format <- "nifti"
   } else if (stringr::str_ends(fname_low, ".rda")) {
     format <- "rda"
   } else if (stringr::str_ends(fname_low, ".ima")) {
