@@ -1,3 +1,5 @@
+# spant 1.15.0
+
 # spant 1.14.0
 * Added glycerol simulation parameters, e.g. get_mol_paras("glyc").
 * Bug fix for read_ima_* functions.
