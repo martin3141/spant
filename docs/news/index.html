@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.13.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.14.0</span>
       </span>
     </div>
 
@@ -146,9 +146,24 @@
       <small>Source: <a href='https://github.com/martin3141/spant/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="spant-1140" class="section level1">
+<h1 class="page-header" data-toc-text="1.14.0">
+<a href="#spant-1140" class="anchor"></a>spant 1.14.0<small> Unreleased </small>
+</h1>
+<ul>
+<li>Added glycerol simulation parameters, e.g. get_mol_paras(“glyc”).</li>
+<li>Bug fix for read_ima_* functions.</li>
+<li>Improved y = 0 baseline for stackplot when setting bl_lty parameter.</li>
+<li>Removed norm_mrs function and replaced with scale_spec for simple data scaling tasks, eg scaling based on the integration of a spectral region.</li>
+<li>Added spec_op function for performing simple summary operations on spectral segments.</li>
+<li>Changed the name of scale_mrs function to scale_mrs_amp.</li>
+<li>Added mean_mrs_list function.</li>
+<li>Improved LCM RAW and BASIS readers (contribution from Alex Craven).</li>
+</ul>
+</div>
     <div id="spant-1130" class="section level1">
 <h1 class="page-header" data-toc-text="1.13.0">
-<a href="#spant-1130" class="anchor"></a>spant 1.13.0<small> Unreleased </small>
+<a href="#spant-1130" class="anchor"></a>spant 1.13.0<small> 2021-06-09 </small>
 </h1>
 <ul>
 <li>ABfit frequency shifts limits are now specified in ppm rather than Hz to improve consistency between field strengths.</li>
