@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Integrate a spectral region. — int_spec" />
-<meta property="og:description" content="Integrate a spectral region." />
+<meta property="og:description" content="See spec_op function for a more complete set of spectral operations." />
 <meta property="og:image" content="https://martin3141.github.io/spant/logo.png" />
 
 
@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.13.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.14.0</span>
       </span>
     </div>
 
@@ -149,10 +149,10 @@
     </div>
 
     <div class="ref-description">
-    <p>Integrate a spectral region.</p>
+    <p>See spec_op function for a more complete set of spectral operations.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>int_spec</span><span class='op'>(</span><span class='va'>mrs_data</span>, xlim <span class='op'>=</span> <span class='cn'>NULL</span>, scale <span class='op'>=</span> <span class='st'>"ppm"</span>, mode <span class='op'>=</span> <span class='st'>"re"</span>, summation <span class='op'>=</span> <span class='st'>"sum"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>int_spec</span><span class='op'>(</span><span class='va'>mrs_data</span>, xlim <span class='op'>=</span> <span class='cn'>NULL</span>, freq_scale <span class='op'>=</span> <span class='st'>"ppm"</span>, mode <span class='op'>=</span> <span class='st'>"re"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -166,16 +166,12 @@
       <td><p>spectral range to be integrated (defaults to full range).</p></td>
     </tr>
     <tr>
-      <th>scale</th>
-      <td><p>units of xlim, can be : "ppm", "Hz" or "points".</p></td>
+      <th>freq_scale</th>
+      <td><p>units of xlim, can be : "ppm", "hz" or "points".</p></td>
     </tr>
     <tr>
       <th>mode</th>
       <td><p>spectral mode, can be : "re", "im", "mod" or "cplx".</p></td>
-    </tr>
-    <tr>
-      <th>summation</th>
-      <td><p>can be "sum" (default), "mean" or "l2".</p></td>
     </tr>
     </table>
 

@@ -13,7 +13,9 @@ rats(
   sp_N = 2,
   sp_deg = 3,
   max_t = 0.2,
-  basis_type = "poly"
+  basis_type = "poly",
+  rescale_output = TRUE,
+  phase_corr = TRUE
 )
 }
 \arguments{
@@ -35,9 +37,16 @@ sp_deg.}
 
 \item{sp_deg}{degree of spline functions.}
 
-\item{max_t}{truncate the FID when longer than max_t to reduce time taken}
+\item{max_t}{truncate the FID when longer than max_t to reduce time taken,
+set to NULL to use the entire FID.}
 
 \item{basis_type}{may be one of "poly" or "spline".}
+
+\item{rescale_output}{rescale the bl_matched_spec and bl output to improve
+consistency between dynamic scans.}
+
+\item{phase_corr}{apply phase correction (in addition to frequency). TRUE by
+default.}
 }
 \value{
 a list containing the corrected data; phase and shift values in units

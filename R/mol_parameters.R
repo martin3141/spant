@@ -437,6 +437,51 @@ get_bhb_paras <- function(lw = NULL, lg = 0, ...) {
   paras
 }
 
+get_glyc_paras <- function(lw = NULL, lg = 0, ...) {
+  if (is.null(lw)) lw = 0.5
+  nucleus <- rep("1H", 5)
+  chem_shift <- c(3.552, 3.640, 3.770, 3.640, 3.552)
+  j_coupling_mat <- matrix(0, 5, 5)
+  
+  # these are possible also:
+  #j_coupling_mat[2,1] <- -11.72
+  #j_coupling_mat[3,1] <- 4.43
+  #j_coupling_mat[3,2] <- 6.49
+  #j_coupling_mat[4,3] <- 4.43
+  #j_coupling_mat[5,3] <- 6.49
+  #j_coupling_mat[5,4] <- -11.72
+  #j_coupling_mat[2,1] <- -11.72
+  #j_coupling_mat[3,1] <- 6.49
+  #j_coupling_mat[3,2] <- 4.43
+  #j_coupling_mat[4,3] <- 4.43
+  #j_coupling_mat[5,3] <- 6.49
+  #j_coupling_mat[5,4] <- -11.72
+  
+  # this ordering numbers gives the best agreement with the text book
+  # eg:
+  # get_mol_paras("glyc") %>% sim_mol(ft = 300e6, N = 1024*8) %>%
+  # lb(1, 1) %>% plot(xlim = c(3.9, 3.4))
+  
+  j_coupling_mat[2,1] <- -11.72
+  j_coupling_mat[3,1] <- 4.43
+  j_coupling_mat[3,2] <- 6.49
+  j_coupling_mat[4,3] <- 6.49
+  j_coupling_mat[5,3] <- 4.43
+  j_coupling_mat[5,4] <- -11.72
+  
+  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 1,
+                       lw = lw, lg = lg)
+  
+  source <- "In Vivo NMR Spectroscopy: Principles and Techniques,
+              Robin A. de Graaf"
+  
+  paras <- list(spin_groups = list(spin_group_a), name = "Glyc",
+                source = source, full_name = "Glycerol")
+  class(paras) <- "mol_parameters"
+  paras
+}
+
 get_ins_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 0.5
   nucleus <- rep("1H", 6)

@@ -4,22 +4,20 @@
 \alias{int_spec}
 \title{Integrate a spectral region.}
 \usage{
-int_spec(mrs_data, xlim = NULL, scale = "ppm", mode = "re", summation = "sum")
+int_spec(mrs_data, xlim = NULL, freq_scale = "ppm", mode = "re")
 }
 \arguments{
 \item{mrs_data}{MRS data.}
 
 \item{xlim}{spectral range to be integrated (defaults to full range).}
 
-\item{scale}{units of xlim, can be : "ppm", "Hz" or "points".}
+\item{freq_scale}{units of xlim, can be : "ppm", "hz" or "points".}
 
 \item{mode}{spectral mode, can be : "re", "im", "mod" or "cplx".}
-
-\item{summation}{can be "sum" (default), "mean" or "l2".}
 }
 \value{
 an array of integral values.
 }
 \description{
-Integrate a spectral region.
+See spec_op function for a more complete set of spectral operations.
 }

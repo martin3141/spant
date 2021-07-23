@@ -11,7 +11,7 @@ apodise_xy(mrs_data, func = "hamming", w = 2.5)
 
 \item{func}{must be "hamming" or "gaussian".}
 
-\item{w}{the reciprocal of the standard deviation for the gaussian function.}
+\item{w}{the reciprocal of the standard deviation for the Gaussian function.}
 }
 \value{
 apodised data.

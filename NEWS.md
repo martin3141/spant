@@ -1,3 +1,15 @@
+# spant 1.14.0
+* Added glycerol simulation parameters, e.g. get_mol_paras("glyc").
+* Bug fix for read_ima_* functions.
+* Improved y = 0 baseline for stackplot when setting bl_lty parameter.
+* Removed norm_mrs function and replaced with scale_spec for simple data
+scaling tasks, eg scaling based on the integration of a spectral region.
+* Added spec_op function for performing simple summary operations on spectral
+segments.
+* Changed the name of scale_mrs function to scale_mrs_amp.
+* Added mean_mrs_list function.
+* Improved LCM RAW and BASIS readers (contribution from Alex Craven).
+
 # spant 1.13.0
 * ABfit frequency shifts limits are now specified in ppm rather than Hz to
 improve consistency between field strengths.

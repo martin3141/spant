@@ -509,13 +509,14 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   lty <- rep(1, ncol(plot_data))
   
   # add baseline traces to the plot?
-  if (!is.null(bl_lty)) {
+  #if (!is.null(bl_lty)) {
     # only need one baseline trace if y_offset is zero
-    if (y_offset == 0) y_offset_mat <- y_offset_mat[, 1, drop = FALSE]
+  #  if (y_offset == 0) y_offset_mat <- y_offset_mat[, 1, drop = FALSE]
     
-    plot_data <- cbind(plot_data, y_offset_mat)
-    lty <- c(lty, rep(bl_lty, ncol(y_offset_mat)))
-  }
+  #  plot_data <- cbind(plot_data, y_offset_mat)
+  #  lty <- c(lty, rep(bl_lty, ncol(y_offset_mat)))
+    # col <- c(col, rep("black", ncol(y_offset_mat)))
+  #}
   
   x_scale_mat <- matrix(x_scale[subset], nrow = nrow(plot_data),
                         ncol = ncol(plot_data), byrow = FALSE)
@@ -561,10 +562,22 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
     # allow text outside axes
     graphics::par(xpd = T)
     for (n in 1:length(labels)) {
-      graphics::text(xlim[2] , y_offset_vec[n], labels[n], pos = 4,
+      graphics::text(xlim[2], y_offset_vec[n], labels[n], pos = 4,
                      cex = lab_cex)
     }
     graphics::par(xpd = F)
+  }
+  
+  # draw baseline(s)
+  if (!is.null(bl_lty)) {
+    # only need one baseline trace if y_offset is zero
+    if (y_offset == 0) {
+      graphics::abline(h = 0, lty = bl_lty, lwd = 0.5)
+    } else {
+      for (offset in y_offset_vec) {
+        graphics::abline(h = offset, lty = bl_lty, lwd = 0.5)
+      }
+    }
   }
   
   # if (show_grid) graphics::grid(nx = grid_nx, ny = grid_ny)

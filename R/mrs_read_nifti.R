@@ -1,8 +1,11 @@
 read_mrs_nifti <- function(fname, extra) {
   
+  fname_low <- tolower(fname)
+  
   # check the file extension is sensible
-  if (stringr::str_sub(fname, -7) != ".nii.gz") {
-    stop("filename argument must end in .nii.gz")
+  if (!stringr::str_ends(fname_low, ".nii.gz") &
+      !stringr::str_ends(fname_low, ".nii")) {
+    stop("filename argument must end in .nii.gz or .nii")
   }
   
   # check file exists

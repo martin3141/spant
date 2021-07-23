@@ -467,7 +467,83 @@ circ_mask <- function(d, n, offset = 1) {
   return(dist <= d / 2)
 }
 
+# equation for following function taken from:
+# https://math.stackexchange.com/questions/2645689/what-is-the-parametric-equation-of-a-rotated-ellipse-given-the-angle-of-rotatio
+
+#' Create an elliptical mask stored as a matrix of logical values.
+#' @param xN number of pixels in the x dimension.
+#' @param yN number of pixels in the y dimension.
+#' @param x0 centre of ellipse in the x direction in units of pixels.
+#' @param y0 centre of ellipse in the y direction in units of pixels.
+#' @param xr radius in the x direction in units of pixels.
+#' @param yr radius in the y direction in units of pixels.
+#' @param angle angle of rotation in degrees.
+#' @return logical mask matrix with dimensions fov_yN x fov_xN.
+#' @export
+elliptical_mask <- function(xN, yN, x0, y0, xr, yr, angle) {
+  g <- pracma::meshgrid(0:(xN - 1) - xN / 2, 0:(yN - 1) - yN / 2)
+  phi <- angle / 180 * pi
+  mask <- (((g$X - x0) * cos(phi) + (g$Y - y0) * sin(phi))  ^ 2 / xr ^ 2 + 
+          (((g$X - x0) * sin(phi) - (g$Y - y0) * cos(phi))) ^ 2 / yr ^ 2) <= 1
+  return(mask)
+}
+
+#' Create a rectangular mask stored as a matrix of logical values.
+#' @param xN number of pixels in the x dimension.
+#' @param yN number of pixels in the y dimension.
+#' @param x0 centre of rectangle in the x direction in units of pixels.
+#' @param y0 centre of rectangle in the y direction in units of pixels.
+#' @param xw width in the x direction in units of pixels.
+#' @param yw width in the y direction in units of pixels.
+#' @param angle angle of rotation in degrees.
+#' @return logical mask matrix with dimensions fov_yN x fov_xN.
+#' @export
+rectangular_mask <- function(xN, yN, x0, y0, xw, yw, angle) {
+  g <- pracma::meshgrid(0:(xN - 1) - xN / 2, 0:(yN - 1) - yN / 2)
+  phi <- angle / 180 * pi
+  
+  x_mask <- (((g$X - x0) * cos(phi) + (g$Y - y0) * sin(phi)) ^ 2 / 
+               (xw / 2) ^ 2 <= 1) 
+  
+  y_mask <- (((g$X - x0) * sin(phi) - (g$Y - y0) * cos(phi)) ^ 2 /
+               (yw / 2) ^ 2 <= 1)
+  
+  mask <- x_mask & y_mask
+  return(mask)
+}
+
+#' Create a two dimensional Gaussian window function stored as a matrix.
+#' @param xN number of pixels in the x dimension.
+#' @param yN number of pixels in the y dimension.
+#' @param x0 centre of window function in the x direction in units of pixels.
+#' Note, only integer values are applied.
+#' @param y0 centre of window function in the y direction in units of pixels.
+#' Note, only integer values are applied.
+#' @param xw the reciprocal of the standard deviation of the Gaussian window in
+#' x direction.
+#' @param yw the reciprocal of the standard deviation of the Gaussian window in
+#' y direction.
+#' @return matrix with dimensions fov_yN x fov_xN.
+#' @export
+gausswin_2d <- function(xN, yN, x0, y0, xw, yw) {
+  x_gaus_vec <- signal::gausswin(xN, xw)
+  x_gaus_vec <- pracma::circshift(x_gaus_vec, x0)
+  x_gaus_mat <- pracma::repmat(x_gaus_vec, yN, 1)
+  
+  y_gaus_vec <- signal::gausswin(yN, yw)
+  y_gaus_vec <- pracma::circshift(y_gaus_vec, y0)
+  y_gaus_mat <- pracma::repmat(y_gaus_vec, xN, 1)
+  y_gaus_mat <- t(y_gaus_mat)
+
+  return(x_gaus_mat * y_gaus_mat)
+}
+
 #' Check if an object is defined, which is the same as being not NULL.
 #' @param x object to test for being NULL.
 #' @return logical value.
 is.def <- function(x) !is.null(x)
+
+convolve_td <- function(x, y) {
+  x <- stats::fft(x * Conj(y) * length(x))
+  return(x)
+}

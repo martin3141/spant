@@ -41,6 +41,8 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
   #  stop()
   #}
   
+  if (class(acq_paras) == "mrs_data") acq_paras <- get_acq_paras(acq_paras)
+  
   sig_n <- length(freq)
   if (sig_n != length(amp)) {
     amp <- rep_len(amp, sig_n)
@@ -330,7 +332,15 @@ add_noise <- function(mrs_data, sd = 0.1, fd = TRUE) {
   mrs_data
 }
 
-sim_zeros <- function(fs = def_fs(), ft = def_ft(), N = def_N(),
+#' Simulate an mrs_data object containing complex zero valued samples.
+#' @param fs sampling frequency in Hz.
+#' @param ft transmitter frequency in Hz.
+#' @param N number of data points in the spectral dimension.
+#' @param ref reference value for ppm scale.
+#' @param dyns number of dynamic scans to generate.
+#' @return mrs_data object.
+#' @export
+sim_zero <- function(fs = def_fs(), ft = def_ft(), N = def_N(),
                       ref = def_ref(), dyns = 1) {
   
   data_pts <- dyns * N 
@@ -683,6 +693,39 @@ is_fd <- function(mrs_data) {
   check_mrs_data(mrs_data)
   
   mrs_data$freq_domain[7]
+}
+
+#' Apply the Fourier transform over the dynamic dimension.
+#' @param mrs_data MRS data where the dynamic dimension is in the time-domain.
+#' @param ft_shift apply FT shift to the output, default is FALSE.
+#' @return transformed MRS data.
+#' @export
+ft_dyn <- function(mrs_data, ft_shift = FALSE) {
+  data <- mrs_data$data
+  
+  # permute the dynamic dimension to be the last (7th)
+  data <- aperm(data, c(1, 2, 3, 4, 6, 7, 5)) 
+  data_dim <- dim(data)
+  
+  # convert to a matrix and transform
+  data <- matrix(data, ncol = Ndyns(mrs_data))
+  
+  # fft and shift if requested
+  if (ft_shift) {
+    data <- t(ft_shift_mat(t(data)))
+  } else {
+    data <- t(stats::mvfft(t(data)))
+  }
+  
+  # revert back to an array
+  dim(data) <- data_dim
+  
+  # permute the dynamic dimension to be 5th
+  data <- aperm(data, c(1, 2, 3, 4, 7, 5, 6)) 
+  
+  mrs_data$data <- data
+  
+  return(mrs_data)
 }
 
 #' Transform time-domain data to the frequency-domain.
@@ -1192,27 +1235,36 @@ crop_spec <- function(mrs_data, xlim = c(4, 0.2), scale = "ppm") {
 #' @param lb line broadening to apply to the reference signal.
 #' @param max_shift maximum allowable shift in Hz.
 #' @param ret_df return frequency shifts in addition to aligned data (logical).
+#' @param mean_dyns align the mean spectrum and apply the same shift to each
+#' dyanmic.
 #' @return aligned data object.
 #' @export
 align <- function(mrs_data, ref_freq = 4.65, zf_factor = 2, lb = 2,
-                  max_shift = 20, ret_df = FALSE) {
+                  max_shift = 20, ret_df = FALSE, mean_dyns = FALSE) {
   
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
+  if (mean_dyns) {
+    mrs_data_orig <- mrs_data
+    mrs_data <- mean_dyns(mrs_data)
+  }
+  
   mrs_data_zf <- zf(mrs_data, zf_factor)
-  mrs_data_zf <- td2fd(mrs_data_zf)
+  
   freq <- ppm2hz(ref_freq, mrs_data$ft, mrs_data$ref)
   t_zf <- seconds(mrs_data_zf)
   
   freq_mat <- matrix(freq, length(freq), length(t_zf), byrow = FALSE)
   t_zf_mat <- matrix(t_zf, length(freq), length(t_zf), byrow = TRUE)
-  ref_data <- ft_shift(colSums(exp(2i * t_zf_mat * pi * freq_mat - 
-                                   lb * t_zf_mat * pi)))
+  
+  ref_data <- colSums(exp(2i * t_zf_mat * pi * freq_mat - lb * t_zf_mat * pi))
   
   window <- floor(max_shift * Npts(mrs_data_zf) * mrs_data$resolution[7])
   
   shifts <- apply_mrs(mrs_data_zf, 7, conv_align, ref_data, window,
-                      1/mrs_data$resolution[7], data_only = TRUE)
+                      1 / mrs_data$resolution[7], FALSE, data_only = TRUE)
+  
+  if (mean_dyns) mrs_data <- mrs_data_orig
   
   t_orig <- rep(seconds(mrs_data), each = Nspec(mrs_data))
   t_array <- array(t_orig, dim = dim(mrs_data$data))
@@ -1252,8 +1304,12 @@ get_td_amp <- function(mrs_data, nstart = 10, nend = 50, method = "spline") {
   amps
 }
 
-conv_align <- function(acq, ref, window, fs) {
-  conv <- pracma::fftshift(Mod(stats::convolve(acq, ref)))
+conv_align <- function(acq, ref, window, fs, fd) {
+  if (fd) {
+    conv <- pracma::fftshift(Mod(stats::convolve(acq, ref)))
+  } else {
+    conv <- pracma::fftshift(Mod(convolve_td(acq, ref)))
+  }
   conv_crop <- array(conv[(length(acq) / 2 - window + 1):(length(acq) / 2 +
                      window + 1)])
   #plot(conv_crop)
@@ -1469,6 +1525,44 @@ mask_xy_mat <- function(mrs_data, mask, value = NA) {
   dim(mask) <- c(1, nrow(mask), ncol(mask), 1, 1, 1, 1)
   mask <- rep_array_dim(mask, 7, Npts(mrs_data))
   mrs_data$data[mask] <- value
+  return(mrs_data)
+}
+
+#' Set the masked voxels in a 2D MRSI dataset to given spectrum.
+#' @param mrs_data MRSI data object.
+#' @param mask matrix of boolean values specifying the voxels to set, where a
+#' value of TRUE indicates the voxel should be set to mask_mrs_data.
+#' @param mask_mrs_data the spectral data to be assigned to the masked voxels.
+#' @return updated dataset.
+#' @export
+set_mask_xy_mat <- function(mrs_data, mask, mask_mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  check_mrs_data(mask_mrs_data)
+  
+  if (Nspec(mask_mrs_data) > 1) {
+    stop("mask_mrs_data should only contain one spectrum")
+  }
+  
+  if (Npts(mrs_data) != Npts(mask_mrs_data)) {
+    stop("mrs_data and mask_mrs_data don't have the same number of data points")
+  }
+  
+  # make sure mask_mrs_data is in the same domain as mrs_data 
+  if (is_fd(mrs_data) & !is_fd(mask_mrs_data)) {
+    mask_mrs_data <- td2fd(mask_mrs_data)
+  }
+  
+  if (!is_fd(mrs_data) & is_fd(mask_mrs_data)) {
+    mask_mrs_data <- fd2td(mask_mrs_data)
+  }
+  
+  voxels <- sum(mask)
+  
+  dim(mask) <- c(1, nrow(mask), ncol(mask), 1, 1, 1, 1)
+  mask <- rep_array_dim(mask, 7, Npts(mrs_data))
+  mrs_data$data[mask] <- rep(drop(mask_mrs_data$data), each = voxels)
   return(mrs_data)
 }
 
@@ -1734,22 +1828,132 @@ sum_mrs <- function(a, b, force = FALSE) {
   return(a)
 }
 
-#' Scale an mrs_data object by a constant.
-#' @param mrs_data data to be scaled.
-#' @param scale multiplicative factor.
-#' @return mrs_data multiplied by the scale factor.
+#' Perform a mathematical operation on a spectral region.
+#' @param mrs_data MRS data.
+#' @param xlim spectral range to be integrated (defaults to full range).
+#' @param operator can be "sum" (default), "mean", "l2", "max", "min" or
+#' "max-min".
+#' @param freq_scale units of xlim, can be : "ppm", "hz" or "points".
+#' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
+#' @return an array of integral values.
 #' @export
-scale_mrs <- function(mrs_data, scale) {
+spec_op <- function(mrs_data, xlim = NULL, operator = "sum", freq_scale = "ppm",
+                    mode = "re") {
+  
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+    
+  if (freq_scale == "ppm") {
+    x_scale <- ppm(mrs_data)
+  } else if (freq_scale == "hz") {
+    x_scale <- hz(mrs_data)
+  } else if (freq_scale == "points") {
+    x_scale <- pts(mrs_data)
+  }
+  
+  if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[Npts(mrs_data)])
+  
+  subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
+  
+  data_arr <- mrs_data$data[,,,,,, subset, drop = F]
+  
+  if (mode == "re") {
+    data_arr <- Re(data_arr)
+  } else if (mode == "im") {
+    data_arr <- Im(data_arr)
+  } else if (mode == "mod") {
+    data_arr <- Mod(data_arr)
+  }
+ 
+  if (operator == "l2") {
+    data_arr <- data_arr * data_arr
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
+    res <- res ^ 0.5
+  } else if (operator == "mean") {
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), mean)
+  } else if (operator == "sum") {
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
+  } else if (operator == "max") {
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), max)
+  } else if (operator == "min") {
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), min)
+  } else if (operator == "max-min") {
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), max) - 
+           apply(data_arr, c(1, 2, 3, 4, 5, 6), min)
+  } else {
+    stop("unknown operator argument for spec_op function") 
+  }
+  
+  return(res) 
+}
+
+#' Integrate a spectral region.
+#' 
+#' See spec_op function for a more complete set of spectral operations.
+#' 
+#' @param mrs_data MRS data.
+#' @param xlim spectral range to be integrated (defaults to full range).
+#' @param freq_scale units of xlim, can be : "ppm", "hz" or "points".
+#' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
+#' @return an array of integral values.
+#' @export
+int_spec <- function(mrs_data, xlim = NULL, freq_scale = "ppm", mode = "re") {
+  
+  res <- spec_op(mrs_data = mrs_data, xlim = xlim, operator = "sum",
+                 freq_scale = freq_scale, mode = mode)
+  
+  return(res) 
+}
+
+#' Scale an mrs_data object by a scalar or vector or amplitudes.
+#' @param mrs_data data to be scaled.
+#' @param amp multiplicative factor, must have length equal to 1 or
+#' Nspec(mrs_data).
+#' @return mrs_data object multiplied by the amplitude scale factor.
+#' @export
+scale_mrs_amp <- function(mrs_data, amp) {
  
   if (class(mrs_data) != "mrs_data") {
     stop("first argument is not an mrs_data object")
   }
   
-  mrs_data$data <- mrs_data$data * scale
+  if (length(amp) == 1) {
+    mrs_data$data <- mrs_data$data * amp
+  } else if (length(amp) == Nspec(mrs_data)) {
+    amps_full <- array(rep(amp, Npts(mrs_data)), dim = dim(mrs_data$data))
+    mrs_data$data <- mrs_data$data * amps_full
+  } else {
+    stop("scale should either have length equal to 1 or Nspec(mrs_data)")
+  }
   
   return(mrs_data)
 }
+
+#' Scale mrs_data to a spectral region.
+#' @param mrs_data MRS data.
+#' @param xlim spectral range to be integrated (defaults to full range).
+#' @param operator can be "sum" (default), "mean", "l2", "max", "min" or
+#' "max-min".
+#' @param freq_scale units of xlim, can be : "ppm", "Hz" or "points".
+#' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
+#' @param mean_dyns mean the dynamic scans before applying the operator. The
+#' same scaling value will be applied to each individual dynamic.
+#' @return normalised data.
+#' @export
+scale_spec <- function(mrs_data, xlim = NULL, operator = "sum",
+                       freq_scale = "ppm", mode = "re", mean_dyns = TRUE) {
   
+  if (mean_dyns) {
+    amp <- spec_op(mean_dyns(mrs_data), xlim, operator, freq_scale, mode)
+    amp <- as.numeric(amp)
+  } else {
+    amp <- spec_op(mrs_data, xlim, operator, freq_scale, mode)
+  }
+  
+  mrs_data <- scale_mrs_amp(mrs_data, 1 / amp)
+  
+  return(mrs_data)
+}
+
 #' @export
 `+.mrs_data` <- function(a, b) {
   if (class(b) == "mrs_data" ) {
@@ -1890,11 +2094,21 @@ mean_dyns <- function(mrs_data) {
   # check the input
   check_mrs_data(mrs_data) 
   
-  mrs_data$data <- aperm(mrs_data$data, c(5,1,2,3,4,6,7))
+  mrs_data$data <- aperm(mrs_data$data, c(5, 1, 2, 3, 4, 6, 7))
   mrs_data$data <- colMeans(mrs_data$data, na.rm = TRUE)
   new_dim <- dim(mrs_data$data)
-  dim(mrs_data$data) <- c(new_dim[1:4],1,new_dim[5:6])
+  dim(mrs_data$data) <- c(new_dim[1:4], 1, new_dim[5:6])
   mrs_data
+}
+
+#' Subtract the mean dynamic spectrum from a dynamic series.
+#' @param mrs_data dynamic MRS data.
+#' @return subtracted data.
+#' @export
+sub_mean_dyns <- function(mrs_data) {
+  mean_mrs_data <- mean_dyns(mrs_data)
+  mrs_data_mean_sub <- mrs_data - rep_dyn(mean_mrs_data, Ndyns(mrs_data))
+  return(mrs_data_mean_sub)
 }
 
 #' Calculate the mean of adjacent dynamic scans.
@@ -2319,7 +2533,7 @@ ecc <- function(metab, ref, rev = FALSE) {
 #' Apodise MRSI data in the x-y direction with a k-space filter.
 #' @param mrs_data MRSI data.
 #' @param func must be "hamming" or "gaussian".
-#' @param w the reciprocal of the standard deviation for the gaussian function.
+#' @param w the reciprocal of the standard deviation for the Gaussian function.
 #' @return apodised data.
 #' @export
 apodise_xy <- function(mrs_data, func = "hamming", w = 2.5) {
@@ -2810,78 +3024,16 @@ bc_constant <- function(mrs_data, xlim) {
   
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
-  offsets <- int_spec(mrs_data, xlim = xlim, mode = "cplx", summation = "mean")
+  # offsets <- int_spec(mrs_data, xlim = xlim, mode = "cplx",
+  #                     summation = "mean")
+  
+  offsets <- spec_op(mrs_data, xlim = xlim, mode = "cplx", operator = "mean")
   offsets_rep <- array(rep(offsets, Npts(mrs_data)), dim = dim(mrs_data$data))
   mrs_data$data <- mrs_data$data - offsets_rep
   return(mrs_data)
 }
 
-#' Normalise mrs_data to a spectral region.
-#' @param mrs_data MRS data.
-#' @param xlim spectral range to be integrated (defaults to full range).
-#' @param scale units of xlim, can be : "ppm", "Hz" or "points".
-#' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
-#' @param summation can be "sum", "mean" or "l2" (default).
-#' @return normalised data.
-#' @export
-norm_mrs <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
-                     summation = "l2") {
-  
-  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
-  
-  amps <- int_spec(mrs_data, xlim, scale, mode, summation)
-  amps_full <- array(rep(amps, Npts(mrs_data)), dim = dim(mrs_data$data))
-  mrs_data$data <- mrs_data$data / amps_full
-  return(mrs_data)
-}
 
-#' Integrate a spectral region.
-#' @param mrs_data MRS data.
-#' @param xlim spectral range to be integrated (defaults to full range).
-#' @param scale units of xlim, can be : "ppm", "Hz" or "points".
-#' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
-#' @param summation can be "sum" (default), "mean" or "l2".
-#' @return an array of integral values.
-#' @export
-int_spec <- function(mrs_data, xlim = NULL, scale = "ppm", mode = "re",
-                     summation = "sum") {
-  
-  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
-    
-  if ( scale == "ppm" ) {
-    x_scale <- ppm(mrs_data)
-  } else if (scale == "hz") {
-    x_scale <- hz(mrs_data)
-  } else if (scale == "points") {
-    x_scale <- pts(mrs_data)
-  }
-  
-  if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[Npts(mrs_data)])
-  
-  subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
-  
-  data_arr <- mrs_data$data[,,,,,, subset, drop = F]
-  
-  if (mode == "re") {
-    data_arr <- Re(data_arr)
-  } else if (mode == "im") {
-    data_arr <- Im(data_arr)
-  } else if (mode == "mod") {
-    data_arr <- Mod(data_arr)
-  }
- 
-  if (summation == "l2") {
-    data_arr <- data_arr * data_arr
-    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
-    res <- res ^ 0.5
-  } else if (summation == "mean") {
-    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), mean)
-  } else {
-    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
-  }
-  
-  return(res) 
-}
 
 #' Baseline correction using the ALS method.
 #' @param mrs_data mrs_data object.
@@ -3130,7 +3282,8 @@ l2_reg <- function(mrs_data, thresh = 0.05, b = 1e-11, A = NA, xlim = NA) {
     mrs_data_coil <- get_subset(mrs_data, coil_set = coil)
     
     if (anyNA(A)) {
-      map <- drop(int_spec(mrs_data_coil, mode = "mod"))
+      # map <- drop(int_spec(mrs_data_coil, mode = "mod"))
+      map <- drop(spec_op(mrs_data_coil, mode = "mod"))
       map_bool <- map > (max(map) * thresh)
       mrsi_mask <- mask_xy_mat(mrs_data_coil, mask = !map_bool)
       A_coil <- t(stats::na.omit(mrs_data2mat(mrsi_mask)))
@@ -3188,7 +3341,13 @@ ssp <- function(mrs_data, comps = 5, xlim = c(1.5, 0.8)) {
     
     # remove the lipids from the input
     D_ori <- mrs_data2mat(get_subset(mrs_data, coil_set = coil))
-    P <- diag(nrow(U_m)) - U_m %*% Conj(t(U_m))
+    
+    if (is.matrix(U_m)) {
+      P <- diag(nrow(U_m)) - U_m %*% Conj(t(U_m))
+    } else{
+      P <- diag(U_m) - U_m %*% Conj(t(U_m))
+    }
+    
     D_supp <- P %*% D_ori
     
     # restructure back into an mrs_data object
@@ -3270,7 +3429,8 @@ pg_extrap_xy <- function(mrs_data, img_mask = NULL, kspace_mask = NULL,
   
   # get an image mask from the interpolated data, generally a scalp lipid mask
   if (is.null(img_mask)) {
-    img_map  <- drop(int_spec(mrs_data_zf, mode = "mod"))
+    # img_map  <- drop(int_spec(mrs_data_zf, mode = "mod"))
+    img_map  <- drop(spec_op(mrs_data_zf, mode = "mod"))
     img_mask <- img_map > (max(img_map) * intensity_thresh)
   }
   
@@ -3291,4 +3451,15 @@ pg_extrap_xy <- function(mrs_data, img_mask = NULL, kspace_mask = NULL,
   }
   
   return(mrs_data_zf)
+}
+
+#' Return the mean of a list of mrs_data objects.
+#' @param mrs_list list of mrs_data objects.
+#' @return mean \code{mrs_data} object.
+#' @export
+mean_mrs_list <- function(mrs_list) {
+  mean_mrs <- mrs_list[[1]]
+  for (n in (2:length(mrs_list))) mean_mrs <- sum_mrs(mean_mrs, mrs_list[[n]])
+  mean_mrs <- mean_mrs / length(mrs_list)
+  return(mean_mrs)
 }
