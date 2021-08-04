@@ -1,5 +1,5 @@
 ---
-title: 'spant: An R package for magnetic resonance spectroscopy analysis'
+title: 'spant: an R package for magnetic resonance spectroscopy analysis'
 tags:
   - TODO
   - TODO
@@ -23,6 +23,8 @@ TODO
 # Statement of need
 
 TODO
+
+Ref test [@Binney:2008].
 
 # Mathematics
 
