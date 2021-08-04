@@ -10,8 +10,7 @@ authors:
     orcid: 0000-0002-2089-3956
     affiliation: 1
 affiliations:
- - name: Centre for Human Brain Health and School of Psychology, University of
- Birmingham, Birmingham, UK
+ - name: Centre for Human Brain Health and School of Psychology, University of Birmingham, Birmingham, UK
    index: 1
 date: 4 August 2021
 bibliography: paper.bib
