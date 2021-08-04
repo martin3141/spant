@@ -20,10 +20,10 @@ bibliography: paper.bib
 
 # Summary
 
-TODO
+TODO @wilson:2011
 
 # Statement of need
 
-TODO
+TODO @simpson:2017
 
 # References
