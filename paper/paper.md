@@ -49,7 +49,7 @@ Citations to entries in paper.bib should be in
 format.
 
 If you want to cite a software repository URL (e.g. something on GitHub without a preferred
-citation) then you can do it with the example BibTeX entry below for @fidgit.
+citation) then you can do it with the example BibTeX entry below for.
 
 For a quick reference, the following citation commands can be used:
 - `@author:2001`  ->  "Author et al. (2001)"
