@@ -1,5 +1,5 @@
 ---
-title: 'spant: an R package for magnetic resonance spectroscopy analysis'
+title: 'spant: An R package for magnetic resonance spectroscopy analysis'
 tags:
   - TODO
   - TODO
@@ -48,7 +48,7 @@ Citations to entries in paper.bib should be in
 format.
 
 If you want to cite a software repository URL (e.g. something on GitHub without a preferred
-citation) then you can do it with the example BibTeX entry below for.
+citation) then you can do it with the example BibTeX entry below for @fidgit.
 
 For a quick reference, the following citation commands can be used:
 - `@author:2001`  ->  "Author et al. (2001)"
@@ -60,6 +60,9 @@ For a quick reference, the following citation commands can be used:
 Figures can be included like this:
 ![Caption for example figure.\label{fig:example}](figure.png)
 and referenced from text using \autoref{fig:example}.
+
+Figure sizes can be customized by adding an optional second parameter:
+![Caption for example figure.](figure.png){ width=20% }
 
 # Acknowledgements
 
