@@ -28,7 +28,7 @@ Traditional MRS analysis was dominated by the use of proprietary software, eithe
 
 The vast majority of recentely developed open-source MRS analysis tools have been written in either MATLAB or Python. Whilst all languages have strengths and weaknesses, R is particularly suited to the interactive exploration and batch processing of large and complex datasets - typical of MRS and neuroimaging studies. The `spant` package was developed to combine traditional  and modern MRS data processing techniques with strengths of R, including: plotting/visualisation, statistics, machine learning and data wrangling. Furthermore, `spant` may be used to conveniently combine MRS results with other imaging modalities, due to the availabilty of a wide range of R packages focussed on image processing (@muschelli:2019) and support for the NIfTI data format (*clayden, oro.nifti*).
 
-At the time of writing, `spant` has been used to develop and validate two new MRS spectroscopy analysis algorithms: RATS (*ref*) and ABfit (@wilson:2021), and has also been used to study Alzheimer’s Disease (*ref*) and psychosis (*ref*) - confirming its suitability for both MRS methods research and clinical studies.
+At the time of writing, `spant` has been used to develop and validate two new MRS spectroscopy analysis algorithms: RATS (@wilson:2019) and ABfit (@wilson:2021), and has also been used to study cancer (@franco:2021), Alzheimer’s Disease (@montal:2021) and psychosis (@fisher:2020) - confirming its suitability for both MRS methods research and clinical studies.
 
 # Acknowledgements
 
