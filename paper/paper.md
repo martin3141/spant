@@ -32,6 +32,6 @@ At the time of writing, `spant` has been used to develop and validate two new MR
 
 # Acknowledgements
 
-Particular thanks go to Dr Jonathan D. Clayden and Dr Robert W. Cox for their work on the `RNifti` package (@clayden:2021) and NIfTI standard <https://nifti.nimh.nih.gov/>, which have substantially expanded the capabilites of `spant`.
+Particular thanks go to Dr Jonathan D. Clayden and Dr Robert W. Cox for their work on the `RNifti` package (@clayden:2021) and NIfTI standard (<https://nifti.nimh.nih.gov/>) which have substantially expanded the capabilites of `spant`.
 
 # References
