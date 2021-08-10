@@ -1,4 +1,5 @@
 # spant 1.15.0
+* Added a unit test for reading and writing LCM .basis formatted files.
 
 # spant 1.14.0
 * Added glycerol simulation parameters, e.g. get_mol_paras("glyc").

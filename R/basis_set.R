@@ -96,9 +96,63 @@ stackplot.basis_set <- function(x, ...) {
 #' Read a basis file in LCModel .basis format.
 #' @param basis_file path to basis file.
 #' @param ref assumed ppm reference value.
+#' @param sort_basis sort the basis set based on signal names.
 #' @return basis object.
 #' @export
-read_basis <- function(basis_file, ref = def_ref()) {
+read_basis <- function(basis_file, ref = def_ref(), sort_basis = TRUE) {
+  con  <- file(basis_file, open = "r")
+  names <- vector()
+  data <- vector()
+  
+  while (length(line <- readLines(con, n = 1, warn = FALSE)) > 0) {
+    if (startsWith(line, " NDATAB = ")) {
+      N <- as.integer(strsplit(trimws(line), "\\s+")[[1]][3])
+      data_lines <- ceiling(2 * N / 6) # assume 6 cols
+    } else if (startsWith(line, " HZPPPM = ")) {
+      bas_ft <- strsplit(trimws(line), "\\s+")[[1]][3]
+      bas_ft <- as.double(gsub(",", "", bas_ft))*1e6
+    } else if (startsWith(line, " BADELT = ")) {
+      bas_fs <- strsplit(trimws(line), "\\s+")[[1]][3]
+      bas_fs <- 1/as.double(gsub(",", "",bas_fs))
+    } else if (endsWith(line, "$BASIS")) {
+      while (length(line <- readLines(con, n = 1, warn = FALSE)) > 0) {
+        if (startsWith(line, " ID = ")) {
+          id <- (strsplit(trimws(line), " ")[[1]][3])
+          id <- gsub(",", "",id)
+          id <- gsub("'", "",id)
+          names <- c(names, id)
+        } else if (endsWith(line, "$END")) {
+          x <- utils::read.fortran(con, "6F13.0", n = data_lines)
+          data_pts <- as.vector(t(as.matrix(x)))
+          data_pts <- data_pts[seq(1, 2 * N, 2)] +
+                      1i * data_pts[seq(2, 2 * N, 2)]
+          data_pts <- pracma::ifftshift(data_pts)
+          data <- cbind(data, data_pts)
+          break
+        }
+      }
+    }
+  }
+  close(con)
+  
+  basis_set <- list(data = data, N = N, fs = bas_fs, ft = bas_ft, 
+                    names = names, ref = ref)
+  
+  class(basis_set) <- "basis_set"
+  
+  if (sort_basis) basis_set <- sort_basis(basis_set)
+  
+  dimnames(basis_set$data) <- NULL
+
+  return(basis_set)
+}
+
+#' Read a basis file in LCModel .basis format (for testing only).
+#' @param basis_file path to basis file.
+#' @param ref assumed ppm reference value.
+#' @return basis object.
+#' @export
+read_basis_ac <- function(basis_file, ref = def_ref()) {
   con  <- file(basis_file, open = "r")
   names <- vector()
   data <- vector()
@@ -138,18 +192,18 @@ read_basis <- function(basis_file, ref = def_ref()) {
           fp <- seek(con,origin='current')
           l1 <- readLines(con,n=1,warn=FALSE); 
           fpn <- seek(con,origin='start',where=fp);
-
+          
           tokens <- strsplit(trimws(l1),"[[:space:]]+")[[1]];
           cols <- length(tokens);
           width <- ceiling(nchar(l1)/cols);
           fmt <- sprintf("%dF%d.0",cols,width);
           # }}}
-
+          
           data_lines <- ceiling(2 * N / cols)
           x <- utils::read.fortran(con, fmt, n = data_lines)
           data_pts <- as.vector(t(as.matrix(x)))
           data_pts <- data_pts[seq(1, 2 * N, 2)] +
-                      1i * data_pts[seq(2, 2 * N, 2)]
+            1i * data_pts[seq(2, 2 * N, 2)]
           data_pts <- pracma::ifftshift(data_pts)
           data <- cbind(data, data_pts)
           break
