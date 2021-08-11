@@ -113,7 +113,7 @@ read_basis <- function(basis_file, ref = def_ref(), sort_basis = TRUE) {
       bas_ft <- as.double(gsub(",", "", bas_ft))*1e6
     } else if (startsWith(line, " BADELT = ")) {
       bas_fs <- strsplit(trimws(line), "\\s+")[[1]][3]
-      bas_fs <- 1/as.double(gsub(",", "",bas_fs))
+      bas_fs <- 1 / as.double(gsub(",", "",bas_fs))
     } else if (endsWith(line, "$BASIS")) {
       while (length(line <- readLines(con, n = 1, warn = FALSE)) > 0) {
         if (startsWith(line, " ID = ")) {
@@ -150,9 +150,10 @@ read_basis <- function(basis_file, ref = def_ref(), sort_basis = TRUE) {
 #' Read a basis file in LCModel .basis format (for testing only).
 #' @param basis_file path to basis file.
 #' @param ref assumed ppm reference value.
+#' @param sort_basis sort the basis set based on signal names.
 #' @return basis object.
 #' @export
-read_basis_ac <- function(basis_file, ref = def_ref()) {
+read_basis_ac <- function(basis_file, ref = def_ref(), sort_basis = TRUE) {
   con  <- file(basis_file, open = "r")
   names <- vector()
   data <- vector()
@@ -217,7 +218,12 @@ read_basis_ac <- function(basis_file, ref = def_ref()) {
                     names = names, ref = ref)
   
   class(basis_set) <- "basis_set"
-  sort_basis(basis_set)
+  
+  if (sort_basis) basis_set <- sort_basis(basis_set)
+  
+  dimnames(basis_set$data) <- NULL
+  
+  return(basis_set)
 }
 
 #' Write a basis object to an LCModel .basis formatted file.
