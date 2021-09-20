@@ -1,5 +1,8 @@
-# spant 1.15.0
+# spant 2.0.0
 * Added a unit test for reading and writing LCM .basis formatted files.
+* Added FWHM estimates for tCr and tCho in ABfit.
+* Added water suppression efficiency and water FWHM measures to the diagnostic
+output of svs_1h_brain_analysis.
 
 # spant 1.14.0
 * Added glycerol simulation parameters, e.g. get_mol_paras("glyc").

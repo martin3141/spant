@@ -128,6 +128,28 @@ svs_1h_brain_analysis <- function(metab, basis = NULL, w_ref = NULL,
     plot_voi_overlay(mri, voi, file.path(output_dir, "vox_plot.png"))
   }
   
+  # the calculate water reference frequency, linewidth and water suppression
+  # efficiency
+  if (is.def(w_ref)) {
+    # phase correct based on the phase of the first data point
+    w_ref      <- fp_phase_correct(w_ref)
+    w_info_re  <- peak_info(w_ref, xlim = c(6, 4), mode = "real")
+    w_info_mod <- peak_info(w_ref, xlim = c(6, 4), mode = "mod")
+    
+    fit_res$res_tab$water_freq_mod_ppm  <- w_info_mod$freq_ppm
+    fit_res$res_tab$water_freq_real_ppm <- w_info_re$freq_ppm
+    fit_res$res_tab$water_fwhm_mod_ppm  <- w_info_mod$fwhm_ppm
+    fit_res$res_tab$water_fwhm_real_ppm <- w_info_re$fwhm_ppm
+    
+    # search for highest peak in the water suppressed data 0.1 ppm either side
+    # of the water frequency
+    water_freq <- w_info_mod$freq_ppm
+    resid_water_peak_mod <- peak_info(metab, xlim = c(water_freq + 0.1,
+                                             water_freq - 0.1), mode = "mod")
+    fit_res$res_tab$water_sup_efficiency_percent <- resid_water_peak_mod$height /
+                                                  w_info_mod$height * 100
+  }
+  
   if (scale_amps) {
     if (is.def(w_ref) & is.def(mri_seg)) {
       
@@ -156,6 +178,7 @@ svs_1h_brain_analysis <- function(metab, basis = NULL, w_ref = NULL,
       fit_res <- scale_amp_ratio(fit_res, "tCr")
     }
   }
+  
   return(fit_res)
 }
 

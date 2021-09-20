@@ -4,12 +4,14 @@
 \alias{read_basis_ac}
 \title{Read a basis file in LCModel .basis format (for testing only).}
 \usage{
-read_basis_ac(basis_file, ref = def_ref())
+read_basis_ac(basis_file, ref = def_ref(), sort_basis = TRUE)
 }
 \arguments{
 \item{basis_file}{path to basis file.}
 
 \item{ref}{assumed ppm reference value.}
+
+\item{sort_basis}{sort the basis set based on signal names.}
 }
 \value{
 basis object.
