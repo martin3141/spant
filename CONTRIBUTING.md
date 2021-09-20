@@ -25,4 +25,4 @@ To contribute a change to spant, follow these steps:
 
 If you're not familiar with git or github, please start by reading <http://r-pkgs.had.co.nz/git.html>. Please use the following style <http://adv-r.had.co.nz/Style.html>.
 
-Please ensure all checks pass with `devtools::check(args = c('--as-cran'))` and consider adding one or more unit tests to the repository tests directory to confirm expected behavior with `devtools::test()`. CI checks are set up to run following pushes to the master branch using GitHub Actions, see <https://orchid00.github.io/actions_sandbox> for details.
+Please ensure all checks pass with `devtools::check(args = c('--as-cran'))` and consider adding one or more unit tests to the repository tests directory to confirm expected behavior with `devtools::test()`. CI checks are set to run following pushes to the master branch using GitHub Actions, see <https://orchid00.github.io/actions_sandbox> for details.
