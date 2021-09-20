@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.14.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.9000</span>
       </span>
     </div>
 
@@ -96,25 +96,28 @@
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+    Tutorials
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/abfit-baseline-opts.html">ABfit baseline options</a>
-    </li>
-    <li>
-      <a href="../articles/spant-basis-simulation.html">Basis simulation</a>
-    </li>
-    <li>
       <a href="../articles/spant-intro.html">Introduction to spant</a>
+    </li>
+    <li>
+      <a href="../articles/spant-preprocessing.html">Common preprocesing steps</a>
     </li>
     <li>
       <a href="../articles/spant-metabolite-simulation.html">Metabolite simulation</a>
     </li>
     <li>
-      <a href="../articles/spant-preprocessing.html">Common preprocessing steps</a>
+      <a href="../articles/spant-basis-simulation.html">Basis simulation</a>
+    </li>
+    <li>
+      <a href="../articles/abfit-baseline-opts.html">ABfit baseline options</a>
+    </li>
+    <li>
+      <a href="../articles/index.html">Index</a>
     </li>
   </ul>
 </li>
@@ -146,9 +149,19 @@
       <small>Source: <a href='https://github.com/martin3141/spant/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="spant-200" class="section level1">
+<h1 class="page-header" data-toc-text="2.0.0">
+<a href="#spant-200" class="anchor"></a>spant 2.0.0<small> Unreleased </small>
+</h1>
+<ul>
+<li>Added a unit test for reading and writing LCM .basis formatted files.</li>
+<li>Added FWHM estimates for tCr and tCho in ABfit.</li>
+<li>Added water suppression efficiency and water FWHM measures to the diagnostic output of svs_1h_brain_analysis.</li>
+</ul>
+</div>
     <div id="spant-1140" class="section level1">
 <h1 class="page-header" data-toc-text="1.14.0">
-<a href="#spant-1140" class="anchor"></a>spant 1.14.0<small> Unreleased </small>
+<a href="#spant-1140" class="anchor"></a>spant 1.14.0<small> 2021-07-23 </small>
 </h1>
 <ul>
 <li>Added glycerol simulation parameters, e.g. get_mol_paras(“glyc”).</li>

@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.14.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.9000</span>
       </span>
     </div>
 
@@ -97,25 +97,28 @@
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+    Tutorials
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/abfit-baseline-opts.html">ABfit baseline options</a>
-    </li>
-    <li>
-      <a href="../articles/spant-basis-simulation.html">Basis simulation</a>
-    </li>
-    <li>
       <a href="../articles/spant-intro.html">Introduction to spant</a>
+    </li>
+    <li>
+      <a href="../articles/spant-preprocessing.html">Common preprocesing steps</a>
     </li>
     <li>
       <a href="../articles/spant-metabolite-simulation.html">Metabolite simulation</a>
     </li>
     <li>
-      <a href="../articles/spant-preprocessing.html">Common preprocessing steps</a>
+      <a href="../articles/spant-basis-simulation.html">Basis simulation</a>
+    </li>
+    <li>
+      <a href="../articles/abfit-baseline-opts.html">ABfit baseline options</a>
+    </li>
+    <li>
+      <a href="../articles/index.html">Index</a>
     </li>
   </ul>
 </li>
@@ -152,7 +155,7 @@
     <p>Read a basis file in LCModel .basis format.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>read_basis</span><span class='op'>(</span><span class='va'>basis_file</span>, ref <span class='op'>=</span> <span class='fu'><a href='def_ref.html'>def_ref</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>read_basis</span><span class='op'>(</span><span class='va'>basis_file</span>, ref <span class='op'>=</span> <span class='fu'><a href='def_ref.html'>def_ref</a></span><span class='op'>(</span><span class='op'>)</span>, sort_basis <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,6 +167,10 @@
     <tr>
       <th>ref</th>
       <td><p>assumed ppm reference value.</p></td>
+    </tr>
+    <tr>
+      <th>sort_basis</th>
+      <td><p>sort the basis set based on signal names.</p></td>
     </tr>
     </table>
 
