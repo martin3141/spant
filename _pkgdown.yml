@@ -3,3 +3,21 @@ url: https://martin3141.github.io/spant/
 template:
   params:
     bootswatch: flatly
+  
+navbar:
+  components:
+    articles:
+      text: Tutorials
+      menu:
+      - text: Introduction to spant
+        href: articles/spant-intro.html
+      - text: Common preprocesing steps
+        href: articles/spant-preprocessing.html
+      - text: Metabolite simulation
+        href: articles/spant-metabolite-simulation.html
+      - text: Basis simulation
+        href: articles/spant-basis-simulation.html
+      - text: ABfit baseline options
+        href: articles/abfit-baseline-opts.html
+      - text: Index
+        href: articles/index.html
