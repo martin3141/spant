@@ -1583,6 +1583,26 @@ mask_dyns <- function(mrs_data, mask) {
   return(mrs_data)
 }
 
+#' Return the first scans of a dynamic series.
+#' @param mrs_data dynamic MRS data.
+#' @param n the number of dynamic scans to return.
+#' @return first scans of a dynamic series.
+#' @export
+get_head_dyns <- function(mrs_data, n = 1) {
+  index <- 1:n
+  get_dyns(mrs_data, index)
+}
+
+#' Return the last scans of a dynamic series.
+#' @param mrs_data dynamic MRS data.
+#' @param n the number of dynamic scans to return.
+#' @return last scans of a dynamic series.
+#' @export
+get_tail_dyns <- function(mrs_data, n = 1) {
+  index <- (Ndyns(mrs_data) - n + 1):Ndyns(mrs_data)
+  get_dyns(mrs_data, index)
+}
+
 #' Return the first half of a dynamic series.
 #' @param mrs_data dynamic MRS data.
 #' @return first half of the dynamic series.
@@ -1638,7 +1658,6 @@ inv_even_dyns <- function(mrs_data) {
   mrs_data$data[,,,, subset,,] <- -1 * mrs_data$data[,,,, subset,,]
   return(mrs_data)
 }
-
 
 #' Combine a reference and metabolite mrs_data object.
 #' @param metab metabolite mrs_data object.

@@ -3,6 +3,8 @@
 * Added FWHM estimates for tCr and tCho in ABfit.
 * Added water suppression efficiency and water FWHM measures to the diagnostic
 output of svs_1h_brain_analysis.
+* Added get_head_dyns and get_tail_dyns to return the first and last dynamic
+scans within a dataset.
 
 # spant 1.14.0
 * Added glycerol simulation parameters, e.g. get_mol_paras("glyc").
