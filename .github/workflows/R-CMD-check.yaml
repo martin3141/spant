@@ -8,6 +8,10 @@ on:
 
 name: R-CMD-check
 
+# Increment this version when we want to clear cache
+env:
+  cache-version: v6
+
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
@@ -18,21 +22,26 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'devel'}
-          - {os: macOS-latest,   r: 'release'}
-          - {os: windows-latest, r: 'release'}
-          - {os: windows-latest, r: '3.6'}
-          - {os: ubuntu-16.04,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04,   r: 'oldrel',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-          #- {os: ubuntu-16.04,   r: '3.5',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-          #- {os: ubuntu-16.04,   r: '3.4',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-          #- {os: ubuntu-16.04,   r: '3.3',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-          # the above default checks fail with - ERROR: dependency ‘nloptr’ is not available for package ‘spant’
+          - {os: windows-latest, r: '4.1',   vdiffr: true,  xref: true}
+          - {os: macOS-latest,   r: '4.1',   vdiffr: true,  xref: true}
+          - {os: ubuntu-18.04,   r: 'devel', vdiffr: false, xref: true}
+          - {os: ubuntu-18.04,   r: '4.1',   vdiffr: true,  xref: true, rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
+          - {os: ubuntu-18.04,   r: '4.0',   vdiffr: false, xref: true, rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
+          - {os: ubuntu-18.04,   r: '3.6',   vdiffr: false, xref: true, rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
+          - {os: ubuntu-18.04,   r: '3.5',   vdiffr: false, xref: true, rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
+          - {os: ubuntu-18.04,   r: '3.4',   vdiffr: false, xref: true, rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
+          - {os: ubuntu-18.04,   r: '3.3',   vdiffr: false, xref: true, rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       RSPM: ${{ matrix.config.rspm }}
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      # don't treat missing suggested packages as error
+      _R_CHECK_FORCE_SUGGESTS_: false
+      # Some packages might unavailable on the older versions, so let's ignore xref warnings
+      _R_CHECK_RD_XREFS_: ${{ matrix.config.xref }}
+      # Runs vdiffr test only on the latest version of R
+      VDIFFR_RUN_TESTS: ${{ matrix.config.vdiffr }}
+      VDIFFR_LOG_PATH: "../vdiffr.Rout.fail"
 
     steps:
       - uses: actions/checkout@v2
@@ -40,14 +49,14 @@ jobs:
       - uses: r-lib/actions/setup-r@master
         with:
           r-version: ${{ matrix.config.r }}
+          http-user-agent: ${{ matrix.config.http-user-agent }}
 
       - uses: r-lib/actions/setup-pandoc@master
 
       - name: Query dependencies
         run: |
           install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), "depends.Rds", version = 2)
         shell: Rscript {0}
 
       - name: Cache R packages
@@ -55,41 +64,32 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+          key: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
+          restore-keys: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-
 
-      - name: Install system dependencies
+      - name: Install system dependencies on Linux
         if: runner.os == 'Linux'
-        env:
-          RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
         run: |
-          Rscript -e "remotes::install_github('r-hub/sysreqs')"
-          sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
-          sudo -s eval "$sysreqs"
-
+          while read -r cmd
+          do
+            eval sudo $cmd
+          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "18.04"))')
+      - name: Install system dependencies on macOS
+        if: runner.os == 'macOS'
+        run: |
+          # XQuartz is needed by vdiffr
+          brew install xquartz
+          # Use only binary packages
+          echo 'options(pkgType = "binary")' >> ~/.Rprofile
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 
-      - name: Session info
-        run: |
-          options(width = 100)
-          pkgs <- installed.packages()[, "Package"]
-          sessioninfo::session_info(pkgs, include_base = TRUE)
-        shell: Rscript {0}
-
       - name: Check
-        env:
-          _R_CHECK_CRAN_INCOMING_: false
-        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning", check_dir = "check")
         shell: Rscript {0}
-
-      - name: Show testthat output
-        if: always()
-        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
-        shell: bash
 
       - name: Upload check results
         if: failure()
