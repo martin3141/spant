@@ -61,6 +61,13 @@ mkdir -p ~/R/x86_64-pc-linux-gnu-library/3.6
 Rscript -e 'install.packages("spant", dependencies = TRUE)'
 ```
 
+### Ubuntu 21.10 installation
+```{ubuntu 2110 install, eval = FALSE}
+sudo apt install -y r-base libcurl4-openssl-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libtiff5-dev
+mkdir -p ~/R/x86_64-pc-linux-gnu-library/4.0
+Rscript -e 'install.packages("spant", dependencies = TRUE)'
+```
+
 ## Documentation
 Quick introduction to the basic analysis workflow : https://martin3141.github.io/spant/articles/spant-intro.html
 
