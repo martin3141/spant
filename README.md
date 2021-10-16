@@ -5,6 +5,7 @@
 
 [![R build
 status](https://github.com/martin3141/spant/workflows/R-CMD-check/badge.svg)](https://github.com/martin3141/spant/actions)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.03646/status.svg)](https://doi.org/)
 [![](http://cranlogs.r-pkg.org/badges/spant)](http://cran.rstudio.com/web/packages/spant/index.html)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant)
 [![Coverage
