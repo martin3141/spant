@@ -35,7 +35,7 @@ features and algorithms are included:
 -   Voxel registration to anatomical images for partial volume
     concentration corrections.
 
-## Installation
+## Basic installation
 
 Download and install the latest version of R
 (<https://cloud.r-project.org/>), or with your package manager if using
@@ -61,27 +61,6 @@ install.packages("devtools")
 devtools::install_github("martin3141/spant", ref = "devel")
 ```
 
-### Ubuntu 20.04 installation
-
-CRAN packages need to be compiled on Linux, and therefore you may need
-to ensure some additional system libraries are installed. spant may be
-installed from a clean installation of Ubuntu 20.04 with the following
-commands pasted into the terminal:
-
-``` ubuntu
-sudo apt install -y r-base libcurl4-openssl-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libtiff5-dev
-mkdir -p ~/R/x86_64-pc-linux-gnu-library/3.6
-Rscript -e 'install.packages("spant", dependencies = TRUE)'
-```
-
-### Ubuntu 21.10 installation
-
-``` ubuntu
-sudo apt install -y r-base libcurl4-openssl-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libtiff5-dev
-mkdir -p ~/R/x86_64-pc-linux-gnu-library/4.0
-Rscript -e 'install.packages("spant", dependencies = TRUE)'
-```
-
 ## Documentation
 
 Quick introduction to the basic analysis workflow :
@@ -95,3 +74,92 @@ Once the spant library has been loaded with `library(spant)`, type
 `?spant` on the console for instructions on how to access the offline
 documentation. Note that offline help on the available functions can be
 quickly shown in RStudio using `?function_name`, eg `?read_mrs`.
+
+## Ubuntu 20.04 installation
+
+CRAN packages need to be compiled on Linux, and therefore you may need
+to ensure some additional system libraries are installed. spant may be
+installed from a clean installation of Ubuntu 20.04 with the following
+commands pasted into the terminal:
+
+``` ubuntu
+sudo apt install -y r-base libcurl4-openssl-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libtiff5-dev
+mkdir -p ~/R/x86_64-pc-linux-gnu-library/3.6
+Rscript -e 'install.packages("spant", dependencies = TRUE)'
+```
+
+## Ubuntu 21.10 installation
+
+``` ubuntu
+sudo apt install -y r-base libcurl4-openssl-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libtiff5-dev
+mkdir -p ~/R/x86_64-pc-linux-gnu-library/4.0
+Rscript -e 'install.packages("spant", dependencies = TRUE)'
+```
+
+## Anaconda environment installation
+
+Firstly install Anaconda in the standard way for your platform:
+<https://docs.anaconda.com/anaconda/install/index.html>.
+
+Create a text file, called `spant_requirements.yml`, containing the
+following:
+
+``` conda
+name: spant
+channels:
+    - conda-forge
+    - r
+dependencies:
+    - r-base
+    - r-essentials
+    - r-abind
+    - r-plyr
+    - r-foreach
+    - r-pracma
+    - r-stringr
+    - r-signal
+    - r-matrixcalc
+    - r-minpack.lm
+    - r-nnls
+    - r-r.utils
+    - r-graphicsqc
+    - r-expm
+    - r-smoother
+    - r-readr
+    - r-magrittr
+    - r-ptw
+    - r-mmand
+    - r-RNifti
+    - r-RNiftyReg
+    - r-fields
+    - r-MASS
+    - r-numDeriv
+    - r-nloptr
+    - r-irlba
+    - r-tibble
+    - r-jsonlite
+    - r-viridisLite
+    - r-shiny
+    - r-miniUI
+    - r-knitr
+    - r-rmarkdown
+    - r-testthat
+    - r-ragg
+    - r-doParallel
+```
+
+Create and activate the environment:
+
+``` conda
+conda env create -f spant_requirements.yml
+conda activate spant
+```
+
+Start R and install spant in the usual way:
+
+``` r
+install.packages("spant", dependencies = TRUE)
+```
+
+Big thanks to [João M.C. Teixeira](https://github.com/joaomcteixeira)
+for figuring out this method of install.
