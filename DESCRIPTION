@@ -14,7 +14,7 @@ Description: Tools for reading, visualising and processing Magnetic Resonance
     <DOI:10.1002/mrm.27605>. 
 BugReports: https://github.com/martin3141/spant/issues/
 License: GPL-3
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE, roclets = c("rd", "namespace", "collate"))
 NeedsCompilation: yes
 LazyData: yes
@@ -29,7 +29,6 @@ Imports:
     complexplus,
     signal,
     minpack.lm,
-    nnls,
     utils,
     graphics,
     grDevices,

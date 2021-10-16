@@ -56,7 +56,7 @@ varpro <- function(y, acq_paras, basis, opts = NULL) {
   basis_real <- rbind(Re(basis_mod[opts$nstart:Npts,]),
                       Im(basis_mod[opts$nstart:Npts,]))
   
-  ahat <- nnls::nnls(basis_real, y_real)$x
+  ahat <- nnls(basis_real, y_real)$x
   
   yhat <- basis_mod %*% ahat
   
@@ -154,7 +154,7 @@ varpro_obj <- function(par, y, basis, t, nstart, sc_res = FALSE) {
   y_real <- c(Re(y[nstart:Npts]), Im(y[nstart:Npts]))
   basis_real <- rbind(Re(basis_mod[nstart:Npts,]), Im(basis_mod[nstart:Npts,]))
   
-  ahat <- nnls::nnls(basis_real, y_real)$x
+  ahat <- nnls(basis_real, y_real)$x
   res <- y_real - basis_real %*% ahat
   
   if ( sc_res ) {
@@ -215,7 +215,7 @@ varpro_anal_jac <- function(par, y, basis, t, nstart) {
   y_real <- c(Re(y[nstart:Npts]), Im(y[nstart:Npts]))
   basis_real <- rbind(Re(basis_mod[nstart:Npts,]), Im(basis_mod[nstart:Npts,]))
   
-  ahat <- nnls::nnls(basis_real, y_real)$x
+  ahat <- nnls(basis_real, y_real)$x
   
   unmod_basis_real <- basis_real %*% ahat
   unmod_basis_cplx <- basis_mod %*% ahat
