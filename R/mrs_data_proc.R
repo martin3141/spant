@@ -2394,7 +2394,7 @@ hsvd_vec <- function(y, fs, comps = 40, irlba = TRUE, max_damp = 0) {
   y <- y / sc_factor
 
   # H is the LxM Hankel LP matrix
-  H <- matrixcalc::hankel.matrix(L + 1, y)
+  H <- hankel.matrix(L + 1, y)
   H <- H[1:L,]
   
   if (irlba)  {

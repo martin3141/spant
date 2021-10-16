@@ -547,3 +547,28 @@ convolve_td <- function(x, y) {
   x <- stats::fft(x * Conj(y) * length(x))
   return(x)
 }
+
+# Directly from the package matrixcalc.
+# I don't like copying code like this, but CRAN don't like packages
+# that have lots of dependencies so...
+hankel.matrix <- function(n, x) {
+  if (!is.numeric(n)) 
+    stop("argument n is not numeric")
+  if (n != trunc(n)) 
+    stop("argument n ix not an integer")
+  if (n < 2) 
+    stop("argument n is less than 2")
+  if (!is.vector(x)) 
+    stop("argument x is not a vector")
+  m <- length(x)
+  if (m < n) 
+    stop("length of argument x is less than n")
+  y <- x
+  H <- matrix(0, nrow = n, ncol = n)
+  H[1, ] <- y[1:n]
+  for (i in 2:n) {
+    y <- c(y[2:m], y[1])
+    H[i, ] <- y[1:n]
+  }
+  return(H)
+}
