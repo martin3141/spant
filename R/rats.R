@@ -149,7 +149,7 @@ rats_obj_fn <- function(par, x, ref, t, inds, basis) {
   }
   
   # use ginv
-  #inv_basis <- MASS::ginv(basis)
+  #inv_basis <- ginv(basis)
   #ahat <- inv_basis %*% ref
   
   # use qr

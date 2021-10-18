@@ -33,18 +33,15 @@ Imports:
     graphics,
     grDevices,
     smoother,
-    readr,
     magrittr,
     ptw,
     mmand,
     RNifti,
     RNiftyReg,
     fields,
-    MASS,
     numDeriv,
     nloptr,
     irlba,
-    tibble,
     jsonlite
 Suggests:
     viridisLite,

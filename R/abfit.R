@@ -1272,7 +1272,7 @@ auto_pspline_smoother <- function(y, spline_basis, deriv_mat, maxiters = 25,
   for (iter in 1:maxiters) {
     lambda <- sig_sq / tau_sq
     
-    inv_mat <- MASS::ginv(rbind(spline_basis, lambda ^ 0.5 * deriv_mat))
+    inv_mat <- ginv(rbind(spline_basis, lambda ^ 0.5 * deriv_mat))
     alpha <-   inv_mat %*% c(y, rep(0, dim(deriv_mat)[1]))
     
     yhat <- spline_basis %*% alpha
@@ -1308,7 +1308,7 @@ auto_pspline_smoother <- function(y, spline_basis, deriv_mat, maxiters = 25,
 }
 
 calc_ed_from_lambda_stable <- function(spline_basis, deriv_mat, lambda) {
-  inv_mat  <- MASS::ginv(rbind(spline_basis, (lambda ^ 0.5) * deriv_mat))
+  inv_mat  <- ginv(rbind(spline_basis, (lambda ^ 0.5) * deriv_mat))
   zero_mat <- matrix(0, dim(deriv_mat)[1], dim(deriv_mat)[2])
   G        <- inv_mat %*% rbind(spline_basis, zero_mat)
   return(sum(diag(G)))

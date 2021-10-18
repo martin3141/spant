@@ -7,6 +7,7 @@ output of svs_1h_brain_analysis.
 scans within a dataset.
 * Fixed CI errors.
 * Improved installation instructions.
+* Removed comb_csv_results function and reduced the number of required packages.
 
 # spant 1.14.0
 * Added glycerol simulation parameters, e.g. get_mol_paras("glyc").

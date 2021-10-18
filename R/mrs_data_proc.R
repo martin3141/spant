@@ -2408,7 +2408,7 @@ hsvd_vec <- function(y, fs, comps = 40, irlba = TRUE, max_damp = 0) {
   rows <- nrow(Uk)
   Ukt <- Uk[2:rows,]
   Ukb <- Uk[1:(rows - 1),]
-  Zp <- MASS::ginv(Ukb) %*% Ukt
+  Zp  <- ginv(Ukb) %*% Ukt
 
   # find the poles
   q <- pracma::eig(Zp)
@@ -2433,7 +2433,7 @@ hsvd_vec <- function(y, fs, comps = 40, irlba = TRUE, max_damp = 0) {
   
   basis <- exp(t_mat * freq_damp)
   
-  ahat <- MASS::ginv(basis) %*% y
+  ahat <- ginv(basis) %*% y
   
   # Undo scaling
   ahat <- ahat * sc_factor

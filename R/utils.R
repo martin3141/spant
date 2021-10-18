@@ -316,46 +316,6 @@ sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal_v1",
   }
 }
 
-#' Combine the results from multiple csv format files into a table.
-#' @param pattern glob string to match csv files.
-#' @param supp_mess suppress messages from the read_csv function.
-#' @param ... extra parameters to pass to read_csv.
-#' @return results table.
-#' @export
-comb_csv_results <- function(pattern, supp_mess = TRUE, ...) {
-  files <- Sys.glob(pattern)
-  n <- length(files)
-  
-  if (n == 0) stop("No matching files found.")
-  
-  cat(paste(n, "file(s) found:\n"))
-  
-  # list the matches
-  for (file in files) cat(file, "\n")
-  
-  # read the first file
-  if (supp_mess) {
-    res <- suppressMessages(readr::read_csv(files[1], ...))
-  } else {
-    res <- readr::read_csv(files[1], ...)
-  }
-  
-  if (length(files) > 1) {
-    for (n in 2:length(files)) {
-      if (supp_mess) {
-        res_temp <- suppressMessages(readr::read_csv(files[n], ...))
-      } else {
-        res_temp <- readr::read_csv(files[n])
-      }
-      res <- rbind(res, res_temp)
-    }
-  }
-  
-  # add the filename
-  res <- tibble::add_column(res, files, .before = 1)
-  res
-}
-
 #' Get the point spread function (PSF) for a 2D phase encoded MRSI scan.
 #' @param FOV field of view in mm.
 #' @param mat_size acquisition matrix size (not interpolated).
@@ -548,7 +508,7 @@ convolve_td <- function(x, y) {
   return(x)
 }
 
-# Directly from the package matrixcalc.
+# Directly from the matrixcalc package
 # I don't like copying code like this, but CRAN don't like packages
 # that have lots of dependencies so...
 hankel.matrix <- function(n, x) {
@@ -571,4 +531,22 @@ hankel.matrix <- function(n, x) {
     H[i, ] <- y[1:n]
   }
   return(H)
+}
+
+# Directly from the MASS package
+ginv <- function(X, tol = sqrt(.Machine$double.eps)) {
+  if (length(dim(X)) > 2L || !(is.numeric(X) || is.complex(X))) 
+    stop("'X' must be a numeric or complex matrix")
+  if (!is.matrix(X)) 
+    X <- as.matrix(X)
+  Xsvd <- svd(X)
+  if (is.complex(X)) 
+    Xsvd$u <- Conj(Xsvd$u)
+  Positive <- Xsvd$d > max(tol * Xsvd$d[1L], 0)
+  if (all(Positive)) 
+    Xsvd$v %*% (1/Xsvd$d * t(Xsvd$u))
+  else if (!any(Positive)) 
+    array(0, dim(X)[2L:1L])
+  else Xsvd$v[, Positive, drop = FALSE] %*% ((1/Xsvd$d[Positive]) * 
+                                           t(Xsvd$u[, Positive, drop = FALSE]))
 }
