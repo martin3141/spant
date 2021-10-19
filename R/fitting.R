@@ -140,6 +140,21 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
                                                .packages = "spant"),
                                .progress = progress, .inform = FALSE)
     
+  } else if (METHOD == "VARPRO_BASIC") {
+    # read basis into memory if a file
+    if (is.character(basis)) {
+      basis <- read_basis(basis)
+    }
+    
+    acq_paras <- get_acq_paras(metab)
+    
+    result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6), varpro_basic,
+                               acq_paras, basis, opts, 
+                               .parallel = parallel, 
+                               .paropts = list(.inorder = TRUE,
+                                               .packages = "spant"),
+                               .progress = progress, .inform = FALSE)
+    
   } else if (METHOD == "VARPRO_3P") {
     # read basis into memory if a file
     if (is.character(basis)) {
