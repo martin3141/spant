@@ -29,7 +29,7 @@ may be specified.}
 \item{ret_df}{return frequency shifts in addition to aligned data (logical).}
 
 \item{mean_dyns}{align the mean spectrum and apply the same shift to each
-dyanmic.}
+dynamic.}
 }
 \value{
 aligned data object.

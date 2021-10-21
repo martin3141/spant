@@ -1236,7 +1236,7 @@ crop_spec <- function(mrs_data, xlim = c(4, 0.2), scale = "ppm") {
 #' @param max_shift maximum allowable shift in Hz.
 #' @param ret_df return frequency shifts in addition to aligned data (logical).
 #' @param mean_dyns align the mean spectrum and apply the same shift to each
-#' dyanmic.
+#' dynamic.
 #' @return aligned data object.
 #' @export
 align <- function(mrs_data, ref_freq = 4.65, zf_factor = 2, lb = 2,

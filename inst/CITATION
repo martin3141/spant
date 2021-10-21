@@ -6,11 +6,7 @@ citEntry(
   author   = "Martin Wilson",
   journal  = "JOSS",
   year     = "2021",
-  volume   = "TODO",
-  number   = "TODO",
-  pages    = "TODO",
-  doi      = "TODO",
-  textVersion = "Martin Wilson, spant: An R package for magnetic resonance spectroscopy analysis, JOSS, TODO"
+  textVersion = "Martin Wilson, spant: An R package for magnetic resonance spectroscopy analysis, JOSS, in-press."
 )
 
 citEntry(

@@ -103,9 +103,6 @@
     <loc>https://martin3141.github.io/spant//reference/comb_coils.html</loc>
   </url>
   <url>
-    <loc>https://martin3141.github.io/spant//reference/comb_csv_results.html</loc>
-  </url>
-  <url>
     <loc>https://martin3141.github.io/spant//reference/comb_fit_list_fit_tables.html</loc>
   </url>
   <url>
@@ -265,6 +262,9 @@
     <loc>https://martin3141.github.io/spant//reference/get_guassian_pulse.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant//reference/get_head_dyns.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant//reference/get_lcm_cmd.html</loc>
   </url>
   <url>
@@ -311,6 +311,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/get_svs_voi.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/get_tail_dyns.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/get_td_amp.html</loc>
@@ -782,6 +785,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/varpro_3_para_opts.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/varpro_basic_opts.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/varpro_opts.html</loc>
