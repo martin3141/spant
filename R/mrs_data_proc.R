@@ -2362,11 +2362,21 @@ hsvd_filt_vec <- function(fid, fs, region = c(-30, 30), comps = 40,
 #' @return basis matrix and signal table.
 #' @export
 hsvd <- function(mrs_data, comps = 40, irlba = TRUE, max_damp = 10) {
+  
+  if (Nspec(mrs_data) > 1) {
+    warning("Data contains multiple spectra, but only one has been processed.")
+  }
+  
   res <- hsvd_vec(mrs_data2vec(mrs_data), fs = fs(mrs_data), comps = comps,
                   irlba = irlba, max_damp = max_damp)
   res$reson_table$frequency_ppm <- hz2ppm(res$reson_table$frequency,
                                           mrs_data$ft, mrs_data$ref)
   res$reson_table$lw_hz <- -res$reson_table$damping / pi
+  
+  res$basis <- mat2mrs_data(t(res$basis), fs = fs(mrs_data),
+                            ref = mrs_data$ref, nuc = mrs_data$nuc,
+                            ft = mrs_data$ft, fd = FALSE)
+  
   return(res)
 }
 
