@@ -1,3 +1,6 @@
+# spant 1.16.0
+* The basis result of the HSVD function is now an mrs_data object.
+
 # spant 1.15.0
 * Added a unit test for reading and writing LCM .basis formatted files.
 * Added FWHM estimates for tCr and tCho in ABfit.
