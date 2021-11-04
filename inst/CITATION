@@ -4,9 +4,14 @@ citEntry(
   entry    = "Article",
   title    = "spant: An R package for magnetic resonance spectroscopy analysis",
   author   = "Martin Wilson",
-  journal  = "JOSS",
+  journal  = "Journal of Open Source Software",
+  publisher= "The Open Journal",
   year     = "2021",
-  textVersion = "Martin Wilson, spant: An R package for magnetic resonance spectroscopy analysis, JOSS, in-press."
+  volume   = "6",
+  number   = "67",
+  pages    = "3646",
+  doi      = "10.21105/joss.03646",
+  textVersion = "Wilson, M., spant: An R package for magnetic resonance spectroscopy analysis. JOSS 2021, 6(67), 3646."
 )
 
 citEntry(
