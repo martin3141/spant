@@ -294,7 +294,7 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
   
   graphics::image(x_scale[subset][length(subset):1], (1:yN),
                   plot_data[length(subset):1,], xlim = xlim,
-                  xlab = "Frequency (ppm)", ylab = y_title, 
+                  xlab = "Chemical shift (ppm)", ylab = y_title, 
                   col = col, ...)
   
   if (!is.null(y_ticks)) {
