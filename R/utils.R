@@ -550,3 +550,23 @@ ginv <- function(X, tol = sqrt(.Machine$double.eps)) {
   else Xsvd$v[, Positive, drop = FALSE] %*% ((1/Xsvd$d[Positive]) * 
                                            t(Xsvd$u[, Positive, drop = FALSE]))
 }
+
+matexp <- function(x) {
+  d  <- dim(x)
+  n  <- d[1]
+  p  <- d[2]
+  Ar <- Re(x)
+  Ai <- Im(x)
+  E  <- rbind(cbind(Ar, -Ai), cbind(Ai, Ar))
+  eE <- expm::expm(E)
+  eA <- eE[1:n, 1:n] + (0+1i) * eE[(1:n) + n, 1:n]
+  eA <- matrix(Imzap(eA), ncol = n)
+  return(eA)
+}
+
+# fn taken from complexplus package
+Imzap <- function(x, tol = 1e-06) {
+  if (all(abs(Im(z <- zapsmall(x))) <= tol)) 
+    as.double(x)
+  else x
+}

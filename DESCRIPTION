@@ -26,7 +26,7 @@ Imports:
     foreach,
     pracma,
     stringr,
-    complexplus,
+    expm,
     signal,
     minpack.lm,
     utils,
