@@ -41,3 +41,22 @@ spant_abfit_benchmark <- function(noise_reps = 10, return_res = FALSE,
   
   if (return_res) return(fit_res)
 }
+
+#' Simulate a typical metabolite basis set for benchmarking. Timing metrics will
+#' be printed on completion.
+#' @param sim_reps number of times to simulate the basis set.
+#' @param N number of FID data points to simulate.
+#' @export
+spant_simulation_benchmark <- function(sim_reps = 10, N = 1024) {
+  
+  start_time <- Sys.time()
+  
+  for (n in 1:sim_reps) {
+    sim_basis_1h_brain_press(acq_paras = def_acq_paras(N = N)) 
+  }
+  
+  end_time <- Sys.time()
+  
+  diff_time  <- as.double(end_time - start_time, units = "secs")
+  cat("Total simulation time :", diff_time, "seconds.\n")
+}
