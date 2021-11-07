@@ -291,9 +291,9 @@ sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal_v1",
                          pul_seq = seq_press_ideal, xlim = c(0.5, 4.2), 
                          full_output = FALSE, amps = NULL,  ...) {
   
+  brain_basis_paras <- get_1h_brain_basis_paras_v1(ft = acq_paras$ft)
   if (is.null(amps)) {
     if (type == "normal_v1") {
-      brain_basis_paras <- get_1h_brain_basis_paras_v1(ft = acq_paras$ft)
       amps <- c(0.000000000, 0.009799548, 0.072152490, 0.077845526, 0.045575002, 
                 0.005450371, 0.000000000, 0.028636132, 0.076469056, 0.028382618,
                 0.069602483, 0.001763720, 0.042031981, 0.013474549, 0.000000000, 
