@@ -366,6 +366,10 @@ mrs_data2basis <- function(mrs_data, names) {
   basis_set
 }
 
+#' Sort the basis-set elements alphabetically.
+#' @param basis input basis.
+#' @return sorted basis.
+#' @export
 sort_basis <- function(basis) {
   names_sorted <- sort(basis$names, index.return = TRUE)
   basis$names <- names_sorted$x
