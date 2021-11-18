@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Read the text format header found in Siemens IMA and TWIX data files. — read_siemens_txt_hdr • Spectroscopy Analysis Tools (spant)</title>
+<title>Sort the basis-set elements alphabetically. — sort_basis • Spectroscopy Analysis Tools (spant)</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Read the text format header found in Siemens IMA and TWIX data files. — read_siemens_txt_hdr" />
-<meta property="og:description" content="Read the text format header found in Siemens IMA and TWIX data files." />
+<meta property="og:title" content="Sort the basis-set elements alphabetically. — sort_basis" />
+<meta property="og:description" content="Sort the basis-set elements alphabetically." />
 <meta property="og:image" content="https://martin3141.github.io/spant/logo.png" />
 
 
@@ -146,33 +146,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Read the text format header found in Siemens IMA and TWIX data files.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/mrs_read_twix.R'><code>R/mrs_read_twix.R</code></a></small>
-    <div class="hidden name"><code>read_siemens_txt_hdr.Rd</code></div>
+    <h1>Sort the basis-set elements alphabetically.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/basis_set.R'><code>R/basis_set.R</code></a></small>
+    <div class="hidden name"><code>sort_basis.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Read the text format header found in Siemens IMA and TWIX data files.</p>
+    <p>Sort the basis-set elements alphabetically.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>read_siemens_txt_hdr</span><span class='op'>(</span><span class='va'>input</span>, version <span class='op'>=</span> <span class='st'>"vd"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>sort_basis</span><span class='op'>(</span><span class='va'>basis</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>input</th>
-      <td><p>file name to read or raw data.</p></td>
-    </tr>
-    <tr>
-      <th>version</th>
-      <td><p>software version, can be "vb" or "vd".</p></td>
+      <th>basis</th>
+      <td><p>input basis.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a list of parameter values</p>
+    <p>sorted basis.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

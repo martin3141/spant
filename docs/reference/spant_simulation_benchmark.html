@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Read the text format header found in Siemens IMA and TWIX data files. — read_siemens_txt_hdr • Spectroscopy Analysis Tools (spant)</title>
+<title>Simulate a typical metabolite basis set for benchmarking. Timing metrics will
+be printed on completion. — spant_simulation_benchmark • Spectroscopy Analysis Tools (spant)</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +47,10 @@
 
 
 
-<meta property="og:title" content="Read the text format header found in Siemens IMA and TWIX data files. — read_siemens_txt_hdr" />
-<meta property="og:description" content="Read the text format header found in Siemens IMA and TWIX data files." />
+<meta property="og:title" content="Simulate a typical metabolite basis set for benchmarking. Timing metrics will
+be printed on completion. — spant_simulation_benchmark" />
+<meta property="og:description" content="Simulate a typical metabolite basis set for benchmarking. Timing metrics will
+be printed on completion." />
 <meta property="og:image" content="https://martin3141.github.io/spant/logo.png" />
 
 
@@ -146,33 +149,32 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Read the text format header found in Siemens IMA and TWIX data files.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/mrs_read_twix.R'><code>R/mrs_read_twix.R</code></a></small>
-    <div class="hidden name"><code>read_siemens_txt_hdr.Rd</code></div>
+    <h1>Simulate a typical metabolite basis set for benchmarking. Timing metrics will
+be printed on completion.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/benchmark.R'><code>R/benchmark.R</code></a></small>
+    <div class="hidden name"><code>spant_simulation_benchmark.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Read the text format header found in Siemens IMA and TWIX data files.</p>
+    <p>Simulate a typical metabolite basis set for benchmarking. Timing metrics will
+be printed on completion.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>read_siemens_txt_hdr</span><span class='op'>(</span><span class='va'>input</span>, version <span class='op'>=</span> <span class='st'>"vd"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>spant_simulation_benchmark</span><span class='op'>(</span>sim_reps <span class='op'>=</span> <span class='fl'>10</span>, N <span class='op'>=</span> <span class='fl'>1024</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>input</th>
-      <td><p>file name to read or raw data.</p></td>
+      <th>sim_reps</th>
+      <td><p>number of times to simulate the basis set.</p></td>
     </tr>
     <tr>
-      <th>version</th>
-      <td><p>software version, can be "vb" or "vd".</p></td>
+      <th>N</th>
+      <td><p>number of FID data points to simulate.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>a list of parameter values</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
