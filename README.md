@@ -59,7 +59,7 @@ package):
 
 ``` r
 install.packages("devtools")
-devtools::install_github("martin3141/spant", ref = "devel")
+devtools::install_github("martin3141/spant", ref = "devel", dependencies = TRUE)
 ```
 
 ## Documentation
