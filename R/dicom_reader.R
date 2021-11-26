@@ -35,7 +35,7 @@ dicom_reader <- function(input, tags = list(sop_class_uid = "0008,0016"),
   dicom_prefix <- rawToChar(fraw[129:132])
   
   if (dicom_prefix != "DICM") {
-    stop("Could not find DICM prefix - input is probally not DICOM.")
+    stop("Could not find DICM prefix - input is probally not DICOM. Try manually setting the correct 'format' argument of read_mrs.")
   }
   
   # strip the preamble

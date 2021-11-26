@@ -1,6 +1,7 @@
 # spant 1.17.0
 * New function added (recon_twix_2d) for reconstructing basic phase encoded twix
 2D MRSI data.
+* File name argument for read_mrs now permits globbing, eg read_mrs("*.dcm").
 
 # spant 1.16.0
 * The package has been published in the Journal for Open Source Software :
