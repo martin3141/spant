@@ -446,6 +446,12 @@ plot_slice_fit <- function(fit_res, map, map_denom = NULL, slice = 1,
 #' @param name name of the quantity to plot, eg "tNAA".
 #' @export
 get_fit_map <- function(fit_res, name) {
+  
+  # check name is valid
+  if (!(name %in% colnames(fit_res$res_tab))) {
+    stop("Following column not found in fit result : ", name)
+  }
+  
   result_map <- fit_res$res_tab[[name]]
   dim(result_map) <- c(1, dim(fit_res$data$data)[2:6])
   result_map
