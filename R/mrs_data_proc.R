@@ -2369,13 +2369,17 @@ hsvd <- function(mrs_data, comps = 40, irlba = TRUE, max_damp = 10) {
   
   res <- hsvd_vec(mrs_data2vec(mrs_data), fs = fs(mrs_data), comps = comps,
                   irlba = irlba, max_damp = max_damp)
+  
   res$reson_table$frequency_ppm <- hz2ppm(res$reson_table$frequency,
                                           mrs_data$ft, mrs_data$ref)
+  
   res$reson_table$lw_hz <- -res$reson_table$damping / pi
   
   res$basis <- mat2mrs_data(t(res$basis), fs = fs(mrs_data),
                             ref = mrs_data$ref, nuc = mrs_data$nuc,
                             ft = mrs_data$ft, fd = FALSE)
+  
+  res$model <- sum_dyns(res$basis)
   
   return(res)
 }
@@ -2719,11 +2723,14 @@ zp_vec <- function(vector, n) {
 #' @param noise_region the spectral region (in ppm) to estimate the noise.
 #' @param average_ref_dyns take the mean of the reference scans in the dynamic
 #' dimension before use.
+#' @param ref_pt_index time-domain point to use for estimating phase and scaling 
+#' values.
 #' @return MRS data.
 #' @export
 comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
                        scale_method = "sig_noise_sq", sum_coils = TRUE,
-                       noise_region = c(-0.5, -2.5), average_ref_dyns = TRUE) {
+                       noise_region = c(-0.5, -2.5), average_ref_dyns = TRUE,
+                       ref_pt_index = 1) {
   
   metab_only <- FALSE
   if (is.null(ref)) {
@@ -2743,9 +2750,10 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
   # some cases?)
   if (average_ref_dyns) ref <- mean_dyns(ref)
   
-  fp <- get_fp(ref)
-  phi <- Arg(fp)
-  amp <- Mod(fp)
+  # ref_pt <- get_fp(ref)
+  ref_pt <- get_subset(ref, td_set = ref_pt_index)$data
+  phi <- Arg(ref_pt)
+  amp <- Mod(ref_pt)
   
   # maintain original spatial scaling
   mean_amps <- apply(amp, c(1,2,3,4,5), mean)
@@ -3491,4 +3499,41 @@ mean_mrs_list <- function(mrs_list) {
   for (n in (2:length(mrs_list))) mean_mrs <- sum_mrs(mean_mrs, mrs_list[[n]])
   mean_mrs <- mean_mrs / length(mrs_list)
   return(mean_mrs)
+}
+
+#' Reconstruct 2D MRSI data from a twix file loaded with read_mrs.
+#' @param twix_mrs raw dynamic data.
+#' @return reconstructed data.
+#' @export
+recon_twix_2d_mrsi <- function(twix_mrs) {
+  
+  # figure out the required output array size
+  max_lin <- max(twix_mrs$twix_inds$Lin) + 1
+  max_seg <- max(twix_mrs$twix_inds$Seg) + 1
+  
+  twix_recon      <- twix_mrs 
+  twix_recon$data <- array(0, c(1, max_lin, max_seg, 1, 1, Ncoils(twix_mrs),
+                                Npts(twix_mrs)))
+  
+  # map the twix indices to a full data array
+  for (n in 1:nrow(twix_mrs$twix_inds)) {
+    x_ind <- twix_mrs$twix_inds$Seg[n] + 1
+    y_ind <- twix_mrs$twix_inds$Lin[n] + 1
+    twix_recon$data[1, x_ind, y_ind, 1, 1, , ] <- twix_mrs$data[1, 1, 1, 1, n, , ]
+  }
+  
+  # invert every other k-space line (for some reason)
+  k_sp_corr_x <- array(1, dim(twix_recon$data))
+  k_sp_corr_y <- k_sp_corr_x
+  k_sp_corr_x[,c(T, F),,,,,] <- -1
+  k_sp_corr_y[,,c(F, T),,,,] <- -1
+  twix_recon$data <- twix_recon$data * k_sp_corr_x * k_sp_corr_y
+  
+  # kspace to image space
+  twix_recon <- kspace2img_xy(twix_recon)
+  
+  # mirror in the x-direction  
+  twix_recon <- get_subset(twix_recon, x_set = Nx(twix_recon):1)
+  
+  return(twix_recon)
 }

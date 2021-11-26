@@ -14,6 +14,7 @@
 ^Meta$
 ^paper$
 ^pkgdown$
+^src-i386$
 ^\.github$
 ^LICENSE$
 ^CONTRIBUTING\.md$

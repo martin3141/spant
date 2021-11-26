@@ -12,7 +12,8 @@ comb_coils(
   scale_method = "sig_noise_sq",
   sum_coils = TRUE,
   noise_region = c(-0.5, -2.5),
-  average_ref_dyns = TRUE
+  average_ref_dyns = TRUE,
+  ref_pt_index = 1
 )
 }
 \arguments{
@@ -33,6 +34,9 @@ comb_coils(
 
 \item{average_ref_dyns}{take the mean of the reference scans in the dynamic
 dimension before use.}
+
+\item{ref_pt_index}{time-domain point to use for estimating phase and scaling
+values.}
 }
 \value{
 MRS data.

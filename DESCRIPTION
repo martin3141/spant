@@ -1,8 +1,8 @@
 Package: spant
 Type: Package
 Title: MR Spectroscopy Analysis Tools
-Version: 1.16.9000
-Date: 2021-10-21
+Version: 1.17.9000
+Date: 2021-11-25
 Authors@R: c(
     person("Martin", "Wilson", email = "martin@pipegrep.co.uk",
            role = c("cre", "aut"), comment = c(ORCID = "0000-0002-2089-3956")),
@@ -26,7 +26,7 @@ Imports:
     foreach,
     pracma,
     stringr,
-    complexplus,
+    expm,
     signal,
     minpack.lm,
     utils,
