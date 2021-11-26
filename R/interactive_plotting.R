@@ -22,6 +22,13 @@ plot_slice_fit_inter <- function(fit_res, map = NULL, map_denom = NULL,
   
   if (!is.null(map_denom)) map <- map / map_denom
   
+  inf_map <- is.infinite(map)
+  
+  if (sum(inf_map) > 0) {
+    warning("Inf values set to NA.")
+    map[inf_map] <- NA
+  }
+  
   plot_slice_map_inter(mrs_data = fit_res, map = map, slice = slice, 
                        interp = interp, zlim = zlim, xlim = xlim)
 }

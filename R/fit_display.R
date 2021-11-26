@@ -420,6 +420,13 @@ plot_slice_fit <- function(fit_res, map, map_denom = NULL, slice = 1,
   
   if (!is.null(map_denom)) map <- map / map_denom
   
+  inf_map <- is.infinite(map)
+  
+  if (sum(inf_map) > 0) {
+    warning("Inf values set to NA.")
+    map[inf_map] <- NA
+  }
+  
   plot_map <- map[1,,, slice, 1, 1]
   plot_map <- pracma::fliplr(plot_map)
   
