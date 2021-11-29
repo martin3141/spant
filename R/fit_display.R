@@ -422,7 +422,7 @@ plot_slice_fit <- function(fit_res, map, map_denom = NULL, slice = 1,
   
   inf_map <- is.infinite(map)
   
-  if (sum(inf_map) > 0) {
+  if (any(inf_map)) {
     warning("Inf values set to NA.")
     map[inf_map] <- NA
   }
@@ -436,7 +436,7 @@ plot_slice_fit <- function(fit_res, map, map_denom = NULL, slice = 1,
   col <- viridisLite::viridis(64)
   
   if (interp != 1) {
-    if (sum(is.na(plot_map) > 0) && (interp > 1)) {
+    if (any(is.na(plot_map)) && (interp > 1)) {
       plot_map <- interpolate_nas(plot_map, interp, 2)
     } else {
       plot_map <- mmand::rescale(plot_map, interp, mmand::mnKernel())
