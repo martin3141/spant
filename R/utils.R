@@ -570,3 +570,14 @@ Imzap <- function(x, tol = 1e-06) {
     as.double(x)
   else x
 }
+
+# a trick to allow nice interpolation to work with data containing NAs
+interpolate_nas <- function(map, factor, sigma) {
+  map_box_interp <- mmand::rescale(map, factor, mmand::boxKernel())
+  map_gaus       <- mmand::gaussianSmooth(map, sigma)
+  map_replace    <- map
+  map_replace[is.na(map_replace)] <- map_gaus[is.na(map_replace)]
+  map_interp     <- mmand::rescale(map_replace, factor, mmand::mnKernel())
+  map_interp[is.na(map_box_interp)] <- NA
+  return(map_interp)
+}

@@ -426,6 +426,9 @@ plot_slice_fit <- function(fit_res, map, map_denom = NULL, slice = 1,
     warning("Inf values set to NA.")
     map[inf_map] <- NA
   }
+    
+  # set any nan values to NA
+  map[is.nan(map)] <- NA
   
   plot_map <- map[1,,, slice, 1, 1]
   plot_map <- pracma::fliplr(plot_map)
@@ -433,7 +436,11 @@ plot_slice_fit <- function(fit_res, map, map_denom = NULL, slice = 1,
   col <- viridisLite::viridis(64)
   
   if (interp != 1) {
-    plot_map <- mmand::rescale(plot_map, interp, mmand::mnKernel())
+    if (sum(is.na(plot_map) > 0) && (interp > 1)) {
+      plot_map <- interpolate_nas(plot_map, interp, 2)
+    } else {
+      plot_map <- mmand::rescale(plot_map, interp, mmand::mnKernel())
+    }
   }
   
   if (is.null(zlim)) { 
