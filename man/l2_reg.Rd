@@ -4,13 +4,21 @@
 \alias{l2_reg}
 \title{Perform l2 regularisation artefact suppression.}
 \usage{
-l2_reg(mrs_data, thresh = 0.05, b = 1e-11, A = NA, xlim = NA)
+l2_reg(
+  mrs_data,
+  thresh = 0.05,
+  b = 1e-11,
+  A = NA,
+  xlim = NA,
+  thresh_xlim = NULL
+)
 }
 \arguments{
 \item{mrs_data}{input data for artefact suppression.}
 
 \item{thresh}{threshold parameter to extract lipid signals from mrs_data
-based on the integration of the full spectral width in magnitude mode.}
+based on the spectral integration of the thresh_xlim region in magnitude
+mode.}
 
 \item{b}{regularisation parameter.}
 
@@ -19,6 +27,8 @@ parameter is ignored when A is specified.}
 
 \item{xlim}{spectral limits in ppm to restrict the reconstruction range.
 Defaults to the full spectral width.}
+
+\item{thresh_xlim}{spectral limits in ppm to integrate for the threshold map.}
 }
 \value{
 l2 reconstructed mrs_data object.

@@ -3287,15 +3287,18 @@ lw_obj_fn <- function(lb_val, mrs_data, lw, xlim) {
 #' Bilgic et al. JMRI 40(1):181-91 2014.
 #' @param mrs_data input data for artefact suppression.
 #' @param thresh threshold parameter to extract lipid signals from mrs_data
-#' based on the integration of the full spectral width in magnitude mode.
+#' based on the spectral integration of the thresh_xlim region in magnitude
+#' mode.
 #' @param b regularisation parameter.
 #' @param A set of spectra containing the artefact basis signals. The thresh
 #' parameter is ignored when A is specified.
 #' @param xlim spectral limits in ppm to restrict the reconstruction range.
 #' Defaults to the full spectral width.
+#' @param thresh_xlim spectral limits in ppm to integrate for the threshold map.
 #' @return l2 reconstructed mrs_data object.
 #' @export
-l2_reg <- function(mrs_data, thresh = 0.05, b = 1e-11, A = NA, xlim = NA) {
+l2_reg <- function(mrs_data, thresh = 0.05, b = 1e-11, A = NA, xlim = NA,
+                   thresh_xlim = NULL) {
   
   # generally done as a FD operation
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
@@ -3320,7 +3323,7 @@ l2_reg <- function(mrs_data, thresh = 0.05, b = 1e-11, A = NA, xlim = NA) {
     
     if (anyNA(A)) {
       # map <- drop(int_spec(mrs_data_coil, mode = "mod"))
-      map <- drop(spec_op(mrs_data_coil, mode = "mod"))
+      map <- drop(spec_op(mrs_data_coil, mode = "mod", xlim = thresh_xlim))
       map_bool <- map > (max(map) * thresh)
       mrsi_mask <- mask_xy_mat(mrs_data_coil, mask = !map_bool)
       A_coil <- t(stats::na.omit(mrs_data2mat(mrsi_mask)))
