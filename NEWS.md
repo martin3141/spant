@@ -3,6 +3,7 @@
 2D MRSI data.
 * File name argument for read_mrs now permits globbing, eg read_mrs("*.dcm").
 * Improved plotting of metabolite maps containing infinite values.
+* Improvements to GE p-file reader and tentative support for revision 28.
 
 # spant 1.16.0
 * The package has been published in the Journal for Open Source Software :

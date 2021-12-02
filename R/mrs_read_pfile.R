@@ -2,7 +2,7 @@
 # when nechoes = 2 we're probally dealing with MEGA-PRESS data, where edited
 # pairs are not interleaved but occupy the first and second half of the data
 
-read_pfile <- function(fname, n_ref_scans = NULL, extra) {
+read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
   # check the file size
   fbytes <- file.size(fname)
   
@@ -36,13 +36,25 @@ read_pfile <- function(fname, n_ref_scans = NULL, extra) {
   
   if (expt_pts != Npts) {
     warning("Unexpected number of data points.")
-    cat(paste("Expecting :", Npts, "points based on file size.\n"))
-    cat(paste("Expecting :", expt_pts, "points based on header information.\n"))
-    cat(paste("Coils :", coils, "\n"))
-    cat(paste("nframes :", hdr$nframes, "\n"))
-    cat(paste("nechoes :", hdr$nechoes), "\n")
-    cat(paste("frame_size :", hdr$frame_size), "\n")
-    cat(paste("w_frames :", hdr$rhuser19), "\n")
+    cat(paste("Expecting   :", Npts, "points based on file size.\n"))
+    cat(paste("Expecting   :", expt_pts, "points based on header information.\n"))
+    cat(paste("Coils       :", coils, "\n"))
+    cat(paste("nframes     :", hdr$nframes, "\n"))
+    cat(paste("nechoes     :", hdr$nechoes), "\n")
+    cat(paste("frame_size  :", hdr$frame_size), "\n")
+    cat(paste("w_frames    :", hdr$rhuser19), "\n")
+    cat(paste("Header rev. :", hdr$hdr_rev), "\n")
+  }
+  
+  if (verbose) {
+    cat(paste("Expecting   :", Npts, "points based on file size.\n"))
+    cat(paste("Expecting   :", expt_pts, "points based on header information.\n"))
+    cat(paste("Coils       :", coils, "\n"))
+    cat(paste("nframes     :", hdr$nframes, "\n"))
+    cat(paste("nechoes     :", hdr$nechoes), "\n")
+    cat(paste("frame_size  :", hdr$frame_size), "\n")
+    cat(paste("w_frames    :", hdr$rhuser19), "\n")
+    cat(paste("Header rev. :", hdr$hdr_rev), "\n\n")
   }
   
   data <- raw_pts[c(TRUE, FALSE)] + 1i * raw_pts[c(FALSE, TRUE)]
@@ -93,7 +105,7 @@ read_pfile_header <- function(fname) {
   con <- file(fname, "rb")
   vars$hdr_rev <- readBin(con, "numeric", size = 4, endian = endian)
   
-  loc <- get_pfile_dict(vars$hdr_rev)
+  loc <- get_pfile_dict(vars$hdr_rev, con)
   
   seek(con, loc$off_data)
   vars$off_data <- readBin(con, "int", size = 4, endian = endian)
@@ -151,40 +163,44 @@ get_pfile_vars <- function() {
   vars
 }
 
-get_pfile_dict <- function(hdr_rev) {
+get_pfile_dict <- function(hdr_rev, con) {
   loc <- get_pfile_vars()
   
-  if (floor(hdr_rev) > 25) {
-    loc$hdr_rev <- 0
-    loc$off_data <- 4
-    loc$nechoes <- 146
-    loc$nframes <- 150
-    loc$frame_size <- 156
-    loc$rcv <- 264
-    loc$rhuser19 <- 356
-    loc$spec_width <- 432
-    loc$csi_dims <- 436
-    loc$xcsi <- 438
-    loc$ycsi <- 440
-    loc$zcsi <- 442
+  if (floor(hdr_rev) == 28) {
+    close(con)
+    stop(paste("Error, pfile version not supported :", hdr_rev))
+  } else if (floor(hdr_rev) == 26) {
+    loc$hdr_rev     <- 0
+    loc$off_data    <- 4
+    loc$nechoes     <- 146
+    loc$nframes     <- 150
+    loc$frame_size  <- 156
+    loc$rcv         <- 264
+    loc$rhuser19    <- 356
+    loc$spec_width  <- 432
+    loc$csi_dims    <- 436
+    loc$xcsi        <- 438
+    loc$ycsi        <- 440
+    loc$zcsi        <- 442
     loc$ps_mps_freq <- 488
     loc$te <- 1148
   } else if ((floor(hdr_rev) > 11) && (floor(hdr_rev) < 25)) {
-    loc$hdr_rev <- 0
-    loc$off_data <- 1468
-    loc$nechoes <- 70
-    loc$nframes <- 74
-    loc$frame_size <- 80
-    loc$rcv <- 200
-    loc$rhuser19 <- 292
-    loc$spec_width <- 368
-    loc$csi_dims <- 372
-    loc$xcsi <- 374
-    loc$ycsi <- 376
-    loc$zcsi <- 378
+    loc$hdr_rev     <- 0
+    loc$off_data    <- 1468
+    loc$nechoes     <- 70
+    loc$nframes     <- 74
+    loc$frame_size  <- 80
+    loc$rcv         <- 200
+    loc$rhuser19    <- 292
+    loc$spec_width  <- 368
+    loc$csi_dims    <- 372
+    loc$xcsi        <- 374
+    loc$ycsi        <- 376
+    loc$zcsi        <- 378
     loc$ps_mps_freq <- 424
-    loc$te <- 1212
+    loc$te          <- 1212
   } else {
+    close(con)
     stop(paste("Error, pfile version not supported :", hdr_rev))
   }
   loc

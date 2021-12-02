@@ -66,7 +66,7 @@ read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
     return(read_twix(fname, verbose, full_fid, omit_svs_ref_scans,
                      extra))
   } else if (format == "pfile") {
-    return(read_pfile(fname, n_ref_scans, extra))
+    return(read_pfile(fname, n_ref_scans, verbose, extra))
   } else if (format == "list_data") {
     if (is.null(ft)) stop("Please specify ft parameter for list_data format")
     if (is.null(fs)) stop("Please specify fs parameter for list_data format")
