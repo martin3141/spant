@@ -166,10 +166,7 @@ get_pfile_vars <- function() {
 get_pfile_dict <- function(hdr_rev, con) {
   loc <- get_pfile_vars()
   
-  if (floor(hdr_rev) == 28) {
-    close(con)
-    stop(paste("Error, pfile version not supported :", hdr_rev))
-  } else if (floor(hdr_rev) == 26) {
+  if (floor(hdr_rev) > 25) {
     loc$hdr_rev     <- 0
     loc$off_data    <- 4
     loc$nechoes     <- 146
