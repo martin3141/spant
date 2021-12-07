@@ -13,8 +13,9 @@ print.mrs_data <- function(x, full = FALSE, ...) {
               "x", dim(x$data)[4], "\n")), sep = "")
   cat(paste(c("Dynamics                : ", dim(x$data)[5], "\n")), sep = "")
   cat(paste(c("Coils                   : ", dim(x$data)[6], "\n")) ,sep = "")
-  cat(paste(c("Voxel resolution (mm)   : ", x$resolution[2],
-              "x", x$resolution[3], "x", x$resolution[4], "\n")), sep = "")
+  cat(paste(c("Voxel resolution (mm)   : ", round(x$resolution[2], 2),
+              "x", round(x$resolution[3], 2),
+              "x", round(x$resolution[4], 2), "\n")), sep = "")
   cat(paste(c("Sampling frequency (Hz) : ",
               1 / x$resolution[7], "\n")), sep = "")
   cat(paste(c("Reference freq. (ppm)   : ", x$ref, "\n")), sep = "")

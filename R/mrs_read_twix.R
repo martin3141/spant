@@ -301,6 +301,15 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
     mrs_data <- get_dyns(mrs_data, mrs_data$twix_inds$Phs == 1)
   }
   
+  # correct the voxel dimensions for MRSI
+  x_pts <- max(mrs_data$twix_inds$Seg) + 1
+  y_pts <- max(mrs_data$twix_inds$Lin) + 1
+  
+  if (x_pts > 1 || y_pts > 1) {
+    mrs_data$resolution[2] <- vars$x_dim / x_pts
+    mrs_data$resolution[3] <- vars$y_dim / y_pts
+  }
+  
   return(mrs_data)
 }
 
