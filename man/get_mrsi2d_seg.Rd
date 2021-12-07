@@ -16,7 +16,8 @@ Must be 1mm isotropic resolution.}
 package, eg: mmand::shapeKernel(c(10, 10), type = "box").}
 }
 \value{
-a data frame of partial volume estimates.
+a data frame of partial volume estimates and individual segmentation
+maps.
 }
 \description{
 Localisation is assumed to be perfect in the z direction and determined by

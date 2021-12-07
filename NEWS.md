@@ -5,6 +5,7 @@
 * Improved plotting of metabolite maps containing infinite values.
 * Improvements to GE p-file reader.
 * Bug fix for TWIX MRSI voxel dimensions.
+* get_mrsi2d_seg now returns partial volume maps as well as a data frame.
 
 # spant 1.16.0
 * The package has been published in the Journal for Open Source Software :

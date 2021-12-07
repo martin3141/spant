@@ -439,7 +439,8 @@ reslice_to_mrs <- function(mri, mrs) {
 #' Must be 1mm isotropic resolution.
 #' @param ker MRSI PSF kernel in the x-y direction compatible with the mmand 
 #' package, eg: mmand::shapeKernel(c(10, 10), type = "box").
-#' @return a data frame of partial volume estimates.
+#' @return a data frame of partial volume estimates and individual segmentation
+#' maps.
 #' @export
 get_mrsi2d_seg <- function(mrs_data, mri_seg, ker) {
   # reformat seg data into the same space as the full MRSI voi
@@ -486,10 +487,22 @@ get_mrsi2d_seg <- function(mrs_data, mri_seg, ker) {
   GMF <- 100 * as.numeric(mri_seg_2_final) /
                      (as.numeric(mri_seg_2_final) + as.numeric(mri_seg_3_final))
   
-  seg_frame <- data.frame(Other = 100 * as.numeric(mri_seg_0_final),
-                          CSF   = 100 * as.numeric(mri_seg_1_final),
-                          GM    = 100 * as.numeric(mri_seg_2_final),
-                          WM    = 100 * as.numeric(mri_seg_3_final),
-                          GMF   = GMF)
-  return(seg_frame)
+  seg_table <- data.frame(Other = 100 * as.numeric(mri_seg_0_final),
+                      CSF   = 100 * as.numeric(mri_seg_1_final),
+                      GM    = 100 * as.numeric(mri_seg_2_final),
+                      WM    = 100 * as.numeric(mri_seg_3_final),
+                      GMF   = GMF)
+  
+  map_dim <- c(1, Nx(mrs_data), Ny(mrs_data), 1, 1, 1)
+  
+  gm_map    <- array(seg_table$GM,    map_dim)
+  wm_map    <- array(seg_table$WM,    map_dim)
+  csf_map   <- array(seg_table$CSF,   map_dim)
+  other_map <- array(seg_table$Other, map_dim)
+  gmf_map   <- array(seg_table$GMF,   map_dim)
+  
+  res <- list(seg_table = seg_table, gm_map = gm_map, wm_map = wm_map,
+              csf_map = csf_map, other_map = other_map, gmf_map = gmf_map) 
+  
+  return(res)
 }
