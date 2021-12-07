@@ -254,7 +254,7 @@ get_voi_seg <- function(voi, mri_seg) {
   check_geom(voi, mri_seg)
   vals <- mri_seg[voi == 1]
   pvs <- summary(factor(vals, levels = c(0, 1, 2, 3), 
-        labels = c("Other", "CSF", "GM", "WM"))) / sum(voi) * 100
+         labels = c("Other", "CSF", "GM", "WM"))) / sum(voi) * 100
   pvs <- as.data.frame(t(pvs))
   return(pvs)
 }
