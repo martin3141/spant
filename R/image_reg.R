@@ -130,7 +130,16 @@ get_mrsi_voi <- function(mrs_data, target_mri = NULL, map = NULL,
   } else {
     # assume 2D xy map for now
     #resamp_map <- mmand::rescale(drop(map), 10, mmand::mnKernel())
-    resamp_map <- mmand::rescale(drop(map), mrs_data$resolution[2], ker)
+    
+    # deal with Infs
+    if (any(is.infinite(map))) map[is.infinite(map)] <- NA
+    
+    if (any(is.na(map))) {
+      resamp_map <- interpolate_nas(drop(map), mrs_data$resolution[2], 2)
+    } else {
+      resamp_map <- mmand::rescale(drop(map), mrs_data$resolution[2], ker)
+    }
+    
     raw_data <- array(resamp_map, voi_dim) 
   }
   
@@ -500,9 +509,11 @@ get_mrsi2d_seg <- function(mrs_data, mri_seg, ker) {
   csf_map   <- array(seg_table$CSF,   map_dim)
   other_map <- array(seg_table$Other, map_dim)
   gmf_map   <- array(seg_table$GMF,   map_dim)
+  gm_wm_map <- gm_map + wm_map
   
   res <- list(seg_table = seg_table, gm_map = gm_map, wm_map = wm_map,
-              csf_map = csf_map, other_map = other_map, gmf_map = gmf_map) 
+              csf_map = csf_map, other_map = other_map, gmf_map = gmf_map,
+              gm_wm_map = gm_wm_map) 
   
   return(res)
 }

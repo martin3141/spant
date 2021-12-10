@@ -215,7 +215,7 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
   if (is.null(xyz)) {
     if (!is.null(overlay)) {
       # create map of zero and ones to calc cog
-      overlay_bin <- (overlay > mean(overlay)) * 1
+      overlay_bin <- (overlay > mean(overlay, na.rm = TRUE)) * 1
       xyz <- get_voi_cog(overlay_bin)
     } else {
       xyz <- ceiling(img_dim / 2)

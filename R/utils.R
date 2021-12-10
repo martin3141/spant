@@ -575,6 +575,7 @@ Imzap <- function(x, tol = 1e-06) {
 interpolate_nas <- function(map, factor, sigma) {
   map_box_interp <- mmand::rescale(map, factor, mmand::boxKernel())
   map_gaus       <- mmand::gaussianSmooth(map, sigma)
+  map_gaus[is.na(map_gaus)] <- 0 # set any remaing NA values to 0
   map_replace    <- map
   map_replace[is.na(map_replace)] <- map_gaus[is.na(map_replace)]
   map_interp     <- mmand::rescale(map_replace, factor, mmand::mnKernel())
