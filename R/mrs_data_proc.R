@@ -1867,6 +1867,8 @@ spec_op <- function(mrs_data, xlim = NULL, operator = "sum", freq_scale = "ppm",
     x_scale <- hz(mrs_data)
   } else if (freq_scale == "points") {
     x_scale <- pts(mrs_data)
+  } else {
+    stop("unknown freq_scale for spec_op function")
   }
   
   if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[Npts(mrs_data)])
@@ -1881,6 +1883,8 @@ spec_op <- function(mrs_data, xlim = NULL, operator = "sum", freq_scale = "ppm",
     data_arr <- Im(data_arr)
   } else if (mode == "mod") {
     data_arr <- Mod(data_arr)
+  } else {
+    stop("unknown mode for spec_op function")
   }
  
   if (operator == "l2") {
