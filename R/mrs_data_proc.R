@@ -27,36 +27,39 @@ check_mrs_data <- function(mrs_data) {
 #' \code{\link{def_acq_paras}}
 #' @param fp_scale multiply the first data point by 0.5.
 #' @param back_extrap_pts number of data points to back extrapolate.
+#' @param sum_resonances sum all resonances (default is TRUE), otherwise return
+#' a dynamic mrs_data object. 
 #' @return MRS data object.
 #' @examples
 #' sim_data <- sim_resonances(freq = 2, lw = 5)
 #' @export
 sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0, 
                            freq_ppm = TRUE, acq_paras = def_acq_paras(),
-                           fp_scale = TRUE, back_extrap_pts = 0) {
-  
-  # TODO check this works for vectors
-  #if ((sum(lg > 1) + sum(lg < 0)) > 0) {
-  #  cat("Error, lg values not between 0 and 1.")  
-  #  stop()
-  #}
+                           fp_scale = TRUE, back_extrap_pts = 0,
+                           sum_resonances = TRUE) {
   
   if (class(acq_paras) == "mrs_data") acq_paras <- get_acq_paras(acq_paras)
   
   sig_n <- length(freq)
   if (sig_n != length(amp)) {
+    if (length(amp) != 1) warning("amp length is not the same as freq length")
     amp <- rep_len(amp, sig_n)
   }
   
   if (sig_n != length(lw)) {
+    if (length(lw) != 1) warning("lw length is not the same as freq length")
     lw <- rep_len(lw, sig_n)
   }
   
   if (sig_n != length(phase)) {
+    if (length(phase) != 1) {
+      warning("phase length is not the same as freq length")
+    }
     phase <- rep_len(phase, sig_n)
   }
   
   if (sig_n != length(lg)) {
+    if (length(lg) != 1) warning("lg length is not the same as freq length")
     lg <- rep_len(lg, sig_n)
   }
   
@@ -71,35 +74,24 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
     f_hz <- freq
   }
   
-  data <- rep(0, acq_paras$N + back_extrap_pts)
+  data <- matrix(NA, sig_n, acq_paras$N + back_extrap_pts)
+  
   for (n in 1:sig_n) {
-    temp_data <- amp[n] * exp(1i * pi * phase[n] / 180 + 2i * pi * f_hz[n] * t)
+    data[n,] <- amp[n] * exp(1i * pi * phase[n] / 180 + 2i * pi * f_hz[n] * t)
     
     # LG peak model
-    temp_data <- temp_data * ((1 - lg[n]) * exp(-lw[n] * t * pi) + 
-                              lg[n] * exp(-lw2beta(lw[n]) * t * t))
-    
-    data <- data + temp_data
+    data[n,] <- data[n,] * ((1 - lg[n]) * exp(-lw[n] * t * pi) + 
+                             lg[n] * exp(-lw2beta(lw[n]) * t * t))
   }
   
   # first point correction
-  if (fp_scale) data[1] <- data[1] * 0.5
+  if (fp_scale) data[, 1] <- data[, 1] * 0.5
   
-  #if (lg < 1) {
-  #  mrs_data$data = mrs_data$data*exp(-(1-lg)*lb*t*pi)
-  #}
+  mrs_data <- mat2mrs_data(data, fs = acq_paras$fs, ft = acq_paras$ft,
+                           ref = acq_paras$ref, nuc = acq_paras$nuc,
+                           fd = FALSE)
   
-  #if (lg > 0) {
-  #  mrs_data$data = mrs_data$data*exp(((lg*lb)^2*pi^2/4/log(0.5))*(t^2))
-  #}
-  
-  data <- array(data,dim = c(1, 1, 1, 1, 1, 1, acq_paras$N + back_extrap_pts))
-  res <- c(NA, 1, 1, 1, 1, NA, 1 / acq_paras$fs)
-  
-  mrs_data <- mrs_data(data = data, ft = acq_paras$ft, resolution = res,
-                       ref = acq_paras$ref, nuc = acq_paras$nuc,
-                       freq_domain = rep(FALSE, 7), affine = NULL, meta = NULL,
-                       extra = NULL)
+  if (sum_resonances) mrs_data <- sum_dyns(mrs_data)
   
   return(mrs_data)
 }

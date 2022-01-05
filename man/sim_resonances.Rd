@@ -13,7 +13,8 @@ sim_resonances(
   freq_ppm = TRUE,
   acq_paras = def_acq_paras(),
   fp_scale = TRUE,
-  back_extrap_pts = 0
+  back_extrap_pts = 0,
+  sum_resonances = TRUE
 )
 }
 \arguments{
@@ -36,6 +37,9 @@ Hz are assumed.}
 \item{fp_scale}{multiply the first data point by 0.5.}
 
 \item{back_extrap_pts}{number of data points to back extrapolate.}
+
+\item{sum_resonances}{sum all resonances (default is TRUE), otherwise return
+a dynamic mrs_data object.}
 }
 \value{
 MRS data object.
