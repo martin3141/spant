@@ -3549,6 +3549,7 @@ recon_twix_2d_mrsi <- function(twix_mrs) {
 #' @param start_ppm start point of the fade in ppm units.
 #' @param end_ppm end point of the fade in ppm units.
 #' @return modified mrs_data object.
+#' @export
 zero_fade_spec <- function(mrs_data, start_ppm, end_ppm) {
   
   # fd operation
