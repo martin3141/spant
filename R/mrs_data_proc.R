@@ -2857,10 +2857,11 @@ rep_dyn <- function(mrs_data, times) {
 #' @param z_rep number of z replications.
 #' @param dyn_rep number of dynamic replications.
 #' @param coil_rep number of coil replications.
+#' @param warn print a warning when the data dimensions do not change.
 #' @return replicated data object.
 #' @export
 rep_mrs <- function(mrs_data, x_rep = 1, y_rep = 1, z_rep = 1, dyn_rep = 1,
-                    coil_rep = 1) {
+                    coil_rep = 1, warn = TRUE) {
   
   # check the input
   check_mrs_data(mrs_data) 
@@ -2873,16 +2874,21 @@ rep_mrs <- function(mrs_data, x_rep = 1, y_rep = 1, z_rep = 1, dyn_rep = 1,
   if (dyn_rep != 1) mrs_data$data <- rep_array_dim(mrs_data$data, 5, dyn_rep)
   if (coil_rep != 1) mrs_data$data <- rep_array_dim(mrs_data$data, 6, coil_rep)
   
-  if (identical(old_dims, dim(mrs_data$data))) warning("Data dimensions not changed.")
+  if (warn & (identical(old_dims, dim(mrs_data$data)))) {
+    warning("Data dimensions not changed.")
+  }
   
   mrs_data
 }
 
-#' Estimate the standard deviation of the noise from a segment of an mrs_data object.
+#' Estimate the standard deviation of the noise from a segment of an mrs_data
+#' object.
 #' @param mrs_data MRS data object.
-#' @param n number of data points (taken from the end of array) to use in the estimation.
+#' @param n number of data points (taken from the end of array) to use in the
+#' estimation.
 #' @param offset number of final points to exclude from the calculation.
-#' @param p_order polynomial order to fit to the data before estimating the standard deviation.
+#' @param p_order polynomial order to fit to the data before estimating the
+#' standard deviation.
 #' @return standard deviation array.
 #' @export
 est_noise_sd <- function(mrs_data, n = 100, offset = 100, p_order = 2) {
@@ -3543,4 +3549,38 @@ recon_twix_2d_mrsi <- function(twix_mrs) {
   twix_recon <- get_subset(twix_recon, x_set = Nx(twix_recon):1)
   
   return(twix_recon)
+}
+
+#' Fade a spectrum to zero by frequency domain multiplication with a tanh
+#' function. Note this operation distorts data points at the end of the FID.
+#' @param mrs_data data to be faded.
+#' @param start_ppm start point of the fade in ppm units.
+#' @param end_ppm end point of the fade in ppm units.
+#' @return modified mrs_data object.
+zero_fade_spec <- function(mrs_data, start_ppm, end_ppm) {
+  
+  # fd operation
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  fade_spec <- get_voxel(mrs_data)
+  fade_spec$data[,,,,,,] <- 0
+  
+  ppm_scale <- ppm(mrs_data)
+  inds      <- get_seg_ind(ppm_scale, start_ppm, end_ppm)
+  
+  if (start_ppm < end_ppm) {
+    fade <- (tanh(seq(from = -3, to = 3, length.out = length(inds))) + 1) / 2
+    fade_spec$data[,,,,,,(inds[length(inds)] + 1):Npts(mrs_data)] <- 1
+  } else {
+    fade <- (tanh(seq(from = 3, to = -3, length.out = length(inds))) + 1) / 2
+    fade_spec$data[,,,,,,0:(inds[1] - 1)] <- 1
+  }
+
+  fade_spec$data[,,,,,,inds] <- fade
+  
+  fade_spec <- rep_mrs(fade_spec, x_rep = Nx(mrs_data), y_rep = Ny(mrs_data),
+                       z_rep = Nz(mrs_data), dyn_rep = Ndyns(mrs_data),
+                       coil_rep = Ncoils(mrs_data), warn = FALSE)
+  
+  return(mrs_data * fade_spec)
 }

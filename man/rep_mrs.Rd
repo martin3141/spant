@@ -4,7 +4,15 @@
 \alias{rep_mrs}
 \title{Replicate a scan over a given dimension.}
 \usage{
-rep_mrs(mrs_data, x_rep = 1, y_rep = 1, z_rep = 1, dyn_rep = 1, coil_rep = 1)
+rep_mrs(
+  mrs_data,
+  x_rep = 1,
+  y_rep = 1,
+  z_rep = 1,
+  dyn_rep = 1,
+  coil_rep = 1,
+  warn = TRUE
+)
 }
 \arguments{
 \item{mrs_data}{MRS data to be replicated.}
@@ -18,6 +26,8 @@ rep_mrs(mrs_data, x_rep = 1, y_rep = 1, z_rep = 1, dyn_rep = 1, coil_rep = 1)
 \item{dyn_rep}{number of dynamic replications.}
 
 \item{coil_rep}{number of coil replications.}
+
+\item{warn}{print a warning when the data dimensions do not change.}
 }
 \value{
 replicated data object.
