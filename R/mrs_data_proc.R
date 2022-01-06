@@ -2568,18 +2568,20 @@ ecc <- function(metab, ref, rev = FALSE) {
 apodise_xy <- function(mrs_data, func = "hamming", w = 2.5) {
   
   # check the input
-  check_mrs_data(mrs_data) 
+  check_mrs_data(mrs_data)
   
-  mrsi_dims <- dim(mrs_data$data)
-  x_dim <- mrsi_dims[2]
-  y_dim <- mrsi_dims[3]
-  N <- mrsi_dims[7]
+  x_dim <- Nx(mrs_data)
+  y_dim <- Ny(mrs_data)
+  z_dim <- Nz(mrs_data)
+  dyns  <- Ndyns(mrs_data)
+  coils <- Ncoils(mrs_data)
+  N     <- Npts(mrs_data)
   
+  # transform to k-space
   mrs_data <- img2kspace_xy(mrs_data)
   
-  mat <- mrs_data$data
-  mat <- drop(mat)
-  dim(mat) <- c(x_dim, y_dim * N)
+  # create the k-space weighting matrix
+  weight_mat <- matrix(1, nrow = x_dim, ncol = y_dim)
   
   if (func == "hamming") {
     x_fun <- signal::hamming(x_dim)
@@ -2591,20 +2593,18 @@ apodise_xy <- function(mrs_data, func = "hamming", w = 2.5) {
     stop("error func not recognised")
   }
     
-  mat <- mat * x_fun
+  weight_mat   <- t(t(weight_mat * x_fun) * y_fun)
+  weight_array <- array(weight_mat, c(1, x_dim, y_dim, 1, 1, 1, 1))
   
-  dim(mat) <- c(x_dim, y_dim, N)
-  mat <- aperm(mat, c(2, 1, 3))
-  dim(mat) <- c(y_dim, x_dim * N)
+  if (z_dim != 1) weight_array <- rep_array_dim(weight_array, 4, z_dim)
+  if (dyns != 1)  weight_array <- rep_array_dim(weight_array, 5, dyns)
+  if (coils != 1) weight_array <- rep_array_dim(weight_array, 6, coils)
+  if (N != 1)     weight_array <- rep_array_dim(weight_array, 7, N)
   
-  mat <- mat * y_fun
+  # apply the weighting to the dataset
+  mrs_data$data <- mrs_data$data * weight_array
   
-  dim(mat) <- c(y_dim, x_dim, N)
-  mat <- aperm(mat, c(2, 1, 3))
-  dim(mat) <- mrsi_dims
-  mrs_data$data <- mat
-  
-  # put xy dims back to space
+  # transform back to image space
   mrs_data <- kspace2img_xy(mrs_data)
   return(mrs_data)
 }
