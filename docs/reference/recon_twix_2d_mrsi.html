@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert SPM style segmentation files to a single categorical image where
-the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM. — spm_pve2categorical • Spectroscopy Analysis Tools (spant)</title>
+<title>Reconstruct 2D MRSI data from a twix file loaded with read_mrs. — recon_twix_2d_mrsi • Spectroscopy Analysis Tools (spant)</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,10 +46,8 @@ the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM. — spm_pve2cate
 
 
 
-<meta property="og:title" content="Convert SPM style segmentation files to a single categorical image where
-the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM. — spm_pve2categorical" />
-<meta property="og:description" content="Convert SPM style segmentation files to a single categorical image where
-the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM." />
+<meta property="og:title" content="Reconstruct 2D MRSI data from a twix file loaded with read_mrs. — recon_twix_2d_mrsi" />
+<meta property="og:description" content="Reconstruct 2D MRSI data from a twix file loaded with read_mrs." />
 <meta property="og:image" content="https://martin3141.github.io/spant/logo.png" />
 
 
@@ -149,31 +146,29 @@ the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert SPM style segmentation files to a single categorical image where
-the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/image_reg.R'><code>R/image_reg.R</code></a></small>
-    <div class="hidden name"><code>spm_pve2categorical.Rd</code></div>
+    <h1>Reconstruct 2D MRSI data from a twix file loaded with read_mrs.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/mrs_data_proc.R'><code>R/mrs_data_proc.R</code></a></small>
+    <div class="hidden name"><code>recon_twix_2d_mrsi.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Convert SPM style segmentation files to a single categorical image where
-the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM.</p>
+    <p>Reconstruct 2D MRSI data from a twix file loaded with read_mrs.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>spm_pve2categorical</span><span class='op'>(</span><span class='va'>fname</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>recon_twix_2d_mrsi</span><span class='op'>(</span><span class='va'>twix_mrs</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>fname</th>
-      <td><p>any of the segmentation files (eg c1_MY_T1.nii).</p></td>
+      <th>twix_mrs</th>
+      <td><p>raw dynamic data.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>nifti object.</p>
+    <p>reconstructed data.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

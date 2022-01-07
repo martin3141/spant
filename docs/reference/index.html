@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.16.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.0</span>
       </span>
     </div>
 
@@ -531,7 +531,8 @@ aliased.</p></td>
         <td>
           <p><code><a href="est_noise_sd.html">est_noise_sd()</a></code> </p>
         </td>
-        <td><p>Estimate the standard deviation of the noise from a segment of an mrs_data object.</p></td>
+        <td><p>Estimate the standard deviation of the noise from a segment of an mrs_data
+object.</p></td>
       </tr><tr>
         
         <td>
@@ -1365,6 +1366,12 @@ name and should be checked when consistency is required.</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="recon_twix_2d_mrsi.html">recon_twix_2d_mrsi()</a></code> </p>
+        </td>
+        <td><p>Reconstruct 2D MRSI data from a twix file loaded with read_mrs.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="rectangular_mask.html">rectangular_mask()</a></code> </p>
         </td>
         <td><p>Create a rectangular mask stored as a matrix of logical values.</p></td>
@@ -1839,6 +1846,13 @@ individual basis set components shown.</p></td>
           <p><code><a href="write_mrs_nifti.html">write_mrs_nifti()</a></code> </p>
         </td>
         <td><p>Write MRS data object to file in NIFTI format.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="zero_fade_spec.html">zero_fade_spec()</a></code> </p>
+        </td>
+        <td><p>Fade a spectrum to zero by frequency domain multiplication with a tanh
+function. Note this operation distorts data points at the end of the FID.</p></td>
       </tr><tr>
         
         <td>

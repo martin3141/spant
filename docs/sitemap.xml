@@ -580,6 +580,9 @@
     <loc>https://martin3141.github.io/spant//reference/read_tqn_result.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant//reference/recon_twix_2d_mrsi.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant//reference/rectangular_mask.html</loc>
   </url>
   <url>
@@ -812,6 +815,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/write_mrs_nifti.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/zero_fade_spec.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/zero_nzoc.html</loc>

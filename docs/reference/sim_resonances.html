@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.16.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.0</span>
       </span>
     </div>
 
@@ -164,7 +164,8 @@
   freq_ppm <span class='op'>=</span> <span class='cn'>TRUE</span>,
   acq_paras <span class='op'>=</span> <span class='fu'><a href='def_acq_paras.html'>def_acq_paras</a></span><span class='op'>(</span><span class='op'>)</span>,
   fp_scale <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  back_extrap_pts <span class='op'>=</span> <span class='fl'>0</span>
+  back_extrap_pts <span class='op'>=</span> <span class='fl'>0</span>,
+  sum_resonances <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -207,6 +208,11 @@ Hz are assumed.</p></td>
     <tr>
       <th>back_extrap_pts</th>
       <td><p>number of data points to back extrapolate.</p></td>
+    </tr>
+    <tr>
+      <th>sum_resonances</th>
+      <td><p>sum all resonances (default is TRUE), otherwise return
+a dynamic mrs_data object.</p></td>
     </tr>
     </table>
 

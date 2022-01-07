@@ -6,8 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert SPM style segmentation files to a single categorical image where
-the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM. — spm_pve2categorical • Spectroscopy Analysis Tools (spant)</title>
+<title>Fade a spectrum to zero by frequency domain multiplication with a tanh
+function. Note this operation distorts data points at the end of the FID. — zero_fade_spec • Spectroscopy Analysis Tools (spant)</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,10 +47,10 @@ the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM. — spm_pve2cate
 
 
 
-<meta property="og:title" content="Convert SPM style segmentation files to a single categorical image where
-the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM. — spm_pve2categorical" />
-<meta property="og:description" content="Convert SPM style segmentation files to a single categorical image where
-the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM." />
+<meta property="og:title" content="Fade a spectrum to zero by frequency domain multiplication with a tanh
+function. Note this operation distorts data points at the end of the FID. — zero_fade_spec" />
+<meta property="og:description" content="Fade a spectrum to zero by frequency domain multiplication with a tanh
+function. Note this operation distorts data points at the end of the FID." />
 <meta property="og:image" content="https://martin3141.github.io/spant/logo.png" />
 
 
@@ -149,31 +149,39 @@ the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert SPM style segmentation files to a single categorical image where
-the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/image_reg.R'><code>R/image_reg.R</code></a></small>
-    <div class="hidden name"><code>spm_pve2categorical.Rd</code></div>
+    <h1>Fade a spectrum to zero by frequency domain multiplication with a tanh
+function. Note this operation distorts data points at the end of the FID.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/mrs_data_proc.R'><code>R/mrs_data_proc.R</code></a></small>
+    <div class="hidden name"><code>zero_fade_spec.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Convert SPM style segmentation files to a single categorical image where
-the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM.</p>
+    <p>Fade a spectrum to zero by frequency domain multiplication with a tanh
+function. Note this operation distorts data points at the end of the FID.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>spm_pve2categorical</span><span class='op'>(</span><span class='va'>fname</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>zero_fade_spec</span><span class='op'>(</span><span class='va'>mrs_data</span>, <span class='va'>start_ppm</span>, <span class='va'>end_ppm</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>fname</th>
-      <td><p>any of the segmentation files (eg c1_MY_T1.nii).</p></td>
+      <th>mrs_data</th>
+      <td><p>data to be faded.</p></td>
+    </tr>
+    <tr>
+      <th>start_ppm</th>
+      <td><p>start point of the fade in ppm units.</p></td>
+    </tr>
+    <tr>
+      <th>end_ppm</th>
+      <td><p>end point of the fade in ppm units.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>nifti object.</p>
+    <p>modified mrs_data object.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

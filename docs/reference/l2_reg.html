@@ -81,7 +81,7 @@ Bilgic et al. JMRI 40(1):181-91 2014." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.16.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.0</span>
       </span>
     </div>
 
@@ -157,7 +157,14 @@ Bilgic et al. JMRI 40(1):181-91 2014." />
 Bilgic et al. JMRI 40(1):181-91 2014.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>l2_reg</span><span class='op'>(</span><span class='va'>mrs_data</span>, thresh <span class='op'>=</span> <span class='fl'>0.05</span>, b <span class='op'>=</span> <span class='fl'>1e-11</span>, A <span class='op'>=</span> <span class='cn'>NA</span>, xlim <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>l2_reg</span><span class='op'>(</span>
+  <span class='va'>mrs_data</span>,
+  thresh <span class='op'>=</span> <span class='fl'>0.05</span>,
+  b <span class='op'>=</span> <span class='fl'>1e-11</span>,
+  A <span class='op'>=</span> <span class='cn'>NA</span>,
+  xlim <span class='op'>=</span> <span class='cn'>NA</span>,
+  thresh_xlim <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,7 +176,8 @@ Bilgic et al. JMRI 40(1):181-91 2014.</p>
     <tr>
       <th>thresh</th>
       <td><p>threshold parameter to extract lipid signals from mrs_data
-based on the integration of the full spectral width in magnitude mode.</p></td>
+based on the spectral integration of the thresh_xlim region in magnitude
+mode.</p></td>
     </tr>
     <tr>
       <th>b</th>
@@ -184,6 +192,10 @@ parameter is ignored when A is specified.</p></td>
       <th>xlim</th>
       <td><p>spectral limits in ppm to restrict the reconstruction range.
 Defaults to the full spectral width.</p></td>
+    </tr>
+    <tr>
+      <th>thresh_xlim</th>
+      <td><p>spectral limits in ppm to integrate for the threshold map.</p></td>
     </tr>
     </table>
 
