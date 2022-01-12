@@ -10,7 +10,8 @@ l2_reg(
   b = 1e-11,
   A = NA,
   xlim = NA,
-  thresh_xlim = NULL
+  thresh_xlim = NULL,
+  A_append = NULL
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ parameter is ignored when A is specified.}
 Defaults to the full spectral width.}
 
 \item{thresh_xlim}{spectral limits in ppm to integrate for the threshold map.}
+
+\item{A_append}{additional spectra to append to the A basis.}
 }
 \value{
 l2 reconstructed mrs_data object.
