@@ -3297,10 +3297,11 @@ lw_obj_fn <- function(lb_val, mrs_data, lw, xlim) {
 #' @param xlim spectral limits in ppm to restrict the reconstruction range.
 #' Defaults to the full spectral width.
 #' @param thresh_xlim spectral limits in ppm to integrate for the threshold map.
+#' @param A_append additional spectra to append to the A basis.
 #' @return l2 reconstructed mrs_data object.
 #' @export
 l2_reg <- function(mrs_data, thresh = 0.05, b = 1e-11, A = NA, xlim = NA,
-                   thresh_xlim = NULL) {
+                   thresh_xlim = NULL, A_append = NULL) {
   
   # generally done as a FD operation
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
@@ -3319,17 +3320,25 @@ l2_reg <- function(mrs_data, thresh = 0.05, b = 1e-11, A = NA, xlim = NA,
     A_coil <- t(stats::na.omit(mrs_data2mat(A)))
   }
   
+  # prepare any extra signals and convert to matrix
+  if (!is.null(A_append)) {
+    if (!anyNA(xlim)) A_append <- crop_spec(A_append, xlim)
+    A_append_mat <- t(stats::na.omit(mrs_data2mat(A_append)))
+  }
+  
   for (coil in 1:Ncoils(mrs_data)) {
     
     mrs_data_coil <- get_subset(mrs_data, coil_set = coil)
     
     if (anyNA(A)) {
-      # map <- drop(int_spec(mrs_data_coil, mode = "mod"))
       map <- drop(spec_op(mrs_data_coil, mode = "mod", xlim = thresh_xlim))
       map_bool <- map > (max(map) * thresh)
       mrsi_mask <- mask_xy_mat(mrs_data_coil, mask = !map_bool)
       A_coil <- t(stats::na.omit(mrs_data2mat(mrsi_mask)))
     }
+    
+    # Append any extra signals
+    if (!is.null(A_append)) A_coil <- cbind(A_coil, A_append_mat)
     
     # original data as a matrix
     x0 <- t(mrs_data2mat(mrs_data_coil))
