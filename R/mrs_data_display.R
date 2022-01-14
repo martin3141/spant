@@ -482,7 +482,12 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
     y_title = "Scan"
   } else {
     stop("Unrecognised dim value. Should be one of: dyn, x, y, z, coil")
-  } 
+  }
+  
+  if (nrow(plot_data) == 1) {
+    warning("stackplot is designed for plotting multiple spectra but only one has been selected.")
+    plot_data <- t(plot_data)
+  }
   
   if (mode == "re") {
     plot_data <- Re(plot_data)

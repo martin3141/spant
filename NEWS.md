@@ -1,3 +1,6 @@
+# spant 1.18.0
+* Better behavior when using stackplot with single spectra datasets.
+
 # spant 1.17.0
 * New function added (recon_twix_2d) for reconstructing basic phase encoded twix
 2D MRSI data.
