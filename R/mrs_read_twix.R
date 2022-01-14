@@ -1,7 +1,9 @@
 calc_siemens_paras <- function(vars, is_ima) {
   
   # correct fs if the FID has been decimated for ima data
-  if (vars$rm_oversampling & is_ima) vars$fs <- vars$fs / 2
+  if (is_ima) {
+    if (vars$rm_oversampling) vars$fs <- vars$fs / 2
+  }
   
   res <- c(NA, vars$x_dim / vars$x_pts, vars$y_dim / vars$y_pts,
            vars$z_dim / vars$z_pts, 1, NA, 1 / vars$fs)

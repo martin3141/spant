@@ -1,5 +1,6 @@
 # spant 1.18.0
 * Better behavior when using stackplot with single spectra datasets.
+* Bug fix for reading MEGA-PRESS data in TWIX format.
 
 # spant 1.17.0
 * New function added (recon_twix_2d) for reconstructing basic phase encoded twix
