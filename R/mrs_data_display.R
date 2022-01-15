@@ -275,6 +275,11 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
     stop("Unrecognised dim value. Should be one of: dyn, x, y, z, coil")
   } 
   
+  if (nrow(plot_data) == 1) {
+    warning("image is designed for plotting multiple spectra but only one has been selected.")
+    plot_data <- t(plot_data)
+  }
+  
   if (mode == "re") {
     plot_data <- Re(plot_data)
   } else if (mode == "im") {
@@ -294,7 +299,7 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
   col <- viridisLite::viridis(128)
   
   graphics::image(x_scale[subset][length(subset):1], (1:yN),
-                  plot_data[length(subset):1,], xlim = xlim,
+                  plot_data[length(subset):1,,drop = F], xlim = xlim,
                   xlab = "Chemical shift (ppm)", ylab = y_title, 
                   col = col, ...)
   
