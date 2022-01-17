@@ -1,6 +1,6 @@
 
 check_mrs_data <- function(mrs_data) {
-  in_class <- class(mrs_data)
+  in_class <- class(mrs_data)[1]
   if (in_class == "mrs_data") {
     return()
   } else if (in_class == "list") {
@@ -1781,8 +1781,13 @@ append_scan <- function(...) {
     first_dataset <- fd2td(first_dataset)
   }
   
+  dim_first_dataset <- dim(first_dataset$data)
+  
   # data needs to be in the same domain
   for (n in 1:length(x)) {
+    if (!identical(dim(x[[n]]$data), dim_first_dataset)) {
+      stop("Data dimensions passed to stackplot do not match.")
+    }
     if (is_fd(x[[n]])) {
         x[[n]] <- fd2td(x[[n]])
     }
@@ -2824,7 +2829,9 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
   if (metab_only) {
     return(metab_ps)
   } else {
-    return(list(metab = metab_ps, ref = ref_ps))
+    out <- list(metab = metab_ps, ref = ref_ps)
+    class(out) <- c("list", "mrs_data")
+    return(out)
   }
 }
 

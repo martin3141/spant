@@ -96,7 +96,9 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
     metab_mrs <- mrs_data
   }
   
-  list(metab = metab_mrs, ref = ref_mrs)
+  out <- list(metab = metab_mrs, ref = ref_mrs)
+  class(out) <- c("list", "mrs_data")
+  return(out)
 }
   
 read_pfile_header <- function(fname) {
