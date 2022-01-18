@@ -3305,10 +3305,11 @@ lw_obj_fn <- function(lb_val, mrs_data, lw, xlim) {
 #' Defaults to the full spectral width.
 #' @param thresh_xlim spectral limits in ppm to integrate for the threshold map.
 #' @param A_append additional spectra to append to the A basis.
+#' @param ret_norms return the residual norm and solution norms.
 #' @return l2 reconstructed mrs_data object.
 #' @export
 l2_reg <- function(mrs_data, thresh = 0.05, b = 1e-11, A = NA, xlim = NA,
-                   thresh_xlim = NULL, A_append = NULL) {
+                   thresh_xlim = NULL, A_append = NULL, ret_norms = FALSE) {
   
   # generally done as a FD operation
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
@@ -3333,6 +3334,11 @@ l2_reg <- function(mrs_data, thresh = 0.05, b = 1e-11, A = NA, xlim = NA,
     A_append_mat <- t(stats::na.omit(mrs_data2mat(A_append)))
   }
   
+  if (ret_norms) {
+    resid_norm <- array(dim = Ncoils(mrs_data))
+    soln_norm  <- array(dim = Ncoils(mrs_data))
+  }
+  
   for (coil in 1:Ncoils(mrs_data)) {
     
     mrs_data_coil <- get_subset(mrs_data, coil_set = coil)
@@ -3355,12 +3361,31 @@ l2_reg <- function(mrs_data, thresh = 0.05, b = 1e-11, A = NA, xlim = NA,
     
     # recon data
     x <- recon_mat %*% x0
-    x <- t(x) 
+    
+    if (ret_norms) {
+      # residual norm
+      # resid_norm[coil] <- norm(x - x0, "2")
+      # resid_norm[coil] <- sum(Mod(x - x0) ^ 2) ^ 0.5
+      resid_norm[coil] <- sum(rowSums(Mod(x - x0) ^ 2) ^ 0.5)
+      
+      # solution norm
+      # soln_norm[coil] <- norm(Conj(t(A_coil)) %*% x, "2")
+      # soln_norm[coil] <- sum(Mod(Conj(t(A_coil)) %*% x) ^ 2) ^ 0.5
+      soln_norm[coil] <- b * sum(rowSums(Mod(Conj(t(A_coil)) %*% x) ^ 2) ^ 0.5)
+      # soln_norm[coil] <- sum(rowSums(Mod(x ^ 2)) ^ 0.5)
+    }
+    
+    x <- t(x)
     dim(x) <- res_dim
     mrs_data$data[,,,,,coil,] <- x
   }
     
-  return(mrs_data)
+  if (ret_norms) {
+    return(list(mrs_data = mrs_data, resid_norm = resid_norm,
+                soln_norm = soln_norm))
+  } else {
+    return(mrs_data)
+  }
 }
 
 #' Signal space projection method for lipid suppression.

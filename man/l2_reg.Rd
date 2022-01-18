@@ -11,7 +11,8 @@ l2_reg(
   A = NA,
   xlim = NA,
   thresh_xlim = NULL,
-  A_append = NULL
+  A_append = NULL,
+  ret_norms = FALSE
 )
 }
 \arguments{
@@ -32,6 +33,8 @@ Defaults to the full spectral width.}
 \item{thresh_xlim}{spectral limits in ppm to integrate for the threshold map.}
 
 \item{A_append}{additional spectra to append to the A basis.}
+
+\item{ret_norms}{return the residual norm and solution norms.}
 }
 \value{
 l2 reconstructed mrs_data object.
