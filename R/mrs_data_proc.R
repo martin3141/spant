@@ -3376,7 +3376,7 @@ l2_reg <- function(mrs_data, thresh = 0.05, b = 1e-11, A = NA, xlim = NA,
       # resid_norm[coil] <- sum(rowSums(Mod(x) ^ 2) ^ 0.5)
       
       # solution norm
-      soln_norm[coil] <- norm(Conj(t(A_coil)) %*% x, "2")
+      soln_norm[coil] <- b * norm(Conj(t(A_coil)) %*% x, "2")
       # soln_norm[coil] <- sum(Mod(Conj(t(A_coil)) %*% x) ^ 2) ^ 0.5
       # soln_norm[coil] <- sum(rowSums(Mod(Conj(t(A_coil)) %*% x) ^ 2) ^ 0.5)
       # soln_norm[coil] <- sum(rowSums(Mod(x - x0) ^ 2) ^ 0.5)
