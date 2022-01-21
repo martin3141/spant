@@ -3363,25 +3363,19 @@ l2_reg <- function(mrs_data, thresh = 0.05, b = 1e-11, A = NA, xlim = NA,
     x <- recon_mat %*% x0
     
     if (ret_norms) {
-      
       # mrsi_mask <- mask_xy_mat(mrs_data_coil, mask = map_bool)
       # x0_mask <- t(stats::na.omit(mrs_data2mat(mrsi_mask)))
       # x_mask <-  recon_mat %*% x0_mask
-      
       
       # residual norm
       resid_norm[coil] <- norm(x - x0, "2")
       # resid_norm[coil] <- sum(Mod(x - x0) ^ 2) ^ 0.5
       # resid_norm[coil] <- sum(rowSums(Mod(x - x0) ^ 2) ^ 0.5)
-      # resid_norm[coil] <- sum(rowSums(Mod(x) ^ 2) ^ 0.5)
       
       # solution norm
-      soln_norm[coil] <- b * norm(Conj(t(A_coil)) %*% x, "2")
+      soln_norm[coil] <- norm(Conj(t(A_coil)) %*% x, "2")
       # soln_norm[coil] <- sum(Mod(Conj(t(A_coil)) %*% x) ^ 2) ^ 0.5
       # soln_norm[coil] <- sum(rowSums(Mod(Conj(t(A_coil)) %*% x) ^ 2) ^ 0.5)
-      # soln_norm[coil] <- sum(rowSums(Mod(x - x0) ^ 2) ^ 0.5)
-      # soln_norm[coil] <- sum(rowSums(Mod(x ^ 2)) ^ 0.5)
-      # soln_norm[coil] <- sum(rowSums(Mod(recon_mat %*% x0 - x) ^ 2) ^ 0.5)
     }
     
     x <- t(x)
