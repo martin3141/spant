@@ -536,11 +536,23 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   # tNAA_lw calc 
   if (("NAA" %in% colnames(amps)) & ("NAAG" %in% colnames(amps))) {
     tnaa_sig_pts <- basis_frame$NAA + basis_frame$NAAG
-    diags$tNAA_lw <- calc_peak_info_vec(tnaa_sig_pts, 2)[3] * 
-                     (sp_bas_final$x_scale[1] - sp_bas_final$x_scale[2])
+    
+    if (max(tnaa_sig_pts) > max(-tnaa_sig_pts)) {
+      diags$tNAA_lw <- calc_peak_info_vec(tnaa_sig_pts, 2)[3] * 
+        (sp_bas_final$x_scale[1] - sp_bas_final$x_scale[2])
+    } else { # for MEGA-PRESS - NAA is inverted so do this instead
+      diags$tNAA_lw <- calc_peak_info_vec(-tnaa_sig_pts, 2)[3] * 
+        (sp_bas_final$x_scale[1] - sp_bas_final$x_scale[2])
+    }
+    
   } else if ("NAA" %in% colnames(amps)) {
-    diags$NAA_lw <- calc_peak_info_vec(basis_frame$NAA, 2)[3] * 
-                    (sp_bas_final$x_scale[1] - sp_bas_final$x_scale[2])
+    if (max(basis_frame$NAA) > max(-basis_frame$NAA)) {
+      diags$NAA_lw <- calc_peak_info_vec(basis_frame$NAA, 2)[3] * 
+        (sp_bas_final$x_scale[1] - sp_bas_final$x_scale[2])
+    } else { # for MEGA-PRESS - NAA is inverted so do this instead
+      diags$NAA_lw <- calc_peak_info_vec(-basis_frame$NAA, 2)[3] * 
+        (sp_bas_final$x_scale[1] - sp_bas_final$x_scale[2])
+    }
   }
   
   # tCr_lw calc 

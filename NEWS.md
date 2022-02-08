@@ -3,6 +3,7 @@
 * Better behavior when using image with single spectra datasets.
 * Bug fix for reading MEGA-PRESS data in TWIX format.
 * Better error checking for lists of spectra.
+* Bug fix for calculating NAA linewidth from MEGA-PRESS data.
 
 # spant 1.17.0
 * New function added (recon_twix_2d) for reconstructing basic phase encoded twix
