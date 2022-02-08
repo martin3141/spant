@@ -81,7 +81,7 @@ Bilgic et al. JMRI 40(1):181-91 2014." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.17.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.0</span>
       </span>
     </div>
 
@@ -163,7 +163,9 @@ Bilgic et al. JMRI 40(1):181-91 2014.</p>
   b <span class='op'>=</span> <span class='fl'>1e-11</span>,
   A <span class='op'>=</span> <span class='cn'>NA</span>,
   xlim <span class='op'>=</span> <span class='cn'>NA</span>,
-  thresh_xlim <span class='op'>=</span> <span class='cn'>NULL</span>
+  thresh_xlim <span class='op'>=</span> <span class='cn'>NULL</span>,
+  A_append <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ret_norms <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -196,6 +198,14 @@ Defaults to the full spectral width.</p></td>
     <tr>
       <th>thresh_xlim</th>
       <td><p>spectral limits in ppm to integrate for the threshold map.</p></td>
+    </tr>
+    <tr>
+      <th>A_append</th>
+      <td><p>additional spectra to append to the A basis.</p></td>
+    </tr>
+    <tr>
+      <th>ret_norms</th>
+      <td><p>return the residual norm and solution norms.</p></td>
     </tr>
     </table>
 
