@@ -1981,8 +1981,10 @@ scale_spec <- function(mrs_data, xlim = NULL, operator = "sum",
       warning("sum warning, spectral domains do not match")
     }
     a$data <- a$data + b$data
-  } else if (class(b) == "numeric") {
+  } else if (class(b) %in% c("numeric", "integer", "complex")) {
     a$data <- a$data + b
+  } else {
+    stop("unrecognised type")
   }
   return(a)
 }
@@ -1996,8 +1998,10 @@ scale_spec <- function(mrs_data, xlim = NULL, operator = "sum",
     a$data = a$data - b$data
   } else if (is.null(b)) {
     a$data = -a$data
-  } else if ( class(b) == "numeric") {
+  } else if (class(b) %in% c("numeric", "integer", "complex")) {
     a$data = a$data - b
+  } else {
+    stop("unrecognised type")
   }
   return(a)
 }
@@ -2009,8 +2013,10 @@ scale_spec <- function(mrs_data, xlim = NULL, operator = "sum",
       warning("multiply warning, time/frequency domains do not match")
     }
     a$data <- a$data * b$data
-  } else if ( class(b) == "numeric") {
+  } else if (class(b) %in% c("numeric", "integer", "complex")) {
     a$data <- a$data * b
+  } else {
+    stop("unrecognised type")
   }
   return(a)
 }
@@ -2022,8 +2028,10 @@ scale_spec <- function(mrs_data, xlim = NULL, operator = "sum",
       warning("divide warning, time/frequency domains do not match")
     }
     a$data <- a$data / b$data
-  } else if (class(b) == "numeric") {
+  } else if (class(b) %in% c("numeric", "integer", "complex")) {
     a$data <- a$data / b
+  } else {
+    stop("unrecognised type")
   }
   return(a)
 }
@@ -3544,10 +3552,7 @@ pg_extrap_xy <- function(mrs_data, img_mask = NULL, kspace_mask = NULL,
 #' @return mean \code{mrs_data} object.
 #' @export
 mean_mrs_list <- function(mrs_list) {
-  # mean_mrs <- mrs_list[[1]]
-  # for (n in (2:length(mrs_list))) mean_mrs <- sum_mrs(mean_mrs, mrs_list[[n]])
-  sum_mrs  <- sum_mrs_list(mrs_list) 
-  mean_mrs <- sum_mrs / length(mrs_list)
+  mean_mrs  <- sum_mrs_list(mrs_list) / length(mrs_list)
   return(mean_mrs)
 }
 
@@ -3558,7 +3563,6 @@ mean_mrs_list <- function(mrs_list) {
 sum_mrs_list <- function(mrs_list) {
   sum_mrs <- mrs_list[[1]]
   for (n in (2:length(mrs_list))) sum_mrs <- sum_mrs(sum_mrs, mrs_list[[n]])
-  # mean_mrs <- mean_mrs / length(mrs_list)
   return(sum_mrs)
 }
 
