@@ -1,3 +1,6 @@
+# spant 1.19.0
+* Added sum_mrs_list function.
+
 # spant 1.18.0
 * Better behavior when using stackplot with single spectra datasets.
 * Better behavior when using image with single spectra datasets.

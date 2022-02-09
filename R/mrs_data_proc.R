@@ -3544,10 +3544,22 @@ pg_extrap_xy <- function(mrs_data, img_mask = NULL, kspace_mask = NULL,
 #' @return mean \code{mrs_data} object.
 #' @export
 mean_mrs_list <- function(mrs_list) {
-  mean_mrs <- mrs_list[[1]]
-  for (n in (2:length(mrs_list))) mean_mrs <- sum_mrs(mean_mrs, mrs_list[[n]])
-  mean_mrs <- mean_mrs / length(mrs_list)
+  # mean_mrs <- mrs_list[[1]]
+  # for (n in (2:length(mrs_list))) mean_mrs <- sum_mrs(mean_mrs, mrs_list[[n]])
+  sum_mrs  <- sum_mrs_list(mrs_list) 
+  mean_mrs <- sum_mrs / length(mrs_list)
   return(mean_mrs)
+}
+
+#' Return the sum of a list of mrs_data objects.
+#' @param mrs_list list of mrs_data objects.
+#' @return sum \code{mrs_data} object.
+#' @export
+sum_mrs_list <- function(mrs_list) {
+  sum_mrs <- mrs_list[[1]]
+  for (n in (2:length(mrs_list))) sum_mrs <- sum_mrs(sum_mrs, mrs_list[[n]])
+  # mean_mrs <- mean_mrs / length(mrs_list)
+  return(sum_mrs)
 }
 
 #' Reconstruct 2D MRSI data from a twix file loaded with read_mrs.
