@@ -2187,6 +2187,10 @@ sub_mean_dyns <- function(mrs_data) {
 #' @export
 mean_dyn_blocks <- function(mrs_data, block_size) {
   
+  if (class(mrs_data) == "list") {
+    return(lapply(mrs_data, mean_dyn_blocks, block_size = block_size))
+  }
+  
   if ((Ndyns(mrs_data) %% block_size) != 0) {
     warning("Block size does not fit into the number of dynamics without truncation.")
   }
