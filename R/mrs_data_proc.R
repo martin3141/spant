@@ -2363,6 +2363,13 @@ fd_conv_filt <- function(mrs_data, K = 25, ext = 1) {
 hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE,
                       max_damp = 10, scale = "hz", return_model = FALSE) {
   
+  if (class(mrs_data) == "list") {
+    res <- lapply(mrs_data, hsvd_filt, xlim = xlim, comps = comps,
+                  irlba = irlba, max_damp = max_damp, scale = scale,
+                  return_model = return_model)
+    return(res)
+  }
+  
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
   if ( scale == "ppm" ) {
