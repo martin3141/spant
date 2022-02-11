@@ -45,8 +45,10 @@ read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
   if (length(fname) == 0) stop("Error, read_mrs file not found.")
   
   if (length(fname) > 1) {
-    message <- c("Error, read_mrs input should only match one file, but multiple were found :", fname)
-    stop(paste(message, collapse = "\n"))
+    return(lapply(fname, read_mrs, format = format, ft = ft, fs = fs, ref = ref,
+                  n_ref_scans = n_ref_scans, full_fid = full_fid,
+                  omit_svs_ref_scans = omit_svs_ref_scans, verbose = verbose,
+                  extra = extra))
   }
   
   if (!file.exists(fname)) stop("Error, read_mrs file does not exist.")

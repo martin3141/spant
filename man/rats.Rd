@@ -15,7 +15,8 @@ rats(
   max_t = 0.2,
   basis_type = "poly",
   rescale_output = TRUE,
-  phase_corr = TRUE
+  phase_corr = TRUE,
+  ret_corr_only = FALSE
 )
 }
 \arguments{
@@ -47,6 +48,8 @@ consistency between dynamic scans.}
 
 \item{phase_corr}{apply phase correction (in addition to frequency). TRUE by
 default.}
+
+\item{ret_corr_only}{return the corrected mrs_data object only.}
 }
 \value{
 a list containing the corrected data; phase and shift values in units

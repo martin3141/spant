@@ -2,11 +2,14 @@
 % Please edit documentation in R/mrs_data_proc.R
 \name{zf}
 \alias{zf}
+\alias{zf.list}
 \alias{zf.mrs_data}
 \alias{zf.basis_set}
 \title{Zero-fill MRS data in the time domain.}
 \usage{
 zf(x, factor = 2)
+
+\method{zf}{list}(x, factor = 2)
 
 \method{zf}{mrs_data}(x, factor = 2)
 

@@ -18,13 +18,22 @@
 #' consistency between dynamic scans.
 #' @param phase_corr apply phase correction (in addition to frequency). TRUE by
 #' default.
+#' @param ret_corr_only return the corrected mrs_data object only.
 #' @return a list containing the corrected data; phase and shift values in units
 #' of degrees and Hz respectively.
 #' @export
 rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
                  p_deg = 2, sp_N = 2, sp_deg = 3, max_t = 0.2,
                  basis_type = "poly", rescale_output = TRUE,
-                 phase_corr = TRUE) {
+                 phase_corr = TRUE, ret_corr_only = FALSE) {
+  
+  if (class(mrs_data) == "list") {
+    res <- lapply(mrs_data, rats, ref = ref, xlim = xlim, max_shift = max_shift,
+                  p_deg = p_deg, sp_N = sp_N, sp_deg = sp_deg, max_t = max_t,
+                  basis_type = basis_type, rescale_output = rescale_output,
+                  phase_corr = phase_corr, ret_corr_only = ret_corr_only) 
+    return(res)
+  }
   
   # move mrs_data to the time-domain
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
@@ -102,9 +111,15 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
     bl_spec   <- scale_mrs_amp(bl_spec,   1 / amps)
   }
   
-  # results 
-  list(corrected = mrs_data, phases = -phases, shifts = -shifts, amps = amps,
-       bl_matched_spec = corr_spec, bl = -bl_spec)
+  # results
+  res <- list(corrected = mrs_data, phases = -phases, shifts = -shifts,
+              amps = amps, bl_matched_spec = corr_spec, bl = -bl_spec)
+  
+  if (ret_corr_only) {
+    return(res$corrected)
+  } else {
+    return(res)
+  }
 }
 
 optim_rats <- function(x, ref, t, inds, basis, max_shift) {
