@@ -466,6 +466,10 @@ phase <- function(mrs_data, zero_order, first_order = 0) {
 #' @export
 fp_phase_correct <- function(mrs_data, ret_phase = FALSE) {
   
+  if (class(mrs_data) == "list") {
+    return(lapply(mrs_data, fp_phase_correct, ret_phase = ret_phase))  
+  }
+  
   # needs to be a time-domain operation
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
@@ -2604,8 +2608,18 @@ ecc_ref <- function(mrs_data) {
 #' @return corrected data in the time domain.
 #' @export
 ecc <- function(metab, ref, rev = FALSE) {
+  
+  if (class(metab) == "list") {
+    if (class(ref) != "list") stop("metab is a list but ref it not")
+    if (length(metab) != length(ref)) {
+      stop("metab and ref must have the same length")
+    }
+    return(mapply(ecc, metab = metab, ref = ref, MoreArgs = list(rev = rev),
+                  SIMPLIFY = FALSE))
+  } 
+  
   if (is_fd(metab)) metab <- fd2td(metab)
-  if (is_fd(ref)) ref <- fd2td(ref)
+  if (is_fd(ref))   ref <- fd2td(ref)
   
   if (rev) ref <- Conj(ref)
   

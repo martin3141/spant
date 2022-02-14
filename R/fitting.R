@@ -50,7 +50,30 @@
 #' @export
 fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
                     opts = NULL, parallel = FALSE, time = TRUE,
-                    progress = "text", extra = metab$extra) {
+                    progress = "text", extra = NULL) {
+  
+  if (class(metab) == "list") {
+    
+    if (!is.null(w_ref)) {
+      if (class(w_ref) != "list") stop("w_ref is not a list but metab is")
+      
+      if (length(metab) != length(w_ref)) {
+        stop("metab and w_ref must have the same length")
+      }
+    } else {
+      w_ref <- vector("list", length(metab))
+    }
+    
+    res <- mapply(fit_mrs, metab = metab, w_ref = w_ref,
+                  MoreArgs = list(basis = basis, method = method, opts = opts,
+                                  parallel = parallel, time = time,
+                                  progress = progress, extra = extra),
+                  SIMPLIFY = FALSE)
+    
+    return(res)
+  }
+  
+  if (is.null(extra)) extra <- metab$extra
   
   # start the clock
   if (time) ptm <- proc.time()
