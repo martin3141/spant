@@ -13,7 +13,7 @@ fit_mrs(
   parallel = FALSE,
   time = TRUE,
   progress = "text",
-  extra = metab$extra
+  extra = NULL
 )
 }
 \arguments{

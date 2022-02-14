@@ -59,7 +59,8 @@ read_mrs_nifti <- function(fname, extra) {
   sli_vec <- crossprod_3d(row_vec, col_vec)
   pos_vec <- xform_mat[1:3, 4] * c(-1, -1, 1)
   affine  <- xform_mat
-  attr(affine, "code") <- NULL
+  
+  attributes(affine) <- list(dim = dim(affine))
   
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
