@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.18.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.19.0</span>
       </span>
     </div>
 
@@ -166,7 +166,8 @@
   max_t <span class='op'>=</span> <span class='fl'>0.2</span>,
   basis_type <span class='op'>=</span> <span class='st'>"poly"</span>,
   rescale_output <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  phase_corr <span class='op'>=</span> <span class='cn'>TRUE</span>
+  phase_corr <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  ret_corr_only <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -222,6 +223,10 @@ consistency between dynamic scans.</p></td>
       <th>phase_corr</th>
       <td><p>apply phase correction (in addition to frequency). TRUE by
 default.</p></td>
+    </tr>
+    <tr>
+      <th>ret_corr_only</th>
+      <td><p>return the corrected mrs_data object only.</p></td>
     </tr>
     </table>
 
