@@ -915,6 +915,11 @@ downsample_mrs_td <- function(mrs_data) {
 #' @return decimated data.
 #' @export
 decimate_mrs_td <- function(mrs_data, q = 2, n = 4, ftype = "iir") {
+  
+  if (class(mrs_data) == "list") {
+    return(lapply(mrs_data, decimate_mrs_td, q = q, n = n, ftype = ftype))
+  }
+  
   # needs to be a TD operation
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
@@ -932,6 +937,11 @@ decimate_mrs_td <- function(mrs_data, q = 2, n = 4, ftype = "iir") {
 #' @return decimated data at half the original sampling frequency.
 #' @export
 decimate_mrs_fd <- function(mrs_data) {
+  
+  if (class(mrs_data) == "list") {
+    return(lapply(mrs_data, decimate_mrs_fd))
+  }
+  
   # needs to be a FD operation initially
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
