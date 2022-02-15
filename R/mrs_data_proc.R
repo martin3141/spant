@@ -748,6 +748,9 @@ ft_dyn <- function(mrs_data, ft_shift = FALSE) {
 #' @return MRS data in frequency-domain representation.
 #' @export
 td2fd <- function(mrs_data) {
+  
+  if (class(mrs_data) == "list") return(lapply(mrs_data, td2fd))
+  
   if (mrs_data$freq_domain[7] == TRUE) {
     warning("Data is alread in the frequency-domain.")
   }
@@ -767,6 +770,9 @@ td2fd <- function(mrs_data) {
 #' @return MRS data in time-domain representation.
 #' @export
 fd2td <- function(mrs_data) {
+  
+  if (class(mrs_data) == "list") return(lapply(mrs_data, fd2td))
+  
   if (mrs_data$freq_domain[7] == FALSE) {
     warning("Data is alread in the time-domain.")
   }
@@ -2162,6 +2168,25 @@ collapse_to_dyns.fit_result <- function(x, rm_masked = FALSE) {
   dyns <- nrow(x$res_tab)
   x$res_tab[4] <- 1:dyns
   x
+}
+
+#' Perform a Fourier Transform over the dynamic MRS data dimension.
+#' @param mrs_data dynamic MRS data.
+#' @param ret_mod return the modulus of the FT.
+#' @return Fourier Transformed data.
+#' @export
+fft_dyns <- function(mrs_data, ret_mod = FALSE) {
+  
+  if (class(mrs_data) == "list") {
+    return(lapply(mrs_data, fft_dyns, ret_mod = ret_mod))
+  }
+  
+  res <- apply_mrs(mrs_data, 5, fft)
+  
+  if (ret_mod) res <- Mod(res)
+  
+  return(res)
+  
 }
  
 #' Calculate the mean dynamic data.
