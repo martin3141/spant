@@ -713,9 +713,25 @@ is_fd <- function(mrs_data) {
 #' Apply the Fourier transform over the dynamic dimension.
 #' @param mrs_data MRS data where the dynamic dimension is in the time-domain.
 #' @param ft_shift apply FT shift to the output, default is FALSE.
+#' @param ret_mod return the modulus out the transform, default is FALSE.
+#' @param fd transform the chemical shift axis to the frequency domain first,
+#' default is TRUE.
 #' @return transformed MRS data.
 #' @export
-ft_dyn <- function(mrs_data, ft_shift = FALSE) {
+ft_dyns <- function(mrs_data, ft_shift = FALSE, ret_mod = FALSE, fd = TRUE) {
+  
+  if (class(mrs_data) == "list") {
+    return(lapply(mrs_data, ft_dyn, ft_shift = ft_shift, ret_mod = ret_mod,
+                  fd = fd))
+  }
+  
+  # convert to the correct domain
+  if (fd & !is_fd(mrs_data)) {
+    mrs_data <- td2fd(mrs_data)
+  } else if (!fd & is_fd(mrs_data)) {
+    mrs_data <- fd2td(mrs_data)
+  }
+  
   data <- mrs_data$data
   
   # permute the dynamic dimension to be the last (7th)
@@ -737,6 +753,8 @@ ft_dyn <- function(mrs_data, ft_shift = FALSE) {
   
   # permute the dynamic dimension to be 5th
   data <- aperm(data, c(1, 2, 3, 4, 7, 5, 6)) 
+  
+  if (ret_mod) data <- Mod(data)
   
   mrs_data$data <- data
   
@@ -2170,25 +2188,6 @@ collapse_to_dyns.fit_result <- function(x, rm_masked = FALSE) {
   x
 }
 
-#' Perform a Fourier Transform over the dynamic MRS data dimension.
-#' @param mrs_data dynamic MRS data.
-#' @param ret_mod return the modulus of the FT.
-#' @return Fourier Transformed data.
-#' @export
-fft_dyns <- function(mrs_data, ret_mod = FALSE) {
-  
-  if (class(mrs_data) == "list") {
-    return(lapply(mrs_data, fft_dyns, ret_mod = ret_mod))
-  }
-  
-  res <- apply_mrs(mrs_data, 5, fft)
-  
-  if (ret_mod) res <- Mod(res)
-  
-  return(res)
-  
-}
- 
 #' Calculate the mean dynamic data.
 #' @param mrs_data dynamic MRS data.
 #' @return mean dynamic data.

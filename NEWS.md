@@ -1,3 +1,7 @@
+# spant 1.20.0
+* Options added to ft_dyns to return the modulus of the 2D spectra and to
+pre-transform the chemical shift axis if needed.
+
 # spant 1.19.0
 * Added sum_mrs_list function.
 * Bug fix for operating on mrs_data with single values that aren't numeric
