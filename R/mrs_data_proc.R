@@ -721,7 +721,7 @@ is_fd <- function(mrs_data) {
 ft_dyns <- function(mrs_data, ft_shift = FALSE, ret_mod = FALSE, fd = TRUE) {
   
   if (class(mrs_data) == "list") {
-    return(lapply(mrs_data, ft_dyn, ft_shift = ft_shift, ret_mod = ret_mod,
+    return(lapply(mrs_data, ft_dyns, ft_shift = ft_shift, ret_mod = ret_mod,
                   fd = fd))
   }
   
