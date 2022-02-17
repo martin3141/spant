@@ -1803,7 +1803,7 @@ append_dyns <- function(...) {
   x <- list(...)
   
   # were the arguments a list already? 
-  if (class(x[[1]]) == "list") x <- x[[1]]
+  if (class(x[[1]])[1] == "list") x <- x[[1]]
   
   # were the arguments a list already? 
   # this doesn't work now we have the meta field :(
@@ -1837,7 +1837,7 @@ append_scan <- function(...) {
   x <- list(...)
   
   # were the arguments a list already? 
-  if (class(x[[1]]) == "list") x <- x[[1]]
+  if (class(x[[1]])[1] == "list") x <- x[[1]]
   
   # this doesn't work now we have the meta field :(
   # if (depth(x) == 3) x <- x[[1]]

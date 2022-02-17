@@ -4,7 +4,7 @@
 \alias{ft_dyns}
 \title{Apply the Fourier transform over the dynamic dimension.}
 \usage{
-ft_dyns(mrs_data, ft_shift = FALSE, ret_mod = FALSE)
+ft_dyns(mrs_data, ft_shift = FALSE, ret_mod = FALSE, fd = TRUE)
 }
 \arguments{
 \item{mrs_data}{MRS data where the dynamic dimension is in the time-domain.}
@@ -12,6 +12,9 @@ ft_dyns(mrs_data, ft_shift = FALSE, ret_mod = FALSE)
 \item{ft_shift}{apply FT shift to the output, default is FALSE.}
 
 \item{ret_mod}{return the modulus out the transform, default is FALSE.}
+
+\item{fd}{transform the chemical shift axis to the frequency domain first,
+default is TRUE.}
 }
 \value{
 transformed MRS data.
