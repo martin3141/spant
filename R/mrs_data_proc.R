@@ -590,9 +590,7 @@ lb.mrs_data <- function(x, lb, lg = 1) {
   }
   t <- rep(seconds(x), each = Nspec(x))
   
-  if (lg < 1) {
-    x$data = x$data * exp(-(1 - lg) * lb * t * pi)
-  }
+  if (lg < 1)  x$data = x$data * exp(-(1 - lg) * lb * t * pi)
   
   if (lg > 0) {
     sign <- ifelse(lb > 0, 1, -1)
@@ -615,10 +613,14 @@ lb.basis_set <- function(x, lb, lg = 1) {
 #' Apply a weighting to the FID to enhance spectral resolution.
 #' @param mrs_data data to be enhanced.
 #' @param re resolution enhancement factor (rising exponential factor).
-#' @param alpha alpha factor (Guassian decay)
+#' @param alpha alpha factor (Gaussian decay)
 #' @return resolution enhanced mrs_data.
 #' @export
 re_weighting <- function(mrs_data, re, alpha) {
+  
+  if (class(mrs_data) == "list") {
+    return(lapply(mrs_data, re_weighting, re = re, alpha = alpha))  
+  }
   
   # needs to be a time-domain operation
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data) 
@@ -2000,6 +2002,11 @@ int_spec <- function(mrs_data, xlim = NULL, freq_scale = "ppm", mode = "re") {
 #' @return mrs_data object multiplied by the amplitude scale factor.
 #' @export
 scale_mrs_amp <- function(mrs_data, amp) {
+  
+  if (class(mrs_data) == "list") {
+    res <- lapply(mrs_data, scale_mrs_amp, amp = amp)
+    return(res)
+  }
  
   if (class(mrs_data) != "mrs_data") {
     stop("first argument is not an mrs_data object")
@@ -2983,7 +2990,6 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
     return(metab_ps)
   } else {
     out <- list(metab = metab_ps, ref = ref_ps)
-    class(out) <- c("list", "mrs_data")
     return(out)
   }
 }
@@ -3400,6 +3406,11 @@ kspace2img_xy <- function(mrs_data) {
 #' @return line-broadened data.
 #' @export
 set_lw <- function(mrs_data, lw, xlim = c(4, 0.5)) {
+  
+  if (class(mrs_data) == "list") {
+    res <- lapply(mrs_data, set_lw, lw = lw, xlim = xlim)
+    return(res)
+  }
   
   # check the input
   check_mrs_data(mrs_data) 

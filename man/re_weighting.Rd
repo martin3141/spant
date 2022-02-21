@@ -11,7 +11,7 @@ re_weighting(mrs_data, re, alpha)
 
 \item{re}{resolution enhancement factor (rising exponential factor).}
 
-\item{alpha}{alpha factor (Guassian decay)}
+\item{alpha}{alpha factor (Gaussian decay)}
 }
 \value{
 resolution enhanced mrs_data.
