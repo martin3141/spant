@@ -2644,7 +2644,7 @@ ecc_ref <- function(mrs_data) {
 ecc <- function(metab, ref, rev = FALSE) {
   
   if (class(metab) == "list") {
-    if (class(ref) != "list") stop("metab is a list but ref it not")
+    if (class(ref) != "list") stop("metab is a list but ref is not")
     if (length(metab) != length(ref)) {
       stop("metab and ref must have the same length")
     }
@@ -2840,6 +2840,51 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
                        scale_method = "sig_noise_sq", sum_coils = TRUE,
                        noise_region = c(-0.5, -2.5), average_ref_dyns = TRUE,
                        ref_pt_index = 1) {
+  
+  if (class(metab) == "list") {
+    # if (class(ref) != "list") stop("metab is a list but ref is not")
+    # if (length(metab) != length(ref)) {
+    #   stop("metab and ref must have the same length")
+    # }
+    
+    if (!is.null(ref)) {
+      if (class(ref) != "list") stop("ref is not a list but metab is")
+      
+      if (length(metab) != length(ref)) {
+        stop("metab and w_ref must have the same length")
+      }
+    } else {
+      ref <- vector("list", length(metab))
+    }
+    
+    if (!is.null(noise)) {
+      if (class(noise) != "list") stop("noise is not a list but metab is")
+      
+      if (length(metab) != length(noise)) {
+        stop("metab and noise must have the same length")
+      }
+    } else {
+      noise <- vector("list", length(metab))
+    }
+    
+    more_args <- list(scale = scale, scale_method = scale_method,
+                      sum_coils = sum_coils, noise_region = noise_region,
+                      average_ref_dyns = average_ref_dyns,
+                      ref_pt_index = ref_pt_index)
+    
+    res <- mapply(comb_coils, metab = metab, ref = ref, noise = noise,
+                  MoreArgs = more_args, SIMPLIFY = FALSE)
+    
+    if (is.null(ref[[1]])) {
+      return(res)
+    } else {
+      metab_list <- lapply(res, '[[', 1)
+      ref_list   <- lapply(res, '[[', 2)
+      out        <- list(metab = metab_list, ref = ref_list)
+      class(out) <- c("list", "mrs_data")
+      return(out)
+    }
+  } 
   
   metab_only <- FALSE
   if (is.null(ref)) {
