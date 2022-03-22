@@ -81,7 +81,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
     Nscans <- 1
   }
   close(con)
-  vars <- read_siemens_txt_hdr(fname, version)
+  vars <- read_siemens_txt_hdr(fname, version, verbose)
   
   # read data points 
   con <- file(fname, "rb")
@@ -206,10 +206,13 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
           if (version == "vb") {
             seek(con, 128 + cPos + x * (2 * 4 * samples_in_scan + 128), "start")
           } else if (version == "vd") {
-            seek(con, 192 + 32 + cPos + x * (2 * 4 * samples_in_scan + 32), "start")
+            seek(con, 192 + 32 + cPos + x * (2 * 4 * samples_in_scan + 32),
+                 "start")
           }
           # read (samples_in_scan * 2) floats
-          fid <- readBin(con, "numeric", size = 4L, n = (samples_in_scan * 2), endian = "little")
+          fid <- readBin(con, "numeric", size = 4L, n = (samples_in_scan * 2),
+                         endian = "little")
+          
           raw_pt_end <- raw_pt_start + (samples_in_scan * 2) - 1
           raw_pts[raw_pt_start:raw_pt_end] <- fid
           expt <- length(raw_pts[raw_pt_start:raw_pt_end])
@@ -318,9 +321,10 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
 #' Read the text format header found in Siemens IMA and TWIX data files.
 #' @param input file name to read or raw data.
 #' @param version software version, can be "vb" or "vd".
+#' @param verbose print information to the console.
 #' @return a list of parameter values
 #' @export
-read_siemens_txt_hdr <- function(input, version = "vd") {
+read_siemens_txt_hdr <- function(input, version = "vd", verbose) {
   if (is.character(input)) {
     con <- file(input, 'rb', encoding = "UTF-8")
   } else {
@@ -461,6 +465,8 @@ read_siemens_txt_hdr <- function(input, version = "vd") {
       vars$rm_oversampling <- as.numeric(strsplit(line, "=")[[1]][2])
     }
   }
+  
+  if (verbose) cat(paste("Table position  :", scan_reg_pos_tra, "mm\n"))
  
   # how many voxels do we expect?
   Nvoxels <- vars$x_pts * vars$y_pts * vars$z_pts

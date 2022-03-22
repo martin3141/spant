@@ -17,7 +17,7 @@ read_dicom <- function(fname, verbose, extra) {
       return(read_ima(fraw, verbose, extra))
     } else if (sop_class_uid == "1.2.840.10008.5.1.4.1.1.4.2") { 
       # MR Spectroscopy Storage
-      return(read_siemens_dicom(fraw, extra))
+      return(read_siemens_dicom(fraw, extra, verbose))
     } else {
       stop(paste0("Unsupported SOP class UID : ", sop_class_uid,
                   ". This doesn't look like MRS data."))
@@ -37,7 +37,7 @@ read_dicom <- function(fname, verbose, extra) {
   }
 }
 
-read_siemens_dicom <- function(fraw, extra) {
+read_siemens_dicom <- function(fraw, extra, verbose) {
   
   # list of tags to pull from the dicom file
   tags <- list(data    = "5600,0020",
