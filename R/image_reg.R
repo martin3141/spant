@@ -496,11 +496,15 @@ get_mrsi2d_seg <- function(mrs_data, mri_seg, ker) {
   GMF <- 100 * as.numeric(mri_seg_2_final) /
                      (as.numeric(mri_seg_2_final) + as.numeric(mri_seg_3_final))
   
+  # gray matter + white matter
+  GM_WM <- 100 * (as.numeric(mri_seg_2_final) + as.numeric(mri_seg_3_final))
+  
   seg_table <- data.frame(Other = 100 * as.numeric(mri_seg_0_final),
                       CSF   = 100 * as.numeric(mri_seg_1_final),
                       GM    = 100 * as.numeric(mri_seg_2_final),
                       WM    = 100 * as.numeric(mri_seg_3_final),
-                      GMF   = GMF)
+                      GMF   = GMF,
+                      GM_WM = GM_WM)
   
   map_dim <- c(1, Nx(mrs_data), Ny(mrs_data), 1, 1, 1)
   
