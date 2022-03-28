@@ -5,6 +5,7 @@ pre-transform the chemical shift axis if needed.
 * comb_coils function now supports lists of mrs_data objects.
 * IMA reader now respects the verbose option in read_mrs.
 * Bug fix for get_mrsi_voi ignoring the ker argument.
+* Bug fix for reading Siemens TWIX files.
 
 # spant 1.19.0
 * Added sum_mrs_list function.

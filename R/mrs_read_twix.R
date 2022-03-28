@@ -101,6 +101,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   for (scans in 0:(Nscans - 1)) {
     # the final scan is the one we are interested in, so clear the last one 
     raw_pts <- c(NA)
+    inds <- NULL
     length(raw_pts) <- expected_pts
     raw_pt_start <- 1
     
@@ -195,7 +196,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
       if (MDH_IMASCAN) {
         # this chunk of data is from all coils
         inds <- c(inds, c(Lin, Ave, Sli, Par, Eco, Phs, Rep, Set, Seg, Ida, Idb,
-                         Idc, Idd, Ide))
+                          Idc, Idd, Ide))
         
         ima_coils <- used_channels
         ima_samples <- samples_in_scan

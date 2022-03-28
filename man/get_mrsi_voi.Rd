@@ -13,7 +13,8 @@ get_mrsi_voi(mrs_data, target_mri = NULL, map = NULL, ker = mmand::boxKernel())
 
 \item{map}{optional voi intensity map.}
 
-\item{ker}{kernel to rescale the map data to the target_mri.}
+\item{ker}{kernel to rescale the map data to the target_mri. Default value is
+mmand::boxKernel(), use mmand::mnKernel() for a smoothed map.}
 }
 \value{
 volume data as a nifti object.

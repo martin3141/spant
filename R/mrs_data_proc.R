@@ -3733,18 +3733,21 @@ sum_mrs_list <- function(mrs_list) {
 #' @export
 recon_twix_2d_mrsi <- function(twix_mrs) {
   
+  x_inds <- twix_mrs$twix_inds$Seg
+  y_inds <- twix_mrs$twix_inds$Lin
+  
   # figure out the required output array size
-  max_lin <- max(twix_mrs$twix_inds$Lin) + 1
-  max_seg <- max(twix_mrs$twix_inds$Seg) + 1
+  max_x <- max(x_inds) + 1
+  max_y <- max(y_inds) + 1
   
   twix_recon      <- twix_mrs 
-  twix_recon$data <- array(0, c(1, max_lin, max_seg, 1, 1, Ncoils(twix_mrs),
+  twix_recon$data <- array(0, c(1, max_y, max_x, 1, 1, Ncoils(twix_mrs),
                                 Npts(twix_mrs)))
   
   # map the twix indices to a full data array
   for (n in 1:nrow(twix_mrs$twix_inds)) {
-    x_ind <- twix_mrs$twix_inds$Seg[n] + 1
-    y_ind <- twix_mrs$twix_inds$Lin[n] + 1
+    x_ind <- x_inds[n] + 1
+    y_ind <- y_inds[n] + 1
     twix_recon$data[1, x_ind, y_ind, 1, 1, , ] <- twix_mrs$data[1, 1, 1, 1, n, , ]
   }
   
