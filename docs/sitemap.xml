@@ -208,7 +208,7 @@
     <loc>https://martin3141.github.io/spant//reference/fs.html</loc>
   </url>
   <url>
-    <loc>https://martin3141.github.io/spant//reference/ft_dyn.html</loc>
+    <loc>https://martin3141.github.io/spant//reference/ft_dyns.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/ft_shift.html</loc>
@@ -776,6 +776,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/sum_mrs.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant//reference/sum_mrs_list.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant//reference/svs_1h_brain_analysis.html</loc>
