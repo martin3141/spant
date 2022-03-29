@@ -1,8 +1,16 @@
+# spant 1.20.0
+* Options added to ft_dyns to return the modulus of the 2D spectra and to
+pre-transform the chemical shift axis if needed.
+* Bug fix for printing lists of mrs_data objects.
+* comb_coils function now supports lists of mrs_data objects.
+* IMA reader now respects the verbose option in read_mrs.
+* Bug fix for get_mrsi_voi ignoring the ker argument.
+* Bug fix for reading Siemens TWIX files.
+
 # spant 1.19.0
 * Added sum_mrs_list function.
 * Bug fix for operating on mrs_data with single values that aren't numeric
-types.
-For example, multiplying mrs_data by a single complex number now works.
+types. For example, multiplying mrs_data by a single complex number now works.
 * A number of common preprocessing functions now operate on lists of mrs_data
 objects.
 * Change to NIfTI MRS reader to fix a failing test when using the development

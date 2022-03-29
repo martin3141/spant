@@ -109,7 +109,8 @@ get_mrsi_voxel_xy_psf <- function(mrs_data, target_mri, x_pos, y_pos, z_pos) {
 #' @param mrs_data MRS data.
 #' @param target_mri optional image data to match the intended volume space.
 #' @param map optional voi intensity map.
-#' @param ker kernel to rescale the map data to the target_mri.
+#' @param ker kernel to rescale the map data to the target_mri. Default value is
+#' mmand::boxKernel(), use mmand::mnKernel() for a smoothed map.
 #' @return volume data as a nifti object.
 #' @export
 get_mrsi_voi <- function(mrs_data, target_mri = NULL, map = NULL,
@@ -134,7 +135,7 @@ get_mrsi_voi <- function(mrs_data, target_mri = NULL, map = NULL,
     # deal with Infs
     if (any(is.infinite(map))) map[is.infinite(map)] <- NA
     
-    if (any(is.na(map))) {
+    if (any(is.na(map)) && (ker$name != "box")) {
       resamp_map <- interpolate_nas(drop(map), mrs_data$resolution[2], 2)
     } else {
       resamp_map <- mmand::rescale(drop(map), mrs_data$resolution[2], ker)
@@ -496,11 +497,15 @@ get_mrsi2d_seg <- function(mrs_data, mri_seg, ker) {
   GMF <- 100 * as.numeric(mri_seg_2_final) /
                      (as.numeric(mri_seg_2_final) + as.numeric(mri_seg_3_final))
   
+  # gray matter + white matter
+  GM_WM <- 100 * (as.numeric(mri_seg_2_final) + as.numeric(mri_seg_3_final))
+  
   seg_table <- data.frame(Other = 100 * as.numeric(mri_seg_0_final),
                       CSF   = 100 * as.numeric(mri_seg_1_final),
                       GM    = 100 * as.numeric(mri_seg_2_final),
                       WM    = 100 * as.numeric(mri_seg_3_final),
-                      GMF   = GMF)
+                      GMF   = GMF,
+                      GM_WM = GM_WM)
   
   map_dim <- c(1, Nx(mrs_data), Ny(mrs_data), 1, 1, 1)
   

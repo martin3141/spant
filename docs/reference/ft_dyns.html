@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate the median dynamic data. — median_dyns • Spectroscopy Analysis Tools (spant)</title>
+<title>Apply the Fourier transform over the dynamic dimension. — ft_dyns • Spectroscopy Analysis Tools (spant)</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Calculate the median dynamic data. — median_dyns" />
-<meta property="og:description" content="Calculate the median dynamic data." />
+<meta property="og:title" content="Apply the Fourier transform over the dynamic dimension. — ft_dyns" />
+<meta property="og:description" content="Apply the Fourier transform over the dynamic dimension." />
 <meta property="og:image" content="https://martin3141.github.io/spant/logo.png" />
 
 
@@ -80,11 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-<<<<<<< HEAD
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.19.0</span>
-=======
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.20.0</span>
->>>>>>> devel
       </span>
     </div>
 
@@ -150,29 +146,42 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate the median dynamic data.</h1>
+    <h1>Apply the Fourier transform over the dynamic dimension.</h1>
     <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/mrs_data_proc.R'><code>R/mrs_data_proc.R</code></a></small>
-    <div class="hidden name"><code>median_dyns.Rd</code></div>
+    <div class="hidden name"><code>ft_dyns.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Calculate the median dynamic data.</p>
+    <p>Apply the Fourier transform over the dynamic dimension.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>median_dyns</span><span class='op'>(</span><span class='va'>mrs_data</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>ft_dyns</span><span class='op'>(</span><span class='va'>mrs_data</span>, ft_shift <span class='op'>=</span> <span class='cn'>FALSE</span>, ret_mod <span class='op'>=</span> <span class='cn'>FALSE</span>, fd <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>mrs_data</th>
-      <td><p>dynamic MRS data.</p></td>
+      <td><p>MRS data where the dynamic dimension is in the time-domain.</p></td>
+    </tr>
+    <tr>
+      <th>ft_shift</th>
+      <td><p>apply FT shift to the output, default is FALSE.</p></td>
+    </tr>
+    <tr>
+      <th>ret_mod</th>
+      <td><p>return the modulus out the transform, default is FALSE.</p></td>
+    </tr>
+    <tr>
+      <th>fd</th>
+      <td><p>transform the chemical shift axis to the frequency domain first,
+default is TRUE.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>median dynamic data.</p>
+    <p>transformed MRS data.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

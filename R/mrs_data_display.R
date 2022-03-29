@@ -4,6 +4,13 @@
 #' @param ... further arguments.
 #' @export
 print.mrs_data <- function(x, full = FALSE, ...) {
+  
+  if (class(x)[1] == "list") {
+    class(x) <- "list"
+    print(x)
+    return(NULL)
+  }
+  
   cat("MRS Data Parameters\n")
   cat("----------------------------------\n")
   cat(paste(c("Trans. freq (MHz)       : ", round(x$ft * 1e-6, 4), "\n")),

@@ -3,7 +3,7 @@ read_ima <- function(fraw, verbose = FALSE, extra) {
   tags <- list(ascii_hdr = "0029,1120", spec_data = "7FE1,1010")
   res  <- dicom_reader(fraw, tags)
   
-  vars <- read_siemens_txt_hdr(res$ascii_hdr, "vd")
+  vars <- read_siemens_txt_hdr(res$ascii_hdr, "vd", verbose)
   
   # calculate expected size of data in bytes - assuming complex 4byte floats
   data_size <- vars$x_pts * vars$y_pts * vars$z_pts * vars$N * 4 * 2
