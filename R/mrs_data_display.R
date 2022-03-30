@@ -5,7 +5,8 @@
 #' @export
 print.mrs_data <- function(x, full = FALSE, ...) {
   
-  if (class(x)[1] == "list") {
+  # if (class(x)[1] == "list") { # should be the same as below
+  if (inherits(x, "list", which = TRUE) == 1) {
     class(x) <- "list"
     print(x)
     return(NULL)
@@ -633,7 +634,7 @@ plot_slice_map <- function(data, zlim = NULL, mask_map = NULL,
                            coil = 1, ref = 1, denom = NULL,
                            horizontal = FALSE) {
   
-  if (class(data) == "mrs_data") {
+  if (inherits(data, "mrs_data")) {
     data <- get_subset(data, coil_set = coil) # speeds things up
     data <- int_spec(data, mode = "mod")
   }

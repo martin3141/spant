@@ -52,10 +52,11 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
                     opts = NULL, parallel = FALSE, time = TRUE,
                     progress = "text", extra = NULL) {
   
-  if (class(metab) == "list") {
+  if (inherits(metab, "list")) {
     
     if (!is.null(w_ref)) {
-      if (class(w_ref) != "list") stop("w_ref is not a list but metab is")
+      # if (class(w_ref) != "list") stop("w_ref is not a list but metab is")
+      if (!inherits(w_ref, "list")) stop("w_ref is not a list but metab is")
       
       if (length(metab) != length(w_ref)) {
         stop("metab and w_ref must have the same length")
@@ -100,7 +101,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
                                       TE2 = TE2) 
   }
   
-  if (class(basis) == "basis_set") {
+  if (inherits(basis, "basis_set")) {
     # TODO check basis matches mrs_data 
   } else if (is.character(basis)) {
     if (!file.exists(basis)) {

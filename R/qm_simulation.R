@@ -437,7 +437,7 @@ get_mol_para_list_names <- function(mol_para_list) {
 sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
                       acq_paras = def_acq_paras(), xlim = NULL, ...) {
   
-  if (class(acq_paras) == "mrs_data") acq_paras <- get_acq_paras(acq_paras)
+  if (inherits(acq_paras, "mrs_data")) acq_paras <- get_acq_paras(acq_paras)
   
   ft  <- acq_paras$ft
   ref <- acq_paras$ref

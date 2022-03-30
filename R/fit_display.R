@@ -50,7 +50,7 @@ plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
   }
   
   if (is.null(xlim)) {
-    if (class(opts) == "list") {
+    if (inherits(opts, "list")) {
       if ((!is.null(opts$ppm_left)) & (!is.null(opts$ppm_right))) {
         xlim <- c(opts$ppm_left, opts$ppm_right)
       } else {
@@ -411,9 +411,9 @@ fit_res2csv <- function(fit_res, fname, unscaled = FALSE) {
 plot_slice_fit <- function(fit_res, map, map_denom = NULL, slice = 1,
                            zlim = NULL, interp = 1) {
   
-  if (class(map) == "character") map <- get_fit_map(fit_res, map)
+  if (inherits(map, "character")) map <- get_fit_map(fit_res, map)
   
-  if (class(map_denom) == "character") map_denom <- get_fit_map(fit_res,
+  if (inherits(map_denom, "character")) map_denom <- get_fit_map(fit_res,
                                                                 map_denom)
   
   if (is.null(map)) map <- get_fit_map(fit_res, "tNAA") 
