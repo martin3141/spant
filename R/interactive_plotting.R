@@ -13,9 +13,9 @@ plot_slice_fit_inter <- function(fit_res, map = NULL, map_denom = NULL,
                                  slice = 1, zlim = NULL, interp = 1,
                                  xlim = NULL) {
   
-  if (class(map) == "character") map <- get_fit_map(fit_res, map)
+  if (inherits(map, "character")) map <- get_fit_map(fit_res, map)
   
-  if (class(map_denom) == "character") map_denom <- get_fit_map(fit_res,
+  if (inherits(map_denom, "character")) map_denom <- get_fit_map(fit_res,
                                                                 map_denom)
   
   if (is.null(map)) map <- get_fit_map(fit_res, "tNAA") 
@@ -60,7 +60,7 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
                                  y_scale = FALSE, ylim = NULL, coil = 1,
                                  fd = TRUE) {
   
-  if (class(mrs_data) == "mrs_data") {
+  if (inherits(mrs_data, "mrs_data")) {
     mrs_data <- get_subset(mrs_data, coil_set = coil) # speeds things up
     if (is.null(map)) map <- int_spec(mrs_data, mode = "mod")
     input_mrs_data <- TRUE
@@ -72,7 +72,7 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
     }
     
     if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[length(x_scale)])
-  } else if (class(mrs_data) == "fit_result") {
+  } else if (inherits(mrs_data, "fit_result")) {
     fit_res  <- mrs_data
     mrs_data <- fit_res$data
     input_mrs_data <- FALSE
