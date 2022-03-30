@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,23 +40,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.20.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.20.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorials
      
     <span class="caret"></span>
@@ -86,7 +82,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/martin3141/spant/">
+  <a href="https://github.com/martin3141/spant/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -101,25 +97,25 @@
 
       
 
-      </header><script src="spant-metabolite-simulation_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Metabolite simulation</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/martin3141/spant/blob/master/vignettes/spant-metabolite-simulation.Rmd"><code>vignettes/spant-metabolite-simulation.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/martin3141/spant/blob/HEAD/vignettes/spant-metabolite-simulation.Rmd" class="external-link"><code>vignettes/spant-metabolite-simulation.Rmd</code></a></small>
       <div class="hidden name"><code>spant-metabolite-simulation.Rmd</code></div>
 
     </div>
 
     
     
-<div id="simple-simulation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simple-simulation" class="anchor"></a>Simple simulation</h2>
+<div class="section level2">
+<h2 id="simple-simulation">Simple simulation<a class="anchor" aria-label="anchor" href="#simple-simulation"></a>
+</h2>
 <p>Load the spant package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://martin3141.github.io/spant/">spant</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://martin3141.github.io/spant/">spant</a></span><span class="op">)</span></code></pre></div>
 <p>Output a list of pre-defined molecules available for simulation:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/get_mol_names.html">get_mol_names</a></span><span class="op">(</span><span class="op">)</span>
@@ -135,7 +131,7 @@
 <p>Get and print the spin system for myo-inositol:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ins</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_mol_paras.html">get_mol_paras</a></span><span class="op">(</span><span class="st">"ins"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">ins</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ins</span><span class="op">)</span>
 <span class="co">#&gt; Name        : Ins</span>
 <span class="co">#&gt; Full name   : myo-Inositol</span>
 <span class="co">#&gt; Spin groups : 1</span>
@@ -166,12 +162,12 @@
 <span class="co">#&gt; 3.6144  9.998      -      -      - 9.482      -</span></code></pre></div>
 <p>Simulate and plot the simulation at 7 Tesla for a pulse acquire sequence (seq_pulse_acquire), apply 2 Hz line-broadening and plot.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/sim_mol.html">sim_mol</a></span><span class="op">(</span><span class="va">ins</span>, ft <span class="op">=</span> <span class="fl">300e6</span>, N <span class="op">=</span> <span class="fl">4096</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/lb.html">lb</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3.8</span>, <span class="fl">3.1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/sim_mol.html">sim_mol</a></span><span class="op">(</span><span class="va">ins</span>, ft <span class="op">=</span> <span class="fl">300e6</span>, N <span class="op">=</span> <span class="fl">4096</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/lb.html">lb</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.8</span>, <span class="fl">3.1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-metabolite-simulation_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
 <p>Other pulse sequences may be simulated including: seq_cpmg_ideal, seq_mega_press_ideal, seq_press_ideal, seq_slaser_ideal, seq_spin_echo_ideal, seq_steam_ideal. Note all these sequences assume chemical shift displacement is negligible. Next we simulate a 30 ms spin-echo sequence and plot:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ins_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_mol.html">sim_mol</a></span><span class="op">(</span><span class="va">ins</span>, <span class="va">seq_spin_echo_ideal</span>, ft <span class="op">=</span> <span class="fl">300e6</span>, N <span class="op">=</span> <span class="fl">4086</span>, TE <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span>
-<span class="va">ins_sim</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/lb.html">lb</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3.8</span>, <span class="fl">3.1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="va">ins_sim</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/lb.html">lb</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.8</span>, <span class="fl">3.1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-metabolite-simulation_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 <p>Finally we simulate a range of echo-times and plot all results together to see the phase evolution:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -180,53 +176,53 @@
   <span class="fu"><a href="../reference/lb.html">lb</a></span><span class="op">(</span><span class="va">te_sim</span>, <span class="fl">2</span><span class="op">)</span>
 <span class="op">}</span>
 
-<span class="va">te_vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0.4</span><span class="op">)</span>
+<span class="va">te_vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0.4</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">te_vals</span>, <span class="va">sim_fn</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span>y_offset <span class="op">=</span> <span class="fl">150</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3.8</span>, <span class="fl">3.1</span><span class="op">)</span>,
-                                      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">te_vals</span> <span class="op">*</span> <span class="fl">100</span>, <span class="st">"ms"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">te_vals</span>, <span class="va">sim_fn</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span>y_offset <span class="op">=</span> <span class="fl">150</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.8</span>, <span class="fl">3.1</span><span class="op">)</span>,
+                                      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">te_vals</span> <span class="op">*</span> <span class="fl">100</span>, <span class="st">"ms"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-metabolite-simulation_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 <p>See the <a href="spant-basis-simulation.html">basis simulation</a> vignette for how to combine these simulations into a basis set for MRS analysis.</p>
 </div>
-<div id="custom-molecules" class="section level2">
-<h2 class="hasAnchor">
-<a href="#custom-molecules" class="anchor"></a>Custom molecules</h2>
+<div class="section level2">
+<h2 id="custom-molecules">Custom molecules<a class="anchor" aria-label="anchor" href="#custom-molecules"></a>
+</h2>
 <p>For simple signals that do not require j-coupling evolution, for example singlets or approximations to macromolecule or lipid resonances, the <code>get_uncoupled_mol</code> function may be used. In this example we simulated two broad Gaussian resonances at 1.3 and 1.4 ppm with differing amplitudes:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/get_uncoupled_mol.html">get_uncoupled_mol</a></span><span class="op">(</span><span class="st">"Lip13"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.3</span>, <span class="fl">1.4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1H"</span>, <span class="st">"1H"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span>,
-                  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="va">sim_mol</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/get_uncoupled_mol.html">get_uncoupled_mol</a></span><span class="op">(</span><span class="st">"Lip13"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.3</span>, <span class="fl">1.4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1H"</span>, <span class="st">"1H"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span>,
+                  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">sim_mol</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-metabolite-simulation_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
 <p>Molecules that aren’t defined within spant, or need adjusting to match a particular scan, may be manually defined by constructing a <code>mol_parameters</code> object. In the following code we define an imaginary molecule based on Lactate, with the addition of a second spin group containing a singlet at 2.5 ppm. Whilst this molecule could be defined as a single group, it is more computationally efficient to split non j-coupled spin systems up in this way. Note the lineshape is set to a Lorentzian (Lorentz-Gauss factor lg = 0) with a width of 2 Hz. It is generally a good idea to simulate resonances with narrower lineshapes that you expect to see in experimental data, as it is far easier to make a resonance broader than narrower.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nucleus_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"1H"</span>, <span class="fl">4</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">nucleus_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"1H"</span>, <span class="fl">4</span><span class="op">)</span>
 
-<span class="va">chem_shift_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4.0974</span>, <span class="fl">1.3142</span>, <span class="fl">1.3142</span>, <span class="fl">1.3142</span><span class="op">)</span>
+<span class="va">chem_shift_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4.0974</span>, <span class="fl">1.3142</span>, <span class="fl">1.3142</span>, <span class="fl">1.3142</span><span class="op">)</span>
 
-<span class="va">j_coupling_mat_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span>
+<span class="va">j_coupling_mat_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span>
 <span class="va">j_coupling_mat_a</span><span class="op">[</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">6.933</span>
 <span class="va">j_coupling_mat_a</span><span class="op">[</span><span class="fl">3</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">6.933</span>
 <span class="va">j_coupling_mat_a</span><span class="op">[</span><span class="fl">4</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">6.933</span>
 
-<span class="va">spin_group_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>nucleus <span class="op">=</span> <span class="va">nucleus_a</span>, chem_shift <span class="op">=</span> <span class="va">chem_shift_a</span>, 
+<span class="va">spin_group_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>nucleus <span class="op">=</span> <span class="va">nucleus_a</span>, chem_shift <span class="op">=</span> <span class="va">chem_shift_a</span>, 
                      j_coupling_mat <span class="op">=</span> <span class="va">j_coupling_mat_a</span>, scale_factor <span class="op">=</span> <span class="fl">1</span>,
                      lw <span class="op">=</span> <span class="fl">2</span>, lg <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
 
-<span class="va">nucleus_b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1H"</span><span class="op">)</span>
-<span class="va">chem_shift_b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2.5</span><span class="op">)</span>
-<span class="va">j_coupling_mat_b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>
+<span class="va">nucleus_b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1H"</span><span class="op">)</span>
+<span class="va">chem_shift_b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5</span><span class="op">)</span>
+<span class="va">j_coupling_mat_b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>
 
-<span class="va">spin_group_b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>nucleus <span class="op">=</span> <span class="va">nucleus_b</span>, chem_shift <span class="op">=</span> <span class="va">chem_shift_b</span>, 
+<span class="va">spin_group_b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>nucleus <span class="op">=</span> <span class="va">nucleus_b</span>, chem_shift <span class="op">=</span> <span class="va">chem_shift_b</span>, 
                      j_coupling_mat <span class="op">=</span> <span class="va">j_coupling_mat_b</span>, scale_factor <span class="op">=</span> <span class="fl">3</span>,
                      lw <span class="op">=</span> <span class="fl">2</span>, lg <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
 
 <span class="va">source</span> <span class="op">&lt;-</span> <span class="st">"This text should include a reference on the origin of the chemical shift and j-coupling values."</span>
 
-<span class="va">custom_mol</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>spin_groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">spin_group_a</span>, <span class="va">spin_group_b</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"Cus"</span>,
+<span class="va">custom_mol</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>spin_groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">spin_group_a</span>, <span class="va">spin_group_b</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"Cus"</span>,
               source <span class="op">=</span> <span class="va">source</span>, full_name <span class="op">=</span> <span class="st">"Custom molecule"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">custom_mol</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"mol_parameters"</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">custom_mol</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"mol_parameters"</span></code></pre></div>
 <p>In the next step we output the molecule definition as formatted text and plot it.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">custom_mol</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">custom_mol</span><span class="op">)</span>
 <span class="co">#&gt; Name        : Cus</span>
 <span class="co">#&gt; Full name   : Custom molecule</span>
 <span class="co">#&gt; Spin groups : 2</span>
@@ -259,7 +255,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt;   nucleus chem_shift</span>
 <span class="co">#&gt; 1      1H        2.5</span>
-<span class="va">custom_mol</span> <span class="op">%&gt;%</span> <span class="va">sim_mol</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/lb.html">lb</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="va">zf</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4.4</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="va">custom_mol</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">sim_mol</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/lb.html">lb</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">zf</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4.4</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-metabolite-simulation_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
 <p>Once your happy the new molecule is correct, please consider contributing it to the package if you think others would benefit.</p>
 </div>
@@ -276,11 +272,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Martin Wilson.</p>
+  <p></p>
+<p>Developed by Martin Wilson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -288,6 +286,8 @@
 
   
 
+
+  
 
   </body>
 </html>

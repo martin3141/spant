@@ -1,10 +1,9 @@
 
 check_mrs_data <- function(mrs_data) {
-  in_class <- class(mrs_data)[1]
-  if (in_class == "mrs_data") {
+  if (inherits(mrs_data, "mrs_data", which = TRUE) == 1) {
     return()
-  } else if (in_class == "list") {
-    if (class(mrs_data[[1]]) == "mrs_data") {
+  } else if (inherits(mrs_data, "list", which = TRUE) == 1) {
+    if (inherits(mrs_data[[1]], "mrs_data")) {
       stop("Error, input is a list of mrs_data objects. Please only pass a
            single mrs_data object to this function.")
     } else {
@@ -38,7 +37,7 @@ sim_resonances <- function(freq = 0, amp = 1, lw = 0, lg = 0, phase = 0,
                            fp_scale = TRUE, back_extrap_pts = 0,
                            sum_resonances = TRUE) {
   
-  if (class(acq_paras) == "mrs_data") acq_paras <- get_acq_paras(acq_paras)
+  if (inherits(acq_paras, "mrs_data")) acq_paras <- get_acq_paras(acq_paras)
   
   sig_n <- length(freq)
   if (sig_n != length(amp)) {
@@ -235,7 +234,7 @@ array2mrs_data <- function(data_array, fs = def_fs(), ft = def_ft(),
 #' @return MRS data matrix.
 #' @export
 mrs_data2mat <- function(mrs_data, collapse = TRUE) {
-  if (class(mrs_data) == "list") mrs_data <- append_dyns(mrs_data)
+  if (inherits(mrs_data, "list")) mrs_data <- append_dyns(mrs_data)
   
   if (collapse) mrs_data <- collapse_to_dyns(mrs_data)
   
@@ -417,7 +416,7 @@ shift <- function(mrs_data, shift, units = "ppm") {
 #' @export
 phase <- function(mrs_data, zero_order, first_order = 0) {
   
-  if (class(mrs_data) == "list") {
+  if (inherits(mrs_data, "list")) {
     res <- lapply(mrs_data, phase, zero_order = zero_order,
                   first_order = first_order)
     return(res)
@@ -466,7 +465,7 @@ phase <- function(mrs_data, zero_order, first_order = 0) {
 #' @export
 fp_phase_correct <- function(mrs_data, ret_phase = FALSE) {
   
-  if (class(mrs_data) == "list") {
+  if (inherits(mrs_data, "list")) {
     return(lapply(mrs_data, fp_phase_correct, ret_phase = ret_phase))  
   }
   
@@ -618,7 +617,7 @@ lb.basis_set <- function(x, lb, lg = 1) {
 #' @export
 re_weighting <- function(mrs_data, re, alpha) {
   
-  if (class(mrs_data) == "list") {
+  if (inherits(mrs_data, "list")) {
     return(lapply(mrs_data, re_weighting, re = re, alpha = alpha))  
   }
   
@@ -722,7 +721,7 @@ is_fd <- function(mrs_data) {
 #' @export
 ft_dyns <- function(mrs_data, ft_shift = FALSE, ret_mod = FALSE, fd = TRUE) {
   
-  if (class(mrs_data) == "list") {
+  if (inherits(mrs_data, "list")) {
     return(lapply(mrs_data, ft_dyns, ft_shift = ft_shift, ret_mod = ret_mod,
                   fd = fd))
   }
@@ -769,7 +768,7 @@ ft_dyns <- function(mrs_data, ft_shift = FALSE, ret_mod = FALSE, fd = TRUE) {
 #' @export
 td2fd <- function(mrs_data) {
   
-  if (class(mrs_data) == "list") return(lapply(mrs_data, td2fd))
+  if (inherits(mrs_data, "list")) return(lapply(mrs_data, td2fd))
   
   if (mrs_data$freq_domain[7] == TRUE) {
     warning("Data is alread in the frequency-domain.")
@@ -791,7 +790,7 @@ td2fd <- function(mrs_data) {
 #' @export
 fd2td <- function(mrs_data) {
   
-  if (class(mrs_data) == "list") return(lapply(mrs_data, fd2td))
+  if (inherits(mrs_data, "list")) return(lapply(mrs_data, fd2td))
   
   if (mrs_data$freq_domain[7] == FALSE) {
     warning("Data is alread in the time-domain.")
@@ -942,7 +941,7 @@ downsample_mrs_td <- function(mrs_data) {
 #' @export
 decimate_mrs_td <- function(mrs_data, q = 2, n = 4, ftype = "iir") {
   
-  if (class(mrs_data) == "list") {
+  if (inherits(mrs_data, "list")) {
     return(lapply(mrs_data, decimate_mrs_td, q = q, n = n, ftype = ftype))
   }
   
@@ -964,7 +963,7 @@ decimate_mrs_td <- function(mrs_data, q = 2, n = 4, ftype = "iir") {
 #' @export
 decimate_mrs_fd <- function(mrs_data) {
   
-  if (class(mrs_data) == "list") {
+  if (inherits(mrs_data, "list")) {
     return(lapply(mrs_data, decimate_mrs_fd))
   }
   
@@ -1240,7 +1239,7 @@ crop_td_pts <- function(mrs_data, start = NULL, end = NULL) {
 #' @export
 crop_spec <- function(mrs_data, xlim = c(4, 0.2), scale = "ppm") {
   
-  if (class(mrs_data) == "list") {
+  if (inherits(mrs_data, "list")) {
     return(lapply(mrs_data, crop_spec, xlim = xlim, scale = scale))
   }
   
@@ -1297,7 +1296,7 @@ crop_spec <- function(mrs_data, xlim = c(4, 0.2), scale = "ppm") {
 align <- function(mrs_data, ref_freq = 4.65, zf_factor = 2, lb = 2,
                   max_shift = 20, ret_df = FALSE, mean_dyns = FALSE) {
   
-  if (class(mrs_data) == "list") {
+  if (inherits(mrs_data, "list")) {
     return(lapply(mrs_data, align, ref_freq = ref_freq, zf_factor = zf_factor,
                   lb = lb, max_shift = max_shift, ret_df = ret_df,
                   mean_dyns = mean_dyns))
@@ -1805,7 +1804,8 @@ append_dyns <- function(...) {
   x <- list(...)
   
   # were the arguments a list already? 
-  if (class(x[[1]])[1] == "list") x <- x[[1]]
+  # if (class(x[[1]])[1] == "list") x <- x[[1]]
+  if (inherits(x[[1]], "list", which = TRUE) == 1) x <- x[[1]]
   
   # were the arguments a list already? 
   # this doesn't work now we have the meta field :(
@@ -1839,7 +1839,8 @@ append_scan <- function(...) {
   x <- list(...)
   
   # were the arguments a list already? 
-  if (class(x[[1]])[1] == "list") x <- x[[1]]
+  # if (class(x[[1]])[1] == "list") x <- x[[1]]
+  if (inherits(x[[1]], "list", which = TRUE) == 1) x <- x[[1]]
   
   # this doesn't work now we have the meta field :(
   # if (depth(x) == 3) x <- x[[1]]
@@ -1894,9 +1895,9 @@ bc <- function(mrs_data, lambda = 1e3, p = 0.1) {
 #' @export
 sum_mrs <- function(a, b, force = FALSE) {
  
-  if (class(a) != "mrs_data") stop("a argument is not an mrs_data object")
+  if (!inherits(a, "mrs_data")) stop("a argument is not an mrs_data object")
   
-  if (class(b) != "mrs_data") stop("b argument is not an mrs_data object")
+  if (!inherits(b, "mrs_data")) stop("b argument is not an mrs_data object")
   
   # if they are not in the same domain and we are not forcing, then swap b to 
   # match a
@@ -2003,12 +2004,12 @@ int_spec <- function(mrs_data, xlim = NULL, freq_scale = "ppm", mode = "re") {
 #' @export
 scale_mrs_amp <- function(mrs_data, amp) {
   
-  if (class(mrs_data) == "list") {
+  if (inherits(mrs_data, "list")) {
     res <- lapply(mrs_data, scale_mrs_amp, amp = amp)
     return(res)
   }
  
-  if (class(mrs_data) != "mrs_data") {
+  if (!inherits(mrs_data, "mrs_data")) {
     stop("first argument is not an mrs_data object")
   }
   
@@ -2038,7 +2039,7 @@ scale_mrs_amp <- function(mrs_data, amp) {
 scale_spec <- function(mrs_data, xlim = NULL, operator = "sum",
                        freq_scale = "ppm", mode = "re", mean_dyns = TRUE) {
   
-  if (class(mrs_data) == "list") {
+  if (inherits(mrs_data, "list")) {
     res <- lapply(mrs_data, scale_spec, xlim = xlim, operator = operator,
                   freq_scale = freq_scale, mode = mode, mean_dyns = mean_dyns)
     return(res)
@@ -2058,7 +2059,7 @@ scale_spec <- function(mrs_data, xlim = NULL, operator = "sum",
 
 #' @export
 `+.mrs_data` <- function(a, b) {
-  if (class(b) == "mrs_data" ) {
+  if (inherits(b, "mrs_data")) {
     if (is_fd(a) != is_fd(b)) {
       warning("sum warning, spectral domains do not match")
     }
@@ -2073,7 +2074,7 @@ scale_spec <- function(mrs_data, xlim = NULL, operator = "sum",
 
 #' @export
 `-.mrs_data` <- function(a, b = NULL) {
-  if (class(b) == "mrs_data" ) {
+  if (inherits(b, "mrs_data")) {
     if (is_fd(a) != is_fd(b)) {
       warning("subtract warning, time/frequency domains do not match")
     }
@@ -2090,7 +2091,7 @@ scale_spec <- function(mrs_data, xlim = NULL, operator = "sum",
 
 #' @export
 `*.mrs_data` <- function(a, b) {
-  if (class(b) == "mrs_data" ) {
+  if (inherits(b, "mrs_data")) {
     if (is_fd(a) != is_fd(b)) {
       warning("multiply warning, time/frequency domains do not match")
     }
@@ -2105,7 +2106,7 @@ scale_spec <- function(mrs_data, xlim = NULL, operator = "sum",
 
 #' @export
 `/.mrs_data` <- function(a, b) {
-  if (class(b) == "mrs_data" ) {
+  if (inherits(b, "mrs_data")) {
     if (is_fd(a) != is_fd(b)) {
       warning("divide warning, time/frequency domains do not match")
     }
@@ -2201,7 +2202,7 @@ collapse_to_dyns.fit_result <- function(x, rm_masked = FALSE) {
 #' @export
 mean_dyns <- function(mrs_data) {
   
-  if (class(mrs_data) == "list") {
+  if (inherits(mrs_data, "list")) {
     return(lapply(mrs_data, mean_dyns))
   }
   
@@ -2232,7 +2233,7 @@ sub_mean_dyns <- function(mrs_data) {
 #' @export
 mean_dyn_blocks <- function(mrs_data, block_size) {
   
-  if (class(mrs_data) == "list") {
+  if (inherits(mrs_data, "list")) {
     return(lapply(mrs_data, mean_dyn_blocks, block_size = block_size))
   }
   
@@ -2412,7 +2413,7 @@ fd_conv_filt <- function(mrs_data, K = 25, ext = 1) {
 hsvd_filt <- function(mrs_data, xlim = c(-30, 30), comps = 40, irlba = TRUE,
                       max_damp = 10, scale = "hz", return_model = FALSE) {
   
-  if (class(mrs_data) == "list") {
+  if (inherits(mrs_data, "list")) {
     res <- lapply(mrs_data, hsvd_filt, xlim = xlim, comps = comps,
                   irlba = irlba, max_damp = max_damp, scale = scale,
                   return_model = return_model)
@@ -2650,8 +2651,8 @@ ecc_ref <- function(mrs_data) {
 #' @export
 ecc <- function(metab, ref, rev = FALSE) {
   
-  if (class(metab) == "list") {
-    if (class(ref) != "list") stop("metab is a list but ref is not")
+  if (inherits(metab, "list")) {
+    if (!inherits(ref, "list")) stop("metab is a list but ref is not")
     if (length(metab) != length(ref)) {
       stop("metab and ref must have the same length")
     }
@@ -2848,14 +2849,14 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
                        noise_region = c(-0.5, -2.5), average_ref_dyns = TRUE,
                        ref_pt_index = 1) {
   
-  if (class(metab) == "list") {
+  if (inherits(metab, "list")) {
     # if (class(ref) != "list") stop("metab is a list but ref is not")
     # if (length(metab) != length(ref)) {
     #   stop("metab and ref must have the same length")
     # }
     
     if (!is.null(ref)) {
-      if (class(ref) != "list") stop("ref is not a list but metab is")
+      if (!inherits(ref, "list")) stop("ref is not a list but metab is")
       
       if (length(metab) != length(ref)) {
         stop("metab and w_ref must have the same length")
@@ -2865,7 +2866,7 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
     }
     
     if (!is.null(noise)) {
-      if (class(noise) != "list") stop("noise is not a list but metab is")
+      if (!inherits(noise, "list")) stop("noise is not a list but metab is")
       
       if (length(metab) != length(noise)) {
         stop("metab and noise must have the same length")
@@ -3227,7 +3228,7 @@ calc_peak_info_vec <- function(data_pts, interp_f) {
 #' @export
 bc_constant <- function(mrs_data, xlim = NULL) {
   
-  if (class(mrs_data) == "list") {
+  if (inherits(mrs_data, "list")) {
     return(lapply(mrs_data, bc_constant, xlim = xlim))
   }
   
@@ -3249,7 +3250,7 @@ bc_constant <- function(mrs_data, xlim = NULL) {
 #' @export
 bc_als <- function(mrs_data, lambda = 1e4, p = 0.001) {
   
-  if (class(mrs_data) == "list") {
+  if (inherits(mrs_data, "list")) {
     return(lapply(mrs_data, bc_als, lambda = lambda, p = p))
   }
   
@@ -3407,7 +3408,7 @@ kspace2img_xy <- function(mrs_data) {
 #' @export
 set_lw <- function(mrs_data, lw, xlim = c(4, 0.5)) {
   
-  if (class(mrs_data) == "list") {
+  if (inherits(mrs_data, "list")) {
     res <- lapply(mrs_data, set_lw, lw = lw, xlim = xlim)
     return(res)
   }
@@ -3626,7 +3627,7 @@ ssp <- function(mrs_data, comps = 5, xlim = c(1.5, 0.8)) {
 reson_table2mrs_data <- function(reson_table, acq_paras = def_acq_paras(),
                                  back_extrap_pts = 0) {
   
-  if (class(acq_paras) == "mrs_data") acq_paras <- get_acq_paras(acq_paras)
+  if (inherits(acq_paras, "mrs_data")) acq_paras <- get_acq_paras(acq_paras)
   
   sim_resonances(freq = reson_table$frequency_ppm, amp = reson_table$amplitude,
                  phase = reson_table$phase, lw = reson_table$lw_hz,

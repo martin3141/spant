@@ -29,6 +29,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -41,23 +43,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.20.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.20.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorials
      
     <span class="caret"></span>
@@ -89,7 +85,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/martin3141/spant/">
+  <a href="https://github.com/martin3141/spant/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -106,18 +102,17 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="spectroscopy-analysis-tools-spant-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#spectroscopy-analysis-tools-spant-" class="anchor"></a>Spectroscopy Analysis Tools (spant) <img src="reference/figures/logo.png" align="right" width="130/">
+<div class="section level1">
+<div class="page-header"><h1 id="spectroscopy-analysis-tools-spant-">Spectroscopy Analysis Tools (spant) <img src="reference/figures/logo.png" align="right" width="130/"><a class="anchor" aria-label="anchor" href="#spectroscopy-analysis-tools-spant-"></a>
 </h1></div>
 
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
 <p>spant provides a full suite of tools to build automated analysis pipelines for Magnetic Resonance Spectroscopy (MRS) data. The following features and algorithms are included:</p>
 <ul>
-<li>Advanced fully-automated metabolite fitting algorithm - ABfit <a href="https://onlinelibrary.wiley.com/doi/10.1002/mrm.28385" class="uri">https://onlinelibrary.wiley.com/doi/10.1002/mrm.28385</a>.</li>
-<li>Robust retrospective frequency and phase correction - RATS <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.27605" class="uri">https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.27605</a>.</li>
+<li>Advanced fully-automated metabolite fitting algorithm - ABfit <a href="https://onlinelibrary.wiley.com/doi/10.1002/mrm.28385" class="external-link uri">https://onlinelibrary.wiley.com/doi/10.1002/mrm.28385</a>.</li>
+<li>Robust retrospective frequency and phase correction - RATS <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.27605" class="external-link uri">https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.27605</a>.</li>
 <li>Flexible data types to support single voxel, dynamic and spectroscopic imaging data types.</li>
 <li>Raw data import from individual coils and dynamic measurements, eg support for importing individual FIDs from Siemens TWIX formatted data.</li>
 <li>Publication quality plotting.</li>
@@ -127,157 +122,161 @@
 <li>Voxel registration to anatomical images for partial volume concentration corrections.</li>
 </ul>
 </div>
-<div id="basic-installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#basic-installation" class="anchor"></a>Basic installation</h2>
-<p>Download and install the latest version of R (<a href="https://cloud.r-project.org/" class="uri">https://cloud.r-project.org/</a>), or with your package manager if using a recent Linux distribution, eg <code>sudo apt install r-base</code>.</p>
-<p>It is also strongly recommended to install RStudio Desktop (<a href="https://rstudio.com/products/rstudio/download" class="uri">https://rstudio.com/products/rstudio/download</a>) to provide a modern environment for interactive data analysis.</p>
+<div class="section level2">
+<h2 id="basic-installation">Basic installation<a class="anchor" aria-label="anchor" href="#basic-installation"></a>
+</h2>
+<p>Download and install the latest version of R (<a href="https://cloud.r-project.org/" class="external-link uri">https://cloud.r-project.org/</a>), or with your package manager if using a recent Linux distribution, eg <code>sudo apt install r-base</code>.</p>
+<p>It is also strongly recommended to install RStudio Desktop (<a href="https://rstudio.com/products/rstudio/download" class="external-link uri">https://rstudio.com/products/rstudio/download</a>) to provide a modern environment for interactive data analysis.</p>
 <p>Once R and RStudio have been installed, open the RStudio application and type the following in the Console (lower left panel) to install the latest stable version of spant:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"spant"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"spant"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>Or the the development version from GitHub (requires the <code>devtools</code> package):</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"martin3141/spant"</span>, ref <span class="op">=</span> <span class="st">"devel"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"martin3141/spant"</span>, ref <span class="op">=</span> <span class="st">"devel"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="documentation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h2>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
 <p>Quick introduction to the basic analysis workflow : <a href="https://martin3141.github.io/spant/articles/spant-intro.html" class="uri">https://martin3141.github.io/spant/articles/spant-intro.html</a></p>
 <p>Short tutorials : <a href="https://martin3141.github.io/spant/articles/" class="uri">https://martin3141.github.io/spant/articles/</a></p>
 <p>Function reference : <a href="https://martin3141.github.io/spant/reference/" class="uri">https://martin3141.github.io/spant/reference/</a></p>
 <p>Once the spant library has been loaded with <code><a href="https://martin3141.github.io/spant/">library(spant)</a></code>, type <code><a href="reference/spant-package.html">?spant</a></code> on the console for instructions on how to access the offline documentation. Note that offline help on the available functions can be quickly shown in RStudio using <code>?function_name</code>, eg <code><a href="reference/read_mrs.html">?read_mrs</a></code>.</p>
 </div>
-<div id="ubuntu-2004-installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#ubuntu-2004-installation" class="anchor"></a>Ubuntu 20.04 installation</h2>
+<div class="section level2">
+<h2 id="ubuntu-2004-installation">Ubuntu 20.04 installation<a class="anchor" aria-label="anchor" href="#ubuntu-2004-installation"></a>
+</h2>
 <p>CRAN packages need to be compiled on Linux, and therefore you may need to ensure some additional system libraries are installed. spant may be installed from a clean installation of Ubuntu 20.04 with the following commands pasted into the terminal:</p>
 <pre class="ubuntu"><code>sudo apt install -y r-base libcurl4-openssl-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libtiff5-dev
 mkdir -p ~/R/x86_64-pc-linux-gnu-library/3.6
 Rscript -e 'install.packages("spant", dependencies = TRUE)'</code></pre>
 </div>
-<div id="ubuntu-2110-installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#ubuntu-2110-installation" class="anchor"></a>Ubuntu 21.10 installation</h2>
+<div class="section level2">
+<h2 id="ubuntu-2110-installation">Ubuntu 21.10 installation<a class="anchor" aria-label="anchor" href="#ubuntu-2110-installation"></a>
+</h2>
 <pre class="ubuntu"><code>sudo apt install -y r-base libcurl4-openssl-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libtiff5-dev
 mkdir -p ~/R/x86_64-pc-linux-gnu-library/4.0
 Rscript -e 'install.packages("spant", dependencies = TRUE)'</code></pre>
 </div>
-<div id="anaconda-environment-installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#anaconda-environment-installation" class="anchor"></a>Anaconda environment installation</h2>
-<p>Firstly install Anaconda in the standard way for your platform: <a href="https://docs.anaconda.com/anaconda/install/index.html" class="uri">https://docs.anaconda.com/anaconda/install/index.html</a>.</p>
+<div class="section level2">
+<h2 id="anaconda-environment-installation">Anaconda environment installation<a class="anchor" aria-label="anchor" href="#anaconda-environment-installation"></a>
+</h2>
+<p>Firstly install Anaconda in the standard way for your platform: <a href="https://docs.anaconda.com/anaconda/install/index.html" class="external-link uri">https://docs.anaconda.com/anaconda/install/index.html</a>.</p>
 <p>Create a text file, called <code>spant_requirements.yml</code>, containing the following:</p>
-<pre class="conda"><code>name: spant
-channels:
-    - conda-forge
-    - r
-dependencies:
-    - r-base
-    - r-essentials
-    - r-abind
-    - r-plyr
-    - r-foreach
-    - r-pracma
-    - r-stringr
-    - r-signal
-    - r-matrixcalc
-    - r-minpack.lm
-    - r-nnls
-    - r-r.utils
-    - r-graphicsqc
-    - r-expm
-    - r-smoother
-    - r-readr
-    - r-magrittr
-    - r-ptw
-    - r-mmand
-    - r-RNifti
-    - r-RNiftyReg
-    - r-fields
-    - r-MASS
-    - r-numDeriv
-    - r-nloptr
-    - r-irlba
-    - r-tibble
-    - r-jsonlite
-    - r-viridisLite
-    - r-shiny
-    - r-miniUI
-    - r-knitr
-    - r-rmarkdown
-    - r-testthat
-    - r-ragg
-    - r-doParallel</code></pre>
+<pre class="conda"><code><span class="va">name</span><span class="op">:</span> <span class="va">spant</span>
+<span class="va">channels</span><span class="op">:</span>
+    <span class="op">-</span> <span class="va">conda</span><span class="op">-</span><span class="va">forge</span>
+    <span class="op">-</span> <span class="va">r</span>
+<span class="va">dependencies</span><span class="op">:</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">base</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">essentials</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">abind</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">plyr</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">foreach</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">pracma</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">stringr</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">signal</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">matrixcalc</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">minpack.lm</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">nnls</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">r.utils</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">graphicsqc</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">expm</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">smoother</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">readr</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">magrittr</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">ptw</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">mmand</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">RNifti</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">RNiftyReg</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">fields</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">MASS</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">numDeriv</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">nloptr</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">irlba</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">tibble</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">jsonlite</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">viridisLite</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">shiny</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">miniUI</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">knitr</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">rmarkdown</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">testthat</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">ragg</span>
+    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">doParallel</span></code></pre>
 <p>Create and activate the environment:</p>
 <pre class="conda"><code>conda env create -f spant_requirements.yml
 conda activate spant</code></pre>
 <p>Start R and install spant in the usual way:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"spant"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p>Big thanks to <a href="https://github.com/joaomcteixeira">João M.C. Teixeira</a> for figuring out this method of install.</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"spant"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p>Big thanks to <a href="https://github.com/joaomcteixeira" class="external-link">João M.C. Teixeira</a> for figuring out this method of install.</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=spant">https://​cloud.r-project.org/​package=spant</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/martin3141/spant/">https://​github.com/​martin3141/​spant/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/martin3141/spant/issues/">https://​github.com/​martin3141/​spant/​issues/​</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=spant" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/martin3141/spant/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/martin3141/spant/issues/" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 </ul>
 </div>
+
 <div class="citation">
-<h2>Citation</h2>
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html">Citing spant</a></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Martin Wilson <br><small class="roles"> Maintainer, author </small> <a href="https://orcid.org/0000-0002-2089-3956" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html#citation">Citing spant</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/martin3141/spant/actions"><img src="https://github.com/martin3141/spant/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://doi.org/10.21105/joss.03646"><img src="https://joss.theoj.org/papers/10.21105/joss.03646/status.svg" alt="DOI"></a></li>
-<li><a href="http://cran.rstudio.com/web/packages/spant/index.html"><img src="http://cranlogs.r-pkg.org/badges/spant"></a></li>
-<li><a href="https://cran.r-project.org/package=spant"><img src="http://www.r-pkg.org/badges/version/spant" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://coveralls.io/github/martin3141/spant?branch=master"><img src="https://coveralls.io/repos/github/martin3141/spant/badge.svg?branch=master" alt="Coverage Status"></a></li>
+<li>Martin Wilson <br><small class="roles"> Maintainer, author </small> <a href="https://orcid.org/0000-0002-2089-3956" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/martin3141/spant/actions" class="external-link"><img src="https://github.com/martin3141/spant/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://doi.org/10.21105/joss.03646" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.03646/status.svg" alt="DOI"></a></li>
+<li><a href="http://cran.rstudio.com/web/packages/spant/index.html" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/spant"></a></li>
+<li><a href="https://cran.r-project.org/package=spant" class="external-link"><img src="http://www.r-pkg.org/badges/version/spant" alt="CRAN_Status_Badge"></a></li>
+<li><a href="https://coveralls.io/github/martin3141/spant?branch=master" class="external-link"><img src="https://coveralls.io/repos/github/martin3141/spant/badge.svg?branch=master" alt="Coverage Status"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Martin Wilson.</p>
+  <p></p>
+<p>Developed by Martin Wilson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -285,6 +284,8 @@ conda activate spant</code></pre>
 
   
 
+
+  
 
   </body>
 </html>

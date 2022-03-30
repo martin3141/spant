@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,23 +40,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.20.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.20.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorials
      
     <span class="caret"></span>
@@ -86,7 +82,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/martin3141/spant/">
+  <a href="https://github.com/martin3141/spant/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -101,64 +97,64 @@
 
       
 
-      </header><script src="spant-preprocessing_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Common preprocessing steps</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/martin3141/spant/blob/master/vignettes/spant-preprocessing.Rmd"><code>vignettes/spant-preprocessing.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/martin3141/spant/blob/HEAD/vignettes/spant-preprocessing.Rmd" class="external-link"><code>vignettes/spant-preprocessing.Rmd</code></a></small>
       <div class="hidden name"><code>spant-preprocessing.Rmd</code></div>
 
     </div>
 
     
     
-<div id="reading-raw-data-and-plotting" class="section level2">
-<h2 class="hasAnchor">
-<a href="#reading-raw-data-and-plotting" class="anchor"></a>Reading raw data and plotting</h2>
+<div class="section level2">
+<h2 id="reading-raw-data-and-plotting">Reading raw data and plotting<a class="anchor" aria-label="anchor" href="#reading-raw-data-and-plotting"></a>
+</h2>
 <p>Load the spant package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://martin3141.github.io/spant/">spant</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://martin3141.github.io/spant/">spant</a></span><span class="op">)</span></code></pre></div>
 <p>Load some example data for preprocessing:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"philips_spar_sdat_WS.SDAT"</span>, package <span class="op">=</span> <span class="st">"spant"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">fname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"philips_spar_sdat_WS.SDAT"</span>, package <span class="op">=</span> <span class="st">"spant"</span><span class="op">)</span>
 <span class="va">mrs_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_mrs.html">read_mrs</a></span><span class="op">(</span><span class="va">fname</span>, format <span class="op">=</span> <span class="st">"spar_sdat"</span><span class="op">)</span></code></pre></div>
 <p>Plot the spectral region between 4 and 0.5 ppm:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mrs_data</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mrs_data</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-preprocessing_files/figure-html/unnamed-chunk-4-1.png" width="576"></p>
 <p>Apply a 180 degree phase adjustment and plot:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mrs_data_p180</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phase.html">phase</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="fl">180</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mrs_data_p180</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mrs_data_p180</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-preprocessing_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
 <p>Apply 3 Hz Guassian line broadening:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mrs_data_lb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lb.html">lb</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="fl">3</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mrs_data_lb</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mrs_data_lb</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-preprocessing_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 <p>Zero fill the data to twice the original length and plot:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mrs_data_zf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/zf.html">zf</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="fl">2</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mrs_data_zf</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mrs_data_zf</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-preprocessing_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 <p>Apply a HSVD filter to the residual water region and plot together with the original data:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mrs_data_filt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hsvd_filt.html">hsvd_filt</a></span><span class="op">(</span><span class="va">mrs_data</span><span class="op">)</span>
-<span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">mrs_data_filt</span><span class="op">)</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">0.5</span><span class="op">)</span>, y_offset <span class="op">=</span> <span class="fl">10</span>,
-          col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"red"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"original"</span>, <span class="st">"filtered"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">mrs_data_filt</span><span class="op">)</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">0.5</span><span class="op">)</span>, y_offset <span class="op">=</span> <span class="fl">10</span>,
+          col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"red"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"original"</span>, <span class="st">"filtered"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-preprocessing_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
 <p>Apply a 0.1 ppm frequency shift and plot together with the original data:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mrs_data_shift</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/shift.html">shift</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="fl">0.1</span>, <span class="st">"ppm"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">mrs_data_shift</span><span class="op">)</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span>, y_offset <span class="op">=</span> <span class="fl">10</span>,
-          col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"red"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"original"</span>, <span class="st">"shifted"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">mrs_data_shift</span><span class="op">)</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span>, y_offset <span class="op">=</span> <span class="fl">10</span>,
+          col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"red"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"original"</span>, <span class="st">"shifted"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-preprocessing_files/figure-html/unnamed-chunk-9-1.png" width="576"></p>
 <p>Multiple processing commands may be conveniently combined with the pipe operator “%&gt;%” :</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mrs_data_proc</span> <span class="op">&lt;-</span> <span class="va">mrs_data</span> <span class="op">%&gt;%</span> <span class="va">hsvd_filt</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/lb.html">lb</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="va">zf</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mrs_data_proc</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">mrs_data_proc</span> <span class="op">&lt;-</span> <span class="va">mrs_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">hsvd_filt</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/lb.html">lb</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">zf</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mrs_data_proc</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-preprocessing_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
 </div>
   </div>
@@ -174,11 +170,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Martin Wilson.</p>
+  <p></p>
+<p>Developed by Martin Wilson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -186,6 +184,8 @@
 
   
 
+
+  
 
   </body>
 </html>
