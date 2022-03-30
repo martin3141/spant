@@ -23,7 +23,6 @@ Depends:
 Imports:
     abind,
     plyr,
-    foreach,
     pracma,
     stringr,
     expm,

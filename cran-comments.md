@@ -1,13 +1,10 @@
 ## Test environments
 
-* Windows 7, R 4.0.3
-* Linux Ubuntu 20.04, R 4.0.3
+* Windows 10, R 4.1.2
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
-
-Note - Imports includes 25 non-default packages.
+0 errors | 0 warnings | 0 notes
 
 ## Downstream dependancies
 
