@@ -126,6 +126,8 @@ get_mrsi_voi <- function(mrs_data, target_mri = NULL, map = NULL,
                cols * mrs_data$resolution[3],
                slices * mrs_data$resolution[4])
   
+  voi_dim <- round(voi_dim)
+  
   if (is.null(map)) {
     raw_data <- array(1, voi_dim)
   } else {
