@@ -1,6 +1,8 @@
 # spant 1.21.0
 * Bug fix for get_mrsi_voi function due to incorrect rounding of MRSI matrix
 dimensions in some cases.
+* Added mask_fit_res function.
+* Option added to get_2d_psf function to ensure odd output dimensions.
 
 # spant 1.20.0
 * Options added to ft_dyns to return the modulus of the 2D spectra and to

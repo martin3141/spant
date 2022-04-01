@@ -4,7 +4,13 @@
 \alias{get_2d_psf}
 \title{Get the point spread function (PSF) for a 2D phase encoded MRSI scan.}
 \usage{
-get_2d_psf(FOV = 160, mat_size = 16, sampling = "circ", hamming = FALSE)
+get_2d_psf(
+  FOV = 160,
+  mat_size = 16,
+  sampling = "circ",
+  hamming = FALSE,
+  ensure_odd = TRUE
+)
 }
 \arguments{
 \item{FOV}{field of view in mm.}
@@ -14,6 +20,9 @@ get_2d_psf(FOV = 160, mat_size = 16, sampling = "circ", hamming = FALSE)
 \item{sampling}{can be either "circ" for circular or "rect" for rectangular.}
 
 \item{hamming}{should Hamming k-space weighting be applied (default FALSE).}
+
+\item{ensure_odd}{add 1mm to the FOV when required to ensure the output pdf
+has odd dimensions. Required when using get_mrsi2d_seg.}
 }
 \value{
 A matrix of the PSF with 1mm resolution.

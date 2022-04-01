@@ -321,10 +321,16 @@ sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal_v1",
 #' @param mat_size acquisition matrix size (not interpolated).
 #' @param sampling can be either "circ" for circular or "rect" for rectangular.
 #' @param hamming should Hamming k-space weighting be applied (default FALSE).
+#' @param ensure_odd add 1mm to the FOV when required to ensure the output pdf
+#' has odd dimensions. Required when using get_mrsi2d_seg.
 #' @return A matrix of the PSF with 1mm resolution.
 #' @export
 get_2d_psf <- function(FOV = 160, mat_size = 16, sampling = "circ",
-                       hamming = FALSE) {
+                       hamming = FALSE, ensure_odd = TRUE) {
+  
+  if (ensure_odd) {
+    if ((FOV %% 2) == 0) FOV <- FOV + 1
+  }
   
   if (sampling == "circ") {
     g <- expand.grid(1:FOV, 1:FOV)
@@ -357,6 +363,33 @@ get_2d_psf <- function(FOV = 160, mat_size = 16, sampling = "circ",
   
   return(imspace)
 }
+
+#' Mask fit result spectra depending on a vector of bool values.
+#' @param fit_result fit result object to be masked.
+#' @param mask_vec a Boolean vector with the same number of rows as there are
+#' rows in the results table.
+#' @param amps_only only mask the amplitude and associated error estimate
+#' columns.
+#' @return a masked fit result object.
+#' @export
+mask_fit_res <- function(fit_result, mask_vec, amps_only = FALSE) {
+  if (length(mask_vec) != nrow(fit_result$res_tab)) {
+    stop("mask_vec and fit_res dimensions do not agree")
+  }
+
+  # mask any NA values too
+  mask_vec[is.na(mask_vec)] <- TRUE
+  
+  if (amps_only) {
+    fit_result$res_tab[mask_vec, 6:(fit_result$amp_cols * 2 + 5)] <- NA
+  } else {
+    fit_result$res_tab[mask_vec, 6:ncol(fit_result$res_tab)] <- NA
+  }
+  
+  return(fit_result)
+}
+
+
 
 #' @importFrom magrittr %>%
 #' @export
