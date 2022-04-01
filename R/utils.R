@@ -328,6 +328,9 @@ sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal_v1",
 get_2d_psf <- function(FOV = 160, mat_size = 16, sampling = "circ",
                        hamming = FALSE, ensure_odd = TRUE) {
   
+  # round FOV to ensure int value
+  FOV <- round(FOV)
+  
   if (ensure_odd) {
     if ((FOV %% 2) == 0) FOV <- FOV + 1
   }
