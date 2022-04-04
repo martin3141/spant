@@ -146,6 +146,14 @@ get_mrsi_voi <- function(mrs_data, target_mri = NULL, map = NULL,
       resamp_map <- mmand::rescale(drop(map), rounded_res, ker)
     }
     
+    if (dim(resamp_map)[1] != voi_dim[1]) {
+      stop("get_mrsi_voi - inconsistent matrix dimensions found following interpolation.")
+    }
+    
+    if (dim(resamp_map)[2] != voi_dim[2]) {
+      stop("get_mrsi_voi - inconsistent matrix dimensions found following interpolation.")
+    }
+      
     raw_data <- array(resamp_map, voi_dim) 
   }
   
