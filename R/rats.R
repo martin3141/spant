@@ -125,7 +125,10 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
 optim_rats <- function(x, ref, t, inds, basis, max_shift) {
   
   # masked spectra are special case
-  if (is.na(x[1])) return(c(NA, NA, NA, rep(NA, length(inds))))
+  if (is.na(x[1])) {
+    res <- c(NA, NA, NA, rep(NA, 2 * length(inds)))
+    return(res)
+  }
   
   # optim step
   res <- stats::optim(c(0), rats_obj_fn, gr = NULL, x, ref, t, inds, basis, 
@@ -148,7 +151,8 @@ optim_rats <- function(x, ref, t, inds, basis, max_shift) {
     bl   <- basis_mod %*% c(0, ahat[2:length(ahat)])
   }
   
-  c(Arg(ahat[1]) * 180 / pi, res$par, Mod(ahat[1]), yhat, bl)
+  res <- c(Arg(ahat[1]) * 180 / pi, res$par, Mod(ahat[1]), yhat, bl)
+  return(res)
 }
 
 rats_obj_fn <- function(par, x, ref, t, inds, basis) {
