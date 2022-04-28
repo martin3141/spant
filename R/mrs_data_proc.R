@@ -3802,3 +3802,44 @@ zero_fade_spec <- function(mrs_data, start_ppm, end_ppm) {
   
   return(mrs_data * fade_spec)
 }
+
+#' Decompose an mrs_data object into white and gray matter spectra.
+#' 
+#' An implementation of the method published by Goryawala et al MRM 79(6)
+#' 2886-2895 (2018). "Spectral decomposition for resolving partial volume
+#' effects in MRSI".
+#' 
+#' @param mrs_data data to be decomposed into white and gray matter spectra.
+#' @param wm vector of white matter contributions to each voxel.
+#' @param gm vector of gray matter contributions to each voxel.
+#' @param norm_fractions option to normalise the wm, gm vectors for each voxel.
+#' @return a list of two mrs_data objects corresponding to the two tissue types.
+#' @export
+spec_decomp <- function(mrs_data, wm, gm, norm_fractions = TRUE) {
+  
+  # normally a FD operation
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  # convert mrs_data to a matrix
+  mrs_data_mat <- mrs_data2mat(mrs_data)
+  
+  # remove any masked voxels
+  mask_vec     <- !is.na(mrs_data_mat[,1])
+  mrs_data_mat <- mrs_data_mat[mask_vec,]
+  wm <- wm[mask_vec]
+  gm <- gm[mask_vec]
+  
+  D <- mrs_data_mat
+  W <- cbind(wm, gm)
+  
+  if (norm_fractions) W <- W / cbind(rowSums(W), rowSums(W)) * 100
+  
+  # decompose
+  S <- solve(t(W) %*% W) %*% t(W) %*% D
+  
+  # convert back to an mrs_data object
+  wm_gm_spec <- mat2mrs_data(S, fs(mrs_data), mrs_data$ft, mrs_data$ref,
+                             fd = TRUE)
+  
+  return(list(wm = get_dyns(wm_gm_spec, 1), gm = get_dyns(wm_gm_spec, 2)))
+}

@@ -4,6 +4,7 @@ dimensions in some cases.
 * Added mask_fit_res function.
 * Option added to get_2d_psf function to ensure odd output dimensions.
 * Bug fix for using rats on datasets with masked voxels.
+* Added spec_decomp function.
 
 # spant 1.20.0
 * Options added to ft_dyns to return the modulus of the 2D spectra and to
