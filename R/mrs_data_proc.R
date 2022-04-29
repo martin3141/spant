@@ -2034,10 +2034,13 @@ scale_mrs_amp <- function(mrs_data, amp) {
 #' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
 #' @param mean_dyns mean the dynamic scans before applying the operator. The
 #' same scaling value will be applied to each individual dynamic.
+#' @param ret_scale_factor option to return the scaling factor in addition to
+#' the scaled data.
 #' @return normalised data.
 #' @export
 scale_spec <- function(mrs_data, xlim = NULL, operator = "sum",
-                       freq_scale = "ppm", mode = "re", mean_dyns = TRUE) {
+                       freq_scale = "ppm", mode = "re", mean_dyns = TRUE,
+                       ret_scale_factor = FALSE) {
   
   if (inherits(mrs_data, "list")) {
     res <- lapply(mrs_data, scale_spec, xlim = xlim, operator = operator,
@@ -2054,7 +2057,11 @@ scale_spec <- function(mrs_data, xlim = NULL, operator = "sum",
   
   mrs_data <- scale_mrs_amp(mrs_data, 1 / amp)
   
-  return(mrs_data)
+  if (ret_scale_factor) {
+    return(list(mrs_data = mrs_data, scale_factor = 1 / amp))
+  } else {
+    return(mrs_data)
+  }
 }
 
 #' @export

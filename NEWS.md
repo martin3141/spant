@@ -5,6 +5,7 @@ dimensions in some cases.
 * Option added to get_2d_psf function to ensure odd output dimensions.
 * Bug fix for using rats on datasets with masked voxels.
 * Added spec_decomp function.
+* Added ret_scale_factor option to scale_spec function.
 
 # spant 1.20.0
 * Options added to ft_dyns to return the modulus of the 2D spectra and to

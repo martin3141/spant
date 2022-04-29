@@ -10,7 +10,8 @@ scale_spec(
   operator = "sum",
   freq_scale = "ppm",
   mode = "re",
-  mean_dyns = TRUE
+  mean_dyns = TRUE,
+  ret_scale_factor = FALSE
 )
 }
 \arguments{
@@ -27,6 +28,9 @@ scale_spec(
 
 \item{mean_dyns}{mean the dynamic scans before applying the operator. The
 same scaling value will be applied to each individual dynamic.}
+
+\item{ret_scale_factor}{option to return the scaling factor in addition to
+the scaled data.}
 }
 \value{
 normalised data.
