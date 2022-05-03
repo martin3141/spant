@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return the default reference value for ppm scale. — def_ref • Spectroscopy Analysis Tools (spant)</title>
+<title>Decompose an mrs_data object into white and gray matter spectra. — spec_decomp • Spectroscopy Analysis Tools (spant)</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,10 @@
 
 
 
-<meta property="og:title" content="Return the default reference value for ppm scale. — def_ref" />
-<meta property="og:description" content="Return the default reference value for ppm scale." />
+<meta property="og:title" content="Decompose an mrs_data object into white and gray matter spectra. — spec_decomp" />
+<meta property="og:description" content="An implementation of the method published by Goryawala et al MRM 79(6)
+2886-2895 (2018). &quot;Spectral decomposition for resolving partial volume
+effects in MRSI&quot;." />
 <meta property="og:image" content="https://martin3141.github.io/spant/logo.png" />
 
 
@@ -146,21 +148,43 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return the default reference value for ppm scale.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/spant.R'><code>R/spant.R</code></a></small>
-    <div class="hidden name"><code>def_ref.Rd</code></div>
+    <h1>Decompose an mrs_data object into white and gray matter spectra.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/mrs_data_proc.R'><code>R/mrs_data_proc.R</code></a></small>
+    <div class="hidden name"><code>spec_decomp.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Return the default reference value for ppm scale.</p>
+    <p>An implementation of the method published by Goryawala et al MRM 79(6)
+2886-2895 (2018). "Spectral decomposition for resolving partial volume
+effects in MRSI".</p>
     </div>
 
-    <pre class="usage"><span class='fu'>def_ref</span><span class='op'>(</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>spec_decomp</span><span class='op'>(</span><span class='va'>mrs_data</span>, <span class='va'>wm</span>, <span class='va'>gm</span>, norm_fractions <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>mrs_data</th>
+      <td><p>data to be decomposed into white and gray matter spectra.</p></td>
+    </tr>
+    <tr>
+      <th>wm</th>
+      <td><p>vector of white matter contributions to each voxel.</p></td>
+    </tr>
+    <tr>
+      <th>gm</th>
+      <td><p>vector of gray matter contributions to each voxel.</p></td>
+    </tr>
+    <tr>
+      <th>norm_fractions</th>
+      <td><p>option to normalise the wm, gm vectors for each voxel.</p></td>
+    </tr>
+    </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>reference value for ppm scale.</p>
+    <p>a list of two mrs_data objects corresponding to the two tissue types.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

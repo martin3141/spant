@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return the default reference value for ppm scale. — def_ref • Spectroscopy Analysis Tools (spant)</title>
+<title>Mask fit result spectra depending on a vector of bool values. — mask_fit_res • Spectroscopy Analysis Tools (spant)</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Return the default reference value for ppm scale. — def_ref" />
-<meta property="og:description" content="Return the default reference value for ppm scale." />
+<meta property="og:title" content="Mask fit result spectra depending on a vector of bool values. — mask_fit_res" />
+<meta property="og:description" content="Mask fit result spectra depending on a vector of bool values." />
 <meta property="og:image" content="https://martin3141.github.io/spant/logo.png" />
 
 
@@ -146,21 +146,39 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return the default reference value for ppm scale.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/spant.R'><code>R/spant.R</code></a></small>
-    <div class="hidden name"><code>def_ref.Rd</code></div>
+    <h1>Mask fit result spectra depending on a vector of bool values.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/martin3141/spant/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
+    <div class="hidden name"><code>mask_fit_res.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Return the default reference value for ppm scale.</p>
+    <p>Mask fit result spectra depending on a vector of bool values.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>def_ref</span><span class='op'>(</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>mask_fit_res</span><span class='op'>(</span><span class='va'>fit_result</span>, <span class='va'>mask_vec</span>, amps_only <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>fit_result</th>
+      <td><p>fit result object to be masked.</p></td>
+    </tr>
+    <tr>
+      <th>mask_vec</th>
+      <td><p>a Boolean vector with the same number of rows as there are
+rows in the results table.</p></td>
+    </tr>
+    <tr>
+      <th>amps_only</th>
+      <td><p>only mask the amplitude and associated error estimate
+columns.</p></td>
+    </tr>
+    </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>reference value for ppm scale.</p>
+    <p>a masked fit result object.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

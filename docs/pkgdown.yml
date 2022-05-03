@@ -1,5 +1,5 @@
 pandoc: 2.11.4
-pkgdown: 2.0.2
+pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   abfit-baseline-opts: abfit-baseline-opts.html
@@ -7,8 +7,8 @@ articles:
   spant-intro: spant-intro.html
   spant-metabolite-simulation: spant-metabolite-simulation.html
   spant-preprocessing: spant-preprocessing.html
-last_built: 2022-03-30T10:45Z
+last_built: 2022-05-03T09:54Z
 urls:
-  reference: https://martin3141.github.io/spant/reference
-  article: https://martin3141.github.io/spant/articles
+  reference: https://martin3141.github.io/spant//reference
+  article: https://martin3141.github.io/spant//articles
 
