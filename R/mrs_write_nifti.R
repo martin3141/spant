@@ -8,7 +8,7 @@ write_mrs_nifti <- function(mrs_data, fname) {
     stop("filename argument must end in .nii.gz")
   }
   
-  # convert to nii
+  # extract the raw data points
   data_points <- mrs_data$data
   
   # drop the first dummy dimension
@@ -24,7 +24,6 @@ write_mrs_nifti <- function(mrs_data, fname) {
   mrs_nii <- RNifti::asNifti(data_points)
   
   # get the geometry information
-  #affine  <- get_mrs_affine(mrs_data, 1.5, 1.5, 1.5) # old version
   affine  <- mrs_data$affine
   
   # voxel dimensions

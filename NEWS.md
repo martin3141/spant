@@ -3,6 +3,7 @@
 * write_mrs_nifti function removed from userspace. write_mrs should be used
 instead.
 * set_td_pts and crop_td_pts now work with lists of spectra.
+* Multiple files can now be written by passing a list of spectra to write_mrs.
 
 # spant 1.21.0
 * Bug fix for get_mrsi_voi function due to incorrect rounding of MRSI matrix
