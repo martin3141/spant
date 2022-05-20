@@ -667,6 +667,11 @@ zf.basis_set <- function(x, factor = 2) {
 #' @export
 set_td_pts <- function(mrs_data, pts) {
   
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, set_td_pts, pts = pts)
+    return(res)
+  }
+  
   # needs to be a time-domain operation
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
@@ -1216,6 +1221,11 @@ get_seg_ind <- function(scale, start, end) {
 #' @return cropped \code{mrs_data} object.
 #' @export
 crop_td_pts <- function(mrs_data, start = NULL, end = NULL) {
+  
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, crop_td_pts, start = start, end = end)
+    return(res)
+  }
   
   # needs to be a TD operation
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)

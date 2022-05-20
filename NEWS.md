@@ -2,6 +2,7 @@
 * Added MSM to the set of internally defined molecules.
 * write_mrs_nifti function removed from userspace. write_mrs should be used
 instead.
+* set_td_pts and crop_td_pts now work with lists of spectra.
 
 # spant 1.21.0
 * Bug fix for get_mrsi_voi function due to incorrect rounding of MRSI matrix
