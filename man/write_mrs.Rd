@@ -4,16 +4,18 @@
 \alias{write_mrs}
 \title{Write MRS data object to file.}
 \usage{
-write_mrs(mrs_data, fname, format = NULL)
+write_mrs(mrs_data, fname, format = NULL, force = FALSE)
 }
 \arguments{
-\item{mrs_data}{object to be written to file.}
+\item{mrs_data}{object to be written to file, or list of mrs_data objects.}
 
-\item{fname}{the filename of the output.}
+\item{fname}{one or more filenames to output.}
 
 \item{format}{string describing the data format. Must be one of the
 following : "nifti", "dpt", "lcm_raw", "rds". If not specified, the format
 will be guessed from the filename extension.}
+
+\item{force}{set to TRUE to overwrite any existing files.}
 }
 \description{
 Write MRS data object to file.
