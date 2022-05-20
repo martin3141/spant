@@ -1,3 +1,6 @@
+# spant 1.22.0
+* Added MSM to the set of internally defined molecules.
+
 # spant 1.21.0
 * Bug fix for get_mrsi_voi function due to incorrect rounding of MRSI matrix
 dimensions in some cases.
