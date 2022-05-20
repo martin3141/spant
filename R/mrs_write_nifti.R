@@ -1,7 +1,6 @@
 #' Write MRS data object to file in NIFTI format.
 #' @param mrs_data object to be written to file.
 #' @param fname the filename of the output NIFTI MRS data.
-#' @export
 write_mrs_nifti <- function(mrs_data, fname) {
   if (class(mrs_data) != "mrs_data") stop("data object is not mrs_data format")
   

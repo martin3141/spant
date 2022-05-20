@@ -1,5 +1,7 @@
 # spant 1.22.0
 * Added MSM to the set of internally defined molecules.
+* write_mrs_nifti function removed from userspace. write_mrs should be used
+instead.
 
 # spant 1.21.0
 * Bug fix for get_mrsi_voi function due to incorrect rounding of MRSI matrix
