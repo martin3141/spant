@@ -3751,6 +3751,11 @@ sum_mrs_list <- function(mrs_list) {
 #' @export
 recon_twix_2d_mrsi <- function(twix_mrs) {
   
+  if (inherits(twix_mrs, "list")) {
+    res <- lapply(twix_mrs, recon_twix_2d_mrsi)
+    return(res)
+  }
+  
   x_inds <- twix_mrs$twix_inds$Seg
   y_inds <- twix_mrs$twix_inds$Lin
   
