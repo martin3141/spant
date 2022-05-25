@@ -1,5 +1,5 @@
 # spant 1.22.0
-* Added MSM to the set of internally defined molecules.
+* Added MSM and acetone to the set of internally defined molecules.
 * write_mrs_nifti function removed from userspace. write_mrs should be used
 instead.
 * set_td_pts and crop_td_pts now work with lists of spectra.
