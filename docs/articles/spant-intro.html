@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,23 +40,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.21.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.22.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorials
      
     <span class="caret"></span>
@@ -86,7 +82,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/martin3141/spant/">
+  <a href="https://github.com/martin3141/spant/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -101,34 +97,34 @@
 
       
 
-      </header><script src="spant-intro_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to spant</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/martin3141/spant/blob/master/vignettes/spant-intro.Rmd"><code>vignettes/spant-intro.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/martin3141/spant/blob/HEAD/vignettes/spant-intro.Rmd" class="external-link"><code>vignettes/spant-intro.Rmd</code></a></small>
       <div class="hidden name"><code>spant-intro.Rmd</code></div>
 
     </div>
 
     
     
-<div id="reading-raw-data-and-plotting" class="section level2">
-<h2 class="hasAnchor">
-<a href="#reading-raw-data-and-plotting" class="anchor"></a>Reading raw data and plotting</h2>
+<div class="section level2">
+<h2 id="reading-raw-data-and-plotting">Reading raw data and plotting<a class="anchor" aria-label="anchor" href="#reading-raw-data-and-plotting"></a>
+</h2>
 <p>Load the spant package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://martin3141.github.io/spant/">spant</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://martin3141.github.io/spant/">spant</a></span><span class="op">)</span></code></pre></div>
 <p>Get the path to a data file included with spant:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"philips_spar_sdat_WS.SDAT"</span>, package <span class="op">=</span> <span class="st">"spant"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">fname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"philips_spar_sdat_WS.SDAT"</span>, package <span class="op">=</span> <span class="st">"spant"</span><span class="op">)</span></code></pre></div>
 <p>Read the file and save to the workspace as <code>mrs_data</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mrs_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_mrs.html">read_mrs</a></span><span class="op">(</span><span class="va">fname</span>, format <span class="op">=</span> <span class="st">"spar_sdat"</span><span class="op">)</span></code></pre></div>
 <p>Output some basic information about the data:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">mrs_data</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mrs_data</span><span class="op">)</span>
 <span class="co">#&gt; MRS Data Parameters</span>
 <span class="co">#&gt; ----------------------------------</span>
 <span class="co">#&gt; Trans. freq (MHz)       : 127.7861</span>
@@ -143,26 +139,28 @@
 <span class="co">#&gt; Spectral domain         : FALSE</span></code></pre></div>
 <p>Plot the spectral region between 5 and 0.5 ppm:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mrs_data</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mrs_data</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-intro_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 </div>
-<div id="basic-preprocessing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#basic-preprocessing" class="anchor"></a>Basic preprocessing</h2>
-<p>Apply a HSVD filter to the residual water region and align the spectrum to the tNAA resonance at 2.01 ppm:</p>
+<div class="section level2">
+<h2 id="basic-preprocessing">Basic preprocessing<a class="anchor" aria-label="anchor" href="#basic-preprocessing"></a>
+</h2>
+<p>Apply a HSVD filter to the residual water region and align the
+spectrum to the tNAA resonance at 2.01 ppm:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mrs_proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hsvd_filt.html">hsvd_filt</a></span><span class="op">(</span><span class="va">mrs_data</span><span class="op">)</span>
 <span class="va">mrs_proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/align.html">align</a></span><span class="op">(</span><span class="va">mrs_proc</span>, <span class="fl">2.01</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">mrs_proc</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mrs_proc</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-intro_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 </div>
-<div id="basis-simulation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#basis-simulation" class="anchor"></a>Basis simulation</h2>
-<p>Simulate a typical basis set for short TE brain analysis, print some basic information and plot:</p>
+<div class="section level2">
+<h2 id="basis-simulation">Basis simulation<a class="anchor" aria-label="anchor" href="#basis-simulation"></a>
+</h2>
+<p>Simulate a typical basis set for short TE brain analysis, print some
+basic information and plot:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">basis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_basis_1h_brain_press.html">sim_basis_1h_brain_press</a></span><span class="op">(</span><span class="va">mrs_proc</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">basis</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">basis</span><span class="op">)</span>
 <span class="co">#&gt; Basis set parameters</span>
 <span class="co">#&gt; -------------------------------</span>
 <span class="co">#&gt; Trans. freq (MHz)       : 127.786142</span>
@@ -177,107 +175,110 @@
 <span class="co">#&gt; Lip13a,Lip13b,Lip20,MM09,MM12,</span>
 <span class="co">#&gt; MM14,MM17,MM20,NAA,NAAG,PCh,</span>
 <span class="co">#&gt; PCr,sIns,Tau</span>
-<span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="va">basis</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">basis</span><span class="op">$</span><span class="va">names</span>, y_offset <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="va">basis</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">basis</span><span class="op">$</span><span class="va">names</span>, y_offset <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-intro_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
-<p>Perform ABfit analysis of the processed data (<code>mrs_proc</code>):</p>
+<p>Perform ABfit analysis of the processed data
+(<code>mrs_proc</code>):</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span><span class="op">(</span><span class="va">mrs_proc</span>, <span class="va">basis</span><span class="op">)</span></code></pre></div>
 <p>Plot the fit result:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_res</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-intro_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
-<p>Extract the estimated amplitudes from <code>fit_res</code> and print as a ratio to total-creatine in column format:</p>
+<p>Extract the estimated amplitudes from <code>fit_res</code> and print
+as a ratio to total-creatine in column format:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">amps</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_amps.html">fit_amps</a></span><span class="op">(</span><span class="va">fit_res</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">amps</span> <span class="op">/</span> <span class="va">amps</span><span class="op">$</span><span class="va">tCr</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">amps</span> <span class="op">/</span> <span class="va">amps</span><span class="op">$</span><span class="va">tCr</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;               [,1]</span>
 <span class="co">#&gt; X.CrCH2 0.00000000</span>
-<span class="co">#&gt; Ala     0.15388491</span>
-<span class="co">#&gt; Asp     0.54901292</span>
-<span class="co">#&gt; Cr      0.66227286</span>
-<span class="co">#&gt; GABA    0.27768887</span>
-<span class="co">#&gt; Glc     0.06608174</span>
-<span class="co">#&gt; Gln     0.07780085</span>
-<span class="co">#&gt; GSH     0.35696174</span>
-<span class="co">#&gt; Glu     1.10909390</span>
-<span class="co">#&gt; GPC     0.26539770</span>
-<span class="co">#&gt; Ins     0.99223157</span>
-<span class="co">#&gt; Lac     0.09773847</span>
-<span class="co">#&gt; Lip09   0.38611379</span>
-<span class="co">#&gt; Lip13a  0.04661290</span>
+<span class="co">#&gt; Ala     0.15614852</span>
+<span class="co">#&gt; Asp     0.54809279</span>
+<span class="co">#&gt; Cr      0.66327676</span>
+<span class="co">#&gt; GABA    0.28180963</span>
+<span class="co">#&gt; Glc     0.06746675</span>
+<span class="co">#&gt; Gln     0.07453008</span>
+<span class="co">#&gt; GSH     0.35689235</span>
+<span class="co">#&gt; Glu     1.10359860</span>
+<span class="co">#&gt; GPC     0.26459029</span>
+<span class="co">#&gt; Ins     0.99276937</span>
+<span class="co">#&gt; Lac     0.09734854</span>
+<span class="co">#&gt; Lip09   0.37880080</span>
+<span class="co">#&gt; Lip13a  0.04545716</span>
 <span class="co">#&gt; Lip13b  0.00000000</span>
 <span class="co">#&gt; Lip20   0.00000000</span>
-<span class="co">#&gt; MM09    0.16559585</span>
-<span class="co">#&gt; MM12    0.11274441</span>
-<span class="co">#&gt; MM14    0.44654623</span>
-<span class="co">#&gt; MM17    0.42514379</span>
-<span class="co">#&gt; MM20    1.55949283</span>
-<span class="co">#&gt; NAA     0.98019415</span>
-<span class="co">#&gt; NAAG    0.26060757</span>
+<span class="co">#&gt; MM09    0.17194548</span>
+<span class="co">#&gt; MM12    0.11370653</span>
+<span class="co">#&gt; MM14    0.44454018</span>
+<span class="co">#&gt; MM17    0.42554636</span>
+<span class="co">#&gt; MM20    1.53642869</span>
+<span class="co">#&gt; NAA     0.97179686</span>
+<span class="co">#&gt; NAAG    0.27434664</span>
 <span class="co">#&gt; PCh     0.00000000</span>
-<span class="co">#&gt; PCr     0.33772714</span>
-<span class="co">#&gt; sIns    0.10907862</span>
+<span class="co">#&gt; PCr     0.33672324</span>
+<span class="co">#&gt; sIns    0.10883969</span>
 <span class="co">#&gt; Tau     0.00000000</span>
-<span class="co">#&gt; tNAA    1.24080172</span>
+<span class="co">#&gt; tNAA    1.24614350</span>
 <span class="co">#&gt; tCr     1.00000000</span>
-<span class="co">#&gt; tCho    0.26539770</span>
-<span class="co">#&gt; Glx     1.18689475</span>
-<span class="co">#&gt; tLM09   0.55170964</span>
-<span class="co">#&gt; tLM13   0.60590354</span>
-<span class="co">#&gt; tLM20   1.55949283</span></code></pre></div>
-<p>Unscaled amplitudes, CRLB error estimates and other fitting diagnostics, such as SNR, are given in the results table:</p>
+<span class="co">#&gt; tCho    0.26459029</span>
+<span class="co">#&gt; Glx     1.17812868</span>
+<span class="co">#&gt; tLM09   0.55074627</span>
+<span class="co">#&gt; tLM13   0.60370387</span>
+<span class="co">#&gt; tLM20   1.53642869</span></code></pre></div>
+<p>Unscaled amplitudes, CRLB error estimates and other fitting
+diagnostics, such as SNR, are given in the results table:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span>
 <span class="co">#&gt;   X Y Z Dynamic Coil X.CrCH2          Ala          Asp           Cr</span>
-<span class="co">#&gt; 1 1 1 1       1    1       0 9.343254e-06 3.333379e-05 4.021046e-05</span>
-<span class="co">#&gt;           GABA          Glc          Gln          GSH          Glu          GPC</span>
-<span class="co">#&gt; 1 1.686012e-05 4.012209e-06 4.723745e-06 2.167324e-05 6.733958e-05 1.611385e-05</span>
-<span class="co">#&gt;            Ins          Lac        Lip09       Lip13a Lip13b Lip20         MM09</span>
-<span class="co">#&gt; 1 6.024419e-05 5.934275e-06 2.344323e-05 2.830142e-06      0     0 1.005429e-05</span>
-<span class="co">#&gt;           MM12         MM14         MM17         MM20          NAA         NAAG</span>
-<span class="co">#&gt; 1 6.845373e-06 2.711244e-05 2.581297e-05 9.468594e-05 5.951333e-05 1.582301e-05</span>
-<span class="co">#&gt;   PCh          PCr         sIns Tau         tNAA          tCr         tCho</span>
-<span class="co">#&gt; 1   0 2.050539e-05 6.622802e-06   0 7.533634e-05 6.071586e-05 1.611385e-05</span>
-<span class="co">#&gt;            Glx        tLM09        tLM13        tLM20   X.CrCH2.sd       Ala.sd</span>
-<span class="co">#&gt; 1 7.206333e-05 3.349752e-05 3.678795e-05 9.468594e-05 2.365865e-06 4.358581e-06</span>
-<span class="co">#&gt;        Asp.sd        Cr.sd     GABA.sd       Glc.sd      Gln.sd      GSH.sd</span>
-<span class="co">#&gt; 1 8.96596e-06 3.745157e-06 4.44331e-06 4.324162e-06 4.89224e-06 2.01775e-06</span>
-<span class="co">#&gt;         Glu.sd      GPC.sd      Ins.sd       Lac.sd    Lip09.sd    Lip13a.sd</span>
-<span class="co">#&gt; 1 4.904507e-06 2.48574e-06 2.02138e-06 5.353012e-06 4.06968e-06 1.340822e-05</span>
-<span class="co">#&gt;      Lip13b.sd     Lip20.sd     MM09.sd      MM12.sd      MM14.sd      MM17.sd</span>
-<span class="co">#&gt; 1 6.514833e-06 7.381737e-06 3.76942e-06 4.490833e-06 7.118534e-06 3.582286e-06</span>
+<span class="co">#&gt; 1 1 1 1       1    1       0 9.497422e-06 3.333665e-05 4.034248e-05</span>
+<span class="co">#&gt;           GABA         Glc          Gln          GSH          Glu          GPC</span>
+<span class="co">#&gt; 1 1.714051e-05 4.10353e-06 4.533143e-06 2.170726e-05 6.712418e-05 1.609318e-05</span>
+<span class="co">#&gt;            Ins         Lac       Lip09       Lip13a Lip13b Lip20         MM09</span>
+<span class="co">#&gt; 1 6.038321e-05 5.92103e-06 2.30398e-05 2.764841e-06      0     0 1.045824e-05</span>
+<span class="co">#&gt;           MM12         MM14         MM17        MM20         NAA         NAAG</span>
+<span class="co">#&gt; 1 6.915973e-06 2.703827e-05 2.588301e-05 9.34502e-05 5.91076e-05 1.668659e-05</span>
+<span class="co">#&gt;   PCh          PCr         sIns Tau         tNAA        tCr         tCho</span>
+<span class="co">#&gt; 1   0 2.048052e-05 6.619957e-06   0 7.579419e-05 6.0823e-05 1.609318e-05</span>
+<span class="co">#&gt;            Glx        tLM09        tLM13       tLM20   X.CrCH2.sd       Ala.sd</span>
+<span class="co">#&gt; 1 7.165732e-05 3.349804e-05 3.671908e-05 9.34502e-05 2.353862e-06 4.359105e-06</span>
+<span class="co">#&gt;         Asp.sd       Cr.sd      GABA.sd       Glc.sd       Gln.sd       GSH.sd</span>
+<span class="co">#&gt; 1 8.967176e-06 3.76957e-06 4.496029e-06 4.330377e-06 4.891686e-06 2.019976e-06</span>
+<span class="co">#&gt;        Glu.sd       GPC.sd       Ins.sd       Lac.sd     Lip09.sd    Lip13a.sd</span>
+<span class="co">#&gt; 1 4.91104e-06 2.340559e-06 2.023099e-06 5.343971e-06 4.067372e-06 1.338191e-05</span>
+<span class="co">#&gt;      Lip13b.sd     Lip20.sd      MM09.sd      MM12.sd      MM14.sd     MM17.sd</span>
+<span class="co">#&gt; 1 6.502036e-06 7.383159e-06 3.767183e-06 4.507066e-06 7.122517e-06 3.57925e-06</span>
 <span class="co">#&gt;        MM20.sd       NAA.sd      NAAG.sd       PCh.sd       PCr.sd      sIns.sd</span>
-<span class="co">#&gt; 1 8.255783e-06 1.018032e-06 1.239151e-06 2.126375e-06 3.164547e-06 7.094294e-07</span>
-<span class="co">#&gt;         Tau.sd      tNAA.sd       tCr.sd      tCho.sd       Glx.sd     tLM09.sd</span>
-<span class="co">#&gt; 1 3.714836e-06 7.075161e-07 5.852302e-07 2.122002e-07 2.894733e-06 9.740525e-07</span>
-<span class="co">#&gt;       tLM13.sd     tLM20.sd    phase       lw        shift      asym</span>
-<span class="co">#&gt; 1 1.527124e-06 2.881584e-06 10.68786 5.024705 -0.003553105 0.1745251</span>
+<span class="co">#&gt; 1 8.280711e-06 1.021341e-06 1.289272e-06 1.998756e-06 3.162821e-06 7.079373e-07</span>
+<span class="co">#&gt;         Tau.sd      tNAA.sd       tCr.sd      tCho.sd       Glx.sd    tLM09.sd</span>
+<span class="co">#&gt; 1 3.741981e-06 7.137559e-07 5.844872e-07 2.125819e-07 2.883711e-06 9.73116e-07</span>
+<span class="co">#&gt;       tLM13.sd     tLM20.sd    phase       lw        shift     asym</span>
+<span class="co">#&gt; 1 1.520083e-06 2.886552e-06 10.83967 5.024143 -0.002971687 0.177138</span>
 <span class="co">#&gt;   res.deviance res.niter res.info</span>
-<span class="co">#&gt; 1  7.46863e-05        27        2</span>
+<span class="co">#&gt; 1 7.455761e-05        27        2</span>
 <span class="co">#&gt;                                                        res.message bl_ed_pppm</span>
 <span class="co">#&gt; 1 Relative error between `par' and the solution is at most `ptol'.   1.969325</span>
 <span class="co">#&gt;   max_bl_flex_used     full_res fit_pts ppm_range      SNR      SRR      FQN</span>
-<span class="co">#&gt; 1            FALSE 8.218364e-05     497       3.8 63.11155 51.11144 1.524689</span>
-<span class="co">#&gt;     tNAA_lw     tCr_lw    tCho_lw auto_bl_crit_7 auto_bl_crit_5.901</span>
-<span class="co">#&gt; 1 0.0457357 0.05174081 0.05459448      -8.897184          -8.940906</span>
+<span class="co">#&gt; 1            FALSE 8.202623e-05     497       3.8 63.23665 51.27883 1.520763</span>
+<span class="co">#&gt;      tNAA_lw     tCr_lw    tCho_lw auto_bl_crit_7 auto_bl_crit_5.901</span>
+<span class="co">#&gt; 1 0.04585124 0.05167911 0.05460797      -8.872611          -8.918514</span>
 <span class="co">#&gt;   auto_bl_crit_4.942 auto_bl_crit_4.12 auto_bl_crit_3.425 auto_bl_crit_2.844</span>
-<span class="co">#&gt; 1            -8.9744         -8.997882          -9.012253          -9.020869</span>
+<span class="co">#&gt; 1          -8.954323         -8.980263           -8.99748          -9.009404</span>
 <span class="co">#&gt;   auto_bl_crit_2.364 auto_bl_crit_1.969 auto_bl_crit_1.647 auto_bl_crit_1.384</span>
-<span class="co">#&gt; 1           -9.02583          -9.026292          -9.013371          -8.962017</span>
+<span class="co">#&gt; 1          -9.017235           -9.02016          -9.008892          -8.957937</span>
 <span class="co">#&gt;   auto_bl_crit_1.17 auto_bl_crit_0.997 auto_bl_crit_0.856 auto_bl_crit_0.743</span>
-<span class="co">#&gt; 1         -8.846432          -8.691285          -8.562192          -8.484754</span>
+<span class="co">#&gt; 1         -8.841036          -8.684538          -8.555257          -8.478503</span>
 <span class="co">#&gt;   auto_bl_crit_0.654 auto_bl_crit_0.593 auto_bl_crit_0.558 auto_bl_crit_0.54</span>
-<span class="co">#&gt; 1          -8.446474          -8.429614           -8.42256         -8.419626</span>
+<span class="co">#&gt; 1          -8.441094          -8.424849          -8.418127          -8.41535</span>
 <span class="co">#&gt;   auto_bl_crit_0.532 auto_bl_crit_0.529</span>
-<span class="co">#&gt; 1          -8.418395          -8.417874</span></code></pre></div>
+<span class="co">#&gt; 1          -8.414189          -8.413699</span></code></pre></div>
 <p>Spectral SNR:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">SNR</span>
-<span class="co">#&gt; [1] 63.11155</span></code></pre></div>
+<span class="co">#&gt; [1] 63.23665</span></code></pre></div>
 <p>Linewidth of the tNAA resonance in PPM:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">tNAA_lw</span>
-<span class="co">#&gt; [1] 0.0457357</span></code></pre></div>
+<span class="co">#&gt; [1] 0.04585124</span></code></pre></div>
 </div>
   </div>
 
@@ -292,11 +293,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Martin Wilson.</p>
+  <p></p>
+<p>Developed by Martin Wilson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -304,6 +307,8 @@
 
   
 
+
+  
 
   </body>
 </html>
