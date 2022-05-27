@@ -86,7 +86,7 @@ read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
   } else if (format == "rds") {
     mrs_data <- readRDS(fname)
     mrs_data$extra <- extra
-    if (class(mrs_data) != "mrs_data") stop("rds file is not mrs_data format")
+    if (!inherits(mrs_data, "mrs_data")) stop("rds file is not mrs_data format")
     return(mrs_data)
   } else if (format == "nifti") {
     return(read_mrs_nifti(fname, extra))
@@ -166,7 +166,7 @@ write_mrs <- function(mrs_data, fname, format = NULL, force = FALSE) {
            SIMPLIFY = FALSE)))
   }
   
-  if (class(mrs_data) != "mrs_data") stop("data object is not mrs_data format")
+  if (!inherits(mrs_data, "mrs_data")) stop("data object is not mrs_data format")
   
   # try and guess the format from the filename extension
   if (is.null(format)) format <- guess_mrs_format(fname) 
@@ -390,6 +390,8 @@ write_mrs_lcm_raw <- function(fname, mrs_data, id = NA) {
 }
 
 write_mrs_rds <- function(fname, mrs_data) {
-  if (class(mrs_data) != "mrs_data") stop("data object is not mrs_data format")
+  if (!inherits(mrs_data, "mrs_data")) {
+    stop("data object is not mrs_data format")
+  }
   saveRDS(mrs_data, fname)
 }
