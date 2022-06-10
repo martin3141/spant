@@ -1,5 +1,7 @@
 # spant 1.23.0
 * NIfTI MRS writer no longer fails when dealing with a NULL affine matrix.
+* Bug fix for NIfTI MRS writer, where frequency domain data was not correctly
+converted.
 
 # spant 1.22.0
 * Added MSM and acetone to the set of internally defined molecules.

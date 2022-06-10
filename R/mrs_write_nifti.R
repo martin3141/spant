@@ -8,6 +8,9 @@ write_mrs_nifti <- function(mrs_data, fname) {
     stop("filename argument must end in .nii.gz")
   }
   
+  # NIfTI MRS stores data in the time-domain
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+  
   # extract the raw data points
   data_points <- mrs_data$data
   
