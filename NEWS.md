@@ -1,3 +1,6 @@
+# spant 1.23.0
+* NIfTI MRS writer no longer fails when dealing with a NULL affine matrix.
+
 # spant 1.22.0
 * Added MSM and acetone to the set of internally defined molecules.
 * write_mrs_nifti function removed from userspace. write_mrs should be used
