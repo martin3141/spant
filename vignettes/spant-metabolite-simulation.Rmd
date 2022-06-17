@@ -40,7 +40,7 @@ print(ins)
 Simulate and plot the simulation at 7 Tesla for a pulse acquire sequence
 (seq_pulse_acquire), apply 2 Hz line-broadening and plot.
 ```{r, message = FALSE}
-sim_mol(ins, ft = 300e6, N = 4096) %>% lb(2) %>% plot(xlim = c(3.8, 3.1))
+sim_mol(ins, ft = 300e6, N = 4096) |> lb(2) |> plot(xlim = c(3.8, 3.1))
 ```
 
 Other pulse sequences may be simulated including: seq_cpmg_ideal,
@@ -50,7 +50,7 @@ negligible. Next we simulate a 30 ms spin-echo sequence and plot:
 
 ```{r, message = FALSE}
 ins_sim <- sim_mol(ins, seq_spin_echo_ideal, ft = 300e6, N = 4086, TE = 0.03)
-ins_sim %>% lb(2) %>% plot(xlim = c(3.8, 3.1))
+ins_sim |> lb(2) |> plot(xlim = c(3.8, 3.1))
 ```
 
 Finally we simulate a range of echo-times and plot all results together to see
@@ -64,8 +64,8 @@ sim_fn <- function(TE) {
 
 te_vals <- seq(0, 2, 0.4)
 
-lapply(te_vals, sim_fn) %>% stackplot(y_offset = 150, xlim = c(3.8, 3.1),
-                                      labels = paste(te_vals * 100, "ms"))
+lapply(te_vals, sim_fn) |> stackplot(y_offset = 150, xlim = c(3.8, 3.1),
+                                     labels = paste(te_vals * 100, "ms"))
 ```
 
 See the [basis simulation](spant-basis-simulation.html) vignette for how to combine these simulations into a basis set for MRS analysis.
@@ -79,7 +79,7 @@ Gaussian resonances at 1.3 and 1.4 ppm with differing amplitudes:
 
 ```{r, message = FALSE}
 get_uncoupled_mol("Lip13", c(1.3, 1.4), c("1H", "1H"), c(2, 1), c(10, 10),
-                  c(1, 1)) %>% sim_mol %>% plot(xlim = c(2, 0.8))
+                  c(1, 1)) |> sim_mol() |> plot(xlim = c(2, 0.8))
 ```
 
 Molecules that aren't defined within spant, or need adjusting to match a particular scan, may be manually defined by constructing a `mol_parameters` object. In the following code we define an imaginary molecule based on Lactate, with the addition of a second spin group containing a singlet at 2.5 ppm. Whilst this molecule could be defined as a single group, it is more computationally efficient to split non j-coupled spin systems up in this way. Note the lineshape is set to a Lorentzian (Lorentz-Gauss factor lg = 0) with a width of 2 Hz. It is generally a good idea to simulate resonances with narrower lineshapes that you expect to see in experimental data, as it is far easier to make a resonance broader than narrower.
@@ -118,7 +118,7 @@ In the next step we output the molecule definition as formatted text and plot it
 
 ```{r, message = FALSE}
 print(custom_mol)
-custom_mol %>% sim_mol %>% lb(2) %>% zf %>% plot(xlim = c(4.4, 0.5))
+custom_mol |> sim_mol() |> lb(2) |> zf() |> plot(xlim = c(4.4, 0.5))
 ```
 
 

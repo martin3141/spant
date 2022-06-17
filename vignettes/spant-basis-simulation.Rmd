@@ -63,12 +63,13 @@ Note the field strength is often required to simulate these broad resonances as 
 `sim_basis_1h_brain_press` to produce commonly used sets of basis signals:
 
 ```{r}
-sim_basis_1h_brain() %>% stackplot(xlim = c(4, 0.5), y_offset = 20, labels = .$names)
+basis <- sim_basis_1h_brain()
+stackplot(basis, xlim = c(4, 0.5), y_offset = 20, labels = basis$names)
 ```
 
 Basis sets can be exported for use with LCModel with the `write_basis` function, and sim_basis_1h_brain has the option `lcm_compat` to remove signals that are usually generated within the LCModel package:
 
 ```{r}
-sim_basis_1h_brain(lcm_compat = TRUE) %>%
-  stackplot(xlim = c(4, 0.5), y_offset = 20, labels = .$names)
+lcm_basis <- sim_basis_1h_brain()
+stackplot(lcm_basis, xlim = c(4, 0.5), y_offset = 20, labels = basis$names)
 ```

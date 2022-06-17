@@ -3,8 +3,6 @@
 \docType{import}
 \name{reexports}
 \alias{reexports}
-\alias{\%>\%}
-\alias{\%$\%}
 \alias{readNifti}
 \alias{writeNifti}
 \title{Objects exported from other packages}
@@ -14,8 +12,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{magrittr}{\code{\link[magrittr:exposition]{\%$\%}}, \code{\link[magrittr:pipe]{\%>\%}}}
-
   \item{RNifti}{\code{\link[RNifti]{readNifti}}, \code{\link[RNifti]{writeNifti}}}
 }}
 

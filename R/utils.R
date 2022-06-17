@@ -392,16 +392,6 @@ mask_fit_res <- function(fit_result, mask_vec, amps_only = FALSE) {
   return(fit_result)
 }
 
-
-
-#' @importFrom magrittr %>%
-#' @export
-magrittr::`%>%`
-
-#' @importFrom magrittr %$%
-#' @export
-magrittr::`%$%`
-
 #' @importFrom RNifti readNifti
 #' @export
 RNifti::readNifti
