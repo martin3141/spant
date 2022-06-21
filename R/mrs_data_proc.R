@@ -3865,3 +3865,49 @@ spec_decomp <- function(mrs_data, wm, gm, norm_fractions = TRUE) {
   
   return(list(wm = get_dyns(wm_gm_spec, 1), gm = get_dyns(wm_gm_spec, 2)))
 }
+
+#' Bin equally spaced spectral regions.
+#' @param mrs_data data to be "binned".
+#' @param width bin width.
+#' @param unit bin width unit, can be "ppm" (default) or "pts".
+#' @return binned mrs_data object.
+#' @export
+bin_spec <- function(mrs_data, width = 0.05, unit = "ppm") {
+  
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, bin_spec, width = width, unit = unit)
+    return(res)
+  }
+  
+  if (Ncoils(mrs_data) > 1) stop("Unsuppored data type for bin_spec function.")
+  if (Ndyns(mrs_data) > 1) stop("Unsuppored data type for bin_spec function.")
+  if (Nx(mrs_data) > 1) stop("Unsuppored data type for bin_spec function.")
+  if (Ny(mrs_data) > 1) stop("Unsuppored data type for bin_spec function.")
+  if (Nz(mrs_data) > 1) stop("Unsuppored data type for bin_spec function.")
+  
+  # need to be a FD operation
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  if (unit == "ppm") {
+    width_hz  <- width * 1e-6 * mrs_data$ft
+    width_pts <- round(width_hz / fs(mrs_data) * Npts(mrs_data))
+  } else if (unit == "pts") {
+    width_pts <- width 
+  } else {
+    stop("Unrecognised unit for bin_spec")
+  }
+  
+  data_vec_orig <- as.vector(mrs_data$data)
+  
+  N_old <- length(data_vec_orig)
+  
+  # check for remainder and pad with NA's
+  data_vec_orig <- c(data_vec_orig,
+                     rep(NA, ceiling(N_old / width_pts) * width_pts - N_old))
+  
+  data_vec <- colMeans(matrix(data_vec_orig, nrow = width_pts), na.rm = TRUE)
+  
+  mrs_data$data <- array(data_vec, dim = c(1, 1, 1, 1, 1, 1, length(data_vec)))
+  
+  return(mrs_data)
+}
