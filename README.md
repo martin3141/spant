@@ -21,6 +21,8 @@ features and algorithms are included:
     <https://onlinelibrary.wiley.com/doi/10.1002/mrm.28385>.
 -   Robust retrospective frequency and phase correction - RATS
     <https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.27605>.
+-   Support for common MRS data formats including read / write NIfTI
+    MRS - <https://www.biorxiv.org/content/10.1101/2021.11.09.467912v1>.
 -   Flexible data types to support single voxel, dynamic and
     spectroscopic imaging data types.
 -   Raw data import from individual coils and dynamic measurements, eg
@@ -28,7 +30,7 @@ features and algorithms are included:
     data.
 -   Publication quality plotting.
 -   Extensive set of pre-processing steps (phasing, coil-combination,
-    zero-filling, HSVD filtering…)
+    zero-filling, HSVD filtering…).
 -   Quantum mechanical based simulation for experimental design and
     basis-set generation.
 -   Set of metabolite, macromolecule and lipid parameters for typical
