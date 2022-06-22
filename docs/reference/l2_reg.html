@@ -18,7 +18,7 @@ Bilgic et al. JMRI 40(1):181-91 2014."><meta property="og:image" content="https:
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.22.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.9000</span>
       </span>
     </div>
 
@@ -96,28 +96,45 @@ Bilgic et al. JMRI 40(1):181-91 2014.</p>
     <h2>Arguments</h2>
     <dl><dt>mrs_data</dt>
 <dd><p>input data for artefact suppression.</p></dd>
+
+
 <dt>thresh</dt>
 <dd><p>threshold parameter to extract lipid signals from mrs_data
 based on the spectral integration of the thresh_xlim region in magnitude
 mode.</p></dd>
+
+
 <dt>b</dt>
 <dd><p>regularisation parameter.</p></dd>
+
+
 <dt>A</dt>
 <dd><p>set of spectra containing the artefact basis signals. The thresh
 parameter is ignored when A is specified.</p></dd>
+
+
 <dt>xlim</dt>
 <dd><p>spectral limits in ppm to restrict the reconstruction range.
 Defaults to the full spectral width.</p></dd>
+
+
 <dt>thresh_xlim</dt>
 <dd><p>spectral limits in ppm to integrate for the threshold map.</p></dd>
+
+
 <dt>A_append</dt>
 <dd><p>additional spectra to append to the A basis.</p></dd>
+
+
 <dt>ret_norms</dt>
 <dd><p>return the residual norm and solution norms.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>l2 reconstructed mrs_data object.</p>
+    
+
+<p>l2 reconstructed mrs_data object.</p>
     </div>
 
   </div>
@@ -132,7 +149,7 @@ Defaults to the full spectral width.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
