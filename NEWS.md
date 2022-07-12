@@ -1,6 +1,7 @@
 # spant 2.1.0
 * y-axis label can now be changed with a new argument (yaxis_lab) to
 plot.mrs_data.
+* Segmentation files are now checked for non-integer values.
 
 # spant 2.0.0
 * magrittr pipe (%>%) is no longer loaded together with spant now the base pipe
