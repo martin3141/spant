@@ -61,6 +61,7 @@ print.mrs_data <- function(x, full = FALSE, ...) {
 #' been made.
 #' @param mar option to adjust the plot margins. See ?par.
 #' @param xaxis_lab x-axis label.
+#' @param yaxis_lab y-axis label.
 #' @param xat x-axis tick label values.
 #' @param xlabs x-axis tick labels.
 #' @param yat y-axis tick label values.
@@ -81,10 +82,10 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
                           y_scale = FALSE, x_ax = TRUE, mode = "re",
                           lwd = NULL, bty = NULL, label = "",
                           restore_def_par = TRUE, mar = NULL,
-                          xaxis_lab = NULL, xat = NULL, xlabs = TRUE,
-                          yat = NULL, ylabs = TRUE, show_grid = TRUE,
-                          grid_nx = NULL, grid_ny = NA, col = NULL,
-                          alpha = NULL, ...) {
+                          xaxis_lab = NULL, yaxis_lab = NULL, xat = NULL,
+                          xlabs = TRUE, yat = NULL, ylabs = TRUE,
+                          show_grid = TRUE, grid_nx = NULL, grid_ny = NA,
+                          col = NULL, alpha = NULL, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
  
@@ -146,6 +147,8 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
   
   if (!is.null(xaxis_lab)) xlab <- xaxis_lab
   
+  if (is.null(yaxis_lab)) yaxis_lab <- "Intensity (au)"
+  
   if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[Npts(x)])
   
   subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
@@ -174,7 +177,7 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
   if (y_scale) {
     if (is.null(mar)) graphics::par(mar = c(3.5, 3.5, 1, 1))
     graphics::plot(x_scale[subset], plot_data[subset], type = 'l', xlim = xlim, 
-                   xlab = xlab, ylab = "Intensity (au)", lwd = lwd, bty = bty, 
+                   xlab = xlab, ylab = yaxis_lab, lwd = lwd, bty = bty, 
                    xaxt = "n", yaxt = "n", col = col,
                    panel.first = {if (show_grid) graphics::grid(nx = grid_nx,
                                                             ny = grid_ny)}, ...)
