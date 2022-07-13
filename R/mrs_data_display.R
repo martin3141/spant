@@ -94,7 +94,8 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
  
   # has this data element been masked? 
   if (anyNA(x$data)) {
-    graphics::plot.new()
+    # graphics::plot.new()
+    plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
     return(NULL)
   }
   
@@ -730,6 +731,10 @@ gridplot.mrs_data <- function(x, rows = NA, cols = NA, mar = c(0, 0, 0, 0),
   mrs_data_dyns <- collapse_to_dyns(x)
   Nspec <- Ndyns(mrs_data_dyns)
   
+  # auto choose rows and cols for MRSI
+  if (is.na(rows) && (Nx(x) + Ny(x) > 2)) rows <- Ny(x)
+  if (is.na(cols) && (Nx(x) + Ny(x) > 2)) cols <- Nx(x)
+  
   # set to rows and cols to be squareish if not specified
   if (is.na(rows) & is.na(cols)) {
     rows <- ceiling(Nspec ^ 0.5)
@@ -744,11 +749,11 @@ gridplot.mrs_data <- function(x, rows = NA, cols = NA, mar = c(0, 0, 0, 0),
   
   if (Ndyns(mrs_data_dyns) > rows * cols) {
     warning("not enough rows and columns to show all spectra")
-    mrs_data_dyns <- get_dyns(mrs_data_dyns, 1:(rows*cols))
+    mrs_data_dyns <- get_dyns(mrs_data_dyns, 1:(rows * cols))
   }
   
   for (n in 1:Ndyns(mrs_data_dyns)) {
-    if (n > (rows*cols - cols)) {
+    if (n > (rows * cols - cols)) {
       x_ax = TRUE
     } else {
       x_ax = FALSE
@@ -758,7 +763,7 @@ gridplot.mrs_data <- function(x, rows = NA, cols = NA, mar = c(0, 0, 0, 0),
                    bty = bty, x_ax = x_ax, ...)
   }
   
-  graphics::mtext(text="Chemical shift (ppm)", side=1, line=1.8, outer=TRUE,
+  graphics::mtext(text="Chemical shift (ppm)", side = 1, line = 1.8, outer=TRUE,
                   cex = 0.8)
   
   if (restore_def_par) graphics::par(.pardefault)
