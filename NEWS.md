@@ -2,8 +2,8 @@
 * y-axis label can now be changed with a new argument (yaxis_lab) to
 plot.mrs_data.
 * Segmentation files are now checked for non-integer values.
-* gridplot has better row and col number defaults for MRSI and deals better
-with masked spectra.
+* gridplot has better row and col number defaults for MRSI, and has a bug fix
+for plotting masked spectra.
 
 # spant 2.0.0
 * magrittr pipe (%>%) is no longer loaded together with spant now the base pipe
