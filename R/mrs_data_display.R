@@ -95,7 +95,7 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
  
   # has this data element been masked? 
   if (anyNA(x$data)) {
-    par(mar = c(0, 0, 0 ,0))
+    graphics::par(mar = c(0, 0, 0 ,0))
     graphics::plot.new()
     # plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
     return(NULL)
