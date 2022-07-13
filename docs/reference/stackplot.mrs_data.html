@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.22.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -113,68 +113,119 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>object of class mrs_data.</p></dd>
+
+
 <dt>xlim</dt>
 <dd><p>the range of values to display on the x-axis, eg xlim = c(4,1).</p></dd>
+
+
 <dt>mode</dt>
 <dd><p>representation of the complex numbers to be plotted, can be one
 of: "re", "im", "mod" or "arg".</p></dd>
+
+
 <dt>x_units</dt>
 <dd><p>the units to use for the x-axis, can be one of: "ppm", "hz",
 "points" or "seconds".</p></dd>
+
+
 <dt>fd</dt>
 <dd><p>display data in the frequency-domain (default), or time-domain
 (logical).</p></dd>
+
+
 <dt>col</dt>
 <dd><p>set the colour of the line, eg col = rgb(1, 0, 0, 0.5).</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>set the line transparency, eg alpha = 0.5 is 50% transparency.
 Overrides any transparency levels set by col.</p></dd>
+
+
 <dt>x_offset</dt>
 <dd><p>separate plots in the x-axis direction by this value.
 Default value is 0.</p></dd>
+
+
 <dt>y_offset</dt>
 <dd><p>separate plots in the y-axis direction by this value.</p></dd>
+
+
 <dt>plot_dim</dt>
 <dd><p>the dimension to display on the y-axis, can be one of: "dyn",
 "x", "y", "z", "coil" or NULL. If NULL (the default) all spectra will be
 collapsed into the dynamic dimension and displayed.</p></dd>
+
+
 <dt>x_pos</dt>
 <dd><p>the x index to plot.</p></dd>
+
+
 <dt>y_pos</dt>
 <dd><p>the y index to plot.</p></dd>
+
+
 <dt>z_pos</dt>
 <dd><p>the z index to plot.</p></dd>
+
+
 <dt>dyn</dt>
 <dd><p>the dynamic index to plot.</p></dd>
+
+
 <dt>coil</dt>
 <dd><p>the coil element number to plot.</p></dd>
+
+
 <dt>bty</dt>
 <dd><p>option to draw a box around the plot. See ?par.</p></dd>
+
+
 <dt>labels</dt>
 <dd><p>add labels to each data item.</p></dd>
+
+
 <dt>lab_cex</dt>
 <dd><p>label size.</p></dd>
+
+
 <dt>right_marg</dt>
 <dd><p>change the size of the right plot margin.</p></dd>
+
+
 <dt>bl_lty</dt>
 <dd><p>linetype for the y = 0 baseline trace. A default value NULL
 results in no baseline being plotted.</p></dd>
+
+
 <dt>restore_def_par</dt>
 <dd><p>restore default plotting par values after the plot has
 been made.</p></dd>
+
+
 <dt>show_grid</dt>
 <dd><p>plot gridlines behind the data (logical). Defaults to TRUE.</p></dd>
+
+
 <dt>grid_nx</dt>
 <dd><p>number of cells of the grid in x and y direction. When NULL
 the grid aligns with the tick marks on the corresponding default axis (i.e.,
 tickmarks as computed by axTicks). When NA, no grid lines are drawn in the
 corresponding direction.</p></dd>
+
+
 <dt>grid_ny</dt>
 <dd><p>as above.</p></dd>
+
+
 <dt>lwd</dt>
 <dd><p>plot linewidth.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>other arguments to pass to the matplot method.</p></dd>
+
 </dl></div>
 
   </div>
@@ -189,7 +240,7 @@ corresponding direction.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

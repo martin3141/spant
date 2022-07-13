@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.22.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -128,113 +128,196 @@
     <dl><dt>init_damping</dt>
 <dd><p>initial value of the Gaussian global damping parameter
 (Hz). Very poorly shimmed or high field data may benefit from a larger value.</p></dd>
+
+
 <dt>maxiters</dt>
 <dd><p>The maximum number of iterations to run for the detailed fit.</p></dd>
+
+
 <dt>max_shift</dt>
 <dd><p>The maximum allowable shift to be applied in the
 optimisation phase of fitting (ppm).</p></dd>
+
+
 <dt>max_damping</dt>
 <dd><p>maximum permitted value of the global damping parameter
 (Hz).</p></dd>
+
+
 <dt>max_phase</dt>
 <dd><p>the maximum absolute permitted value of the global
 zero-order phase term (degrees). Note, the prefit_phase_search option is not
 constrained by this term.</p></dd>
+
+
 <dt>lambda</dt>
 <dd><p>manually set the the baseline smoothness parameter.</p></dd>
+
+
 <dt>ppm_left</dt>
 <dd><p>downfield frequency limit for the fitting range (ppm).</p></dd>
+
+
 <dt>ppm_right</dt>
 <dd><p>upfield frequency limit for the fitting range (ppm).</p></dd>
+
+
 <dt>zp</dt>
 <dd><p>zero pad the data to twice the original length before fitting.</p></dd>
+
+
 <dt>bl_ed_pppm</dt>
 <dd><p>manually set the the baseline smoothness parameter (ED per
 ppm).</p></dd>
+
+
 <dt>auto_bl_flex</dt>
 <dd><p>automatically determine the level of baseline smoothness.</p></dd>
+
+
 <dt>bl_comps_pppm</dt>
 <dd><p>spline basis density (signals per ppm).</p></dd>
+
+
 <dt>export_sp_fit</dt>
 <dd><p>add the fitted spline functions to the fit result.</p></dd>
+
+
 <dt>max_asym</dt>
 <dd><p>maximum allowable value of the asymmetry parameter.</p></dd>
+
+
 <dt>max_basis_shift</dt>
 <dd><p>maximum allowable frequency shift for individual basis
 signals (ppm).</p></dd>
+
+
 <dt>max_basis_damping</dt>
 <dd><p>maximum allowable Lorentzian damping factor for
 individual basis signals (Hz).</p></dd>
+
+
 <dt>maxiters_pre</dt>
 <dd><p>maximum iterations for the coarse (pre-)fit.</p></dd>
+
+
 <dt>algo_pre</dt>
 <dd><p>optimisation method for the coarse (pre-)fit.</p></dd>
+
+
 <dt>min_bl_ed_pppm</dt>
 <dd><p>minimum value for the candidate baseline flexibility
 analyses (ED per ppm).</p></dd>
+
+
 <dt>max_bl_ed_pppm</dt>
 <dd><p>minimum value for the candidate baseline flexibility
 analyses (ED per ppm).</p></dd>
+
+
 <dt>auto_bl_flex_n</dt>
 <dd><p>number of candidate baseline analyses to perform.</p></dd>
+
+
 <dt>pre_fit_bl_ed_pppm</dt>
 <dd><p>level of baseline flexibility to use in the coarse
 fitting stage of the algorithm (ED per ppm).</p></dd>
+
+
 <dt>remove_lip_mm_prefit</dt>
 <dd><p>remove broad signals in the coarse fitting stage
 of the algorithm.</p></dd>
+
+
 <dt>pre_align</dt>
 <dd><p>perform a pre-alignment step before coarse fitting.</p></dd>
+
+
 <dt>max_pre_align_shift</dt>
 <dd><p>maximum allowable shift in the pre-alignment step
 (ppm).</p></dd>
+
+
 <dt>pre_align_ref_freqs</dt>
 <dd><p>a vector of prominent spectral frequencies used in
 the pre-alignment step (ppm).</p></dd>
+
+
 <dt>noise_region</dt>
 <dd><p>spectral region to estimate the noise level (ppm).</p></dd>
+
+
 <dt>optimal_smooth_criterion</dt>
 <dd><p>method to determine the optimal smoothness.</p></dd>
+
+
 <dt>aic_smoothing_factor</dt>
 <dd><p>modification factor for the AIC calculation.</p></dd>
+
+
 <dt>anal_jac</dt>
 <dd><p>use a analytical approximation to the jacobian in the
 detailed fitting stage.</p></dd>
+
+
 <dt>pre_fit_ppm_left</dt>
 <dd><p>downfield frequency limit for the fitting range in
 the coarse fitting stage of the algorithm (ppm).</p></dd>
+
+
 <dt>pre_fit_ppm_right</dt>
 <dd><p>upfield frequency limit for the fitting range in the
 coarse fitting stage of the algorithm (ppm).</p></dd>
+
+
 <dt>phi1_optim</dt>
 <dd><p>apply and optimise a frequency dependant phase term.</p></dd>
+
+
 <dt>phi1_init</dt>
 <dd><p>initial value for the frequency dependant phase term (ms).</p></dd>
+
+
 <dt>max_dphi1</dt>
 <dd><p>maximum allowable change from the initial frequency
 dependant phase term (ms).</p></dd>
+
+
 <dt>max_basis_shift_broad</dt>
 <dd><p>maximum allowable shift for broad signals in the
 basis (ppm). Determined based on their name beginning with Lip or MM.</p></dd>
+
+
 <dt>max_basis_damping_broad</dt>
 <dd><p>maximum allowable Lorentzian damping for broad
 signals in the basis (Hz). Determined based on their name beginning with Lip
 or MM.</p></dd>
+
+
 <dt>ahat_calc_method</dt>
 <dd><p>method to calculate the metabolite amplitudes. May be
 one of: "lh_pnnls" or "ls".</p></dd>
+
+
 <dt>prefit_phase_search</dt>
 <dd><p>perform a 1D search for the optimal phase in the
 prefit stage of the algorithm.</p></dd>
+
+
 <dt>freq_reg</dt>
 <dd><p>frequency shift parameter.</p></dd>
+
+
 <dt>output_all_paras</dt>
 <dd><p>include more fitting parameters in the fit table,
 e.g. individual shift and damping factors for each basis set element.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>full list of options.</p>
+    
+
+<p>full list of options.</p>
     </div>
 
     <div id="ref-examples">
@@ -254,7 +337,7 @@ e.g. individual shift and damping factors for each basis set element.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

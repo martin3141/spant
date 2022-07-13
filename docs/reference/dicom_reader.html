@@ -19,7 +19,7 @@ reader use the oro.dicom package."><meta property="og:image" content="https://ma
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.22.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -94,17 +94,26 @@ reader use the oro.dicom package.</p>
     <h2>Arguments</h2>
     <dl><dt>input</dt>
 <dd><p>either a file path or raw binary object.</p></dd>
+
+
 <dt>tags</dt>
 <dd><p>a named list of tags to be extracted from the file.
 eg tags &lt;- list(spec_data = "7FE1,1010", pat_name = "0010,0010")</p></dd>
+
+
 <dt>endian</dt>
 <dd><p>can be "little" or "big".</p></dd>
+
+
 <dt>debug</dt>
 <dd><p>print out some debugging information, can be "little" or "big".</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a list with the same structure as the input, but with tag codes
+    
+
+<p>a list with the same structure as the input, but with tag codes
 replaced with the corresponding data in a raw format.</p>
     </div>
 
@@ -120,7 +129,7 @@ replaced with the corresponding data in a raw format.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

@@ -20,7 +20,7 @@ individual basis set components shown."><meta property="og:image" content="https
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.22.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -114,56 +114,99 @@ individual basis set components shown.</p>
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>fit_result object.</p></dd>
+
+
 <dt>xlim</dt>
 <dd><p>the range of values to display on the x-axis, eg xlim = c(4,1).</p></dd>
+
+
 <dt>y_offset</dt>
 <dd><p>separate basis signals in the y-axis direction by this value.</p></dd>
+
+
 <dt>dyn</dt>
 <dd><p>the dynamic index to plot.</p></dd>
+
+
 <dt>x_pos</dt>
 <dd><p>the x index to plot.</p></dd>
+
+
 <dt>y_pos</dt>
 <dd><p>the y index to plot.</p></dd>
+
+
 <dt>z_pos</dt>
 <dd><p>the z index to plot.</p></dd>
+
+
 <dt>coil</dt>
 <dd><p>the coil element number to plot.</p></dd>
+
+
 <dt>n</dt>
 <dd><p>single index element to plot (overrides other indices when given).</p></dd>
+
+
 <dt>sub_bl</dt>
 <dd><p>subtract the baseline from the data and fit (logical).</p></dd>
+
+
 <dt>labels</dt>
 <dd><p>print signal labels at the right side of the plot.</p></dd>
+
+
 <dt>label_names</dt>
 <dd><p>provide a character vector of signal names to replace the
 defaults determined from the basis set.</p></dd>
+
+
 <dt>sig_col</dt>
 <dd><p>colour of individual signal components.</p></dd>
+
+
 <dt>restore_def_par</dt>
 <dd><p>restore default plotting par values after the plot has
 been made.</p></dd>
+
+
 <dt>omit_signals</dt>
 <dd><p>a character vector of basis signal names to be removed
 from the plot.</p></dd>
+
+
 <dt>combine_lipmm</dt>
 <dd><p>combine all basis signals with names starting with "Lip"
 or "MM".</p></dd>
+
+
 <dt>combine_metab</dt>
 <dd><p>combine all basis signals with names not starting with
 "Lip" or "MM".</p></dd>
+
+
 <dt>mar</dt>
 <dd><p>option to adjust the plot margins. See ?par.</p></dd>
+
+
 <dt>show_grid</dt>
 <dd><p>plot gridlines behind the data (logical). Defaults to TRUE.</p></dd>
+
+
 <dt>grid_nx</dt>
 <dd><p>number of cells of the grid in x and y direction. When NULL
 the grid aligns with the tick marks on the corresponding default axis (i.e.,
 tickmarks as computed by axTicks). When NA, no grid lines are drawn in the
 corresponding direction.</p></dd>
+
+
 <dt>grid_ny</dt>
 <dd><p>as above.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>further arguments to plot method.</p></dd>
+
 </dl></div>
 
   </div>
@@ -178,7 +221,7 @@ corresponding direction.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

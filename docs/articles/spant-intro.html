@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.22.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -145,8 +145,7 @@
 <div class="section level2">
 <h2 id="basic-preprocessing">Basic preprocessing<a class="anchor" aria-label="anchor" href="#basic-preprocessing"></a>
 </h2>
-<p>Apply a HSVD filter to the residual water region and align the
-spectrum to the tNAA resonance at 2.01 ppm:</p>
+<p>Apply a HSVD filter to the residual water region and align the spectrum to the tNAA resonance at 2.01 ppm:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mrs_proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hsvd_filt.html">hsvd_filt</a></span><span class="op">(</span><span class="va">mrs_data</span><span class="op">)</span>
 <span class="va">mrs_proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/align.html">align</a></span><span class="op">(</span><span class="va">mrs_proc</span>, <span class="fl">2.01</span><span class="op">)</span>
@@ -156,8 +155,7 @@ spectrum to the tNAA resonance at 2.01 ppm:</p>
 <div class="section level2">
 <h2 id="basis-simulation">Basis simulation<a class="anchor" aria-label="anchor" href="#basis-simulation"></a>
 </h2>
-<p>Simulate a typical basis set for short TE brain analysis, print some
-basic information and plot:</p>
+<p>Simulate a typical basis set for short TE brain analysis, print some basic information and plot:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">basis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_basis_1h_brain_press.html">sim_basis_1h_brain_press</a></span><span class="op">(</span><span class="va">mrs_proc</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">basis</span><span class="op">)</span>
@@ -177,108 +175,105 @@ basic information and plot:</p>
 <span class="co">#&gt; PCr,sIns,Tau</span>
 <span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="va">basis</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">basis</span><span class="op">$</span><span class="va">names</span>, y_offset <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-intro_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
-<p>Perform ABfit analysis of the processed data
-(<code>mrs_proc</code>):</p>
+<p>Perform ABfit analysis of the processed data (<code>mrs_proc</code>):</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span><span class="op">(</span><span class="va">mrs_proc</span>, <span class="va">basis</span><span class="op">)</span></code></pre></div>
 <p>Plot the fit result:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res</span><span class="op">)</span></code></pre></div>
 <p><img src="spant-intro_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
-<p>Extract the estimated amplitudes from <code>fit_res</code> and print
-as a ratio to total-creatine in column format:</p>
+<p>Extract the estimated amplitudes from <code>fit_res</code> and print as a ratio to total-creatine in column format:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">amps</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_amps.html">fit_amps</a></span><span class="op">(</span><span class="va">fit_res</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">amps</span> <span class="op">/</span> <span class="va">amps</span><span class="op">$</span><span class="va">tCr</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;               [,1]</span>
 <span class="co">#&gt; X.CrCH2 0.00000000</span>
-<span class="co">#&gt; Ala     0.15614873</span>
-<span class="co">#&gt; Asp     0.54809300</span>
-<span class="co">#&gt; Cr      0.66327748</span>
-<span class="co">#&gt; GABA    0.28180884</span>
-<span class="co">#&gt; Glc     0.06746779</span>
-<span class="co">#&gt; Gln     0.07453092</span>
-<span class="co">#&gt; GSH     0.35689233</span>
-<span class="co">#&gt; Glu     1.10359930</span>
-<span class="co">#&gt; GPC     0.26459036</span>
-<span class="co">#&gt; Ins     0.99277019</span>
-<span class="co">#&gt; Lac     0.09734839</span>
-<span class="co">#&gt; Lip09   0.37880031</span>
-<span class="co">#&gt; Lip13a  0.04545732</span>
+<span class="co">#&gt; Ala     0.15388553</span>
+<span class="co">#&gt; Asp     0.54901247</span>
+<span class="co">#&gt; Cr      0.66227499</span>
+<span class="co">#&gt; GABA    0.27768812</span>
+<span class="co">#&gt; Glc     0.06608540</span>
+<span class="co">#&gt; Gln     0.07780272</span>
+<span class="co">#&gt; GSH     0.35696180</span>
+<span class="co">#&gt; Glu     1.10909495</span>
+<span class="co">#&gt; GPC     0.26539808</span>
+<span class="co">#&gt; Ins     0.99223489</span>
+<span class="co">#&gt; Lac     0.09773796</span>
+<span class="co">#&gt; Lip09   0.38611259</span>
+<span class="co">#&gt; Lip13a  0.04661353</span>
 <span class="co">#&gt; Lip13b  0.00000000</span>
 <span class="co">#&gt; Lip20   0.00000000</span>
-<span class="co">#&gt; MM09    0.17194580</span>
-<span class="co">#&gt; MM12    0.11370655</span>
-<span class="co">#&gt; MM14    0.44454004</span>
-<span class="co">#&gt; MM17    0.42554648</span>
-<span class="co">#&gt; MM20    1.53642824</span>
-<span class="co">#&gt; NAA     0.97179569</span>
-<span class="co">#&gt; NAAG    0.27434691</span>
+<span class="co">#&gt; MM09    0.16559676</span>
+<span class="co">#&gt; MM12    0.11274446</span>
+<span class="co">#&gt; MM14    0.44654597</span>
+<span class="co">#&gt; MM17    0.42514417</span>
+<span class="co">#&gt; MM20    1.55949359</span>
+<span class="co">#&gt; NAA     0.98019166</span>
+<span class="co">#&gt; NAAG    0.26060755</span>
 <span class="co">#&gt; PCh     0.00000000</span>
-<span class="co">#&gt; PCr     0.33672252</span>
-<span class="co">#&gt; sIns    0.10883981</span>
+<span class="co">#&gt; PCr     0.33772501</span>
+<span class="co">#&gt; sIns    0.10907916</span>
 <span class="co">#&gt; Tau     0.00000000</span>
-<span class="co">#&gt; tNAA    1.24614260</span>
+<span class="co">#&gt; tNAA    1.24079921</span>
 <span class="co">#&gt; tCr     1.00000000</span>
-<span class="co">#&gt; tCho    0.26459036</span>
-<span class="co">#&gt; Glx     1.17813022</span>
-<span class="co">#&gt; tLM09   0.55074611</span>
-<span class="co">#&gt; tLM13   0.60370390</span>
-<span class="co">#&gt; tLM20   1.53642824</span></code></pre></div>
-<p>Unscaled amplitudes, CRLB error estimates and other fitting
-diagnostics, such as SNR, are given in the results table:</p>
+<span class="co">#&gt; tCho    0.26539808</span>
+<span class="co">#&gt; Glx     1.18689767</span>
+<span class="co">#&gt; tLM09   0.55170935</span>
+<span class="co">#&gt; tLM13   0.60590397</span>
+<span class="co">#&gt; tLM20   1.55949359</span></code></pre></div>
+<p>Unscaled amplitudes, CRLB error estimates and other fitting diagnostics, such as SNR, are given in the results table:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span>
 <span class="co">#&gt;   X Y Z Dynamic Coil X.CrCH2          Ala          Asp           Cr</span>
-<span class="co">#&gt; 1 1 1 1       1    1       0 9.497437e-06 3.333667e-05 4.034254e-05</span>
+<span class="co">#&gt; 1 1 1 1       1    1       0 9.343298e-06 3.333378e-05 4.021062e-05</span>
 <span class="co">#&gt;           GABA          Glc          Gln          GSH          Glu          GPC</span>
-<span class="co">#&gt; 1 1.714046e-05 4.103595e-06 4.533196e-06 2.170727e-05 6.712424e-05 1.609318e-05</span>
+<span class="co">#&gt; 1 1.686008e-05 4.012435e-06 4.723862e-06 2.167326e-05 6.733969e-05 1.611388e-05</span>
 <span class="co">#&gt;            Ins          Lac        Lip09       Lip13a Lip13b Lip20         MM09</span>
-<span class="co">#&gt; 1 6.038328e-05 5.921023e-06 2.303978e-05 2.764851e-06      0     0 1.045826e-05</span>
+<span class="co">#&gt; 1 6.024443e-05 5.934248e-06 2.344317e-05 2.830183e-06      0     0 1.005436e-05</span>
 <span class="co">#&gt;           MM12         MM14         MM17         MM20          NAA         NAAG</span>
-<span class="co">#&gt; 1 6.915976e-06 2.703827e-05 2.588302e-05 9.345021e-05 5.910755e-05 1.668661e-05</span>
-<span class="co">#&gt;   PCh          PCr         sIns Tau         tNAA          tCr         tCho</span>
-<span class="co">#&gt; 1   0 2.048048e-05 6.619966e-06   0 7.579416e-05 6.082302e-05 1.609318e-05</span>
-<span class="co">#&gt;            Glx        tLM09        tLM13        tLM20   X.CrCH2.sd       Ala.sd</span>
-<span class="co">#&gt; 1 7.165744e-05 3.349804e-05 3.671909e-05 9.345021e-05 2.353862e-06 4.359105e-06</span>
-<span class="co">#&gt;         Asp.sd        Cr.sd      GABA.sd       Glc.sd       Gln.sd       GSH.sd</span>
-<span class="co">#&gt; 1 8.967176e-06 3.769573e-06 4.496017e-06 4.330379e-06 4.891685e-06 2.019976e-06</span>
-<span class="co">#&gt;         Glu.sd       GPC.sd     Ins.sd       Lac.sd     Lip09.sd    Lip13a.sd</span>
-<span class="co">#&gt; 1 4.911039e-06 2.340558e-06 2.0231e-06 5.343971e-06 4.067373e-06 1.338191e-05</span>
-<span class="co">#&gt;      Lip13b.sd    Lip20.sd      MM09.sd      MM12.sd      MM14.sd      MM17.sd</span>
-<span class="co">#&gt; 1 6.502037e-06 7.38316e-06 3.767184e-06 4.507066e-06 7.122518e-06 3.579251e-06</span>
+<span class="co">#&gt; 1 6.845381e-06 2.711244e-05 2.581301e-05 9.468605e-05 5.951322e-05 1.582302e-05</span>
+<span class="co">#&gt;   PCh          PCr         sIns Tau         tNAA         tCr         tCho</span>
+<span class="co">#&gt; 1   0 2.050528e-05 6.622839e-06   0 7.533624e-05 6.07159e-05 1.611388e-05</span>
+<span class="co">#&gt;            Glx        tLM09      tLM13        tLM20   X.CrCH2.sd       Ala.sd</span>
+<span class="co">#&gt; 1 7.206356e-05 3.349753e-05 3.6788e-05 9.468605e-05 2.365865e-06 4.358582e-06</span>
+<span class="co">#&gt;         Asp.sd        Cr.sd      GABA.sd       Glc.sd      Gln.sd      GSH.sd</span>
+<span class="co">#&gt; 1 8.965963e-06 3.745166e-06 4.443293e-06 4.324169e-06 4.89224e-06 2.01775e-06</span>
+<span class="co">#&gt;         Glu.sd       GPC.sd       Ins.sd       Lac.sd     Lip09.sd    Lip13a.sd</span>
+<span class="co">#&gt; 1 4.904508e-06 2.485735e-06 2.021386e-06 5.353013e-06 4.069682e-06 1.340823e-05</span>
+<span class="co">#&gt;      Lip13b.sd     Lip20.sd      MM09.sd      MM12.sd      MM14.sd      MM17.sd</span>
+<span class="co">#&gt; 1 6.514836e-06 7.381741e-06 3.769422e-06 4.490832e-06 7.118537e-06 3.582288e-06</span>
 <span class="co">#&gt;        MM20.sd       NAA.sd      NAAG.sd       PCh.sd       PCr.sd      sIns.sd</span>
-<span class="co">#&gt; 1 8.280713e-06 1.021341e-06 1.289272e-06 1.998754e-06 3.162822e-06 7.079374e-07</span>
-<span class="co">#&gt;         Tau.sd      tNAA.sd       tCr.sd     tCho.sd       Glx.sd     tLM09.sd</span>
-<span class="co">#&gt; 1 3.741983e-06 7.137557e-07 5.844874e-07 2.12582e-07 2.883712e-06 9.731163e-07</span>
-<span class="co">#&gt;       tLM13.sd     tLM20.sd    phase       lw        shift      asym</span>
-<span class="co">#&gt; 1 1.520084e-06 2.886552e-06 10.83965 5.024142 -0.002971685 0.1771379</span>
+<span class="co">#&gt; 1 8.255787e-06 1.018031e-06 1.239149e-06 2.126367e-06 3.164552e-06 7.094298e-07</span>
+<span class="co">#&gt;         Tau.sd      tNAA.sd       tCr.sd      tCho.sd       Glx.sd     tLM09.sd</span>
+<span class="co">#&gt; 1 3.714842e-06 7.075155e-07 5.852307e-07 2.122005e-07 2.894735e-06 9.740532e-07</span>
+<span class="co">#&gt;       tLM13.sd     tLM20.sd   phase       lw        shift      asym</span>
+<span class="co">#&gt; 1 1.527125e-06 2.881585e-06 10.6878 5.024704 -0.003553099 0.1745246</span>
 <span class="co">#&gt;   res.deviance res.niter res.info</span>
-<span class="co">#&gt; 1 7.455764e-05        27        2</span>
+<span class="co">#&gt; 1  7.46864e-05        27        2</span>
 <span class="co">#&gt;                                                        res.message bl_ed_pppm</span>
 <span class="co">#&gt; 1 Relative error between `par' and the solution is at most `ptol'.   1.969325</span>
-<span class="co">#&gt;   max_bl_flex_used     full_res fit_pts ppm_range      SNR      SRR      FQN</span>
-<span class="co">#&gt; 1            FALSE 8.202625e-05     497       3.8 63.23665 51.27883 1.520763</span>
+<span class="co">#&gt;   max_bl_flex_used    full_res fit_pts ppm_range      SNR      SRR      FQN</span>
+<span class="co">#&gt; 1            FALSE 8.21836e-05     497       3.8 63.11156 51.11142 1.524691</span>
 <span class="co">#&gt;      tNAA_lw     tCr_lw    tCho_lw auto_bl_crit_7 auto_bl_crit_5.901</span>
-<span class="co">#&gt; 1 0.04585123 0.05167912 0.05460798      -8.872611          -8.918514</span>
+<span class="co">#&gt; 1 0.04573567 0.05174083 0.05459455      -8.897184          -8.940906</span>
 <span class="co">#&gt;   auto_bl_crit_4.942 auto_bl_crit_4.12 auto_bl_crit_3.425 auto_bl_crit_2.844</span>
-<span class="co">#&gt; 1          -8.954323         -8.980263           -8.99748          -9.009404</span>
+<span class="co">#&gt; 1          -8.974399         -8.997882          -9.012252          -9.020869</span>
 <span class="co">#&gt;   auto_bl_crit_2.364 auto_bl_crit_1.969 auto_bl_crit_1.647 auto_bl_crit_1.384</span>
-<span class="co">#&gt; 1          -9.017234           -9.02016          -9.008891          -8.957936</span>
+<span class="co">#&gt; 1          -9.025829          -9.026291          -9.013371          -8.962018</span>
 <span class="co">#&gt;   auto_bl_crit_1.17 auto_bl_crit_0.997 auto_bl_crit_0.856 auto_bl_crit_0.743</span>
-<span class="co">#&gt; 1         -8.841036          -8.684537          -8.555256          -8.478501</span>
+<span class="co">#&gt; 1         -8.846435           -8.69129          -8.562199          -8.484762</span>
 <span class="co">#&gt;   auto_bl_crit_0.654 auto_bl_crit_0.593 auto_bl_crit_0.558 auto_bl_crit_0.54</span>
-<span class="co">#&gt; 1          -8.441092          -8.424847          -8.418125         -8.415348</span>
+<span class="co">#&gt; 1          -8.446483          -8.429623          -8.422569         -8.419635</span>
 <span class="co">#&gt;   auto_bl_crit_0.532 auto_bl_crit_0.529</span>
-<span class="co">#&gt; 1          -8.414187          -8.413697</span></code></pre></div>
+<span class="co">#&gt; 1          -8.418404          -8.417883</span></code></pre></div>
 <p>Spectral SNR:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">SNR</span>
-<span class="co">#&gt; [1] 63.23665</span></code></pre></div>
+<span class="co">#&gt; [1] 63.11156</span></code></pre></div>
 <p>Linewidth of the tNAA resonance in PPM:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">tNAA_lw</span>
-<span class="co">#&gt; [1] 0.04585123</span></code></pre></div>
+<span class="co">#&gt; [1] 0.04573567</span></code></pre></div>
 </div>
   </div>
 
@@ -299,7 +294,7 @@ diagnostics, such as SNR, are given in the results table:</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer>

@@ -18,7 +18,7 @@ the ker input in the x-y direction."><meta property="og:image" content="https://
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.22.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -87,16 +87,23 @@ the ker input in the x-y direction.</p>
     <h2>Arguments</h2>
     <dl><dt>mrs_data</dt>
 <dd><p>2D MRSI data with multiple voxels in the x-y dimension.</p></dd>
+
+
 <dt>mri_seg</dt>
 <dd><p>MRI data with values corresponding to the segmentation class.
 Must be 1mm isotropic resolution.</p></dd>
+
+
 <dt>ker</dt>
 <dd><p>MRSI PSF kernel in the x-y direction compatible with the mmand
 package, eg: mmand::shapeKernel(c(10, 10), type = "box").</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a data frame of partial volume estimates and individual segmentation
+    
+
+<p>a data frame of partial volume estimates and individual segmentation
 maps.</p>
     </div>
 
@@ -112,7 +119,7 @@ maps.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

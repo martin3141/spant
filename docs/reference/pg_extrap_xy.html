@@ -20,7 +20,7 @@ k-space coverage by a factor of 2, with the aim to reduce Gibbs ringing."><meta 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.22.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -97,24 +97,35 @@ k-space coverage by a factor of 2, with the aim to reduce Gibbs ringing.</p>
     <h2>Arguments</h2>
     <dl><dt>mrs_data</dt>
 <dd><p>MRS data object.</p></dd>
+
+
 <dt>img_mask</dt>
 <dd><p>a boolean matrix of voxels with strong signals to be
 extrapolated. Must be twice the dimensions of the input data.</p></dd>
+
+
 <dt>kspace_mask</dt>
 <dd><p>a boolean matrix of kspace points that have been sampled.
 Typically a circle for MRSI, but defaults to the full rectangular area of
 k-space covered by the input data. Must match the x-y dimensions of the input
 data.</p></dd>
+
+
 <dt>intensity_thresh</dt>
 <dd><p>used to define img_mask based on the strength of the
 signal in each voxel. Defaults to intensities greater than 15% of the
 maximum. Ignored if img_mask is specified as argument.</p></dd>
+
+
 <dt>iters</dt>
 <dd><p>number of iterations to perform.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>extrapolated <code>mrs_data</code> object.</p>
+    
+
+<p>extrapolated <code>mrs_data</code> object.</p>
     </div>
 
   </div>
@@ -129,7 +140,7 @@ maximum. Ignored if img_mask is specified as argument.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

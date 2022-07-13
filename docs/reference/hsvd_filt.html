@@ -20,7 +20,7 @@ signals. J Magn Reson 1987;73:553-557."><meta property="og:image" content="https
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.22.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -99,24 +99,39 @@ signals. J Magn Reson 1987;73:553-557.</p>
     <h2>Arguments</h2>
     <dl><dt>mrs_data</dt>
 <dd><p>MRS data to be filtered.</p></dd>
+
+
 <dt>xlim</dt>
 <dd><p>frequency range to filter, default units are Hz which can be
 changed to ppm using the "scale" argument.</p></dd>
+
+
 <dt>comps</dt>
 <dd><p>number of Lorentzian components to use for modelling.</p></dd>
+
+
 <dt>irlba</dt>
 <dd><p>option to use irlba SVD (logical).</p></dd>
+
+
 <dt>max_damp</dt>
 <dd><p>maximum allowable damping factor.</p></dd>
+
+
 <dt>scale</dt>
 <dd><p>either "hz" or "ppm" to set the frequency units of xlim.</p></dd>
+
+
 <dt>return_model</dt>
 <dd><p>by default the filtered spectrum is returned. Set
 return_model to TRUE to return the HSVD model of the data.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>filtered data or model depending on the return_model argument.</p>
+    
+
+<p>filtered data or model depending on the return_model argument.</p>
     </div>
 
   </div>
@@ -131,7 +146,7 @@ return_model to TRUE to return the HSVD model of the data.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
