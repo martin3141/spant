@@ -4,6 +4,7 @@ plot.mrs_data.
 * Segmentation files are now checked for non-integer values.
 * gridplot has better row and col number defaults for MRSI, and has a bug fix
 for plotting masked spectra.
+* Updated functions for dealing with lists of MRSI datasets.
 
 # spant 2.0.0
 * magrittr pipe (%>%) is no longer loaded together with spant now the base pipe

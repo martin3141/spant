@@ -1535,6 +1535,11 @@ get_subset <- function(mrs_data, x_set = NULL, y_set = NULL, z_set = NULL,
 #' @export
 crop_xy <- function(mrs_data, x_dim, y_dim) {
   
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, crop_xy, x_dim = x_dim, y_dim = y_dim)
+    return(res)
+  }
+  
   # check the input
   check_mrs_data(mrs_data) 
   
@@ -1588,6 +1593,11 @@ mask_xy <- function(mrs_data, x_dim, y_dim) {
 #' @return masked dataset.
 #' @export
 mask_xy_mat <- function(mrs_data, mask, value = NA) {
+  
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, mask_xy_mat, mask = mask, value = value)
+    return(res)
+  }
   
   # check the input
   check_mrs_data(mrs_data)
@@ -2148,6 +2158,15 @@ mean.mrs_data <- function(x, ...) {
   x$data <- colMeans(data_pts, ...)
   dim(x$data) <- c(1, 1, 1, 1, 1, 1, data_N)
   x
+}
+
+#' Calculate the mean spectrum from an mrs_data object.
+#' @param x object of class mrs_data.
+#' @param ... other arguments to pass to the colMeans function.
+#' @return mean mrs_data object.
+#' @export
+mean.list <- function(x, ...) {
+  return(lapply(x, mean, ...))
 }
 
 #' Calculate the standard deviation spectrum from an mrs_data object.
