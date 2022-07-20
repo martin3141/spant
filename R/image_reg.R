@@ -440,9 +440,10 @@ nifti_flip_lr <- function(x) {
 #' Reslice a nifti object to match the orientation of mrs data.
 #' @param mri nifti object to be resliced.
 #' @param mrs mrs_data object for the target orientation.
+#' @param interp interpolation parameter, see nifyreg.linear definition.
 #' @return resliced imaging data.
 #' @export
-reslice_to_mrs <- function(mri, mrs) {
+reslice_to_mrs <- function(mri, mrs, interp = 3L) {
   mrs_affine <- RNifti::xform(get_mrsi_voi(mrs))
   dummy <- mri
   new_affine <- RNifti::xform(mri)
@@ -457,7 +458,7 @@ reslice_to_mrs <- function(mri, mrs) {
   new_affine[1:3, 4] <- new_pos
   #RNifti::sform(dummy) <- new_affine
   dummy <- RNifti::`sform<-`(dummy, structure(new_affine, code = 2L))
-  resample_img(mri, dummy)
+  resample_img(mri, dummy, interp)
 }
 
 #' Calculate the partial volume estimates for each voxel in a 2D MRSI dataset.

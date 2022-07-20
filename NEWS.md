@@ -5,6 +5,7 @@ plot.mrs_data.
 * gridplot has better row and col number defaults for MRSI, and has a bug fix
 for plotting masked spectra.
 * Updated functions for dealing with lists of MRSI datasets.
+* Bug fix for crop_xy function when working with odd matrix sizes.
 
 # spant 2.0.0
 * magrittr pipe (%>%) is no longer loaded together with spant now the base pipe

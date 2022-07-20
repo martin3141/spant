@@ -4,12 +4,14 @@
 \alias{reslice_to_mrs}
 \title{Reslice a nifti object to match the orientation of mrs data.}
 \usage{
-reslice_to_mrs(mri, mrs)
+reslice_to_mrs(mri, mrs, interp = 3L)
 }
 \arguments{
 \item{mri}{nifti object to be resliced.}
 
 \item{mrs}{mrs_data object for the target orientation.}
+
+\item{interp}{interpolation parameter, see nifyreg.linear definition.}
 }
 \value{
 resliced imaging data.

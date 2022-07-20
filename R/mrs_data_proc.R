@@ -1547,10 +1547,22 @@ crop_xy <- function(mrs_data, x_dim, y_dim) {
   mid_pt_y <- Ny(mrs_data) / 2
   x_set <- seq(from = mid_pt_x - x_dim / 2 + 1, by = 1, length.out = x_dim)
   y_set <- seq(from = mid_pt_y - y_dim / 2 + 1, by = 1, length.out = y_dim)
-  x_set <- floor(x_set) # could be floor or ceil, need to test
-  y_set <- floor(y_set) # could be floor or ceil, need to test
-  x_offset <- x_set[1] - 1
-  y_offset <- y_set[1] - 1
+  
+  if((Nx(mrs_data) %% 2) == 0) {
+    x_set <- floor(x_set)
+    x_offset <- x_set[1] - 1
+  } else {
+    x_set <- ceiling(x_set)
+    x_offset <- x_set[1] - 1
+  }
+  
+  if((Ny(mrs_data) %% 2) == 0) {
+    y_set <- floor(y_set)
+    y_offset <- y_set[1] - 1
+  } else {
+    y_set <- ceiling(y_set)
+    y_offset <- y_set[1] - 1
+  }
   
   affine <- mrs_data$affine
   
@@ -1577,8 +1589,19 @@ mask_xy <- function(mrs_data, x_dim, y_dim) {
   mid_pt_y <- Ny(mrs_data) / 2
   x_set <- seq(from = mid_pt_x - x_dim / 2 + 1, by = 1, length.out = x_dim)
   y_set <- seq(from = mid_pt_y - y_dim / 2 + 1, by = 1, length.out = y_dim)
-  x_set <- floor(x_set) # could be floor or ceil, need to test
-  y_set <- floor(y_set) # could be floor or ceil, need to test
+  
+  if((Nx(mrs_data) %% 2) == 0) {
+    x_set <- floor(x_set)
+  } else {
+    x_set <- ceiling(x_set)
+  }
+  
+  if((Ny(mrs_data) %% 2) == 0) {
+    y_set <- floor(y_set)
+  } else {
+    y_set <- ceiling(y_set)
+  }
+  
   mask_mat <- matrix(TRUE, Nx(mrs_data), Ny(mrs_data))
   mask_mat[x_set, y_set] <- FALSE
   mrs_data <- mask_xy_mat(mrs_data, mask_mat)
