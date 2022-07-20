@@ -1548,12 +1548,15 @@ crop_xy <- function(mrs_data, x_dim, y_dim) {
   x_set <- seq(from = mid_pt_x - x_dim / 2 + 1, by = 1, length.out = x_dim)
   y_set <- seq(from = mid_pt_y - y_dim / 2 + 1, by = 1, length.out = y_dim)
   
+  print(x_set)
   if((Nx(mrs_data) %% 2) == 0) {
     x_set <- floor(x_set)
     x_offset <- x_set[1] - 1
+    print("even")
   } else {
     x_set <- ceiling(x_set)
     x_offset <- x_set[1] - 1
+    print("odd")
   }
   
   if((Ny(mrs_data) %% 2) == 0) {
