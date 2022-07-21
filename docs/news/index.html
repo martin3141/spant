@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -73,7 +73,15 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.0.0" id="spant-200">spant 2.0.0<a class="anchor" aria-label="anchor" href="#spant-200"></a></h2>
+<h2 class="page-header" data-toc-text="2.1.0" id="spant-210">spant 2.1.0<a class="anchor" aria-label="anchor" href="#spant-210"></a></h2>
+<ul><li>y-axis label can now be changed with a new argument (yaxis_lab) to plot.mrs_data.</li>
+<li>Segmentation files are now checked for non-integer values.</li>
+<li>gridplot has better row and col number defaults for MRSI, and has a bug fix for plotting masked spectra.</li>
+<li>Updated functions for dealing with lists of MRSI datasets.</li>
+<li>Bug fix for crop_xy function when working with odd matrix sizes.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="2.0.0" id="spant-200">spant 2.0.0<small>2022-06-22</small><a class="anchor" aria-label="anchor" href="#spant-200"></a></h2>
 <ul><li>magrittr pipe (%&gt;%) is no longer loaded together with spant now the base pipe is part of R. Vignettes and tests have been updated to use the base pipe.</li>
 <li>NIfTI MRS writer no longer fails when dealing with a NULL affine matrix.</li>
 <li>Bug fix for NIfTI MRS writer, where frequency domain data was not correctly converted to time-domain before export.</li>
@@ -121,7 +129,7 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.17.0" id="spant-1170">spant 1.17.0<small>2022-01-07</small><a class="anchor" aria-label="anchor" href="#spant-1170"></a></h2>
 <ul><li>New function added (recon_twix_2d) for reconstructing basic phase encoded twix 2D MRSI data.</li>
-<li>File name argument for read_mrs now permits globbing, eg read_mrs("*.dcm").</li>
+<li>File name argument for read_mrs now permits globbing, eg read_mrs(“*.dcm”).</li>
 <li>Improved plotting of metabolite maps containing infinite values.</li>
 <li>Improvements to GE p-file reader.</li>
 <li>Bug fix for TWIX MRSI voxel dimensions.</li>
@@ -436,7 +444,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0" id="spant-010">spant 0.1.0<small>2017-04-26</small><a class="anchor" aria-label="anchor" href="#spant-010"></a></h2>
-<ul><li>First public release.</li></ul></div>
+<ul><li>First public release.</li>
+</ul></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -451,7 +460,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

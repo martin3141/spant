@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -113,68 +113,110 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>A good baseline estimate is a prerequisite for accurate metabolite quantitation. The default MRS analysis algorithm in spant (ABfit) is designed to find accurate baseline estimates by automatically adapting the level of baseline flexibility to match the data complexity. This process is inevitably a balancing act between a baseline that is too smooth (resulting in greater bias), and too flexible (resulting in greater variance). Therefore, ABfit has a number of fitting options to adjust the baseline according to user preference. In this vignette the most common adjustments are demonstrated.</p>
+<p>A good baseline estimate is a prerequisite for accurate metabolite
+quantitation. The default MRS analysis algorithm in spant (ABfit) is
+designed to find accurate baseline estimates by automatically adapting
+the level of baseline flexibility to match the data complexity. This
+process is inevitably a balancing act between a baseline that is too
+smooth (resulting in greater bias), and too flexible (resulting in
+greater variance). Therefore, ABfit has a number of fitting options to
+adjust the baseline according to user preference. In this vignette the
+most common adjustments are demonstrated.</p>
 </div>
 <div class="section level2">
 <h2 id="default-analysis">Default analysis<a class="anchor" aria-label="anchor" href="#default-analysis"></a>
 </h2>
 <p>Load the spant analysis package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://martin3141.github.io/spant/">spant</a></span><span class="op">)</span></code></pre></div>
-<p>Read an example dataset from file and simulate matching basis set:</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://martin3141.github.io/spant/">spant</a></span><span class="op">)</span></span></code></pre></div>
+<p>Read an example dataset from file and simulate matching basis
+set:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fname</span>    <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"philips_spar_sdat_WS.SDAT"</span>, package <span class="op">=</span> <span class="st">"spant"</span><span class="op">)</span>
-<span class="va">mrs_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_mrs.html">read_mrs</a></span><span class="op">(</span><span class="va">fname</span>, format <span class="op">=</span> <span class="st">"spar_sdat"</span><span class="op">)</span>
-<span class="va">basis</span>    <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_basis_1h_brain_press.html">sim_basis_1h_brain_press</a></span><span class="op">(</span><span class="va">mrs_data</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">fname</span>    <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"philips_spar_sdat_WS.SDAT"</span>, package <span class="op">=</span> <span class="st">"spant"</span><span class="op">)</span></span>
+<span><span class="va">mrs_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_mrs.html">read_mrs</a></span><span class="op">(</span><span class="va">fname</span>, format <span class="op">=</span> <span class="st">"spar_sdat"</span><span class="op">)</span></span>
+<span><span class="va">basis</span>    <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_basis_1h_brain_press.html">sim_basis_1h_brain_press</a></span><span class="op">(</span><span class="va">mrs_data</span><span class="op">)</span></span></code></pre></div>
 <p>Run a default ABfit analysis and plot the result:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fit_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">basis</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">fit_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">basis</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res</span><span class="op">)</span></span></code></pre></div>
 <p><img src="abfit-baseline-opts_files/figure-html/abfit_default-1.png" width="576"></p>
-<p>The above fit looks good, with a smooth baseline and no significant signals in the residual (top trace) above the noise level. We can find the automatically determined level of baseline smoothness by inspecting the results table in the <code>fit_res</code> object:</p>
+<p>The above fit looks good, with a smooth baseline and no significant
+signals in the residual (top trace) above the noise level. We can find
+the automatically determined level of baseline smoothness by inspecting
+the results table in the <code>fit_res</code> object:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">bl_ed_pppm</span>
-<span class="co">#&gt; [1] 2.364083</span></code></pre></div>
-<p>The baseline flexibility was found to be 2.4 ED per ppm, where ED is the effective dimension – analogous to the number of spline functions required per ppm. Whilst the automated fit looks reasonable at first glance, let’s try and convince ourselves we can’t do better with manual adjustments to the algorithm.</p>
+<code class="sourceCode R"><span><span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">bl_ed_pppm</span></span>
+<span><span class="co">#&gt; [1] 2.364083</span></span></code></pre></div>
+<p>The baseline flexibility was found to be 2.4 ED per ppm, where ED is
+the effective dimension – analogous to the number of spline functions
+required per ppm. Whilst the automated fit looks reasonable at first
+glance, let’s try and convince ourselves we can’t do better with manual
+adjustments to the algorithm.</p>
 </div>
 <div class="section level2">
 <h2 id="custom-analyses">Custom analyses<a class="anchor" aria-label="anchor" href="#custom-analyses"></a>
 </h2>
-<p>Changing the default behaviour of ABfit is achieved by supplying an options structure to the <code>fit_mrs</code> function. The <code>abfit_opts</code> function generates the default fitting options, which may be modified by supplying arguments. To manually specify the baseline flexibility we set the <code>auto_bl_flex</code> option to <code>FALSE</code> and set the <code>bl_ed_pppm</code> option to the desired level. A greater value results in more baseline flexibility, let’s try a value of 8 ED ppm:</p>
+<p>Changing the default behaviour of ABfit is achieved by supplying an
+options structure to the <code>fit_mrs</code> function. The
+<code>abfit_opts</code> function generates the default fitting options,
+which may be modified by supplying arguments. To manually specify the
+baseline flexibility we set the <code>auto_bl_flex</code> option to
+<code>FALSE</code> and set the <code>bl_ed_pppm</code> option to the
+desired level. A greater value results in more baseline flexibility,
+let’s try a value of 8 ED ppm:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">opts</span>    <span class="op">&lt;-</span> <span class="fu"><a href="../reference/abfit_opts.html">abfit_opts</a></span><span class="op">(</span>auto_bl_flex <span class="op">=</span> <span class="cn">FALSE</span>, bl_ed_pppm <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>
-<span class="va">fit_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">basis</span>, opts <span class="op">=</span> <span class="va">opts</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">opts</span>    <span class="op">&lt;-</span> <span class="fu"><a href="../reference/abfit_opts.html">abfit_opts</a></span><span class="op">(</span>auto_bl_flex <span class="op">=</span> <span class="cn">FALSE</span>, bl_ed_pppm <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span>
+<span><span class="va">fit_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">basis</span>, opts <span class="op">=</span> <span class="va">opts</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res</span><span class="op">)</span></span></code></pre></div>
 <p><img src="abfit-baseline-opts_files/figure-html/abfit_flex-1.png" width="576"></p>
-<p>The baseline is clearly more flexible, resulting in a slightly improved residual, however some baseline features are likely to be due to instability from noise, rather than true spectral features. For the next analysis let’s investigate 1 ED pppm:</p>
+<p>The baseline is clearly more flexible, resulting in a slightly
+improved residual, however some baseline features are likely to be due
+to instability from noise, rather than true spectral features. For the
+next analysis let’s investigate 1 ED pppm:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">opts</span>    <span class="op">&lt;-</span> <span class="fu"><a href="../reference/abfit_opts.html">abfit_opts</a></span><span class="op">(</span>auto_bl_flex <span class="op">=</span> <span class="cn">FALSE</span>, bl_ed_pppm <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="va">fit_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">basis</span>, opts <span class="op">=</span> <span class="va">opts</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">opts</span>    <span class="op">&lt;-</span> <span class="fu"><a href="../reference/abfit_opts.html">abfit_opts</a></span><span class="op">(</span>auto_bl_flex <span class="op">=</span> <span class="cn">FALSE</span>, bl_ed_pppm <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">fit_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">basis</span>, opts <span class="op">=</span> <span class="va">opts</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res</span><span class="op">)</span></span></code></pre></div>
 <p><img src="abfit-baseline-opts_files/figure-html/abfit_stiff-1.png" width="576"></p>
-<p>Now we have a much smoother (almost linear) baseline, which comes at the cost of having broad unmodelled signals in the residual – ultimately resulting in biased metabolite levels. An alternative to manually specifying a fixed level of baseline flexibility is to adjust the criterion used for automated estimation. The <code>aic_smoothing_factor</code> can be set to a smaller value (default = 5) to encourage more flexible baselines, whilst still being adaptive to any broad spectral features:</p>
+<p>Now we have a much smoother (almost linear) baseline, which comes at
+the cost of having broad unmodelled signals in the residual – ultimately
+resulting in biased metabolite levels. An alternative to manually
+specifying a fixed level of baseline flexibility is to adjust the
+criterion used for automated estimation. The
+<code>aic_smoothing_factor</code> can be set to a smaller value (default
+= 5) to encourage more flexible baselines, whilst still being adaptive
+to any broad spectral features:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">opts</span>    <span class="op">&lt;-</span> <span class="fu"><a href="../reference/abfit_opts.html">abfit_opts</a></span><span class="op">(</span>aic_smoothing_factor <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="va">fit_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">basis</span>, opts <span class="op">=</span> <span class="va">opts</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">opts</span>    <span class="op">&lt;-</span> <span class="fu"><a href="../reference/abfit_opts.html">abfit_opts</a></span><span class="op">(</span>aic_smoothing_factor <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">fit_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">basis</span>, opts <span class="op">=</span> <span class="va">opts</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res</span><span class="op">)</span></span></code></pre></div>
 <p><img src="abfit-baseline-opts_files/figure-html/abfit_aic-1.png" width="576"></p>
-<p>It can be informative to visualise the individual spline components used for baseline modelling by saving these in the results object:</p>
+<p>It can be informative to visualise the individual spline components
+used for baseline modelling by saving these in the results object:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">opts</span>    <span class="op">&lt;-</span> <span class="fu"><a href="../reference/abfit_opts.html">abfit_opts</a></span><span class="op">(</span>export_sp_fit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">fit_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">basis</span>, opts <span class="op">=</span> <span class="va">opts</span><span class="op">)</span>
-<span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="va">fit_res</span>, omit_signals <span class="op">=</span> <span class="va">basis</span><span class="op">$</span><span class="va">names</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">opts</span>    <span class="op">&lt;-</span> <span class="fu"><a href="../reference/abfit_opts.html">abfit_opts</a></span><span class="op">(</span>export_sp_fit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">fit_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">basis</span>, opts <span class="op">=</span> <span class="va">opts</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="va">fit_res</span>, omit_signals <span class="op">=</span> <span class="va">basis</span><span class="op">$</span><span class="va">names</span><span class="op">)</span></span></code></pre></div>
 <p><img src="abfit-baseline-opts_files/figure-html/abfit_bspline-1.png" width="576"></p>
-<p>The default number of spline functions for ABfit is 15 per PPM which may be verified from the above plot. Let’s try increasing to 25:</p>
+<p>The default number of spline functions for ABfit is 15 per PPM which
+may be verified from the above plot. Let’s try increasing to 25:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">opts</span>    <span class="op">&lt;-</span> <span class="fu"><a href="../reference/abfit_opts.html">abfit_opts</a></span><span class="op">(</span>export_sp_fit <span class="op">=</span> <span class="cn">TRUE</span>, bl_comps_pppm <span class="op">=</span> <span class="fl">25</span><span class="op">)</span>
-<span class="va">fit_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">basis</span>, opts <span class="op">=</span> <span class="va">opts</span><span class="op">)</span>
-<span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="va">fit_res</span>, omit_signals <span class="op">=</span> <span class="va">basis</span><span class="op">$</span><span class="va">names</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">opts</span>    <span class="op">&lt;-</span> <span class="fu"><a href="../reference/abfit_opts.html">abfit_opts</a></span><span class="op">(</span>export_sp_fit <span class="op">=</span> <span class="cn">TRUE</span>, bl_comps_pppm <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></span>
+<span><span class="va">fit_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_mrs.html">fit_mrs</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">basis</span>, opts <span class="op">=</span> <span class="va">opts</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="va">fit_res</span>, omit_signals <span class="op">=</span> <span class="va">basis</span><span class="op">$</span><span class="va">names</span><span class="op">)</span></span></code></pre></div>
 <p><img src="abfit-baseline-opts_files/figure-html/abfit_bspline_more-1.png" width="576"></p>
-<p>Clearly the density of spline functions has increased, however the baseline smoothness remains very close to the default. The general principle for ABfit (derived from P-splines) is to over specify the number of baseline modelling spline functions, and rely on a penalty factor to encourage smoothness.</p>
+<p>Clearly the density of spline functions has increased, however the
+baseline smoothness remains very close to the default. The general
+principle for ABfit (derived from P-splines) is to over specify the
+number of baseline modelling spline functions, and rely on a penalty
+factor to encourage smoothness.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">bl_ed_pppm</span>
-<span class="co">#&gt; [1] 2.276356</span></code></pre></div>
-<p>Inspecting the automatically determined level of baseline flexibility shows the ED per ppm value remains very close to the default analysis despite the change in spline function density – precisely the desired behaviour.</p>
+<code class="sourceCode R"><span><span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">bl_ed_pppm</span></span>
+<span><span class="co">#&gt; [1] 2.276356</span></span></code></pre></div>
+<p>Inspecting the automatically determined level of baseline flexibility
+shows the ED per ppm value remains very close to the default analysis
+despite the change in spline function density – precisely the desired
+behaviour.</p>
 </div>
   </div>
 
@@ -195,7 +237,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>

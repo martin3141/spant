@@ -43,7 +43,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -130,11 +130,11 @@
 <p>It is also strongly recommended to install RStudio Desktop (<a href="https://rstudio.com/products/rstudio/download" class="external-link uri">https://rstudio.com/products/rstudio/download</a>) to provide a modern environment for interactive data analysis.</p>
 <p>Once R and RStudio have been installed, open the RStudio application and type the following in the Console (lower left panel) to install the latest stable version of spant:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"spant"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"spant"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Or the the development version from GitHub (requires the <code>devtools</code> package):</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"martin3141/spant"</span>, ref <span class="op">=</span> <span class="st">"devel"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"martin3141/spant"</span>, ref <span class="op">=</span> <span class="st">"devel"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
@@ -164,53 +164,53 @@ Rscript -e 'install.packages("spant", dependencies = TRUE)'</code></pre>
 </h2>
 <p>Firstly install Anaconda in the standard way for your platform: <a href="https://docs.anaconda.com/anaconda/install/index.html" class="external-link uri">https://docs.anaconda.com/anaconda/install/index.html</a>.</p>
 <p>Create a text file, called <code>spant_requirements.yml</code>, containing the following:</p>
-<pre class="conda"><code><span class="va">name</span><span class="op">:</span> <span class="va">spant</span>
-<span class="va">channels</span><span class="op">:</span>
-    <span class="op">-</span> <span class="va">conda</span><span class="op">-</span><span class="va">forge</span>
-    <span class="op">-</span> <span class="va">r</span>
-<span class="va">dependencies</span><span class="op">:</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">base</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">essentials</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">abind</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">plyr</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">foreach</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">pracma</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">stringr</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">signal</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">matrixcalc</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">minpack.lm</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">nnls</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">r.utils</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">graphicsqc</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">expm</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">smoother</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">readr</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">magrittr</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">ptw</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">mmand</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">RNifti</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">RNiftyReg</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">fields</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">MASS</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">numDeriv</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">nloptr</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">irlba</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">tibble</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">jsonlite</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">viridisLite</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">shiny</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">miniUI</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">knitr</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">rmarkdown</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">testthat</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">ragg</span>
-    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">doParallel</span></code></pre>
+<pre class="conda"><code><span><span class="va">name</span><span class="op">:</span> <span class="va">spant</span></span>
+<span><span class="va">channels</span><span class="op">:</span></span>
+<span>    <span class="op">-</span> <span class="va">conda</span><span class="op">-</span><span class="va">forge</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span></span>
+<span><span class="va">dependencies</span><span class="op">:</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">base</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">essentials</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">abind</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">plyr</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">foreach</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">pracma</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">stringr</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">signal</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">matrixcalc</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">minpack.lm</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">nnls</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">r.utils</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">graphicsqc</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">expm</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">smoother</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">readr</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">magrittr</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">ptw</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">mmand</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">RNifti</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">RNiftyReg</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">fields</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">MASS</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">numDeriv</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">nloptr</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">irlba</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">tibble</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">jsonlite</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">viridisLite</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">shiny</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">miniUI</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">knitr</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">rmarkdown</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">testthat</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">ragg</span></span>
+<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">doParallel</span></span></code></pre>
 <p>Create and activate the environment:</p>
 <pre class="conda"><code>conda env create -f spant_requirements.yml
 conda activate spant</code></pre>
 <p>Start R and install spant in the usual way:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"spant"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"spant"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Big thanks to <a href="https://github.com/joaomcteixeira" class="external-link">João M.C. Teixeira</a> for figuring out this method of install.</p>
 </div>
 </div>
@@ -277,7 +277,7 @@ conda activate spant</code></pre>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>

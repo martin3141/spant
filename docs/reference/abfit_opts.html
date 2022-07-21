@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -78,49 +78,49 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">abfit_opts</span><span class="op">(</span>
-  init_damping <span class="op">=</span> <span class="fl">5</span>,
-  maxiters <span class="op">=</span> <span class="fl">1024</span>,
-  max_shift <span class="op">=</span> <span class="fl">0.078</span>,
-  max_damping <span class="op">=</span> <span class="fl">15</span>,
-  max_phase <span class="op">=</span> <span class="fl">360</span>,
-  lambda <span class="op">=</span> <span class="cn">NULL</span>,
-  ppm_left <span class="op">=</span> <span class="fl">4</span>,
-  ppm_right <span class="op">=</span> <span class="fl">0.2</span>,
-  zp <span class="op">=</span> <span class="cn">TRUE</span>,
-  bl_ed_pppm <span class="op">=</span> <span class="fl">2</span>,
-  auto_bl_flex <span class="op">=</span> <span class="cn">TRUE</span>,
-  bl_comps_pppm <span class="op">=</span> <span class="fl">15</span>,
-  export_sp_fit <span class="op">=</span> <span class="cn">FALSE</span>,
-  max_asym <span class="op">=</span> <span class="fl">0.25</span>,
-  max_basis_shift <span class="op">=</span> <span class="fl">0.0078</span>,
-  max_basis_damping <span class="op">=</span> <span class="fl">2</span>,
-  maxiters_pre <span class="op">=</span> <span class="fl">1000</span>,
-  algo_pre <span class="op">=</span> <span class="st">"NLOPT_LN_NELDERMEAD"</span>,
-  min_bl_ed_pppm <span class="op">=</span> <span class="cn">NULL</span>,
-  max_bl_ed_pppm <span class="op">=</span> <span class="fl">7</span>,
-  auto_bl_flex_n <span class="op">=</span> <span class="fl">20</span>,
-  pre_fit_bl_ed_pppm <span class="op">=</span> <span class="fl">1</span>,
-  remove_lip_mm_prefit <span class="op">=</span> <span class="cn">FALSE</span>,
-  pre_align <span class="op">=</span> <span class="cn">TRUE</span>,
-  max_pre_align_shift <span class="op">=</span> <span class="fl">0.1</span>,
-  pre_align_ref_freqs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.01</span>, <span class="fl">3.03</span>, <span class="fl">3.22</span><span class="op">)</span>,
-  noise_region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="op">-</span><span class="fl">2.5</span><span class="op">)</span>,
-  optimal_smooth_criterion <span class="op">=</span> <span class="st">"maic"</span>,
-  aic_smoothing_factor <span class="op">=</span> <span class="fl">5</span>,
-  anal_jac <span class="op">=</span> <span class="cn">TRUE</span>,
-  pre_fit_ppm_left <span class="op">=</span> <span class="fl">4</span>,
-  pre_fit_ppm_right <span class="op">=</span> <span class="fl">1.8</span>,
-  phi1_optim <span class="op">=</span> <span class="cn">FALSE</span>,
-  phi1_init <span class="op">=</span> <span class="fl">0</span>,
-  max_dphi1 <span class="op">=</span> <span class="fl">0.2</span>,
-  max_basis_shift_broad <span class="op">=</span> <span class="fl">0.0078</span>,
-  max_basis_damping_broad <span class="op">=</span> <span class="fl">2</span>,
-  ahat_calc_method <span class="op">=</span> <span class="st">"lh_pnnls"</span>,
-  prefit_phase_search <span class="op">=</span> <span class="cn">TRUE</span>,
-  freq_reg <span class="op">=</span> <span class="cn">NULL</span>,
-  output_all_paras <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">abfit_opts</span><span class="op">(</span></span>
+<span>  init_damping <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  maxiters <span class="op">=</span> <span class="fl">1024</span>,</span>
+<span>  max_shift <span class="op">=</span> <span class="fl">0.078</span>,</span>
+<span>  max_damping <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>  max_phase <span class="op">=</span> <span class="fl">360</span>,</span>
+<span>  lambda <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ppm_left <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  ppm_right <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>  zp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  bl_ed_pppm <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  auto_bl_flex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  bl_comps_pppm <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>  export_sp_fit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  max_asym <span class="op">=</span> <span class="fl">0.25</span>,</span>
+<span>  max_basis_shift <span class="op">=</span> <span class="fl">0.0078</span>,</span>
+<span>  max_basis_damping <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  maxiters_pre <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  algo_pre <span class="op">=</span> <span class="st">"NLOPT_LN_NELDERMEAD"</span>,</span>
+<span>  min_bl_ed_pppm <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  max_bl_ed_pppm <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>  auto_bl_flex_n <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  pre_fit_bl_ed_pppm <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  remove_lip_mm_prefit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  pre_align <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  max_pre_align_shift <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  pre_align_ref_freqs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.01</span>, <span class="fl">3.03</span>, <span class="fl">3.22</span><span class="op">)</span>,</span>
+<span>  noise_region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="op">-</span><span class="fl">2.5</span><span class="op">)</span>,</span>
+<span>  optimal_smooth_criterion <span class="op">=</span> <span class="st">"maic"</span>,</span>
+<span>  aic_smoothing_factor <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  anal_jac <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  pre_fit_ppm_left <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  pre_fit_ppm_right <span class="op">=</span> <span class="fl">1.8</span>,</span>
+<span>  phi1_optim <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  phi1_init <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  max_dphi1 <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>  max_basis_shift_broad <span class="op">=</span> <span class="fl">0.0078</span>,</span>
+<span>  max_basis_damping_broad <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  ahat_calc_method <span class="op">=</span> <span class="st">"lh_pnnls"</span>,</span>
+<span>  prefit_phase_search <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  freq_reg <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_all_paras <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -322,7 +322,7 @@ e.g. individual shift and damping factors for each basis set element.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu">abfit_opts</span><span class="op">(</span>ppm_left <span class="op">=</span> <span class="fl">4.2</span>, noise_region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu">abfit_opts</span><span class="op">(</span>ppm_left <span class="op">=</span> <span class="fl">4.2</span>, noise_region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -337,7 +337,7 @@ e.g. individual shift and damping factors for each basis set element.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
