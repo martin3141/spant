@@ -776,7 +776,7 @@ td2fd <- function(mrs_data) {
   if (inherits(mrs_data, "list")) return(lapply(mrs_data, td2fd))
   
   if (mrs_data$freq_domain[7] == TRUE) {
-    warning("Data is alread in the frequency-domain.")
+    warning("Data is already in the frequency-domain.")
   }
   
   freq <- matrix(mrs_data$data, ncol = Npts(mrs_data))
@@ -798,7 +798,7 @@ fd2td <- function(mrs_data) {
   if (inherits(mrs_data, "list")) return(lapply(mrs_data, fd2td))
   
   if (mrs_data$freq_domain[7] == FALSE) {
-    warning("Data is alread in the time-domain.")
+    warning("Data is already in the time-domain.")
   }
   
   time <- matrix(mrs_data$data, ncol = Npts(mrs_data))
@@ -3952,4 +3952,16 @@ bin_spec <- function(mrs_data, width = 0.05, unit = "ppm") {
   mrs_data$data <- array(data_vec, dim = c(1, 1, 1, 1, 1, 1, length(data_vec)))
   
   return(mrs_data)
+}
+
+#' Apply the Modulus operator to the time-domain MRS signal.
+#' @param mrs_data MRS data input.
+#' @return time-domain modulus of input.
+#' @export
+mod_td <- function(mrs_data) {
+  # covert to time-domain
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+  
+  # return the Modulus
+  return(Mod(mrs_data))
 }
