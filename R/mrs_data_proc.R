@@ -3253,6 +3253,9 @@ peak_info <- function(mrs_data, xlim = c(4,0.5), interp_f = 4,
 #' value in the y axis, FWHM in the units of data points.
 #' @export
 calc_peak_info_vec <- function(data_pts, interp_f) {
+  
+  if (is.na(data_pts[1])) return(rep(NA, 3))
+  
   data_pts <- stats::spline(data_pts, n = interp_f * length(data_pts))
   data_pts_x <- data_pts$x
   data_pts <- data_pts$y
