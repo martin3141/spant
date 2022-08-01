@@ -308,12 +308,18 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   }
   
   # correct the voxel dimensions for MRSI
+  # this is needed because the Siemens software automatically zero-pads k-space
+  # to a power of two, but we don't want this when dealing with raw twix data
   x_pts <- max(mrs_data$twix_inds$Seg) + 1
   y_pts <- max(mrs_data$twix_inds$Lin) + 1
   
   if (x_pts > 1 || y_pts > 1) {
     mrs_data$resolution[2] <- vars$x_dim / x_pts
     mrs_data$resolution[3] <- vars$y_dim / y_pts
+    
+    # fix the affine
+    mrs_data$affine[,1] <- mrs_data$affine[,1] * vars$x_dim / x_pts
+    mrs_data$affine[,2] <- mrs_data$affine[,2] * vars$y_dim / y_pts
   }
   
   return(mrs_data)

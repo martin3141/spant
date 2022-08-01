@@ -1,6 +1,8 @@
 # spant 2.2.0
 * peak_info function now works with masked datasets.
-* Bug fix for HSVD function.
+* Bug fix for HSVD function not working with frequency domain data.
+* Bug fix for TWIX affine calculation when not using power of two matrix
+dimensions.
 
 # spant 2.1.0
 * y-axis label can now be changed with a new argument (yaxis_lab) to
