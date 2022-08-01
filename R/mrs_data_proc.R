@@ -2529,6 +2529,8 @@ hsvd_filt_vec <- function(fid, fs, region = c(-30, 30), comps = 40,
 #' @export
 hsvd <- function(mrs_data, comps = 40, irlba = TRUE, max_damp = 10) {
   
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+  
   if (Nspec(mrs_data) > 1) {
     warning("Data contains multiple spectra, but only one has been processed.")
   }
