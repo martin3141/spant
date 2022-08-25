@@ -25,7 +25,7 @@
 rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
                  p_deg = 2, sp_N = 2, sp_deg = 3, max_t = 0.2,
                  basis_type = "poly", rescale_output = TRUE,
-                 phase_corr = TRUE, ret_corr_only = FALSE) {
+                 phase_corr = TRUE, ret_corr_only = TRUE) {
   
   if (inherits(mrs_data, "list")) {
     res <- lapply(mrs_data, rats, ref = ref, xlim = xlim, max_shift = max_shift,
