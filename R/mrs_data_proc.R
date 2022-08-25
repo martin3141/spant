@@ -1236,7 +1236,38 @@ crop_td_pts <- function(mrs_data, start = NULL, end = NULL) {
   
   mrs_data$data <- mrs_data$data[,,,,,,start:end, drop = F]
   
-  mrs_data
+  return(mrs_data)
+}
+
+#' Crop \code{mrs_data} object data points in the time-domain rounding down to
+#' the next smallest power of two (pot). Data that already has a pot length will
+#' not be changed.
+#' @param mrs_data MRS data.
+#' @return cropped \code{mrs_data} object.
+#' @export
+crop_td_pts_pot <- function(mrs_data) {
+  
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, crop_td_pts_pot)
+    return(res)
+  }
+  
+  # check to see if already a power of 2
+  len <- Npts(mrs_data) 
+  
+  if ((log2(len) == as.integer(log2(len)))) {
+    # nothing to do
+    return(mrs_data)
+  } else {
+    # needs to be a TD operation
+    if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+    
+    # not a power of two, so rounding down to the nearest
+    end <- 2 ^ floor(log2(len))
+    mrs_data$data <- mrs_data$data[,,,,,,1:end, drop = F]
+  }
+  
+  return(mrs_data)  
 }
 
 #' Crop \code{mrs_data} object based on a frequency range.

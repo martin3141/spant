@@ -3,10 +3,9 @@
 \name{varpro_3_para_opts}
 \alias{varpro_3_para_opts}
 \title{Return a list of options for VARPRO based fitting with 3 free parameters:
-\itemize{
-\item zero'th order phase correction
-\item global damping
-\item global frequency shift.
+\enumerate{
+\item zeroth order phase correction, 2. global damping, 3 global frequency
+shift.
 }}
 \usage{
 varpro_3_para_opts(
@@ -42,9 +41,8 @@ list of options.
 }
 \description{
 Return a list of options for VARPRO based fitting with 3 free parameters:
-\itemize{
-\item zero'th order phase correction
-\item global damping
-\item global frequency shift.
+\enumerate{
+\item zeroth order phase correction, 2. global damping, 3 global frequency
+shift.
 }
 }
