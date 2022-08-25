@@ -2903,12 +2903,14 @@ zp_vec <- function(vector, n) {
 #' dimension before use.
 #' @param ref_pt_index time-domain point to use for estimating phase and scaling 
 #' values.
+#' @param ret_metab_only return the metabolite data only, even if reference data
+#' has been specified.
 #' @return MRS data.
 #' @export
 comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
                        scale_method = "sig_noise_sq", sum_coils = TRUE,
                        noise_region = c(-0.5, -2.5), average_ref_dyns = TRUE,
-                       ref_pt_index = 1) {
+                       ref_pt_index = 1, ret_metab_only = FALSE) {
   
   if (inherits(metab, "list")) {
     # if (class(ref) != "list") stop("metab is a list but ref is not")
@@ -2939,12 +2941,13 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
     more_args <- list(scale = scale, scale_method = scale_method,
                       sum_coils = sum_coils, noise_region = noise_region,
                       average_ref_dyns = average_ref_dyns,
-                      ref_pt_index = ref_pt_index)
+                      ref_pt_index = ref_pt_index,
+                      ret_metab_only = ret_metab_only)
     
     res <- mapply(comb_coils, metab = metab, ref = ref, noise = noise,
                   MoreArgs = more_args, SIMPLIFY = FALSE)
     
-    if (is.null(ref[[1]])) {
+    if (is.null(ref[[1]]) | ret_metab_only) {
       return(res)
     } else {
       metab_list <- lapply(res, '[[', 1)
@@ -3048,7 +3051,7 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
   
   if (sum_coils) metab_ps <- sum_coils(metab_ps)
   
-  if (metab_only) {
+  if (metab_only | ret_metab_only) {
     return(metab_ps)
   } else {
     out <- list(metab = metab_ps, ref = ref_ps)
