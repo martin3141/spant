@@ -13,7 +13,8 @@ comb_coils(
   sum_coils = TRUE,
   noise_region = c(-0.5, -2.5),
   average_ref_dyns = TRUE,
-  ref_pt_index = 1
+  ref_pt_index = 1,
+  ret_metab_only = FALSE
 )
 }
 \arguments{
@@ -37,6 +38,9 @@ dimension before use.}
 
 \item{ref_pt_index}{time-domain point to use for estimating phase and scaling
 values.}
+
+\item{ret_metab_only}{return the metabolite data only, even if reference data
+has been specified.}
 }
 \value{
 MRS data.
