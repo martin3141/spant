@@ -82,10 +82,9 @@ read_mrs_nifti <- function(fname, extra) {
   
   # get all metadata
   meta <- json_data
+  
   # remove any data that is explicitly part of the mrs_data structure
-  # TODO add ref when we decide what it is called
-  # meta$TxOff <- NULL
-  meta$TransmitterFrequency <- NULL
+  meta$SpectrometerFrequency <- NULL
   meta$ResonantNucleus <- NULL
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,

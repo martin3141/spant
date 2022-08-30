@@ -285,7 +285,8 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   # get the resolution and geom info
   paras <- calc_siemens_paras(vars, FALSE)
   
-  meta <- list(EchoTime = vars$te)
+  meta <- list(EchoTime = vars$te, RepetitionTime = vars$tr,
+               FlipAngle = vars$flip_ang)
 
   mrs_data <- mrs_data(data = data, ft = vars$ft, resolution = paras$res,
                        ref = paras$ref, nuc = paras$nuc,
@@ -418,6 +419,10 @@ read_siemens_txt_hdr <- function(input, version = "vd", verbose) {
       vars$ft <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "alTE[0]")) {
       vars$te <- (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
+    } else if (startsWith(line, "alTR[0]")) {
+      vars$tr <- (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
+    } else if (startsWith(line, "adFlipAngleDegree[0]")) {
+      vars$flip_ang <- (as.numeric(strsplit(line, "=")[[1]][2]))
     } else if (startsWith(line, "sSpecPara.lVectorSize")) {
       vars$N <- as.integer(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSpecPara.lFinalMatrixSizePhase")) {

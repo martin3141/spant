@@ -43,15 +43,19 @@ write_mrs_nifti <- function(mrs_data, fname) {
   # set the nucleus to a default value if not specified in mrs_data
   if (!exists("nuc", where = mrs_data)) mrs_data$nuc <- def_nuc()
   
-  if (is.null(mrs_data$meta$EchoTime)) {
-    te_val <- NULL
-  } else {
-    te_val <- mrs_data$meta$EchoTime * 1e3
-  }
+  # if (is.null(mrs_data$meta$EchoTime)) {
+  #  te_val <- NULL
+  #} else {
+  #  te_val <- mrs_data$meta$EchoTime * 1e3
+  #}
   
+  #json_list <- list(SpectrometerFrequency = mrs_data$ft / 1e6,
+  #                  ResonantNucleus = mrs_data$nuc,
+  #                  EchoTime = jsonlite::unbox(te_val))
+  
+  # these two are required for nifti mrs and therefore a special case
   json_list <- list(SpectrometerFrequency = mrs_data$ft / 1e6,
-                    ResonantNucleus = mrs_data$nuc,
-                    EchoTime = jsonlite::unbox(te_val))
+                    ResonantNucleus = mrs_data$nuc)
   
   # append any additional meta information
   json_list <- c(json_list, mrs_data$meta)
