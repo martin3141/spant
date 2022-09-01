@@ -16,7 +16,7 @@ rats(
   basis_type = "poly",
   rescale_output = TRUE,
   phase_corr = TRUE,
-  ret_corr_only = FALSE
+  ret_corr_only = TRUE
 )
 }
 \arguments{
