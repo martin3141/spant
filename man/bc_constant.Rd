@@ -4,7 +4,7 @@
 \alias{bc_constant}
 \title{Remove a constant baseline offset based on a reference spectral region.}
 \usage{
-bc_constant(mrs_data, xlim = NULL)
+bc_constant(mrs_data, xlim)
 }
 \arguments{
 \item{mrs_data}{MRS data.}
