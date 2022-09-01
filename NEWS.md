@@ -3,9 +3,11 @@
 * Bug fix for HSVD function not working with frequency domain data.
 * Bug fix for TWIX affine calculation when not using power of two matrix
 dimensions.
-* Added ret_metab_only option to comb_coils.
 * New function (crop_td_pts_pot) to round a dataset length down to the nearest
 power of 2.
+* Added ret_metab_only option to comb_coils.
+* rats now only returns the corrected data by default, note this could break old
+code.
 
 # spant 2.1.0
 * y-axis label can now be changed with a new argument (yaxis_lab) to
