@@ -3324,7 +3324,7 @@ calc_peak_info_vec <- function(data_pts, interp_f) {
 #' offset.
 #' @return baseline corrected data.
 #' @export
-bc_constant <- function(mrs_data, xlim = NULL) {
+bc_constant <- function(mrs_data, xlim) {
   
   if (inherits(mrs_data, "list")) {
     return(lapply(mrs_data, bc_constant, xlim = xlim))
