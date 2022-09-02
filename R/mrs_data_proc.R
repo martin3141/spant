@@ -3350,7 +3350,7 @@ bc_constant <- function(mrs_data, xlim) {
 #' baseline estimate and input data will be returned.
 #' @return baseline corrected data.
 #' @export
-bc_als <- function(mrs_data, lambda = 1e4, p = 0.001, ret_bc_only = TRUE) {
+bc_als <- function(mrs_data, lambda = 1e4, p = 1e-3, ret_bc_only = TRUE) {
   
   if (inherits(mrs_data, "list")) {
     return(lapply(mrs_data, bc_als, lambda = lambda, p = p))
