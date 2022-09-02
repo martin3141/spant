@@ -3338,15 +3338,19 @@ bc_constant <- function(mrs_data, xlim) {
   return(mrs_data)
 }
 
-
-
 #' Baseline correction using the ALS method.
+#'
+#' Eilers P. H. C. and Boelens H. F. M. (2005) Baseline correction with
+#' asymmetric least squares smoothing. Leiden Univ. Medical Centre Report.
+#'
 #' @param mrs_data mrs_data object.
-#' @param lambda lambda parameter.
-#' @param p p parameter.
+#' @param lambda controls the baseline flexibility.
+#' @param p controls the penalty for negative data points.
+#' @param ret_bc_only return the baseline corrected data only. When FALSE the
+#' baseline estimate and input data will be returned.
 #' @return baseline corrected data.
 #' @export
-bc_als <- function(mrs_data, lambda = 1e4, p = 0.001) {
+bc_als <- function(mrs_data, lambda = 1e4, p = 0.001, ret_bc_only = TRUE) {
   
   if (inherits(mrs_data, "list")) {
     return(lapply(mrs_data, bc_als, lambda = lambda, p = p))
@@ -3354,7 +3358,14 @@ bc_als <- function(mrs_data, lambda = 1e4, p = 0.001) {
   
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
-  apply_mrs(mrs_data, 7, bc_als_vec, lambda, p)
+  bc_res <- apply_mrs(mrs_data, 7, bc_als_vec, lambda, p)
+
+  if (ret_bc_only) {
+    return(bc_res)  
+  } else {
+    bl <- mrs_data - bc_res
+    return(list(bc = bc_res, bl = bl, input = mrs_data))
+  }
 }
 
 bc_als_vec <- function(vec, lambda, p) {
