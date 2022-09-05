@@ -75,6 +75,8 @@ print.mrs_data <- function(x, full = FALSE, ...) {
 #' @param col set the line colour, eg col = rgb(0.5, 0.5, 0.5).
 #' @param alpha set the line transparency, eg alpha = 0.5 is 50% transparency.
 #' Overrides any transparency levels set by col.
+#' @param bl_lty linetype for the y = 0 baseline trace. A default value NULL
+#' results in no baseline being plotted.
 #' @param ... other arguments to pass to the plot method.
 #' @export
 plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
@@ -85,7 +87,7 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
                           xaxis_lab = NULL, yaxis_lab = NULL, xat = NULL,
                           xlabs = TRUE, yat = NULL, ylabs = TRUE,
                           show_grid = TRUE, grid_nx = NULL, grid_ny = NA,
-                          col = NULL, alpha = NULL, ...) {
+                          col = NULL, alpha = NULL, bl_lty = NULL, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
  
@@ -201,6 +203,11 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
     graphics::par(xpd = T)
     graphics::text(xlim[1], max_dp * 1.03, label, cex = 2.5)
     graphics::par(xpd = F) 
+  }
+  
+  # draw baseline(s)
+  if (!is.null(bl_lty)) {
+      graphics::abline(h = 0, lty = bl_lty, lwd = 0.5)
   }
   
   if (restore_def_par) graphics::par(.pardefault)

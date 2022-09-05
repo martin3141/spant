@@ -33,6 +33,7 @@
   grid_ny = NA,
   col = NULL,
   alpha = NULL,
+  bl_lty = NULL,
   ...
 )
 }
@@ -100,6 +101,9 @@ corresponding direction.}
 
 \item{alpha}{set the line transparency, eg alpha = 0.5 is 50\% transparency.
 Overrides any transparency levels set by col.}
+
+\item{bl_lty}{linetype for the y = 0 baseline trace. A default value NULL
+results in no baseline being plotted.}
 
 \item{...}{other arguments to pass to the plot method.}
 }
