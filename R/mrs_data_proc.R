@@ -3513,12 +3513,13 @@ kspace2img_xy <- function(mrs_data) {
 #' @param mrs_data data in.
 #' @param lw target linewidth in units of ppm.
 #' @param xlim region to search for peaks to obtain a linewidth estimate.
+#' @param lg Lorentz-Gauss lineshape parameter.
 #' @return line-broadened data.
 #' @export
-set_lw <- function(mrs_data, lw, xlim = c(4, 0.5)) {
+set_lw <- function(mrs_data, lw, xlim = c(4, 0.5), lg = 1) {
   
   if (inherits(mrs_data, "list")) {
-    res <- lapply(mrs_data, set_lw, lw = lw, xlim = xlim)
+    res <- lapply(mrs_data, set_lw, lw = lw, xlim = xlim, lg = lg)
     return(res)
   }
   
@@ -3532,16 +3533,16 @@ set_lw <- function(mrs_data, lw, xlim = c(4, 0.5)) {
   single_mrs <- get_subset(mrs_data, x_set = 1, y_set = 1, z_set = 1,
                            dyn_set = 1, coil_set = 1)
   
-  lb_res <- apply_mrs(mrs_data, 7, optim_set_lw, lw, xlim, single_mrs,
-                   data_only = TRUE)
+  lb_res <- apply_mrs(mrs_data, 7, optim_set_lw, lw, xlim, lg, single_mrs,
+                      data_only = TRUE)
   
   # apply the lb parameter to the full dataset
-  res <- lb(mrs_data, lb_res)
+  res <- lb(mrs_data, lb_res, lg)
   
   return(res)
 }
 
-optim_set_lw <- function(x, lw, xlim, single_mrs) {
+optim_set_lw <- function(x, lw, xlim, lg, single_mrs) {
   single_mrs$data[1,1,1,1,1,1,] <- x
   
   # return NA if the spectrum has been masked
@@ -3557,14 +3558,14 @@ optim_set_lw <- function(x, lw, xlim, single_mrs) {
   # convert lw to Hz to get the upper value for 1D search
   upper_lw <- lw * single_mrs$ft / 1e6
   
-  res <- stats::optim(0, lw_obj_fn, NULL, single_mrs, lw, xlim, lower = 0,
+  res <- stats::optim(0, lw_obj_fn, NULL, single_mrs, lw, xlim, lg, lower = 0,
                       upper = upper_lw, method = "Brent")
   
   return(res$par[1])
 }
 
-lw_obj_fn <- function(lb_val, mrs_data, lw, xlim) {
-  mrs_data <- lb(mrs_data, lb_val)
+lw_obj_fn <- function(lb_val, mrs_data, lw, xlim, lg) {
+  mrs_data <- lb(mrs_data, lb_val, lg)
   new_lw   <- peak_info(mrs_data, xlim)$fwhm_ppm[1]
   Mod(new_lw - lw)
 }
