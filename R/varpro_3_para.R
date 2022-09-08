@@ -165,9 +165,8 @@ varpro_3_para_obj <- function(par, y, basis, t, nstart, sc_res = FALSE) {
   res
 }
 
-#' Return a list of options for VARPRO based fitting with 3 free parameters:
-#' 1. zeroth order phase correction, 2. global damping, 3 global frequency
-#' shift.
+#' Return a list of options for VARPRO based fitting with 3 free parameters.
+#' 
 #' @param nstart position in the time-domain to start fitting, units of data
 #' points.
 #' @param init_damping starting value for the global Gaussian line-broadening

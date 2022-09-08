@@ -2,11 +2,7 @@
 % Please edit documentation in R/varpro_3_para.R
 \name{varpro_3_para_opts}
 \alias{varpro_3_para_opts}
-\title{Return a list of options for VARPRO based fitting with 3 free parameters:
-\enumerate{
-\item zeroth order phase correction, 2. global damping, 3 global frequency
-shift.
-}}
+\title{Return a list of options for VARPRO based fitting with 3 free parameters.}
 \usage{
 varpro_3_para_opts(
   nstart = 20,
@@ -40,9 +36,5 @@ calculation.}
 list of options.
 }
 \description{
-Return a list of options for VARPRO based fitting with 3 free parameters:
-\enumerate{
-\item zeroth order phase correction, 2. global damping, 3 global frequency
-shift.
-}
+Return a list of options for VARPRO based fitting with 3 free parameters.
 }
