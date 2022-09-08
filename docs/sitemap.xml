@@ -181,6 +181,9 @@
     <loc>https://martin3141.github.io/spant/reference/crop_td_pts.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/crop_td_pts_pot.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/crop_xy.html</loc>
   </url>
   <url>
@@ -527,6 +530,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/Mod.mrs_data.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/mod_td.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/mrsi2d_img2kspace.html</loc>
