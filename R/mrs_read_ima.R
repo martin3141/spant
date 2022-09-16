@@ -40,13 +40,14 @@ read_ima <- function(fraw, verbose = FALSE, extra) {
 #' @param dir data directory path.
 #' @param extra an optional data frame to provide additional variables for use
 #' in subsequent analysis steps, eg id or grouping variables.
+#' @param verbose output extra information to the console.
 #' @return mrs_data object.
 #' @export
-read_ima_coil_dir <- function(dir, extra = NULL) {
+read_ima_coil_dir <- function(dir, extra = NULL, verbose = FALSE) {
   files <- list.files(dir, full.names = TRUE)
   #warning("coil ordering is based on file name only.")
   files <- sort(files)
-  mrs_list <- lapply(files, read_mrs, format = "dicom", verbose = TRUE,
+  mrs_list <- lapply(files, read_mrs, format = "dicom", verbose = verbose,
                      extra = extra)
   mrs_data <- append_coils(mrs_list)
   return(mrs_data)
@@ -58,13 +59,14 @@ read_ima_coil_dir <- function(dir, extra = NULL) {
 #' @param dir data directory path.
 #' @param extra an optional data frame to provide additional variables for use
 #' in subsequent analysis steps, eg id or grouping variables.
+#' @param verbose output extra information to the console.
 #' @return mrs_data object.
 #' @export
-read_ima_dyn_dir <- function(dir, extra = NULL) {
+read_ima_dyn_dir <- function(dir, extra = NULL, verbose = FALSE) {
   files <- list.files(dir, full.names = TRUE)
   #warning("coil ordering is based on file name only.")
   files <- sort(files)
-  mrs_list <- lapply(files, read_mrs, format = "dicom", verbose = TRUE,
+  mrs_list <- lapply(files, read_mrs, format = "dicom", verbose = verbose,
                      extra = extra)
   mrs_data <- append_dyns(mrs_list)
   return(mrs_data)

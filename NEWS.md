@@ -1,3 +1,6 @@
+# spant 2.3.0
+* Verbose option added to read_ima_coil_dir and read_ima_dyn_dir functions.
+
 # spant 2.2.0
 * peak_info function now works with masked datasets.
 * Bug fix for HSVD function not working with frequency domain data.
