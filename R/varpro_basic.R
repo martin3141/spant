@@ -204,6 +204,7 @@ append_metab_combs <- function(amps) {
 #' @param method one of "td", "fd", "fd_re".
 #' @param nnls restrict basis amplitudes to non-negative values.
 #' @return full list of options.
+#' @export
 varpro_basic_opts <- function(method = "fd_re", nnls = TRUE) {
   list(method = method, nnls = nnls)
 }

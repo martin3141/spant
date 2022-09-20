@@ -3,7 +3,7 @@ context("fitting")
 test_that("Test data stimulation step", {
   
   # simulate some data and check consistency to a reference file
-  sim_res <- sim_brain_1h(full_output = TRUE)
+  sim_res <- sim_brain_1h(pul_seq = seq_press_ideal, full_output = TRUE)
   
   expect_equal_to_reference(sim_res, "abfit_sim_res.rds", tolerance = 1e-6)
   

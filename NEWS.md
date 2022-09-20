@@ -1,5 +1,7 @@
 # spant 2.3.0
 * Verbose option added to read_ima_coil_dir and read_ima_dyn_dir functions.
+* sim_brain_1h default sequence changed to semi-LASER and line-broadening option
+added.
 
 # spant 2.2.0
 * peak_info function now works with masked datasets.

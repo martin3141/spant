@@ -7,10 +7,11 @@
 sim_brain_1h(
   acq_paras = def_acq_paras(),
   type = "normal_v1",
-  pul_seq = seq_press_ideal,
+  pul_seq = seq_slaser_ideal,
   xlim = c(0.5, 4.2),
   full_output = FALSE,
   amps = NULL,
+  basis_lb = NULL,
   ...
 )
 }
@@ -30,6 +31,8 @@ corresponding amplitudes.}
 
 \item{amps}{a vector of basis amplitudes may be specified to modify the
 output spectrum.}
+
+\item{basis_lb}{apply additional Gaussian line-broadening to the basis (Hz).}
 
 \item{...}{extra parameters to pass to the pulse sequence function.}
 }

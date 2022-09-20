@@ -284,12 +284,14 @@ depth <- function(this) ifelse(is.list(this), 1L + max(sapply(this, depth)), 0L)
 #' corresponding amplitudes.
 #' @param amps a vector of basis amplitudes may be specified to modify the
 #' output spectrum.
+#' @param basis_lb apply additional Gaussian line-broadening to the basis (Hz).
 #' @param ... extra parameters to pass to the pulse sequence function.
 #' @return see full_output option.
 #' @export
 sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal_v1",
-                         pul_seq = seq_press_ideal, xlim = c(0.5, 4.2), 
-                         full_output = FALSE, amps = NULL,  ...) {
+                         pul_seq = seq_slaser_ideal, xlim = c(0.5, 4.2), 
+                         full_output = FALSE, amps = NULL,
+                         basis_lb = NULL, ...) {
   
   brain_basis_paras <- get_1h_brain_basis_paras_v1(ft = acq_paras$ft)
   if (is.null(amps)) {
@@ -306,6 +308,10 @@ sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal_v1",
   }
   
   basis <- sim_basis(brain_basis_paras, pul_seq, acq_paras, xlim = xlim, ...)
+  
+  names(amps) <- basis$names
+  
+  if (!is.null(basis_lb)) basis <- lb(basis, basis_lb)
 
   mrs_data <- basis2mrs_data(basis, sum_elements = TRUE, amps = amps)
   
