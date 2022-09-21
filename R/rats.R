@@ -28,6 +28,13 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
                  phase_corr = TRUE, ret_corr_only = TRUE) {
   
   if (inherits(mrs_data, "list")) {
+    
+    # take the mean over the list and dataset if ref is not given 
+    if (is.null(ref)) {
+      ref <- mean_mrs_list(mrs_data)
+      ref <- mean(ref, na.rm = TRUE)
+    } 
+    
     res <- lapply(mrs_data, rats, ref = ref, xlim = xlim, max_shift = max_shift,
                   p_deg = p_deg, sp_N = sp_N, sp_deg = sp_deg, max_t = max_t,
                   basis_type = basis_type, rescale_output = rescale_output,
