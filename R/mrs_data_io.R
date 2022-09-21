@@ -14,8 +14,8 @@ mrs_data <- function(data, ft, resolution, ref, nuc, freq_domain, affine,
 #' @param fname filename of the dpt format MRS data.
 #' @param format string describing the data format. Must be one of the 
 #' following : "spar_sdat", "rda", "dicom", "twix", "pfile", "list_data",
-#' "paravis", "dpt", "lcm_raw", "rds", "nifti", "varian". If not specified,
-#' the format will be guessed from the filename extension.
+#' "paravis", "dpt", "lcm_raw", "rds", "nifti", "varian", "jmrui_txt". If not 
+#' specified, the format will be guessed from the filename extension.
 #' @param ft transmitter frequency in Hz (required for list_data format).
 #' @param fs sampling frequency in Hz (required for list_data format).
 #' @param ref reference value for ppm scale (required for list_data format).
@@ -76,6 +76,8 @@ read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
     return(read_list_data(fname, ft, fs, ref, extra))
   } else if (format == "dpt") {
     return(read_mrs_dpt(fname, extra))
+  } else if (format == "jmrui_txt") {
+    return(read_mrs_jmrui_txt(fname, extra))
   } else if (format == "paravis") {
     return(read_paravis_raw(fname, extra))
   } else if (format == "lcm_raw") {
@@ -128,6 +130,8 @@ guess_mrs_format <- function(fname) {
     format <- "rds"
   } else if (stringr::str_ends(fname_low, ".raw")) {
     format <- "lcm_raw"
+  } else if (stringr::str_ends(fname_low, ".txt")) {
+    format <- "jmrui_txt"
   } else if (basename(fname_low) == "fid") {
     format <- "varian"
   } else {

@@ -25,7 +25,7 @@ read_lcm_raw <- function(fname, ft, fs, ref, extra) {
   close(con)
 
   data <- as.vector(t(as.matrix(x)))
-  N <- length(data)/2
+  N <- length(data) / 2
   data <- data[seq(1, 2 * N, 2)] +
           1i * data[seq(2, 2 * N, 2)]
   

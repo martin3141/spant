@@ -1,5 +1,6 @@
 # spant 2.3.0
 * Verbose option added to read_ima_coil_dir and read_ima_dyn_dir functions.
+* Support added for reading jMRUI txt formatted MRS data.
 * sim_brain_1h default sequence changed to semi-LASER and line-broadening option
 added.
 
