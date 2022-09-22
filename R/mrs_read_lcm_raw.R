@@ -2,7 +2,8 @@ read_lcm_raw <- function(fname, ft, fs, ref, extra) {
   in_nmid <- FALSE 
   con <- file(fname, "rb")
   while (length(line <- readLines(con, n = 1, warn = FALSE)) > 0) {
-    if (endsWith(line, "$NMID")) {
+    # if (endsWith(line, "$NMID") | startsWith(line, " $NMID")) {
+    if (grepl("$NMID", line, fixed = TRUE)) {
       in_nmid <- TRUE
     } else if (endsWith(line, "$END") && in_nmid) {
       

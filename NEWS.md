@@ -3,6 +3,7 @@
 * Support added for reading jMRUI txt formatted MRS data.
 * sim_brain_1h default sequence changed to semi-LASER and line-broadening option
 added.
+* Bug fix for reading LCModel RAW files.
 
 # spant 2.2.0
 * peak_info function now works with masked datasets.
