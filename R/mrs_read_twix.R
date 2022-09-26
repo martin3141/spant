@@ -276,10 +276,10 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
    
   if (!full_fid & (floor(ima_kspace_center_column / 2) > 0)) {
     # data <- data[,,,,,,(fid_offset + 1):ima_samples, drop = FALSE]
-    data <- data[,,,,,,(ima_kspace_center_column + 1):ima_samples, drop = FALSE]
-    # start_pt <- ima_kspace_center_column + 1
-    # start_pt <- fid_offset + ima_kspace_center_column + 1
-    # data <- data[,,,,,,start_pt:ima_samples, drop = FALSE]
+    # data <- data[,,,,,,(ima_kspace_center_column + 1):ima_samples, drop = FALSE]
+    start_pt <- ima_kspace_center_column + 1
+    data <- data[,,,,,,start_pt:ima_samples, drop = FALSE]
+    if (verbose) cat(paste("FID start adj.  :", start_pt, "\n"))
   }
   
   # freq domain vector vector
