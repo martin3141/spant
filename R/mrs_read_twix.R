@@ -266,7 +266,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   if (verbose) cat(paste("Complex pts     :", ima_samples, "\n"))
   if (verbose) cat(paste("Dynamics        :", dynamics, "\n"))
   if (verbose) cat(paste("kspace center   :", ima_kspace_center_column, "\n"))
-  #if (verbose) cat(paste("FID offset pts  :", fid_offset, "\n"))
+  if (verbose) cat(paste("FID offset pts  :", fid_offset, "\n"))
   
   # make complex
   data <- raw_pts[c(TRUE, FALSE)] - 1i * raw_pts[c(FALSE, TRUE)]
@@ -275,8 +275,11 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   data <- aperm(data, c(7,6,5,4,3,2,1))
    
   if (!full_fid & (floor(ima_kspace_center_column / 2) > 0)) {
-    #data <- data[,,,,,,(fid_offset + 1):ima_samples, drop = FALSE]
+    # data <- data[,,,,,,(fid_offset + 1):ima_samples, drop = FALSE]
     data <- data[,,,,,,(ima_kspace_center_column + 1):ima_samples, drop = FALSE]
+    # start_pt <- ima_kspace_center_column + 1
+    # start_pt <- fid_offset + ima_kspace_center_column + 1
+    # data <- data[,,,,,,start_pt:ima_samples, drop = FALSE]
   }
   
   # freq domain vector vector
@@ -295,6 +298,9 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   
   # some extra info specific to twix data
   mrs_data$twix_inds <- as.data.frame(matrix(inds, ncol = 14, byrow = TRUE))
+  
+  mrs_data$ima_kspace_center_column <- ima_kspace_center_column
+  mrs_data$fid_offset <- fid_offset
   
   ind_names <- c("Lin", "Ave", "Sli", "Par", "Eco", "Phs", "Rep", "Set", "Seg",
                  "Ida", "Idb", "Idc", "Idd", "Ide")
