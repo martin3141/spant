@@ -2539,10 +2539,24 @@ hsvd_filt_vec <- function(fid, fs, region = c(-30, 30), comps = 40,
     model <- rowSums(hsvd_res$basis)
   } else {
     idx <- (hsvd_res$reson_table$frequency_hz < region[2]) &
-           (hsvd_res$reson_table$frequency_hz > region[1] )
-    model <- rowSums(hsvd_res$basis[,idx])
+           (hsvd_res$reson_table$frequency_hz > region[1])
+    
+    sub_basis <- hsvd_res$basis[,idx]
+    
+    # print(idx)
+    
+    if (sum(idx) > 1) {
+      model <- rowSums(sub_basis)
+    } else if (sum(idx) == 1) {
+      model <- sub_basis
+    } else if (sum(idx) == 0) {
+      # no components found
+      return(fid)
+    } else {
+      stop("Unexpected error in HSVD filter.")
+    }
   }
-  fid - model
+  return(fid - model)
 }
 
 #' HSVD of an mrs_data object.

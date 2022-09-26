@@ -4,6 +4,8 @@
 * sim_brain_1h default sequence changed to semi-LASER and line-broadening option
 added.
 * Bug fix for reading LCModel RAW files.
+* Bug fix for HSVD filter when only 0 or 1 components are found in the filter
+region.
 
 # spant 2.2.0
 * peak_info function now works with masked datasets.
