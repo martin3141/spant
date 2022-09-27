@@ -259,14 +259,14 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   
   if (verbose) cat("\n")
   raw_pts <- raw_pts[1:raw_pt_end]
-  fid_offset <- floor(ima_kspace_center_column / 2) + 1
+  # fid_offset <- floor(ima_kspace_center_column / 2) + 1
   dynamics <- length(raw_pts) / ima_coils / (ima_samples * 2)
   if (verbose) cat(paste("Raw data points :", length(raw_pts), "\n"))
   if (verbose) cat(paste("Coils           :", ima_coils, "\n"))
   if (verbose) cat(paste("Complex pts     :", ima_samples, "\n"))
   if (verbose) cat(paste("Dynamics        :", dynamics, "\n"))
   if (verbose) cat(paste("kspace center   :", ima_kspace_center_column, "\n"))
-  if (verbose) cat(paste("FID offset pts  :", fid_offset, "\n"))
+  # if (verbose) cat(paste("FID offset pts  :", fid_offset, "\n"))
   
   # make complex
   data <- raw_pts[c(TRUE, FALSE)] - 1i * raw_pts[c(FALSE, TRUE)]
@@ -274,14 +274,6 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   data <- array(data, dim = c(ima_samples, ima_coils, dynamics, 1, 1, 1, 1))
   data <- aperm(data, c(7,6,5,4,3,2,1))
    
-  if (!full_fid & (floor(ima_kspace_center_column / 2) > 0)) {
-    # data <- data[,,,,,,(fid_offset + 1):ima_samples, drop = FALSE]
-    # data <- data[,,,,,,(ima_kspace_center_column + 1):ima_samples, drop = FALSE]
-    start_pt <- ima_kspace_center_column + 1
-    data <- data[,,,,,,start_pt:ima_samples, drop = FALSE]
-    if (verbose) cat(paste("FID start adj.  :", start_pt, "\n"))
-  }
-  
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
   
@@ -299,8 +291,8 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   # some extra info specific to twix data
   mrs_data$twix_inds <- as.data.frame(matrix(inds, ncol = 14, byrow = TRUE))
   
-  mrs_data$ima_kspace_center_column <- ima_kspace_center_column
-  mrs_data$fid_offset <- fid_offset
+  # mrs_data$ima_kspace_center_column <- ima_kspace_center_column
+  # mrs_data$fid_offset <- fid_offset
   
   ind_names <- c("Lin", "Ave", "Sli", "Par", "Eco", "Phs", "Rep", "Set", "Seg",
                  "Ida", "Idb", "Idc", "Idd", "Ide")
@@ -320,14 +312,30 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   x_pts <- max(mrs_data$twix_inds$Seg) + 1
   y_pts <- max(mrs_data$twix_inds$Lin) + 1
   
-if (x_pts > 1 || y_pts > 1) {
-  mrs_data$resolution[2] <- vars$x_dim / x_pts
-  mrs_data$resolution[3] <- vars$y_dim / y_pts
+  if (x_pts > 1 || y_pts > 1) {
+    mrs_data$resolution[2] <- vars$x_dim / x_pts
+    mrs_data$resolution[3] <- vars$y_dim / y_pts
+    
+    # fix the affine
+    mrs_data$affine[,1] <- mrs_data$affine[,1] * vars$x_pts / x_pts
+    mrs_data$affine[,2] <- mrs_data$affine[,2] * vars$y_pts / y_pts
+  }
   
-  # fix the affine
-  mrs_data$affine[,1] <- mrs_data$affine[,1] * vars$x_pts / x_pts
-  mrs_data$affine[,2] <- mrs_data$affine[,2] * vars$y_pts / y_pts
-}
+  # crop the first few points of the FID if required
+  if (!full_fid) {
+    if (endsWith(vars$seq_fname, "svs_slaser_dkd")) {
+      start_pt = 1
+    } else {
+      # find the max echo position from the first 50 data points in the FID
+      start_chunk <- crop_td_pts(mrs_data, 1, 50)
+      start_chunk <- mean_dyns(start_chunk)
+      start_chunk <- Mod(start_chunk$data)
+      start_pt    <- arrayInd(which.max(start_chunk), dim(start_chunk))[7]
+    }
+    
+    mrs_data$data <- mrs_data$data[,,,,,,start_pt:ima_samples, drop = FALSE]
+    if (verbose) cat(paste("FID start adj.  :", start_pt, "\n"))
+  }
   
   return(mrs_data)
 }
@@ -356,6 +364,12 @@ read_siemens_txt_hdr <- function(input, version = "vd", verbose) {
       # skip if there isn't an equal sign once spaces have been removed
       if (!startsWith(line_no_sp_no_tab, "ulVersion=")) next
       tSequenceFilename <- readLines(con, n = 1)
+      
+      seq_fname <- strsplit(tSequenceFilename, "=")[[1]][2]
+      seq_fname <- gsub("\t", "", seq_fname)
+      seq_fname <- gsub("\"", "", seq_fname)
+      seq_fname <- gsub(" ", "", seq_fname)
+      
       tProtocolName <- readLines(con, n = 1)
       last_ulVersion_pos <- seek(con)
       #if ((tProtocolName != "tProtocolName\t = \t\"AdjCoilSens\"") && (tProtocolName != "tProtocolName\t = \t\"CBU_MPRAGE_32chn\"")) {
@@ -388,7 +402,8 @@ read_siemens_txt_hdr <- function(input, version = "vd", verbose) {
                pos_tra = 0,
                norm_sag = 0,
                norm_cor = 0,
-               norm_tra = 0)
+               norm_tra = 0,
+               seq_fname = seq_fname)
   
   # when a parameter is missing from an ima file it means it's zero (I think)
   slice_dPhaseFOV    <- 0
@@ -484,6 +499,7 @@ read_siemens_txt_hdr <- function(input, version = "vd", verbose) {
     }
   }
   
+  if (verbose) cat(paste("Sequence fname  :", vars$seq_fname, "\n"))
   if (verbose) cat(paste("Table position  :", scan_reg_pos_tra, "mm\n"))
  
   # how many voxels do we expect?
