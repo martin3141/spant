@@ -321,8 +321,12 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
     mrs_data$affine[,2] <- mrs_data$affine[,2] * vars$y_pts / y_pts
   }
   
-  # crop the first few points of the FID if required
+  # crop the first few points of the FID and set the length to a power of two if 
+  # required
+  
   if (!full_fid) {
+    
+    # CMRR sLASER always starts with the first point
     if (endsWith(vars$seq_fname, "svs_slaser_dkd")) {
       start_pt = 1
     } else {
@@ -333,8 +337,12 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
       start_pt    <- arrayInd(which.max(start_chunk), dim(start_chunk))[7]
     }
     
+    # trim the start point of the FID
     mrs_data$data <- mrs_data$data[,,,,,,start_pt:ima_samples, drop = FALSE]
     if (verbose) cat(paste("FID start adj.  :", start_pt, "\n"))
+    
+    # crop to a power of 2 if needed
+    mrs_data <- crop_td_pts_pot(mrs_data)
   }
   
   return(mrs_data)
