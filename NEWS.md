@@ -6,6 +6,7 @@ added.
 * Bug fix for reading LCModel RAW files.
 * Bug fix for HSVD filter when only 0 or 1 components are found in the filter
 region.
+* Improved removal of unwanted data points for reading TWIX formatted data.
 
 # spant 2.2.0
 * peak_info function now works with masked datasets.
