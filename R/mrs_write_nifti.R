@@ -60,9 +60,15 @@ write_mrs_nifti <- function(mrs_data, fname) {
   # append any additional meta information
   json_list <- c(json_list, mrs_data$meta)
   
-  RNifti::extension(mrs_nii, 44) <- jsonlite::toJSON(json_list, digits = NA,
-                                                     null = "null")
+  json_data <- jsonlite::toJSON(json_list, digits = NA, null = "null")
   
+  RNifti::extension(mrs_nii, 44) <- json_data
+                                                     
   # write nifti to disk
   RNifti::writeNifti(mrs_nii, fname, version = 2)
+  
+  # write json sidecar
+  jsonlite::write_json(json_list, sub('\\.nii\\.gz$', '.json', fname),
+                       pretty = TRUE, digits = NA, null = "null",
+                       auto_unbox = TRUE) 
 }
