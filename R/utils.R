@@ -614,3 +614,6 @@ interpolate_nas <- function(map, factor, sigma) {
   map_interp[is.na(map_box_interp)] <- NA
   return(map_interp)
 }
+
+# is this dataset SVS?
+is_svs <- function(mrs_data) identical(dim(mrs_data$data)[2:4], c(1L, 1L, 1L))

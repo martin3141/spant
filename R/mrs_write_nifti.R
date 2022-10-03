@@ -57,6 +57,16 @@ write_mrs_nifti <- function(mrs_data, fname) {
   json_list <- list(SpectrometerFrequency = mrs_data$ft / 1e6,
                     ResonantNucleus = mrs_data$nuc)
   
+  # these are in BIDS and are derived directly from the mrs object 
+  json_list <- c(json_list, list(SpectralWidth = 1 / mrs_data$res[7],
+                                 NumberOfSpectralPoints = Npts(mrs_data),
+                                 AcquisitionVoxelSize = mrs_data$res[2:4]))
+  
+  # if SVS
+  if (is_svs(mrs_data)) {
+    json_list <- c(json_list, list(NumberOfTransients = Ndyns(mrs_data)))
+  }
+  
   # append any additional meta information
   json_list <- c(json_list, mrs_data$meta)
   

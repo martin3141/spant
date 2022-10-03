@@ -87,6 +87,12 @@ read_mrs_nifti <- function(fname, extra) {
   meta$SpectrometerFrequency <- NULL
   meta$ResonantNucleus <- NULL
   
+  # remove any metadata that is directly derived from the mrs_data structure
+  meta$SpectralWidth <- NULL
+  meta$NumberOfSpectralPoints <- NULL
+  meta$AcquisitionVoxelSize <- NULL
+  meta$NumberOfTransients <- NULL
+  
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = affine,
                        meta = meta, extra = extra)

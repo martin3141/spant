@@ -280,8 +280,10 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   # get the resolution and geom info
   paras <- calc_siemens_paras(vars, FALSE)
   
-  meta <- list(EchoTime = vars$te, RepetitionTime = vars$tr,
-               FlipAngle = vars$flip_ang, SequenceName = vars$seq_fname)
+  meta <- list(EchoTime = vars$te,
+               RepetitionTime = vars$tr,
+               FlipAngle = vars$flip_ang,
+               SequenceName = vars$seq_fname)
 
   mrs_data <- mrs_data(data = data, ft = vars$ft, resolution = paras$res,
                        ref = paras$ref, nuc = paras$nuc,
