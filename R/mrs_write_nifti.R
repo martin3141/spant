@@ -60,12 +60,14 @@ write_mrs_nifti <- function(mrs_data, fname) {
   # these are in BIDS and are derived directly from the mrs object 
   json_list <- c(json_list, list(SpectralWidth = 1 / mrs_data$res[7],
                                  NumberOfSpectralPoints = Npts(mrs_data),
-                                 AcquisitionVoxelSize = mrs_data$res[2:4]))
+                                 AcquisitionVoxelSize = mrs_data$res[2:4]),
+                                 ChemicalShiftOffset = mrs_data$ref)
   
-  # if SVS
-  if (is_svs(mrs_data)) {
-    json_list <- c(json_list, list(NumberOfTransients = Ndyns(mrs_data)))
-  }
+  # if SVS this doesn't work yet as number of dynamics doesn't always equal
+  # the number of trasients, eg when dealing with averaged data
+  # if (is_svs(mrs_data)) {
+  #   json_list <- c(json_list, list(NumberOfTransients = Ndyns(mrs_data)))
+  # }
   
   # append any additional meta information
   json_list <- c(json_list, mrs_data$meta)
@@ -79,6 +81,5 @@ write_mrs_nifti <- function(mrs_data, fname) {
   
   # write json sidecar
   jsonlite::write_json(json_list, sub('\\.nii\\.gz$', '.json', fname),
-                       pretty = TRUE, digits = NA, null = "null",
-                       auto_unbox = TRUE) 
+                       pretty = TRUE, digits = NA, null = "null") 
 }

@@ -1,4 +1,4 @@
-read_mrs_nifti <- function(fname, extra) {
+read_mrs_nifti <- function(fname, extra, verbose) {
   
   fname_low <- tolower(fname)
   
@@ -41,8 +41,23 @@ read_mrs_nifti <- function(fname, extra) {
   
   if (is.null(ext_char)) stop("NIfTI extension header for MRS not found.")
   
-  # read the json file
-  json_data <- jsonlite::fromJSON(ext_char)
+  # if sidecar exists read json_data from here, otherwise use nifti header
+  # construct path
+  json_fname <- sub('\\.gz$', '', fname) 
+  json_fname <- sub('\\.nii$', '', json_fname) 
+  json_fname <- paste0(json_fname, ".json")
+  
+  if (file.exists(json_fname)) {
+    if (verbose) {
+      message("JSON sidecar found, reading metadata from here.")
+    }
+    json_data <- jsonlite::fromJSON(json_fname)
+  } else {
+    if (verbose) {
+      message("JSON sidecar not found, reading metadata from NIfTI header.")
+    }
+    json_data <- jsonlite::fromJSON(ext_char)
+  }
   
   # TODO
   # if ("dim_5" %in% names(json_data)) stop("NIfTI MRS non-default dimensions are not currently supported")
@@ -76,22 +91,29 @@ read_mrs_nifti <- function(fname, extra) {
   # read the nucleus
   nuc <- json_data$ResonantNucleus
   
-  # TODO get ref from a lookup table of defaults depending on "nuc" when not in
-  # the json sidecar
-  ref <- def_ref()
+  
+  if (is.null(json_data$ChemicalShiftOffset)) {
+    # TODO get default ref from a lookup table of defaults depending on "nuc"
+    # when value isn't found
+    ref <- def_ref()
+  } else {
+    ref <- json_data$ChemicalShiftOffset
+  }
   
   # get all metadata
   meta <- json_data
   
   # remove any data that is explicitly part of the mrs_data structure
   meta$SpectrometerFrequency <- NULL
-  meta$ResonantNucleus <- NULL
+  meta$ResonantNucleus       <- NULL
   
   # remove any metadata that is directly derived from the mrs_data structure
-  meta$SpectralWidth <- NULL
+  meta$SpectralWidth          <- NULL
   meta$NumberOfSpectralPoints <- NULL
-  meta$AcquisitionVoxelSize <- NULL
-  meta$NumberOfTransients <- NULL
+  meta$AcquisitionVoxelSize   <- NULL
+  meta$ChemicalShiftOffset    <- NULL
+  
+  # meta$NumberOfTransients <- NULL
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = affine,

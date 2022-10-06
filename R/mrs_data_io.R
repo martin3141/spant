@@ -91,7 +91,7 @@ read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
     if (!inherits(mrs_data, "mrs_data")) stop("rds file is not mrs_data format")
     return(mrs_data)
   } else if (format == "nifti") {
-    return(read_mrs_nifti(fname, extra))
+    return(read_mrs_nifti(fname, extra, verbose))
   } else if (format == "varian") {
     return(read_varian(fname, extra))
   } else {
