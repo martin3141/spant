@@ -331,7 +331,10 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
     # CMRR sLASER always starts with the first point
     if (endsWith(vars$seq_fname, "svs_slaser_dkd")) {
       start_pt = 1
+    } else if (vars$seq_fname == "%SiemensSeq%\\csi_slaser") {
+      start_pt = ima_kspace_center_column + 1
     } else {
+      warning("Guessing the echo start point.")
       # find the max echo position from the first 50 data points in the FID
       start_chunk <- crop_td_pts(mrs_data, 1, 50)
       start_chunk <- mean_dyns(start_chunk)
