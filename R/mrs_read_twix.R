@@ -280,10 +280,20 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   # get the resolution and geom info
   paras <- calc_siemens_paras(vars, FALSE)
   
+  Nvoxels <- vars$x_pts * vars$y_pts * vars$z_pts
+  if (verbose) {
+    if (Nvoxels == 1) {
+       cat(paste("Data is SVS.\n"))
+    } else {
+       cat(paste("Data is MRSI.\n"))
+    }
+  }
+  
   meta <- list(EchoTime = vars$te,
                RepetitionTime = vars$tr,
                FlipAngle = vars$flip_ang,
-               SequenceName = vars$seq_fname)
+               SequenceName = vars$seq_fname,
+               ChemicalShiftReference = 4.7 + vars$delta_freq)
 
   mrs_data <- mrs_data(data = data, ft = vars$ft, resolution = paras$res,
                        ref = paras$ref, nuc = paras$nuc,
@@ -344,6 +354,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
       start_chunk <- Mod(start_chunk$data)
       start_pt    <- arrayInd(which.max(start_chunk), dim(start_chunk))[7]
     }
+    
     
     # trim the start point of the FID
     mrs_data$data <- mrs_data$data[,,,,,,start_pt:ima_samples, drop = FALSE]
@@ -512,6 +523,8 @@ read_siemens_txt_hdr <- function(input, version = "vd", verbose) {
       slice_norm_tra <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSpecPara.ucRemoveOversampling")) {
       vars$rm_oversampling <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "sSpecPara.dDeltaFrequency")) {
+      vars$delta_freq <- as.numeric(strsplit(line, "=")[[1]][2])
     }
   }
   
