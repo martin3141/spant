@@ -107,7 +107,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
     
     n <- 0
     while (TRUE) {
-      if (verbose) cat(".")
+      if (verbose & !((n + 1) %% 10)) cat(".")
       seek(con, cPos, "start")
       n <- n + 1
       ulDMALength_bin <- intToBits(read_int32(con))
