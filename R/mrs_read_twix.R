@@ -337,6 +337,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
       start_pt <- ima_kspace_center_column + 1
     } else {
       warning("TWIX seqeuence not recognised, guessing the echo start point.")
+      warning("Contact the developer if you're not sure if this is a problem.")
       # find the max echo position from the first 50 data points in the FID
       start_chunk <- crop_td_pts(mrs_data, 1, 50)
       start_chunk <- mean_dyns(start_chunk)
