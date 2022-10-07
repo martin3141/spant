@@ -99,6 +99,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   if (verbose) cat(paste("Scans           :", Nscans, "\n"))
   
   for (scans in 0:(Nscans - 1)) {
+  if (verbose) cat(paste("Reading scan    :", scans + 1, "\n"))
     # the final scan is the one we are interested in, so clear the last one 
     raw_pts <- c(NA)
     inds <- NULL
