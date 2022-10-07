@@ -281,8 +281,11 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   paras <- calc_siemens_paras(vars, FALSE)
   
   Nvoxels <- vars$x_pts * vars$y_pts * vars$z_pts
+  
+  if (Nvoxels == 1) is_svs = TRUE
+  
   if (verbose) {
-    if (Nvoxels == 1) {
+    if (is_svs) {
        cat(paste("Data is SVS.\n"))
     } else {
        cat(paste("Data is MRSI.\n"))
@@ -334,8 +337,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   }
   
   # crop the first few points of the FID and set the length to a power of two if 
-  # required
-  
+  # the full FID output is not requested
   if (!full_fid) {
     
     # CMRR sLASER always starts with the first point
@@ -350,11 +352,10 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
       warning("Contact the developer if you're not sure if this is a problem.")
       # find the max echo position from the first 50 data points in the FID
       start_chunk <- crop_td_pts(mrs_data, 1, 50)
-      start_chunk <- mean_dyns(start_chunk)
+      if (!is_svs) start_chunk <- mean_dyns(start_chunk)
       start_chunk <- Mod(start_chunk$data)
       start_pt    <- arrayInd(which.max(start_chunk), dim(start_chunk))[7]
     }
-    
     
     # trim the start point of the FID
     mrs_data$data <- mrs_data$data[,,,,,,start_pt:ima_samples, drop = FALSE]
