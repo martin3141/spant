@@ -99,7 +99,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   if (verbose) cat(paste("Scans           :", Nscans, "\n"))
   
   for (scans in 0:(Nscans - 1)) {
-  if (verbose) cat(paste("Reading scan    :", scans + 1, "\n"))
+    if (verbose) cat(paste("\nReading scan    :", scans + 1, "\n"))
     # the final scan is the one we are interested in, so clear the last one 
     raw_pts <- c(NA)
     inds <- NULL
@@ -108,7 +108,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
     
     n <- 0
     while (TRUE) {
-      if (verbose & !((n + 1) %% 10)) cat(".")
+      if (verbose & !(n %% 10)) cat(".")
       seek(con, cPos, "start")
       n <- n + 1
       ulDMALength_bin <- intToBits(read_int32(con))
@@ -166,9 +166,11 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
       MDH_NOISEADJSCAN      <- info_bits[26]
       MDH_IMASCAN           <- TRUE
       
-      #print(info_bits)
-      #print(samples_in_scan)
-      #print(used_channels)
+      # if (n == 1) {
+      #   print(info_bits)
+      #   print(samples_in_scan)
+      #   print(used_channels)
+      # }
       
       if (MDH_ACQEND || MDH_RTFEEDBACK || MDH_HPFEEDBACK || MDH_PHASCOR || MDH_NOISEADJSCAN || MDH_SYNCDATA) {
         MDH_IMASCAN <- FALSE
@@ -230,6 +232,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
       
       if (MDH_ACQEND || (ulDMALength == 0)) { # break out to the next scan
         if (scans < (Nscans - 1)) {
+          # print(ulDMALength)
           cPos <- cPos + ulDMALength
           cPos <- cPos + 512 - (cPos %% 512)
           seek(con, cPos, "start")
