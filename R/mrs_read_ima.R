@@ -16,7 +16,7 @@ read_ima <- function(fraw, verbose = FALSE, extra) {
   data <- array(data, dim = c(vars$N, 1, 1, vars$z_pts, vars$y_pts, vars$x_pts, 
                               1))
   
-  data <- aperm(data, c(7,5,6,4,3,2,1))
+  data <- aperm(data, c(7, 5, 6, 4, 3, 2, 1))
   
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
@@ -24,7 +24,11 @@ read_ima <- function(fraw, verbose = FALSE, extra) {
   # get the resolution and geom info
   paras <- calc_siemens_paras(vars, TRUE)
   
-  meta = list(EchoTime = vars$te)
+  meta <- list(EchoTime = vars$te,
+               RepetitionTime = vars$tr,
+               FlipAngle = vars$flip_ang,
+               SequenceName = vars$seq_fname,
+               ChemicalShiftReference = 4.7 + vars$delta_freq)
   
   mrs_data <- mrs_data(data = data, ft = vars$ft, resolution = paras$res,
                        ref = paras$ref, nuc = paras$nuc,
