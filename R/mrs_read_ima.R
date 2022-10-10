@@ -5,9 +5,8 @@ read_ima <- function(fraw, verbose = FALSE, extra) {
   
   vars <- read_siemens_txt_hdr(res$ascii_hdr, "vd", verbose)
   
-  # calculate expected size of data in bytes - assuming complex 4byte floats
-  data_size <- vars$x_pts * vars$y_pts * vars$z_pts * vars$N * 4 * 2
-  
+  # calculate expected size of data points
+  data_size <- vars$x_pts * vars$y_pts * vars$z_pts * vars$N * 2
   raw_pts <- readBin(res$spec_data, what = "double", n = data_size, size = 4L)
   
   # make complex
