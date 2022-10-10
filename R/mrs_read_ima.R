@@ -7,6 +7,11 @@ read_ima <- function(fraw, verbose = FALSE, extra) {
   
   # calculate expected size of data points
   data_size <- vars$x_pts * vars$y_pts * vars$z_pts * vars$N * 2
+  
+  # note that for scans where oversampling is not removed there are actually
+  # twice the number of points in the DICOM tag. However these points seem to
+  # be garbage making this mode useless as half the time-domain data is lost.
+  
   raw_pts <- readBin(res$spec_data, what = "double", n = data_size, size = 4L)
   
   # make complex
