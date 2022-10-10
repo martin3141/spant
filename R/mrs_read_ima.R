@@ -5,6 +5,9 @@ read_ima <- function(fraw, verbose = FALSE, extra) {
   
   vars <- read_siemens_txt_hdr(res$ascii_hdr, "vd", verbose)
   
+  # works for CMRR MPRESS, but not CMRR sLASER
+  if (!vars$rm_oversampling) vars$N <- vars$N * 2
+  
   # calculate expected size of data points
   data_size <- vars$x_pts * vars$y_pts * vars$z_pts * vars$N * 2
   
