@@ -540,6 +540,8 @@ read_siemens_txt_hdr <- function(input, version = "vd", verbose) {
   
   if (verbose) cat(paste("Sequence fname  :", vars$seq_fname, "\n"))
   if (verbose) cat(paste("Table position  :", scan_reg_pos_tra, "mm\n"))
+  if (verbose) cat(paste("Rm oversampling :", as.logical(vars$rm_oversampling),
+                         "\n"))
  
   # how many voxels do we expect?
   Nvoxels <- vars$x_pts * vars$y_pts * vars$z_pts
