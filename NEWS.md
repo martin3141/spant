@@ -9,6 +9,8 @@ region.
 * Improved removal of unwanted data points for reading TWIX formatted data.
 * A json sidecar is automatically written when exporting NIfTI MRS formatted
 data.
+* TWIX reader improved to only read data points from the last scan in the file.
+This also fixes a rare bug.
 
 # spant 2.2.0
 * peak_info function now works with masked datasets.

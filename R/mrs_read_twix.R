@@ -50,6 +50,9 @@ calc_siemens_paras <- function(vars, is_ima) {
 read_twix <- function(fname, verbose, full_fid = FALSE,
                       omit_svs_ref_scans = TRUE, extra) {
   
+  # see mapVBVD function from Will C's pymapvbvd for a better implementation
+  # of all this
+  
   # check the file size
   fbytes <- file.size(fname)
   
@@ -67,9 +70,18 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
     #print(measID)
     fileID <- read_uint32(con)
     #print(fileID)
-    measOffset <- read_uint64(con) # usually 10240 bytes
-    #print(measOffset)
-    measLength <- read_uint64(con)
+    
+    # offsets are available for each scan
+    # here we just keep the last one as this
+    # is the bit we are generally interested in
+    for (z in seq(Nscans)) {
+      measOffset <- read_uint64(con)
+      # print(measOffset)
+      measLength <- read_uint64(con)
+      # print(measLength)
+      seek(con, 152 - 16, "current")
+    }
+    
     seek(con, measOffset)
     hdrLength <- read_uint32(con)
     dataStart <- measOffset + hdrLength
@@ -81,6 +93,8 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
     Nscans <- 1
   }
   close(con)
+  
+  # read the text header
   vars <- read_siemens_txt_hdr(fname, version, verbose)
   
   # read data points 
@@ -98,7 +112,8 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   
   if (verbose) cat(paste("Scans           :", Nscans, "\n"))
   
-  for (scans in 0:(Nscans - 1)) {
+  #for (scans in 0:(Nscans - 1)) {
+  for (scans in (Nscans - 1)) {
     if (verbose) cat(paste("\nReading scan    :", scans + 1, "\n"))
     # the final scan is the one we are interested in, so clear the last one 
     raw_pts <- c(NA)
@@ -109,6 +124,9 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
     n <- 0
     while (TRUE) {
       if (verbose & !(n %% 10)) cat(".")
+      
+      # cat(paste("Cpos :", cPos))
+      
       seek(con, cPos, "start")
       n <- n + 1
       ulDMALength_bin <- intToBits(read_int32(con))
