@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.3.0</span>
       </span>
     </div>
 
@@ -73,7 +73,18 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.2.0" id="spant-220">spant 2.2.0<a class="anchor" aria-label="anchor" href="#spant-220"></a></h2>
+<h2 class="page-header" data-toc-text="2.3.0" id="spant-230">spant 2.3.0<a class="anchor" aria-label="anchor" href="#spant-230"></a></h2>
+<ul><li>Verbose option added to read_ima_coil_dir and read_ima_dyn_dir functions.</li>
+<li>Support added for reading jMRUI txt formatted MRS data.</li>
+<li>sim_brain_1h default sequence changed to semi-LASER and line-broadening option added.</li>
+<li>Bug fix for reading LCModel RAW files.</li>
+<li>Bug fix for HSVD filter when only 0 or 1 components are found in the filter region.</li>
+<li>Improved removal of unwanted data points for reading TWIX formatted data.</li>
+<li>A json sidecar is automatically written when exporting NIfTI MRS formatted data.</li>
+<li>TWIX reader improved to only read data points from the last scan in the file. This also fixes a rare bug.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="2.2.0" id="spant-220">spant 2.2.0<small>2022-09-08</small><a class="anchor" aria-label="anchor" href="#spant-220"></a></h2>
 <ul><li>peak_info function now works with masked datasets.</li>
 <li>Bug fix for HSVD function not working with frequency domain data.</li>
 <li>Bug fix for TWIX affine calculation when not using power of two matrix dimensions.</li>

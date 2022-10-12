@@ -304,10 +304,14 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   
   Nvoxels <- vars$x_pts * vars$y_pts * vars$z_pts
   
-  if (Nvoxels == 1) is_svs = TRUE
+  if (Nvoxels == 1) {
+    twix_is_svs <- TRUE
+  } else {
+    twix_is_svs <- FALSE
+  }
   
   if (verbose) {
-    if (is_svs) {
+    if (twix_is_svs) {
        cat(paste("Data is SVS.\n"))
     } else {
        cat(paste("Data is MRSI.\n"))
@@ -374,7 +378,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
       warning("Contact the developer if you're not sure if this is a problem.")
       # find the max echo position from the first 50 data points in the FID
       start_chunk <- crop_td_pts(mrs_data, 1, 50)
-      if (!is_svs) start_chunk <- mean_dyns(start_chunk)
+      if (!twix_is_svs) start_chunk <- mean_dyns(start_chunk)
       start_chunk <- Mod(start_chunk$data)
       start_pt    <- arrayInd(which.max(start_chunk), dim(start_chunk))[7]
     }
