@@ -294,7 +294,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   data <- raw_pts[c(TRUE, FALSE)] - 1i * raw_pts[c(FALSE, TRUE)]
   
   data <- array(data, dim = c(ima_samples, ima_coils, dynamics, 1, 1, 1, 1))
-  data <- aperm(data, c(7,6,5,4,3,2,1))
+  data <- aperm(data, c(7, 6, 5, 4, 3, 2, 1))
    
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
@@ -373,14 +373,17 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
       start_pt <- floor(ima_kspace_center_column / 2) + 1
     } else if (vars$seq_fname == "%SiemensSeq%\\csi_slaser") {
       start_pt <- ima_kspace_center_column + 1
+    } else if (vars$seq_fname == "%SiemensSeq%\\svs_se") {
+      start_pt <- 1
     } else {
       warning("TWIX seqeuence not recognised, guessing the echo start point.")
       warning("Contact the developer if you're not sure if this is a problem.")
       # find the max echo position from the first 50 data points in the FID
-      start_chunk <- crop_td_pts(mrs_data, 1, 50)
-      if (!twix_is_svs) start_chunk <- mean_dyns(start_chunk)
-      start_chunk <- Mod(start_chunk$data)
-      start_pt    <- arrayInd(which.max(start_chunk), dim(start_chunk))[7]
+      # start_chunk <- crop_td_pts(mrs_data, 1, 50)
+      # if (!twix_is_svs) start_chunk <- mean_dyns(start_chunk)
+      # start_chunk <- Mod(start_chunk$data)
+      # start_pt    <- arrayInd(which.max(start_chunk), dim(start_chunk))[7]
+      start_pt <- 1
     }
     
     # trim the start point of the FID
@@ -401,16 +404,22 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
 #' @return a list of parameter values
 #' @export
 read_siemens_txt_hdr <- function(input, version = "vd", verbose) {
+  
   if (is.character(input)) {
     con <- file(input, 'rb', encoding = "UTF-8")
   } else {
     # assume binary
     con <- rawConnection(input, "rb")
   }
+ 
   while (TRUE) {
     line <- readLines(con, n = 1, skipNul = TRUE, warn = FALSE)
     if (length(line) == 0) break
-    if (startsWith(line, "ulVersion") && version == 'vb') break
+    
+    if (startsWith(line, "ulVersion") && version == 'vb') {
+      seq_fname <- NULL
+      break
+    }
 
     if (startsWith(line, "ulVersion") && version == 'vd') {
       line_no_sp <- gsub(" ", "", line)
@@ -556,6 +565,11 @@ read_siemens_txt_hdr <- function(input, version = "vd", verbose) {
       vars$rm_oversampling <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "sSpecPara.dDeltaFrequency")) {
       vars$delta_freq <- as.numeric(strsplit(line, "=")[[1]][2])
+    } else if (startsWith(line, "tSequenceFileName")) {
+      vars$seq_fname <- strsplit(line, "=")[[1]][2]
+      vars$seq_fname <- gsub("\t", "", vars$seq_fname)
+      vars$seq_fname <- gsub("\"", "", vars$seq_fname)
+      vars$seq_fname <- gsub(" ", "", vars$seq_fname)
     }
   }
   
