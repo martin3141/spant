@@ -162,6 +162,30 @@ scale_amp_ratio <- function(fit_result, name) {
   fit_result
 }
 
+#' Scale fitted amplitudes to a ratio of signal amplitude.
+#' @param fit_result a result object generated from fitting.
+#' @param value the number use as a denominator.
+#' @return a \code{fit_result} object with a rescaled results table.
+#' @export
+scale_amp_ratio_value <- function(fit_result, value) {
+  
+  # check if res_tab_unscaled exists, and if not create it
+  if (is.null(fit_result$res_tab_unscaled)) {
+    fit_result$res_tab_unscaled <- fit_result$res_tab
+  } else {
+    fit_result$res_tab <- fit_result$res_tab_unscaled
+  }
+  
+  ratio_amp <- value
+  
+  amp_cols <- fit_result$amp_cols
+  ws_cols <- 6:(5 + amp_cols * 2)
+  
+  fit_result$res_tab[, ws_cols] <- fit_result$res_tab[, ws_cols] / ratio_amp
+  
+  fit_result
+}
+
 get_corr_factor <- function(te, tr, B0, gm_vol, wm_vol, csf_vol) {
   # Correction factor calcualted according to the method of Gasparovic et al (MRM 55:1219-1226 2006)
   # NOTE - gives concs as Mol/kg of water NOT Mol/liter of tissue like default LCM/TQN analysis.
