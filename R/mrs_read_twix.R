@@ -397,7 +397,10 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
     }
     
     # trim the start point of the FID
-    mrs_data$data <- mrs_data$data[,,,,,,start_pt:ima_samples, drop = FALSE]
+    if (start_pt != 1) {
+      mrs_data$data <- mrs_data$data[,,,,,,start_pt:ima_samples, drop = FALSE]
+    }
+    
     if (verbose) cat(paste("FID start adj.  :", start_pt, "\n"))
     
     # crop to a power of 2 if needed
