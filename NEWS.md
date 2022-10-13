@@ -1,3 +1,6 @@
+# spant 2.4.0
+* Performance improvement for reading VD format TWIX files.
+
 # spant 2.3.0
 * Verbose option added to read_ima_coil_dir and read_ima_dyn_dir functions.
 * Support added for reading jMRUI txt formatted MRS data.

@@ -95,7 +95,17 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   close(con)
   
   # read the text header
-  vars <- read_siemens_txt_hdr(fname, version, verbose)
+  if (verbose) cat("Reading txt header.\n")
+  
+  if (version == "vd") {
+    txt_offset <- measOffset
+  } else {
+    txt_offset <- 0
+  }
+  
+  vars <- read_siemens_txt_hdr(fname, version, verbose, offset = txt_offset)
+  
+  if (verbose) cat("Finished with txt header.\n")
   
   # read data points 
   con <- file(fname, "rb")
@@ -401,12 +411,16 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
 #' @param input file name to read or raw data.
 #' @param version software version, can be "vb" or "vd".
 #' @param verbose print information to the console.
+#' @param offset offset to begin searching for the text header.
 #' @return a list of parameter values
 #' @export
-read_siemens_txt_hdr <- function(input, version = "vd", verbose) {
+read_siemens_txt_hdr <- function(input, version = "vd", verbose,
+                                 offset = 0) {
   
   if (is.character(input)) {
     con <- file(input, 'rb', encoding = "UTF-8")
+    if (offset > 0) seek(con, offset)
+    if (verbose) cat(paste("Data offset     :", offset, "\n"))
   } else {
     # assume binary
     con <- rawConnection(input, "rb")
@@ -416,37 +430,8 @@ read_siemens_txt_hdr <- function(input, version = "vd", verbose) {
     line <- readLines(con, n = 1, skipNul = TRUE, warn = FALSE)
     if (length(line) == 0) break
     
-    if (startsWith(line, "ulVersion") && version == 'vb') {
-      seq_fname <- NULL
-      break
-    }
-
-    if (startsWith(line, "ulVersion") && version == 'vd') {
-      line_no_sp <- gsub(" ", "", line)
-      line_no_sp_no_tab <- gsub("\t", "", line_no_sp)
-      # skip if there isn't an equal sign once spaces have been removed
-      if (!startsWith(line_no_sp_no_tab, "ulVersion=")) next
-      tSequenceFilename <- readLines(con, n = 1)
-      
-      seq_fname <- strsplit(tSequenceFilename, "=")[[1]][2]
-      seq_fname <- gsub("\t", "", seq_fname)
-      seq_fname <- gsub("\"", "", seq_fname)
-      seq_fname <- gsub(" ", "", seq_fname)
-      
-      tProtocolName <- readLines(con, n = 1)
-      last_ulVersion_pos <- seek(con)
-      #if ((tProtocolName != "tProtocolName\t = \t\"AdjCoilSens\"") && (tProtocolName != "tProtocolName\t = \t\"CBU_MPRAGE_32chn\"")) {
-        #print(tProtocolName)
-      #  break
-      #}
-    }
+    if (startsWith(line, "ulVersion")) break
   }
-  
-  # TODO reads the whole file looking for "ulVersion" and then
-  # tracks back to the last one. Must be a better way of finding the
-  # last one without reading all the spectral data. This is particularly
-  # bad for ima data when there will only ever be one set.
-  if (version == 'vd') seek(con, where = last_ulVersion_pos)
   
   vars <- list(averages = NA,
                fs = NA,
@@ -466,7 +451,7 @@ read_siemens_txt_hdr <- function(input, version = "vd", verbose) {
                norm_sag = 0,
                norm_cor = 0,
                norm_tra = 0,
-               seq_fname = seq_fname)
+               seq_fname = NULL)
   
   # when a parameter is missing from an ima file it means it's zero (I think)
   slice_dPhaseFOV    <- 0
