@@ -454,7 +454,9 @@ read_siemens_txt_hdr <- function(input, version = "vd", verbose,
                norm_sag = 0,
                norm_cor = 0,
                norm_tra = 0,
-               seq_fname = NULL)
+               seq_fname = NA,
+               delta_freq = 0, # when missing then equals zero
+               rm_oversampling = NA)
   
   # when a parameter is missing from an ima file it means it's zero (I think)
   slice_dPhaseFOV    <- 0
