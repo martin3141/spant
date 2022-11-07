@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.4.0</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_siemens_txt_hdr</span><span class="op">(</span><span class="va">input</span>, version <span class="op">=</span> <span class="st">"vd"</span>, <span class="va">verbose</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_siemens_txt_hdr</span><span class="op">(</span><span class="va">input</span>, version <span class="op">=</span> <span class="st">"vd"</span>, <span class="va">verbose</span>, offset <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -93,6 +93,10 @@
 
 <dt>verbose</dt>
 <dd><p>print information to the console.</p></dd>
+
+
+<dt>offset</dt>
+<dd><p>offset to begin searching for the text header.</p></dd>
 
 </dl></div>
     <div id="value">
