@@ -25,7 +25,7 @@ for phantom measurements.}
 a \code{fit_result} object with a rescaled results table.
 }
 \description{
-See the LCModel manual section on water-scaling for details on the
+See the LCModel manual (section 10.2) on water-scaling for details on the
 assumptions and relevant references. Use this type of concentration scaling
 to compare fit results with LCModel and TARQUIN defaults. Otherwise
 scale_amp_molal_pvc is generally the preferred method.

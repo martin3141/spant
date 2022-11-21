@@ -31,7 +31,7 @@ fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
 
 Read the file and save to the workspace as ``mrs_data``:
 ```{r}
-mrs_data <- read_mrs(fname, format = "spar_sdat")
+mrs_data <- read_mrs(fname)
 ```
 
 Output some basic information about the data:
@@ -70,16 +70,16 @@ Plot the fit result:
 plot(fit_res)
 ```
 
-Extract the estimated amplitudes from ``fit_res`` and print as a ratio to total-creatine in column format:
-```{r}
-amps <- fit_amps(fit_res)
-print(t(amps / amps$tCr))
-```
-
-Unscaled amplitudes, CRLB error estimates and other fitting diagnostics, such as SNR, are given in the results table:
+Unscaled amplitudes, CRLB error estimates and other useful fitting diagnostics, such as SNR, are given in the ``fit_res`` results table:
 
 ```{r}
 fit_res$res_tab
+```
+
+Note that signal names appended with ".sd" are the CRLB estimates for the uncertainty (standard deviation) in the metabolite quantity estimate. e.g. to calculate the percentage s.d. for tNAA:
+
+```{r}
+fit_res$res_tab$tNAA.sd / fit_res$res_tab$tNAA * 100
 ```
 
 Spectral SNR:
@@ -91,3 +91,41 @@ Linewidth of the tNAA resonance in PPM:
 ```{r}
 fit_res$res_tab$tNAA_lw
 ```
+
+## Ratios to total-creatine
+
+Amplitude estimates measured by the fitting method are essentially arbitrary unless scaled to a known reference signal. The simplest approach for proton-MRS is to simply divide all metabolite values by total-creatine:
+
+```{r}
+fit_res_tcr_sc <- scale_amp_ratio(fit_res, "tCr")
+amps <- fit_amps(fit_res_tcr_sc)
+print(t(amps))
+```
+
+## Water reference scaling, AKA "absolute-quantification"
+
+A more sophisticated approach to scaling metabolite values involves the use of a separate water-reference acquisition - which can be imported in the standard way:
+
+```{r}
+fname_wref <- system.file("extdata", "philips_spar_sdat_W.SDAT", package = "spant")
+mrs_data_wref <- read_mrs(fname_wref)
+```
+
+The following code assumes the voxel contains 100% white matter tissue and scales the metabolite values into molal (mM) units (mol / kg tissue water) based on the method described by Gasparovic et al MRM 2006 55(6):1219-26:
+
+```{r}
+p_vols <- c(WM = 100, GM = 0, CSF = 0)
+TE = 0.03
+TR = 2
+fit_res_molal <- scale_amp_molal_pvc(fit_res, mrs_data_wref, p_vols, TE, TR)
+fit_res_molal$res_tab$tNAA
+```
+
+An alternative method scales the metabolite values into molar (mM) units (mol / Litre of tissue) based on assumptions outlined in the LCModel manual and references therein (section 10.2). This approach may be preferred when comparing results to those obtained LCModel or TARQUIN.
+
+```{r}
+fit_res_molar <- scale_amp_molar(fit_res, mrs_data_wref)
+fit_res_molar$res_tab$tNAA
+```
+
+Note, while "absolute" units are attractive, a large number of assumptions about metabolite and water relaxation rates are necessary to arrive at these mM estimates. If you're not confident at being able to justify these assumptions, scaling to a metabolite reference (eg tCr as above) is going to be a better option in most cases. Simple metabolite referenced ratios also have the benefit of being more reproducible due to the simplicity of the approach.
