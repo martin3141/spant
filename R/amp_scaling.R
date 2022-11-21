@@ -1,7 +1,18 @@
-#' Apply partial volume correction to a fitting result object.
+#' Apply water reference scaling to a fitting results object to yield metabolite 
+#' quantities in millimolar (mM) units (mol / kg of tissue water).
+#'
+#' Details of this method can be found in "Use of tissue water as a
+#' concentration reference for proton spectroscopic imaging" by Gasparovic et al
+#' MRM 2006 55(6):1219-26. 1.5 Tesla relaxation assumptions are taken from this
+#' paper. For 3 Tesla data, relaxation assumptions are taken from "NMR 
+#' relaxation times in the human brain at 3.0 tesla" by Wansapura et al J Magn
+#' Reson Imaging 1999 9(4):531-8. 
+#' 
 #' @param fit_result result object generated from fitting.
 #' @param ref_data water reference MRS data object.
-#' @param p_vols a numeric vector of partial volumes.
+#' @param p_vols a numeric vector of partial volumes expressed as percentages.
+#' For example, a voxel containing 100% white matter tissue would use : 
+#' p_vols = c(WM = 100, GM = 0, CSF = 0).
 #' @param te the MRS TE in seconds.
 #' @param tr the MRS TR in seconds.
 #' @param ... additional arguments to get_td_amp function.
@@ -37,14 +48,18 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr, ...){
   fit_result$res_tab$GM_vol    <- p_vols[["GM"]]
   fit_result$res_tab$WM_vol    <- p_vols[["WM"]]
   fit_result$res_tab$CSF_vol   <- p_vols[["CSF"]]
-  fit_result$res_tab$Other_vol <- p_vols[["Other"]]
+  if ("Other" %in% names(p_vols)) {
+    fit_result$res_tab$Other_vol <- p_vols[["Other"]]
+  }
   fit_result$res_tab$GM_frac   <- p_vols[["GM"]] / 
                                  (p_vols[["GM"]] + p_vols[["WM"]])
   
   fit_result$res_tab_unscaled$GM_vol    <- p_vols[["GM"]]
   fit_result$res_tab_unscaled$WM_vol    <- p_vols[["WM"]]
   fit_result$res_tab_unscaled$CSF_vol   <- p_vols[["CSF"]]
-  fit_result$res_tab_unscaled$Other_vol <- p_vols[["Other"]]
+  if ("Other" %in% names(p_vols)) {
+    fit_result$res_tab_unscaled$Other_vol <- p_vols[["Other"]]
+  }
   fit_result$res_tab_unscaled$GM_frac   <- p_vols[["GM"]] / 
                                           (p_vols[["GM"]] + p_vols[["WM"]])
   
@@ -57,14 +72,17 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr, ...){
 }
   
 #' Apply water reference scaling to a fitting results object to yield metabolite 
-#' quantities in millimolar (mM) units (mol/litre).
+#' quantities in millimolar (mM) units (mol / Litre of tissue).
 #' 
 #' See the LCModel manual section on water-scaling for details on the
-#' assumptions and relevant references.
+#' assumptions and relevant references. Use this type of concentration scaling
+#' to compare fit results with LCModel and TARQUIN defaults. Otherwise
+#' scale_amp_molal_pvc is generally the preferred method.
 #' 
 #' @param fit_result a result object generated from fitting.
 #' @param ref_data water reference MRS data object.
-#' @param w_att water attenuation factor (default = 0.7).
+#' @param w_att water attenuation factor (default = 0.7). Assumes water T2 of
+#' 80ms and a TE = 30 ms. exp(-30ms / 80ms) ~ 0.7.
 #' @param w_conc assumed water concentration (default = 35880). Default value
 #' corresponds to typical white matter. Set to 43300 for gray matter, and 55556 
 #' for phantom measurements.
@@ -252,7 +270,9 @@ get_corr_factor <- function(te, tr, B0, gm_vol, wm_vol, csf_vol) {
 #' volume correction.
 #' @param fit_result a \code{fit_result} object to apply partial volume 
 #' correction.
-#' @param p_vols a numeric vector of partial volumes.
+#' @param p_vols a numeric vector of partial volumes expressed as percentages.
+#' For example, a voxel containing 100% white matter tissue would use : 
+#' p_vols = c(WM = 100, GM = 0, CSF = 0).
 #' @param te the MRS TE.
 #' @param tr the MRS TR.
 #' @return a \code{fit_result} object with a rescaled results table.
@@ -275,7 +295,10 @@ apply_pvc <- function(fit_result, p_vols, te, tr){
   fit_result$res_tab$GM_vol <- p_vols[["GM"]]
   fit_result$res_tab$WM_vol <- p_vols[["WM"]]
   fit_result$res_tab$CSF_vol <- p_vols[["CSF"]]
-  fit_result$res_tab$Other_vol <- p_vols[["Other"]]
+  
+  if ("Other" %in% names(p_vols)) {
+    fit_result$res_tab$Other_vol <- p_vols[["Other"]]
+  }
   
   # append tables with %GM, %WM, %CSF and %Other
   pvc_cols <- 6:(5 + amp_cols * 2)

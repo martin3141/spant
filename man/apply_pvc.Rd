@@ -11,7 +11,9 @@ apply_pvc(fit_result, p_vols, te, tr)
 \item{fit_result}{a \code{fit_result} object to apply partial volume
 correction.}
 
-\item{p_vols}{a numeric vector of partial volumes.}
+\item{p_vols}{a numeric vector of partial volumes expressed as percentages.
+For example, a voxel containing 100\% white matter tissue would use :
+p_vols = c(WM = 100, GM = 0, CSF = 0).}
 
 \item{te}{the MRS TE.}
 

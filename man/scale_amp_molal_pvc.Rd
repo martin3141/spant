@@ -2,7 +2,8 @@
 % Please edit documentation in R/amp_scaling.R
 \name{scale_amp_molal_pvc}
 \alias{scale_amp_molal_pvc}
-\title{Apply partial volume correction to a fitting result object.}
+\title{Apply water reference scaling to a fitting results object to yield metabolite
+quantities in millimolar (mM) units (mol / kg of tissue water).}
 \usage{
 scale_amp_molal_pvc(fit_result, ref_data, p_vols, te, tr, ...)
 }
@@ -11,7 +12,9 @@ scale_amp_molal_pvc(fit_result, ref_data, p_vols, te, tr, ...)
 
 \item{ref_data}{water reference MRS data object.}
 
-\item{p_vols}{a numeric vector of partial volumes.}
+\item{p_vols}{a numeric vector of partial volumes expressed as percentages.
+For example, a voxel containing 100\% white matter tissue would use :
+p_vols = c(WM = 100, GM = 0, CSF = 0).}
 
 \item{te}{the MRS TE in seconds.}
 
@@ -23,5 +26,10 @@ scale_amp_molal_pvc(fit_result, ref_data, p_vols, te, tr, ...)
 A \code{fit_result} object with a rescaled results table.
 }
 \description{
-Apply partial volume correction to a fitting result object.
+Details of this method can be found in "Use of tissue water as a
+concentration reference for proton spectroscopic imaging" by Gasparovic et al
+MRM 2006 55(6):1219-26. 1.5 Tesla relaxation assumptions are taken from this
+paper. For 3 Tesla data, relaxation assumptions are taken from "NMR
+relaxation times in the human brain at 3.0 tesla" by Wansapura et al J Magn
+Reson Imaging 1999 9(4):531-8.
 }

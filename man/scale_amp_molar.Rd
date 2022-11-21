@@ -3,7 +3,7 @@
 \name{scale_amp_molar}
 \alias{scale_amp_molar}
 \title{Apply water reference scaling to a fitting results object to yield metabolite
-quantities in millimolar (mM) units (mol/litre).}
+quantities in millimolar (mM) units (mol / Litre of tissue).}
 \usage{
 scale_amp_molar(fit_result, ref_data, w_att = 0.7, w_conc = 35880, ...)
 }
@@ -12,7 +12,8 @@ scale_amp_molar(fit_result, ref_data, w_att = 0.7, w_conc = 35880, ...)
 
 \item{ref_data}{water reference MRS data object.}
 
-\item{w_att}{water attenuation factor (default = 0.7).}
+\item{w_att}{water attenuation factor (default = 0.7). Assumes water T2 of
+80ms and a TE = 30 ms. exp(-30ms / 80ms) ~ 0.7.}
 
 \item{w_conc}{assumed water concentration (default = 35880). Default value
 corresponds to typical white matter. Set to 43300 for gray matter, and 55556
@@ -25,5 +26,7 @@ a \code{fit_result} object with a rescaled results table.
 }
 \description{
 See the LCModel manual section on water-scaling for details on the
-assumptions and relevant references.
+assumptions and relevant references. Use this type of concentration scaling
+to compare fit results with LCModel and TARQUIN defaults. Otherwise
+scale_amp_molal_pvc is generally the preferred method.
 }
