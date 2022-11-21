@@ -1,3 +1,5 @@
+# spant 2.5.0
+
 # spant 2.4.0
 * Performance improvement for reading VD format TWIX files.
 * Function added to scale all metabolite levels by a set value
