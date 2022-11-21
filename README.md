@@ -22,7 +22,7 @@ features and algorithms are included:
 -   Robust retrospective frequency and phase correction - RATS
     <https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.27605>.
 -   Support for common MRS data formats including read / write NIfTI
-    MRS - <https://www.biorxiv.org/content/10.1101/2021.11.09.467912v1>.
+    MRS - <https://onlinelibrary.wiley.com/doi/10.1002/mrm.29418>.
 -   Flexible data types to support single voxel, dynamic and
     spectroscopic imaging data types.
 -   Raw data import from individual coils and dynamic measurements, eg
