@@ -55,8 +55,16 @@ read_ima <- function(fraw, verbose = FALSE, extra) {
 #' @return mrs_data object.
 #' @export
 read_ima_coil_dir <- function(dir, extra = NULL, verbose = FALSE) {
+  
+  # check the directory exists
+  if (!dir.exists(dir)) stop("Error read_ima_coil_dir directory was not found.")
+  
+  # check it contains some files
   files <- list.files(dir, full.names = TRUE)
+  if (length(files) == 0) stop("Error, read_ima_coil_dir files not found.")
+  
   #warning("coil ordering is based on file name only.")
+  
   files <- sort(files)
   mrs_list <- lapply(files, read_mrs, format = "dicom", verbose = verbose,
                      extra = extra)
@@ -74,11 +82,20 @@ read_ima_coil_dir <- function(dir, extra = NULL, verbose = FALSE) {
 #' @return mrs_data object.
 #' @export
 read_ima_dyn_dir <- function(dir, extra = NULL, verbose = FALSE) {
+  
+  # check the directory exists
+  if (!dir.exists(dir)) stop("Error read_ima_dyn_dir directory was not found.")
+  
+  # check it contains some files
   files <- list.files(dir, full.names = TRUE)
+  if (length(files) == 0) stop("Error, read_ima_dyn_dir files not found.")
+  
   #warning("coil ordering is based on file name only.")
+  
   files <- sort(files)
   mrs_list <- lapply(files, read_mrs, format = "dicom", verbose = verbose,
                      extra = extra)
+  
   mrs_data <- append_dyns(mrs_list)
   return(mrs_data)
 }
