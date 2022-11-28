@@ -2,6 +2,7 @@
 * Improved function documentation for water concentration scaling.
 * Added water and tCr scaling examples to the introduction vignette.
 * Better error checking for reading ima files.
+* read_basis function improved to work with variable formatting.
 
 # spant 2.4.0
 * Performance improvement for reading VD format TWIX files.
