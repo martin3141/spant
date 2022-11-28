@@ -139,7 +139,7 @@ read_basis <- function(basis_file, ref = def_ref(), sort_basis = TRUE) {
           data_pts <- data_pts[seq(1, 2 * N, 2)] +
                       1i * data_pts[seq(2, 2 * N, 2)]
           
-          # transform to time-domain
+          # ifftshift
           data_pts <- pracma::ifftshift(data_pts)
           data     <- cbind(data, data_pts) # slow?
           break
@@ -343,4 +343,46 @@ shift_basis <- function(basis, shifts) {
   basis_mrs_data <- basis2mrs_data(basis)
   basis_mrs_data <- shift(basis_mrs_data, shifts)
   mrs_data2basis(basis_mrs_data, basis$names)
+}
+
+#' Resample a basis-set to match a mrs_data acquisition
+#' @param basis the basis to be resampled.
+#' @param mrs_data the mrs_data to match the number of data points and sampling
+#' frequency.
+#' @param ref_freq_match apply a frequency shift to the basis to match the
+#' reference frequency (usually 4.65 or 4.68) of the mrs_data.
+#' @return resampled basis set object.
+#' @export
+resample_basis <- function(basis, mrs_data, ref_freq_match = TRUE) {
+  N  <- basis$N
+  fs <- basis$fs
+  t_orig <- seq(from = 0, to = (N - 1) / fs, by = 1 / fs)
+  t_new  <- seconds(mrs_data)
+  
+  # create resampled basis 
+  basis_resamp    <- basis
+  basis_resamp$N  <- Npts(mrs_data)
+  basis_resamp$fs <- fs(mrs_data)
+  basis_resamp$data <- matrix(nrow = basis_resamp$N, ncol = length(basis$names))
+  
+  # inverse FT back to the time-domain
+  basis$data <- ift_shift_mat(basis$data)
+  
+  # loop through basis elements and resample
+  for (n in 1:length(basis$names)) {
+    
+    resamp_ele <- stats::spline(t_orig, Re(basis$data[,n]), xout = t_new)$y +
+                  1i * stats::spline(t_orig, Im(basis$data[,n]), xout = t_new)$y
+    basis_resamp$data[,n] <- resamp_ele
+  }
+  
+  # back to freq. domain
+  basis_resamp$data <- ft_shift_mat(basis_resamp$data)
+  
+  if (ref_freq_match) {
+    basis_resamp <- shift_basis(basis_resamp, basis$ref - mrs_data$ref)
+    basis_resamp$ref <- mrs_data$ref
+  }
+  
+  return(basis_resamp)
 }
