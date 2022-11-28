@@ -386,3 +386,28 @@ resample_basis <- function(basis, mrs_data, ref_freq_match = TRUE) {
   
   return(basis_resamp)
 }
+
+#' Return a subset of the input basis.
+#' @param basis input basis.
+#' @param names basis set elements to keep in the returned object. 
+#' @param invert set to true to return all basis elements except those given in
+#' the names argument.
+#' @return a subset of the input basis.
+#' @export
+get_basis_subset <- function(basis, names, invert = FALSE) {
+  matches <- rep(FALSE, length(basis$names))
+  for (n in 1:length(names)) {
+    match <- basis$names == names[n]
+    if (any(match)) {
+      matches <- matches | match
+    } else {
+      warning(names[n], " not found")
+    }
+  }
+  
+  if (invert) matches <- !matches
+  
+  basis$data  <- basis$data[, matches]
+  basis$names <- basis$names[matches]
+  return(basis)
+}
