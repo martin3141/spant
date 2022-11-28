@@ -328,12 +328,17 @@ append_basis <- function(basis_a, basis_b) {
 #' Apply frequency shifts to basis set signals.
 #' @param basis the basis to apply the shift to.
 #' @param shifts a vector of frequency shifts to apply in ppm units. Must be the
-#' same length as there are basis elements.
+#' same length as there are basis elements, or one value to be applied to all
+#' elements.
 #' @return modified basis set object.
 #' @export
 shift_basis <- function(basis, shifts) {
   if (length(shifts) != ncol(basis$data)) {
-    stop("the length of shifts does not match the number of basis signals")
+    if (length(shifts == 1)) {
+      rep(shifts, ncol(basis$data))    
+    } else {
+      stop("the length of shifts does not match the number of basis signals")
+    }
   }
   basis_mrs_data <- basis2mrs_data(basis)
   basis_mrs_data <- shift(basis_mrs_data, shifts)

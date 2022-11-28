@@ -10,7 +10,8 @@ shift_basis(basis, shifts)
 \item{basis}{the basis to apply the shift to.}
 
 \item{shifts}{a vector of frequency shifts to apply in ppm units. Must be the
-same length as there are basis elements.}
+same length as there are basis elements, or one value to be applied to all
+elements.}
 }
 \value{
 modified basis set object.

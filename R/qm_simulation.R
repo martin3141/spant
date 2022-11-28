@@ -398,6 +398,32 @@ sim_basis_1h_brain <- function(pul_seq = seq_press_ideal,
                                      xlim = xlim, ...)
 }
 
+#' Simulate a macromolecular and lipid basis-set suitable for 1H brain MRS
+#' analysis.
+#' 
+#' @param acq_paras list of acquisition parameters or an mrs_data object. See
+#' \code{\link{def_acq_paras}}
+#' @return basis object.
+#' @export
+sim_basis_mm_lip_lcm <- function(acq_paras = def_acq_paras()){
+  
+  ft <- acq_paras$ft 
+  
+  mol_list <- list(
+    get_lip09_paras(ft),
+    get_lip13a_paras(ft),
+    get_lip13b_paras(ft),
+    get_lip20_paras(ft),
+    get_mm09_paras(ft),
+    get_mm12_paras(ft),
+    get_mm14_paras(ft),
+    get_mm17_paras(ft),
+    get_mm20_paras(ft)
+  )
+  
+  return(sim_basis(mol_list, acq_paras = acq_paras))
+}
+
 #' Simulate a basis-set suitable for 1H brain MRS analysis acquired with a PRESS 
 #' sequence. Note, ideal pulses are assumed.
 #' @param acq_paras list of acquisition parameters or an mrs_data object. See
