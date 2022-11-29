@@ -911,6 +911,16 @@ get_sins_paras <- function(lw = NULL, lg = 0, ...) {
   paras
 }
 
+get_h2o_paras <- function(lw = NULL, lg = 0, ...) {
+  if (is.null(lw)) lw = 2
+  paras <- get_uncoupled_mol("H2O", 4.65, "1H", 2, lw, lg, "water")
+  
+  source <- "Singlet at 4.65 ppm."
+  
+  paras$source <- source
+  paras
+}
+
 get_msm_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 1
   paras <- get_uncoupled_mol("MSM", 3.142, "1H", 6, lw, lg,

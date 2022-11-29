@@ -2,7 +2,7 @@
 % Please edit documentation in R/basis_set.R
 \name{resample_basis}
 \alias{resample_basis}
-\title{Resample a basis-set to match a mrs_data acquisition}
+\title{Resample a basis-set to match a mrs_data acquisition.}
 \usage{
 resample_basis(basis, mrs_data, ref_freq_match = TRUE)
 }
@@ -19,5 +19,5 @@ reference frequency (usually 4.65 or 4.68) of the mrs_data.}
 resampled basis set object.
 }
 \description{
-Resample a basis-set to match a mrs_data acquisition
+Resample a basis-set to match a mrs_data acquisition.
 }

@@ -71,7 +71,7 @@ sim_basis_tqn <- function(fs = def_fs(), ft = def_ft(), N = def_N(),
 print.basis_set <- function(x, ...) {
   cat("Basis set parameters\n")
   cat("-------------------------------\n")
-  cat(paste(c("Trans. freq (MHz)       : ", x$ft * 1e-6, "\n")), sep = "")
+  cat(paste(c("Trans. freq (MHz)       : ", round(x$ft * 1e-6, 1), "\n")), sep = "")
   cat(paste(c("Data points             : ", dim(x$data)[1], "\n")), sep = "")
   cat(paste(c("Sampling frequency (Hz) : ", x$fs, "\n")), sep = "")
   cat(paste(c("Elements                : ", dim(x$data)[2], "\n\n")), sep = "")
@@ -345,7 +345,7 @@ shift_basis <- function(basis, shifts) {
   mrs_data2basis(basis_mrs_data, basis$names)
 }
 
-#' Resample a basis-set to match a mrs_data acquisition
+#' Resample a basis-set to match a mrs_data acquisition.
 #' @param basis the basis to be resampled.
 #' @param mrs_data the mrs_data to match the number of data points and sampling
 #' frequency.
@@ -401,13 +401,37 @@ get_basis_subset <- function(basis, names, invert = FALSE) {
     if (any(match)) {
       matches <- matches | match
     } else {
-      warning(names[n], " not found")
+      stop(names[n], " not found")
     }
   }
   
   if (invert) matches <- !matches
   
-  basis$data  <- basis$data[, matches]
+  basis$data  <- basis$data[, matches, drop = FALSE]
   basis$names <- basis$names[matches]
+  return(basis)
+}
+
+#' Scale a basis-set to be consistent with spant assumptions for water scaling.
+#' 
+#' For correct water scaling, spant assumes the time-domain amplitude (t = 0)
+#' for a single proton is 0.5. Internally simulated basis-sets will be correctly
+#' scaled, however imported basis-sets should be assumed to be un-scaled and 
+#' this function should be used. Note that the singlet specified should only
+#' contain one resonance, and that any additional signals (eg TSP or residual 
+#' water) will result in incorrect scaling. Therefore, only simulated basis sets
+#' are appropriate for use with this function.
+#' 
+#' @param basis basis set to be scaled.
+#' @param name the name of the singlet to be used as a scaling reference.
+#' @param protons the number of MRS visible protons contributing to the singlet
+#' resonance.
+#' @return a scaled basis.
+#' @export
+scale_basis_from_singlet <- function(basis, name, protons) {
+  basis_singlet <- get_basis_subset(basis, name)
+  mrs_singlet   <- basis2mrs_data(basis_singlet)
+  sc_factor     <- get_td_amp(mrs_singlet, nstart = 2) / protons * 2
+  basis$data    <- basis$data / as.numeric(sc_factor)
   return(basis)
 }
