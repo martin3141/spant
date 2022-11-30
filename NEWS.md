@@ -4,7 +4,7 @@
 * Better error checking for reading ima files.
 * read_basis function improved to work with variable formatting.
 * Added helper functions for working with basis set objects: 
-scale_basis_from_singlet and get_basis_subset.
+scale_basis_from_singlet, resample_basis and get_basis_subset.
 
 # spant 2.4.0
 * Performance improvement for reading VD format TWIX files.
