@@ -29,11 +29,13 @@ get_mol_names <- function() {
   sub("_paras", "", sub("get_", "", funs[grep("get_.*_paras", funs)]))
 }
 
-#' Generate a \code{mol_parameters} object for a simple spin system with one resonance.
+#' Generate a \code{mol_parameters} object for a simple spin system with one
+#' resonance.
 #' @param name abbreviated name of the molecule.
 #' @param chem_shift chemical shift of the resonance (PPM).
 #' @param nucleus nucleus (1H, 31P...).
-#' @param scale_factor multiplicative scaling factor.
+#' @param scale_factor multiplicative scaling factor. Note, this value can be
+#' made complex to adjust the phase of the resonance.
 #' @param lw linewidth in Hz.
 #' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1).
 #' @param full_name long name of the molecule (optional).

@@ -2,7 +2,8 @@
 % Please edit documentation in R/mol_parameters.R
 \name{get_uncoupled_mol}
 \alias{get_uncoupled_mol}
-\title{Generate a \code{mol_parameters} object for a simple spin system with one resonance.}
+\title{Generate a \code{mol_parameters} object for a simple spin system with one
+resonance.}
 \usage{
 get_uncoupled_mol(
   name,
@@ -21,7 +22,8 @@ get_uncoupled_mol(
 
 \item{nucleus}{nucleus (1H, 31P...).}
 
-\item{scale_factor}{multiplicative scaling factor.}
+\item{scale_factor}{multiplicative scaling factor. Note, this value can be
+made complex to adjust the phase of the resonance.}
 
 \item{lw}{linewidth in Hz.}
 
@@ -33,5 +35,6 @@ get_uncoupled_mol(
 mol_parameters object.
 }
 \description{
-Generate a \code{mol_parameters} object for a simple spin system with one resonance.
+Generate a \code{mol_parameters} object for a simple spin system with one
+resonance.
 }
