@@ -249,15 +249,15 @@ get_corr_factor <- function(te, tr, B0, gm_vol, wm_vol, csf_vol) {
   f_csf <- csf_vol * csf_vis / 
           (gm_vol * gm_vis + wm_vol * wm_vis + csf_vol * csf_vis)
   
-  #This might give the result in Mol/kg?
-  #f_gm  <- gm_vol  * gm_vis   / ( gm_vol + wm_vol + csf_vol )
-  #f_wm  <- wm_vol  * wm_vis   / ( gm_vol + wm_vol + csf_vol )
-  #f_csf <- csf_vol * csf_vis  / ( gm_vol + wm_vol + csf_vol )
+  # This might give the result in Mol/kg?
+  # f_gm  <- gm_vol  * gm_vis   / ( gm_vol + wm_vol + csf_vol )
+  # f_wm  <- wm_vol  * wm_vis   / ( gm_vol + wm_vol + csf_vol )
+  # f_csf <- csf_vol * csf_vis  / ( gm_vol + wm_vol + csf_vol )
   
   # Relaxtion attenuation factors
-  R_h2o_gm  <- exp(-te / t2_gm) * (1.0 - exp(-tr / t1_gm))
-  R_h2o_wm  <- exp(-te / t2_wm) * (1.0 - exp(-tr / t1_wm))
-  R_h2o_csf <- exp(-te / t2_csf) * (1.0 - exp(-tr / t1_csf))
+  R_h2o_gm  <- exp(-te / t2_gm)    * (1.0 - exp(-tr / t1_gm))
+  R_h2o_wm  <- exp(-te / t2_wm)    * (1.0 - exp(-tr / t1_wm))
+  R_h2o_csf <- exp(-te / t2_csf)   * (1.0 - exp(-tr / t1_csf))
   R_metab   <- exp(-te / t2_metab) * (1.0 - exp(-tr / t1_metab))
   
   corr_factor <- ((f_gm * R_h2o_gm + f_wm * R_h2o_wm + f_csf * R_h2o_csf) / 
