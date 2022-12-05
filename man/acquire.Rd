@@ -4,7 +4,7 @@
 \alias{acquire}
 \title{Simulate pulse sequence acquisition.}
 \usage{
-acquire(sys, rec_phase = 180, tol = 1e-04, detect = NULL)
+acquire(sys, rec_phase = 180, tol = 1e-04, detect = NULL, amp_scale = 1)
 }
 \arguments{
 \item{sys}{spin system object.}
@@ -14,6 +14,8 @@ acquire(sys, rec_phase = 180, tol = 1e-04, detect = NULL)
 \item{tol}{ignore resonance amplitudes below this threshold.}
 
 \item{detect}{detection nuclei.}
+
+\item{amp_scale}{scaling factor for the output amplitudes.}
 }
 \value{
 a list of resonance amplitudes and frequencies.

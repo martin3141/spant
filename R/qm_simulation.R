@@ -61,9 +61,11 @@ H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, ft, ref) {
 #' @param rec_phase receiver phase in degrees.
 #' @param tol ignore resonance amplitudes below this threshold.
 #' @param detect detection nuclei.
+#' @param amp_scale scaling factor for the output amplitudes.
 #' @return a list of resonance amplitudes and frequencies.
 #' @export
-acquire <- function(sys, rec_phase = 180, tol = 1e-4, detect = NULL) {
+acquire <- function(sys, rec_phase = 180, tol = 1e-4, detect = NULL,
+                    amp_scale = 1) {
   if (is.null(detect)) {
     Fp <- gen_F(sys, "p")
   } else {
@@ -79,7 +81,7 @@ acquire <- function(sys, rec_phase = 180, tol = 1e-4, detect = NULL) {
   indx <- which(sig_amps, arr.ind = TRUE)
   amps <- amp_mat[indx] * (exp(1i * rec_phase * pi / 180) * amp_scaling_factor)
   freqs <- sys$H_eig_vals[indx[,1]] - sys$H_eig_vals[indx[,2]]
-  list(amps = amps, freqs = freqs)
+  list(amps = amps * amp_scale, freqs = freqs)
 }
 
 #' Generate the F product operator.

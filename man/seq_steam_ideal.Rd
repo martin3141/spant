@@ -4,7 +4,7 @@
 \alias{seq_steam_ideal}
 \title{STEAM sequence with ideal pulses.}
 \usage{
-seq_steam_ideal(spin_params, ft, ref, TE = 0.03, TM = 0.02)
+seq_steam_ideal(spin_params, ft, ref, TE = 0.03, TM = 0.02, amp_scale = 2)
 }
 \arguments{
 \item{spin_params}{spin system definition.}
@@ -16,6 +16,10 @@ seq_steam_ideal(spin_params, ft, ref, TE = 0.03, TM = 0.02)
 \item{TE}{sequence parameter in seconds.}
 
 \item{TM}{sequence parameter in seconds.}
+
+\item{amp_scale}{amplitude scaling factor. Set to 2 (default) to ensure
+correct scaling for water reference scaling. Set to 1 to maintain the
+inherent loss of signal associated with STEAM.}
 }
 \value{
 list of resonance amplitudes and frequencies.

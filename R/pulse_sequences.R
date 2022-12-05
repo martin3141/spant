@@ -351,9 +351,13 @@ seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89, TE1 = 0.0
 #' @param ref reference value for ppm scale.
 #' @param TE sequence parameter in seconds.
 #' @param TM sequence parameter in seconds.
+#' @param amp_scale amplitude scaling factor. Set to 2 (default) to ensure
+#' correct scaling for water reference scaling. Set to 1 to maintain the
+#' inherent loss of signal associated with STEAM.
 #' @return list of resonance amplitudes and frequencies.
 #' @export
-seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02) {
+seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02,
+                            amp_scale = 2) {
   
   # TODO, compare results with the method described by Young et al JMR 140,
   # 146-152 (1999) where a rotation about the z-axis is used instead of 
@@ -389,7 +393,7 @@ seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02) {
   basis_size <- prod(sys$spin_n * 2 + 1)
   rho_combined <- matrix(0, basis_size, basis_size)
   
-  # phase cycling loop 
+  # phase cycling loop
   for (n in 0:3) {
     phase <- n * 360 / 4
     #phase <- 270
@@ -422,8 +426,9 @@ seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02) {
   
   sys$rho <- rho_combined
   
-  # acquire
-  acquire(sys, detect = "1H", rec_phase = 0)
+  # acquire, and double the output intensity to ensure consistent concentration
+  # scaling
+  acquire(sys, detect = "1H", rec_phase = 0, amp_scale = amp_scale)
 }
 
 #' sLASER sequence with ideal pulses.
