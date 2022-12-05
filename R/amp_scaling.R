@@ -231,7 +231,7 @@ get_corr_factor <- function(te, tr, B0, gm_vol, wm_vol, csf_vol) {
     stop("Error. Relaxation values not available for this field strength.")
   }
   
-  # MR-visable water densities
+  # MR-visible water densities
   gm_vis  <- 0.78
   wm_vis  <- 0.65
   csf_vis <- 0.97
