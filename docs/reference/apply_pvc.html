@@ -20,7 +20,7 @@ volume correction."><meta property="og:image" content="https://martin3141.github
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.5.0</span>
       </span>
     </div>
 
@@ -94,7 +94,9 @@ correction.</p></dd>
 
 
 <dt>p_vols</dt>
-<dd><p>a numeric vector of partial volumes.</p></dd>
+<dd><p>a numeric vector of partial volumes expressed as percentages.
+For example, a voxel containing 100% white matter tissue would use :
+p_vols = c(WM = 100, GM = 0, CSF = 0).</p></dd>
 
 
 <dt>te</dt>

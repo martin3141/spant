@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.5.0</span>
       </span>
     </div>
 
@@ -73,7 +73,17 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.4.0" id="spant-240">spant 2.4.0<a class="anchor" aria-label="anchor" href="#spant-240"></a></h2>
+<h2 class="page-header" data-toc-text="2.5.0" id="spant-250">spant 2.5.0<a class="anchor" aria-label="anchor" href="#spant-250"></a></h2>
+<ul><li>Improved function documentation for water concentration scaling.</li>
+<li>Added water and tCr scaling examples to the introduction vignette.</li>
+<li>Better error checking for reading ima files.</li>
+<li>read_basis function improved to work with variable formatting.</li>
+<li>Improved default method of time-domain signal amplitude estimation.</li>
+<li>Added helper functions for working with basis set objects: scale_basis_from_singlet, resample_basis and get_basis_subset.</li>
+<li>Bug fix for STEAM basis simulation being incorrectly scaled for internal water scaling methods.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="2.4.0" id="spant-240">spant 2.4.0<small>2022-11-07</small><a class="anchor" aria-label="anchor" href="#spant-240"></a></h2>
 <ul><li>Performance improvement for reading VD format TWIX files.</li>
 <li>Function added to scale all metabolite levels by a set value (scale_amp_ratio_value).</li>
 </ul></div>
@@ -154,7 +164,7 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.17.0" id="spant-1170">spant 1.17.0<small>2022-01-07</small><a class="anchor" aria-label="anchor" href="#spant-1170"></a></h2>
 <ul><li>New function added (recon_twix_2d) for reconstructing basic phase encoded twix 2D MRSI data.</li>
-<li>File name argument for read_mrs now permits globbing, eg read_mrs(“*.dcm”).</li>
+<li>File name argument for read_mrs now permits globbing, eg read_mrs("*.dcm").</li>
 <li>Improved plotting of metabolite maps containing infinite values.</li>
 <li>Improvements to GE p-file reader.</li>
 <li>Bug fix for TWIX MRSI voxel dimensions.</li>
@@ -469,8 +479,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0" id="spant-010">spant 0.1.0<small>2017-04-26</small><a class="anchor" aria-label="anchor" href="#spant-010"></a></h2>
-<ul><li>First public release.</li>
-</ul></div>
+<ul><li>First public release.</li></ul></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.5.0</span>
       </span>
     </div>
 
@@ -113,27 +113,17 @@
 <div class="section level2">
 <h2 id="basis-simulation">Basis simulation<a class="anchor" aria-label="anchor" href="#basis-simulation"></a>
 </h2>
-<p>Basis simulation is necessary step for modern MRS analysis and the
-this vignette will explain how to achieve this with spant. It is
-advisable to follow the examples given in the <a href="spant-metabolite-simulation.html">metabolite simulation
-vignette</a> before following this guide.</p>
+<p>Basis simulation is necessary step for modern MRS analysis and the this vignette will explain how to achieve this with spant. It is advisable to follow the examples given in the <a href="spant-metabolite-simulation.html">metabolite simulation vignette</a> before following this guide.</p>
 <p>Load the spant package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://martin3141.github.io/spant/">spant</a></span><span class="op">)</span></span></code></pre></div>
-<p>A basis set is a collection of signals to be fit to the MRS data. In
-spant we start with a list of molecular definitions containing the
-relevant information for each signal - such as chemical shifts and
-j-coupling values:</p>
+<p>A basis set is a collection of signals to be fit to the MRS data. In spant we start with a list of molecular definitions containing the relevant information for each signal - such as chemical shifts and j-coupling values:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mol_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_mol_paras.html">get_mol_paras</a></span><span class="op">(</span><span class="st">"lac"</span><span class="op">)</span>,</span>
 <span>                 <span class="fu"><a href="../reference/get_mol_paras.html">get_mol_paras</a></span><span class="op">(</span><span class="st">"naa"</span><span class="op">)</span>,</span>
 <span>                 <span class="fu"><a href="../reference/get_mol_paras.html">get_mol_paras</a></span><span class="op">(</span><span class="st">"cr"</span><span class="op">)</span>,</span>
 <span>                 <span class="fu"><a href="../reference/get_mol_paras.html">get_mol_paras</a></span><span class="op">(</span><span class="st">"gpc"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>In the next step we convert these chemical properties into a
-collection of signals (a spant <code>basis_set</code> object) with the
-<code>sim_basis</code> function. When fitting, the signal parameters
-(e.g. sampling frequency) and pulse sequence (e.g. echo-time) must match
-the MRS data acquisition protocol.</p>
+<p>In the next step we convert these chemical properties into a collection of signals (a spant <code>basis_set</code> object) with the <code>sim_basis</code> function. When fitting, the signal parameters (e.g. sampling frequency) and pulse sequence (e.g. echo-time) must match the MRS data acquisition protocol.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">basis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_basis.html">sim_basis</a></span><span class="op">(</span><span class="va">mol_list</span>, pul_seq <span class="op">=</span> <span class="va">seq_slaser_ideal</span>,</span>
 <span>                   acq_paras <span class="op">=</span> <span class="fu"><a href="../reference/def_acq_paras.html">def_acq_paras</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">2048</span>, fs <span class="op">=</span> <span class="fl">2000</span>, ft <span class="op">=</span> <span class="fl">127.8e6</span><span class="op">)</span>,</span>
@@ -141,8 +131,7 @@ the MRS data acquisition protocol.</p>
 <span></span>
 <span><span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="va">basis</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span>, y_offset <span class="op">=</span> <span class="fl">50</span>, labels <span class="op">=</span> <span class="va">basis</span><span class="op">$</span><span class="va">names</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spant-basis-simulation_files/figure-html/unnamed-chunk-4-1.png" width="576"></p>
-<p>In 1H MRS broad resonances from lipids and macromolecules are often
-included in addition to metabolites:</p>
+<p>In 1H MRS broad resonances from lipids and macromolecules are often included in addition to metabolites:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mol_list_mm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/append.html" class="external-link">append</a></span><span class="op">(</span><span class="va">mol_list</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_mol_paras.html">get_mol_paras</a></span><span class="op">(</span><span class="st">"MM09"</span>, ft <span class="op">=</span> <span class="fl">127.8e6</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -152,19 +141,12 @@ included in addition to metabolites:</p>
 <span></span>
 <span><span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="va">basis_mm</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span>, y_offset <span class="op">=</span> <span class="fl">50</span>, labels <span class="op">=</span> <span class="va">basis_mm</span><span class="op">$</span><span class="va">names</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spant-basis-simulation_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
-<p>Note the field strength is often required to simulate these broad
-resonances as their linewidth is usually specified in ppm. spant also
-includes the functions <code>sim_basis_1h_brain</code> and
-<code>sim_basis_1h_brain_press</code> to produce commonly used sets of
-basis signals:</p>
+<p>Note the field strength is often required to simulate these broad resonances as their linewidth is usually specified in ppm. spant also includes the functions <code>sim_basis_1h_brain</code> and <code>sim_basis_1h_brain_press</code> to produce commonly used sets of basis signals:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">basis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_basis_1h_brain.html">sim_basis_1h_brain</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="va">basis</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span>, y_offset <span class="op">=</span> <span class="fl">20</span>, labels <span class="op">=</span> <span class="va">basis</span><span class="op">$</span><span class="va">names</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spant-basis-simulation_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
-<p>Basis sets can be exported for use with LCModel with the
-<code>write_basis</code> function, and sim_basis_1h_brain has the option
-<code>lcm_compat</code> to remove signals that are usually generated
-within the LCModel package:</p>
+<p>Basis sets can be exported for use with LCModel with the <code>write_basis</code> function, and sim_basis_1h_brain has the option <code>lcm_compat</code> to remove signals that are usually generated within the LCModel package:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lcm_basis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_basis_1h_brain.html">sim_basis_1h_brain</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span><span class="va">lcm_basis</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span>, y_offset <span class="op">=</span> <span class="fl">20</span>, labels <span class="op">=</span> <span class="va">basis</span><span class="op">$</span><span class="va">names</span><span class="op">)</span></span></code></pre></div>

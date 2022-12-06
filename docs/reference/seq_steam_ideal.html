@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.5.0</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">seq_steam_ideal</span><span class="op">(</span><span class="va">spin_params</span>, <span class="va">ft</span>, <span class="va">ref</span>, TE <span class="op">=</span> <span class="fl">0.03</span>, TM <span class="op">=</span> <span class="fl">0.02</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">seq_steam_ideal</span><span class="op">(</span><span class="va">spin_params</span>, <span class="va">ft</span>, <span class="va">ref</span>, TE <span class="op">=</span> <span class="fl">0.03</span>, TM <span class="op">=</span> <span class="fl">0.02</span>, amp_scale <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -101,6 +101,12 @@
 
 <dt>TM</dt>
 <dd><p>sequence parameter in seconds.</p></dd>
+
+
+<dt>amp_scale</dt>
+<dd><p>amplitude scaling factor. Set to 2 (default) to ensure
+correct scaling for water reference scaling. Set to 1 to maintain the
+inherent loss of signal associated with STEAM.</p></dd>
 
 </dl></div>
     <div id="value">

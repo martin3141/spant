@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.5.0</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">acquire</span><span class="op">(</span><span class="va">sys</span>, rec_phase <span class="op">=</span> <span class="fl">180</span>, tol <span class="op">=</span> <span class="fl">1e-04</span>, detect <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">acquire</span><span class="op">(</span><span class="va">sys</span>, rec_phase <span class="op">=</span> <span class="fl">180</span>, tol <span class="op">=</span> <span class="fl">1e-04</span>, detect <span class="op">=</span> <span class="cn">NULL</span>, amp_scale <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -97,6 +97,10 @@
 
 <dt>detect</dt>
 <dd><p>detection nuclei.</p></dd>
+
+
+<dt>amp_scale</dt>
+<dd><p>scaling factor for the output amplitudes.</p></dd>
 
 </dl></div>
     <div id="value">
