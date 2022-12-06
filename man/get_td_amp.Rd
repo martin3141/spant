@@ -5,7 +5,7 @@
 \title{Return an array of amplitudes derived from fitting the initial points in the
 time domain and extrapolating back to t=0.}
 \usage{
-get_td_amp(mrs_data, nstart = 10, nend = 50, method = "spline")
+get_td_amp(mrs_data, nstart = 10, nend = 50, method = "poly")
 }
 \arguments{
 \item{mrs_data}{MRS data.}
@@ -14,7 +14,8 @@ get_td_amp(mrs_data, nstart = 10, nend = 50, method = "spline")
 
 \item{nend}{last data point to fit.}
 
-\item{method}{method for measuring the amplitude, one of "spline" or "exp".}
+\item{method}{method for measuring the amplitude, one of "poly", spline" or
+exp".}
 }
 \value{
 array of amplitudes.

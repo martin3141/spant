@@ -1389,7 +1389,7 @@ align <- function(mrs_data, ref_freq = 4.65, zf_factor = 2, lb = 2,
 #' exp".
 #' @return array of amplitudes.
 #' @export
-get_td_amp <- function(mrs_data, nstart = 10, nend = 50, method = "spline") {
+get_td_amp <- function(mrs_data, nstart = 10, nend = 50, method = "poly") {
   
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
