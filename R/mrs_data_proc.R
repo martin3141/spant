@@ -1385,7 +1385,8 @@ align <- function(mrs_data, ref_freq = 4.65, zf_factor = 2, lb = 2,
 #' @param mrs_data MRS data.
 #' @param nstart first data point to fit.
 #' @param nend last data point to fit.
-#' @param method method for measuring the amplitude, one of "spline" or "exp".
+#' @param method method for measuring the amplitude, one of "poly", spline" or 
+#' exp".
 #' @return array of amplitudes.
 #' @export
 get_td_amp <- function(mrs_data, nstart = 10, nend = 50, method = "spline") {
@@ -1397,6 +1398,8 @@ get_td_amp <- function(mrs_data, nstart = 10, nend = 50, method = "spline") {
   } else if (method == "exp") {
     t <- seconds(mrs_data)
     amps <- apply_mrs(mrs_data, 7, measure_lorentz_amp, t, nstart, nend)$data
+  } else if (method == "poly") {
+    amps <- apply_mrs(mrs_data, 7, measure_td_amp_poly, nstart, nend)$data
   } else {
     stop("incorrect method for get_td_amp")
   }

@@ -187,6 +187,10 @@ is.installed <- function(mypkg) {
 
 # From : http://mathworld.wolfram.com/LeastSquaresFittingExponential.html
 measure_lorentz_amp <- function(y, t, start_pnt = 10, end_pnt = 50) {
+  
+  # check for masked data
+  if (is.na(y[1])) return(NA)
+  
   # crop to time region and take Mod
   y <- Mod(y[start_pnt:end_pnt])
   t <- t[start_pnt:end_pnt]
@@ -204,7 +208,19 @@ measure_td_amp <- function(y, start_pnt = 10, end_pnt = 50) {
   
   # crop to time region and take Mod
   y <- Mod(y[start_pnt:end_pnt])
-  stats::spline(start_pnt:end_pnt, y, xout=1, method = "natural")$y
+  stats::spline(start_pnt:end_pnt, y, xout = 1, method = "natural")$y
+}
+
+measure_td_amp_poly <- function(y, start_pnt = 10, end_pnt = 50) {
+  
+  # check for masked data
+  if (is.na(y[1])) return(NA)
+  
+  x <- start_pnt:end_pnt
+  y <- Mod(y[x])
+  lm_res <- stats::lm(y ~ poly(x, 3))
+  new <- data.frame(x = 1)
+  return(stats::predict(lm_res, new))
 }
 
 # return the sum of squares of a complex vector
