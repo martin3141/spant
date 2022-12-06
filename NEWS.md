@@ -3,7 +3,7 @@
 * Added water and tCr scaling examples to the introduction vignette.
 * Better error checking for reading ima files.
 * read_basis function improved to work with variable formatting.
-* Improvement to default method of time-domain signal amplitude estimation.
+* Improved default method of time-domain signal amplitude estimation.
 * Added helper functions for working with basis set objects: 
 scale_basis_from_singlet, resample_basis and get_basis_subset.
 * Bug fix for STEAM basis simulation being incorrectly scaled for internal
