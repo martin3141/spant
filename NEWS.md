@@ -1,4 +1,5 @@
 # spant 2.6.0
+* Added function to read .pta files - read_pulse_pta.
 
 # spant 2.5.0
 * Improved function documentation for water concentration scaling.
