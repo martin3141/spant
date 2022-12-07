@@ -1,3 +1,5 @@
+# spant 2.6.0
+
 # spant 2.5.0
 * Improved function documentation for water concentration scaling.
 * Added water and tCr scaling examples to the introduction vignette.

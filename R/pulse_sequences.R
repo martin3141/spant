@@ -243,8 +243,9 @@ seq_cpmg_ideal <- function(spin_params, ft, ref, TE = 0.03, echoes = 4) {
 #' @param steps number of hard pulses used to approximate the editing pulse.
 #' @return list of resonance amplitudes and frequencies.
 #' @export
-seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89, TE1 = 0.015, 
-                             TE2 = 0.053, BW = 110, steps = 50) {
+seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89,
+                                 TE1 = 0.015, TE2 = 0.053, BW = 110,
+                                 steps = 50) {
   
   # Probably need to do some phase cycling, see:
   # https://github.com/CIC-methods/FID-A/blob/master/simulationTools/sim_megapress_shapedEdit.m
