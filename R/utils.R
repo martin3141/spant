@@ -625,7 +625,7 @@ matexp <- function(x) {
 #' @export
 Imzap <- function(x, tol = 1e-06) {
   if (all(abs(Im(z <- zapsmall(x))) <= tol)) 
-    as.double(x)
+    suppressWarnings(as.double(x))
   else x
 }
 
