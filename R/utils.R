@@ -599,6 +599,11 @@ ginv <- function(X, tol = sqrt(.Machine$double.eps)) {
                                            t(Xsvd$u[, Positive, drop = FALSE]))
 }
 
+#' Matrix exponential function taken from complexplus package to reduce the
+#' number of spant dependencies.
+#' @param x a square complex matrix.
+#' @return the matrix exponential of x.
+#' @export
 matexp <- function(x) {
   d  <- dim(x)
   n  <- d[1]
@@ -607,12 +612,17 @@ matexp <- function(x) {
   Ai <- Im(x)
   E  <- rbind(cbind(Ar, -Ai), cbind(Ai, Ar))
   eE <- expm::expm(E)
-  eA <- eE[1:n, 1:n] + (0+1i) * eE[(1:n) + n, 1:n]
+  eA <- eE[1:n, 1:n] + (0 + 1i) * eE[(1:n) + n, 1:n]
   eA <- matrix(Imzap(eA), ncol = n)
   return(eA)
 }
 
-# fn taken from complexplus package
+#' Complex rounding function taken from complexplus package to reduce the number
+#' of spant dependencies.
+#' @param x a scalar or vector, real or complex.
+#' @param tol a tolerance, 10^-6 by default. Prevents possible numerical
+#' problems. Can be set to 0 if desired.
+#' @export
 Imzap <- function(x, tol = 1e-06) {
   if (all(abs(Im(z <- zapsmall(x))) <= tol)) 
     as.double(x)

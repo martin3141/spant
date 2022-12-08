@@ -24,7 +24,7 @@ read_pulse_pta <- function(fname) {
   header_txt <- stats::setNames(as.list(header$V2[is_txt]), header$V1[is_txt])
   header_num <- stats::setNames(as.list(header$V3[!is_txt]), header$V1[!is_txt])
   header_out <- c(header_txt, header_num)
-  pulse  <- read.table(con)
+  pulse  <- utils::read.table(con)
   close(con)
   pulse  <- pulse[, 1:2]
   colnames(pulse) <- c("mag", "pha")
