@@ -120,6 +120,7 @@ gen_F_xy <- function(sys, phase, detect = NULL) {
 #' Get the quantum coherence matrix for a spin system.
 #' @param sys spin system object.
 #' @return quantum coherence number matrix.
+#' @export
 qn_states <- function(sys) {
   Fz <- gen_F(sys, "z")
   states_vec <- diag(Fz)
