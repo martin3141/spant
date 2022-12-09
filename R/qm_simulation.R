@@ -124,7 +124,10 @@ gen_F_xy <- function(sys, phase, detect = NULL) {
 qn_states <- function(sys) {
   Fz <- gen_F(sys, "z")
   states_vec <- diag(Fz)
-  outer(states_vec, states_vec, '-')
+  states_mat <- outer(states_vec, states_vec, '-')
+  states_mat <- Re(states_mat)
+  mode(states_mat) <- "integer"
+  return(states_mat)
 }
 
 #' Zero all non-zero-order coherences.
