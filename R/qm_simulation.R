@@ -138,7 +138,21 @@ qn_states <- function(sys) {
 zero_nzoc <- function(sys, rho) {
   qn_states <- qn_states(sys)
   rho[qn_states != 0] <- 0
-  rho
+  return(rho)
+}
+
+#' Zero all coherences including and above a given order.
+#' @param sys spin system object.
+#' @param rho density matrix.
+#' @param order states higher than or equal to this argument will be set to
+#' zero.
+#' @return density matrix.
+#' @export
+zero_higher_orders <- function(sys, rho, order) {
+  order <- as.integer(order)
+  qn_states <- qn_states(sys)
+  rho[Mod(qn_states) >= order] <- 0
+  return(rho)
 }
 
 gen_I <- function(n, spin_num, op) {
