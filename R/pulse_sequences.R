@@ -429,7 +429,7 @@ seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02,
   
   # acquire, and double the output intensity to ensure consistent concentration
   # scaling
-  acquire(sys, detect = "1H", rec_phase = 0, amp_scale = amp_scale)
+  acquire(sys, rec_phase = 180, detect = "1H", amp_scale = amp_scale)
 }
 
 #' STEAM sequence with ideal pulses using the z-rotation gradient simulation
@@ -515,7 +515,7 @@ seq_steam_ideal_young <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02,
   
   # acquire, and double the output intensity to ensure consistent concentration
   # scaling
-  acquire(sys, detect = "1H", rec_phase = 0, amp_scale = amp_scale)
+  acquire(sys, detect = "1H", rec_phase = 180, amp_scale = amp_scale)
 }
 
 #' sLASER sequence with ideal pulses.

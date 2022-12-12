@@ -4,7 +4,7 @@
 \alias{acquire}
 \title{Simulate pulse sequence acquisition.}
 \usage{
-acquire(sys, rec_phase = 180, tol = 1e-04, detect = NULL, amp_scale = 1)
+acquire(sys, rec_phase = 0, tol = 1e-04, detect = NULL, amp_scale = 1)
 }
 \arguments{
 \item{sys}{spin system object.}

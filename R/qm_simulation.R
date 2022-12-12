@@ -31,7 +31,7 @@ H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, ft, ref) {
   for (n in (1:length(spin_n))) {
     # Convert chem shift to angular freq and apply to Iz
     H_mat <- H_mat + gen_I(n, spin_n, "z") * 
-             ((-chem_shift[n] + ref) * ft * 1e-6)
+             ((chem_shift[n] - ref) * ft * 1e-6)
   }
   
   # Find non-zero elements of j_coupling_mat
@@ -64,18 +64,20 @@ H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, ft, ref) {
 #' @param amp_scale scaling factor for the output amplitudes.
 #' @return a list of resonance amplitudes and frequencies.
 #' @export
-acquire <- function(sys, rec_phase = 180, tol = 1e-4, detect = NULL,
+acquire <- function(sys, rec_phase = 0, tol = 1e-4, detect = NULL,
                     amp_scale = 1) {
+  
   if (is.null(detect)) {
-    Fp <- gen_F(sys, "p")
+    Fm <- gen_F(sys, "m")
   } else {
-    Fp <- gen_F(sys, "p", detect)
+    Fm <- gen_F(sys, "m", detect)
   }
     
   coherence <- Conj(t(sys$H_eig_vecs)) %*% sys$rho %*% sys$H_eig_vecs
-  coupled_coherence <- Conj(t(sys$H_eig_vecs)) %*% Fp %*% sys$H_eig_vecs
+  coupled_coherence <- Conj(t(sys$H_eig_vecs)) %*% Fm %*% sys$H_eig_vecs
   amp_mat <- coherence * coupled_coherence
   amp_scaling_factor <- 2i / nrow(coherence)
+  
   # find resonances
   sig_amps <- (Mod(amp_mat) > tol)
   indx <- which(sig_amps, arr.ind = TRUE)
