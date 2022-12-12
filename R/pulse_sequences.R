@@ -411,7 +411,7 @@ seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02,
     rho <- lhs_x_pulse %*% rho %*% rhs_x_pulse
     
     # zero non-zero-order coherences
-    rho <- zero_nzoc(sys, rho)
+    rho <- coherence_filter(sys, rho)
     
     # evolve TM
     rho <- lhs_tm %*% rho %*% rhs_tm
@@ -496,7 +496,7 @@ seq_steam_ideal_young <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02,
     rho <- lhs_x_pulse %*% rho %*% rhs_x_pulse
     
     # zero non-zero-order coherences
-    rho <- zero_nzoc(sys, rho)
+    rho <- coherence_filter(sys, rho)
     
     # evolve TM
     rho <- lhs_tm %*% rho %*% rhs_tm
@@ -529,6 +529,7 @@ seq_steam_ideal_young <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02,
 #' @export
 seq_slaser_ideal <- function(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.011,
                              TE3 = 0.009) {
+  
   sys <- spin_sys(spin_params, ft, ref)
   
   sys$rho <- gen_F(sys, "z")
@@ -536,7 +537,7 @@ seq_slaser_ideal <- function(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.011,
   angle <- 90
   Fx <- gen_F(sys, "x", "1H")
   lhs_pulse <- matexp(-Fx * 1i * angle * pi / 180)
-  rhs_pulse <- matexp(Fx * 1i * angle * pi / 180)
+  rhs_pulse <- matexp( Fx * 1i * angle * pi / 180)
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # apply delay
@@ -621,7 +622,6 @@ seq_slaser_ideal <- function(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.011,
   rhs <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * t)) %*%
     eig_vec_inv
   sys$rho <- lhs %*% sys$rho %*% rhs
-  
   
   # acquire
   acquire(sys, detect = "1H")

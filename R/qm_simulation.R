@@ -130,14 +130,15 @@ qn_states <- function(sys) {
   return(states_mat)
 }
 
-#' Zero all non-zero-order coherences.
+#' Zero all coherence orders other than the one supplied as an argument.
 #' @param sys spin system object.
 #' @param rho density matrix.
+#' @param order coherence order to keep (default is 0).
 #' @return density matrix.
 #' @export
-zero_nzoc <- function(sys, rho) {
+coherence_filter <- function(sys, rho, order = 0) {
   qn_states <- qn_states(sys)
-  rho[qn_states != 0] <- 0
+  rho[qn_states != order] <- 0
   return(rho)
 }
 
