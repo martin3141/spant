@@ -27,5 +27,5 @@ list of resonance amplitudes and frequencies.
 }
 \description{
 See Landheer et al NMR Biomed 2021 34(5):e4129 and Landheer et al MRM 2019
-Apr;81(4):2209-2222 for more details on the coherence order filering method.
+Apr;81(4):2209-2222 for more details on the coherence order filtering method.
 }
