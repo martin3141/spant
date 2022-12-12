@@ -522,7 +522,7 @@ seq_steam_ideal_young <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02,
 #' gradient crushers.
 #' 
 #' See Landheer et al NMR Biomed 2021 34(5):e4129 and Landheer et al MRM 2019
-#' Apr;81(4):2209-2222 for more details on the coherence order filering method.
+#' Apr;81(4):2209-2222 for more details on the coherence order filtering method.
 #' 
 #' @param spin_params spin system definition.
 #' @param ft transmitter frequency in Hz.
