@@ -242,7 +242,6 @@ seq_cpmg_ideal <- function(spin_params, ft, ref, TE = 0.03, echoes = 4) {
 #' @param BW editing pulse bandwidth in Hz.
 #' @param steps number of hard pulses used to approximate the editing pulse.
 #' @return list of resonance amplitudes and frequencies.
-#' @export
 seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89,
                                  TE1 = 0.015, TE2 = 0.053, BW = 110,
                                  steps = 50) {
