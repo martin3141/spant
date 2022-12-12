@@ -409,17 +409,17 @@ seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02,
     
     # first 90
     rho <- lhs_xy_pulse %*% sys$rho %*% rhs_xy_pulse
-    # evole TE/2
+    # evolve TE/2
     rho <- lhs_half_te %*% rho %*% rhs_half_te
     # second 90
     rho <- lhs_x_pulse %*% rho %*% rhs_x_pulse
     # zero non-zero-order coherences
     rho <- zero_nzoc(sys, rho)
-    # evole TM
+    # evolve TM
     rho <- lhs_tm %*% rho %*% rhs_tm
     # third 90
     rho <- lhs_xy_pulse %*% rho %*% rhs_xy_pulse
-    # evole TE/2
+    # evolve TE/2
     rho <- lhs_half_te %*% rho %*% rhs_half_te
     
     rho_combined <- rho_combined + rho / 4
