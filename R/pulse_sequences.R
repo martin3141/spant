@@ -153,7 +153,7 @@ seq_spin_echo_ideal <- function(spin_params, ft, ref, TE = 0.03) {
 seq_spin_echo_ideal_31p <- function(spin_params, ft, ref, TE = 0.03) {
   sys <- spin_sys(spin_params, ft, ref)
   
-  sys$rho <- gen_F(sys, "z", "31P")
+  sys$rho <- gen_F(sys, "z")
    
   angle <- 90
   Fx <- gen_F(sys, "x", "31P")
@@ -175,7 +175,7 @@ seq_spin_echo_ideal_31p <- function(spin_params, ft, ref, TE = 0.03) {
   
   # apply pulse
   angle <- 180
-  Fy <- gen_F(sys,"y","31P")
+  Fy <- gen_F(sys, "y", "31P")
   lhs_pulse <- matexp(-Fy * 1i * angle * pi / 180)
   rhs_pulse <- matexp(Fy * 1i * angle * pi / 180)
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
@@ -445,7 +445,7 @@ seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02,
 #' @return list of resonance amplitudes and frequencies.
 #' @export
 seq_steam_ideal_young <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02,
-                            amp_scale = 2) {
+                                  amp_scale = 2) {
   
   sys <- spin_sys(spin_params, ft, ref)
   Fz  <- gen_F(sys, "z")
@@ -516,6 +516,87 @@ seq_steam_ideal_young <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02,
   # acquire, and double the output intensity to ensure consistent concentration
   # scaling
   acquire(sys, detect = "1H", rec_phase = 180, amp_scale = amp_scale)
+}
+
+#' STEAM sequence with ideal pulses and coherence order filtering to simulate
+#' gradient crushers.
+#' 
+#' See Landheer et al NMR Biomed 2021 34(5):e4129 and Landheer et al MRM 2019
+#' Apr;81(4):2209-2222 for more details on the coherence order filering method.
+#' 
+#' @param spin_params spin system definition.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @param TE sequence parameter in seconds.
+#' @param TM sequence parameter in seconds.
+#' @param amp_scale amplitude scaling factor. Set to 2 (default) to ensure
+#' correct scaling for water reference scaling. Set to 1 to maintain the
+#' inherent loss of signal associated with STEAM.
+#' @return list of resonance amplitudes and frequencies.
+#' @export
+seq_steam_ideal_cof <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02,
+                                    amp_scale = 2) {
+  
+  sys <- spin_sys(spin_params, ft, ref)
+  Fz  <- gen_F(sys, "z")
+  sys$rho <- Fz
+  
+  # TE/2 delay operator 
+  eig_vec_inv <- solve(sys$H_eig_vecs)
+  t <- (TE / 2)
+  lhs_half_te <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*% 
+    eig_vec_inv
+  
+  rhs_half_te <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * t)) %*% 
+    eig_vec_inv
+  
+  # TM delay operator 
+  t <- TM
+  lhs_tm <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*% 
+    eig_vec_inv
+  
+  rhs_tm <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * t)) %*% 
+    eig_vec_inv
+  
+  # 90 degree x pulse operator
+  angle <- 90
+  Fx <- gen_F(sys, "x", "1H")
+  lhs_x_pulse <- matexp(-Fx * 1i * angle * pi / 180)
+  rhs_x_pulse <- matexp( Fx * 1i * angle * pi / 180)
+  
+  basis_size   <- prod(sys$spin_n * 2 + 1)
+  rho_combined <- matrix(0, basis_size, basis_size)
+  
+  # apply first 90
+  sys$rho <- lhs_x_pulse %*% sys$rho %*% rhs_x_pulse
+  
+  # filter +1
+  sys$rho <- coherence_filter(sys, sys$rho, 1)
+  
+  # evolve TE/2
+  sys$rho <- lhs_half_te %*% sys$rho %*% rhs_half_te
+  
+  # second 90
+  sys$rho <- lhs_x_pulse %*% sys$rho %*% rhs_x_pulse
+  
+  # filter 0
+  sys$rho <- coherence_filter(sys, sys$rho, 0)
+  
+  # evolve TM
+  sys$rho <- lhs_tm %*% sys$rho %*% rhs_tm
+  
+  # third 90
+  sys$rho <- lhs_x_pulse %*% sys$rho %*% rhs_x_pulse
+  
+  # filter -1
+  sys$rho <- coherence_filter(sys, sys$rho, -1)
+  
+  # evolve TE/2
+  sys$rho <- lhs_half_te %*% sys$rho %*% rhs_half_te
+  
+  # acquire, and double the output intensity to ensure consistent concentration
+  # scaling
+  acquire(sys, rec_phase = 180, detect = "1H", amp_scale = amp_scale)
 }
 
 #' sLASER sequence with ideal pulses.

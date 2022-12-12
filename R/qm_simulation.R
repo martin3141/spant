@@ -101,7 +101,7 @@ gen_F <- function(sys, op, detect = NULL) {
     spin_indices <- which(toupper(sys$nucleus) == toupper(detect))
   }
     
-  for (n in spin_indices ) {
+  for (n in spin_indices) {
     F_mat = F_mat + gen_I(n, sys$spin_num, op)
   }
   F_mat
