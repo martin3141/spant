@@ -1391,6 +1391,12 @@ align <- function(mrs_data, ref_freq = 4.65, zf_factor = 2, lb = 2,
 #' @export
 get_td_amp <- function(mrs_data, nstart = 10, nend = 50, method = "poly") {
   
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, get_td_amp, nstart = nstart, nend = nend,
+                  method = method)
+    return(res)
+  }
+  
   if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
   
   if (method == "spline") {
@@ -2002,6 +2008,12 @@ sum_mrs <- function(a, b, force = FALSE) {
 #' @export
 spec_op <- function(mrs_data, xlim = NULL, operator = "sum", freq_scale = "ppm",
                     mode = "re") {
+  
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, spec_op, xlim = xlim, operator = operator,
+                  freq_scale = freq_scale, mode = mode)
+    return(res)
+  }
   
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
     
