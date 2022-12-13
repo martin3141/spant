@@ -581,11 +581,14 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   if (bty == "n") graphics::lines(xlim_labs, c(graphics::par("usr")[3],
                                                graphics::par("usr")[3]))
   
-  if (x_offset != 0) {
-    graphics::lines(c(0, utils::tail(as.numeric(x_offset_mat),1)),
-          c(graphics::par("usr")[3], graphics::par("usr")[3] +
-              utils::tail(as.numeric(y_offset_mat),1)))
-  }
+  # if (x_offset != 0) {
+  #   # graphics::lines(c(0, utils::tail(as.numeric(x_offset_mat),1)),
+  #   #       c(graphics::par("usr")[3], graphics::par("usr")[3] +
+  #   #           utils::tail(as.numeric(y_offset_mat),1)))
+  #   
+  #   graphics::lines(c(0, utils::tail(as.numeric(x_offset_mat),1)),
+  #             c(0, utils::tail(as.numeric(y_offset_mat),1)), lty = 2)
+  # }
   
   # write text labels if provided
   if (!is.null(labels)) {
