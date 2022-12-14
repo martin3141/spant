@@ -32,6 +32,23 @@ apply_axes <- function(x, axes, fun, ...) {
   x
 }
 
+#' Simulate an ideal pulse excitation profile by smoothing a top-hat function 
+#' with a Gaussian.
+#' @param bw top-hat bandwidth (Hz).
+#' @param sigma Gaussian width smoothing parameter (Hz).
+#' @param fa intended flip angle of the pulse.
+#' @return data frame containing the frequency scale, excitation profile and
+#' corresponding flip-angles.
+#' @export
+sim_th_excit_profile <- function(bw = 1500, sigma = 50, fa = 180) {
+  y <- c(rep(0, bw / 2), rep(1, bw), rep(0, bw / 2))
+  if (sigma != 0) y <- mmand::gaussianSmooth(y, sigma)
+  width <- length(y)
+  x <- seq(from = -width / 2, to = width / 2, length.out = width)
+  angle <- acos(1 - 2 * y) * fa / pi
+  return(data.frame(freq = x, Mxy = y, fa = angle))
+}
+
 #' Repeat an array over a given dimension.
 #' @param x array.
 #' @param rep_dim dimension to extend.
