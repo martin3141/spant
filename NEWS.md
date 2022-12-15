@@ -1,5 +1,7 @@
 # spant 2.6.0
 * Added function to read .pta files - read_pulse_pta.
+* Added a function to make basis set objects from a directory of LCModel
+formatted RAW files - make_basis_from_raw.
 
 # spant 2.5.0
 * Improved function documentation for water concentration scaling.

@@ -435,3 +435,24 @@ scale_basis_from_singlet <- function(basis, name, protons) {
   basis$data    <- basis$data / as.numeric(sc_factor)
   return(basis)
 }
+
+#' Make a basis-set object from a directory containing LCModel formatted RAW
+#' files.
+#' @param dir_path path to the directory containing LCModel RAW files. One file
+#' per signal.
+#' @param ft transmitter frequency in Hz.
+#' @param fs sampling frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @return a basis-set object.
+#' @export
+make_basis_from_raw <- function(dir_path, ft, fs, ref) {
+  files <- list.files(dir_path)
+  raw_files <- grep("\\.RAW$", files, value = TRUE, ignore.case = TRUE)
+  raw_path <- file.path(dir_path, raw_files)
+  mrs_data_list <- read_mrs(raw_path, ft = ft, fs = fs, ref = ref,
+                            format = "lcm_raw")
+  mrs_data_dynamic <- append_dyns(mrs_data_list)
+  names <- tools::file_path_sans_ext(raw_files)
+  basis <- mrs_data2basis(mrs_data_dynamic, names = names)
+  return(basis)
+}
