@@ -142,6 +142,7 @@ plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
     if (!sub_bl) {
       graphics::lines(x$PPMScale, x$Baseline)
     }
+    graphics::abline(h = offset, lty = 1, col = "gray")
     graphics::lines(x$PPMScale, res + offset)
     graphics::abline(h = max_dp)
   }
@@ -339,6 +340,7 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0, dyn = 1,
     graphics::lines(x$PPMScale, x$Baseline)
   }
   
+  graphics::abline(h = offset, lty = 1, col = "gray")
   graphics::lines(x$PPMScale, res + offset)
   graphics::abline(h = max_dp)
   
