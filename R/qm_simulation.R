@@ -5,7 +5,6 @@
 #' @return spin system object.
 #' @export
 spin_sys <- function(spin_params, ft, ref) {
-  # TODO checks on input
   
   # force uppercase
   spin_params$nucleus <- toupper(spin_params$nucleus)
@@ -36,6 +35,7 @@ H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, ft, ref) {
   
   # Find non-zero elements of j_coupling_mat
   inds <- which((j_coupling_mat != 0), arr.ind = TRUE)
+  
   if ((dim(inds)[1]) > 0)  {
     # j-coupling part
     for (n in 1:dim(inds)[1]) {
@@ -102,7 +102,7 @@ gen_F <- function(sys, op, detect = NULL) {
   }
     
   for (n in spin_indices) {
-    F_mat = F_mat + gen_I(n, sys$spin_num, op)
+    F_mat <- F_mat + gen_I(n, sys$spin_num, op)
   }
   F_mat
 }
@@ -220,6 +220,29 @@ Ix_pauli <- function(I) {
 
 Iy_pauli <- function(I) {
   -0.5i * (Ip_pauli(I) - Im_pauli(I))
+}
+
+#' Simulate an RF pulse on a single spin.
+#' @param sys spin system object.
+#' @param rho density matrix.
+#' @param spin_n spin index.
+#' @param angle RF flip angle in degrees.
+#' @param nuc nucleus influenced by the pulse.
+#' @param xy x or y pulse.
+#' @return density matrix.
+#' @export
+apply_pulse <- function(sys, rho, spin_n, angle, nuc, xy) {
+  
+  if (nuc != sys$nucleus[spin_n]) return(rho)
+  
+  F <- gen_I(spin_n, sys$spin_num, xy)
+  
+  lhs_pulse <- matexp(-F * 1i * angle * pi / 180)
+  rhs_pulse <- matexp( F * 1i * angle * pi / 180)
+  
+  rho_out <- lhs_pulse %*% rho %*% rhs_pulse
+  
+  return(rho_out)
 }
 
 get_spin_num <- function(nucleus) {
@@ -494,7 +517,7 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
   fs  <- acq_paras$fs
   N   <- acq_paras$N
     
-basis_mrs_data <- sim_zero(ft = ft, ref = ref, fs = fs, N = N,
+  basis_mrs_data <- sim_zero(ft = ft, ref = ref, fs = fs, N = N,
                               dyns = length(mol_list))
   
   for (n in 1:length(mol_list)) {
@@ -542,9 +565,5 @@ sim_mol <- function(mol, pul_seq = seq_pulse_acquire, ft = def_ft(),
     }
   }
   
-  # first pt correction - shouldn't need this because already done in 
-  # sim_resonances_fast function
-  # mrs_data$data[,,,,,,1] <- 0.5 * mrs_data$data[,,,,,,1]
-  
-  mrs_data
+  return(mrs_data)
 }
