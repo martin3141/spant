@@ -390,7 +390,7 @@ seq_steam_ideal <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02,
   
   # phase cycling loop
   for (n in 0:3) {
-    phase <- n * 360 / 4
+    phase <- n * 90
     
     # first and third 90 pulse operator
     angle <- 90
@@ -484,7 +484,7 @@ seq_steam_ideal_young <- function(spin_params, ft, ref, TE = 0.03, TM = 0.02,
   
   # phase cycling loop
   for (n in 0:3) {
-    phase_ang <- n * 360 / 4
+    phase_ang <- n * 90
     
     # rotate about z
     lhs_z_rot <- matexp(-Fz * 1i * phase_ang * pi / 180)
