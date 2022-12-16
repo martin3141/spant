@@ -96,7 +96,7 @@ seq_press_ideal <- function(spin_params, ft, ref, TE1 = 0.01, TE2 = 0.02) {
   sys$rho <- lhs %*% sys$rho %*% rhs
   
   # acquire
-  acquire(sys,detect = "1H")
+  acquire(sys, detect = "1H")
 }
 
 #' Spin echo sequence with ideal pulses.
