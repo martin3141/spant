@@ -12,7 +12,7 @@ seq_pulse_acquire <- function(spin_params, ft, ref) {
   angle <- 90
   Fx <- gen_F(sys, "x", "1H")
   lhs_pulse <- matexp(-Fx * 1i * angle * pi / 180)
-  rhs_pulse <- matexp(Fx * 1i * angle * pi / 180)
+  rhs_pulse <- matexp( Fx * 1i * angle * pi / 180)
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # acquire
@@ -33,7 +33,7 @@ seq_pulse_acquire_31p <- function(spin_params, ft, ref) {
   angle <- 90
   Fx <- gen_F(sys, "x", "31P")
   lhs_pulse <- matexp(-Fx * 1i * angle * pi / 180)
-  rhs_pulse <- matexp(Fx * 1i * angle * pi / 180)
+  rhs_pulse <- matexp( Fx * 1i * angle * pi / 180)
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # acquire
@@ -114,7 +114,7 @@ seq_spin_echo_ideal <- function(spin_params, ft, ref, TE = 0.03) {
   angle <- 90
   Fx <- gen_F(sys, "x", "1H")
   lhs_pulse <- matexp(-Fx * 1i * angle * pi / 180)
-  rhs_pulse <- matexp(Fx * 1i * angle * pi / 180)
+  rhs_pulse <- matexp( Fx * 1i * angle * pi / 180)
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # apply delay
@@ -133,7 +133,7 @@ seq_spin_echo_ideal <- function(spin_params, ft, ref, TE = 0.03) {
   angle <- 180
   Fy <- gen_F(sys, "y", "1H")
   lhs_pulse <- matexp(-Fy * 1i * angle * pi / 180)
-  rhs_pulse <- matexp(Fy * 1i * angle * pi / 180)
+  rhs_pulse <- matexp( Fy * 1i * angle * pi / 180)
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # apply delay
@@ -158,7 +158,7 @@ seq_spin_echo_ideal_31p <- function(spin_params, ft, ref, TE = 0.03) {
   angle <- 90
   Fx <- gen_F(sys, "x", "31P")
   lhs_pulse <- matexp(-Fx * 1i * angle * pi / 180)
-  rhs_pulse <- matexp(Fx * 1i * angle * pi / 180)
+  rhs_pulse <- matexp( Fx * 1i * angle * pi / 180)
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # apply delay
@@ -177,7 +177,7 @@ seq_spin_echo_ideal_31p <- function(spin_params, ft, ref, TE = 0.03) {
   angle <- 180
   Fy <- gen_F(sys, "y", "31P")
   lhs_pulse <- matexp(-Fy * 1i * angle * pi / 180)
-  rhs_pulse <- matexp(Fy * 1i * angle * pi / 180)
+  rhs_pulse <- matexp( Fy * 1i * angle * pi / 180)
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # apply delay
@@ -213,7 +213,7 @@ seq_cpmg_ideal <- function(spin_params, ft, ref, TE = 0.03, echoes = 4) {
   angle <- 180
   Fy <- gen_F(sys, "y", "1H")
   lhs_pulse <- matexp(-Fy * 1i * angle * pi / 180)
-  rhs_pulse <- matexp(Fy * 1i * angle * pi / 180)
+  rhs_pulse <- matexp( Fy * 1i * angle * pi / 180)
     
   sys$rho <- lhs %*% sys$rho %*% rhs
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
@@ -273,7 +273,7 @@ seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89,
   angle <- 180
   Fy <- gen_F(sys, "y", "1H")
   lhs_pulse <- matexp(-Fy * 1i * angle * pi / 180)
-  rhs_pulse <- matexp(Fy * 1i * angle * pi / 180)
+  rhs_pulse <- matexp( Fy * 1i * angle * pi / 180)
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # apply delay
@@ -302,7 +302,7 @@ seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89,
     angle <- x
     Fx <- gen_F(sys, "y", "1H")
     lhs_pulse_gaus <- matexp(-Fx * 1i * angle)
-    rhs_pulse_gaus <- matexp(Fx * 1i * angle)
+    rhs_pulse_gaus <- matexp( Fx * 1i * angle)
     sys$rho <- lhs_pulse_gaus %*% sys$rho %*% rhs_pulse_gaus
     sys$rho <- lhs_dt %*% sys$rho %*% rhs_dt
   }
@@ -329,7 +329,7 @@ seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89,
     angle <- x
     Fx <- gen_F(sys, "x", "1H")
     lhs_pulse_gaus <- matexp(-Fx * 1i * angle)
-    rhs_pulse_gaus <- matexp(Fx * 1i * angle)
+    rhs_pulse_gaus <- matexp( Fx * 1i * angle)
     sys$rho <- lhs_pulse_gaus %*% sys$rho %*% rhs_pulse_gaus
     sys$rho <- lhs_dt %*% sys$rho %*% rhs_dt
   }
@@ -635,7 +635,7 @@ seq_slaser_ideal <- function(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.011,
   angle <- 180
   Fy <- gen_F(sys, "y", "1H")
   lhs_pulse <- matexp(-Fy * 1i * angle * pi / 180)
-  rhs_pulse <- matexp(Fy * 1i * angle * pi / 180)
+  rhs_pulse <- matexp( Fy * 1i * angle * pi / 180)
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # apply delay
@@ -653,7 +653,7 @@ seq_slaser_ideal <- function(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.011,
   angle <- 180
   Fy <- gen_F(sys, "y", "1H")
   lhs_pulse <- matexp(-Fy * 1i * angle * pi / 180)
-  rhs_pulse <- matexp(Fy * 1i * angle * pi / 180)
+  rhs_pulse <- matexp( Fy * 1i * angle * pi / 180)
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # apply delay
@@ -671,7 +671,7 @@ seq_slaser_ideal <- function(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.011,
   angle <- 180
   Fy <- gen_F(sys, "y", "1H")
   lhs_pulse <- matexp(-Fy * 1i * angle * pi / 180)
-  rhs_pulse <- matexp(Fy * 1i * angle * pi / 180)
+  rhs_pulse <- matexp( Fy * 1i * angle * pi / 180)
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # apply delay
@@ -689,7 +689,7 @@ seq_slaser_ideal <- function(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.011,
   angle <- 180
   Fy <- gen_F(sys, "y", "1H")
   lhs_pulse <- matexp(-Fy * 1i * angle * pi / 180)
-  rhs_pulse <- matexp(Fy * 1i * angle * pi / 180)
+  rhs_pulse <- matexp( Fy * 1i * angle * pi / 180)
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # apply delay
