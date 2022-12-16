@@ -235,6 +235,8 @@ apply_pulse <- function(sys, rho, spin_n, angle, nuc, xy) {
   
   if (nuc != sys$nucleus[spin_n]) return(rho)
   
+  if (is.na(angle)) return(rho)
+  
   if (angle < 1) return(rho)
   
   F <- gen_I(spin_n, sys$spin_num, xy)
