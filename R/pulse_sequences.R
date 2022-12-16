@@ -69,7 +69,7 @@ seq_press_ideal <- function(spin_params, ft, ref, TE1 = 0.01, TE2 = 0.02) {
   angle <- 180
   Fy <- gen_F(sys, "y", "1H")
   lhs_pulse <- matexp(-Fy * 1i * angle * pi / 180)
-  rhs_pulse <- matexp(Fy * 1i * angle * pi / 180)
+  rhs_pulse <- matexp( Fy * 1i * angle * pi / 180)
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # apply delay
@@ -86,7 +86,7 @@ seq_press_ideal <- function(spin_params, ft, ref, TE1 = 0.01, TE2 = 0.02) {
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # apply delay
-  t = TE2/2
+  t <- TE2 / 2
   lhs <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*%
          eig_vec_inv
   
@@ -621,7 +621,7 @@ seq_slaser_ideal <- function(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.011,
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # apply delay
-  t = TE1 / 2
+  t <- TE1 / 2
   # find the inverse of the eigenvector matrix
   eig_vec_inv <- solve(sys$H_eig_vecs)
   lhs <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*%
@@ -657,7 +657,7 @@ seq_slaser_ideal <- function(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.011,
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # apply delay
-  t = 2 * TE2 / 4
+  t <- 2 * TE2 / 4
   # find the inverse of the eigenvector matrix
   eig_vec_inv <- solve(sys$H_eig_vecs)
   lhs <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*%
@@ -675,7 +675,7 @@ seq_slaser_ideal <- function(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.011,
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # apply delay
-  t = TE2 / 4 + TE3 /2
+  t <- TE2 / 4 + TE3 /2
   # find the inverse of the eigenvector matrix
   eig_vec_inv <- solve(sys$H_eig_vecs)
   lhs <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*%
@@ -693,7 +693,7 @@ seq_slaser_ideal <- function(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.011,
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
   # apply delay
-  t = TE3 /2
+  t <- TE3 /2
   # find the inverse of the eigenvector matrix
   eig_vec_inv <- solve(sys$H_eig_vecs)
   lhs <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*%
