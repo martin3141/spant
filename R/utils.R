@@ -45,6 +45,8 @@ sim_th_excit_profile <- function(bw = 1500, sigma = 50, fa = 180) {
   if (sigma != 0) y <- mmand::gaussianSmooth(y, sigma)
   width <- length(y)
   x <- seq(from = -width / 2, to = width / 2, length.out = width)
+  y[y >  1] <-  1 # acos doesn't like values gt 1
+  y[y < -1] <- -1 # acos doesn't like values lt -1
   angle <- acos(1 - 2 * y) * fa / pi
   return(data.frame(freq = x, Mxy = y, fa = angle))
 }
