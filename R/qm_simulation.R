@@ -158,6 +158,12 @@ zero_higher_orders <- function(sys, rho, order) {
   return(rho)
 }
 
+#' Generate the I product operator for a single spin.
+#' @param n spin index number for the required operator.
+#' @param spin_num vector of spin numbers in the system.
+#' @param op operator, one of "x", "y", "z", "p", "m".
+#' @return I product operator matrix.
+#' @export
 gen_I <- function(n, spin_num, op) {
   N <- length(spin_num)
   I <- spin_num[n]
