@@ -313,7 +313,12 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
   }
   
   # remove any columns with NAs
-  plot_data <- t(stats::na.omit(t(plot_data)))
+  # plot_data <- t(stats::na.omit(t(plot_data)))
+  
+  # set masked spectra to zero
+  plot_data[is.na(plot_data)] <- 0
+  
+  
   yN <- ncol(plot_data)
   
   col <- viridisLite::viridis(128)

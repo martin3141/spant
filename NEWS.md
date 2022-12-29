@@ -1,4 +1,5 @@
 # spant 2.6.0
+* Masked spectra plotted with image are now shown with a value of zero.
 * Added function to read .pta files - read_pulse_pta.
 * Added a function to make basis set objects from a directory of LCModel
 formatted RAW files - make_basis_from_raw.
