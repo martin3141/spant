@@ -3,7 +3,7 @@
 * Added function to read .pta files - read_pulse_pta.
 * Added a function to make basis set objects from a directory of LCModel
 formatted RAW files - make_basis_from_raw.
-* Added horizontal line to the fit result plots.
+* Added horizontal line to fit result plots.
 
 # spant 2.5.0
 * Improved function documentation for water concentration scaling.
