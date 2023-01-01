@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.0</span>
       </span>
     </div>
 
@@ -76,6 +76,59 @@
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
+          <p><code><a href="Arg.mrs_data.html">Arg(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Apply Arg operator to an MRS dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="Conj.mrs_data.html">Conj(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Apply Conj operator to an MRS dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="Im.mrs_data.html">Im(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Apply Im operator to an MRS dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="Imzap.html">Imzap()</a></code> </p>
+        </td>
+        <td><p>Complex rounding function taken from complexplus package to reduce the number
+of spant dependencies.</p></td>
+      </tr><tr><td>
+          <p><code><a href="Mod.mrs_data.html">Mod(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Apply Mod operator to an MRS dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="Ncoils.html">Ncoils()</a></code> </p>
+        </td>
+        <td><p>Return the total number of coil elements in an MRS dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="Ndyns.html">Ndyns()</a></code> </p>
+        </td>
+        <td><p>Return the total number of dynamic scans in an MRS dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="Npts.html">Npts()</a></code> </p>
+        </td>
+        <td><p>Return the number of data points in an MRS dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="Nspec.html">Nspec()</a></code> </p>
+        </td>
+        <td><p>Return the total number of spectra in an MRS dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="Nx.html">Nx()</a></code> </p>
+        </td>
+        <td><p>Return the total number of x locations in an MRS dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="Ny.html">Ny()</a></code> </p>
+        </td>
+        <td><p>Return the total number of y locations in an MRS dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="Nz.html">Nz()</a></code> </p>
+        </td>
+        <td><p>Return the total number of z locations in an MRS dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="Re.mrs_data.html">Re(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Apply Re operator to an MRS dataset.</p></td>
+      </tr><tr><td>
           <p><code><a href="abfit_opts.html">abfit_opts()</a></code> </p>
         </td>
         <td><p>Return a list of options for an ABfit analysis.</p></td>
@@ -123,14 +176,14 @@ other dimensions.</p></td>
         </td>
         <td><p>Apply a function across given dimensions of a MRS data object.</p></td>
       </tr><tr><td>
+          <p><code><a href="apply_pulse.html">apply_pulse()</a></code> </p>
+        </td>
+        <td><p>Simulate an RF pulse on a single spin.</p></td>
+      </tr><tr><td>
           <p><code><a href="apply_pvc.html">apply_pvc()</a></code> </p>
         </td>
         <td><p>Convert default LCM/TARQUIN concentration scaling to molal units with partial
 volume correction.</p></td>
-      </tr><tr><td>
-          <p><code><a href="Arg.mrs_data.html">Arg(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Apply Arg operator to an MRS dataset.</p></td>
       </tr><tr><td>
           <p><code><a href="array2mrs_data.html">array2mrs_data()</a></code> </p>
         </td>
@@ -215,6 +268,10 @@ residuals.</p></td>
         </td>
         <td><p>Create a logical circular mask spanning the full extent of an n x n matrix.</p></td>
       </tr><tr><td>
+          <p><code><a href="coherence_filter.html">coherence_filter()</a></code> </p>
+        </td>
+        <td><p>Zero all coherence orders other than the one supplied as an argument.</p></td>
+      </tr><tr><td>
           <p><code><a href="collapse_to_dyns.html">collapse_to_dyns()</a></code> </p>
         </td>
         <td><p>Collapse MRS data by concatenating spectra along the dynamic dimension.</p></td>
@@ -238,10 +295,6 @@ residuals.</p></td>
           <p><code><a href="comb_metab_ref.html">comb_metab_ref()</a></code> </p>
         </td>
         <td><p>Combine a reference and metabolite mrs_data object.</p></td>
-      </tr><tr><td>
-          <p><code><a href="Conj.mrs_data.html">Conj(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Apply Conj operator to an MRS dataset.</p></td>
       </tr><tr><td>
           <p><code><a href="conv_mrs.html">conv_mrs()</a></code> </p>
         </td>
@@ -279,6 +332,10 @@ in the frequency domain before down sampling.</p></td>
         </td>
         <td><p>Decimate an MRS signal by filtering in the time domain before downsampling.</p></td>
       </tr><tr><td>
+          <p><code><a href="def_N.html">def_N()</a></code> </p>
+        </td>
+        <td><p>Return the default number of data points in the spectral dimension.</p></td>
+      </tr><tr><td>
           <p><code><a href="def_acq_paras.html">def_acq_paras()</a></code> </p>
         </td>
         <td><p>Return (and optionally modify using the input arguments) a list of the
@@ -291,10 +348,6 @@ default acquisition parameters.</p></td>
           <p><code><a href="def_ft.html">def_ft()</a></code> </p>
         </td>
         <td><p>Return the default transmitter frequency in Hz.</p></td>
-      </tr><tr><td>
-          <p><code><a href="def_N.html">def_N()</a></code> </p>
-        </td>
-        <td><p>Return the default number of data points in the spectral dimension.</p></td>
       </tr><tr><td>
           <p><code><a href="def_nuc.html">def_nuc()</a></code> </p>
         </td>
@@ -401,6 +454,10 @@ shifted fft.</p></td>
         </td>
         <td><p>Generate the Fxy product operator with a specified phase.</p></td>
       </tr><tr><td>
+          <p><code><a href="gen_I.html">gen_I()</a></code> </p>
+        </td>
+        <td><p>Generate the I product operator for a single spin.</p></td>
+      </tr><tr><td>
           <p><code><a href="get_1h_brain_basis_paras.html">get_1h_brain_basis_paras()</a></code> </p>
         </td>
         <td><p>Return a list of <code>mol_parameter</code> objects suitable for 1H brain MRS
@@ -478,6 +535,10 @@ analyses.</p></td>
         </td>
         <td><p>Get a <code>mol_parameters</code> object for a named molecule.</p></td>
       </tr><tr><td>
+          <p><code><a href="get_mrs_affine.html">get_mrs_affine()</a></code> </p>
+        </td>
+        <td><p>Generate an affine for nifti generation.</p></td>
+      </tr><tr><td>
           <p><code><a href="get_mrsi2d_seg.html">get_mrsi2d_seg()</a></code> </p>
         </td>
         <td><p>Calculate the partial volume estimates for each voxel in a 2D MRSI dataset.</p></td>
@@ -493,10 +554,6 @@ analyses.</p></td>
           <p><code><a href="get_mrsi_voxel_xy_psf.html">get_mrsi_voxel_xy_psf()</a></code> </p>
         </td>
         <td><p>Generate a MRSI voxel PSF from an <code>mrs_data</code> object.</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_mrs_affine.html">get_mrs_affine()</a></code> </p>
-        </td>
-        <td><p>Generate an affine for nifti generation.</p></td>
       </tr><tr><td>
           <p><code><a href="get_odd_dyns.html">get_odd_dyns()</a></code> </p>
         </td>
@@ -560,17 +617,17 @@ resonance.</p></td>
         </td>
         <td><p>Return a single voxel from a larger mrs dataset.</p></td>
       </tr><tr><td>
-          <p><code><a href="gridplot.mrs_data.html">gridplot(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
+          <p><code><a href="grid_shift_xy.html">grid_shift_xy()</a></code> </p>
         </td>
-        <td><p>Arrange spectral plots in a grid.</p></td>
+        <td><p>Grid shift MRSI data in the x/y dimension.</p></td>
       </tr><tr><td>
           <p><code><a href="gridplot.html">gridplot()</a></code> </p>
         </td>
         <td><p>Arrange spectral plots in a grid.</p></td>
       </tr><tr><td>
-          <p><code><a href="grid_shift_xy.html">grid_shift_xy()</a></code> </p>
+          <p><code><a href="gridplot.mrs_data.html">gridplot(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Grid shift MRSI data in the x/y dimension.</p></td>
+        <td><p>Arrange spectral plots in a grid.</p></td>
       </tr><tr><td>
           <p><code><a href="hsvd.html">hsvd()</a></code> </p>
         </td>
@@ -597,10 +654,6 @@ resonance.</p></td>
         <td><p>Perform an ifft and ifftshift on a matrix with each column replaced by its
 shifted ifft.</p></td>
       </tr><tr><td>
-          <p><code><a href="Im.mrs_data.html">Im(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Apply Im operator to an MRS dataset.</p></td>
-      </tr><tr><td>
           <p><code><a href="image.mrs_data.html">image(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
         </td>
         <td><p>Image plot method for objects of class mrs_data.</p></td>
@@ -609,13 +662,13 @@ shifted ifft.</p></td>
         </td>
         <td><p>Transform 2D MRSI data to k-space in the x-y direction.</p></td>
       </tr><tr><td>
-          <p><code><a href="interleave_dyns.html">interleave_dyns()</a></code> </p>
-        </td>
-        <td><p>Interleave the first and second half of a dynamic series.</p></td>
-      </tr><tr><td>
           <p><code><a href="int_spec.html">int_spec()</a></code> </p>
         </td>
         <td><p>Integrate a spectral region.</p></td>
+      </tr><tr><td>
+          <p><code><a href="interleave_dyns.html">interleave_dyns()</a></code> </p>
+        </td>
+        <td><p>Interleave the first and second half of a dynamic series.</p></td>
       </tr><tr><td>
           <p><code><a href="inv_even_dyns.html">inv_even_dyns()</a></code> </p>
         </td>
@@ -656,6 +709,11 @@ x * exp(-t * alpha).</p></td>
         <td><p>Covert a linewidth in Hz to an equivalent beta value in the time-domain ie:
 x * exp(-t * t * beta).</p></td>
       </tr><tr><td>
+          <p><code><a href="make_basis_from_raw.html">make_basis_from_raw()</a></code> </p>
+        </td>
+        <td><p>Make a basis-set object from a directory containing LCModel formatted RAW
+files.</p></td>
+      </tr><tr><td>
           <p><code><a href="mask_dyns.html">mask_dyns()</a></code> </p>
         </td>
         <td><p>Mask an MRS dataset in the dynamic dimension.</p></td>
@@ -677,6 +735,11 @@ x * exp(-t * t * beta).</p></td>
         <td><p>Convert a matrix (with spectral points in the column dimension and dynamics
 in the row dimensions) into a mrs_data object.</p></td>
       </tr><tr><td>
+          <p><code><a href="matexp.html">matexp()</a></code> </p>
+        </td>
+        <td><p>Matrix exponential function taken from complexplus package to reduce the
+number of spant dependencies.</p></td>
+      </tr><tr><td>
           <p><code><a href="max_mrs.html">max_mrs()</a></code> </p>
         </td>
         <td><p>Apply the max operator to an MRS dataset.</p></td>
@@ -693,10 +756,6 @@ in the row dimensions) into a mrs_data object.</p></td>
         </td>
         <td><p>Calculate the mean spectrum from an mrs_data object.</p></td>
       </tr><tr><td>
-          <p><code><a href="mean_dyns.html">mean_dyns()</a></code> </p>
-        </td>
-        <td><p>Calculate the mean dynamic data.</p></td>
-      </tr><tr><td>
           <p><code><a href="mean_dyn_blocks.html">mean_dyn_blocks()</a></code> </p>
         </td>
         <td><p>Calculate the mean of adjacent dynamic scans.</p></td>
@@ -705,6 +764,10 @@ in the row dimensions) into a mrs_data object.</p></td>
         </td>
         <td><p>Calculate the pairwise means across a dynamic data set.</p></td>
       </tr><tr><td>
+          <p><code><a href="mean_dyns.html">mean_dyns()</a></code> </p>
+        </td>
+        <td><p>Calculate the mean dynamic data.</p></td>
+      </tr><tr><td>
           <p><code><a href="mean_mrs_list.html">mean_mrs_list()</a></code> </p>
         </td>
         <td><p>Return the mean of a list of mrs_data objects.</p></td>
@@ -712,10 +775,6 @@ in the row dimensions) into a mrs_data object.</p></td>
           <p><code><a href="median_dyns.html">median_dyns()</a></code> </p>
         </td>
         <td><p>Calculate the median dynamic data.</p></td>
-      </tr><tr><td>
-          <p><code><a href="Mod.mrs_data.html">Mod(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Apply Mod operator to an MRS dataset.</p></td>
       </tr><tr><td>
           <p><code><a href="mod_td.html">mod_td()</a></code> </p>
         </td>
@@ -749,39 +808,11 @@ result.</p></td>
         </td>
         <td><p>Print fit coordinates from a single index.</p></td>
       </tr><tr><td>
-          <p><code><a href="Ncoils.html">Ncoils()</a></code> </p>
-        </td>
-        <td><p>Return the total number of coil elements in an MRS dataset.</p></td>
-      </tr><tr><td>
-          <p><code><a href="Ndyns.html">Ndyns()</a></code> </p>
-        </td>
-        <td><p>Return the total number of dynamic scans in an MRS dataset.</p></td>
-      </tr><tr><td>
           <p><code><a href="nifti_flip_lr.html">nifti_flip_lr()</a></code> </p>
         </td>
         <td><p>Flip the x data dimension order of a nifti image. This corresponds to
 flipping MRI data in the left-right direction, assuming the data in save in
 neurological format (can check with fslorient program).</p></td>
-      </tr><tr><td>
-          <p><code><a href="Npts.html">Npts()</a></code> </p>
-        </td>
-        <td><p>Return the number of data points in an MRS dataset.</p></td>
-      </tr><tr><td>
-          <p><code><a href="Nspec.html">Nspec()</a></code> </p>
-        </td>
-        <td><p>Return the total number of spectra in an MRS dataset.</p></td>
-      </tr><tr><td>
-          <p><code><a href="Nx.html">Nx()</a></code> </p>
-        </td>
-        <td><p>Return the total number of x locations in an MRS dataset.</p></td>
-      </tr><tr><td>
-          <p><code><a href="Ny.html">Ny()</a></code> </p>
-        </td>
-        <td><p>Return the total number of y locations in an MRS dataset.</p></td>
-      </tr><tr><td>
-          <p><code><a href="Nz.html">Nz()</a></code> </p>
-        </td>
-        <td><p>Return the total number of z locations in an MRS dataset.</p></td>
       </tr><tr><td>
           <p><code><a href="ortho3.html">ortho3()</a></code> </p>
         </td>
@@ -866,9 +897,9 @@ computation.</p></td>
         </td>
         <td><p>Robust Alignment to a Target Spectrum (RATS).</p></td>
       </tr><tr><td>
-          <p><code><a href="Re.mrs_data.html">Re(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
+          <p><code><a href="re_weighting.html">re_weighting()</a></code> </p>
         </td>
-        <td><p>Apply Re operator to an MRS dataset.</p></td>
+        <td><p>Apply a weighting to the FID to enhance spectral resolution.</p></td>
       </tr><tr><td>
           <p><code><a href="read_basis.html">read_basis()</a></code> </p>
         </td>
@@ -897,6 +928,10 @@ name and should be checked when consistency is required.</p></td>
           <p><code><a href="read_mrs_tqn.html">read_mrs_tqn()</a></code> </p>
         </td>
         <td><p>Read MRS data using the TARQUIN software package.</p></td>
+      </tr><tr><td>
+          <p><code><a href="read_pulse_pta.html">read_pulse_pta()</a></code> </p>
+        </td>
+        <td><p>Read a .pta formatted text file compatible with Siemens PulseTool.</p></td>
       </tr><tr><td>
           <p><code><a href="read_siemens_txt_hdr.html">read_siemens_txt_hdr()</a></code> </p>
         </td>
@@ -951,10 +986,6 @@ interpolation.</p></td>
         </td>
         <td><p>Generate mrs_data from a table of single Lorentzian resonances.</p></td>
       </tr><tr><td>
-          <p><code><a href="re_weighting.html">re_weighting()</a></code> </p>
-        </td>
-        <td><p>Apply a weighting to the FID to enhance spectral resolution.</p></td>
-      </tr><tr><td>
           <p><code><a href="rm_dyns.html">rm_dyns()</a></code> </p>
         </td>
         <td><p>Remove a subset of dynamic scans.</p></td>
@@ -993,11 +1024,11 @@ quantities in millimolar (mM) units (mol / Litre of tissue).</p></td>
         </td>
         <td><p>Scale mrs_data to a spectral region.</p></td>
       </tr><tr><td>
-          <p><code><a href="sd.mrs_data.html">sd(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
+          <p><code><a href="sd.html">sd()</a></code> </p>
         </td>
         <td><p>Calculate the standard deviation spectrum from an mrs_data object.</p></td>
       </tr><tr><td>
-          <p><code><a href="sd.html">sd()</a></code> </p>
+          <p><code><a href="sd.mrs_data.html">sd(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
         </td>
         <td><p>Calculate the standard deviation spectrum from an mrs_data object.</p></td>
       </tr><tr><td>
@@ -1041,6 +1072,16 @@ editing pulse.</p></td>
           <p><code><a href="seq_steam_ideal.html">seq_steam_ideal()</a></code> </p>
         </td>
         <td><p>STEAM sequence with ideal pulses.</p></td>
+      </tr><tr><td>
+          <p><code><a href="seq_steam_ideal_cof.html">seq_steam_ideal_cof()</a></code> </p>
+        </td>
+        <td><p>STEAM sequence with ideal pulses and coherence order filtering to simulate
+gradient crushers.</p></td>
+      </tr><tr><td>
+          <p><code><a href="seq_steam_ideal_young.html">seq_steam_ideal_young()</a></code> </p>
+        </td>
+        <td><p>STEAM sequence with ideal pulses using the z-rotation gradient simulation
+method described by Young et al JMR 140, 146-152 (1999).</p></td>
       </tr><tr><td>
           <p><code><a href="set_def_acq_paras.html">set_def_acq_paras()</a></code> </p>
         </td>
@@ -1126,6 +1167,11 @@ analysis.</p></td>
         </td>
         <td><p>Simulate a MRS data object containing a set of simulated resonances.</p></td>
       </tr><tr><td>
+          <p><code><a href="sim_th_excit_profile.html">sim_th_excit_profile()</a></code> </p>
+        </td>
+        <td><p>Simulate an ideal pulse excitation profile by smoothing a top-hat function
+with a Gaussian.</p></td>
+      </tr><tr><td>
           <p><code><a href="sim_zero.html">sim_zero()</a></code> </p>
         </td>
         <td><p>Simulate an mrs_data object containing complex zero valued samples.</p></td>
@@ -1173,6 +1219,10 @@ the numerical values map as: 0) Other, 1) CSF, 2) GM and 3) WM.</p></td>
         </td>
         <td><p>Signal space projection method for lipid suppression.</p></td>
       </tr><tr><td>
+          <p><code><a href="stackplot.html">stackplot()</a></code> </p>
+        </td>
+        <td><p>Produce a plot with multiple traces.</p></td>
+      </tr><tr><td>
           <p><code><a href="stackplot.fit_result.html">stackplot(<i>&lt;fit_result&gt;</i>)</a></code> </p>
         </td>
         <td><p>Plot the fitting results of an object of class <code>fit_result</code> with
@@ -1181,10 +1231,6 @@ individual basis set components shown.</p></td>
           <p><code><a href="stackplot.mrs_data.html">stackplot(<i>&lt;mrs_data&gt;</i>)</a></code> </p>
         </td>
         <td><p>Stackplot plotting method for objects of class mrs_data.</p></td>
-      </tr><tr><td>
-          <p><code><a href="stackplot.html">stackplot()</a></code> </p>
-        </td>
-        <td><p>Produce a plot with multiple traces.</p></td>
       </tr><tr><td>
           <p><code><a href="sub_mean_dyns.html">sub_mean_dyns()</a></code> </p>
         </td>
@@ -1218,13 +1264,13 @@ individual basis set components shown.</p></td>
         </td>
         <td><p>Transform time-domain data to the frequency-domain.</p></td>
       </tr><tr><td>
-          <p><code><a href="tdsr.html">tdsr()</a></code> </p>
-        </td>
-        <td><p>Time-domain spectral registration.</p></td>
-      </tr><tr><td>
           <p><code><a href="td_conv_filt.html">td_conv_filt()</a></code> </p>
         </td>
         <td><p>Time-domain convolution based filter.</p></td>
+      </tr><tr><td>
+          <p><code><a href="tdsr.html">tdsr()</a></code> </p>
+        </td>
+        <td><p>Time-domain spectral registration.</p></td>
       </tr><tr><td>
           <p><code><a href="varpro_3_para_opts.html">varpro_3_para_opts()</a></code> </p>
         </td>
@@ -1263,9 +1309,9 @@ individual basis set components shown.</p></td>
         <td><p>Fade a spectrum to zero by frequency domain multiplication with a tanh
 function. Note this operation distorts data points at the end of the FID.</p></td>
       </tr><tr><td>
-          <p><code><a href="zero_nzoc.html">zero_nzoc()</a></code> </p>
+          <p><code><a href="zero_higher_orders.html">zero_higher_orders()</a></code> </p>
         </td>
-        <td><p>Zero all non-zero-order coherences.</p></td>
+        <td><p>Zero all coherences including and above a given order.</p></td>
       </tr><tr><td>
           <p><code><a href="zf.html">zf()</a></code> </p>
         </td>
@@ -1287,7 +1333,7 @@ function. Note this operation distorts data points at the end of the FID.</p></t
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

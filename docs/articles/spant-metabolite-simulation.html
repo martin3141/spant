@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.0</span>
       </span>
     </div>
 
@@ -160,16 +160,22 @@
 <span><span class="co">#&gt; 3.6144      -      -  9.997      -     -      -</span></span>
 <span><span class="co">#&gt; 3.269       -      -      -  9.485     -      -</span></span>
 <span><span class="co">#&gt; 3.6144  9.998      -      -      - 9.482      -</span></span></code></pre></div>
-<p>Simulate and plot the simulation at 7 Tesla for a pulse acquire sequence (seq_pulse_acquire), apply 2 Hz line-broadening and plot.</p>
+<p>Simulate and plot the simulation at 7 Tesla for a pulse acquire
+sequence (seq_pulse_acquire), apply 2 Hz line-broadening and plot.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sim_mol.html">sim_mol</a></span><span class="op">(</span><span class="va">ins</span>, ft <span class="op">=</span> <span class="fl">300e6</span>, N <span class="op">=</span> <span class="fl">4096</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/lb.html">lb</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.8</span>, <span class="fl">3.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spant-metabolite-simulation_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
-<p>Other pulse sequences may be simulated including: seq_cpmg_ideal, seq_mega_press_ideal, seq_press_ideal, seq_slaser_ideal, seq_spin_echo_ideal, seq_steam_ideal. Note all these sequences assume chemical shift displacement is negligible. Next we simulate a 30 ms spin-echo sequence and plot:</p>
+<p>Other pulse sequences may be simulated including: seq_cpmg_ideal,
+seq_mega_press_ideal, seq_press_ideal, seq_slaser_ideal,
+seq_spin_echo_ideal, seq_steam_ideal. Note all these sequences assume
+chemical shift displacement is negligible. Next we simulate a 30 ms
+spin-echo sequence and plot:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ins_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_mol.html">sim_mol</a></span><span class="op">(</span><span class="va">ins</span>, <span class="va">seq_spin_echo_ideal</span>, ft <span class="op">=</span> <span class="fl">300e6</span>, N <span class="op">=</span> <span class="fl">4086</span>, TE <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span></span>
 <span><span class="va">ins_sim</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/lb.html">lb</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.8</span>, <span class="fl">3.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spant-metabolite-simulation_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
-<p>Finally we simulate a range of echo-times and plot all results together to see the phase evolution:</p>
+<p>Finally we simulate a range of echo-times and plot all results
+together to see the phase evolution:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sim_fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">TE</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">te_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_mol.html">sim_mol</a></span><span class="op">(</span><span class="va">ins</span>, <span class="va">seq_spin_echo_ideal</span>, ft <span class="op">=</span> <span class="fl">300e6</span>, N <span class="op">=</span> <span class="fl">4086</span>, TE <span class="op">=</span> <span class="va">TE</span><span class="op">)</span></span>
@@ -181,17 +187,33 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">te_vals</span>, <span class="va">sim_fn</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/stackplot.html">stackplot</a></span><span class="op">(</span>y_offset <span class="op">=</span> <span class="fl">150</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.8</span>, <span class="fl">3.1</span><span class="op">)</span>,</span>
 <span>                                     labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">te_vals</span> <span class="op">*</span> <span class="fl">100</span>, <span class="st">"ms"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spant-metabolite-simulation_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
-<p>See the <a href="spant-basis-simulation.html">basis simulation</a> vignette for how to combine these simulations into a basis set for MRS analysis.</p>
+<p>See the <a href="spant-basis-simulation.html">basis simulation</a>
+vignette for how to combine these simulations into a basis set for MRS
+analysis.</p>
 </div>
 <div class="section level2">
 <h2 id="custom-molecules">Custom molecules<a class="anchor" aria-label="anchor" href="#custom-molecules"></a>
 </h2>
-<p>For simple signals that do not require j-coupling evolution, for example singlets or approximations to macromolecule or lipid resonances, the <code>get_uncoupled_mol</code> function may be used. In this example we simulated two broad Gaussian resonances at 1.3 and 1.4 ppm with differing amplitudes:</p>
+<p>For simple signals that do not require j-coupling evolution, for
+example singlets or approximations to macromolecule or lipid resonances,
+the <code>get_uncoupled_mol</code> function may be used. In this example
+we simulated two broad Gaussian resonances at 1.3 and 1.4 ppm with
+differing amplitudes:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_uncoupled_mol.html">get_uncoupled_mol</a></span><span class="op">(</span><span class="st">"Lip13"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.3</span>, <span class="fl">1.4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1H"</span>, <span class="st">"1H"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/sim_mol.html">sim_mol</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spant-metabolite-simulation_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
-<p>Molecules that aren’t defined within spant, or need adjusting to match a particular scan, may be manually defined by constructing a <code>mol_parameters</code> object. In the following code we define an imaginary molecule based on Lactate, with the addition of a second spin group containing a singlet at 2.5 ppm. Whilst this molecule could be defined as a single group, it is more computationally efficient to split non j-coupled spin systems up in this way. Note the lineshape is set to a Lorentzian (Lorentz-Gauss factor lg = 0) with a width of 2 Hz. It is generally a good idea to simulate resonances with narrower lineshapes that you expect to see in experimental data, as it is far easier to make a resonance broader than narrower.</p>
+<p>Molecules that aren’t defined within spant, or need adjusting to
+match a particular scan, may be manually defined by constructing a
+<code>mol_parameters</code> object. In the following code we define an
+imaginary molecule based on Lactate, with the addition of a second spin
+group containing a singlet at 2.5 ppm. Whilst this molecule could be
+defined as a single group, it is more computationally efficient to split
+non j-coupled spin systems up in this way. Note the lineshape is set to
+a Lorentzian (Lorentz-Gauss factor lg = 0) with a width of 2 Hz. It is
+generally a good idea to simulate resonances with narrower lineshapes
+that you expect to see in experimental data, as it is far easier to make
+a resonance broader than narrower.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nucleus_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"1H"</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span></span>
@@ -220,7 +242,8 @@
 <span>              source <span class="op">=</span> <span class="va">source</span>, full_name <span class="op">=</span> <span class="st">"Custom molecule"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">custom_mol</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"mol_parameters"</span></span></code></pre></div>
-<p>In the next step we output the molecule definition as formatted text and plot it.</p>
+<p>In the next step we output the molecule definition as formatted text
+and plot it.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">custom_mol</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Name        : Cus</span></span>
@@ -257,7 +280,8 @@
 <span><span class="co">#&gt; 1      1H        2.5</span></span>
 <span><span class="va">custom_mol</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/sim_mol.html">sim_mol</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/lb.html">lb</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/zf.html">zf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4.4</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spant-metabolite-simulation_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
-<p>Once your happy the new molecule is correct, please consider contributing it to the package if you think others would benefit.</p>
+<p>Once your happy the new molecule is correct, please consider
+contributing it to the package if you think others would benefit.</p>
 </div>
   </div>
 
@@ -278,7 +302,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
