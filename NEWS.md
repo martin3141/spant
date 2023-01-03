@@ -4,6 +4,7 @@
 * Added a function to make basis set objects from a directory of LCModel
 formatted RAW files - make_basis_from_raw.
 * Added horizontal line to fit result plots.
+* Improvements to reading LCM .raw files with variable numerical columns.
 
 # spant 2.5.0
 * Improved function documentation for water concentration scaling.

@@ -136,7 +136,8 @@ read_basis <- function(basis_file, ref = def_ref(), sort_basis = TRUE) {
           # read data points
           x <- utils::read.table(con, nrows = data_lines, fill = TRUE)
           data_pts <- as.vector(t(as.matrix(x)))
-          data_pts <- data_pts[seq(1, 2 * N, 2)] +
+          data_pts <- stats::na.omit(data_pts)
+          data_pts <-      data_pts[seq(1, 2 * N, 2)] +
                       1i * data_pts[seq(2, 2 * N, 2)]
           
           # ifftshift

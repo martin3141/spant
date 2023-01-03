@@ -1,33 +1,20 @@
 read_lcm_raw <- function(fname, ft, fs, ref, extra) {
   in_nmid <- FALSE 
-  con <- file(fname, "rb")
+  con <- file(fname, "r")
   while (length(line <- readLines(con, n = 1, warn = FALSE)) > 0) {
-    # if (endsWith(line, "$NMID") | startsWith(line, " $NMID")) {
-    if (grepl("$NMID", line, fixed = TRUE)) {
+    if (grepl("$NMID", line, fixed = TRUE)) {       # in the header
       in_nmid <- TRUE
-    } else if (endsWith(line, "$END") && in_nmid) {
-      
-      # ARC 2021-07-15: auto-detect column layout {{{
-      # read a single line, then rewind
-      fp <- seek(con, origin='current')
-      l1 <- readLines(con, n=1, warn=FALSE);
-      fpn <- seek(con, origin='start', where=fp);
-  
-      tokens <- strsplit(trimws(l1),"[[:space:]]+")[[1]];
-      cols <- length(tokens);
-      width <- ceiling(nchar(l1)/cols);
-      fmt <- sprintf("%dF%d.0", cols, width);
-      # }}}
-          
-      x <- utils::read.fortran(con, fmt);
+    } else if (endsWith(line, "$END") && in_nmid) { # in the numerical part
+      x <- utils::read.table(con, fill = TRUE)
       break
     }
   }
   close(con)
-
+  
   data <- as.vector(t(as.matrix(x)))
+  data <- stats::na.omit(data)
   N <- length(data) / 2
-  data <- data[seq(1, 2 * N, 2)] +
+  data <-      data[seq(1, 2 * N, 2)] +
           1i * data[seq(2, 2 * N, 2)]
   
   dim(data) <- c(1, 1, 1, 1, 1, 1, N)
