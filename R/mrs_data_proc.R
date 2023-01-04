@@ -631,6 +631,31 @@ re_weighting <- function(mrs_data, re, alpha) {
   return(mrs_data)
 }
 
+#' Smooth data across the dynamic dimension with a Gaussian kernel.
+#' @param mrs_data data to be smoothed.
+#' @param sigma standard deviation of the underlying Gaussian kernel.
+#' @return smoothed mrs_data object.
+#' @export
+smooth_dyns <- function(mrs_data, sigma) {
+  
+  # covert data to the frequency domain if needed
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data) 
+ 
+  # generate a 1D Gaussian kernel 
+  gaus_ker <- mmand::gaussianKernel(sigma)
+  
+  # expand to 7D
+  dim(gaus_ker) <- c(1, 1, 1, 1, length(gaus_ker), 1, 1)
+  
+  # apply to Re and Im parts separately
+  mrs_data$data <-      mmand::morph(Re(mrs_data$data), gaus_ker,
+                                     operator = "*", merge = "sum")
+                   1i * mmand::morph(Im(mrs_data$data), gaus_ker,
+                                     operator = "*", merge = "sum")
+  
+  return(mrs_data)
+}
+
 #' Zero-fill MRS data in the time domain.
 #' @param x input mrs_data or basis_set object.
 #' @param factor zero-filling factor, factor of 2 returns a dataset with
