@@ -7,6 +7,7 @@
 align(
   mrs_data,
   ref_freq = 4.65,
+  ref_amp = 1,
   zf_factor = 2,
   lb = 2,
   max_shift = 20,
@@ -19,6 +20,9 @@ align(
 
 \item{ref_freq}{reference frequency in ppm units. More than one frequency
 may be specified.}
+
+\item{ref_amp}{amplitude value for the reference signal. More than one value
+may be specified to match the number of ref_freq signals.}
 
 \item{zf_factor}{zero filling factor to increase alignment resolution.}
 

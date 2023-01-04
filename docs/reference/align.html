@@ -81,6 +81,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">align</span><span class="op">(</span></span>
 <span>  <span class="va">mrs_data</span>,</span>
 <span>  ref_freq <span class="op">=</span> <span class="fl">4.65</span>,</span>
+<span>  ref_amp <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  zf_factor <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  lb <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  max_shift <span class="op">=</span> <span class="fl">20</span>,</span>
@@ -98,6 +99,11 @@
 <dt>ref_freq</dt>
 <dd><p>reference frequency in ppm units. More than one frequency
 may be specified.</p></dd>
+
+
+<dt>ref_amp</dt>
+<dd><p>amplitude value for the reference signal. More than one value
+may be specified to match the number of ref_freq signals.</p></dd>
 
 
 <dt>zf_factor</dt>
