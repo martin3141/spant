@@ -1456,7 +1456,7 @@ get_td_amp <- function(mrs_data, nstart = 10, nend = 50, method = "poly") {
   }
  
   amps <- abind::adrop(amps, 7)
-  amps
+  return(amps)
 }
 
 conv_align <- function(acq, ref, window, fs, fd) {
@@ -3447,6 +3447,39 @@ bc_als_vec <- function(vec, lambda, p) {
     return(vec) 
   else {
     return(ptw::baseline.corr(Re(vec), lambda = lambda, p = p))
+  }
+}
+
+#' Fit and subtract a polynomial to each spectrum in a dataset.
+#' @param mrs_data mrs_data object.
+#' @param p_deg polynomial degree.
+#' @return polynomial subtracted data.
+#' @export
+bc_poly <- function(mrs_data, p_deg = 1) {
+  
+  if (inherits(mrs_data, "list")) {
+    return(lapply(mrs_data, bc_poly, p_deg = p_deg))
+  }
+  
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  bc_res <- apply_mrs(mrs_data, 7, bc_poly_vec, p_deg)
+
+  return(bc_res)
+}
+
+bc_poly_vec <- function(vec, p_deg) {
+  if (is.na(vec[1]))
+    return(vec) 
+  else {
+    if (p_deg > 0) {
+      x <- 1:length(vec)
+      lm_res <-      stats::lm(Re(vec) ~ poly(x, p_deg))$residuals
+                1i * stats::lm(Im(vec) ~ poly(x, p_deg))$residuals
+    } else {
+      lm_res <- Re(vec) - mean(Re(vec)) + 1i * (Im(vec) - mean(Im(vec)))
+    }
+    return(lm_res)
   }
 }
 
