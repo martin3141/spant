@@ -384,7 +384,12 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
     } else if (vars$seq_fname == "%SiemensSeq%\\csi_slaser") {
       start_pt <- ima_kspace_center_column + 1
     } else if (vars$seq_fname == "%SiemensSeq%\\svs_se") {
-      start_pt <- 1
+      # Siemens PRESS
+      if (version == "vb") {
+        start_pt <- 1
+      } else {
+        start_pt <- ima_kspace_center_column + 1
+      }
     } else {
       warning("TWIX seqeuence not recognised, guessing the echo start point.")
       warning("Contact the developer if you're not sure if this is a problem.")
