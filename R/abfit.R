@@ -705,6 +705,12 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     diags <- cbind(diags, t(lb_vec_hz))
   }
   
+  if (opts$output_all_paras_raw) {
+    par_out <- final_par
+    names(par_out) <- paste0("para_raw_", 1:length(par_out))
+    diags   <- cbind(diags, t(par_out))
+  }
+  
   # construct output
   list(amps = amps, crlbs = t(crlbs_out), diags = diags, fit = fit_frame)
 }
@@ -827,7 +833,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
        max_basis_damping_broad = max_basis_damping_broad,
        ahat_calc_method = ahat_calc_method,
        prefit_phase_search = prefit_phase_search, freq_reg = freq_reg,
-       output_all_paras = output_all_paras)
+       output_all_paras = output_all_paras,
+       output_all_paras_raw = output_all_paras_raw)
 }
 
 #' Return a list of options for an ABfit analysis to maintain comparability with
