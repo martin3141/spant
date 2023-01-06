@@ -843,7 +843,7 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
        prefit_phase_search = prefit_phase_search, freq_reg = freq_reg,
        output_all_paras = output_all_paras,
        output_all_paras_raw = output_all_paras_raw,
-       input_raw_paras = input_paras_raw)
+       input_paras_raw = input_paras_raw)
 }
 
 #' Return a list of options for an ABfit analysis to maintain comparability with
