@@ -1152,7 +1152,7 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   return(ret_mat)
 }
 
-# objective function for 3 parameter spine fitting method
+# objective function for 3 parameter spline fitting method
 abfit_3p_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
                            bl_comps, sum_sq, ret_full, ahat_calc_method) {
   
