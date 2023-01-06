@@ -1,3 +1,6 @@
+# spant 2.7.0
+* TODO
+
 # spant 2.6.0
 * Masked spectra plotted with image are now shown with a value of zero.
 * Added function to read .pta files - read_pulse_pta.
