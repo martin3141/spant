@@ -45,7 +45,8 @@ abfit_opts(
   ahat_calc_method = "lh_pnnls",
   prefit_phase_search = TRUE,
   freq_reg = NULL,
-  output_all_paras = FALSE
+  output_all_paras = FALSE,
+  output_all_paras_raw = FALSE
 )
 }
 \arguments{
@@ -154,6 +155,9 @@ prefit stage of the algorithm.}
 
 \item{output_all_paras}{include more fitting parameters in the fit table,
 e.g. individual shift and damping factors for each basis set element.}
+
+\item{output_all_paras_raw}{include raw fitting parameters in the fit table.
+For advanced diagnostic use only.}
 }
 \value{
 full list of options.
