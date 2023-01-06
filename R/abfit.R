@@ -347,8 +347,13 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   } 
   
   if (opts$maxiters == 0) {
-    res$par <- c(res$par[1], res$par[2], res$par[3], 0, rep(0, Nbasis),
-                 rep(0, Nbasis))
+    
+    if (is.null(opts$input_paras_raw)) {
+      res$par <- c(res$par[1], res$par[2], res$par[3], 0, rep(0, Nbasis),
+                   rep(0, Nbasis))
+    } else {
+      res$par <- opts$input_paras_raw
+    }
     
     if (opts$maxiters_pre == 0) { # don't overwrite if a prefit was done
       res$deviance <- NA
@@ -784,6 +789,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' e.g. individual shift and damping factors for each basis set element.
 #' @param output_all_paras_raw include raw fitting parameters in the fit table.
 #' For advanced diagnostic use only.
+#' @param input_paras_raw input raw fitting parameters. For advanced diagnostic
+#' use only.
 #' @return full list of options.
 #' @examples
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
@@ -809,7 +816,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
                        max_basis_damping_broad = 2,
                        ahat_calc_method = "lh_pnnls",
                        prefit_phase_search = TRUE, freq_reg = NULL,
-                       output_all_paras = FALSE, output_all_paras_raw = FALSE) {
+                       output_all_paras = FALSE, output_all_paras_raw = FALSE,
+                       input_paras_raw = NULL) {
                          
   list(init_damping = init_damping, maxiters = maxiters,
        max_shift = max_shift, max_damping = max_damping, max_phase = max_phase,
@@ -834,7 +842,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
        ahat_calc_method = ahat_calc_method,
        prefit_phase_search = prefit_phase_search, freq_reg = freq_reg,
        output_all_paras = output_all_paras,
-       output_all_paras_raw = output_all_paras_raw)
+       output_all_paras_raw = output_all_paras_raw,
+       input_raw_paras = input_paras_raw)
 }
 
 #' Return a list of options for an ABfit analysis to maintain comparability with

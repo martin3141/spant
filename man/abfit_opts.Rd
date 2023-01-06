@@ -46,7 +46,8 @@ abfit_opts(
   prefit_phase_search = TRUE,
   freq_reg = NULL,
   output_all_paras = FALSE,
-  output_all_paras_raw = FALSE
+  output_all_paras_raw = FALSE,
+  input_paras_raw = NULL
 )
 }
 \arguments{
@@ -158,6 +159,9 @@ e.g. individual shift and damping factors for each basis set element.}
 
 \item{output_all_paras_raw}{include raw fitting parameters in the fit table.
 For advanced diagnostic use only.}
+
+\item{input_paras_raw}{input raw fitting parameters. For advanced diagnostic
+use only.}
 }
 \value{
 full list of options.
