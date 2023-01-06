@@ -776,6 +776,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param freq_reg frequency shift parameter.
 #' @param output_all_paras include more fitting parameters in the fit table,
 #' e.g. individual shift and damping factors for each basis set element.
+#' @param output_all_paras_raw include raw fitting parameters in the fit table.
+#' For advanced diagnostic use only.
 #' @return full list of options.
 #' @examples
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
@@ -801,7 +803,7 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
                        max_basis_damping_broad = 2,
                        ahat_calc_method = "lh_pnnls",
                        prefit_phase_search = TRUE, freq_reg = NULL,
-                       output_all_paras = FALSE) {
+                       output_all_paras = FALSE, output_all_paras_raw = FALSE) {
                          
   list(init_damping = init_damping, maxiters = maxiters,
        max_shift = max_shift, max_damping = max_damping, max_phase = max_phase,
