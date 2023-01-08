@@ -1,5 +1,5 @@
 # spant 2.7.0
-* TODO
+* Added Manufacturer meta data.
 
 # spant 2.6.0
 * Masked spectra plotted with image are now shown with a value of zero.
