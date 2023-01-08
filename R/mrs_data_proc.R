@@ -1264,6 +1264,43 @@ crop_td_pts <- function(mrs_data, start = NULL, end = NULL) {
   return(mrs_data)
 }
 
+#' Crop \code{mrs_data} object data points at the end of the FID.
+#' @param mrs_data MRS data.
+#' @param pts number of points to remove from the end of the FID.
+#' @return cropped \code{mrs_data} object.
+#' @export
+crop_td_pts_end <- function(mrs_data, pts) {
+  
+  end <- Npts(mrs_data) - pts
+  
+  cropped_data <- crop_td_pts(mrs_data, end = end)
+  
+  return(cropped_data) 
+}
+
+#' Set \code{mrs_data} object data points at the end of the FID to zero.
+#' @param mrs_data MRS data.
+#' @param pts number of end points to set to zero.
+#' @return modified \code{mrs_data} object.
+#' @export
+zero_td_pts_end <- function(mrs_data, pts) {
+  
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, zero_td_pts_end, pts = pts)
+    return(res)
+  }
+  
+  # needs to be a TD operation
+  if (is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
+  
+  N_pts <- Npts(mrs_data)
+  start <- N_pts - pts + 1
+  
+  mrs_data$data[,,,,,,start:N_pts] <- 0
+  
+  return(mrs_data)
+}
+
 #' Crop \code{mrs_data} object data points in the time-domain rounding down to
 #' the next smallest power of two (pot). Data that already has a pot length will
 #' not be changed.
