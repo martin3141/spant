@@ -38,6 +38,7 @@ read_spar_sdat <- function(fname, extra) {
   ft <- as.numeric(paras$V2[which(paras$V1 == "synthesizer_frequency")])
   fs <- as.numeric(paras$V2[which(paras$V1 == "sample_frequency")])
   te <- as.numeric(paras$V2[which(paras$V1 == "echo_time")]) * 1e-3
+  tr <- as.numeric(paras$V2[which(paras$V1 == "repetition_time")]) * 1e-3
   ap_oc <- as.numeric(paras$V2[which(paras$V1 == "ap_off_center")])
   lr_oc <- as.numeric(paras$V2[which(paras$V1 == "lr_off_center")])
   cc_oc <- as.numeric(paras$V2[which(paras$V1 == "cc_off_center")])
@@ -118,7 +119,8 @@ read_spar_sdat <- function(fname, extra) {
   # freq domain vector
   freq_domain <- rep(FALSE, 7)
   
-  meta <- list(EchoTime = te)
+  meta <- list(EchoTime = te,
+               RepetitionTime = tr)
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = NULL,
