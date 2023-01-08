@@ -55,11 +55,12 @@ read_paravis_raw <- function(fname, extra) {
   ref <- def_ref()
   nuc <- def_nuc()
   
-  meta <- list(EchoTime = te)
+  meta <- list(EchoTime = te,
+               Manufacturer = "Bruker")
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = NULL,
-                       meta = NULL, extra = extra)
+                       meta = meta, extra = extra)
   
   return(mrs_data)
 }

@@ -66,9 +66,11 @@ read_varian <- function(fname, extra) {
   te <- NA
   nuc <- def_nuc()
   
+  meta <- list(Manufacturer = "Varian")
+  
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = NULL,
-                       meta = NULL, extra = extra)
+                       meta = meta, extra = extra)
   
   return(mrs_data)
 }

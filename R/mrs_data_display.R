@@ -31,6 +31,11 @@ print.mrs_data <- function(x, full = FALSE, ...) {
   cat(paste(c("Spectral domain         : ", x$freq_domain[7], "\n")), sep = "")
   if (full) {
     cat(paste(c("Echo time (s)           :", x$meta$EchoTime, "\n")), sep = " ")
+    cat(paste(c("Repetition time (s)     :", x$meta$RepetitionTime, "\n")),
+        sep = " ")
+    cat(paste(c("Manufacturer            :", x$meta$Manufacturer, "\n")),
+        sep = " ")
+    
     #cat(paste(c("Row vector              :", x$row_vec, "\n")), sep = " ")
     #cat(paste(c("Column vector           :", x$col_vec, "\n")), sep = " ")
     #cat(paste(c("Slice vector            :", x$sli_vec, "\n")), sep = " ")

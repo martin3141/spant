@@ -106,7 +106,8 @@ read_siemens_dicom <- function(fraw, extra, verbose) {
                   c(pos_vec_affine, 1))
   affine[1:2,] <- -affine[1:2,]
   
-  meta <- list(EchoTime = te)
+  meta <- list(EchoTime = te,
+               Manufacturer = "Siemens")
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = affine,
@@ -186,7 +187,8 @@ read_philips_dicom <- function(fraw, extra) {
                   c(pos_vec_affine, 1))
   affine[1:2,] <- -affine[1:2,]
   
-  meta <- list(EchoTime = te)
+  meta <- list(EchoTime = te,
+               Manufacturer = "Philips")
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = affine,
@@ -227,7 +229,8 @@ read_philips_priv_dicom <- function(fraw, extra) {
   # freq domain vector
   freq_domain <- rep(FALSE, 7)
   
-  meta <- list(EchoTime = te)
+  meta <- list(EchoTime = te,
+               Manufacturer = "Philips")
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = NULL,

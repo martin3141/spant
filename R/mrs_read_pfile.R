@@ -77,7 +77,8 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
   ref <- def_ref()
   nuc <- def_nuc()
   
-  meta <- list(EchoTime = hdr$te)
+  meta <- list(EchoTime = hdr$te,
+               Manufacturer = "GE")
   
   mrs_data <- mrs_data(data = data, ft = hdr$ps_mps_freq / 10, resolution = res,
                        ref = ref, nuc = nuc, freq_domain = freq_domain,

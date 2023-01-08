@@ -120,7 +120,8 @@ read_spar_sdat <- function(fname, extra) {
   freq_domain <- rep(FALSE, 7)
   
   meta <- list(EchoTime = te,
-               RepetitionTime = tr)
+               RepetitionTime = tr,
+               Manufacturer = "Philips")
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = NULL,

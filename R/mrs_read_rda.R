@@ -29,6 +29,7 @@ read_rda <- function(fname, extra) {
   fs <- 1e6 / as.numeric(txt$V2[which(txt$V1 == "DwellTime")])
   ft <- 1e6 * as.numeric(txt$V2[which(txt$V1 == "MRFrequency")])
   te <- as.numeric(txt$V2[which(txt$V1 == "TE")]) / 1e3
+  tr <- as.numeric(txt$V2[which(txt$V1 == "TR")]) / 1e3
   rows <- as.numeric(txt$V2[which(txt$V1 == "CSIMatrixSize[0]")])
   cols <- as.numeric(txt$V2[which(txt$V1 == "CSIMatrixSize[1]")])
   slices <- as.numeric(txt$V2[which(txt$V1 == "CSIMatrixSize[2]")])
@@ -87,7 +88,9 @@ read_rda <- function(fname, extra) {
                   c(pos_vec_affine, 1))
   affine[1:2,] <- -affine[1:2,]
   
-  meta = list(EchoTime = te)
+  meta = list(EchoTime = te,
+              RepetitionTime = tr,
+              Manufacturer = "Siemens")
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = affine,

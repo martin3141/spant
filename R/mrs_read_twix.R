@@ -332,7 +332,8 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
                RepetitionTime = vars$tr,
                FlipAngle = vars$flip_ang,
                SequenceName = vars$seq_fname,
-               ChemicalShiftReference = 4.7 + vars$delta_freq)
+               ChemicalShiftReference = 4.7 + vars$delta_freq,
+               Manufacturer = "Siemens")
 
   mrs_data <- mrs_data(data = data, ft = vars$ft, resolution = paras$res,
                        ref = paras$ref, nuc = paras$nuc,

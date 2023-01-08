@@ -68,6 +68,8 @@ read_list_data <- function(fname, ft, fs, ref, extra) {
   
   cplx_vec <- raw_vec[c(TRUE, FALSE)] - 1i * raw_vec[c(FALSE, TRUE)]
   
+  meta <- list(Manufacturer = "Philips")
+  
   if (is.na(ref_start)) {
     ref_mrs <- NA
   } else {
