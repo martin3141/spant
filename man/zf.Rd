@@ -7,19 +7,22 @@
 \alias{zf.basis_set}
 \title{Zero-fill MRS data in the time domain.}
 \usage{
-zf(x, factor = 2)
+zf(x, factor = 2, offset = 0)
 
-\method{zf}{list}(x, factor = 2)
+\method{zf}{list}(x, factor = 2, offset = 0)
 
-\method{zf}{mrs_data}(x, factor = 2)
+\method{zf}{mrs_data}(x, factor = 2, offset = 0)
 
-\method{zf}{basis_set}(x, factor = 2)
+\method{zf}{basis_set}(x, factor = 2, offset = 0)
 }
 \arguments{
 \item{x}{input mrs_data or basis_set object.}
 
 \item{factor}{zero-filling factor, factor of 2 returns a dataset with
 twice the original data points.}
+
+\item{offset}{number of points from the end of the FID to insert the zero
+values.}
 }
 \value{
 zero-filled data.

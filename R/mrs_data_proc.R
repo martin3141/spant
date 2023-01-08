@@ -660,26 +660,51 @@ smooth_dyns <- function(mrs_data, sigma) {
 #' @param x input mrs_data or basis_set object.
 #' @param factor zero-filling factor, factor of 2 returns a dataset with
 #' twice the original data points.
+#' @param offset number of points from the end of the FID to insert the zero
+#' values.
 #' @return zero-filled data.
 #' @rdname zf
 #' @export
-zf <- function(x, factor = 2) UseMethod("zf")
+zf <- function(x, factor = 2, offset = 0) UseMethod("zf")
 
 #' @rdname zf
 #' @export
-zf.list <- function(x, factor = 2) {
-  lapply(x, zf, factor = factor)
+zf.list <- function(x, factor = 2, offset = 0) {
+  lapply(x, zf, factor = factor, offset = offset)
 }
 
 #' @rdname zf
 #' @export
-zf.mrs_data <- function(x, factor = 2) {
-  set_td_pts(x, factor * Npts(x))
+zf.mrs_data <- function(x, factor = 2, offset = 0) {
+  
+  # needs to be a time-domain operation
+  if (is_fd(x)) x <- fd2td(x)
+  
+  pts_orig <- Npts(x)
+  
+  pts <- factor * pts_orig
+  
+  data_dim <- dim(x$data)
+  zero_dim <- data_dim
+  zero_dim[7] <- pts - data_dim[7]
+  zero_array <- array(0, dim = zero_dim)
+  x$data = abind::abind(x$data, zero_array, along = 7)
+  
+  if (offset > 0) {
+    orig_inds <- (pts_orig - offset + 1):pts_orig
+    new_inds  <- (pts - offset + 1):pts
+    x$data[,,,,,,new_inds]  <- x$data[,,,,,,orig_inds]
+    x$data[,,,,,,orig_inds] <- 0
+  }
+  
+  dimnames(x$data) <- NULL
+  
+  return(x)
 }
 
 #' @rdname zf
 #' @export
-zf.basis_set <- function(x, factor = 2) {
+zf.basis_set <- function(x, factor = 2, offset = 0) {
   x_mrs_data <- basis2mrs_data(x)
   mrs_data2basis(set_td_pts(x_mrs_data, factor * Npts(x_mrs_data)), x$names)
 }
