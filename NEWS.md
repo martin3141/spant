@@ -1,5 +1,6 @@
 # spant 2.7.0
-* Added Manufacturer meta data.
+* Added Manufacturer to metadata.
+* Added mask_xy_corners and mask_xy_ellipse functions.
 
 # spant 2.6.0
 * Masked spectra plotted with image are now shown with a value of zero.

@@ -1755,6 +1755,46 @@ mask_xy <- function(mrs_data, x_dim, y_dim) {
   return(mrs_data)
 }
 
+#' Mask the four corners of an MRSI dataset in the x-y plane.
+#' @param mrs_data MRS data object.
+#' @return masked MRS data.
+#' @export
+mask_xy_corners <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
+  x_dim <- Nx(mrs_data)
+  y_dim <- Nx(mrs_data)
+  
+  mask_mat <- matrix(FALSE, x_dim, y_dim)
+  mask_mat[c(1, x_dim), c(1, y_dim)] <- TRUE
+  mrs_data <- mask_xy_mat(mrs_data, mask_mat)
+  
+  return(mrs_data)
+}
+
+#' Mask the voxels outside an elliptical region spanning the MRSI dataset in the
+#' x-y plane.
+#' @param mrs_data MRS data object.
+#' @return masked MRS data.
+#' @export
+mask_xy_ellipse <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data) 
+  
+  x_dim <- Nx(mrs_data)
+  y_dim <- Nx(mrs_data)
+  
+  mask_mat <- !elliptical_mask(x_dim, y_dim, -0.5, -0.5, x_dim / 2 - 0.1,
+                              y_dim / 2 - 0.1, 0)
+  
+  mrs_data <- mask_xy_mat(mrs_data, mask_mat)
+  
+  return(mrs_data)
+}
+
 #' Mask a 2D MRSI dataset in the x-y dimension.
 #' @param mrs_data MRS data object.
 #' @param mask matrix of boolean values specifying the voxels to mask, where a
