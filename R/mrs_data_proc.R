@@ -1728,6 +1728,11 @@ crop_xy <- function(mrs_data, x_dim, y_dim) {
 #' @export
 mask_xy <- function(mrs_data, x_dim, y_dim) {
   
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, mask_xy, x_dim = x_dim, y_dim = y_dim)
+    return(res)
+  }
+  
   # check the input
   check_mrs_data(mrs_data) 
   
@@ -1761,6 +1766,11 @@ mask_xy <- function(mrs_data, x_dim, y_dim) {
 #' @export
 mask_xy_corners <- function(mrs_data) {
   
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, mask_xy_corners)
+    return(res)
+  }
+  
   # check the input
   check_mrs_data(mrs_data) 
   
@@ -1780,6 +1790,11 @@ mask_xy_corners <- function(mrs_data) {
 #' @return masked MRS data.
 #' @export
 mask_xy_ellipse <- function(mrs_data) {
+  
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, mask_xy_ellipse)
+    return(res)
+  }
   
   # check the input
   check_mrs_data(mrs_data) 
