@@ -5,7 +5,7 @@
 #' concentration reference for proton spectroscopic imaging" by Gasparovic et al
 #' MRM 2006 55(6):1219-26. 1.5 Tesla relaxation assumptions are taken from this
 #' paper. For 3 Tesla data, relaxation assumptions are taken from "NMR 
-#' relaxation times in the human brain at 3.0 tesla" by Wansapura et al J Magn
+#' relaxation times in the human brain at 3.0 Tesla" by Wansapura et al J Magn
 #' Reson Imaging 1999 9(4):531-8. 
 #' 
 #' @param fit_result result object generated from fitting.
