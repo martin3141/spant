@@ -746,6 +746,11 @@ set_td_pts <- function(mrs_data, pts) {
 #' @export
 set_ref <- function(mrs_data, ref) {
   
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, set_ref, ref = ref)
+    return(res)
+  }
+  
   # check the input
   check_mrs_data(mrs_data)
   
