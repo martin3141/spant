@@ -1,6 +1,7 @@
 # spant 2.7.0
-* Added Manufacturer to metadata.
+* Added Manufacturer tag to metadata.
 * Added mask_xy_corners and mask_xy_ellipse functions.
+* Added functions to fit T1 and T2 relaxation curves.
 
 # spant 2.6.0
 * Masked spectra plotted with image are now shown with a value of zero.
