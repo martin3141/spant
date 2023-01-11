@@ -183,7 +183,7 @@ get_pfile_dict <- function(hdr_rev, con) {
     loc$ycsi        <- 440
     loc$zcsi        <- 442
     loc$ps_mps_freq <- 488
-    loc$te <- 1148
+    loc$te          <- 1148
   } else if ((floor(hdr_rev) > 11) && (floor(hdr_rev) < 25)) {
     loc$hdr_rev     <- 0
     loc$off_data    <- 1468
