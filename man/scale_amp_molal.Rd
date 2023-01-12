@@ -3,12 +3,7 @@
 \name{scale_amp_molal}
 \alias{scale_amp_molal}
 \title{Apply water reference scaling to a fitting results object to yield metabolite
-quantities in millimolar (mM) units (mol / kg of tissue water). Note, this
-function assumes the volume contains a homogeneous voxel, eg pure WM, GM or
-CSF. Also note that in the case of a homogeneous voxel the relative densities
-of MR-visible water (eg GM=0.78, WM=0.65, and CSF=0.97) cancel out and don't
-need to be considered. Use scale_amp_molal_pvc for volumes containing
-multiple compartments.}
+quantities in millimolar (mM) units (mol / kg of tissue water).}
 \usage{
 scale_amp_molal(
   fit_result,
@@ -45,7 +40,11 @@ scale_amp_molal(
 A \code{fit_result} object with a rescaled results table.
 }
 \description{
-Details of this method can be found in "Use of tissue water as a
-concentration reference for proton spectroscopic imaging" by Gasparovic et al
-MRM 2006 55(6):1219-26.
+Note, this function assumes the volume contains a homogeneous voxel, eg pure
+WM, GM or  CSF. Also note that in the case of a homogeneous voxel the
+relative densities of MR-visible water (eg GM=0.78, WM=0.65, and CSF=0.97)
+cancel out and don't need to be considered. Use scale_amp_molal_pvc for
+volumes containing  multiple compartments. Details of this method can be
+found in "Use of tissue water as a concentration reference for proton
+spectroscopic imaging" by Gasparovic et al MRM 2006 55(6):1219-26.
 }
