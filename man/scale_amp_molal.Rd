@@ -3,7 +3,9 @@
 \name{scale_amp_molal}
 \alias{scale_amp_molal}
 \title{Apply water reference scaling to a fitting results object to yield metabolite
-quantities in millimolar (mM) units (mol / kg of tissue water).}
+quantities in millimolar (mM) units (mol / kg of tissue water). Note, this
+function assumes the volume contains a homogeneous voxel, eg pure WM, GM or
+CSF.}
 \usage{
 scale_amp_molal(
   fit_result,
@@ -14,7 +16,6 @@ scale_amp_molal(
   water_t2,
   metab_t1,
   metab_t2,
-  water_conc,
   ...
 )
 }
@@ -34,9 +35,6 @@ scale_amp_molal(
 \item{metab_t1}{assumed metabolite T1 value.}
 
 \item{metab_t2}{assumed metabolite T2 value.}
-
-\item{water_conc}{assumed MR-visible water concentration in molal units
-(moles / gram). For pure water this is 55510.0 (mol / g).}
 
 \item{...}{additional arguments to get_td_amp function.}
 }
