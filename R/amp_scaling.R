@@ -70,6 +70,62 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr, ...){
   
   return(fit_result)
 }
+
+#' Apply water reference scaling to a fitting results object to yield metabolite 
+#' quantities in millimolar (mM) units (mol / kg of tissue water).
+#'
+#' Details of this method can be found in "Use of tissue water as a
+#' concentration reference for proton spectroscopic imaging" by Gasparovic et al
+#' MRM 2006 55(6):1219-26.
+#' 
+#' @param fit_result result object generated from fitting.
+#' @param ref_data water reference MRS data object.
+#' @param te the MRS TE in seconds.
+#' @param tr the MRS TR in seconds.
+#' @param water_t1 assumed water T1 value.
+#' @param water_t2 assumed water T2 value.
+#' @param metab_t1 assumed metabolite T1 value.
+#' @param metab_t2 assumed metabolite T2 value.
+#' @param water_conc assumed MR-visible water concentration in molal units
+#' (moles / gram). For pure water this is 55510.0 (mol / g).
+#' @param ... additional arguments to get_td_amp function.
+#' @return A \code{fit_result} object with a rescaled results table.
+#' @export
+scale_amp_molal <- function(fit_result, ref_data, te, tr, water_t1, water_t2,
+                            metab_t1, metab_t2, water_conc, ...){
+  
+  if (!identical(dim(fit_result$data$data)[2:6], dim(ref_data$data)[2:6])) {
+    stop("Mismatch between fit result and reference data dimensions.")
+  }
+  
+  # check if res_tab_unscaled exists, and if not create it
+  if (is.null(fit_result$res_tab_unscaled)) {
+    fit_result$res_tab_unscaled <- fit_result$res_tab
+  } else {
+    fit_result$res_tab <- fit_result$res_tab_unscaled
+  }
+  
+  R_metab   <- exp(-te / metab_t2) * (1.0 - exp(-tr / metab_t1))
+  R_water   <- exp(-te / water_t2) * (1.0 - exp(-tr / water_t1))
+  
+  corr_factor <- R_water / R_metab * water_conc
+  
+  amp_cols <- fit_result$amp_cols
+  
+  w_amp <- as.numeric(get_td_amp(ref_data, ...))
+  
+  if (length(w_amp) != nrow(fit_result$res_tab)) {
+    stop("Mismatch between fit result and reference data.")
+  }
+  
+  fit_result$res_tab$w_amp <- w_amp
+  
+  pvc_cols <- 6:(5 + amp_cols * 2)
+  fit_result$res_tab[, pvc_cols] <- fit_result$res_tab[, pvc_cols] *
+                                    corr_factor / w_amp
+  
+  return(fit_result)
+}
   
 #' Apply water reference scaling to a fitting results object to yield metabolite 
 #' quantities in millimolar (mM) units (mol / Litre of tissue).
