@@ -72,7 +72,9 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr, ...){
 }
 
 #' Apply water reference scaling to a fitting results object to yield metabolite 
-#' quantities in millimolar (mM) units (mol / kg of tissue water).
+#' quantities in millimolar (mM) units (mol / kg of tissue water). Note, this
+#' function assumes the volume contains a homogeneous voxel, eg pure WM, GM or 
+#' CSF.
 #'
 #' Details of this method can be found in "Use of tissue water as a
 #' concentration reference for proton spectroscopic imaging" by Gasparovic et al
@@ -86,13 +88,11 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr, ...){
 #' @param water_t2 assumed water T2 value.
 #' @param metab_t1 assumed metabolite T1 value.
 #' @param metab_t2 assumed metabolite T2 value.
-#' @param water_conc assumed MR-visible water concentration in molal units
-#' (moles / gram). For pure water this is 55510.0 (mol / g).
 #' @param ... additional arguments to get_td_amp function.
 #' @return A \code{fit_result} object with a rescaled results table.
 #' @export
 scale_amp_molal <- function(fit_result, ref_data, te, tr, water_t1, water_t2,
-                            metab_t1, metab_t2, water_conc, ...){
+                            metab_t1, metab_t2, ...){
   
   if (!identical(dim(fit_result$data$data)[2:6], dim(ref_data$data)[2:6])) {
     stop("Mismatch between fit result and reference data dimensions.")
@@ -105,8 +105,10 @@ scale_amp_molal <- function(fit_result, ref_data, te, tr, water_t1, water_t2,
     fit_result$res_tab <- fit_result$res_tab_unscaled
   }
   
-  R_metab   <- exp(-te / metab_t2) * (1.0 - exp(-tr / metab_t1))
   R_water   <- exp(-te / water_t2) * (1.0 - exp(-tr / water_t1))
+  R_metab   <- exp(-te / metab_t2) * (1.0 - exp(-tr / metab_t1))
+  
+  water_conc <- 55510.0
   
   corr_factor <- R_water / R_metab * water_conc
   
