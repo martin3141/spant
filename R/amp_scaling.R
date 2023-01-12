@@ -72,13 +72,15 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr, ...){
 }
 
 #' Apply water reference scaling to a fitting results object to yield metabolite 
-#' quantities in millimolar (mM) units (mol / kg of tissue water). Note, this
-#' function assumes the volume contains a homogeneous voxel, eg pure WM, GM or 
-#' CSF.
-#'
-#' Details of this method can be found in "Use of tissue water as a
-#' concentration reference for proton spectroscopic imaging" by Gasparovic et al
-#' MRM 2006 55(6):1219-26.
+#' quantities in millimolar (mM) units (mol / kg of tissue water).
+#' 
+#' Note, this function assumes the volume contains a homogeneous voxel, eg pure
+#' WM, GM or  CSF. Also note that in the case of a homogeneous voxel the
+#' relative densities of MR-visible water (eg GM=0.78, WM=0.65, and CSF=0.97)
+#' cancel out and don't need to be considered. Use scale_amp_molal_pvc for
+#' volumes containing  multiple compartments. Details of this method can be
+#' found in "Use of tissue water as a concentration reference for proton
+#' spectroscopic imaging" by Gasparovic et al MRM 2006 55(6):1219-26.
 #' 
 #' @param fit_result result object generated from fitting.
 #' @param ref_data water reference MRS data object.

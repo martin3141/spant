@@ -5,7 +5,10 @@
 \title{Apply water reference scaling to a fitting results object to yield metabolite
 quantities in millimolar (mM) units (mol / kg of tissue water). Note, this
 function assumes the volume contains a homogeneous voxel, eg pure WM, GM or
-CSF.}
+CSF. Also note that in the case of a homogeneous voxel the relative densities
+of MR-visible water (eg GM=0.78, WM=0.65, and CSF=0.97) cancel out and don't
+need to be considered. Use scale_amp_molal_pvc for volumes containing
+multiple compartments.}
 \usage{
 scale_amp_molal(
   fit_result,
