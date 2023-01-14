@@ -638,6 +638,10 @@ re_weighting <- function(mrs_data, re, alpha) {
 #' @export
 smooth_dyns <- function(mrs_data, sigma) {
   
+  if (inherits(mrs_data, "list")) {
+    return(lapply(mrs_data, smooth_dyns, sigma = sigma))
+  }
+  
   # covert data to the frequency domain if needed
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data) 
  
