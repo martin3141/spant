@@ -19,13 +19,22 @@
 #' @param phase_corr apply phase correction (in addition to frequency). TRUE by
 #' default.
 #' @param ret_corr_only return the corrected mrs_data object only.
+#' @param zero_freq_shift_t0 perform a linear fit to the frequency shifts and
+#' set the (linearly modeled) shift to be 0 Hz for the first dynamic scan.
+#' @param remove_freq_outliers remove dynamics based on their frequency shift.
+#' @param freq_outlier_thresh threshold to remove frequency outliers.
+#' @param remove_phase_outliers remove dynamics based on their phase shift.
+#' @param phase_outlier_thresh threshold to remove phase outliers.
 #' @return a list containing the corrected data; phase and shift values in units
 #' of degrees and Hz respectively.
 #' @export
 rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
                  p_deg = 2, sp_N = 2, sp_deg = 3, max_t = 0.2,
                  basis_type = "poly", rescale_output = TRUE,
-                 phase_corr = TRUE, ret_corr_only = TRUE) {
+                 phase_corr = TRUE, ret_corr_only = TRUE,
+                 zero_freq_shift_t0 = FALSE, remove_freq_outliers = FALSE,
+                 freq_outlier_thresh = 3, remove_phase_outliers = FALSE,
+                 phase_outlier_thresh = 3) {
   
   if (inherits(mrs_data, "list")) {
     
@@ -38,7 +47,13 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
     res <- lapply(mrs_data, rats, ref = ref, xlim = xlim, max_shift = max_shift,
                   p_deg = p_deg, sp_N = sp_N, sp_deg = sp_deg, max_t = max_t,
                   basis_type = basis_type, rescale_output = rescale_output,
-                  phase_corr = phase_corr, ret_corr_only = ret_corr_only) 
+                  phase_corr = phase_corr, ret_corr_only = ret_corr_only,
+                  zero_freq_shift_t0 = zero_freq_shift_t0,
+                  remove_freq_outliers = remove_freq_outliers,
+                  freq_outlier_thresh = freq_outlier_thresh,
+                  remove_phase_outliers = remove_phase_outliers,
+                  phase_outlier_thresh = phase_outlier_thresh)
+    
     return(res)
   }
   

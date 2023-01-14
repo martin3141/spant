@@ -16,7 +16,12 @@ rats(
   basis_type = "poly",
   rescale_output = TRUE,
   phase_corr = TRUE,
-  ret_corr_only = TRUE
+  ret_corr_only = TRUE,
+  zero_freq_shift_t0 = FALSE,
+  remove_freq_outliers = FALSE,
+  freq_outlier_thresh = 3,
+  remove_phase_outliers = FALSE,
+  phase_outlier_thresh = 3
 )
 }
 \arguments{
@@ -50,6 +55,17 @@ consistency between dynamic scans.}
 default.}
 
 \item{ret_corr_only}{return the corrected mrs_data object only.}
+
+\item{zero_freq_shift_t0}{perform a linear fit to the frequency shifts and
+set the (linearly modeled) shift to be 0 Hz for the first dynamic scan.}
+
+\item{remove_freq_outliers}{remove dynamics based on their frequency shift.}
+
+\item{freq_outlier_thresh}{threshold to remove frequency outliers.}
+
+\item{remove_phase_outliers}{remove dynamics based on their phase shift.}
+
+\item{phase_outlier_thresh}{threshold to remove phase outliers.}
 }
 \value{
 a list containing the corrected data; phase and shift values in units
