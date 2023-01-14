@@ -25,6 +25,8 @@
 #' @param freq_outlier_thresh threshold to remove frequency outliers.
 #' @param remove_phase_outliers remove dynamics based on their phase shift.
 #' @param phase_outlier_thresh threshold to remove phase outliers.
+#' @param remove_amp_outliers remove dynamics based on their amplitude change.
+#' @param amp_outlier_thresh threshold to remove amplitude outliers.
 #' @return a list containing the corrected data; phase and shift values in units
 #' of degrees and Hz respectively.
 #' @export
@@ -34,7 +36,8 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
                  phase_corr = TRUE, ret_corr_only = TRUE,
                  zero_freq_shift_t0 = FALSE, remove_freq_outliers = FALSE,
                  freq_outlier_thresh = 3, remove_phase_outliers = FALSE,
-                 phase_outlier_thresh = 3) {
+                 phase_outlier_thresh = 3, remove_amp_outliers = FALSE,
+                 amp_outlier_thresh = 3) {
   
   if (inherits(mrs_data, "list")) {
     
@@ -52,7 +55,9 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
                   remove_freq_outliers = remove_freq_outliers,
                   freq_outlier_thresh = freq_outlier_thresh,
                   remove_phase_outliers = remove_phase_outliers,
-                  phase_outlier_thresh = phase_outlier_thresh)
+                  phase_outlier_thresh = phase_outlier_thresh,
+                  remove_amp_outliers = remove_amp_outliers,
+                  amp_outlier_thresh = amp_outlier_thresh)
     
     return(res)
   }
@@ -116,6 +121,38 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
   bl_spec$data <- res[,,,,,,(length(inds) + 4):(2 * length(inds) + 3),
                       drop = FALSE]
   
+  
+  if (zero_freq_shift_t0 | remove_freq_outliers) {
+    
+    # model frequency drift
+    x <- 0:length(shifts - 1)
+    shift_fit <- as.numeric(stats::predict(stats::lm(shifts ~ x)))
+    
+    if (zero_freq_shift_t0) shifts <- shifts - shift_fit[1]
+    
+    if (remove_freq_outliers) {
+      res <- shift - shift_fit
+      res_med <- stats::median(res)
+      res_mad <- stats::mad(res)
+      upper_lim_freq <- res_med + res_mad * freq_outlier_thresh
+      bad_freq <- Mod(res) > upper_lim_freq
+    }
+  }
+  
+  if (remove_phase_outliers) {
+      phases_med <- stats::median(phases)
+      phases_mad <- stats::mad(phases)
+      upper_lim_phases <- phases_med + phases_mad * phase_outlier_thresh
+      bad_phases <- Mod(phases) > upper_lim_phases
+  }
+  
+  if (remove_amp_outliers) {
+      amps_med <- stats::median(amps)
+      amps_mad <- stats::mad(amps)
+      upper_lim_amps <- amps_med + amps_mad * amp_outlier_thresh
+      bad_amps <- Mod(amps) > upper_lim_amps
+  }
+  
   # apply to original data
   t_orig <- rep(seconds(mrs_data), each = Nspec(mrs_data))
   t_array <- array(t_orig, dim = dim(mrs_data$data))
@@ -124,7 +161,8 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
   if (!phase_corr) phases <- 0
   
   phase_array <- array(phases, dim = dim(mrs_data$data))
-  mod_array <- exp(2i * pi * t_array * shift_array + 1i * phase_array * pi / 180)
+  mod_array   <- exp(2i * pi * t_array * shift_array + 1i * phase_array * 
+                     pi / 180)
   mrs_data$data <- mrs_data$data * mod_array
  
   # maintain original intensities for bl_matched_spec and bl output

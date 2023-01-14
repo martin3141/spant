@@ -79,17 +79,15 @@ lofdc <- function(mrs_data, max_hz_s = 0.1, tr = NULL, ret_corr_only = TRUE,
     resids_mad <- stats::mad(int)
     
     upper_lim <- resids_med + resids_mad * outlier_thresh
-    lower_lim <- resids_med - resids_mad * outlier_thresh
+    bad <- Mod(int) > upper_lim
     
-    good <- (int < upper_lim) & (int > lower_lim)
-    
-    mrs_data_corr_masked <- mask_dyns(mrs_data_corr, drop(!good))
+    mrs_data_corr_masked <- mask_dyns(mrs_data_corr, drop(bad))
   }
   
   if (ret_corr_only) {
     return(mrs_data_corr_masked)
   } else {
-    perc_outlier <- sum(!good) / Ndyns(mrs_data_corr) * 100
+    perc_outlier <- sum(bad) / Ndyns(mrs_data_corr) * 100
     return(list(mrs_data_corr_masked = mrs_data_corr_masked,
                 mrs_data_corr = mrs_data_corr, hz_s = hz_s,
                 perc_outlier = perc_outlier, drift_mat = drift_mat,
