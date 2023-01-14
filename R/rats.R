@@ -125,7 +125,7 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
   if (zero_freq_shift_t0 | remove_freq_outliers) {
     
     # model frequency drift
-    x <- 0:length(shifts - 1)
+    x <- 0:(length(shifts) - 1)
     shift_fit <- as.numeric(stats::predict(stats::lm(shifts ~ x)))
     
     if (zero_freq_shift_t0) shifts <- shifts - shift_fit[1]

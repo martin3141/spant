@@ -949,6 +949,17 @@ get_ace_paras <- function(lw = NULL, lg = 0, ...) {
   paras
 }
 
+get_pyr_paras <- function(lw = NULL, lg = 0, ...) {
+  if (is.null(lw)) lw = 2
+  paras <- get_uncoupled_mol("Pyr", 2.3580, "1H", 3, lw, lg, "Pyruvate")
+  
+  source <- "In Vivo NMR Spectroscopy Principles and Techniques, Robin A. de
+             Graaf, Third Edition, 2019, Wiley."
+  
+  paras$source <- source
+  paras
+}
+
 get_suc_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   paras <- get_uncoupled_mol("Suc", 2.3920, "1H", 4, lw, lg, "Succinate")
@@ -981,6 +992,27 @@ get_tau_paras <- function(lw = NULL, lg = 0, ...) {
   
   paras <- list(spin_groups = list(spin_group_a), name = "Tau", source = source,
                 full_name = "Taurine")
+  class(paras) <- "mol_parameters"
+  paras
+}
+
+get_thr_paras <- function(lw = NULL, lg = 0, ...) {
+  if (is.null(lw)) lw = 2
+  nucleus <- rep("1H", 3)
+  chem_shift <- c(3.578, 4.246, 1.316)
+  j_coupling_mat <- matrix(0, 3, 3)
+  j_coupling_mat[2,1] <- 4.917
+  j_coupling_mat[3,2] <- 6.35
+  
+  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 1,
+                       lw = lw, lg = lg)
+  
+  source <- "In Vivo NMR Spectroscopy: Principles and Techniques,
+             Robin A. de Graaf"
+  
+  paras <- list(spin_groups = list(spin_group_a), name = "Thr", source = source,
+                full_name = "Threonine")
   class(paras) <- "mol_parameters"
   paras
 }
@@ -1022,8 +1054,8 @@ get_lac_rt_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-              metabolites. NMR Biomed. 2000; 13:129-153. Modified by MW for
-              room temperature phantom scans."
+             metabolites. NMR Biomed. 2000; 13:129-153. Modified by MW for
+             room temperature phantom scans."
   
   paras <- list(spin_groups = list(spin_group_a), name = "Lac", source = source,
                 full_name = "Lactate")
@@ -1050,7 +1082,7 @@ get_glu_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-              metabolites. NMR Biomed. 2000; 13:129-153."
+             metabolites. NMR Biomed. 2000; 13:129-153."
   
   paras <- list(spin_groups = list(spin_group_a), name = "Glu", source = source,
                 full_name = "Glutamate")
@@ -1077,8 +1109,8 @@ get_glu_rt_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-              metabolites. NMR Biomed. 2000; 13:129-153. Modified by MW for
-              room temperature phantom scans."
+             metabolites. NMR Biomed. 2000; 13:129-153. Modified by MW for
+             room temperature phantom scans."
   
   paras <- list(spin_groups = list(spin_group_a), name = "Glu", source = source,
                 full_name = "Glutamate")
@@ -1104,7 +1136,7 @@ get_a_glc_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-              metabolites. NMR Biomed. 2000; 13:129-153."
+             metabolites. NMR Biomed. 2000; 13:129-153."
   
   paras <- list(spin_groups = list(spin_group_a), name = "aGlc",
                 source = source, full_name = "alpha-D-glucose")
@@ -1130,7 +1162,7 @@ get_b_glc_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-              metabolites. NMR Biomed. 2000; 13:129-153."
+             metabolites. NMR Biomed. 2000; 13:129-153."
   
   paras <- list(spin_groups = list(spin_group_a), name = "bGlc",
                 source = source, full_name = "beta-D-glucose")
@@ -1171,8 +1203,8 @@ get_glc_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Proton NMR chemical shifts and coupling constants for brain
-              metabolites. NMR Biomed. 2000; 13:129-153. This is a combination
-              of alpha-glc (36%) and beta-glc (64%)."
+             metabolites. NMR Biomed. 2000; 13:129-153. This is a combination
+             of alpha-glc (36%) and beta-glc (64%)."
   
   paras <- list(spin_groups = list(spin_group_a, spin_group_b), name = "Glc",
                 source = source, full_name = "Glucose")
@@ -1222,7 +1254,7 @@ get_gpc_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Corrigendum: Proton NMR chemical shifts and coupling constants for
-              brain metabolites. NMR Biomed. 2000; 13:129-153."
+             brain metabolites. NMR Biomed. 2000; 13:129-153."
   
   paras <- list(spin_groups = list(spin_group_a, spin_group_b, spin_group_c),
                 name = "GPC", source = source,
@@ -1250,9 +1282,9 @@ get_2hg_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "2-hydroxyglutarate detection by magnetic resonance spectroscopy
-              in subjects with IDH-mutated gliomas. Nat Med. 2012 Jan
-              26;18(4):624-9. Numbers are given in the supplementary
-              materials."
+             in subjects with IDH-mutated gliomas. Nat Med. 2012 Jan
+             26;18(4):624-9. Numbers are given in the supplementary
+             materials."
   
   paras <- list(spin_groups = list(spin_group_a), name = "2HG", source = source,
                 full_name = "2-hydroxyglutarate")
@@ -1272,11 +1304,11 @@ get_cit_paras <- function(lw = NULL, lg = 0, ...) {
                        lw = lw, lg = lg)
   
   source <- "Optimizing PRESS localized citrate detection at 3 Tesla. Magn Reson
-              Med. 2005 Jul;54(1):51-8 and van der Graaf M, Heerschap A. Effect
-              of Cation Binding on the Proton Chemical Shifts and the Spin-Spin
-              Coupling Constant of Citrate. J Magn Reson B. 1996
-              Jul;112(1):58-62. Central frequency assumed to be 2.6 ppm, delta
-              chemical shift of 0.147 ppm and j-coupling value of 16.1 Hz."
+             Med. 2005 Jul;54(1):51-8 and van der Graaf M, Heerschap A. Effect
+             of Cation Binding on the Proton Chemical Shifts and the Spin-Spin
+             Coupling Constant of Citrate. J Magn Reson B. 1996
+             Jul;112(1):58-62. Central frequency assumed to be 2.6 ppm, delta
+             chemical shift of 0.147 ppm and j-coupling value of 16.1 Hz."
   
   paras <- list(spin_groups = list(spin_group_a), name = "Cit", source = source,
                 full_name = "Citrate")
