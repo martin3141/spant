@@ -121,36 +121,37 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
   bl_spec$data <- res[,,,,,,(length(inds) + 4):(2 * length(inds) + 3),
                       drop = FALSE]
   
+  corr_dims <- dim(shifts)
   
   if (zero_freq_shift_t0 | remove_freq_outliers) {
     
     # model frequency drift
     x <- 0:(length(shifts) - 1)
-    shift_fit <- as.numeric(stats::predict(stats::lm(shifts ~ x)))
+    shift_fit <- as.numeric(stats::predict(stats::lm(as.numeric(shifts) ~ x)))
     
     if (zero_freq_shift_t0) shifts <- shifts - shift_fit[1]
     
     if (remove_freq_outliers) {
-      res <- shift - shift_fit
+      res <- as.numeric(shifts) - shift_fit
       res_med <- stats::median(res)
       res_mad <- stats::mad(res)
-      upper_lim_freq <- res_med + res_mad * freq_outlier_thresh
-      bad_freq <- Mod(res) > upper_lim_freq
+      upper_lim_freq <- res_mad * freq_outlier_thresh
+      bad_freqs <- Mod(res - res_med) > upper_lim_freq
     }
   }
   
   if (remove_phase_outliers) {
       phases_med <- stats::median(phases)
       phases_mad <- stats::mad(phases)
-      upper_lim_phases <- phases_med + phases_mad * phase_outlier_thresh
-      bad_phases <- Mod(phases) > upper_lim_phases
+      upper_lim_phases <- phases_mad * phase_outlier_thresh
+      bad_phases <- Mod(as.numeric(phases - phases_med)) > upper_lim_phases
   }
   
   if (remove_amp_outliers) {
       amps_med <- stats::median(amps)
       amps_mad <- stats::mad(amps)
-      upper_lim_amps <- amps_med + amps_mad * amp_outlier_thresh
-      bad_amps <- Mod(amps) > upper_lim_amps
+      upper_lim_amps <- amps_mad * amp_outlier_thresh
+      bad_amps <- Mod(as.numeric(amps - amps_med)) > upper_lim_amps
   }
   
   # apply to original data
@@ -170,6 +171,10 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
     corr_spec <- scale_mrs_amp(corr_spec, 1 / amps)
     bl_spec   <- scale_mrs_amp(bl_spec,   1 / amps)
   }
+  
+  if (remove_amp_outliers) mrs_data <- mask_dyns(mrs_data, bad_amps)
+  if (remove_freq_outliers) mrs_data <- mask_dyns(mrs_data, bad_freqs)
+  if (remove_phase_outliers) mrs_data <- mask_dyns(mrs_data, bad_phases)
   
   # results
   res <- list(corrected = mrs_data, phases = -phases, shifts = -shifts,

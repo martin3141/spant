@@ -78,8 +78,8 @@ lofdc <- function(mrs_data, max_hz_s = 0.1, tr = NULL, ret_corr_only = TRUE,
     resids_med <- stats::median(int)
     resids_mad <- stats::mad(int)
     
-    upper_lim <- resids_med + resids_mad * outlier_thresh
-    bad <- Mod(int) > upper_lim
+    upper_lim <- resids_mad * outlier_thresh
+    bad <- Mod(int - resids_med) > upper_lim
     
     mrs_data_corr_masked <- mask_dyns(mrs_data_corr, drop(bad))
   }
