@@ -308,6 +308,16 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       lower <- append(lower,  opts$phi1_init - opts$max_dphi1, 4)
     }
     
+    if (!is.null(opts$input_paras_raw)) par <- opts$input_paras_raw
+  
+    if (opts$optim_lw_only) {
+      upper <- par + par * 1e-6
+      lower <- par - par * 1e-6
+      # set global damping limits
+      upper[2] <-  par[2] * (1 + opts$optim_lw_only_limit / 100)
+      lower[2] <- -par[2] * (1 + opts$optim_lw_only_limit / 100)
+    }
+    
     # get the default nnls control paras
     ctrl <- minpack.lm::nls.lm.control()
     ctrl$maxiter <- opts$maxiters
@@ -347,7 +357,6 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   } 
   
   if (opts$maxiters == 0) {
-    
     if (is.null(opts$input_paras_raw)) {
       res$par <- c(res$par[1], res$par[2], res$par[3], 0, rep(0, Nbasis),
                    rep(0, Nbasis))
@@ -791,6 +800,9 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' For advanced diagnostic use only.
 #' @param input_paras_raw input raw fitting parameters. For advanced diagnostic
 #' use only.
+#' @param optim_lw_only optimize the global line-broadening term only.
+#' @param optim_lw_only_limit limits for the line-breading term as a percentage
+#' of the starting value when optim_lw_only is TRUE.
 #' @return full list of options.
 #' @examples
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
@@ -817,7 +829,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
                        ahat_calc_method = "lh_pnnls",
                        prefit_phase_search = TRUE, freq_reg = NULL,
                        output_all_paras = FALSE, output_all_paras_raw = FALSE,
-                       input_paras_raw = NULL) {
+                       input_paras_raw = NULL, optim_lw_only = FALSE,
+                       optim_lw_only_limit = 20) {
                          
   list(init_damping = init_damping, maxiters = maxiters,
        max_shift = max_shift, max_damping = max_damping, max_phase = max_phase,
@@ -843,7 +856,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
        prefit_phase_search = prefit_phase_search, freq_reg = freq_reg,
        output_all_paras = output_all_paras,
        output_all_paras_raw = output_all_paras_raw,
-       input_paras_raw = input_paras_raw)
+       input_paras_raw = input_paras_raw, optim_lw_only = optim_lw_only,
+       optim_lw_only_limit = optim_lw_only_limit)
 }
 
 #' Return a list of options for an ABfit analysis to maintain comparability with

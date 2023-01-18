@@ -47,7 +47,9 @@ abfit_opts(
   freq_reg = NULL,
   output_all_paras = FALSE,
   output_all_paras_raw = FALSE,
-  input_paras_raw = NULL
+  input_paras_raw = NULL,
+  optim_lw_only = FALSE,
+  optim_lw_only_limit = 20
 )
 }
 \arguments{
@@ -162,6 +164,11 @@ For advanced diagnostic use only.}
 
 \item{input_paras_raw}{input raw fitting parameters. For advanced diagnostic
 use only.}
+
+\item{optim_lw_only}{optimize the global line-broadening term only.}
+
+\item{optim_lw_only_limit}{limits for the line-breading term as a percentage
+of the starting value when optim_lw_only is TRUE.}
 }
 \value{
 full list of options.
