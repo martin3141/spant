@@ -644,6 +644,8 @@ smooth_dyns <- function(mrs_data, sigma) {
   
   # covert data to the frequency domain if needed
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data) 
+  
+  if (sigma == 0) return(mrs_data)
  
   # generate a 1D Gaussian kernel 
   gaus_ker <- mmand::gaussianKernel(sigma)
