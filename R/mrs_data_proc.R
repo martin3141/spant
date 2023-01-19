@@ -2327,6 +2327,18 @@ scale_spec <- function(mrs_data, xlim = NULL, operator = "sum",
 }
 
 #' @export
+`+.basis_set` <- function(a, b) {
+  a$data <- a$data + b$data
+  return(a)
+}
+
+#' @export
+`-.basis_set` <- function(a, b) {
+  a$data <- a$data - b$data
+  return(a)
+}
+
+#' @export
 `+.mrs_data` <- function(a, b) {
   if (inherits(b, "mrs_data")) {
     if (is_fd(a) != is_fd(b)) {

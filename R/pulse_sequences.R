@@ -242,19 +242,19 @@ seq_cpmg_ideal <- function(spin_params, ft, ref, TE = 0.03, echoes = 4) {
 #' @param BW editing pulse bandwidth in Hz.
 #' @param steps number of hard pulses used to approximate the editing pulse.
 #' @return list of resonance amplitudes and frequencies.
+#' @export
 seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89,
                                  TE1 = 0.015, TE2 = 0.053, BW = 110,
                                  steps = 50) {
   
-  # Probably need to do some phase cycling, see:
-  # https://github.com/CIC-methods/FID-A/blob/master/simulationTools/sim_megapress_shapedEdit.m
- 
   # ed pulse duration 
   duration <- 1.53 / BW # 180 deg 1% Guass (p245 de Graff)
-  #print(duration)
   
   sys <- spin_sys(spin_params, ft, ed_freq)
   sys$rho <- -gen_F(sys, "y", "1H")
+  
+  # filter -1
+  sys$rho <- coherence_filter(sys, sys$rho, -1)
   
   # apply delay
   t <- TE1 / 2
@@ -275,6 +275,9 @@ seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89,
   lhs_pulse <- matexp(-Fy * 1i * angle * pi / 180)
   rhs_pulse <- matexp( Fy * 1i * angle * pi / 180)
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
+  
+  # filter 1
+  sys$rho <- coherence_filter(sys, sys$rho, 1)
   
   # apply delay
   t <- (TE1 + TE2 / 2) / 2 - duration / 2
@@ -307,6 +310,9 @@ seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89,
     sys$rho <- lhs_dt %*% sys$rho %*% rhs_dt
   }
   
+  # filter 1
+  sys$rho <- coherence_filter(sys, sys$rho, 1)
+  
   # apply TE2/4 delay
   t <- TE2 / 4 - duration / 2
   if (t < 0) stop("Error, negative delay duration required.")
@@ -321,6 +327,9 @@ seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89,
   # apply pulse
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
   
+  # filter -1
+  sys$rho <- coherence_filter(sys, sys$rho, -1)
+  
   # apply TE2/4 delay
   sys$rho <- lhs %*% sys$rho %*% rhs
   
@@ -333,6 +342,9 @@ seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89,
     sys$rho <- lhs_pulse_gaus %*% sys$rho %*% rhs_pulse_gaus
     sys$rho <- lhs_dt %*% sys$rho %*% rhs_dt
   }
+  
+  # filter -1
+  sys$rho <- coherence_filter(sys, sys$rho, -1)
   
   # apply TE2/4 delay
   sys$rho <- lhs %*% sys$rho %*% rhs
