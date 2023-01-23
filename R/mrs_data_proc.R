@@ -872,7 +872,11 @@ fd2td <- function(mrs_data) {
   return(mrs_data)
 }
 
-# recon complex td data from real part of fd data
+#' Reconstruct complex time-domain data from the real part of frequency-domain
+#' data.
+#' @param mrs_data MRS data.
+#' @return reconstructed MRS data.
+#' @export
 recon_imag <- function(mrs_data) {
   # data needs to be in the FD
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
