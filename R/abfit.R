@@ -489,7 +489,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   # baseline
   bl <- Re(sp_bas_final$bl_bas) %*% ahat[1:sp_bas_final$bl_comps]
   
-  # turn amplitudes into a matrix to scale invividual signals
+  # turn amplitudes into a matrix to scale individual signals
   metab_amp_mat <- matrix(ahat[(sp_bas_final$bl_comps + 1):length(ahat)], 
                           nrow = nrow(metab_basis_fd_cut),
                           ncol = ncol(metab_basis_fd_cut), byrow = TRUE)

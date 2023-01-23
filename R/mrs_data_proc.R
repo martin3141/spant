@@ -2598,7 +2598,11 @@ median_dyns <- function(mrs_data) {
   return(apply_mrs(mrs_data, 5, cplx_median))
 }
 
-# TODO correct first imaginary data point?
+#' Reconstruct complex time-domain data from the real part of frequency-domain
+#' data.
+#' @param data data points in the frequency domain.
+#' @return reconstructed signal.
+#' @export
 recon_imag_vec <- function(data) {
   data <- Conj(hilbert(Re(data)))
   data <- ift_shift(data)
