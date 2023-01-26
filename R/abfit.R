@@ -584,7 +584,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     tcho_sig_pts <- basis_frame$GPC + basis_frame$PCh
     diags$tCho_lw <- calc_peak_info_vec(tcho_sig_pts, 2)[3] * 
                      (sp_bas_final$x_scale[1] - sp_bas_final$x_scale[2])
-  } 
+  }
   
   #### crlb calc ####
   
