@@ -1209,7 +1209,7 @@ abfit_3p_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   # augment signal with zeros to match basis dimensions
   fit_seg <- c(Y[inds], rep(0, bl_comps - 2))
   
-  # estimtate amplitudes
+  # estimate amplitudes
   ahat <- calc_ahat(Re(full_bas), Re(fit_seg), k = bl_comps, ahat_calc_method)
   
   # signal estimate 
