@@ -662,3 +662,24 @@ interpolate_nas <- function(map, factor, sigma) {
 
 # is this dataset SVS?
 is_svs <- function(mrs_data) identical(dim(mrs_data$data)[2:4], c(1L, 1L, 1L))
+
+#' Calculate the mean of adjacent blocks in a vector.
+#' @param x input vector.
+#' @param block_size number of adjacent elements to average over.
+#' @return vector data averaged in blocks.
+#' @export 
+mean_vec_blocks <- function(x, block_size) {
+  
+  if ((length(x) %% block_size) != 0) {
+    warning("Block size does not fit into vector length without truncation.")
+  }
+  
+  new_dyns <- floor(length(x) / block_size)
+  x_out    <- x[seq(1, new_dyns * block_size, block_size)]
+  
+  for (n in 2:block_size) {
+    x_out <- x_out + x[seq(n, new_dyns * block_size, block_size)]
+  }
+  
+  return(x_out / block_size)
+}

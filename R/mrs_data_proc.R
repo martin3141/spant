@@ -2535,10 +2535,11 @@ mean_dyn_blocks <- function(mrs_data, block_size) {
     warning("Block size does not fit into the number of dynamics without truncation.")
   }
   
-  new_dyns <-  floor(Ndyns(mrs_data) / block_size)
-  mrs_out <- get_dyns(mrs_data, seq(1, new_dyns * block_size, block_size))
+  new_dyns <- floor(Ndyns(mrs_data) / block_size)
+  mrs_out <-  get_dyns(mrs_data, seq(1, new_dyns * block_size, block_size))
   for (n in 2:block_size) {
-    mrs_out <- mrs_out + get_dyns(mrs_data, seq(n, new_dyns * block_size, block_size))
+    mrs_out <- mrs_out + get_dyns(mrs_data, seq(n, new_dyns * 
+                                                block_size, block_size))
   }
   
   mrs_out / block_size
