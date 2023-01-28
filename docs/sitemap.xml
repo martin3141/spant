@@ -226,6 +226,9 @@
     <loc>https://martin3141.github.io/spant/reference/crop_td_pts.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/crop_td_pts_end.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/crop_td_pts_pot.html</loc>
   </url>
   <url>
@@ -305,6 +308,15 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/fit_res2csv.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/fit_t1_ti_array.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/fit_t1_tr_array.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/fit_t2_te_array.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/fit_tab2csv.html</loc>
@@ -529,6 +541,9 @@
     <loc>https://martin3141.github.io/spant/reference/lb.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/lofdc.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/lw2alpha.html</loc>
   </url>
   <url>
@@ -545,6 +560,12 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/mask_xy.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/mask_xy_corners.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/mask_xy_ellipse.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/mask_xy_mat.html</loc>
@@ -578,6 +599,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/mean_mrs_list.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/mean_vec_blocks.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/median_dyns.html</loc>
@@ -718,6 +742,12 @@
     <loc>https://martin3141.github.io/spant/reference/read_tqn_result.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/recon_imag.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/recon_imag_vec.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/recon_twix_2d_mrsi.html</loc>
   </url>
   <url>
@@ -752,6 +782,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/rm_dyns.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/scale_amp_molal.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/scale_amp_molal_pvc.html</loc>
@@ -1007,6 +1040,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/zero_nzoc.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/zero_td_pts_end.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/zf.html</loc>

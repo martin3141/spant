@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.0</span>
       </span>
     </div>
 
@@ -119,7 +119,11 @@
 <span>  ahat_calc_method <span class="op">=</span> <span class="st">"lh_pnnls"</span>,</span>
 <span>  prefit_phase_search <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  freq_reg <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  output_all_paras <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  output_all_paras <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  output_all_paras_raw <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  input_paras_raw <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  optim_lw_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  optim_lw_only_limit <span class="op">=</span> <span class="fl">20</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -311,6 +315,25 @@ prefit stage of the algorithm.</p></dd>
 <dt>output_all_paras</dt>
 <dd><p>include more fitting parameters in the fit table,
 e.g. individual shift and damping factors for each basis set element.</p></dd>
+
+
+<dt>output_all_paras_raw</dt>
+<dd><p>include raw fitting parameters in the fit table.
+For advanced diagnostic use only.</p></dd>
+
+
+<dt>input_paras_raw</dt>
+<dd><p>input raw fitting parameters. For advanced diagnostic
+use only.</p></dd>
+
+
+<dt>optim_lw_only</dt>
+<dd><p>optimize the global line-broadening term only.</p></dd>
+
+
+<dt>optim_lw_only_limit</dt>
+<dd><p>limits for the line-breading term as a percentage
+of the starting value when optim_lw_only is TRUE.</p></dd>
 
 </dl></div>
     <div id="value">

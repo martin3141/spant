@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.0</span>
       </span>
     </div>
 
@@ -78,16 +78,16 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">zf</span><span class="op">(</span><span class="va">x</span>, factor <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">zf</span><span class="op">(</span><span class="va">x</span>, factor <span class="op">=</span> <span class="fl">2</span>, offset <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for list</span></span>
-<span><span class="fu">zf</span><span class="op">(</span><span class="va">x</span>, factor <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu">zf</span><span class="op">(</span><span class="va">x</span>, factor <span class="op">=</span> <span class="fl">2</span>, offset <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for mrs_data</span></span>
-<span><span class="fu">zf</span><span class="op">(</span><span class="va">x</span>, factor <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu">zf</span><span class="op">(</span><span class="va">x</span>, factor <span class="op">=</span> <span class="fl">2</span>, offset <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for basis_set</span></span>
-<span><span class="fu">zf</span><span class="op">(</span><span class="va">x</span>, factor <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">zf</span><span class="op">(</span><span class="va">x</span>, factor <span class="op">=</span> <span class="fl">2</span>, offset <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -99,6 +99,11 @@
 <dt>factor</dt>
 <dd><p>zero-filling factor, factor of 2 returns a dataset with
 twice the original data points.</p></dd>
+
+
+<dt>offset</dt>
+<dd><p>number of points from the end of the FID to insert the zero
+values.</p></dd>
 
 </dl></div>
     <div id="value">
