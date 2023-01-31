@@ -36,6 +36,11 @@ print.mrs_data <- function(x, full = FALSE, ...) {
     cat(paste(c("Manufacturer            :", x$meta$Manufacturer, "\n")),
         sep = " ")
     
+    if (!is.null(x$meta$SequenceName)) {
+      cat(paste(c("Sequence name           :", x$meta$SequenceName, "\n")),
+          sep = " ")
+    }
+    
     #cat(paste(c("Row vector              :", x$row_vec, "\n")), sep = " ")
     #cat(paste(c("Column vector           :", x$col_vec, "\n")), sep = " ")
     #cat(paste(c("Slice vector            :", x$sli_vec, "\n")), sep = " ")

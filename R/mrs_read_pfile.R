@@ -55,6 +55,7 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
     cat(paste("frame_size  :", hdr$frame_size), "\n")
     cat(paste("w_frames    :", hdr$rhuser19), "\n")
     cat(paste("Header rev. :", hdr$hdr_rev), "\n")
+    cat(paste("Seq. name   :", hdr$seq_name), "\n")
     cat(paste("CSI dims    :", hdr$csi_dims), "\n")
     cat(paste("xcsi        :", hdr$xcsi), "\n")
     cat(paste("ycsi        :", hdr$ycsi), "\n")
@@ -103,6 +104,7 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
   
   meta <- list(EchoTime = hdr$te,
                RepetitionTime = hdr$tr,
+               SequenceName = hdr$seq_name,
                Manufacturer = "GE")
   
   mrs_data <- mrs_data(data = data, ft = hdr$ps_mps_freq / 10, resolution = res,
@@ -181,16 +183,19 @@ read_pfile_header <- function(fname) {
   seek(con, loc$tr)
   vars$tr <- readBin(con, "int", size = 4, endian = endian) / 1e6
   
+  seek(con, loc$seq_name)
+  vars$seq_name <- readBin(con, "character", size = 33)
+  
   close(con)
   
   vars
 }
 
 get_pfile_vars <- function() {
-  vars <- vector(mode = "list", length = 15)
+  vars <- vector(mode = "list", length = 16)
   names(vars) <- c("hdr_rev", "off_data", "nechoes", "nframes", "frame_size", 
                    "rcv", "rhuser19", "spec_width", "csi_dims", "xcsi", "ycsi",
-                   "zcsi", "ps_mps_freq", "te", "tr")
+                   "zcsi", "ps_mps_freq", "te", "tr", "seq_name")
   vars
 }
 
@@ -217,6 +222,7 @@ get_pfile_dict <- function(hdr_rev, con) {
     loc$ps_mps_freq <- 488
     loc$te          <- 1148
     loc$tr          <- 199236
+    loc$seq_name    <- 199812
   } else if ((floor(hdr_rev) > 11) && (floor(hdr_rev) < 25)) {
     loc$hdr_rev     <- 0
     loc$off_data    <- 1468
@@ -233,6 +239,7 @@ get_pfile_dict <- function(hdr_rev, con) {
     loc$ps_mps_freq <- 424
     loc$te          <- 1212
     loc$tr          <- 148944
+    loc$seq_name    <- 149520
   } else {
     close(con)
     stop(paste("Error, pfile version not supported :", hdr_rev))
