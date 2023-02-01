@@ -92,6 +92,11 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
     new_dim[5] <- 1
     
     dim(data) <- new_dim
+    
+    # phase cycling correction?
+    k_sp_corr_x <- array(1, dim(data))
+    k_sp_corr_x[, c(T, F),,,,,] <- -1
+    data <- data * k_sp_corr_x
 }
   
   res <- c(NA, NA, NA, NA, 1, NA, 1 / hdr$spec_width)
@@ -119,9 +124,18 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
     
     ref_mrs <- get_dyns(mrs_data, which(wref_inds))
     metab_mrs <- get_dyns(mrs_data, which(!wref_inds))
+    
+    if (hdr$csi_dims > 0) {
+      ref_mrs   <- img2kspace_xy(ref_mrs)
+      metab_mrs <- img2kspace_xy(metab_mrs)
+    }
   } else {
     ref_mrs <- NA
     metab_mrs <- mrs_data
+    
+    if (hdr$csi_dims > 0) {
+      metab_mrs <- img2kspace_xy(metab_mrs)
+    }
   }
   
   out <- list(metab = metab_mrs, ref = ref_mrs)

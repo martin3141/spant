@@ -1537,6 +1537,9 @@ get_td_amp <- function(mrs_data, nstart = 10, nend = 50, method = "poly") {
 }
 
 conv_align <- function(acq, ref, window, fs, fd) {
+  
+  if (is.na(acq[1])) return(0)
+  
   if (fd) {
     conv <- pracma::fftshift(Mod(stats::convolve(acq, ref)))
   } else {
