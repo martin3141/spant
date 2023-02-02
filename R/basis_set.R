@@ -259,6 +259,7 @@ basis2mrs_data <- function(basis, sum_elements = FALSE, amps = NULL,
   
   # scale basis elements
   if (!is.null(amps)) {
+    amps <- as.numeric(amps)
     if (n_sigs != length(amps)) {
       stop(paste("Error, length of amps does not match the number of basis elements :", dim(basis$data)[2]))
     }
