@@ -29,9 +29,9 @@
   op <- options()
   
   if(.Platform$OS.type == "unix") {
-    lcm_cmd <- "lcmodel"
+    lcm_cmd <- path.expand(file.path("~", "lcmodel"))
   } else {
-    lcm_cmd <- "LCModel.exe"
+    lcm_cmd <- path.expand(file.path("~", "LCModel.exe"))
   }
   
   op.spant <- list(
