@@ -1377,7 +1377,7 @@ ed_obj_fn <- function(par, spline_basis, deriv_mat, target_ed) {
 }
 
 calc_lambda_from_ed <- function(spline_basis, deriv_mat, target_ed,
-                                upper_lim = 1e11, lower_lim = 1e-6,
+                                upper_lim = 1e10, lower_lim = 1e-6,
                                 start_val = 1.0) {
   
   res <- stats::optim(start_val, ed_obj_fn, method = "Brent", lower = lower_lim,
