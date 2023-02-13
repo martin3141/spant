@@ -2538,6 +2538,8 @@ mean_dyn_blocks <- function(mrs_data, block_size) {
     warning("Block size does not fit into the number of dynamics without truncation.")
   }
   
+  if (block_size == 1) return(mrs_data)
+  
   new_dyns <- floor(Ndyns(mrs_data) / block_size)
   mrs_out <-  get_dyns(mrs_data, seq(1, new_dyns * block_size, block_size))
   for (n in 2:block_size) {
@@ -2545,7 +2547,7 @@ mean_dyn_blocks <- function(mrs_data, block_size) {
                                                 block_size, block_size))
   }
   
-  mrs_out / block_size
+  return(mrs_out / block_size)
 }
 
 #' Calculate the pairwise means across a dynamic data set.

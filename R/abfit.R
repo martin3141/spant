@@ -1377,14 +1377,17 @@ ed_obj_fn <- function(par, spline_basis, deriv_mat, target_ed) {
 }
 
 calc_lambda_from_ed <- function(spline_basis, deriv_mat, target_ed,
-                                upper_lim = 1e10, lower_lim = 1e-6,
+                                upper_lim = 1e11, lower_lim = 1e-6,
                                 start_val = 1.0) {
   
   res <- stats::optim(start_val, ed_obj_fn, method = "Brent", lower = lower_lim,
                upper = upper_lim, spline_basis = spline_basis,
                deriv_mat = deriv_mat, target_ed = target_ed)
   
-  if (res$value > 1e-6) warning("correct lambda not found")
+  if (res$value > 1e-6) {
+    res$par <- 1e11
+    warning(paste0("correct lambda not found, using : ", res$par))
+  }
   
   return(res$par)
 }
