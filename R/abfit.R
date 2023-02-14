@@ -1381,11 +1381,11 @@ calc_lambda_from_ed <- function(spline_basis, deriv_mat, target_ed,
                                 start_val = 1.0) {
   
   res <- stats::optim(start_val, ed_obj_fn, method = "Brent", lower = lower_lim,
-               upper = upper_lim, spline_basis = spline_basis,
-               deriv_mat = deriv_mat, target_ed = target_ed)
+                      upper = upper_lim, spline_basis = spline_basis,
+                      deriv_mat = deriv_mat, target_ed = target_ed)
   
   if (res$value > 1e-6) {
-    res$par <- 1e11
+    res$par <- 1e10
     warning(paste0("correct lambda not found, using : ", res$par))
   }
   
