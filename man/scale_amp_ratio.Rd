@@ -4,13 +4,16 @@
 \alias{scale_amp_ratio}
 \title{Scale fitted amplitudes to a ratio of signal amplitude.}
 \usage{
-scale_amp_ratio(fit_result, name)
+scale_amp_ratio(fit_result, name, use_mean_value = FALSE)
 }
 \arguments{
 \item{fit_result}{a result object generated from fitting.}
 
 \item{name}{the signal name to use as a denominator (usually, "tCr" or
 "tNAA").}
+
+\item{use_mean_value}{scales the result by the mean of the signal when set to
+TRUE.}
 }
 \value{
 a \code{fit_result} object with a rescaled results table.
