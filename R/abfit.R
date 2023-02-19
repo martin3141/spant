@@ -1380,6 +1380,8 @@ calc_lambda_from_ed <- function(spline_basis, deriv_mat, target_ed,
                                 upper_lim = 1e10, lower_lim = 1e-6,
                                 start_val = 1.0) {
   
+  if (target_ed < 2.01) warning("ED of less than 2.01 requested.")
+  
   res <- stats::optim(start_val, ed_obj_fn, method = "Brent", lower = lower_lim,
                       upper = upper_lim, spline_basis = spline_basis,
                       deriv_mat = deriv_mat, target_ed = target_ed)
