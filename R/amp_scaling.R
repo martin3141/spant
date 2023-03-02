@@ -341,7 +341,7 @@ get_corr_factor <- function(te, tr, B0, gm_vol, wm_vol, csf_vol) {
 #' @param tr the MRS TR.
 #' @return a \code{fit_result} object with a rescaled results table.
 #' @export
-apply_pvc <- function(fit_result, p_vols, te, tr){
+scale_amp_molar2molal_pvc <- function(fit_result, p_vols, te, tr){
   
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
