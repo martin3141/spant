@@ -1,7 +1,7 @@
 citHeader("To cite spant in publications use:")
 
-citEntry(
-  entry    = "Article",
+bibentry(
+  bibtype  = "Article",
   title    = "spant: An R package for magnetic resonance spectroscopy analysis",
   author   = "Martin Wilson",
   journal  = "Journal of Open Source Software",
@@ -14,9 +14,9 @@ citEntry(
   textVersion = "Wilson, M., spant: An R package for magnetic resonance spectroscopy analysis. JOSS 2021, 6(67), 3646."
 )
 
-citEntry(
+bibentry(
   header   = "To cite the ABfit method in publications use:",
-  entry    = "Article",
+  bibtype  = "Article",
   title    = "Adaptive baseline fitting for 1H MR spectroscopy analysis",
   author   = "Martin Wilson",
   journal  = "Magn Reson Med",
@@ -28,9 +28,9 @@ citEntry(
   textVersion = "Martin Wilson, Adaptive baseline fitting for 1H MR spectroscopy analysis, MRM 2021 85(1):13-29."
 )
 
-citEntry(
+bibentry(
   header   = "To cite the RATS method in publications use:",
-  entry    = "Article",
+  bibtype  = "Article",
   title    = "Robust retrospective frequency and phase correction for single-voxel MR spectroscopy",
   author   = "Martin Wilson",
   journal  = "Journal",
