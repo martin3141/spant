@@ -1,3 +1,6 @@
+# spant 2.10.0
+* Tentative support for UIH DICOM MRS format.
+
 # spant 2.8.0
 * Bug fix when using align function with masked data.
 * mean_dyn_blocks returns the input data when block_size is set to 1.
