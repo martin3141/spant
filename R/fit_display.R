@@ -472,3 +472,15 @@ get_fit_map <- function(fit_res, name) {
   dim(result_map) <- c(1, dim(fit_res$data$data)[2:6])
   result_map
 }
+
+#' Export a one-page pdf of a single fit result
+#' @param fit_res \code{fit_result} object.
+#' @param path path to the exported pdf file.
+#' @export
+one_page_pdf <- function(fit_res, path) {
+  pdf(path, paper = "a4r", width = 11, height = 7)
+  plot(res, xlim = c(4, 0.5), mar = c(3, 1, 1, 10))
+  # table <- c("a", "b", "c", "d", "e", "f")
+  # legend(x = 0.85, y = 1.12, ncol = 3L, legend = table, bty = "y", xpd = TRUE)
+  dev.off()
+}

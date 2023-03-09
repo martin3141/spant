@@ -1,5 +1,6 @@
 # spant 2.10.0
 * Tentative support for UIH DICOM MRS format.
+* Added a function to export a one-page pdf of the fit result (one_page_pdf).
 
 # spant 2.9.0
 * Bug fix when using align function with masked data.
