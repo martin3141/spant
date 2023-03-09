@@ -477,10 +477,11 @@ get_fit_map <- function(fit_res, name) {
 #' @param fit_res \code{fit_result} object.
 #' @param path path to the exported pdf file.
 #' @export
-one_page_pdf <- function(fit_res, path) {
-  pdf(path, paper = "a4r", width = 11, height = 7)
-  plot(res, xlim = c(4, 0.5), mar = c(3, 1, 1, 10))
+one_page_pdf <- function(fit_res, pdf_out_path, title = NULL) {
+  pdf(pdf_out_path, paper = "a4r", width = 11, height = 7)
+  plot(fit_res, xlim = c(4, 0.5), mar = c(3, 1, 2, 10))
   # table <- c("a", "b", "c", "d", "e", "f")
   # legend(x = 0.85, y = 1.12, ncol = 3L, legend = table, bty = "y", xpd = TRUE)
+  if (!is.null(title)) text(0.5, 1.12, title, cex = 1.5, xpd = TRUE)
   dev.off()
 }
