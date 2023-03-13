@@ -17,8 +17,8 @@ read_rda <- function(fname, extra) {
   # go back to the start and read in the data parameters
   con <- file(fname, "r")
   txt <- utils::read.delim(con, sep = ":", nrows = (n - 2), header = FALSE,
-                    strip.white = TRUE, stringsAsFactors = FALSE,
-                    comment.char = ">")
+                           strip.white = TRUE, stringsAsFactors = FALSE,
+                           comment.char = ">")
   close(con)
   
   row_ori <- rep(NA, 3)
@@ -49,6 +49,16 @@ read_rda <- function(fname, extra) {
   col_vox_dim <- as.numeric(txt$V2[which(txt$V1 == "PixelSpacingCol")])
   row_vox_dim <- as.numeric(txt$V2[which(txt$V1 == "PixelSpacingRow")])
   slice_vox_dim <- as.numeric(txt$V2[which(txt$V1 == "PixelSpacing3D")])
+  
+  model_name <- txt$V2[which(txt$V1 == "ModelName")]
+  
+  if (startsWith(model_name, "uMR")) {
+    manuf <- "UIH"
+  } else {
+    manuf <- "Siemens"
+  }
+  
+  seq_name <- txt$V2[which(txt$V1 == "SequenceName")]
   
   pos_vec_file <- pos_vec
   
@@ -90,7 +100,28 @@ read_rda <- function(fname, extra) {
   
   meta = list(EchoTime = te,
               RepetitionTime = tr,
-              Manufacturer = "Siemens")
+              Manufacturer = manuf,
+              SequenceName = seq_name)
+  
+  if (manuf == "Siemens") {
+    if (toupper(seq_name) == "*SVS_SE") {
+      meta <- append(meta, list(PulseSequenceType = "press"))
+    }
+    
+    if (toupper(seq_name) == "*SVS_ST") {
+      meta <- append(meta, list(PulseSequenceType = "steam"))
+    }
+  }
+  
+  if (manuf == "UIH") {
+    if (toupper(seq_name) == "SVS_PRESS") {
+      meta <- append(meta, list(PulseSequenceType = "press"))
+    }
+    
+    if (toupper(seq_name) == "SVS_STEAM") {
+      meta <- append(meta, list(PulseSequenceType = "steam"))
+    }
+  }
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = affine,

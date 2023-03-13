@@ -29,33 +29,33 @@ print.mrs_data <- function(x, full = FALSE, ...) {
   cat(paste(c("Reference freq. (ppm)   : ", x$ref, "\n")), sep = "")
   cat(paste(c("Nucleus                 : ", x$nuc, "\n")), sep = "")
   cat(paste(c("Spectral domain         : ", x$freq_domain[7], "\n")), sep = "")
+  
+  if (!is.null(x$meta$EchoTime)) {
+    cat(paste(c("Echo time (s)           :", x$meta$EchoTime, "\n")),
+        sep = " ")
+  }
+  
+  if (!is.null(x$meta$RepetitionTime)) {
+    cat(paste(c("Repetition time (s)     :", x$meta$RepetitionTime, "\n")),
+        sep = " ")
+  }
+  
+  if (!is.null(x$meta$Manufacturer)) {
+    cat(paste(c("Manufacturer            :", x$meta$Manufacturer, "\n")),
+        sep = " ")
+  }
+  
+  if (!is.null(x$meta$PulseSequenceType)) {
+    cat(paste(c("Pulse sequence type     :", x$meta$PulseSequenceType, "\n")),
+        sep = " ")
+  }
+  
+  if (!is.null(x$meta$SequenceName)) {
+    cat(paste(c("Sequence name           :", x$meta$SequenceName, "\n")),
+        sep = " ")
+  }
+  
   if (full) {
-    
-    if (!is.null(x$meta$EchoTime)) {
-      cat(paste(c("Echo time (s)           :", x$meta$EchoTime, "\n")),
-          sep = " ")
-    }
-      
-    if (!is.null(x$meta$RepetitionTime)) {
-      cat(paste(c("Repetition time (s)     :", x$meta$RepetitionTime, "\n")),
-          sep = " ")
-    }
-    
-    if (!is.null(x$meta$Manufacturer)) {
-      cat(paste(c("Manufacturer            :", x$meta$Manufacturer, "\n")),
-          sep = " ")
-    }
-    
-    if (!is.null(x$meta$PulseSequenceType)) {
-      cat(paste(c("Pulse sequence type     :", x$meta$PulseSequenceType, "\n")),
-          sep = " ")
-    }
-    
-    if (!is.null(x$meta$SequenceName)) {
-      cat(paste(c("Sequence name           :", x$meta$SequenceName, "\n")),
-          sep = " ")
-    }
-    
     #cat(paste(c("Row vector              :", x$row_vec, "\n")), sep = " ")
     #cat(paste(c("Column vector           :", x$col_vec, "\n")), sep = " ")
     #cat(paste(c("Slice vector            :", x$sli_vec, "\n")), sep = " ")

@@ -38,6 +38,14 @@ read_ima <- function(fraw, verbose = FALSE, extra) {
                ChemicalShiftReference = 4.7 + vars$delta_freq,
                Manufacturer = "Siemens")
   
+  if (toupper(vars$seq_fname) == "%SIEMENSSEQ%\\SVS_SE") {
+    meta <- append(meta, list(PulseSequenceType = "press"))
+  }
+  
+  if (toupper(vars$seq_fname) == "%SIEMENSSEQ%\\SVS_ST") {
+    meta <- append(meta, list(PulseSequenceType = "steam"))
+  }
+  
   mrs_data <- mrs_data(data = data, ft = vars$ft, resolution = paras$res,
                        ref = paras$ref, nuc = paras$nuc,
                        freq_domain = freq_domain, affine = paras$affine,
