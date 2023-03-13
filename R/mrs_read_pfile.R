@@ -107,10 +107,19 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
   ref <- def_ref()
   nuc <- def_nuc()
   
+  
   meta <- list(EchoTime = hdr$te,
                RepetitionTime = hdr$tr,
                SequenceName = hdr$seq_name,
                Manufacturer = "GE")
+  
+  if (toupper(hdr$seq_name) == "PROBE-P") {
+    meta <- append(meta, list(PulseSequenceType = "press"))
+  }
+  
+  if (toupper(hdr$seq_name) == "PROBE-S") {
+    meta <- append(meta, list(PulseSequenceType = "steam"))
+  }
   
   mrs_data <- mrs_data(data = data, ft = hdr$ps_mps_freq / 10, resolution = res,
                        ref = ref, nuc = nuc, freq_domain = freq_domain,
@@ -216,11 +225,13 @@ get_pfile_vars <- function() {
 # following are useful resources for GE p-files
 # https://github.com/SIVICLab/sivic/blob/master/libs/src/svkGEPFileReader.cc
 # https://github.com/chenkonturek/MRS_MRI_libs/blob/master/MRS_lib/io/mrs_readGEpfile.m
+# other option is to use a hex editor https://hexed.it/
 
 get_pfile_dict <- function(hdr_rev, con) {
   loc <- get_pfile_vars()
   
-  if (floor(hdr_rev) > 25) {
+  if (floor(hdr_rev) == 11L) { # version 12
+    warning("pfile version is untested :", hdr_rev)
     loc$hdr_rev     <- 0
     loc$off_data    <- 4
     loc$nechoes     <- 146
@@ -237,7 +248,26 @@ get_pfile_dict <- function(hdr_rev, con) {
     loc$te          <- 1148
     loc$tr          <- 199236
     loc$seq_name    <- 199812
-  } else if ((floor(hdr_rev) > 11) && (floor(hdr_rev) < 25)) {
+  } else if (floor(hdr_rev) == 24L) {
+    loc$hdr_rev     <- 0
+    loc$off_data    <- 1468
+    loc$nechoes     <- 70
+    loc$nframes     <- 74
+    loc$frame_size  <- 80
+    loc$rcv         <- 200
+    loc$rhuser19    <- 292
+    loc$spec_width  <- 368
+    loc$csi_dims    <- 372
+    loc$xcsi        <- 374
+    loc$ycsi        <- 376
+    loc$zcsi        <- 378
+    loc$ps_mps_freq <- 424
+    # loc$te          <- 1212
+    loc$te          <- 148404
+    loc$tr          <- 148396
+    loc$seq_name    <- 148972
+  } else if (floor(hdr_rev) == 26L) {
+    warning("pfile version is untested :", hdr_rev)
     loc$hdr_rev     <- 0
     loc$off_data    <- 1468
     loc$nechoes     <- 70
@@ -254,9 +284,41 @@ get_pfile_dict <- function(hdr_rev, con) {
     loc$te          <- 1212
     loc$tr          <- 148944
     loc$seq_name    <- 149520
+  } else if (floor(hdr_rev) == 28L) {
+    loc$hdr_rev     <- 0
+    loc$off_data    <- 4
+    loc$nechoes     <- 146
+    loc$nframes     <- 150
+    loc$frame_size  <- 156
+    loc$rcv         <- 264
+    loc$rhuser19    <- 356
+    loc$spec_width  <- 432
+    loc$csi_dims    <- 436
+    loc$xcsi        <- 438
+    loc$ycsi        <- 440
+    loc$zcsi        <- 442
+    loc$ps_mps_freq <- 488
+    loc$te          <- 1148
+    loc$tr          <- 207428
+    loc$seq_name    <- 208004
   } else {
-    close(con)
-    stop(paste("Error, pfile version not supported :", hdr_rev))
+    warning("pfile version is untested :", hdr_rev)
+    loc$hdr_rev     <- 0
+    loc$off_data    <- 4
+    loc$nechoes     <- 146
+    loc$nframes     <- 150
+    loc$frame_size  <- 156
+    loc$rcv         <- 264
+    loc$rhuser19    <- 356
+    loc$spec_width  <- 432
+    loc$csi_dims    <- 436
+    loc$xcsi        <- 438
+    loc$ycsi        <- 440
+    loc$zcsi        <- 442
+    loc$ps_mps_freq <- 488
+    loc$te          <- 1148
+    loc$tr          <- 199236
+    loc$seq_name    <- 199812
   }
-  loc
+  return(loc)
 }
