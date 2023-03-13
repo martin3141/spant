@@ -9,7 +9,9 @@ one_page_pdf(fit_res, pdf_out_path, title = NULL)
 \arguments{
 \item{fit_res}{\code{fit_result} object.}
 
-\item{path}{path to the exported pdf file.}
+\item{pdf_out_path}{path to the exported pdf file.}
+
+\item{title}{ouptut title.}
 }
 \description{
 Export a one-page pdf of a single fit result
