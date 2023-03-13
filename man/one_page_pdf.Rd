@@ -4,7 +4,7 @@
 \alias{one_page_pdf}
 \title{Export a one-page pdf of a single fit result}
 \usage{
-one_page_pdf(fit_res, path)
+one_page_pdf(fit_res, pdf_out_path, title = NULL)
 }
 \arguments{
 \item{fit_res}{\code{fit_result} object.}

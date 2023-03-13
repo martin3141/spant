@@ -225,6 +225,7 @@ get_pfile_vars <- function() {
 # following are useful resources for GE p-files
 # https://github.com/SIVICLab/sivic/blob/master/libs/src/svkGEPFileReader.cc
 # https://github.com/chenkonturek/MRS_MRI_libs/blob/master/MRS_lib/io/mrs_readGEpfile.m
+# TARQUIN source is an ok reference for older versions.
 # other option is to use a hex editor https://hexed.it/
 
 get_pfile_dict <- function(hdr_rev, con) {
@@ -248,6 +249,23 @@ get_pfile_dict <- function(hdr_rev, con) {
     loc$te          <- 1148
     loc$tr          <- 199236
     loc$seq_name    <- 199812
+  } else if (floor(hdr_rev) == 14L) {
+    loc$hdr_rev     <- 0
+    loc$off_data    <- 1468
+    loc$nechoes     <- 70
+    loc$nframes     <- 74
+    loc$frame_size  <- 80
+    loc$rcv         <- 200
+    loc$rhuser19    <- 292
+    loc$spec_width  <- 368
+    loc$csi_dims    <- 372
+    loc$xcsi        <- 374
+    loc$ycsi        <- 376
+    loc$zcsi        <- 378
+    loc$ps_mps_freq <- 424
+    loc$te          <- 144580
+    loc$tr          <- 144572
+    loc$seq_name    <- 145132
   } else if (floor(hdr_rev) == 24L) {
     loc$hdr_rev     <- 0
     loc$off_data    <- 1468
