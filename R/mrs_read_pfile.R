@@ -226,7 +226,10 @@ get_pfile_vars <- function() {
 # https://github.com/SIVICLab/sivic/blob/master/libs/src/svkGEPFileReader.cc
 # https://github.com/chenkonturek/MRS_MRI_libs/blob/master/MRS_lib/io/mrs_readGEpfile.m
 # TARQUIN source is an ok reference for older versions.
-# other option is to use a hex editor https://hexed.it/
+# Ralph Noeske also suggests GERead.m from GANNET as a good place to look for
+# newer versions.
+# Other option is to use a hex editor, and search for known values
+# https://hexed.it/
 
 get_pfile_dict <- function(hdr_rev, con) {
   loc <- get_pfile_vars()
@@ -319,6 +322,9 @@ get_pfile_dict <- function(hdr_rev, con) {
     loc$tr          <- 199236
     loc$seq_name    <- 199812
   } else if (floor(hdr_rev) == 28L) {
+    # some files from this version are corrupt due to a bug in the GE software
+    # (relating to auto-coil selection "Air Touch")
+    # don't spend ages trying to fix files that are inherently borked
     loc$hdr_rev     <- 0
     loc$off_data    <- 4
     loc$nechoes     <- 146
