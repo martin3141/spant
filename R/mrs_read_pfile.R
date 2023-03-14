@@ -351,8 +351,8 @@ get_pfile_dict <- function(hdr_rev, con) {
     loc$zcsi        <- 442
     loc$ps_mps_freq <- 488
     loc$te          <- 1148
-    loc$tr          <- 199236
-    loc$seq_name    <- 199812
+    loc$tr          <- 207428
+    loc$seq_name    <- 208004
   }
   return(loc)
 }
