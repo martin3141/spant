@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.10.0</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">scale_amp_ratio</span><span class="op">(</span><span class="va">fit_result</span>, <span class="va">name</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">scale_amp_ratio</span><span class="op">(</span><span class="va">fit_result</span>, <span class="va">name</span>, use_mean_value <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -90,6 +90,11 @@
 <dt>name</dt>
 <dd><p>the signal name to use as a denominator (usually, "tCr" or
 "tNAA").</p></dd>
+
+
+<dt>use_mean_value</dt>
+<dd><p>scales the result by the mean of the signal when set to
+TRUE.</p></dd>
 
 </dl></div>
     <div id="value">
