@@ -3775,12 +3775,15 @@ kspace2img_xy <- function(mrs_data) {
 #' @param lw target linewidth in units of ppm.
 #' @param xlim region to search for peaks to obtain a linewidth estimate.
 #' @param lg Lorentz-Gauss lineshape parameter.
+#' @param mask_narrow masks spectra where the requested linewidth is too narrow,
+#' if set FALSE the spectra are not changed.
 #' @return line-broadened data.
 #' @export
-set_lw <- function(mrs_data, lw, xlim = c(4, 0.5), lg = 1) {
+set_lw <- function(mrs_data, lw, xlim = c(4, 0.5), lg = 1, mask_narrow = TRUE) {
   
   if (inherits(mrs_data, "list")) {
-    res <- lapply(mrs_data, set_lw, lw = lw, xlim = xlim, lg = lg)
+    res <- lapply(mrs_data, set_lw, lw = lw, xlim = xlim, lg = lg,
+                  mask_narrow = mask_narrow)
     return(res)
   }
   
@@ -3797,6 +3800,8 @@ set_lw <- function(mrs_data, lw, xlim = c(4, 0.5), lg = 1) {
   lb_res <- apply_mrs(mrs_data, 7, optim_set_lw, lw, xlim, lg, single_mrs,
                       data_only = TRUE)
   
+  if (!mask_narrow) lb_res[is.na(lb_res)] <- 0
+  
   # apply the lb parameter to the full dataset
   res <- lb(mrs_data, lb_res, lg)
   
@@ -3812,7 +3817,7 @@ optim_set_lw <- function(x, lw, xlim, lg, single_mrs) {
   # measure current lw and check it is narrower than requested
   init_lw <- peak_info(single_mrs, xlim)$fwhm_ppm[1]
   if (init_lw > lw) {
-    warning("Target linewidth is too narrow, masking spectrum.")
+    warning("Target linewidth is too narrow, masking spectrum if requested.")
     return(NA)
   }
   

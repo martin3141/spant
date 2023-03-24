@@ -4,7 +4,7 @@
 \alias{set_lw}
 \title{Apply line-broadening to an mrs_data object to achieve a specified linewidth.}
 \usage{
-set_lw(mrs_data, lw, xlim = c(4, 0.5), lg = 1)
+set_lw(mrs_data, lw, xlim = c(4, 0.5), lg = 1, mask_narrow = TRUE)
 }
 \arguments{
 \item{mrs_data}{data in.}
@@ -14,6 +14,9 @@ set_lw(mrs_data, lw, xlim = c(4, 0.5), lg = 1)
 \item{xlim}{region to search for peaks to obtain a linewidth estimate.}
 
 \item{lg}{Lorentz-Gauss lineshape parameter.}
+
+\item{mask_narrow}{masks spectra where the requested linewidth is too narrow,
+if set FALSE the spectra are not changed.}
 }
 \value{
 line-broadened data.
