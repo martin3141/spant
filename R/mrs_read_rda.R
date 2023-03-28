@@ -50,6 +50,10 @@ read_rda <- function(fname, extra) {
   row_vox_dim <- as.numeric(txt$V2[which(txt$V1 == "PixelSpacingRow")])
   slice_vox_dim <- as.numeric(txt$V2[which(txt$V1 == "PixelSpacing3D")])
   
+  if (length(slice_vox_dim) == 0) {
+    slice_vox_dim <- as.numeric(txt$V2[which(txt$V1 == "SlabThickness[0]")])
+  }
+  
   model_name <- txt$V2[which(txt$V1 == "ModelName")]
   
   if (startsWith(model_name, "uMR")) {
