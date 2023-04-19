@@ -275,13 +275,10 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   
     # set phase, damping, shift, asym, basis_shift and basis_damping limits
     
-    lb_init   <- 0.001 # make small but not zero to avoid being equal to the
-                       # lower limit
-    
     asym_init <- 0
     
     par   <- c(res$par[1], res$par[2], res$par[3], asym_init, rep(0, Nbasis),
-               rep(lb_init, Nbasis))
+               rep(opts$lb_init, Nbasis))
    
     # find any signals with names starting with Lip or MM as they may have
     # different parameter limits
@@ -794,6 +791,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param prefit_phase_search perform a 1D search for the optimal phase in the
 #' prefit stage of the algorithm.
 #' @param freq_reg frequency shift parameter.
+#' @param lb_reg individual line broadening parameter.
 #' @param output_all_paras include more fitting parameters in the fit table,
 #' e.g. individual shift and damping factors for each basis set element.
 #' @param output_all_paras_raw include raw fitting parameters in the fit table.
@@ -803,6 +801,9 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param optim_lw_only optimize the global line-broadening term only.
 #' @param optim_lw_only_limit limits for the line-breading term as a percentage
 #' of the starting value when optim_lw_only is TRUE.
+#' @param lb_init initial Lorentzian line broadening value for the individual 
+#' basis signals. Setting to 0 will clash with the minimum allowable value
+#' (eg hard constraint) during the detailed fit.
 #' @return full list of options.
 #' @examples
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
@@ -828,9 +829,10 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
                        max_basis_damping_broad = 2,
                        ahat_calc_method = "lh_pnnls",
                        prefit_phase_search = TRUE, freq_reg = NULL,
-                       output_all_paras = FALSE, output_all_paras_raw = FALSE,
-                       input_paras_raw = NULL, optim_lw_only = FALSE,
-                       optim_lw_only_limit = 20) {
+                       lb_reg = NULL, output_all_paras = FALSE,
+                       output_all_paras_raw = FALSE, input_paras_raw = NULL,
+                       optim_lw_only = FALSE, optim_lw_only_limit = 20,
+                       lb_init = 0.001) {
                          
   list(init_damping = init_damping, maxiters = maxiters,
        max_shift = max_shift, max_damping = max_damping, max_phase = max_phase,
@@ -854,10 +856,10 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
        max_basis_damping_broad = max_basis_damping_broad,
        ahat_calc_method = ahat_calc_method,
        prefit_phase_search = prefit_phase_search, freq_reg = freq_reg,
-       output_all_paras = output_all_paras,
+       lb_reg = lb_reg, output_all_paras = output_all_paras,
        output_all_paras_raw = output_all_paras_raw,
        input_paras_raw = input_paras_raw, optim_lw_only = optim_lw_only,
-       optim_lw_only_limit = optim_lw_only_limit)
+       optim_lw_only_limit = optim_lw_only_limit, lb_init = lb_init)
 }
 
 #' Return a list of options for an ABfit analysis to maintain comparability with
@@ -932,7 +934,7 @@ abfit_full_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   # augment signal with zeros to match basis dimensions
   fit_seg <- c(Y[inds], rep(0, bl_comps - 2))
   
-  # estimtate amplitudes
+  # estimate amplitudes
   ahat <- calc_ahat(Re(full_bas), Re(fit_seg), k = bl_comps,
                     ahat_calc_method)
   

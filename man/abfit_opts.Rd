@@ -45,11 +45,13 @@ abfit_opts(
   ahat_calc_method = "lh_pnnls",
   prefit_phase_search = TRUE,
   freq_reg = NULL,
+  lb_reg = NULL,
   output_all_paras = FALSE,
   output_all_paras_raw = FALSE,
   input_paras_raw = NULL,
   optim_lw_only = FALSE,
-  optim_lw_only_limit = 20
+  optim_lw_only_limit = 20,
+  lb_init = 0.001
 )
 }
 \arguments{
@@ -156,6 +158,8 @@ prefit stage of the algorithm.}
 
 \item{freq_reg}{frequency shift parameter.}
 
+\item{lb_reg}{individual line broadening parameter.}
+
 \item{output_all_paras}{include more fitting parameters in the fit table,
 e.g. individual shift and damping factors for each basis set element.}
 
@@ -169,6 +173,10 @@ use only.}
 
 \item{optim_lw_only_limit}{limits for the line-breading term as a percentage
 of the starting value when optim_lw_only is TRUE.}
+
+\item{lb_init}{initial Lorentzian line broadening value for the individual
+basis signals. Setting to 0 will clash with the minimum allowable value
+(eg hard constraint) during the detailed fit.}
 }
 \value{
 full list of options.
