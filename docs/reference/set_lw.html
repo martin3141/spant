@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.10.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.11.0</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">set_lw</span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">lw</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span>, lg <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">set_lw</span><span class="op">(</span><span class="va">mrs_data</span>, <span class="va">lw</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span>, lg <span class="op">=</span> <span class="fl">1</span>, mask_narrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -97,6 +97,11 @@
 
 <dt>lg</dt>
 <dd><p>Lorentz-Gauss lineshape parameter.</p></dd>
+
+
+<dt>mask_narrow</dt>
+<dd><p>masks spectra where the requested linewidth is too narrow,
+if set FALSE the spectra are not changed.</p></dd>
 
 </dl></div>
     <div id="value">
