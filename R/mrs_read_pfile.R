@@ -56,6 +56,7 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
     cat(paste("w_frames    :", hdr$rhuser19), "\n")
     cat(paste("Header rev. :", hdr$hdr_rev), "\n")
     cat(paste("Seq. name   :", hdr$seq_name), "\n")
+    cat(paste("Prot. name  :", hdr$prot_name), "\n")
     cat(paste("CSI dims    :", hdr$csi_dims), "\n")
     cat(paste("xcsi        :", hdr$xcsi), "\n")
     cat(paste("ycsi        :", hdr$ycsi), "\n")
@@ -111,6 +112,7 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
   meta <- list(EchoTime = hdr$te,
                RepetitionTime = hdr$tr,
                SequenceName = hdr$seq_name,
+               ProtocolName = hdr$prot_name,
                Manufacturer = "GE")
   
   if (toupper(hdr$seq_name) == "PROBE-P") {
@@ -209,16 +211,19 @@ read_pfile_header <- function(fname) {
   seek(con, loc$seq_name)
   vars$seq_name <- readBin(con, "character", size = 33)
   
+  seek(con, loc$prot_name)
+  vars$prot_name <- readBin(con, "character", size = 65)
+  
   close(con)
   
   vars
 }
 
 get_pfile_vars <- function() {
-  vars <- vector(mode = "list", length = 16)
+  vars <- vector(mode = "list", length = 17)
   names(vars) <- c("hdr_rev", "off_data", "nechoes", "nframes", "frame_size", 
                    "rcv", "rhuser19", "spec_width", "csi_dims", "xcsi", "ycsi",
-                   "zcsi", "ps_mps_freq", "te", "tr", "seq_name")
+                   "zcsi", "ps_mps_freq", "te", "tr", "seq_name", "prot_name")
   vars
 }
 
@@ -252,6 +257,7 @@ get_pfile_dict <- function(hdr_rev, con) {
     loc$te          <- 1148
     loc$tr          <- 199236
     loc$seq_name    <- 199812
+    loc$prot_name   <- 199812 # TODO
   } else if (floor(hdr_rev) == 14L) {
     loc$hdr_rev     <- 0
     loc$off_data    <- 1468
@@ -269,6 +275,7 @@ get_pfile_dict <- function(hdr_rev, con) {
     loc$te          <- 144580
     loc$tr          <- 144572
     loc$seq_name    <- 145132
+    loc$prot_name   <- 142318
   } else if (floor(hdr_rev) == 21L) {
     loc$hdr_rev     <- 0
     loc$off_data    <- 1468
@@ -286,6 +293,7 @@ get_pfile_dict <- function(hdr_rev, con) {
     loc$te          <- 1212
     loc$tr          <- 148944
     loc$seq_name    <- 149520
+    loc$prot_name   <- 146310
   } else if (floor(hdr_rev) == 24L) {
     loc$hdr_rev     <- 0
     loc$off_data    <- 1468
@@ -304,6 +312,7 @@ get_pfile_dict <- function(hdr_rev, con) {
     loc$te          <- 148404
     loc$tr          <- 148396
     loc$seq_name    <- 148972
+    loc$prot_name   <- 145762
   } else if (floor(hdr_rev) == 26L) {
     loc$hdr_rev     <- 0
     loc$off_data    <- 4
@@ -321,6 +330,7 @@ get_pfile_dict <- function(hdr_rev, con) {
     loc$te          <- 1148
     loc$tr          <- 199236
     loc$seq_name    <- 199812
+    loc$prot_name   <- 196602
   } else if (floor(hdr_rev) == 28L) {
     # some files from this version are corrupt due to a bug in the GE software
     # (relating to auto-coil selection "Air Touch")
@@ -341,6 +351,7 @@ get_pfile_dict <- function(hdr_rev, con) {
     loc$te          <- 1148
     loc$tr          <- 207428
     loc$seq_name    <- 208004
+    loc$prot_name   <- 204794
   } else {
     warning("pfile version is untested :", hdr_rev)
     loc$hdr_rev     <- 0
@@ -359,6 +370,7 @@ get_pfile_dict <- function(hdr_rev, con) {
     loc$te          <- 1148
     loc$tr          <- 207428
     loc$seq_name    <- 208004
+    loc$prot_name   <- 204794
   }
   return(loc)
 }

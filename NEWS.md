@@ -1,5 +1,6 @@
 # spant 2.11.0
 * Bug fix for Siemens RDA slice thickness detection.
+* ProtocolName is now read from GE p-files.
 
 # spant 2.10.0
 * Tentative support for UIH DICOM MRS format.
