@@ -55,6 +55,11 @@ print.mrs_data <- function(x, full = FALSE, ...) {
         sep = " ")
   }
   
+  if (!is.null(x$meta$ProtocolName)) {
+    cat(paste(c("Protocol name           :", x$meta$ProtocolName, "\n")),
+        sep = " ")
+  }
+  
   if (full) {
     #cat(paste(c("Row vector              :", x$row_vec, "\n")), sep = " ")
     #cat(paste(c("Column vector           :", x$col_vec, "\n")), sep = " ")
