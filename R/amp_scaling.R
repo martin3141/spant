@@ -20,9 +20,9 @@
 #' @export
 scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr, ...){
   
-  if (!identical(dim(fit_result$data$data)[2:6], dim(ref_data$data)[2:6])) {
-    stop("Mismatch between fit result and reference data dimensions.")
-  }
+  # if (!identical(dim(fit_result$data$data)[2:6], dim(ref_data$data)[2:6])) {
+  #   stop("Mismatch between fit result and reference data dimensions.")
+  # }
   
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
@@ -38,6 +38,11 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr, ...){
   amp_cols <- fit_result$amp_cols
   
   w_amp <- as.numeric(get_td_amp(ref_data, ...))
+  
+  # if there is only one water ref amp, extend if needed, eg for fMRS
+  if ((length(w_amp) == 1) & (nrow(fit_result$res_tab) > 1)) {
+    w_amp <- rep(w_amp, nrow(fit_result$res_tab)) 
+  }
   
   if (length(w_amp) != nrow(fit_result$res_tab)) {
     stop("Mismatch between fit result and reference data.")
@@ -96,9 +101,9 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr, ...){
 scale_amp_molal <- function(fit_result, ref_data, te, tr, water_t1, water_t2,
                             metab_t1, metab_t2, ...){
   
-  if (!identical(dim(fit_result$data$data)[2:6], dim(ref_data$data)[2:6])) {
-    stop("Mismatch between fit result and reference data dimensions.")
-  }
+  # if (!identical(dim(fit_result$data$data)[2:6], dim(ref_data$data)[2:6])) {
+  #   stop("Mismatch between fit result and reference data dimensions.")
+  # }
   
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
@@ -117,6 +122,11 @@ scale_amp_molal <- function(fit_result, ref_data, te, tr, water_t1, water_t2,
   amp_cols <- fit_result$amp_cols
   
   w_amp <- as.numeric(get_td_amp(ref_data, ...))
+  
+  # if there is only one water ref amp, extend if needed, eg for fMRS
+  if ((length(w_amp) == 1) & (nrow(fit_result$res_tab) > 1)) {
+    w_amp <- rep(w_amp, nrow(fit_result$res_tab)) 
+  }
   
   if (length(w_amp) != nrow(fit_result$res_tab)) {
     stop("Mismatch between fit result and reference data.")
@@ -152,9 +162,9 @@ scale_amp_molal <- function(fit_result, ref_data, te, tr, water_t1, water_t2,
 scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880,
                             ...) {
   
-  if (!identical(dim(fit_result$data$data)[2:6], dim(ref_data$data)[2:6])) {
-    stop("Mismatch between fit result and reference data dimensions.")
-  }
+  # if (!identical(dim(fit_result$data$data)[2:6], dim(ref_data$data)[2:6])) {
+  #   stop("Mismatch between fit result and reference data dimensions.")
+  # }
   
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
@@ -164,6 +174,11 @@ scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880,
   }
   
   w_amp <- as.numeric(get_td_amp(ref_data, ...))
+  
+  # if there is only one water ref amp, extend if needed, eg for fMRS
+  if ((length(w_amp) == 1) & (nrow(fit_result$res_tab) > 1)) {
+    w_amp <- rep(w_amp, nrow(fit_result$res_tab)) 
+  }
   
   if (length(w_amp) != nrow(fit_result$res_tab)) {
     stop("Mismatch between fit result and reference data.")
@@ -188,9 +203,9 @@ scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880,
 #' @export
 scale_amp_water_ratio <- function(fit_result, ref_data, ...) {
   
-  if (!identical(dim(fit_result$data$data)[2:6], dim(ref_data$data)[2:6])) {
-    stop("Mismatch between fit result and reference data dimensions.")
-  }
+  # if (!identical(dim(fit_result$data$data)[2:6], dim(ref_data$data)[2:6])) {
+  #  stop("Mismatch between fit result and reference data dimensions.")
+  # }
   
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
@@ -203,6 +218,11 @@ scale_amp_water_ratio <- function(fit_result, ref_data, ...) {
   
   if (length(w_amp) != nrow(fit_result$res_tab)) {
     stop("Mismatch between fit result and reference data.")
+  }
+  
+  # if there is only one water ref amp, extend if needed, eg for fMRS
+  if ((length(w_amp) == 1) & (nrow(fit_result$res_tab) > 1)) {
+    w_amp <- rep(w_amp, nrow(fit_result$res_tab)) 
   }
   
   fit_result$res_tab$w_amp <- w_amp

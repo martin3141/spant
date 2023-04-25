@@ -1,4 +1,6 @@
 # spant 2.12.0
+* Amplitude scaling functions duplicate water reference amplitudes when
+sensible.
 
 # spant 2.11.0
 * Bug fix for Siemens RDA slice thickness detection.
