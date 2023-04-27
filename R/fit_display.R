@@ -382,7 +382,8 @@ print.fit_result <- function(x, ...) {
   cat("Fitting results\n", sep = "")
   cat("-------------------------------\n", sep = "")
   cat("Analysis duration : ", x$proc_time[3],"s\n", sep = "")
-  cat("Number of spectra : ", length(stats::na.omit(x$res_tab[,6])),"\n", sep = "")
+  cat("Number of spectra : ", length(stats::na.omit(x$res_tab[,6])),"\n",
+      sep = "")
   if (!is.character(x$basis)) {
     cat("Basis elements    : ", dim(x$basis$data)[2], "\n\n", sep = "")
     cat("Basis names\n", sep = "")
