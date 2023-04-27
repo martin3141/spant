@@ -2515,12 +2515,24 @@ mean_dyns <- function(mrs_data) {
 
 #' Subtract the mean dynamic spectrum from a dynamic series.
 #' @param mrs_data dynamic MRS data.
+#' @param scale scale factor for the mean spectrum.
 #' @return subtracted data.
 #' @export
-sub_mean_dyns <- function(mrs_data) {
-  mean_mrs_data <- mean_dyns(mrs_data)
+sub_mean_dyns <- function(mrs_data, scale = 1) {
+  mean_mrs_data <- mean_dyns(mrs_data) * scale
   mrs_data_mean_sub <- mrs_data - rep_dyn(mean_mrs_data, Ndyns(mrs_data))
   return(mrs_data_mean_sub)
+}
+
+#' Subtract the first dynamic spectrum from a dynamic series.
+#' @param mrs_data dynamic MRS data.
+#' @param scale scale factor for the first spectrum.
+#' @return subtracted data.
+#' @export
+sub_first_dyn <- function(mrs_data, scale = 1) {
+  first_mrs_data <- get_dyns(mrs_data, 1) * scale
+  mrs_data_first_sub <- mrs_data - rep_dyn(first_mrs_data, Ndyns(mrs_data))
+  return(mrs_data_first_sub)
 }
 
 #' Calculate the mean of adjacent dynamic scans.

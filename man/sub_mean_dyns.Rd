@@ -4,10 +4,12 @@
 \alias{sub_mean_dyns}
 \title{Subtract the mean dynamic spectrum from a dynamic series.}
 \usage{
-sub_mean_dyns(mrs_data)
+sub_mean_dyns(mrs_data, scale = 1)
 }
 \arguments{
 \item{mrs_data}{dynamic MRS data.}
+
+\item{scale}{scale factor for the mean spectrum.}
 }
 \value{
 subtracted data.
