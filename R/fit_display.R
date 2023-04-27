@@ -248,6 +248,18 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0, dyn = 1,
   opts <- x$opts
   x <- x$fits[[n]]
   
+  if (is.null(xlim)) {
+    if (inherits(opts, "list")) {
+      if ((!is.null(opts$ppm_left)) & (!is.null(opts$ppm_right))) {
+        xlim <- c(opts$ppm_left, opts$ppm_right)
+      } else {
+        xlim <- rev(range(x$PPMScale))
+      }
+    } else {
+      xlim <- rev(range(x$PPMScale))
+    }
+  }
+  
   # remove any signals that were requested
   if (!is.null(omit_signals)) x <- x[, !(names(x) %in% omit_signals)]
   
@@ -371,10 +383,12 @@ print.fit_result <- function(x, ...) {
   cat("-------------------------------\n", sep = "")
   cat("Analysis duration : ", x$proc_time[3],"s\n", sep = "")
   cat("Number of spectra : ", length(stats::na.omit(x$res_tab[,6])),"\n", sep = "")
-  cat("Basis elements    : ", dim(x$basis$data)[2], "\n\n", sep = "")
-  cat("Basis names\n", sep = "")
-  cat("-------------------------------\n")
-  cat(x$basis$names, sep = ",", fill = 31)
+  if (!is.character(x$basis)) {
+    cat("Basis elements    : ", dim(x$basis$data)[2], "\n\n", sep = "")
+    cat("Basis names\n", sep = "")
+    cat("-------------------------------\n")
+    cat(x$basis$names, sep = ",", fill = 31)
+  }
 }
 
 #' Print fit coordinates from a single index.
