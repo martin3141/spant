@@ -107,6 +107,9 @@ print.mrs_data <- function(x, full = FALSE, ...) {
 #' Overrides any transparency levels set by col.
 #' @param bl_lty linetype for the y = 0 baseline trace. A default value NULL
 #' results in no baseline being plotted.
+#' @param hline add a horizontal line at the specified value.
+#' @param hline_lty linetype for the horizontal line.
+#' @param hline_col colour for the horizontal line.
 #' @param ... other arguments to pass to the plot method.
 #' @export
 plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
@@ -117,7 +120,8 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
                           xaxis_lab = NULL, yaxis_lab = NULL, xat = NULL,
                           xlabs = TRUE, yat = NULL, ylabs = TRUE,
                           show_grid = TRUE, grid_nx = NULL, grid_ny = NA,
-                          col = NULL, alpha = NULL, bl_lty = NULL, ...) {
+                          col = NULL, alpha = NULL, bl_lty = NULL, hline = NULL,
+                          hline_lty = 2, hline_col = "red", ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
  
@@ -236,9 +240,11 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
   }
   
   # draw baseline(s)
-  if (!is.null(bl_lty)) {
-      graphics::abline(h = 0, lty = bl_lty, lwd = 0.5)
-  }
+  if (!is.null(bl_lty)) graphics::abline(h = 0, lty = bl_lty, lwd = 0.5)
+ 
+  # draw horizonal line 
+  if (!is.null(hline)) graphics::abline(h = hline, col = hline_col,
+                                        lty = hline_lty)
   
   if (restore_def_par) graphics::par(.pardefault)
 }

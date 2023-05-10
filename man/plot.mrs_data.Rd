@@ -34,6 +34,9 @@
   col = NULL,
   alpha = NULL,
   bl_lty = NULL,
+  hline = NULL,
+  hline_lty = 2,
+  hline_col = "red",
   ...
 )
 }
@@ -104,6 +107,12 @@ Overrides any transparency levels set by col.}
 
 \item{bl_lty}{linetype for the y = 0 baseline trace. A default value NULL
 results in no baseline being plotted.}
+
+\item{hline}{add a horizontal line at the specified value.}
+
+\item{hline_lty}{linetype for the horizontal line.}
+
+\item{hline_col}{colour for the horizontal line.}
 
 \item{...}{other arguments to pass to the plot method.}
 }
