@@ -320,29 +320,78 @@ depth <- function(this) ifelse(is.list(this), 1L + max(sapply(this, depth)), 0L)
 #' @param amps a vector of basis amplitudes may be specified to modify the
 #' output spectrum.
 #' @param basis_lb apply additional Gaussian line-broadening to the basis (Hz).
+#' @param zero_lip_mm zero the amplitudes of any lipid or macromolecular
+#' components based on their name starting with "MM" or "Lip".
 #' @param ... extra parameters to pass to the pulse sequence function.
 #' @return see full_output option.
 #' @export
-sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal_v1",
+sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal_v2",
                          pul_seq = seq_slaser_ideal, xlim = c(0.5, 4.2), 
                          full_output = FALSE, amps = NULL,
-                         basis_lb = NULL, ...) {
+                         basis_lb = NULL, zero_lip_mm = FALSE, ...) {
   
-  brain_basis_paras <- get_1h_brain_basis_paras_v1(ft = acq_paras$ft)
-  if (is.null(amps)) {
-    if (type == "normal_v1") {
+  if (type == "normal_v1") {
+    brain_basis_paras <- get_1h_brain_basis_paras_v1(ft = acq_paras$ft)
+    if (is.null(amps)) {
       amps <- c(0.000000000, 0.009799548, 0.072152490, 0.077845526, 0.045575002, 
                 0.005450371, 0.000000000, 0.028636132, 0.076469056, 0.028382618,
                 0.069602483, 0.001763720, 0.042031981, 0.013474549, 0.000000000, 
                 0.000000000, 0.015705756, 0.001903173, 0.063409950, 0.051807236,
                 0.222599530, 0.110431759, 0.023451957, 0.000000000, 0.032474090,
                 0.007033074, 0.000000000)
-    } else {
-      stop("invalid spectrum type")
     }
+  } else if (type == "normal_v2") {
+    brain_basis_paras <- get_1h_brain_basis_paras_v3(ft = acq_paras$ft)
+    if (is.null(amps)) {
+      # levels are taken from within the range specified by "In Vivo NMR
+      # Spectroscopy 3rd ed" in normal grey matter 
+      amps <- c("-CrCH2" = 0,
+                "Ala"    = 0.2, 
+                "Asp"    = 1.5,
+                "Cr"     = 5,
+                "GABA"   = 1,
+                "Glc"    = 1,
+                "Gln"    = 3,
+                "Gly"    = 1,
+                "GSH"    = 2,
+                "Glu"    = 10,
+                "GPC"    = 1.2,
+                "Ins"    = 5,
+                "Lac"    = 0.5,
+                "Lip09"  = 0,
+                "Lip13a" = 0,
+                "Lip13b" = 0,
+                "Lip20"  = 0,
+                "MM09"   = 4,
+                "MM12"   = 4,
+                "MM14"   = 4,
+                "MM17"   = 4,
+                "MM20"   = 4,
+                "NAA"    = 10,
+                "NAAG"   = 2,
+                "PCh"    = 0.5,
+                "PCr"    = 4.5,
+                "PEth"   = 0.8,
+                "sIns"   = 0.4,
+                "Tau"    = 1.5)
+    }
+  } else {
+    stop("invalid spectrum type")
   }
   
   basis <- sim_basis(brain_basis_paras, pul_seq, acq_paras, xlim = xlim, ...)
+  
+  if (zero_lip_mm) {
+    if (length(grep("^MM", basis$names)) > 0) {
+      zero_idx <- grep("^MM", basis$names)
+      amps[zero_idx] <- 0
+    }
+    
+    if (length(grep("^Lip", basis$names)) > 0) {
+      zero_idx <- grep("^Lip", basis$names)
+      amps[zero_idx] <- 0
+    }
+  }
   
   names(amps) <- basis$names
   
