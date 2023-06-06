@@ -2294,6 +2294,16 @@ scale_mrs_amp <- function(mrs_data, amp) {
   return(mrs_data)
 }
 
+#' Scale a basis object by a scalar.
+#' @param basis basis_set object to be scaled.
+#' @param amp multiplicative factor with length 1.
+#' @return basis_set object multiplied by the amplitude scale factor.
+#' @export
+scale_basis_amp <- function(basis, amp) {
+  basis$data <- basis$data * amp
+  return(basis)
+}
+
 #' Scale mrs_data to a spectral region.
 #' @param mrs_data MRS data.
 #' @param xlim spectral range to be integrated (defaults to full range).
