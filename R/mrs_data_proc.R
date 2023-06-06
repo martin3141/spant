@@ -1372,6 +1372,21 @@ crop_td_pts_pot <- function(mrs_data) {
   return(mrs_data)  
 }
 
+#' Crop \code{basis_set} object based on a frequency range.
+#' @param basis basis_set object to be cropped in the spectral dimension.
+#' @param xlim range of values to crop in the spectral dimension eg 
+#' xlim = c(4, 0.2).
+#' @param scale the units to use for the frequency scale, can be one of: "ppm", 
+#' "hz" or "points".
+#' @return cropped \code{mrs_data} object.
+#' @export
+crop_basis <- function(basis, xlim = c(4, 0.2), scale = "ppm") {
+  mrs_data_basis <- basis2mrs_data(basis)  
+  mrs_data_basis_crop <- crop_spec(mrs_data_basis, xlim = xlim, scale = scale)
+  basis_cropped <- mrs_data2basis(mrs_data_basis_crop, basis$names)
+  return(basis_cropped)
+}
+
 #' Crop \code{mrs_data} object based on a frequency range.
 #' @param mrs_data MRS data.
 #' @param xlim range of values to crop in the spectral dimension eg 

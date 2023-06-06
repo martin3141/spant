@@ -1,6 +1,7 @@
 # spant 2.13.0
 * Improved defaults for sim_brain_1h function.
 * Added scale_basis_amp function.
+* Added crop_basis function.
 
 # spant 2.12.0
 * Amplitude scaling functions duplicate water reference amplitudes when
