@@ -1,21 +1,21 @@
 varpro_basic <- function(y, acq_paras, basis, opts = NULL) {
-  mrs_data <- vec2mrs_data(y, fs = acq_paras$fs, ft = acq_paras$ft, 
-                           ref = acq_paras$ref)
   
   # has this data been masked?
+  y <- drop(y)
   if (is.na(y[1])) return(list(amps = NA, crlbs = NA, diags = NA, fit = NA))
+  
+  mrs_data <- vec2mrs_data(y, fs = acq_paras$fs, ft = acq_paras$ft, 
+                           ref = acq_paras$ref)
   
   # use default fitting opts if not specified 
   if (is.null(opts)) opts <- varpro_basic_opts()
   
-  y <- drop(mrs_data$data)
-  
   if (opts$method == "td") {
-    proj <- td_projection(y, basis, opts$nnls)
+    proj <- td_projection(mrs_data, basis, opts)
   } else if (opts$method == "fd") {
-    proj <- fd_projection(y, basis, opts$nnls)
+    proj <- fd_projection(mrs_data, basis, opts)
   } else if (opts$method == "fd_re") {
-    proj <- fd_re_projection(y, basis, opts$nnls)
+    proj <- fd_re_projection(mrs_data, basis, opts)
   } else {
     stop("unrecognised varpro method")
   }
@@ -36,7 +36,9 @@ varpro_basic <- function(y, acq_paras, basis, opts = NULL) {
   list(amps = amps, crlbs = t(rep(NA, length(amps))), diags = diags, fit = fit)
 }
 
-fd_projection <- function(y, basis, nnls) {
+fd_projection <- function(mrs_data, basis, opts) {
+  
+  y      <- drop(mrs_data$data)
   
   Npts   <- length(y)
   Nbasis <- dim(basis$data)[2]
@@ -47,7 +49,7 @@ fd_projection <- function(y, basis, nnls) {
   basis_fd   <- basis$data
   basis_real <- rbind(Re(basis_fd), Im(basis_fd))
   
-  if (nnls) {
+  if (opts$nnls) {
     ahat <- nnls(basis_real, Y_real)$x
   } else {
     ahat <- stats::.lm.fit(basis_real, Y_real)$coefficients
@@ -81,7 +83,9 @@ fd_projection <- function(y, basis, nnls) {
               basis_frame = basis_frame))
 }
 
-fd_re_projection <- function(y, basis, nnls) {
+fd_re_projection <- function(mrs_data, basis, opts) {
+  
+  y      <- drop(mrs_data$data)
   
   Npts   <- length(y)
   Nbasis <- dim(basis$data)[2]
@@ -99,7 +103,7 @@ fd_re_projection <- function(y, basis, nnls) {
   
   basis_real <- Re(basis_fd)
   
-  if (nnls) {
+  if (opts$nnls) {
     ahat <- nnls(basis_real, Y_real)$x
   } else {
     ahat <- stats::.lm.fit(basis_real, Y_real)$coefficients
@@ -121,7 +125,9 @@ fd_re_projection <- function(y, basis, nnls) {
               basis_frame = basis_frame))
 }
 
-td_projection <- function(y, basis, nnls) {
+td_projection <- function(mrs_data, basis, opts) {
+  
+  y      <- drop(mrs_data$data)
   
   Npts   <- length(y)
   Nbasis <- dim(basis$data)[2]
@@ -131,7 +137,7 @@ td_projection <- function(y, basis, nnls) {
   basis_td   <- apply(basis$data, 2, ift_shift)
   basis_real <- rbind(Re(basis_td), Im(basis_td))
   
-  if (nnls) {
+  if (opts$nnls) {
     ahat <- nnls(basis_real, y_real)$x
   } else {
     ahat <- stats::.lm.fit(basis_real, y_real)$coefficients
@@ -204,6 +210,7 @@ append_metab_combs <- function(amps) {
 #' @param nnls restrict basis amplitudes to non-negative values.
 #' @return full list of options.
 #' @export
-varpro_basic_opts <- function(method = "fd_re", nnls = TRUE) {
-  list(method = method, nnls = nnls)
+varpro_basic_opts <- function(method = "fd_re", nnls = TRUE, ppm_left = 4,
+                              ppm_right = 0.2) {
+  list(method = method, nnls = nnls, ppm_left = ppm_left, ppm_right = ppm_right)
 }
