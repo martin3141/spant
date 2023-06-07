@@ -10,7 +10,6 @@ varpro_basic <- function(y, acq_paras, basis, opts = NULL) {
   
   y <- drop(mrs_data$data)
   
-  
   if (opts$method == "td") {
     proj <- td_projection(y, basis, opts$nnls)
   } else if (opts$method == "fd") {

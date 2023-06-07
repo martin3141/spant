@@ -1414,24 +1414,19 @@ crop_spec <- function(mrs_data, xlim = c(4, 0.2), scale = "ppm") {
     stop("Error, scale not recognised.")
   }
   
-  if (is.null(xlim)) {
-    xlim <- c(x_scale[1], x_scale[Npts(mrs_data)])
-  }
+  if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[Npts(mrs_data)])
   
   subset <- get_seg_ind(x_scale, xlim[1], xlim[2])
   
   old_ppm <- ppm(mrs_data)
-  #old_ref <- mrs_data$ref
   
   # update fs
   mrs_data$resolution[7] <- (mrs_data$resolution[7] / length(subset) *
                              Npts(mrs_data))
   
   mrs_data$data <- mrs_data$data[,,,,,, subset, drop = F]
-  #print(length(subset))
   
-  # not sure why subset[2] works better than subset[1]
-  new_ppm = (old_ppm[subset[length(subset)]] + old_ppm[subset[2]])/2
+  new_ppm = (old_ppm[subset[length(subset)]] + old_ppm[subset[2]]) / 2
   mrs_data$ref <- new_ppm
   
   dimnames(mrs_data$data) <- NULL
