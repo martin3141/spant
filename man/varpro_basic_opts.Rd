@@ -4,12 +4,16 @@
 \alias{varpro_basic_opts}
 \title{Return a list of options for a basic VARPRO analysis.}
 \usage{
-varpro_basic_opts(method = "fd_re", nnls = TRUE)
+varpro_basic_opts(method = "fd_re", nnls = TRUE, ppm_left = 4, ppm_right = 0.2)
 }
 \arguments{
 \item{method}{one of "td", "fd", "fd_re".}
 
 \item{nnls}{restrict basis amplitudes to non-negative values.}
+
+\item{ppm_left}{downfield frequency limit for the fitting range (ppm).}
+
+\item{ppm_right}{upfield frequency limit for the fitting range (ppm).}
 }
 \value{
 full list of options.

@@ -12,10 +12,14 @@ varpro_basic <- function(y, acq_paras, basis, opts = NULL) {
   
   if (opts$method == "td") {
     proj <- td_projection(mrs_data, basis, opts)
+    ppm_sc <- ppm(mrs_data, 2 * length(y))
   } else if (opts$method == "fd") {
     proj <- fd_projection(mrs_data, basis, opts)
+    ppm_sc <- ppm(mrs_data, 2 * length(y))
   } else if (opts$method == "fd_re") {
+    mrs_data <- crop_spec(zf(mrs_data), c(opts$ppm_left, opts$ppm_right))
     proj <- fd_re_projection(mrs_data, basis, opts)
+    ppm_sc <- ppm(mrs_data)
   } else {
     stop("unrecognised varpro method")
   }
@@ -23,8 +27,7 @@ varpro_basic <- function(y, acq_paras, basis, opts = NULL) {
   # create some common metabolite combinations
   amps <- append_metab_combs(proj$amps)
   
-  fit <- data.frame(PPMScale = ppm(mrs_data, N = 2 * length(y)),
-                    Data = Re(proj$Y), Fit = Re(proj$YHAT),
+  fit <- data.frame(PPMScale = ppm_sc, Data = Re(proj$Y), Fit = Re(proj$YHAT),
                     Baseline = Re(proj$BL))
   
   fit <- cbind(fit, proj$basis_frame)
@@ -85,23 +88,17 @@ fd_projection <- function(mrs_data, basis, opts) {
 
 fd_re_projection <- function(mrs_data, basis, opts) {
   
-  y      <- drop(mrs_data$data)
+  Y        <- drop(mrs_data$data)
   
-  Npts   <- length(y)
+  Npts   <- length(Y)
   Nbasis <- dim(basis$data)[2]
   
-  # zf y 
-  y <- c(y, rep(0, Npts))
-  
-  Y <- ft_shift(y)
   Y_real <- Re(Y)
   
-  basis_td <- apply(basis$data, 2, ift_shift)
-  zero_mat <- matrix(0, nrow = Npts, ncol = Nbasis)
-  basis_td <- rbind(basis_td, zero_mat)
-  basis_fd <- apply(basis_td, 2, ft_shift)
+  basis <- zf(basis)
+  basis <- crop_basis(basis, c(opts$ppm_left, opts$ppm_right))
   
-  basis_real <- Re(basis_fd)
+  basis_real <- Re(basis$data)
   
   if (opts$nnls) {
     ahat <- nnls(basis_real, Y_real)$x
@@ -110,7 +107,7 @@ fd_re_projection <- function(mrs_data, basis, opts) {
   }
   
   YHAT <- basis_real %*% ahat
-  amat <- matrix(ahat, nrow = Npts * 2, ncol = Nbasis, byrow = TRUE)
+  amat <- matrix(ahat, nrow = Npts, ncol = Nbasis, byrow = TRUE)
   BASIS_SC <- basis_real * amat
   
   basis_frame <- as.data.frame(Re(BASIS_SC), row.names = NA)
@@ -208,6 +205,8 @@ append_metab_combs <- function(amps) {
 #' 
 #' @param method one of "td", "fd", "fd_re".
 #' @param nnls restrict basis amplitudes to non-negative values.
+#' @param ppm_left downfield frequency limit for the fitting range (ppm).
+#' @param ppm_right upfield frequency limit for the fitting range (ppm).
 #' @return full list of options.
 #' @export
 varpro_basic_opts <- function(method = "fd_re", nnls = TRUE, ppm_left = 4,
