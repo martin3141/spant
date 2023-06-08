@@ -13,6 +13,7 @@ sim_brain_1h(
   amps = NULL,
   basis_lb = NULL,
   zero_lip_mm = FALSE,
+  remove_lip_mm = FALSE,
   ...
 )
 }
@@ -37,6 +38,9 @@ output spectrum.}
 
 \item{zero_lip_mm}{zero the amplitudes of any lipid or macromolecular
 components based on their name starting with "MM" or "Lip".}
+
+\item{remove_lip_mm}{remove any lipid or macromolecular basis components
+based on their name starting with "MM" or "Lip".}
 
 \item{...}{extra parameters to pass to the pulse sequence function.}
 }
