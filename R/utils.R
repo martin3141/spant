@@ -322,13 +322,16 @@ depth <- function(this) ifelse(is.list(this), 1L + max(sapply(this, depth)), 0L)
 #' @param basis_lb apply additional Gaussian line-broadening to the basis (Hz).
 #' @param zero_lip_mm zero the amplitudes of any lipid or macromolecular
 #' components based on their name starting with "MM" or "Lip".
+#' @param remove_lip_mm remove any lipid or macromolecular basis components
+#' based on their name starting with "MM" or "Lip".
 #' @param ... extra parameters to pass to the pulse sequence function.
 #' @return see full_output option.
 #' @export
 sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal_v2",
                          pul_seq = seq_slaser_ideal, xlim = c(0.5, 4.2), 
                          full_output = FALSE, amps = NULL,
-                         basis_lb = NULL, zero_lip_mm = FALSE, ...) {
+                         basis_lb = NULL, zero_lip_mm = FALSE, 
+                         remove_lip_mm = FALSE, ...) {
   
   if (type == "normal_v1") {
     brain_basis_paras <- get_1h_brain_basis_paras_v1(ft = acq_paras$ft)
@@ -390,6 +393,22 @@ sim_brain_1h <- function(acq_paras = def_acq_paras(), type = "normal_v2",
     if (length(grep("^Lip", basis$names)) > 0) {
       zero_idx <- grep("^Lip", basis$names)
       amps[zero_idx] <- 0
+    }
+  }
+  
+  if (remove_lip_mm) {
+    if (length(grep("^MM", basis$names)) > 0) {
+      rem_idx <- grep("^MM", basis$names)
+      amps <- amps[-rem_idx]
+      basis$names <- basis$names[-rem_idx]
+      basis$data  <- basis$data[, -rem_idx]
+    }
+    
+    if (length(grep("^Lip", basis$names)) > 0) {
+      rem_idx <- grep("^Lip", basis$names)
+      amps <- amps[-rem_idx]
+      basis$names <- basis$names[-rem_idx]
+      basis$data  <- basis$data[, -rem_idx]
     }
   }
   
