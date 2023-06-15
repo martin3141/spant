@@ -660,6 +660,30 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   if (restore_def_par) graphics::par(.pardefault)
 }
 
+#' Plot the spectral standard deviation.
+#' @param mrs_data MRS data to be plotted.
+#' @param xlim plotting limits in ppm.
+#' @param scale_sd scaling factor for the standard deviation trace.
+#' @param ... other arguments to pass to the stackplot function.
+#' @export
+plot_spec_sd <- function(mrs_data, xlim = NULL, scale_sd = 5, ...) {
+  
+  # needs to be a FD operation
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  mean <- mean(mrs_data)
+  sd   <- sd(mrs_data) * scale_sd
+  
+  # offset <- spec_op(mean, xlim = xlim, operator = "max") -
+  #           spec_op(sd,   xlim = xlim, operator = "min")
+  
+  offset <- spec_op(sd, xlim = xlim, operator = "max") -
+    spec_op(mean, xlim = xlim, operator = "min")
+  
+  offset <- as.numeric(offset)
+  stackplot(list(mean, sd - offset), xlim = xlim, ...)
+}
+
 #' Convenience function to plot a baseline estimate with the original data.
 #' @param orig_data the original data.
 #' @param bc_data the baseline corrected data.
