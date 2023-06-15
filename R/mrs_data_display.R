@@ -664,7 +664,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
 #' @param mrs_data MRS data to be plotted.
 #' @param xlim plotting limits in ppm.
 #' @param scale_sd scaling factor for the standard deviation trace.
-#' @param ... other arguments to pass to the stackplot function.
+#' @param ... other arguments passed to the stackplot function.
 #' @export
 plot_spec_sd <- function(mrs_data, xlim = NULL, scale_sd = 5, ...) {
   

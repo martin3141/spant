@@ -13,7 +13,7 @@ plot_spec_sd(mrs_data, xlim = NULL, scale_sd = 5, ...)
 
 \item{scale_sd}{scaling factor for the standard deviation trace.}
 
-\item{...}{other arguments to pass to the stackplot function.}
+\item{...}{other arguments passed to the stackplot function.}
 }
 \description{
 Plot the spectral standard deviation.
