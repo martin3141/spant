@@ -6,7 +6,7 @@
 squared difference between the real and magnitude components of the
 spectrum.}
 \usage{
-auto_phase(mrs_data, xlim = c(4, 1.8), smo_ppm_sd = 1, ret_phase = FALSE)
+auto_phase(mrs_data, xlim = c(4, 1.8), smo_ppm_sd = 0.05, ret_phase = FALSE)
 }
 \arguments{
 \item{mrs_data}{an object of class \code{mrs_data}.}
