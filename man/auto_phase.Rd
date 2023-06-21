@@ -6,12 +6,14 @@
 squared difference between the real and magnitude components of the
 spectrum.}
 \usage{
-auto_phase(mrs_data, xlim = NULL, ret_phase = FALSE)
+auto_phase(mrs_data, xlim = c(4, 1.8), smo_ppm_sd = 1, ret_phase = FALSE)
 }
 \arguments{
 \item{mrs_data}{an object of class \code{mrs_data}.}
 
 \item{xlim}{frequency range (default units of PPM) to including in the phase.}
+
+\item{smo_ppm_sd}{Gaussian smoother sd in ppm units.}
 
 \item{ret_phase}{return phase values (logical).}
 }

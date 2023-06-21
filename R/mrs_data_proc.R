@@ -2928,35 +2928,51 @@ hsvd_vec <- function(y, fs, comps = 40, irlba = TRUE, max_damp = 0) {
 #' spectrum.
 #' @param mrs_data an object of class \code{mrs_data}.
 #' @param xlim frequency range (default units of PPM) to including in the phase.
+#' @param smo_ppm_sd Gaussian smoother sd in ppm units.
 #' @param ret_phase return phase values (logical).
 #' @return MRS data object and phase values (optional).
 #' @export
-auto_phase <- function(mrs_data, xlim = NULL, ret_phase = FALSE) {
+auto_phase <- function(mrs_data, xlim = c(4, 1.8), smo_ppm_sd = 1,
+                       ret_phase = FALSE) {
   
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
   mrs_data_proc <- mrs_data
   
   if (!is.null(xlim)) mrs_data_proc <- crop_spec(mrs_data_proc, xlim)
-    
-  phases <- apply_mrs(mrs_data_proc, 7, auto_phase_vec, data_only = TRUE)
+  
+  if (is.null(smo_ppm_sd)) {
+    smo_pts_sd <- NULL 
+  } else {
+    ppm_scale  <- ppm(mrs_data)
+    smo_pts_sd <- round(smo_ppm_sd / (ppm_scale[1] - ppm_scale[2]))
+    if (smo_pts_sd < 1) stop("smoothing window less than 1 data point")
+  }
+  
+  phases <- apply_mrs(mrs_data_proc, 7, auto_phase_vec, data_only = TRUE,
+                      smo_pts_sd = smo_pts_sd)
   
   if (length(phases) == 1) phases <- as.numeric(phases)
   
-  # TODO update phase function and remove drop
   mrs_data <- phase(mrs_data, phases)
   
   if (ret_phase) {
-    return(list(mrs_data = mrs_data, phase = abind::adrop(phases, 7)))
+    return(list(mrs_data = mrs_data, phase = phases))
   } else {
     return(mrs_data)
   }
 }
 
-auto_phase_vec <- function(vec) {
+auto_phase_vec <- function(vec, smo_pts_sd) {
+  
+  if (!is.null(smo_pts_sd)) {
+    vec <- Re(vec) - mmand::gaussianSmooth(Re(vec), smo_pts_sd) +
+           1i * (Im(vec) - mmand::gaussianSmooth(Im(vec), smo_pts_sd))
+  }
+  
   res <- stats::optim(0, phase_obj_fn, gr = NULL, vec, method = "Brent",
                       lower = -180, upper = 180)
-  #vec * exp(1i * res$par / 180 * pi)
+  
   res$par
 }
 
