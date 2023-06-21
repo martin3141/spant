@@ -2932,7 +2932,7 @@ hsvd_vec <- function(y, fs, comps = 40, irlba = TRUE, max_damp = 0) {
 #' @param ret_phase return phase values (logical).
 #' @return MRS data object and phase values (optional).
 #' @export
-auto_phase <- function(mrs_data, xlim = c(4, 1.8), smo_ppm_sd = 1,
+auto_phase <- function(mrs_data, xlim = c(4, 1.8), smo_ppm_sd = 0.01,
                        ret_phase = FALSE) {
   
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
@@ -2945,8 +2945,7 @@ auto_phase <- function(mrs_data, xlim = c(4, 1.8), smo_ppm_sd = 1,
     smo_pts_sd <- NULL 
   } else {
     ppm_scale  <- ppm(mrs_data)
-    smo_pts_sd <- round(smo_ppm_sd / (ppm_scale[1] - ppm_scale[2]))
-    if (smo_pts_sd < 1) stop("smoothing window less than 1 data point")
+    smo_pts_sd <- smo_ppm_sd / (ppm_scale[1] - ppm_scale[2])
   }
   
   phases <- apply_mrs(mrs_data_proc, 7, auto_phase_vec, data_only = TRUE,
