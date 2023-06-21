@@ -437,7 +437,9 @@ phase <- function(mrs_data, zero_order, first_order = 0) {
     phase_array <- array(zero_order, dim = c(1, 1, 1, 1, Ndyns(mrs_data), 1,
                                              Npts(mrs_data)))
     mrs_data$data = mrs_data$data * exp(1i * phase_array * pi / 180)
-  } else if ((first_order == 0) && (dim(zero_order)[1:6] == dim(mrs_data$data)[1:6])) {
+  } else if ((first_order == 0) && identical(dim(zero_order)[1:6],
+                                             dim(mrs_data$data)[1:6])) {
+    
     phase_array <- array(rep(zero_order, Npts(mrs_data)), 
                          dim = dim(mrs_data$data))
     mrs_data$data <- mrs_data$data * exp(1i * phase_array * pi / 180)
@@ -2932,7 +2934,7 @@ hsvd_vec <- function(y, fs, comps = 40, irlba = TRUE, max_damp = 0) {
 #' @param ret_phase return phase values (logical).
 #' @return MRS data object and phase values (optional).
 #' @export
-auto_phase <- function(mrs_data, xlim = c(4, 1.8), smo_ppm_sd = 0.01,
+auto_phase <- function(mrs_data, xlim = c(4, 1.8), smo_ppm_sd = 0.05,
                        ret_phase = FALSE) {
   
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
