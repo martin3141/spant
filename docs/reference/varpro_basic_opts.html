@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.12.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.13.0</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">varpro_basic_opts</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"fd_re"</span>, nnls <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">varpro_basic_opts</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"fd_re"</span>, nnls <span class="op">=</span> <span class="cn">TRUE</span>, ppm_left <span class="op">=</span> <span class="fl">4</span>, ppm_right <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -89,6 +89,14 @@
 
 <dt>nnls</dt>
 <dd><p>restrict basis amplitudes to non-negative values.</p></dd>
+
+
+<dt>ppm_left</dt>
+<dd><p>downfield frequency limit for the fitting range (ppm).</p></dd>
+
+
+<dt>ppm_right</dt>
+<dd><p>upfield frequency limit for the fitting range (ppm).</p></dd>
 
 </dl></div>
     <div id="value">

@@ -220,6 +220,9 @@
     <loc>https://martin3141.github.io/spant/reference/conv_mrs.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/crop_basis.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/crop_spec.html</loc>
   </url>
   <url>
@@ -682,6 +685,9 @@
     <loc>https://martin3141.github.io/spant/reference/plot_slice_map_inter.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/plot_spec_sd.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/plot_voi_overlay.html</loc>
   </url>
   <url>
@@ -806,6 +812,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/scale_amp_water_ratio.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/scale_basis_amp.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/scale_basis_from_singlet.html</loc>

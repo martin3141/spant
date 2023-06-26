@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.12.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.13.0</span>
       </span>
     </div>
 
@@ -80,12 +80,14 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sim_brain_1h</span><span class="op">(</span></span>
 <span>  acq_paras <span class="op">=</span> <span class="fu"><a href="def_acq_paras.html">def_acq_paras</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  type <span class="op">=</span> <span class="st">"normal_v1"</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"normal_v2"</span>,</span>
 <span>  pul_seq <span class="op">=</span> <span class="va">seq_slaser_ideal</span>,</span>
 <span>  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.2</span><span class="op">)</span>,</span>
 <span>  full_output <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  amps <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  basis_lb <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  zero_lip_mm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  remove_lip_mm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -122,6 +124,16 @@ output spectrum.</p></dd>
 
 <dt>basis_lb</dt>
 <dd><p>apply additional Gaussian line-broadening to the basis (Hz).</p></dd>
+
+
+<dt>zero_lip_mm</dt>
+<dd><p>zero the amplitudes of any lipid or macromolecular
+components based on their name starting with "MM" or "Lip".</p></dd>
+
+
+<dt>remove_lip_mm</dt>
+<dd><p>remove any lipid or macromolecular basis components
+based on their name starting with "MM" or "Lip".</p></dd>
 
 
 <dt>...</dt>

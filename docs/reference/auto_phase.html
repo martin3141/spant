@@ -23,7 +23,7 @@ spectrum."><meta property="og:image" content="https://martin3141.github.io/spant
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.12.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.13.0</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@ spectrum.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">auto_phase</span><span class="op">(</span><span class="va">mrs_data</span>, xlim <span class="op">=</span> <span class="cn">NULL</span>, ret_phase <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">auto_phase</span><span class="op">(</span><span class="va">mrs_data</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">1.8</span><span class="op">)</span>, smo_ppm_sd <span class="op">=</span> <span class="fl">0.05</span>, ret_phase <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -99,6 +99,10 @@ spectrum.</p>
 
 <dt>xlim</dt>
 <dd><p>frequency range (default units of PPM) to including in the phase.</p></dd>
+
+
+<dt>smo_ppm_sd</dt>
+<dd><p>Gaussian smoother sd in ppm units.</p></dd>
 
 
 <dt>ret_phase</dt>
