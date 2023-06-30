@@ -30,6 +30,7 @@
   grid_nx = NULL,
   grid_ny = NA,
   lwd = NULL,
+  vline = NULL,
   ...
 )
 }
@@ -95,6 +96,8 @@ corresponding direction.}
 \item{grid_ny}{as above.}
 
 \item{lwd}{plot linewidth.}
+
+\item{vline}{x-value to draw a vertical line.}
 
 \item{...}{other arguments to pass to the matplot method.}
 }

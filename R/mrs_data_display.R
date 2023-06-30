@@ -429,6 +429,7 @@ stackplot.list <- function(x, ...) {
 #' corresponding direction.
 #' @param grid_ny as above.
 #' @param lwd plot linewidth.
+#' @param vline x-value to draw a vertical line.
 #' @param ... other arguments to pass to the matplot method.
 #' @export
 stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
@@ -438,7 +439,8 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                                dyn = 1, coil = 1, bty = NULL, labels = NULL,
                                lab_cex = 1, right_marg = NULL, bl_lty = NULL,
                                restore_def_par = TRUE, show_grid = NULL,
-                               grid_nx = NULL, grid_ny = NA, lwd = NULL, ...) {
+                               grid_nx = NULL, grid_ny = NA, lwd = NULL,
+                               vline = NULL, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -656,6 +658,8 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   }
   
   # if (show_grid) graphics::grid(nx = grid_nx, ny = grid_ny)
+  
+  if (!is.null(vline)) graphics::abline(v = vline, col = "red")
   
   if (restore_def_par) graphics::par(.pardefault)
 }

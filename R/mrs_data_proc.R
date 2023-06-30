@@ -3686,6 +3686,35 @@ bc_poly_vec <- function(vec, p_deg) {
   }
 }
 
+#' Fit and subtract a smoothing spline to each spectrum in a dataset.
+#' @param mrs_data mrs_data object.
+#' @param spar smoothing parameter typically between 0 and 1.
+#' @param nknots number of spline knots.
+#' @return smoothing spline subtracted data.
+#' @export
+bc_spline <- function(mrs_data, spar = 0.5, nknots = 100) {
+  
+  if (inherits(mrs_data, "list")) {
+    return(lapply(mrs_data, bc_spline, spar = spar, nknots = nknots))
+  }
+  
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  bc_res <- apply_mrs(mrs_data, 7, bc_spline_vec, spar, nknots)
+
+  return(bc_res)
+}
+
+bc_spline_vec <- function(vec, spar, nknots) {
+  if (is.na(vec[1]))
+    return(vec) 
+  else {
+    sp_res <- stats::smooth.spline(Re(vec), spar = spar, nknots = nknots)$y +
+              1i * stats::smooth.spline(Im(vec), spar = spar, nknots = nknots)$y
+    return(vec - sp_res)
+  }
+}
+
 #' Back extrapolate time-domain data points using an autoregressive model.
 #' @param mrs_data mrs_data object.
 #' @param extrap_pts number of points to extrapolate.
