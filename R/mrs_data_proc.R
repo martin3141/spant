@@ -550,6 +550,7 @@ deconv_mrs <- function(mrs_data_a, mrs_data_b) {
   
   # needs to be a time-domain operation
   if (is_fd(mrs_data_a)) mrs_data_a <- fd2td(mrs_data_a)
+  if (is_fd(mrs_data_b)) mrs_data_b <- fd2td(mrs_data_b)
   
   return(mrs_data_b / mrs_data_a)
 }
