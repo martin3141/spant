@@ -538,7 +538,20 @@ conv_mrs <- function(mrs_data, conv) {
     conv <- rep_dyn(conv, Ndyns(mrs_data))
   }
   
-  mrs_data * conv 
+  return(mrs_data * conv)
+}
+
+#' Deconvolve two MRS data objects.
+#' @param mrs_data_a MRS data to be deconvolved.
+#' @param mrs_data_b MRS data to be deconvolved.
+#' @return deconvolved data.
+#' @export
+deconv_mrs <- function(mrs_data_a, mrs_data_b) {
+  
+  # needs to be a time-domain operation
+  if (is_fd(mrs_data_a)) mrs_data_a <- fd2td(mrs_data_a)
+  
+  return(mrs_data_b / mrs_data_a)
 }
 
 #' Return the phase of the first data point in the time-domain.
