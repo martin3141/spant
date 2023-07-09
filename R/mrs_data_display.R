@@ -32,6 +32,11 @@ print.mrs_data <- function(x, full = FALSE, ...) {
   cat(paste(c("Nucleus                 : ", x$nuc, "\n")), sep = "")
   cat(paste(c("Spectral domain         : ", x$freq_domain[7], "\n")), sep = "")
   
+  if (!is.null(x$meta$NumberOfTransients)) {
+     cat(paste(c("Number of transients    :", x$meta$NumberOfTransients, "\n")),
+         sep = " ")
+  }
+  
   if (!is.null(x$meta$EchoTime)) {
     cat(paste(c("Echo time (s)           :", x$meta$EchoTime, "\n")),
         sep = " ")

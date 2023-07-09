@@ -98,7 +98,7 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
     k_sp_corr_x <- array(1, dim(data))
     k_sp_corr_x[, c(T, F),,,,,] <- -1
     data <- data * k_sp_corr_x
-}
+  }
   
   res <- c(NA, NA, NA, NA, hdr$tr, NA, 1 / hdr$spec_width)
   
@@ -132,7 +132,7 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
     wref_inds[1:hdr$rhuser] <- TRUE
     wref_inds <- rep(wref_inds, hdr$nechoes)
     
-    ref_mrs <- get_dyns(mrs_data, which(wref_inds))
+    ref_mrs   <- get_dyns(mrs_data, which(wref_inds))
     metab_mrs <- get_dyns(mrs_data, which(!wref_inds))
     
     if (hdr$csi_dims > 0) {

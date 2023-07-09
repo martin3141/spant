@@ -53,12 +53,13 @@ read_spar_sdat <- function(fname, extra) {
   cols <- as.numeric(paras$V2[which(paras$V1 == "dim2_pnts")])
   rows <- as.numeric(paras$V2[which(paras$V1 == "dim3_pnts")])
   slices <- as.numeric(paras$V2[which(paras$V1 == "nr_of_slices_for_multislice")])
+  avs <- as.integer(paras$V2[which(paras$V1 == "averages")])
+  
   #cols <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim2_pnts")])
   #rows <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim3_pnts")])
   
   # May be useful...
   # slices <- as.numeric(paras$V2[which(paras$V1 == "nr_of_slices_for_multislice")])
-  # avs <- as.integer(paras$V2[which(paras$V1 == "averages")])
   # dim1_pts <- as.numeric(paras$V2[which(paras$V1 == "dim1_pnts")])
   # dim1_pts <- as.numeric(paras$V2[which(paras$V1 == "SUN_dim1_pnts")])
   # nuc <- as.numeric(paras$V2[which(paras$V1 == "nucleus")])
@@ -120,7 +121,8 @@ read_spar_sdat <- function(fname, extra) {
   freq_domain <- rep(FALSE, 7)
   
   meta <- list(EchoTime = te,
-               Manufacturer = "Philips")
+               Manufacturer = "Philips",
+               NumberOfTransients = dyns * avs)
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = NULL,
