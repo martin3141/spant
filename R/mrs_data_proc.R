@@ -1193,6 +1193,18 @@ fs <- function(mrs_data) {
   1 / mrs_data$resolution[7]
 }
 
+#' Return the repetition time of an MRS dataset.
+#' @param mrs_data MRS data.
+#' @return repetition time in seconds.
+#' @export
+tr <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
+  1 / mrs_data$resolution[5]
+}
+
 #' Return the frequency scale of an MRS dataset in Hz.
 #' @param mrs_data MRS data.
 #' @param fs sampling frequency in Hz.

@@ -6,7 +6,7 @@ calc_siemens_paras <- function(vars, is_ima) {
   }
   
   res <- c(NA, vars$x_dim / vars$x_pts, vars$y_dim / vars$y_pts,
-           vars$z_dim / vars$z_pts, 1, NA, 1 / vars$fs)
+           vars$z_dim / vars$z_pts, vars$tr, NA, 1 / vars$fs)
   
   ima_norm <- c(vars$norm_sag, vars$norm_cor, vars$norm_tra)
   ima_norm <- l2_norm_vec(ima_norm)
@@ -329,7 +329,6 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   }
   
   meta <- list(EchoTime = vars$te,
-               RepetitionTime = vars$tr,
                FlipAngle = vars$flip_ang,
                SequenceName = vars$seq_fname,
                ChemicalShiftReference = 4.7 + vars$delta_freq,

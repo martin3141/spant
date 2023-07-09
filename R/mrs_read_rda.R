@@ -85,7 +85,7 @@ read_rda <- function(fname, extra) {
   dim(data) <- c(N, rows, cols, slices, 1, 1, 1)
   data <- aperm(data, c(7, 2, 3, 4, 5, 6, 1))
   
-  res <- c(NA, col_vox_dim, row_vox_dim, slice_vox_dim, 1, NA, 1 / fs)
+  res <- c(NA, col_vox_dim, row_vox_dim, slice_vox_dim, tr, NA, 1 / fs)
   ref <- def_ref()
   
   # TODO determine from the data
@@ -103,7 +103,6 @@ read_rda <- function(fname, extra) {
   affine[1:2,] <- -affine[1:2,]
   
   meta = list(EchoTime = te,
-              RepetitionTime = tr,
               Manufacturer = manuf,
               SequenceName = seq_name)
   

@@ -63,6 +63,11 @@ write_mrs_nifti <- function(mrs_data, fname) {
                                  AcquisitionVoxelSize = mrs_data$res[2:4]),
                                  ChemicalShiftOffset = mrs_data$ref)
   
+  # check to see if we know the TR
+  if (!is.na(mrs_data$res[5])) {
+      json_list <- c(json_list, list(RepetitionTime = mrs_data$res[5]))
+  }
+  
   # if SVS this doesn't work yet as number of dynamics doesn't always equal
   # the number of trasients, eg when dealing with averaged data
   # if (is_svs(mrs_data)) {

@@ -100,7 +100,7 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
     data <- data * k_sp_corr_x
 }
   
-  res <- c(NA, NA, NA, NA, 1, NA, 1 / hdr$spec_width)
+  res <- c(NA, NA, NA, NA, hdr$tr, NA, 1 / hdr$spec_width)
   
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
@@ -110,7 +110,6 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
   
   
   meta <- list(EchoTime = hdr$te,
-               RepetitionTime = hdr$tr,
                SequenceName = hdr$seq_name,
                ProtocolName = hdr$prot_name,
                Manufacturer = "GE")

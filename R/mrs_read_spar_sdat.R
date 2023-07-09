@@ -110,7 +110,7 @@ read_spar_sdat <- function(fname, extra) {
   data <- array(data_vec,dim = c(N, cols, rows, slices, dyns, 1, 1)) 
   data <- aperm(data,c(6, 2, 3, 4, 5, 7, 1))
   
-  res <- c(NA, row_dim, col_dim, slice_dim, 1, NA, 1 / fs)
+  res <- c(NA, row_dim, col_dim, slice_dim, tr, NA, 1 / fs)
   ref <- def_ref()
   
   # TODO get from the data file
@@ -120,7 +120,6 @@ read_spar_sdat <- function(fname, extra) {
   freq_domain <- rep(FALSE, 7)
   
   meta <- list(EchoTime = te,
-               RepetitionTime = tr,
                Manufacturer = "Philips")
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
