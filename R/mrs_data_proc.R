@@ -780,6 +780,24 @@ set_ref <- function(mrs_data, ref) {
   return(mrs_data)
 }
 
+#' Set the number of transients for an mrs_data object.
+#' @param mrs_data MRS data.
+#' @param n_trans number of acquired transients.
+#' @export
+set_Ntrans <- function(mrs_data, n_trans) {
+  
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, set_Ntrans, n_trans = n_trans)
+    return(res)
+  }
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
+  mrs_data$meta$NumberOfTransients = n_trans
+  return(mrs_data)
+}
+
 #' Check if the chemical shift dimension of an MRS data object is in the
 #' frequency domain.
 #' @param mrs_data MRS data.
@@ -1221,6 +1239,21 @@ tr <- function(mrs_data) {
   mrs_data$resolution[5]
 }
 
+#' Set the repetition time of an MRS dataset.
+#' @param mrs_data MRS data.
+#' @param tr repetition time in seonds.
+#' @return updated mrs_data set.
+#' @export
+set_tr <- function(mrs_data, tr) {
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
+  mrs_data$resolution[5] = tr
+  
+  return(mrs_data)
+}
+
 #' Return the frequency scale of an MRS dataset in Hz.
 #' @param mrs_data MRS data.
 #' @param fs sampling frequency in Hz.
@@ -1247,8 +1280,8 @@ hz <- function(mrs_data, fs = NULL, N = NULL) {
 #' fit result.
 #' @param fs sampling frequency in Hz, does not apply when the object is a
 #' fit result.
-#' @param N number of data points in the spectral dimension, does not apply when the object is a
-#' fit result.
+#' @param N number of data points in the spectral dimension, does not apply when 
+#' the object is a fit result.
 #' @return ppm scale.
 #' @export
 ppm <- function(x, ft = NULL, ref = NULL, fs= NULL, N = NULL) UseMethod("ppm")
