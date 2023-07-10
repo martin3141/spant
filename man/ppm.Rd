@@ -24,8 +24,8 @@ fit result.}
 \item{fs}{sampling frequency in Hz, does not apply when the object is a
 fit result.}
 
-\item{N}{number of data points in the spectral dimension, does not apply when the object is a
-fit result.}
+\item{N}{number of data points in the spectral dimension, does not apply when
+the object is a fit result.}
 }
 \value{
 ppm scale.

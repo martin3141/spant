@@ -124,7 +124,7 @@ sim_resonances_fast <- function(freq = 0, amp = 1, freq_ppm = TRUE,
   data[1] <- data[1] * 0.5
   
   data <- array(data,dim = c(1, 1, 1, 1, 1, 1, N))
-  res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
+  res <- c(NA, NA, NA, NA, NA, NA, 1 / fs)
     
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = rep(FALSE, 7), affine = NULL,
@@ -168,7 +168,7 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
   data[1] <- data[1] * 0.5
   
   data <- array(data, dim = c(1, 1, 1, 1, 1, 1, N))
-  res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
+  res <- c(NA, NA, NA, NA, NA, NA, 1 / fs)
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = rep(FALSE, 7), affine = NULL,
@@ -193,7 +193,7 @@ vec2mrs_data <- function(vec, fs = def_fs(), ft = def_ft(), ref = def_ref(),
   data <- array(vec, dim = c(length(vec), dyns))
   data <- aperm(data,c(2, 1))
   dim(data) <- c(1, 1, 1, 1, dyns, 1, length(vec))
-  res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
+  res <- c(NA, NA, NA, NA, NA, NA, 1 / fs)
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
@@ -217,7 +217,7 @@ array2mrs_data <- function(data_array, fs = def_fs(), ft = def_ft(),
   
   if (length(dim(data_array)) != 7) stop("Incorrect number of dimensions.")
   
-  res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
+  res <- c(NA, NA, NA, NA, NA, NA, 1 / fs)
   
   mrs_data <- mrs_data(data = data_array, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
@@ -273,7 +273,7 @@ mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
                          nuc = def_nuc(), fd = FALSE) {
   
   data <- array(mat, dim = c(1, 1, 1, 1, nrow(mat), 1, ncol(mat)))
-  res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
+  res <- c(NA, NA, NA, NA, NA, NA, 1 / fs)
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
