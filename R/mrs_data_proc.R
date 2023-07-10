@@ -1202,7 +1202,7 @@ tr <- function(mrs_data) {
   # check the input
   check_mrs_data(mrs_data)
   
-  1 / mrs_data$resolution[5]
+  mrs_data$resolution[5]
 }
 
 #' Return the frequency scale of an MRS dataset in Hz.
