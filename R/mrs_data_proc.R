@@ -1158,6 +1158,22 @@ Ndyns <- function(mrs_data) {
   dim(mrs_data$data)[5]
 }
 
+#' Return the total number of acquired transients for an MRS dataset.
+#' @param mrs_data MRS data.
+#' @export
+Ntrans <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
+  if (is.null(mrs_data$meta$NumberOfTransients)) {
+    return(NA) 
+  } else {
+    mrs_data$meta$NumberOfTransients
+  }
+  
+}
+
 #' Return the total number of coil elements in an MRS dataset.
 #' @param mrs_data MRS data.
 #' @export
