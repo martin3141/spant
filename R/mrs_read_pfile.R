@@ -139,6 +139,9 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
       ref_mrs   <- img2kspace_xy(ref_mrs)
       metab_mrs <- img2kspace_xy(metab_mrs)
     }
+    
+    ref_mrs$meta <- append(ref_mrs$meta,
+                           list(NumberOfTransients = Ndyns(ref_mrs)))
   } else {
     ref_mrs <- NA
     metab_mrs <- mrs_data
@@ -147,6 +150,9 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
       metab_mrs <- img2kspace_xy(metab_mrs)
     }
   }
+  
+  metab_mrs$meta <- append(metab_mrs$meta,
+                         list(NumberOfTransients = Ndyns(metab_mrs)))
   
   out <- list(metab = metab_mrs, ref = ref_mrs)
   class(out) <- c("list", "mrs_data")
