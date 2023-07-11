@@ -26,19 +26,26 @@ print.mrs_data <- function(x, full = FALSE, ...) {
               "x", round(x$resolution[4], 2), "\n")), sep = "")
   cat(paste(c("Sampling frequency (Hz) : ",
               1 / x$resolution[7], "\n")), sep = "")
+  cat(paste(c("Repetition time (s)     :", x$resolution[5], "\n")),
+      sep = " ")
   cat(paste(c("Reference freq. (ppm)   : ", x$ref, "\n")), sep = "")
   cat(paste(c("Nucleus                 : ", x$nuc, "\n")), sep = "")
   cat(paste(c("Spectral domain         : ", x$freq_domain[7], "\n")), sep = "")
+  
+  if (!is.null(x$meta$NumberOfTransients)) {
+     cat(paste(c("Number of transients    :", x$meta$NumberOfTransients, "\n")),
+         sep = " ")
+  }
   
   if (!is.null(x$meta$EchoTime)) {
     cat(paste(c("Echo time (s)           :", x$meta$EchoTime, "\n")),
         sep = " ")
   }
   
-  if (!is.null(x$meta$RepetitionTime)) {
-    cat(paste(c("Repetition time (s)     :", x$meta$RepetitionTime, "\n")),
-        sep = " ")
-  }
+  # if (!is.null(x$meta$RepetitionTime)) {
+  #   cat(paste(c("Repetition time (s)     :", x$meta$RepetitionTime, "\n")),
+  #       sep = " ")
+  # }
   
   if (!is.null(x$meta$Manufacturer)) {
     cat(paste(c("Manufacturer            :", x$meta$Manufacturer, "\n")),

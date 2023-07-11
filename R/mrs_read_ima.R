@@ -32,10 +32,10 @@ read_ima <- function(fraw, verbose = FALSE, extra) {
   paras <- calc_siemens_paras(vars, TRUE)
   
   meta <- list(EchoTime = vars$te,
-               RepetitionTime = vars$tr,
                FlipAngle = vars$flip_ang,
                SequenceName = vars$seq_fname,
                ChemicalShiftReference = 4.7 + vars$delta_freq,
+               NumberOfTransients = vars$averages,
                Manufacturer = "Siemens")
   
   if (toupper(vars$seq_fname) == "%SIEMENSSEQ%\\SVS_SE") {

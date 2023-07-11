@@ -124,7 +124,7 @@ sim_resonances_fast <- function(freq = 0, amp = 1, freq_ppm = TRUE,
   data[1] <- data[1] * 0.5
   
   data <- array(data,dim = c(1, 1, 1, 1, 1, 1, N))
-  res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
+  res <- c(NA, NA, NA, NA, NA, NA, 1 / fs)
     
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = rep(FALSE, 7), affine = NULL,
@@ -168,7 +168,7 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
   data[1] <- data[1] * 0.5
   
   data <- array(data, dim = c(1, 1, 1, 1, 1, 1, N))
-  res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
+  res <- c(NA, NA, NA, NA, NA, NA, 1 / fs)
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = rep(FALSE, 7), affine = NULL,
@@ -193,7 +193,7 @@ vec2mrs_data <- function(vec, fs = def_fs(), ft = def_ft(), ref = def_ref(),
   data <- array(vec, dim = c(length(vec), dyns))
   data <- aperm(data,c(2, 1))
   dim(data) <- c(1, 1, 1, 1, dyns, 1, length(vec))
-  res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
+  res <- c(NA, NA, NA, NA, NA, NA, 1 / fs)
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
@@ -217,7 +217,7 @@ array2mrs_data <- function(data_array, fs = def_fs(), ft = def_ft(),
   
   if (length(dim(data_array)) != 7) stop("Incorrect number of dimensions.")
   
-  res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
+  res <- c(NA, NA, NA, NA, NA, NA, 1 / fs)
   
   mrs_data <- mrs_data(data = data_array, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
@@ -273,7 +273,7 @@ mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
                          nuc = def_nuc(), fd = FALSE) {
   
   data <- array(mat, dim = c(1, 1, 1, 1, nrow(mat), 1, ncol(mat)))
-  res <- c(NA, 1, 1, 1, 1, NA, 1 / fs)
+  res <- c(NA, NA, NA, NA, NA, NA, 1 / fs)
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
@@ -780,6 +780,24 @@ set_ref <- function(mrs_data, ref) {
   return(mrs_data)
 }
 
+#' Set the number of transients for an mrs_data object.
+#' @param mrs_data MRS data.
+#' @param n_trans number of acquired transients.
+#' @export
+set_Ntrans <- function(mrs_data, n_trans) {
+  
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, set_Ntrans, n_trans = n_trans)
+    return(res)
+  }
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
+  mrs_data$meta$NumberOfTransients = n_trans
+  return(mrs_data)
+}
+
 #' Check if the chemical shift dimension of an MRS data object is in the
 #' frequency domain.
 #' @param mrs_data MRS data.
@@ -1158,6 +1176,22 @@ Ndyns <- function(mrs_data) {
   dim(mrs_data$data)[5]
 }
 
+#' Return the total number of acquired transients for an MRS dataset.
+#' @param mrs_data MRS data.
+#' @export
+Ntrans <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
+  if (is.null(mrs_data$meta$NumberOfTransients)) {
+    return(NA) 
+  } else {
+    mrs_data$meta$NumberOfTransients
+  }
+  
+}
+
 #' Return the total number of coil elements in an MRS dataset.
 #' @param mrs_data MRS data.
 #' @export
@@ -1193,6 +1227,33 @@ fs <- function(mrs_data) {
   1 / mrs_data$resolution[7]
 }
 
+#' Return the repetition time of an MRS dataset.
+#' @param mrs_data MRS data.
+#' @return repetition time in seconds.
+#' @export
+tr <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
+  mrs_data$resolution[5]
+}
+
+#' Set the repetition time of an MRS dataset.
+#' @param mrs_data MRS data.
+#' @param tr repetition time in seonds.
+#' @return updated mrs_data set.
+#' @export
+set_tr <- function(mrs_data, tr) {
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
+  mrs_data$resolution[5] = tr
+  
+  return(mrs_data)
+}
+
 #' Return the frequency scale of an MRS dataset in Hz.
 #' @param mrs_data MRS data.
 #' @param fs sampling frequency in Hz.
@@ -1219,8 +1280,8 @@ hz <- function(mrs_data, fs = NULL, N = NULL) {
 #' fit result.
 #' @param fs sampling frequency in Hz, does not apply when the object is a
 #' fit result.
-#' @param N number of data points in the spectral dimension, does not apply when the object is a
-#' fit result.
+#' @param N number of data points in the spectral dimension, does not apply when 
+#' the object is a fit result.
 #' @return ppm scale.
 #' @export
 ppm <- function(x, ft = NULL, ref = NULL, fs= NULL, N = NULL) UseMethod("ppm")

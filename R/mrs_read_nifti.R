@@ -112,6 +112,7 @@ read_mrs_nifti <- function(fname, extra, verbose) {
   meta$NumberOfSpectralPoints <- NULL
   meta$AcquisitionVoxelSize   <- NULL
   meta$ChemicalShiftOffset    <- NULL
+  meta$RepetitionTime         <- NULL
   
   # meta$NumberOfTransients <- NULL
   

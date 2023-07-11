@@ -95,7 +95,7 @@ read_uih_dicom <- function(fraw, extra, verbose) {
   dim(data) <- c(N, rows, cols, slices, 1, 1, 1)
   data <- aperm(data, c(7, 2, 3, 4, 5, 6, 1))
   
-  res <- c(NA, pixsp[2], pixsp[1], slice_t, 1, NA, 1 / fs)
+  res <- c(NA, pixsp[2], pixsp[1], slice_t, tr, NA, 1 / fs)
   ref <- def_ref()
   
   # TODO determine from the data
@@ -113,7 +113,6 @@ read_uih_dicom <- function(fraw, extra, verbose) {
   affine[1:2,] <- -affine[1:2,]
   
   meta <- list(EchoTime = te,
-               RepetitionTime = tr,
                Manufacturer = "UIH",
                SequenceName = seq_n)
   
@@ -176,7 +175,7 @@ read_siemens_dicom <- function(fraw, extra, verbose) {
   dim(data) <- c(N, rows, cols, slices, 1, 1, 1)
   data <- aperm(data, c(7, 2, 3, 4, 5, 6, 1))
   
-  res <- c(NA, pixsp[2], pixsp[1], slice_t, 1, NA, 1 / fs)
+  res <- c(NA, pixsp[2], pixsp[1], slice_t, NA, NA, 1 / fs)
   ref <- def_ref()
   
   # TODO determine from the data
@@ -257,7 +256,7 @@ read_philips_dicom <- function(fraw, extra) {
   dim(data) <- c(N, rows, cols, slices, dyns, 1, 1)
   data <- aperm(data, c(7, 2, 3, 4, 5, 6, 1))
   
-  res <- c(NA, pixsp[2], pixsp[1], slice_t, 1, NA, 1 / fs)
+  res <- c(NA, pixsp[2], pixsp[1], slice_t, NA, NA, 1 / fs)
   ref <- def_ref()
   
   # TODO determine from the data
@@ -307,7 +306,7 @@ read_philips_priv_dicom <- function(fraw, extra) {
   dim(data) <- c(N, 1, 1, 1, 1, 1, 1)
   data <- aperm(data, c(7, 2, 3, 4, 5, 6, 1))
   
-  res <- c(NA, NA, NA, NA, 1, NA, 1 / fs)
+  res <- c(NA, NA, NA, NA, NA, NA, 1 / fs)
   ref <- def_ref()
   
   # TODO determine from the data

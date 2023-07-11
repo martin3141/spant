@@ -98,9 +98,9 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
     k_sp_corr_x <- array(1, dim(data))
     k_sp_corr_x[, c(T, F),,,,,] <- -1
     data <- data * k_sp_corr_x
-}
+  }
   
-  res <- c(NA, NA, NA, NA, 1, NA, 1 / hdr$spec_width)
+  res <- c(NA, NA, NA, NA, hdr$tr, NA, 1 / hdr$spec_width)
   
   # freq domain vector vector
   freq_domain <- rep(FALSE, 7)
@@ -110,7 +110,6 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
   
   
   meta <- list(EchoTime = hdr$te,
-               RepetitionTime = hdr$tr,
                SequenceName = hdr$seq_name,
                ProtocolName = hdr$prot_name,
                Manufacturer = "GE")
@@ -133,13 +132,16 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
     wref_inds[1:hdr$rhuser] <- TRUE
     wref_inds <- rep(wref_inds, hdr$nechoes)
     
-    ref_mrs <- get_dyns(mrs_data, which(wref_inds))
+    ref_mrs   <- get_dyns(mrs_data, which(wref_inds))
     metab_mrs <- get_dyns(mrs_data, which(!wref_inds))
     
     if (hdr$csi_dims > 0) {
       ref_mrs   <- img2kspace_xy(ref_mrs)
       metab_mrs <- img2kspace_xy(metab_mrs)
     }
+    
+    ref_mrs$meta <- append(ref_mrs$meta,
+                           list(NumberOfTransients = Ndyns(ref_mrs)))
   } else {
     ref_mrs <- NA
     metab_mrs <- mrs_data
@@ -148,6 +150,9 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
       metab_mrs <- img2kspace_xy(metab_mrs)
     }
   }
+  
+  metab_mrs$meta <- append(metab_mrs$meta,
+                         list(NumberOfTransients = Ndyns(metab_mrs)))
   
   out <- list(metab = metab_mrs, ref = ref_mrs)
   class(out) <- c("list", "mrs_data")
