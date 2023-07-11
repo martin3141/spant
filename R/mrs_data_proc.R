@@ -4331,7 +4331,6 @@ bin_spec <- function(mrs_data, width = 0.05, unit = "ppm") {
   }
   
   if (Ncoils(mrs_data) > 1) stop("Unsuppored data type for bin_spec function.")
-  if (Ndyns(mrs_data) > 1) stop("Unsuppored data type for bin_spec function.")
   if (Nx(mrs_data) > 1) stop("Unsuppored data type for bin_spec function.")
   if (Ny(mrs_data) > 1) stop("Unsuppored data type for bin_spec function.")
   if (Nz(mrs_data) > 1) stop("Unsuppored data type for bin_spec function.")
@@ -4348,19 +4347,21 @@ bin_spec <- function(mrs_data, width = 0.05, unit = "ppm") {
     stop("Unrecognised unit for bin_spec")
   }
   
-  data_vec_orig <- as.vector(mrs_data$data)
+  bin_res <- apply_mrs(mrs_data, 7, bin_vec, width_pts)
   
-  N_old <- length(data_vec_orig)
+  return(bin_res)
+}
+
+bin_vec <- function(vec, width_pts) {
+  N_old <- length(vec)
   
   # check for remainder and pad with NA's
-  data_vec_orig <- c(data_vec_orig,
+  data_vec_orig <- c(vec,
                      rep(NA, ceiling(N_old / width_pts) * width_pts - N_old))
   
   data_vec <- colMeans(matrix(data_vec_orig, nrow = width_pts), na.rm = TRUE)
   
-  mrs_data$data <- array(data_vec, dim = c(1, 1, 1, 1, 1, 1, length(data_vec)))
-  
-  return(mrs_data)
+  return(data_vec) 
 }
 
 #' Apply the Modulus operator to the time-domain MRS signal.
