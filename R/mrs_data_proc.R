@@ -3761,6 +3761,64 @@ bc_poly_vec <- function(vec, p_deg) {
   }
 }
 
+#' Apply and subtract a Gaussian smoother in the spectral domain.
+#' @param mrs_data mrs_data object.
+#' @param smo_ppm_sd Gaussian smoother sd in ppm units.
+#' @return smoother subtracted data.
+#' @export
+bc_gauss <- function(mrs_data, smo_ppm_sd) {
+  
+  if (inherits(mrs_data, "list")) {
+    return(lapply(mrs_data, bc_gauss, smo_ppm_sd = smo_ppm_sd))
+  }
+  
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  ppm_scale  <- ppm(mrs_data)
+  smo_pts_sd <- smo_ppm_sd / (ppm_scale[1] - ppm_scale[2])
+  
+  bc_res <- apply_mrs(mrs_data, 7, bc_gauss_vec, smo_pts_sd)
+
+  return(bc_res)
+}
+
+bc_gauss_vec <- function(vec, smo_pts_sd) {
+  
+  vec <- Re(vec) - mmand::gaussianSmooth(Re(vec), smo_pts_sd) +
+         1i * (Im(vec) - mmand::gaussianSmooth(Im(vec), smo_pts_sd))
+  
+  return(vec)
+}
+
+#' Apply a Gaussian smoother in the spectral domain.
+#' @param mrs_data mrs_data object.
+#' @param smo_ppm_sd Gaussian smoother sd in ppm units.
+#' @return spectrally smoothed data.
+#' @export
+fd_gauss_smo <- function(mrs_data, smo_ppm_sd) {
+  
+  if (inherits(mrs_data, "list")) {
+    return(lapply(mrs_data, fd_gauss_smo, smo_ppm_sd = smo_ppm_sd))
+  }
+  
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  ppm_scale  <- ppm(mrs_data)
+  smo_pts_sd <- smo_ppm_sd / (ppm_scale[1] - ppm_scale[2])
+  
+  bc_res <- apply_mrs(mrs_data, 7, gauss_smo_vec, smo_pts_sd)
+
+  return(bc_res)
+}
+
+gauss_smo_vec <- function(vec, smo_pts_sd) {
+  
+  vec <- mmand::gaussianSmooth(Re(vec), smo_pts_sd) +
+         1i * ( mmand::gaussianSmooth(Im(vec), smo_pts_sd))
+  
+  return(vec)
+}
+
 #' Fit and subtract a smoothing spline to each spectrum in a dataset.
 #' @param mrs_data mrs_data object.
 #' @param spar smoothing parameter typically between 0 and 1.
