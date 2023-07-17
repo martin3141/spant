@@ -9,7 +9,7 @@ set_tr(mrs_data, tr)
 \arguments{
 \item{mrs_data}{MRS data.}
 
-\item{tr}{repetition time in seonds.}
+\item{tr}{repetition time in seconds.}
 }
 \value{
 updated mrs_data set.

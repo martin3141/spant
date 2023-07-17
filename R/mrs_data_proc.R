@@ -1241,10 +1241,15 @@ tr <- function(mrs_data) {
 
 #' Set the repetition time of an MRS dataset.
 #' @param mrs_data MRS data.
-#' @param tr repetition time in seonds.
+#' @param tr repetition time in seconds.
 #' @return updated mrs_data set.
 #' @export
 set_tr <- function(mrs_data, tr) {
+  
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, set_tr, tr = tr)
+    return(res)
+  }
   
   # check the input
   check_mrs_data(mrs_data)
