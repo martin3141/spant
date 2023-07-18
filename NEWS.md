@@ -1,5 +1,6 @@
 # spant 2.14.0
 * Added vline argument to stackplot function.
+* Added functions to set MRS data TR and number of transients.
 
 # spant 2.13.0
 * Improved defaults for sim_brain_1h function.
