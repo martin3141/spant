@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.13.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.14.0</span>
       </span>
     </div>
 
@@ -112,6 +112,10 @@ of spant dependencies.</p></td>
           <p><code><a href="Nspec.html">Nspec()</a></code> </p>
         </td>
         <td><p>Return the total number of spectra in an MRS dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="Ntrans.html">Ntrans()</a></code> </p>
+        </td>
+        <td><p>Return the total number of acquired transients for an MRS dataset.</p></td>
       </tr><tr><td>
           <p><code><a href="Nx.html">Nx()</a></code> </p>
         </td>
@@ -213,9 +217,17 @@ penalties", Eilers 2010.</p></td>
         </td>
         <td><p>Remove a constant baseline offset based on a reference spectral region.</p></td>
       </tr><tr><td>
+          <p><code><a href="bc_gauss.html">bc_gauss()</a></code> </p>
+        </td>
+        <td><p>Apply and subtract a Gaussian smoother in the spectral domain.</p></td>
+      </tr><tr><td>
           <p><code><a href="bc_poly.html">bc_poly()</a></code> </p>
         </td>
         <td><p>Fit and subtract a polynomial to each spectrum in a dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="bc_spline.html">bc_spline()</a></code> </p>
+        </td>
+        <td><p>Fit and subtract a smoothing spline to each spectrum in a dataset.</p></td>
       </tr><tr><td>
           <p><code><a href="beta2lw.html">beta2lw()</a></code> </p>
         </td>
@@ -339,6 +351,10 @@ in the frequency domain before down sampling.</p></td>
         </td>
         <td><p>Decimate an MRS signal by filtering in the time domain before downsampling.</p></td>
       </tr><tr><td>
+          <p><code><a href="deconv_mrs.html">deconv_mrs()</a></code> </p>
+        </td>
+        <td><p>Deconvolve two MRS data objects.</p></td>
+      </tr><tr><td>
           <p><code><a href="def_N.html">def_N()</a></code> </p>
         </td>
         <td><p>Return the default number of data points in the spectral dimension.</p></td>
@@ -402,6 +418,10 @@ object.</p></td>
           <p><code><a href="fd_conv_filt.html">fd_conv_filt()</a></code> </p>
         </td>
         <td><p>Frequency-domain convolution based filter.</p></td>
+      </tr><tr><td>
+          <p><code><a href="fd_gauss_smo.html">fd_gauss_smo()</a></code> </p>
+        </td>
+        <td><p>Apply a Gaussian smoother in the spectral domain.</p></td>
       </tr><tr><td>
           <p><code><a href="fit_amps.html">fit_amps()</a></code> </p>
         </td>
@@ -1151,6 +1171,10 @@ gradient crushers.</p></td>
         <td><p>STEAM sequence with ideal pulses using the z-rotation gradient simulation
 method described by Young et al JMR 140, 146-152 (1999).</p></td>
       </tr><tr><td>
+          <p><code><a href="set_Ntrans.html">set_Ntrans()</a></code> </p>
+        </td>
+        <td><p>Set the number of transients for an mrs_data object.</p></td>
+      </tr><tr><td>
           <p><code><a href="set_def_acq_paras.html">set_def_acq_paras()</a></code> </p>
         </td>
         <td><p>Set the default acquisition parameters.</p></td>
@@ -1187,6 +1211,10 @@ appropriate.</p></td>
           <p><code><a href="set_tqn_cmd.html">set_tqn_cmd()</a></code> </p>
         </td>
         <td><p>Set the command to run the TARQUIN command-line program.</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_tr.html">set_tr()</a></code> </p>
+        </td>
+        <td><p>Set the repetition time of an MRS dataset.</p></td>
       </tr><tr><td>
           <p><code><a href="shift.html">shift()</a></code> </p>
         </td>
@@ -1347,6 +1375,10 @@ individual basis set components shown.</p></td>
           <p><code><a href="tdsr.html">tdsr()</a></code> </p>
         </td>
         <td><p>Time-domain spectral registration.</p></td>
+      </tr><tr><td>
+          <p><code><a href="tr.html">tr()</a></code> </p>
+        </td>
+        <td><p>Return the repetition time of an MRS dataset.</p></td>
       </tr><tr><td>
           <p><code><a href="varpro_3_para_opts.html">varpro_3_para_opts()</a></code> </p>
         </td>

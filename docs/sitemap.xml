@@ -67,6 +67,9 @@
     <loc>https://martin3141.github.io/spant/reference/Nspec.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/Ntrans.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/Nx.html</loc>
   </url>
   <url>
@@ -142,7 +145,13 @@
     <loc>https://martin3141.github.io/spant/reference/bc_constant.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/bc_gauss.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/bc_poly.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/bc_spline.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/beta2lw.html</loc>
@@ -250,6 +259,9 @@
     <loc>https://martin3141.github.io/spant/reference/decimate_mrs_td.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/deconv_mrs.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/def_N.html</loc>
   </url>
   <url>
@@ -299,6 +311,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/fd_conv_filt.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/fd_gauss_smo.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/fit_amps.html</loc>
@@ -874,6 +889,9 @@
     <loc>https://martin3141.github.io/spant/reference/seq_steam_ideal_young.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/set_Ntrans.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/set_def_acq_paras.html</loc>
   </url>
   <url>
@@ -899,6 +917,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/set_tqn_cmd.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/set_tr.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/shift.html</loc>
@@ -1013,6 +1034,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/tdsr.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/tr.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/varpro_3_para_opts.html</loc>
