@@ -1,5 +1,5 @@
 # TODO test MEGA-PRESS and CSI
-# when nechoes = 2 we're probally dealing with MEGA-PRESS data, where edited
+# when nechoes = 2 we're probably dealing with MEGA-PRESS data, where edited
 # pairs are not interleaved but occupy the first and second half of the data
 
 read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
@@ -44,6 +44,13 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
     cat(paste("frame_size  :", hdr$frame_size), "\n")
     cat(paste("w_frames    :", hdr$rhuser19), "\n")
     cat(paste("Header rev. :", hdr$hdr_rev), "\n")
+    cat(paste("Seq. name   :", hdr$seq_name), "\n")
+    cat(paste("Prot. name  :", hdr$prot_name), "\n")
+    cat(paste("CSI dims    :", hdr$csi_dims), "\n")
+    cat(paste("xcsi        :", hdr$xcsi), "\n")
+    cat(paste("ycsi        :", hdr$ycsi), "\n")
+    cat(paste("zcsi        :", hdr$zcsi), "\n")
+    cat(paste("Data offset :", hdr$off_data), "\n")
   }
   
   if (verbose) {
