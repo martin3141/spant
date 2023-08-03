@@ -3378,18 +3378,24 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
   if (scale & (scale_method != "sig")) {
     if (!is.null(noise)) {
       # estimate noise from noise data
+      noise_sd <- calc_coil_noise_sd(noise)
+      
+      if (any(noise_sd == 0)) stop("Some coil noise estimates are zero. Bad data?")
+      
       if (scale_method == "sig_noise_sq") {
-        amp <- amp / (calc_coil_noise_sd(noise) ^ 2)
+        amp <- amp / (noise_sd ^ 2)
       } else {
-        amp <- amp / calc_coil_noise_sd(noise)
+        amp <- amp / noise_sd
       }
       
     } else {
       # estimate noise from first FID of the metab data
       metab_first <- get_dyns(metab, 1)
-      noise_data <- crop_spec(metab_first, noise_region)
-      noise_sd <- est_noise_sd(noise_data, offset = 0, n = Npts(noise_data),
+      noise_data  <- crop_spec(metab_first, noise_region)
+      noise_sd    <- est_noise_sd(noise_data, offset = 0, n = Npts(noise_data),
                                p_order = 2)
+      
+      if (any(noise_sd == 0)) stop("Some coil noise estimates are zero. Bad data?")
       
       if (scale_method == "sig_noise_sq") {
         amp <- amp / (noise_sd ^ 2)

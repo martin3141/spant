@@ -1,3 +1,6 @@
+# spant 2.15.0
+* An SNR estimate of zero in comb_coils is now a failure case.
+
 # spant 2.14.0
 * Added vline argument to stackplot function.
 * Added functions to set MRS data TR and number of transients.
