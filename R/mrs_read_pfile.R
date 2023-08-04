@@ -35,7 +35,7 @@ read_pfile <- function(fname, n_ref_scans = NULL, verbose, extra) {
   expt_pts <- coils * (hdr$nframes * hdr$nechoes + hdr$nechoes) * hdr$frame_size * 2
   
   if (expt_pts != Npts) {
-    warning("Unexpected number of data points.")
+    warning("Unexpected number of data points. Check for data corruption due to autocoil selection bug.")
     cat(paste("Expecting   :", Npts, "points based on file size.\n"))
     cat(paste("Expecting   :", expt_pts, "points based on header information.\n"))
     cat(paste("Coils       :", coils, "\n"))
