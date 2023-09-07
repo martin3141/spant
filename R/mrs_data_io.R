@@ -118,6 +118,8 @@ guess_mrs_format <- function(fname) {
     format <- "spar_sdat"
   } else if (stringr::str_ends(fname_low, ".7")) {
     format <- "pfile"
+  } else if (stringr::str_ends(fname_low, ".7.anon")) {
+    format <- "pfile"
   } else if (stringr::str_ends(fname_low, ".list")) {
     format <- "list_data"
   } else if (stringr::str_ends(fname_low, ".data")) {
