@@ -1,7 +1,6 @@
 #' Find valid MRS data files recursively from a directory path.
 #' @param dir a directory path.
 #' @return a vector of valid MRS data files.
-#' @examples
 find_mrs_files <- function(dir) {
   
   # recursively find all files
@@ -23,7 +22,6 @@ find_mrs_files <- function(dir) {
   }
   return(mrs_files)
 }
-
 
 #' Apply a function over specified array axes.
 #' @param x an array.
