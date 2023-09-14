@@ -1,6 +1,7 @@
 # spant 2.15.0
 * An SNR estimate of zero in comb_coils is now a failure case.
 * Bug fix for GE pfile reader header revision 20.
+* Added a function for finding valid MRS files : find_mrs_files.
 
 # spant 2.14.0
 * Added vline argument to stackplot function.

@@ -1,3 +1,30 @@
+#' Find valid MRS data files recursively from a directory path.
+#' @param dir a directory path.
+#' @return a vector of valid MRS data files.
+#' @examples
+find_mrs_files <- function(dir) {
+  
+  # recursively find all files
+  all_files <- list.files(dir, recursive = TRUE, full.names = TRUE)
+  
+  # empty vector of found files
+  mrs_files <- c()
+  
+  # check each file, catching any errors
+  for (file in all_files) {
+    tryCatch(
+      {
+        dummy <- read_mrs(file)
+        mrs_files <- c(mrs_files, file)
+      },
+      error = function(cond) {
+      }
+    )
+  }
+  return(mrs_files)
+}
+
+
 #' Apply a function over specified array axes.
 #' @param x an array.
 #' @param axes a vector of axes to apply fun over.
