@@ -677,7 +677,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
 #' @param scale_sd scaling factor for the standard deviation trace.
 #' @param ... other arguments passed to the stackplot function.
 #' @export
-plot_spec_sd <- function(mrs_data, xlim = NULL, scale_sd = 5, ...) {
+plot_spec_sd <- function(mrs_data, xlim = NULL, scale_sd = 1.96, ...) {
   
   # needs to be a FD operation
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)

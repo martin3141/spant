@@ -4,7 +4,7 @@
 \alias{plot_spec_sd}
 \title{Plot the spectral standard deviation.}
 \usage{
-plot_spec_sd(mrs_data, xlim = NULL, scale_sd = 5, ...)
+plot_spec_sd(mrs_data, xlim = NULL, scale_sd = 1.96, ...)
 }
 \arguments{
 \item{mrs_data}{MRS data to be plotted.}

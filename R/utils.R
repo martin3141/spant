@@ -1,6 +1,7 @@
 #' Find valid MRS data files recursively from a directory path.
 #' @param dir a directory path.
 #' @return a vector of valid MRS data files.
+#' @export
 find_mrs_files <- function(dir) {
   
   # recursively find all files
