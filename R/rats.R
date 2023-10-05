@@ -129,7 +129,10 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
     x <- 0:(length(shifts) - 1)
     shift_fit <- as.numeric(stats::predict(stats::lm(as.numeric(shifts) ~ x)))
     
-    if (zero_freq_shift_t0) shifts <- shifts - shift_fit[1]
+    # old method
+    # if (zero_freq_shift_t0) shifts <- shifts - shift_fit[1]
+    
+    if (zero_freq_shift_t0) shifts <- shifts - mean(shifts[1:3])
     
     if (remove_freq_outliers) {
       res <- as.numeric(shifts) - shift_fit

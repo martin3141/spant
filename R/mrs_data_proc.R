@@ -2597,16 +2597,21 @@ collapse_to_dyns.fit_result <- function(x, rm_masked = FALSE) {
 
 #' Calculate the mean dynamic data.
 #' @param mrs_data dynamic MRS data.
+#' @param subset vector containing indices to the dynamic scans to be 
+#' averaged.
 #' @return mean dynamic data.
 #' @export
-mean_dyns <- function(mrs_data) {
+mean_dyns <- function(mrs_data, subset = NULL) {
   
   if (inherits(mrs_data, "list")) {
     return(lapply(mrs_data, mean_dyns))
   }
   
   # check the input
-  check_mrs_data(mrs_data) 
+  check_mrs_data(mrs_data)
+ 
+  # extract a subset if requested 
+  if (!is.null(subset)) mrs_data <- get_dyns(mrs_data, subset)
   
   mrs_data$data <- aperm(mrs_data$data, c(5, 1, 2, 3, 4, 6, 7))
   mrs_data$data <- colMeans(mrs_data$data, na.rm = TRUE)

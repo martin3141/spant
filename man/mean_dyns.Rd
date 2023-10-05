@@ -4,10 +4,13 @@
 \alias{mean_dyns}
 \title{Calculate the mean dynamic data.}
 \usage{
-mean_dyns(mrs_data)
+mean_dyns(mrs_data, subset = NULL)
 }
 \arguments{
 \item{mrs_data}{dynamic MRS data.}
+
+\item{subset}{vector containing indices to the dynamic scans to be
+averaged.}
 }
 \value{
 mean dynamic data.

@@ -1,6 +1,7 @@
 # spant 2.16.0
 * plot_spec_sd default s.d. scaling factor is now 1.96 to aid 95% confidence
 interval visualisation.
+* Added subset option to mean_dyns function.
 
 # spant 2.15.0
 * An SNR estimate of zero in comb_coils is now a failure case.
