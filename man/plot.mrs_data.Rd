@@ -37,6 +37,9 @@
   hline = NULL,
   hline_lty = 2,
   hline_col = "red",
+  vline = NULL,
+  vline_lty = 2,
+  vline_col = "red",
   ...
 )
 }
@@ -113,6 +116,12 @@ results in no baseline being plotted.}
 \item{hline_lty}{linetype for the horizontal line.}
 
 \item{hline_col}{colour for the horizontal line.}
+
+\item{vline}{add a vertical line at the specified value.}
+
+\item{vline_lty}{linetype for the vertical line.}
+
+\item{vline_col}{colour for the vertical line.}
 
 \item{...}{other arguments to pass to the plot method.}
 }

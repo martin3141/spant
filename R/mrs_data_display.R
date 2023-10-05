@@ -117,6 +117,9 @@ print.mrs_data <- function(x, full = FALSE, ...) {
 #' @param hline add a horizontal line at the specified value.
 #' @param hline_lty linetype for the horizontal line.
 #' @param hline_col colour for the horizontal line.
+#' @param vline add a vertical line at the specified value.
+#' @param vline_lty linetype for the vertical line.
+#' @param vline_col colour for the vertical line.
 #' @param ... other arguments to pass to the plot method.
 #' @export
 plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
@@ -128,7 +131,8 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
                           xlabs = TRUE, yat = NULL, ylabs = TRUE,
                           show_grid = TRUE, grid_nx = NULL, grid_ny = NA,
                           col = NULL, alpha = NULL, bl_lty = NULL, hline = NULL,
-                          hline_lty = 2, hline_col = "red", ...) {
+                          hline_lty = 2, hline_col = "red", vline = NULL,
+                          vline_lty = 2, vline_col = "red", ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
  
@@ -249,9 +253,13 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
   # draw baseline(s)
   if (!is.null(bl_lty)) graphics::abline(h = 0, lty = bl_lty, lwd = 0.5)
  
-  # draw horizonal line 
+  # draw horizontal line(s)
   if (!is.null(hline)) graphics::abline(h = hline, col = hline_col,
                                         lty = hline_lty)
+  
+  # draw vertical line(s)
+  if (!is.null(vline)) graphics::abline(v = vline, col = vline_col,
+                                        lty = vline_lty)
   
   if (restore_def_par) graphics::par(.pardefault)
 }

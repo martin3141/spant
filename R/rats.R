@@ -123,16 +123,19 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
   
   corr_dims <- dim(shifts)
   
-  if (zero_freq_shift_t0 | remove_freq_outliers) {
+  if (zero_freq_shift_t0)  {
+    if (length(shifts) > 2) {
+      shifts <- shifts - mean(shifts[1:3])
+    } else {
+      stop("Not enough dynamic scans for zero_freq_shift_t0 RATS option.")
+    }
+  }
+  
+  if (remove_freq_outliers) {
     
     # model frequency drift
     x <- 0:(length(shifts) - 1)
     shift_fit <- as.numeric(stats::predict(stats::lm(as.numeric(shifts) ~ x)))
-    
-    # old method
-    # if (zero_freq_shift_t0) shifts <- shifts - shift_fit[1]
-    
-    if (zero_freq_shift_t0) shifts <- shifts - mean(shifts[1:3])
     
     if (remove_freq_outliers) {
       res <- as.numeric(shifts) - shift_fit
