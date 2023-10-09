@@ -671,7 +671,7 @@ smooth_dyns <- function(mrs_data, sigma) {
   
   # apply to Re and Im parts separately
   mrs_data$data <-      mmand::morph(Re(mrs_data$data), gaus_ker,
-                                     operator = "*", merge = "sum")
+                                     operator = "*", merge = "sum") +
                    1i * mmand::morph(Im(mrs_data$data), gaus_ker,
                                      operator = "*", merge = "sum")
   
