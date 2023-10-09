@@ -9,7 +9,7 @@ smooth_dyns(mrs_data, sigma)
 \arguments{
 \item{mrs_data}{data to be smoothed.}
 
-\item{sigma}{standard deviation of the underlying Gaussian kernel.}
+\item{sigma}{standard deviation of the underlying Gaussian kernel in seconds.}
 }
 \value{
 smoothed mrs_data object.

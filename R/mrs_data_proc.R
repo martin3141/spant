@@ -649,7 +649,7 @@ re_weighting <- function(mrs_data, re, alpha) {
 
 #' Smooth data across the dynamic dimension with a Gaussian kernel.
 #' @param mrs_data data to be smoothed.
-#' @param sigma standard deviation of the underlying Gaussian kernel.
+#' @param sigma standard deviation of the underlying Gaussian kernel in seconds.
 #' @return smoothed mrs_data object.
 #' @export
 smooth_dyns <- function(mrs_data, sigma) {
@@ -664,7 +664,7 @@ smooth_dyns <- function(mrs_data, sigma) {
   if (sigma == 0) return(mrs_data)
  
   # generate a 1D Gaussian kernel 
-  gaus_ker <- mmand::gaussianKernel(sigma)
+  gaus_ker <- mmand::gaussianKernel(sigma / tr(mrs_data))
   
   # expand to 7D
   dim(gaus_ker) <- c(1, 1, 1, 1, length(gaus_ker), 1, 1)
