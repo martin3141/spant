@@ -1337,6 +1337,17 @@ get_atp_31p_paras <- function(lw = NULL, lg = 0, ...) {
   paras
 }
 
+get_gpc_31p_paras <- function(lw = NULL, lg = 0, ...) {
+  if (is.null(lw)) lw = 2
+  paras <- get_uncoupled_mol("GPC", 2.93, "1H", 1, lw, lg,
+                             "Glycerophosphocholine")
+  
+  source <- "Unknown"
+  
+  paras$source <- source
+  paras
+}
+
 get_gpe_31p_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   paras <- get_uncoupled_mol("GPE", 3.5, "1H", 1, lw, lg,
