@@ -11,11 +11,13 @@ read_dicom <- function(fname, verbose, extra) {
   sop_class_uid <- rawToChar(res$sop_class_uid)
   manuf         <- rawToChar(res$manuf)
   
-  if (grepl("SIEMENS", manuf)) {
+  if (grepl("SIEMENS", manuf, ignore.case = TRUE)) {
     if (sop_class_uid == "1.3.12.2.1107.5.9.1") {
+      if (verbose) cat("Siemens IMA MRS found.\n")
       # SiemensPrivateCSA Non-ImageStorage - AKA ima format
       return(read_ima(fraw, verbose, extra))
     } else if (sop_class_uid == "1.2.840.10008.5.1.4.1.1.4.2") { 
+      if (verbose) cat("Siemens DICOM MRS found.\n")
       # MR Spectroscopy Storage
       return(read_siemens_dicom(fraw, extra, verbose))
     } else {
@@ -83,6 +85,8 @@ read_uih_dicom <- function(fraw, extra, verbose) {
   fids <- rows * cols * slices
   
   if (N * 2 * fids * 4 != length(dcm_res$data)) {
+    print(length(dcm_res$data))
+    print(N * 2 * fids * 4)
     stop("Unexpected number of data points.")
   }
   
@@ -162,7 +166,12 @@ read_siemens_dicom <- function(fraw, extra, verbose) {
   
   fids <- rows * cols * slices
   
+  # needed when turning "remove oversampling" off
+  # N <- N * 2
+  
   if (N * 2 * fids * 4 != length(dcm_res$data)) {
+    print(length(dcm_res$data))
+    print(N * 2 * fids * 4)
     stop("Unexpected number of data points.")
   }
   
