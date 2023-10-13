@@ -25,7 +25,7 @@ seq_pulse_acquire <- function(spin_params, ft, ref) {
 #' @param ref reference value for ppm scale.
 #' @return list of resonance amplitudes and frequencies.
 #' @export
-seq_pulse_acquire_31p <- function(spin_params, ft, ref) {
+seq_pulse_acquire_31p <- function(spin_params, ft, ref, acq_delay = 0) {
   sys <- spin_sys(spin_params, ft, ref)
   
   sys$rho <- gen_F(sys, "z", "31P")
@@ -35,6 +35,18 @@ seq_pulse_acquire_31p <- function(spin_params, ft, ref) {
   lhs_pulse <- matexp(-Fx * 1i * angle * pi / 180)
   rhs_pulse <- matexp( Fx * 1i * angle * pi / 180)
   sys$rho <- lhs_pulse %*% sys$rho %*% rhs_pulse
+  
+  if (acq_delay > 0) {
+    # apply delay
+    t <- acq_delay
+    # find the inverse of the eigenvector matrix
+    eig_vec_inv <- solve(sys$H_eig_vecs)
+    lhs <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*%
+      eig_vec_inv
+    rhs <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * t)) %*%
+      eig_vec_inv
+    sys$rho <- lhs %*% sys$rho %*% rhs
+  }
   
   # acquire
   acquire(sys, detect = "31P")

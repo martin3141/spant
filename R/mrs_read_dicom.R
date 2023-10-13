@@ -166,13 +166,12 @@ read_siemens_dicom <- function(fraw, extra, verbose) {
   
   fids <- rows * cols * slices
   
-  # needed when turning "remove oversampling" off
-  # N <- N * 2
-  
   if (N * 2 * fids * 4 != length(dcm_res$data)) {
-    print(length(dcm_res$data))
-    print(N * 2 * fids * 4)
-    stop("Unexpected number of data points.")
+    # print(length(dcm_res$data))
+    # print(N * 2 * fids * 4)
+    warning("Unexpected number of data points for Siemens DICOM, attempting 
+            to fix.")
+    N <- N * 2 # usually needed because remove oversampling is not selected
   }
   
   # read the fid points 

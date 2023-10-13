@@ -1318,7 +1318,7 @@ get_cit_paras <- function(lw = NULL, lg = 0, ...) {
 
 get_atp_31p_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
-  nucleus <- rep("1H", 3)
+  nucleus <- rep("31P", 3)
   chem_shift <- c(-7.616, -16.26, -2.6)
   j_coupling_mat <- matrix(0, 3, 3)
   j_coupling_mat[2,1] <- 16.3
@@ -1339,7 +1339,7 @@ get_atp_31p_paras <- function(lw = NULL, lg = 0, ...) {
 
 get_gpc_31p_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
-  paras <- get_uncoupled_mol("GPC", 2.93, "1H", 1, lw, lg,
+  paras <- get_uncoupled_mol("GPC", 2.93, "31P", 1, lw, lg,
                              "Glycerophosphocholine")
   
   source <- "Unknown"
@@ -1350,7 +1350,7 @@ get_gpc_31p_paras <- function(lw = NULL, lg = 0, ...) {
 
 get_gpe_31p_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
-  paras <- get_uncoupled_mol("GPE", 3.5, "1H", 1, lw, lg,
+  paras <- get_uncoupled_mol("GPE", 3.5, "31P", 1, lw, lg,
                              "Glycerol phosphorylethanolamine")
   
   source <- "Unknown"
@@ -1361,7 +1361,7 @@ get_gpe_31p_paras <- function(lw = NULL, lg = 0, ...) {
 
 get_nadh_31p_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
-  paras <- get_uncoupled_mol("NADH", -8.3, "1H", 1, lw, lg,
+  paras <- get_uncoupled_mol("NADH", -8.3, "31P", 1, lw, lg,
                              "Nicotinamide adenine dinucleotide, reduced")
   
   source <- "Unknown"
@@ -1372,7 +1372,7 @@ get_nadh_31p_paras <- function(lw = NULL, lg = 0, ...) {
 
 get_pch_31p_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
-  paras <- get_uncoupled_mol("PCh", 6.243, "1H", 1, lw, lg, "Phosphorylcholine")
+  paras <- get_uncoupled_mol("PCh", 6.243, "31P", 1, lw, lg, "Phosphorylcholine")
   
   source <- "Unknown"
   
@@ -1382,7 +1382,7 @@ get_pch_31p_paras <- function(lw = NULL, lg = 0, ...) {
 
 get_pcr_31p_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
-  paras <- get_uncoupled_mol("PCr", 0, "1H", 1, lw, lg, "Phosphocreatine")
+  paras <- get_uncoupled_mol("PCr", 0, "31P", 1, lw, lg, "Phosphocreatine")
   
   source <- "Unknown"
   
@@ -1392,7 +1392,7 @@ get_pcr_31p_paras <- function(lw = NULL, lg = 0, ...) {
 
 get_pe_31p_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
-  paras <- get_uncoupled_mol("PE", 6.7222, "1H", 1, lw, lg,
+  paras <- get_uncoupled_mol("PE", 6.7222, "31P", 1, lw, lg,
                              "Phosphorylethanolamine ")
   
   source <- "Unknown"
@@ -1403,7 +1403,7 @@ get_pe_31p_paras <- function(lw = NULL, lg = 0, ...) {
 
 get_pi_31p_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
-  paras <- get_uncoupled_mol("PI", 4.8161, "1H", 1, lw, lg,
+  paras <- get_uncoupled_mol("PI", 4.8161, "31P", 1, lw, lg,
                              "Inorganic phosphate")
   
   source <- "Unknown"
