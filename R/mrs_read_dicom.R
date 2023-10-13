@@ -169,8 +169,8 @@ read_siemens_dicom <- function(fraw, extra, verbose) {
   if (N * 2 * fids * 4 != length(dcm_res$data)) {
     # print(length(dcm_res$data))
     # print(N * 2 * fids * 4)
-    warning("Unexpected number of data points for Siemens DICOM, attempting 
-            to fix.")
+    warning(paste0("Unexpected number of data points for Siemens DICOM,",
+                   " attempting to fix."))
     N <- N * 2 # usually needed because remove oversampling is not selected
   }
   
