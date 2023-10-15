@@ -4,7 +4,7 @@
 \alias{seq_spin_echo_ideal}
 \title{Spin echo sequence with ideal pulses.}
 \usage{
-seq_spin_echo_ideal(spin_params, ft, ref, TE = 0.03)
+seq_spin_echo_ideal(spin_params, ft, ref, nuc = "1H", TE = 0.03)
 }
 \arguments{
 \item{spin_params}{spin system definition.}
@@ -12,6 +12,8 @@ seq_spin_echo_ideal(spin_params, ft, ref, TE = 0.03)
 \item{ft}{transmitter frequency in Hz.}
 
 \item{ref}{reference value for ppm scale.}
+
+\item{nuc}{acquisition nucleus.}
 
 \item{TE}{echo time in seconds.}
 }

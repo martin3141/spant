@@ -4,7 +4,7 @@
 \alias{seq_pulse_acquire}
 \title{Simple pulse and acquire sequence with ideal pulses.}
 \usage{
-seq_pulse_acquire(spin_params, ft, ref)
+seq_pulse_acquire(spin_params, ft, ref, nuc = "1H", acq_delay = 0)
 }
 \arguments{
 \item{spin_params}{spin system definition.}
@@ -12,6 +12,10 @@ seq_pulse_acquire(spin_params, ft, ref)
 \item{ft}{transmitter frequency in Hz.}
 
 \item{ref}{reference value for ppm scale.}
+
+\item{nuc}{acquisition nucleus.}
+
+\item{acq_delay}{delay between excitation and acquisition.}
 }
 \value{
 list of resonance amplitudes and frequencies.
