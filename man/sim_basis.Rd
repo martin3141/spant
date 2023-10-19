@@ -9,6 +9,7 @@ sim_basis(
   pul_seq = seq_pulse_acquire,
   acq_paras = def_acq_paras(),
   xlim = NULL,
+  verbose = FALSE,
   ...
 )
 }
@@ -21,6 +22,8 @@ sim_basis(
 \code{\link{def_acq_paras}}}
 
 \item{xlim}{ppm range limiting signals to be simulated.}
+
+\item{verbose}{output simulation progress and timings.}
 
 \item{...}{extra parameters to pass to the pulse sequence function.}
 }
