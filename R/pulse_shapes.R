@@ -12,8 +12,8 @@ get_guassian_pulse <- function(angle, n, trunc = 1) {
   B
 }
 
-#' Read a .pta formatted text file compatible with Siemens PulseTool.
-#' @param fname pta formatted pulse file name.
+#' Read a .pta formatted pulse file compatible with Siemens PulseTool.
+#' @param fname pta formatted pulse file path.
 #' @return pulse waveform and header.
 #' @export
 read_pulse_pta <- function(fname) {
@@ -28,5 +28,23 @@ read_pulse_pta <- function(fname) {
   close(con)
   pulse  <- pulse[, 1:2]
   colnames(pulse) <- c("mag", "pha")
+  return(list(data = pulse, header = header_out))
+}
+
+#' Read a Bruker formatted pulse file
+#' @param fname Bruker formatted pulse file path.
+#' @return pulse waveform and header.
+#' @export
+read_pulse_bruker <- function(fname) {
+  lines <- readLines(fname, warn = FALSE)
+  
+  headerN <- which(startsWith(lines, "##XYPOINTS"))
+  
+  pulse <- utils::read.table(text = lines, sep = ",", skip = headerN)
+  
+  colnames(pulse) <- c("mag", "pha")
+  header_out <- utils::read.table(text = lines, nrows = (headerN - 1), sep = "=",
+                                  comment.char = "")
+  
   return(list(data = pulse, header = header_out))
 }

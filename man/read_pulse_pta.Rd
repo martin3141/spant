@@ -2,16 +2,16 @@
 % Please edit documentation in R/pulse_shapes.R
 \name{read_pulse_pta}
 \alias{read_pulse_pta}
-\title{Read a .pta formatted text file compatible with Siemens PulseTool.}
+\title{Read a .pta formatted pulse file compatible with Siemens PulseTool.}
 \usage{
 read_pulse_pta(fname)
 }
 \arguments{
-\item{fname}{pta formatted pulse file name.}
+\item{fname}{pta formatted pulse file path.}
 }
 \value{
 pulse waveform and header.
 }
 \description{
-Read a .pta formatted text file compatible with Siemens PulseTool.
+Read a .pta formatted pulse file compatible with Siemens PulseTool.
 }
