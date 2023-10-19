@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.15.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.16.9000</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">seq_spin_echo_ideal</span><span class="op">(</span><span class="va">spin_params</span>, <span class="va">ft</span>, <span class="va">ref</span>, TE <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">seq_spin_echo_ideal</span><span class="op">(</span><span class="va">spin_params</span>, <span class="va">ft</span>, <span class="va">ref</span>, nuc <span class="op">=</span> <span class="st">"1H"</span>, TE <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -93,6 +93,10 @@
 
 <dt>ref</dt>
 <dd><p>reference value for ppm scale.</p></dd>
+
+
+<dt>nuc</dt>
+<dd><p>acquisition nucleus.</p></dd>
 
 
 <dt>TE</dt>
