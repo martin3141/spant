@@ -514,11 +514,13 @@ get_mol_para_list_names <- function(mol_para_list) {
 #' @param acq_paras list of acquisition parameters or an mrs_data object. See
 #' \code{\link{def_acq_paras}}
 #' @param xlim ppm range limiting signals to be simulated.
+#' @param verbose output simulation progress and timings.
 #' @param ... extra parameters to pass to the pulse sequence function.
 #' @return basis object.
 #' @export
 sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
-                      acq_paras = def_acq_paras(), xlim = NULL, ...) {
+                      acq_paras = def_acq_paras(), xlim = NULL, verbose = FALSE,
+                      ...) {
   
   if (inherits(acq_paras, "mrs_data")) acq_paras <- get_acq_paras(acq_paras)
   
@@ -530,9 +532,27 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
   basis_mrs_data <- sim_zero(ft = ft, ref = ref, fs = fs, N = N,
                               dyns = length(mol_list))
   
+  if (verbose) {
+    cat("Simulation started.\n")
+    start_time_full <- Sys.time()
+  }
   for (n in 1:length(mol_list)) {
+    if (verbose) {
+      cat(paste0("Simuating ", n, " of ", length(mol_list), " : ",
+                 mol_list[[n]]$full_name, "\n"))
+      start_time <- Sys.time()
+    }
     mrs_data <- sim_mol(mol_list[[n]], pul_seq, ft, ref, fs, N, xlim, ...) 
     basis_mrs_data <- set_dyns(basis_mrs_data, n, mrs_data)
+    if (verbose) {
+      end_time <- Sys.time()
+      print(end_time - start_time)
+    }
+  }
+  if (verbose) {
+    cat("Simulation finished.\n")
+    end_time_full <- Sys.time()
+    print(end_time_full - start_time_full)
   }
   names <- get_mol_para_list_names(mol_list)
   mrs_data2basis(basis_mrs_data, names = names)
