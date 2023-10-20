@@ -46,5 +46,7 @@ read_pulse_bruker <- function(fname) {
   header_out <- utils::read.table(text = lines, nrows = (headerN - 1), sep = "=",
                                   comment.char = "")
   
+  pulse$pha <- pulse$pha / 180 * pi
+  
   return(list(data = pulse, header = header_out))
 }
