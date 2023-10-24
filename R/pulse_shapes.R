@@ -31,6 +31,19 @@ read_pulse_pta <- function(fname) {
   return(list(data = pulse, header = header_out))
 }
 
+#' Read an ASCII formatted pulse file.
+#' @param fname ASCII formatted pulse file path. 
+#' @param deg2rad convert phase values stored in degrees to radians.
+#' @return pulse waveform and header.
+#' @export
+read_pulse_ascii <- function(fname, deg2rad = TRUE) {
+  data <- utils::read.table(fname, col.names = c("mag", "pha"))
+  
+  if (deg2rad) data$pha <- data$pha * pi / 180
+  
+  return(list(data = data, header = NULL))
+}
+
 #' Read a Bruker formatted pulse file
 #' @param fname Bruker formatted pulse file path.
 #' @return pulse waveform and header.
