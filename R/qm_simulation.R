@@ -2,9 +2,11 @@
 #' @param spin_params an object describing the spin system properties.
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.
+#' @param calc_jc_ham calculate the J-coupling Hamiltonian, used for shaped
+#' pulse simulations.
 #' @return spin system object.
 #' @export
-spin_sys <- function(spin_params, ft, ref) {
+spin_sys <- function(spin_params, ft, ref, calc_jc_ham = FALSE) {
   
   # force uppercase
   spin_params$nucleus <- toupper(spin_params$nucleus)
@@ -12,24 +14,43 @@ spin_sys <- function(spin_params, ft, ref) {
   spin_num <- get_spin_num(spin_params$nucleus)
   
   # calculate the Hamiltonian
-  H_mat <- H(spin_num, spin_params$nucleus, spin_params$chem_shift, 
-             spin_params$j_coupling_mat, ft, ref)
+  H_mat_list <- H(spin_num, spin_params$nucleus, spin_params$chem_shift, 
+                  spin_params$j_coupling_mat, ft, ref)
   
   # perform a symmetric eigenvalue decomposition
-  res <- eigen(H_mat, symmetric = TRUE) 
+  H_mat_res <- eigen(H_mat_list$H_mat, symmetric = TRUE)
   
-  list(spin_num = spin_num, nucleus = spin_params$nucleus,
-       H_mat = H_mat, H_eig_vals = res$values, H_eig_vecs = res$vectors)
+  if (calc_jc_ham) {
+    H_mat_jc_res <- eigen(H_mat_list$H_mat_jc, symmetric = TRUE)
+    res <- list(spin_num = spin_num, nucleus = spin_params$nucleus,
+                H_mat = H_mat_list$H_mat, H_eig_vals = H_mat_res$values,
+                H_eig_vecs = H_mat_res$vectors, H_mat_jc = H_mat_list$H_mat_jc,
+                H_jc_eig_vals = H_mat_jc_res$values,
+                H_jc_eig_vecs = H_mat_jc_res$vectors)
+  } else {
+    res <- list(spin_num = spin_num, nucleus = spin_params$nucleus,
+                H_mat = H_mat_list$H_mat, H_eig_vals = H_mat_res$values,
+                H_eig_vecs = H_mat_res$vectors)
+  }
+  return(res)
 }
 
 H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, ft, ref) {
   basis_size <- prod(spin_n * 2 + 1)
+  
+  # chemical shift part
+  H_mat_cs <- matrix(0, basis_size, basis_size)
+  
+  # J-coupling part
+  H_mat_jc <- matrix(0, basis_size, basis_size)
+  
+  # Combined chemical shift and J-coupling
   H_mat <- matrix(0, basis_size, basis_size)
   
   # chemical shift part
   for (n in (1:length(spin_n))) {
     # Convert chem shift to angular freq and apply to Iz
-    H_mat <- H_mat + gen_I(n, spin_n, "z") * 
+    H_mat_cs <- H_mat_cs + gen_I(n, spin_n, "z") * 
              ((chem_shift[n] - ref) * ft * 1e-6)
   }
   
@@ -40,20 +61,23 @@ H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, ft, ref) {
     # j-coupling part
     for (n in 1:dim(inds)[1]) {
       j <- j_coupling_mat[inds[n,1],inds[n,2]]
-      H_mat <- H_mat + j * gen_I(inds[n,1], spin_n, "z") %*%
+      H_mat_jc <- H_mat_jc + j * gen_I(inds[n,1], spin_n, "z") %*%
                gen_I(inds[n,2], spin_n, "z")
      
       # strong coupling for homonuclear spins
       if ( nucleus[inds[n,1]] == nucleus[inds[n,2]] ) {
-        H_mat <- H_mat + j * gen_I(inds[n,1], spin_n, "x") %*%
+        H_mat_jc <- H_mat_jc + j * gen_I(inds[n,1], spin_n, "x") %*%
                  gen_I(inds[n,2], spin_n, "x")
         
-        H_mat <- H_mat + j * gen_I(inds[n,1], spin_n, "y") %*%
+        H_mat_jc <- H_mat_jc + j * gen_I(inds[n,1], spin_n, "y") %*%
                  gen_I(inds[n,2], spin_n, "y")
       }
     }
   }
-  H_mat
+  
+  H_mat <- H_mat_cs + H_mat_jc
+  
+  return(list(H_mat = H_mat, H_mat_cs = H_mat_cs, H_mat_jc = H_mat_jc))
 }
 
 #' Simulate pulse sequence acquisition.
