@@ -4,7 +4,7 @@
 \alias{spin_sys}
 \title{Create a spin system object for pulse sequence simulation.}
 \usage{
-spin_sys(spin_params, ft, ref)
+spin_sys(spin_params, ft, ref, calc_jc_ham = FALSE)
 }
 \arguments{
 \item{spin_params}{an object describing the spin system properties.}
@@ -12,6 +12,9 @@ spin_sys(spin_params, ft, ref)
 \item{ft}{transmitter frequency in Hz.}
 
 \item{ref}{reference value for ppm scale.}
+
+\item{calc_jc_ham}{calculate the J-coupling Hamiltonian, used for shaped
+pulse simulations.}
 }
 \value{
 spin system object.
