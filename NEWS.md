@@ -1,5 +1,5 @@
 # spant 2.17.0
-* TODO
+* Simulation duration output is now rounded to 2dp.
 
 # spant 2.16.0
 * Added subset option to mean_dyns function.

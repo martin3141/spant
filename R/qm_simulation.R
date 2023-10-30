@@ -585,7 +585,7 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
   if (verbose) {
     cat("Simulation finished.\n")
     end_time_full <- Sys.time()
-    print(end_time_full - start_time_full)
+    print(round(end_time_full - start_time_full, 2))
   }
   names <- get_mol_para_list_names(mol_list)
   mrs_data2basis(basis_mrs_data, names = names)
