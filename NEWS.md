@@ -1,3 +1,6 @@
+# spant 2.17.0
+* TODO
+
 # spant 2.16.0
 * Added subset option to mean_dyns function.
 * Added vline option to plot.
