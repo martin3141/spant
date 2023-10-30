@@ -2631,6 +2631,17 @@ sub_mean_dyns <- function(mrs_data, scale = 1) {
   return(mrs_data_mean_sub)
 }
 
+#' Subtract the median dynamic spectrum from a dynamic series.
+#' @param mrs_data dynamic MRS data.
+#' @param scale scale factor for the medium spectrum.
+#' @return subtracted data.
+#' @export
+sub_median_dyns <- function(mrs_data, scale = 1) {
+  median_mrs_data <- median_dyns(mrs_data) * scale
+  mrs_data_median_sub <- mrs_data - rep_dyn(median_mrs_data, Ndyns(mrs_data))
+  return(mrs_data_median_sub)
+}
+
 #' Subtract the first dynamic spectrum from a dynamic series.
 #' @param mrs_data dynamic MRS data.
 #' @param scale scale factor for the first spectrum.
