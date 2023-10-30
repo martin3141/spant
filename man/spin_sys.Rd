@@ -4,7 +4,7 @@
 \alias{spin_sys}
 \title{Create a spin system object for pulse sequence simulation.}
 \usage{
-spin_sys(spin_params, ft, ref, precomp_jc_H = NULL)
+spin_sys(spin_params, ft, ref, precomp_jc_H = NULL, precomp_Iz = NULL)
 }
 \arguments{
 \item{spin_params}{an object describing the spin system properties.}
@@ -14,6 +14,8 @@ spin_sys(spin_params, ft, ref, precomp_jc_H = NULL)
 \item{ref}{reference value for ppm scale.}
 
 \item{precomp_jc_H}{use a precomputed J-coupling H matrix to save time.}
+
+\item{precomp_Iz}{use precomputed Iz matrices to save time.}
 }
 \value{
 spin system object.

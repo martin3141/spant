@@ -3,9 +3,11 @@
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.
 #' @param precomp_jc_H use a precomputed J-coupling H matrix to save time.
+#' @param precomp_Iz use precomputed Iz matrices to save time.
 #' @return spin system object.
 #' @export
-spin_sys <- function(spin_params, ft, ref, precomp_jc_H = NULL) {
+spin_sys <- function(spin_params, ft, ref, precomp_jc_H = NULL,
+                     precomp_Iz = NULL) {
   
   # force uppercase
   spin_params$nucleus <- toupper(spin_params$nucleus)
@@ -20,7 +22,7 @@ spin_sys <- function(spin_params, ft, ref, precomp_jc_H = NULL) {
   }
       
   H_mat_list <- H(spin_num, spin_params$nucleus, spin_params$chem_shift, 
-                  spin_params$j_coupling_mat, ft, ref, omit_jc)
+                  spin_params$j_coupling_mat, ft, ref, omit_jc, precomp_Iz)
   
   if (!is.null(precomp_jc_H)) {
     H_mat_list$H_mat_jc <- precomp_jc_H
@@ -38,7 +40,7 @@ spin_sys <- function(spin_params, ft, ref, precomp_jc_H = NULL) {
 }
 
 H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, ft, ref,
-              omit_jc = FALSE) {
+              omit_jc = FALSE, precomp_Iz = NULL) {
   
   basis_size <- prod(spin_n * 2 + 1)
   
@@ -52,10 +54,18 @@ H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, ft, ref,
   H_mat <- matrix(0, basis_size, basis_size)
   
   # chemical shift part
-  for (n in (1:length(spin_n))) {
-    # Convert chem shift to angular freq and apply to Iz
-    H_mat_cs <- H_mat_cs + gen_I(n, spin_n, "z") * 
-                ((chem_shift[n] - ref) * ft * 1e-6)
+  if (is.null(precomp_Iz)) {
+    for (n in (1:length(spin_n))) {
+      # Convert chem shift to angular freq and apply to Iz
+      H_mat_cs <- H_mat_cs + gen_I(n, spin_n, "z") * 
+                  ((chem_shift[n] - ref) * ft * 1e-6)
+    }
+  } else {
+    for (n in (1:length(spin_n))) {
+      # Convert chem shift to angular freq and apply to Iz
+      H_mat_cs <- H_mat_cs + precomp_Iz[[n]] * 
+                  ((chem_shift[n] - ref) * ft * 1e-6)
+    }
   }
   
   if (omit_jc) {
@@ -288,6 +298,10 @@ apply_pulse <- function(sys, rho, spin_n, angle, nuc, xy) {
   return(rho_out)
 }
 
+#' Return the spin number for a given nucleus.
+#' @param nucleus nucleus name, eg "1H".
+#' @return spin number.
+#' @export
 get_spin_num <- function(nucleus) {
   spin_lookup <- data.frame(nucleus = c("1H", "31P", "14N", "13C"),
                             spin = c(0.5, 0.5, 1.0, 0.5))
