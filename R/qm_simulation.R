@@ -2,11 +2,10 @@
 #' @param spin_params an object describing the spin system properties.
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.
-#' @param calc_jc_ham calculate the J-coupling Hamiltonian, used for shaped
-#' pulse simulations.
+#' @param precomp_jc_H use a precomputed J-coupling H matrix to save time.
 #' @return spin system object.
 #' @export
-spin_sys <- function(spin_params, ft, ref, calc_jc_ham = FALSE) {
+spin_sys <- function(spin_params, ft, ref, precomp_jc_H = NULL) {
   
   # force uppercase
   spin_params$nucleus <- toupper(spin_params$nucleus)
@@ -14,28 +13,33 @@ spin_sys <- function(spin_params, ft, ref, calc_jc_ham = FALSE) {
   spin_num <- get_spin_num(spin_params$nucleus)
   
   # calculate the Hamiltonian
+  if (!is.null(precomp_jc_H)) {
+    omit_jc <- TRUE
+  } else {
+    omit_jc <- FALSE
+  }
+      
   H_mat_list <- H(spin_num, spin_params$nucleus, spin_params$chem_shift, 
-                  spin_params$j_coupling_mat, ft, ref)
+                  spin_params$j_coupling_mat, ft, ref, omit_jc)
+  
+  if (!is.null(precomp_jc_H)) {
+    H_mat_list$H_mat_jc <- precomp_jc_H
+    H_mat_list$H_mat    <- H_mat_list$H_mat + H_mat_list$H_mat_jc
+  }
   
   # perform a symmetric eigenvalue decomposition
   H_mat_res <- eigen(H_mat_list$H_mat, symmetric = TRUE)
   
-  if (calc_jc_ham) {
-    H_mat_jc_res <- eigen(H_mat_list$H_mat_jc, symmetric = TRUE)
-    res <- list(spin_num = spin_num, nucleus = spin_params$nucleus,
-                H_mat = H_mat_list$H_mat, H_eig_vals = H_mat_res$values,
-                H_eig_vecs = H_mat_res$vectors, H_mat_jc = H_mat_list$H_mat_jc,
-                H_jc_eig_vals = H_mat_jc_res$values,
-                H_jc_eig_vecs = H_mat_jc_res$vectors)
-  } else {
-    res <- list(spin_num = spin_num, nucleus = spin_params$nucleus,
-                H_mat = H_mat_list$H_mat, H_eig_vals = H_mat_res$values,
-                H_eig_vecs = H_mat_res$vectors)
-  }
+  res <- list(spin_num = spin_num, nucleus = spin_params$nucleus,
+              H_mat = H_mat_list$H_mat, H_eig_vals = H_mat_res$values,
+              H_eig_vecs = H_mat_res$vectors, H_mat_jc = H_mat_list$H_mat_jc)
+  
   return(res)
 }
 
-H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, ft, ref) {
+H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, ft, ref,
+              omit_jc = FALSE) {
+  
   basis_size <- prod(spin_n * 2 + 1)
   
   # chemical shift part
@@ -51,7 +55,12 @@ H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, ft, ref) {
   for (n in (1:length(spin_n))) {
     # Convert chem shift to angular freq and apply to Iz
     H_mat_cs <- H_mat_cs + gen_I(n, spin_n, "z") * 
-             ((chem_shift[n] - ref) * ft * 1e-6)
+                ((chem_shift[n] - ref) * ft * 1e-6)
+  }
+  
+  if (omit_jc) {
+    H_mat <- H_mat_cs
+    return(list(H_mat = H_mat, H_mat_cs = H_mat_cs, H_mat_jc = H_mat_jc))
   }
   
   # Find non-zero elements of j_coupling_mat
@@ -60,17 +69,17 @@ H <- function(spin_n, nucleus, chem_shift, j_coupling_mat, ft, ref) {
   if ((dim(inds)[1]) > 0)  {
     # j-coupling part
     for (n in 1:dim(inds)[1]) {
-      j <- j_coupling_mat[inds[n,1],inds[n,2]]
-      H_mat_jc <- H_mat_jc + j * gen_I(inds[n,1], spin_n, "z") %*%
-               gen_I(inds[n,2], spin_n, "z")
+      j <- j_coupling_mat[inds[n, 1],inds[n, 2]]
+      H_mat_jc <- H_mat_jc + j * gen_I(inds[n, 1], spin_n, "z") %*%
+                  gen_I(inds[n, 2], spin_n, "z")
      
       # strong coupling for homonuclear spins
-      if ( nucleus[inds[n,1]] == nucleus[inds[n,2]] ) {
-        H_mat_jc <- H_mat_jc + j * gen_I(inds[n,1], spin_n, "x") %*%
-                 gen_I(inds[n,2], spin_n, "x")
+      if (nucleus[inds[n, 1]] == nucleus[inds[n, 2]]) {
+        H_mat_jc <- H_mat_jc + j * gen_I(inds[n, 1], spin_n, "x") %*%
+                    gen_I(inds[n, 2], spin_n, "x")
         
-        H_mat_jc <- H_mat_jc + j * gen_I(inds[n,1], spin_n, "y") %*%
-                 gen_I(inds[n,2], spin_n, "y")
+        H_mat_jc <- H_mat_jc + j * gen_I(inds[n, 1], spin_n, "y") %*%
+                    gen_I(inds[n, 2], spin_n, "y")
       }
     }
   }
@@ -570,7 +579,7 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
     basis_mrs_data <- set_dyns(basis_mrs_data, n, mrs_data)
     if (verbose) {
       end_time <- Sys.time()
-      print(end_time - start_time)
+      print(round(end_time - start_time, 2))
     }
   }
   if (verbose) {
