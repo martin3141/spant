@@ -44,6 +44,14 @@ read_pulse_ascii <- function(fname, deg2rad = TRUE) {
   return(list(data = data, header = NULL))
 }
 
+#' Write an ASCII formatted pulse file.
+#' @param pulse pulse data object.
+#' @param path file path for export.
+#' @export
+write_pulse_ascii <- function(pulse, path) {
+  utils::write.table(pulse$data, path, row.names = FALSE, col.names = FALSE)
+}
+
 #' Read a Bruker formatted pulse file
 #' @param fname Bruker formatted pulse file path.
 #' @return pulse waveform and header.
