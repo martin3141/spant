@@ -18,34 +18,47 @@
 #' outputs. Set to NULL to omit.
 #' @param ecc option to perform water reference based eddy current correction,
 #' defaults to FALSE.
+#' @param fit_opts options to pass to the fitting method.
 #' @export
 svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
                                       p_vols = NULL, dfp_corr = TRUE,
                                       omit_bad_dynamics = TRUE, basis = NULL,
                                       te = NULL, tr = NULL,
-                                      output_ratio = "tCr", ecc = FALSE) {
+                                      output_ratio = "tCr", ecc = FALSE,
+                                      fit_opts = NULL) {
   
   # TODO
-  # Deal with ima dynamic folders
-  # omit bad dynamics with SNR test
-  # option for custom metabolites and clash detection with basis option
-  # abfit options
+  # Omit bad dynamics with SNR test
+  # Option for custom mol_paras and clash detection with basis option
   # Auto sequence detection and override option
   # Realistic PRESS sim for B0 > 2.9T
   
   # read the data file if not already an mrs_data object
-  if (class(metab)[[1]] != "mrs_data") {
-    if (is.null(output_dir)) output_dir <- sub("\\.", "_", basename(metab))
-    metab <- read_mrs(metab)
-  } else {
+  if (class(metab)[[1]] == "mrs_data") {
     if (is.null(output_dir)) output_dir <- paste0("mrs_res_",
                                                   format(Sys.time(),
                                                          "%Y-%M-%d_%H%M%S"))
+  } else if (dir.exists(metab)) {
+    if (is.null(output_dir)) {
+      output_dir <- sub("\\.", "_", basename(metab))
+      output_dir <- paste0(output_dir, "_results")
+    }
+    metab <- read_ima_dyn_dir(metab) 
+  } else {
+    if (is.null(output_dir)) {
+      output_dir <- sub("\\.", "_", basename(metab))
+      output_dir <- paste0(output_dir, "_results")
+    }
+    metab <- read_mrs(metab)
   }
   
   # read the ref data file if not already an mrs_data object
   if (is.def(w_ref) & (class(w_ref)[[1]] != "mrs_data")) {
-    w_ref <- read_mrs(w_ref)
+    if (dir.exists(w_ref)) {
+      w_ref <- read_ima_dyn_dir(w_ref) 
+    } else {
+      w_ref <- read_mrs(w_ref)
+    }
   }
   
   # check for GE style data
@@ -79,16 +92,18 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
   metab_pre_dfp_corr <- metab
   
   if (dfp_corr & (Ndyns(metab) > 1)) {
-    metab <- rats(metab)
+    metab <- rats(metab, zero_freq_shift_t0 = TRUE)
     metab_post_dfp_corr <- metab
   }
   
   metab <- mean_dyns(metab)
+ 
+  if (!is.null(w_ref)) w_ref <- mean_dyns(w_ref)
   
   # eddy current correction
   if (ecc & (!is.null(w_ref))) metab <- ecc(metab, w_ref)
   
-  fit_res <- fit_mrs(metab, basis = basis)
+  fit_res <- fit_mrs(metab, basis = basis, opts = fit_opts)
   
   grDevices::pdf(file.path(output_dir, "fit_plot.pdf"))
   plot(fit_res)

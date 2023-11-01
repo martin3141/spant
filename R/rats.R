@@ -127,7 +127,7 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
     if (length(shifts) > 2) {
       shifts <- shifts - mean(shifts[1:3])
     } else {
-      stop("Not enough dynamic scans for zero_freq_shift_t0 RATS option.")
+      shifts <- shifts - shifts[1]
     }
   }
   

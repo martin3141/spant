@@ -15,7 +15,8 @@ svs_1h_brain_analysis_new(
   te = NULL,
   tr = NULL,
   output_ratio = "tCr",
-  ecc = FALSE
+  ecc = FALSE,
+  fit_opts = NULL
 )
 }
 \arguments{
@@ -48,6 +49,8 @@ outputs. Set to NULL to omit.}
 
 \item{ecc}{option to perform water reference based eddy current correction,
 defaults to FALSE.}
+
+\item{fit_opts}{options to pass to the fitting method.}
 }
 \description{
 Standard SVS 1H brain analysis pipeline.
