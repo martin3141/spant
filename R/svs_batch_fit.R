@@ -30,7 +30,7 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
   # omit bad dynamics with SNR test
   # option for custom metabolites and clash detection with basis option
   # abfit options
-  # Auto sequence detection
+  # Auto sequence detection and override option
   # Realistic PRESS sim for B0 > 2.9T
   
   # read the data file if not already an mrs_data object
@@ -99,13 +99,15 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
     
     grDevices::png(file.path(output_dir, "drift_plot.png"), res = 2 * 72,
                    height = 2 * 480, width = 2 * 480)
-    image(lb(phase(metab_pre_dfp_corr, phase_offset), 2), xlim = c(4, 0.5))
+    graphics::image(lb(phase(metab_pre_dfp_corr, phase_offset), 2),
+                    xlim = c(4, 0.5))
     grDevices::dev.off()
     
     if (dfp_corr) {
       grDevices::png(file.path(output_dir, "drift_plot_dfp_corr.png"),
                      res = 2 * 72, height = 2 * 480, width = 2 * 480)
-      image(lb(phase(metab_post_dfp_corr, phase_offset), 2), xlim = c(4, 0.5))
+      graphics::image(lb(phase(metab_post_dfp_corr, phase_offset), 2),
+                      xlim = c(4, 0.5))
       grDevices::dev.off()
     }
   }
