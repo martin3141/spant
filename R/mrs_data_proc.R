@@ -1239,6 +1239,18 @@ tr <- function(mrs_data) {
   mrs_data$resolution[5]
 }
 
+#' Return the echo time of an MRS dataset.
+#' @param mrs_data MRS data.
+#' @return echo time in seconds.
+#' @export
+te <- function(mrs_data) {
+  
+  # check the input
+  check_mrs_data(mrs_data)
+  
+  return(mrs_data$meta$EchoTime)    
+}
+
 #' Set the repetition time of an MRS dataset.
 #' @param mrs_data MRS data.
 #' @param tr repetition time in seconds.

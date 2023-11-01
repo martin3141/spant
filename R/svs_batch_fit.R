@@ -13,7 +13,7 @@
 #' @param tr metabolite mrs data repetition time in seconds. If not supplied
 #' this will be guessed from the metab data file.
 #' @export
-svs_1h_brain_analyis_new <- function(metab, w_ref = NULL, p_vols = NULL,
+svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, p_vols = NULL,
                                      dfp_corr = TRUE, omit_bad_dynamics = TRUE,
                                      basis = NULL, te = NULL, tr = NULL) {
   
@@ -23,6 +23,13 @@ svs_1h_brain_analyis_new <- function(metab, w_ref = NULL, p_vols = NULL,
   # read the ref data file if not already an mrs_data object
   if (is.def(w_ref) & (class(w_ref)[[1]] != "mrs_data")) {
     w_ref <- read_mrs(w_ref)
+  }
+  
+  if (is.null(tr)) tr <- tr(metab)
+      
+  if (is.null(te)) {
+    te <- te(metab)
+    if (is.null(te)) stop("Unable to determine echo-time from the data file, please pass as an argument.")
   }
   
   # combine coils if needed
