@@ -28,7 +28,7 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
                                       fit_opts = NULL) {
   
   # TODO
-  # Omit bad dynamics with SNR test
+  # Omit bad dynamics with peak height test
   # Option for custom mol_paras and clash detection with basis option
   # Auto sequence detection and override option
   # Realistic PRESS sim for B0 > 2.9T
@@ -111,6 +111,7 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
   
   if (Ndyns(metab_pre_dfp_corr) > 1) {
     phase_offset <- fit_res$res_tab$phase
+    shift_offset <- fit_res$res_tab$shift
     
     grDevices::png(file.path(output_dir, "drift_plot.png"), res = 2 * 72,
                    height = 2 * 480, width = 2 * 480)
@@ -125,6 +126,25 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
                       xlim = c(4, 0.5))
       grDevices::dev.off()
     }
+  }
+  
+  if (omit_bad_dynamics & (Ndyns(metab_pre_dfp_corr) > 1)) {
+    if (dfp_corr) {
+      dyn_data <- shift(phase(metab_post_dfp_corr, phase_offset), shift_offset)
+    } else {
+      dyn_data <- shift(phase(metab_pre_dfp_corr, phase_offset), shift_offset)
+    }
+    
+    dyn_data_proc <- bc_poly(crop_spec(zf(lb(dyn_data, 2)), c(3.5, 1.8)), 2)
+    
+    image(dyn_data_proc)
+    
+    peak_height <- spec_op(dyn_data_proc, operator = "max")
+    
+    peak_height <- peak_height / max(peak_height) * 100
+    
+    plot(peak_height, type = "l", ylim = c(0, 100))
+    
   }
   
   # output unscaled results
