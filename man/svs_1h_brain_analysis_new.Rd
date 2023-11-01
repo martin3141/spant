@@ -7,18 +7,23 @@
 svs_1h_brain_analysis_new(
   metab,
   w_ref = NULL,
+  output_dir = NULL,
   p_vols = NULL,
   dfp_corr = TRUE,
   omit_bad_dynamics = TRUE,
   basis = NULL,
   te = NULL,
-  tr = NULL
+  tr = NULL,
+  output_ratio = "tCr",
+  ecc = FALSE
 )
 }
 \arguments{
 \item{metab}{filepath or mrs_data object containing MRS metabolite data.}
 
 \item{w_ref}{filepath or mrs_data object containing MRS water reference data.}
+
+\item{output_dir}{directory path to output fitting results.}
 
 \item{p_vols}{a numeric vector of partial volumes expressed as percentages.
 Defaults to 100\% white matter. A voxel containing 100\% gray matter tissue
@@ -36,6 +41,13 @@ be guessed from the metab data file.}
 
 \item{tr}{metabolite mrs data repetition time in seconds. If not supplied
 this will be guessed from the metab data file.}
+
+\item{output_ratio}{optional string to specify a metabolite ratio to output.
+Defaults to "tCr" and multiple metabolites may be specified for multiple
+outputs. Set to NULL to omit.}
+
+\item{ecc}{option to perform water reference based eddy current correction,
+defaults to FALSE.}
 }
 \description{
 Standard SVS 1H brain analysis pipeline.

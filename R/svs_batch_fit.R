@@ -1,6 +1,7 @@
 #' Standard SVS 1H brain analysis pipeline.
 #' @param metab filepath or mrs_data object containing MRS metabolite data.
 #' @param w_ref filepath or mrs_data object containing MRS water reference data.
+#' @param output_dir directory path to output fitting results.
 #' @param p_vols a numeric vector of partial volumes expressed as percentages.
 #' Defaults to 100% white matter. A voxel containing 100% gray matter tissue
 #' would use : p_vols = c(WM = 0, GM = 100, CSF = 0).
@@ -12,18 +13,50 @@
 #' be guessed from the metab data file.
 #' @param tr metabolite mrs data repetition time in seconds. If not supplied
 #' this will be guessed from the metab data file.
+#' @param output_ratio optional string to specify a metabolite ratio to output.
+#' Defaults to "tCr" and multiple metabolites may be specified for multiple
+#' outputs. Set to NULL to omit.
+#' @param ecc option to perform water reference based eddy current correction,
+#' defaults to FALSE.
 #' @export
-svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, p_vols = NULL,
-                                     dfp_corr = TRUE, omit_bad_dynamics = TRUE,
-                                     basis = NULL, te = NULL, tr = NULL) {
+svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
+                                      p_vols = NULL, dfp_corr = TRUE,
+                                      omit_bad_dynamics = TRUE, basis = NULL,
+                                      te = NULL, tr = NULL,
+                                      output_ratio = "tCr", ecc = FALSE) {
+  
+  # TODO
+  # Deal with ima dynamic folders
+  # RATS processing
+  # omit bad dynamics
+  # Auto sequence detection
+  # Realistic PRESS sim for B0 > 2.9T
+  # option for custom metabolites and clash detection with basis option
   
   # read the data file if not already an mrs_data object
-  if (class(metab)[[1]] != "mrs_data") metab <- read_mrs(metab)
+  if (class(metab)[[1]] != "mrs_data") {
+    if (is.null(output_dir)) output_dir <- sub("\\.", "_", basename(metab))
+    metab <- read_mrs(metab)
+  } else {
+    if (is.null(output_dir)) output_dir <- paste0("mrs_res_",
+                                                  format(Sys.time(),
+                                                         "%Y-%M-%d_%H%M%S"))
+  }
   
   # read the ref data file if not already an mrs_data object
   if (is.def(w_ref) & (class(w_ref)[[1]] != "mrs_data")) {
     w_ref <- read_mrs(w_ref)
   }
+  
+  # check for GE style data
+  if (identical(class(metab), c("list", "mrs_data"))) {
+    x <- metab
+    metab <- x$metab
+    w_ref <- x$ref
+  }
+  
+  # create the output dir if it doesn't exist
+  if(!dir.exists(output_dir)) dir.create(output_dir)
   
   if (is.null(tr)) tr <- tr(metab)
       
@@ -47,11 +80,38 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, p_vols = NULL,
   
   metab <- mean_dyns(metab)
   
+  # eddy current correction
+  if (ecc & (!is.null(w_ref))) metab <- ecc(metab, w_ref)
+  
   fit_res <- fit_mrs(metab, basis = basis)
   
-  if (is.null(p_vols)) p_vols <- c(WM = 100, GM = 0, CSF = 0)
+  grDevices::pdf(file.path(output_dir, "fit_plot.pdf"))
+  plot(fit_res)
+  grDevices::dev.off()
   
-  fit_res <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, te, tr)
+  # output unscaled results
+  utils::write.csv(fit_res$res_tab, file.path(output_dir,
+                                              "fit_res_unscaled.csv"))
+ 
+  # output ratio results if requested 
+  if (!is.null(output_ratio)) {
+    for (output_ratio_element in output_ratio) {
+      fit_res_rat <- scale_amp_ratio(fit_res, output_ratio_element)
+      
+      file_out <- file.path(output_dir, paste0("fit_res_", output_ratio_element,
+                                               "_ratio.csv"))
+      
+      utils::write.csv(fit_res_rat$res_tab, file_out)
+    }
+  }
+  
+  if (!is.null(w_ref)) {
+    # assume 100% white matter if not told otherwise
+    if (is.null(p_vols)) p_vols <- c(WM = 100, GM = 0, CSF = 0)
+    fit_res_molal <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, te, tr)
+    file_out <- file.path(output_dir, "fit_res_molal_conc.csv")
+    utils::write.csv(fit_res_molal$res_tab, file_out)
+  }
   
   return(fit_res)
 }
