@@ -27,11 +27,11 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
   
   # TODO
   # Deal with ima dynamic folders
-  # RATS processing
-  # omit bad dynamics
+  # omit bad dynamics with SNR test
+  # option for custom metabolites and clash detection with basis option
+  # abfit options
   # Auto sequence detection
   # Realistic PRESS sim for B0 > 2.9T
-  # option for custom metabolites and clash detection with basis option
   
   # read the data file if not already an mrs_data object
   if (class(metab)[[1]] != "mrs_data") {
@@ -76,7 +76,12 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
     }
   }
   
-  if (dfp_corr & (Ndyns(metab)> 1)) metab <- rats(metab)
+  metab_pre_dfp_corr <- metab
+  
+  if (dfp_corr & (Ndyns(metab) > 1)) {
+    metab <- rats(metab)
+    metab_post_dfp_corr <- metab
+  }
   
   metab <- mean_dyns(metab)
   
@@ -88,6 +93,22 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
   grDevices::pdf(file.path(output_dir, "fit_plot.pdf"))
   plot(fit_res)
   grDevices::dev.off()
+  
+  if (Ndyns(metab_pre_dfp_corr) > 1) {
+    phase_offset <- fit_res$res_tab$phase
+    
+    grDevices::png(file.path(output_dir, "drift_plot.png"), res = 2 * 72,
+                   height = 2 * 480, width = 2 * 480)
+    image(lb(phase(metab_pre_dfp_corr, phase_offset), 2), xlim = c(4, 0.5))
+    grDevices::dev.off()
+    
+    if (dfp_corr) {
+      grDevices::png(file.path(output_dir, "drift_plot_dfp_corr.png"),
+                     res = 2 * 72, height = 2 * 480, width = 2 * 480)
+      image(lb(phase(metab_post_dfp_corr, phase_offset), 2), xlim = c(4, 0.5))
+      grDevices::dev.off()
+    }
+  }
   
   # output unscaled results
   utils::write.csv(fit_res$res_tab, file.path(output_dir,
