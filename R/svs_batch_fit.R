@@ -1,3 +1,55 @@
+#' Standard SVS 1H brain analysis pipeline.
+#' @param metab filepath or mrs_data object containing MRS metabolite data.
+#' @param w_ref filepath or mrs_data object containing MRS water reference data.
+#' @param p_vols a numeric vector of partial volumes expressed as percentages.
+#' Defaults to 100% white matter. A voxel containing 100% gray matter tissue
+#' would use : p_vols = c(WM = 0, GM = 100, CSF = 0).
+#' @param dfp_corr perform dynamic frequency and phase correction using the RATS
+#' method.
+#' @param omit_bad_dynamics detect and remove bad dynamics.
+#' @param basis basis set object to use for analysis.
+#' @param te metabolite mrs data echo time in seconds. If not supplied this will
+#' be guessed from the metab data file.
+#' @param tr metabolite mrs data repetition time in seconds. If not supplied
+#' this will be guessed from the metab data file.
+#' @export
+svs_1h_brain_analyis_new <- function(metab, w_ref = NULL, p_vols = NULL,
+                                     dfp_corr = TRUE, omit_bad_dynamics = TRUE,
+                                     basis = NULL, te = NULL, tr = NULL) {
+  
+  # read the data file if not already an mrs_data object
+  if (class(metab)[[1]] != "mrs_data") metab <- read_mrs(metab)
+  
+  # read the ref data file if not already an mrs_data object
+  if (is.def(w_ref) & (class(w_ref)[[1]] != "mrs_data")) {
+    w_ref <- read_mrs(w_ref)
+  }
+  
+  # combine coils if needed
+  if (Ncoils(metab) > 1) {
+    coil_comb_res <- comb_coils(metab, w_ref)
+    if (is.null(w_ref)) {
+      metab <- coil_comb_res
+    } else {
+      metab <- coil_comb_res$metab
+      w_ref <- coil_comb_res$ref
+    }
+  }
+  
+  if (dfp_corr & (Ndyns(metab)> 1)) metab <- rats(metab)
+  
+  metab <- mean_dyns(metab)
+  
+  fit_res <- fit_mrs(metab, basis = basis)
+  
+  if (is.null(p_vols)) p_vols <- c(WM = 100, GM = 0, CSF = 0)
+  
+  fit_res <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, te, tr)
+  
+  return(fit_res)
+}
+
+
 # TODO add option to explicitly specify the type of metabolite scaling to perform
 # include "auto" version which guesses based on the input
 
@@ -76,7 +128,7 @@ svs_1h_brain_analysis <- function(metab, basis = NULL, w_ref = NULL,
       metab <- coil_comb_res
     } else {
       metab <- coil_comb_res$metab
-      w_ref   <- coil_comb_res$ref
+      w_ref <- coil_comb_res$ref
     }
   }
   
@@ -98,11 +150,11 @@ svs_1h_brain_analysis <- function(metab, basis = NULL, w_ref = NULL,
   
   # TODO plot of shifts?
   
-  # eddy current correction
-  if (ecc & (!is.null(w_ref))) metab <- ecc(metab, w_ref)
-  
   # combine dynamic scans
   if (comb_dyns) metab <- mean_dyns(metab)
+  
+  # eddy current correction
+  if (ecc & (!is.null(w_ref))) metab <- ecc(metab, w_ref)
   
   # HSVD residual water removal
   if (hsvd_filt) metab <- hsvd_filt(metab)
