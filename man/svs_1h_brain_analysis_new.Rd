@@ -9,7 +9,8 @@ svs_1h_brain_analysis_new(
   w_ref = NULL,
   output_dir = NULL,
   p_vols = NULL,
-  mol_list = NULL,
+  append_basis = NULL,
+  remove_basis = NULL,
   basis = NULL,
   dfp_corr = TRUE,
   omit_bad_dynamics = TRUE,
@@ -32,7 +33,11 @@ svs_1h_brain_analysis_new(
 Defaults to 100\% white matter. A voxel containing 100\% gray matter tissue
 would use : p_vols = c(WM = 0, GM = 100, CSF = 0).}
 
-\item{mol_list}{list of molecular parameters for basis simulation.}
+\item{append_basis}{names of extra signals to add to the default basis. Eg
+append_basis = c("peth", "cit"). Cannot be used with precompiled basis sets.}
+
+\item{remove_basis}{names of signals to remove from the basis. Cannot be used
+with precompiled basis sets.}
 
 \item{basis}{basis set object to use for analysis.}
 

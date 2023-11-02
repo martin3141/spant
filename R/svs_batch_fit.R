@@ -5,7 +5,10 @@
 #' @param p_vols a numeric vector of partial volumes expressed as percentages.
 #' Defaults to 100% white matter. A voxel containing 100% gray matter tissue
 #' would use : p_vols = c(WM = 0, GM = 100, CSF = 0).
-#' @param mol_list list of molecular parameters for basis simulation.
+#' @param append_basis names of extra signals to add to the default basis. Eg 
+#' append_basis = c("peth", "cit"). Cannot be used with precompiled basis sets.
+#' @param remove_basis names of signals to remove from the basis. Cannot be used
+#' with precompiled basis sets.
 #' @param basis basis set object to use for analysis.
 #' @param dfp_corr perform dynamic frequency and phase correction using the RATS
 #' method.
@@ -23,17 +26,24 @@
 #' @param verbose output potentially useful information.
 #' @export
 svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
-                                      p_vols = NULL, mol_list = NULL,
-                                      basis = NULL, dfp_corr = TRUE,
-                                      omit_bad_dynamics = TRUE,
+                                      p_vols = NULL, append_basis = NULL,
+                                      remove_basis = NULL, basis = NULL,
+                                      dfp_corr = TRUE, omit_bad_dynamics = TRUE,
                                       te = NULL, tr = NULL,
                                       output_ratio = "tCr", ecc = FALSE,
                                       fit_opts = NULL, verbose = FALSE) {
   
   # TODO
-  # Option for custom mol_paras and clash detection with basis option
   # Auto sequence detection and override option
   # Realistic PRESS sim for B0 > 2.9T
+  
+  if (!is.null(basis) & !is.null(append_basis)) {
+    stop("basis and append_basis options cannot both be set. Use one or the other.")
+  }
+  
+  if (!is.null(basis) & !is.null(remove_basis)) {
+    stop("basis and remove_basis options cannot both be set. Use one or the other.")
+  }
   
   # read the data file if not already an mrs_data object
   if (class(metab)[[1]] == "mrs_data") {
@@ -108,6 +118,29 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
   
   # eddy current correction
   if (ecc & (!is.null(w_ref))) metab <- ecc(metab, w_ref)
+  
+  # simulate a basis if needed
+  if (is.null(basis)) {
+    
+    mol_list_chars <- c("m_cr_ch2", "ala", "asp", "cr", "gaba", "glc", "gln",
+                        "gsh", "glu", "gpc", "ins", "lac", "lip09", "lip13a",
+                        "lip13b", "lip20", "mm09", "mm12", "mm14", "mm17",
+                        "mm20", "naa", "naag", "pch", "pcr", "sins", "tau")
+    
+    if (!is.null(append_basis)) mol_list_chars <- c(mol_list_chars,
+                                                    append_basis)
+    
+    if (!is.null(remove_basis)) {
+      inds <- which(mol_list_chars == remove_basis)
+      mol_list_chars <- mol_list_chars[-inds]
+    }
+    
+    mol_list <- get_mol_paras(mol_list_chars, ft = metab$ft)
+    
+    basis <- sim_basis(mol_list, acq_paras = metab)
+    
+    if (verbose) print(basis)
+  }
   
   # fitting
   fit_res <- fit_mrs(metab, basis = basis, opts = fit_opts)
