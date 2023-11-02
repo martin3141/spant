@@ -5,10 +5,11 @@
 #' @param p_vols a numeric vector of partial volumes expressed as percentages.
 #' Defaults to 100% white matter. A voxel containing 100% gray matter tissue
 #' would use : p_vols = c(WM = 0, GM = 100, CSF = 0).
+#' @param mol_list list of molecular parameters for basis simulation.
+#' @param basis basis set object to use for analysis.
 #' @param dfp_corr perform dynamic frequency and phase correction using the RATS
 #' method.
 #' @param omit_bad_dynamics detect and remove bad dynamics.
-#' @param basis basis set object to use for analysis.
 #' @param te metabolite mrs data echo time in seconds. If not supplied this will
 #' be guessed from the metab data file.
 #' @param tr metabolite mrs data repetition time in seconds. If not supplied
@@ -22,8 +23,9 @@
 #' @param verbose output potentially useful information.
 #' @export
 svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
-                                      p_vols = NULL, dfp_corr = TRUE,
-                                      omit_bad_dynamics = TRUE, basis = NULL,
+                                      p_vols = NULL, mol_list = NULL,
+                                      basis = NULL, dfp_corr = TRUE,
+                                      omit_bad_dynamics = TRUE,
                                       te = NULL, tr = NULL,
                                       output_ratio = "tCr", ecc = FALSE,
                                       fit_opts = NULL, verbose = FALSE) {
@@ -96,7 +98,7 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
   
   # dynamic frequency and phase correction
   if (dfp_corr & (Ndyns(metab) > 1)) {
-    metab <- rats(metab, zero_freq_shift_t0 = TRUE)
+    metab <- rats(metab, zero_freq_shift_t0 = TRUE, xlim = c(4, 1.8))
     metab_post_dfp_corr <- metab
   }
   

@@ -9,14 +9,16 @@ svs_1h_brain_analysis_new(
   w_ref = NULL,
   output_dir = NULL,
   p_vols = NULL,
+  mol_list = NULL,
+  basis = NULL,
   dfp_corr = TRUE,
   omit_bad_dynamics = TRUE,
-  basis = NULL,
   te = NULL,
   tr = NULL,
   output_ratio = "tCr",
   ecc = FALSE,
-  fit_opts = NULL
+  fit_opts = NULL,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -30,12 +32,14 @@ svs_1h_brain_analysis_new(
 Defaults to 100\% white matter. A voxel containing 100\% gray matter tissue
 would use : p_vols = c(WM = 0, GM = 100, CSF = 0).}
 
+\item{mol_list}{list of molecular parameters for basis simulation.}
+
+\item{basis}{basis set object to use for analysis.}
+
 \item{dfp_corr}{perform dynamic frequency and phase correction using the RATS
 method.}
 
 \item{omit_bad_dynamics}{detect and remove bad dynamics.}
-
-\item{basis}{basis set object to use for analysis.}
 
 \item{te}{metabolite mrs data echo time in seconds. If not supplied this will
 be guessed from the metab data file.}
@@ -51,6 +55,8 @@ outputs. Set to NULL to omit.}
 defaults to FALSE.}
 
 \item{fit_opts}{options to pass to the fitting method.}
+
+\item{verbose}{output potentially useful information.}
 }
 \description{
 Standard SVS 1H brain analysis pipeline.
