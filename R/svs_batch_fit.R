@@ -19,16 +19,16 @@
 #' @param ecc option to perform water reference based eddy current correction,
 #' defaults to FALSE.
 #' @param fit_opts options to pass to the fitting method.
+#' @param verbose output potentially useful information.
 #' @export
 svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
                                       p_vols = NULL, dfp_corr = TRUE,
                                       omit_bad_dynamics = TRUE, basis = NULL,
                                       te = NULL, tr = NULL,
                                       output_ratio = "tCr", ecc = FALSE,
-                                      fit_opts = NULL) {
+                                      fit_opts = NULL, verbose = FALSE) {
   
   # TODO
-  # Omit bad dynamics with peak height test
   # Option for custom mol_paras and clash detection with basis option
   # Auto sequence detection and override option
   # Realistic PRESS sim for B0 > 2.9T
@@ -52,6 +52,8 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
     metab <- read_mrs(metab)
   }
   
+  if (verbose) cat(paste0("Output directory : ", output_dir, "\n"))
+  
   # read the ref data file if not already an mrs_data object
   if (is.def(w_ref) & (class(w_ref)[[1]] != "mrs_data")) {
     if (dir.exists(w_ref)) {
@@ -73,6 +75,7 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
   
   if (is.null(tr)) tr <- tr(metab)
       
+  # check we have what we need for concentration scaling
   if (is.null(te)) {
     te <- te(metab)
     if (is.null(te)) stop("Unable to determine echo-time from the data file, please pass as an argument.")
@@ -91,6 +94,7 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
   
   metab_pre_dfp_corr <- metab
   
+  # dynamic frequency and phase correction
   if (dfp_corr & (Ndyns(metab) > 1)) {
     metab <- rats(metab, zero_freq_shift_t0 = TRUE)
     metab_post_dfp_corr <- metab
@@ -103,15 +107,79 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
   # eddy current correction
   if (ecc & (!is.null(w_ref))) metab <- ecc(metab, w_ref)
   
+  # fitting
   fit_res <- fit_mrs(metab, basis = basis, opts = fit_opts)
+    
+  phase_offset <- fit_res$res_tab$phase
+  shift_offset <- fit_res$res_tab$shift
+  
+  # check for poor dynamics
+  if (omit_bad_dynamics & (Ndyns(metab_pre_dfp_corr) > 1)) {
+    if (dfp_corr) {
+      dyn_data <- shift(phase(metab_post_dfp_corr, phase_offset), shift_offset)
+    } else {
+      dyn_data <- shift(phase(metab_pre_dfp_corr, phase_offset), shift_offset)
+    }
+    
+    dyn_data_proc <- bc_poly(crop_spec(zf(lb(dyn_data, 2)), c(3.5, 1.8)), 2)
+    
+    peak_height <- spec_op(dyn_data_proc, operator = "max")
+    
+    peak_height <- peak_height / max(peak_height) * 100
+    
+    bad_shots      <- peak_height < 75
+    bad_shots_n    <- sum(bad_shots)
+    bad_shots_perc <- bad_shots_n / length(peak_height) * 100
+    
+    grDevices::png(file.path(output_dir, "drift_plot_peak_height.png"),
+                   res = 2 * 72, height = 2 * 480, width = 2 * 480)
+    graphics::image(dyn_data_proc)
+    grDevices::dev.off()
+    
+    grDevices::pdf(file.path(output_dir, "dynamic_peak_height.pdf"))
+    graphics::plot(peak_height, type = "l", ylim = c(0, 100),
+                   ylab = "Max peak height (%)", xlab = "Dynamic")
+    graphics::abline(h = 75, lty = 2)
+    grDevices::dev.off()
+    
+    if (bad_shots_n > 0) {
+      subset <- which(!bad_shots)
+      
+      cat(paste0(bad_shots_n, " bad shots (", round(bad_shots_perc), 
+                 "%) detected.\n"))
+      
+      # remove bad shots and refit
+      metab_pre_dfp_corr  <- get_dyns(metab_pre_dfp_corr, subset)
+      
+      if (dfp_corr) {
+        metab_post_dfp_corr <- get_dyns(metab_post_dfp_corr, subset)
+        metab <- metab_post_dfp_corr
+      } else {
+        metab <- metab_pre_dfp_corr
+      }
+      
+      metab <- mean_dyns(metab)
+  
+      # eddy current correction
+      if (ecc & (!is.null(w_ref))) metab <- ecc(metab, w_ref)
+      
+      # fitting
+      # TODO reuse basis set used for initial fit
+      if (verbose) cat("Refitting without bad shots.\n")
+      fit_res <- fit_mrs(metab, basis = basis, opts = fit_opts)
+      
+      phase_offset <- fit_res$res_tab$phase
+      shift_offset <- fit_res$res_tab$shift
+    } else {
+      cat("No bad shots detected.\n")
+    }
+  }
   
   grDevices::pdf(file.path(output_dir, "fit_plot.pdf"))
   plot(fit_res)
   grDevices::dev.off()
   
   if (Ndyns(metab_pre_dfp_corr) > 1) {
-    phase_offset <- fit_res$res_tab$phase
-    shift_offset <- fit_res$res_tab$shift
     
     grDevices::png(file.path(output_dir, "drift_plot.png"), res = 2 * 72,
                    height = 2 * 480, width = 2 * 480)
@@ -126,25 +194,6 @@ svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
                       xlim = c(4, 0.5))
       grDevices::dev.off()
     }
-  }
-  
-  if (omit_bad_dynamics & (Ndyns(metab_pre_dfp_corr) > 1)) {
-    if (dfp_corr) {
-      dyn_data <- shift(phase(metab_post_dfp_corr, phase_offset), shift_offset)
-    } else {
-      dyn_data <- shift(phase(metab_pre_dfp_corr, phase_offset), shift_offset)
-    }
-    
-    dyn_data_proc <- bc_poly(crop_spec(zf(lb(dyn_data, 2)), c(3.5, 1.8)), 2)
-    
-    image(dyn_data_proc)
-    
-    peak_height <- spec_op(dyn_data_proc, operator = "max")
-    
-    peak_height <- peak_height / max(peak_height) * 100
-    
-    plot(peak_height, type = "l", ylim = c(0, 100))
-    
   }
   
   # output unscaled results
