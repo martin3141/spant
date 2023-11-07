@@ -14,7 +14,9 @@ sim_basis(
 )
 }
 \arguments{
-\item{mol_list}{list of \code{mol_parameter} objects.}
+\item{mol_list}{list of \code{mol_parameter} objects. Alternatively, a
+character vector matching molecules may also be provided. Use the
+get_mol_names function for a full list of molecules.}
 
 \item{pul_seq}{pulse sequence function to use.}
 

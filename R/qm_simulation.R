@@ -556,7 +556,9 @@ get_mol_para_list_names <- function(mol_para_list) {
 }
 
 #' Simulate a basis set object.
-#' @param mol_list list of \code{mol_parameter} objects.
+#' @param mol_list list of \code{mol_parameter} objects. Alternatively, a 
+#' character vector matching molecules may also be provided. Use the 
+#' get_mol_names function for a full list of molecules.
 #' @param pul_seq pulse sequence function to use.
 #' @param acq_paras list of acquisition parameters or an mrs_data object. See
 #' \code{\link{def_acq_paras}}
@@ -575,6 +577,14 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
   ref <- acq_paras$ref
   fs  <- acq_paras$fs
   N   <- acq_paras$N
+  
+  if (inherits(mol_list[[1]], "character")) {
+    if (length(mol_list) == 1) {
+      mol_list <- list(get_mol_paras(mol_list, ft = ft))
+    } else {
+      mol_list <- get_mol_paras(mol_list, ft = ft)
+    }
+  }
     
   basis_mrs_data <- sim_zero(ft = ft, ref = ref, fs = fs, N = N,
                               dyns = length(mol_list))
@@ -583,6 +593,7 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
     cat("Simulation started.\n")
     start_time_full <- Sys.time()
   }
+  
   for (n in 1:length(mol_list)) {
     if (verbose) {
       cat(paste0("Simuating ", n, " of ", length(mol_list), " : ",
