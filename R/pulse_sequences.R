@@ -671,3 +671,166 @@ seq_slaser_ideal <- function(spin_params, ft, ref, TE1 = 0.008, TE2 = 0.011,
   # acquire
   acquire(sys, detect = "1H")
 }
+
+#' PRESS sequence with shaped refocusing pulses.
+#' @param spin_params spin system definition.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @param TE1 TE1 sequence parameter in seconds (TE=TE1+TE2).
+#' @param TE2 TE2 sequence parameter in seconds.
+#' @param pulse_file path to refocusing pulse file.
+#' @param pulse_dur refocusing pulse duration.
+#' @param pulse_file_format file format for the refocusing pulse.
+#' @param refoc_flip_angle refocusing pulse flip angle in degrees (defaults to
+#' 180).
+#' @param xy_pulse_ppm a vector of ppm values for the offset of each
+#' sub-simulation.
+#' @param resamp option to resample the pulse shape.
+#' @param fs_resamp sampling frequency (Hz) to resample.
+#' @return list of resonance amplitudes and frequencies.
+#' @export
+seq_press_2d_shaped <- function(spin_params, ft, ref, TE1 = 0.01, TE2 = 0.02,
+                                pulse_file, pulse_dur, pulse_file_format,
+                                refoc_flip_angle = 180, xy_pulse_ppm = NULL,
+                                resamp = TRUE, fs_resamp = 1e-4) {
+  
+  if (is.null(xy_pulse_ppm)) xy_pulse_ppm <- seq(from = -4, to = 10,
+                                                 length.out = 10)
+  
+  # read in a 180 degree refocusing pulse
+  if (pulse_file_format == "pta") {
+    pulse <- read_pulse_pta(pulse_file)
+  } else if (pulse_file_format == "bruker") {
+    pulse <- read_pulse_bruker(pulse_file)
+  } else if (pulse_file_format == "ascii") {
+    pulse <- read_pulse_ascii(pulse_file)
+  } else {
+    stop("Pulse file format not recognised.")
+  }
+  
+  if (resamp) {
+    n_resamp   <- round(pulse_dur / fs_resamp)
+    mag_interp <- stats::approx(pulse$data$mag, n = n_resamp)$y
+    pha_interp <- stats::approx(pulse$data$pha, n = n_resamp)$y
+    pulse$data <- data.frame(mag = mag_interp, pha = pha_interp)
+  }
+  
+  # initialize spin system
+  sys      <- spin_sys(spin_params, ft, ref)
+  sys$rho  <- -gen_F(sys, "y", "1H")
+  
+  # precomputed for speed
+  H_mat_jc <- sys$H_mat_jc
+ 
+  # precomputed for speed
+  spin_num <- get_spin_num(spin_params$nucleus)
+  precomp_Iz <- vector(mode = "list", length = length(spin_num))
+  for (n in 1:length(spin_num)) precomp_Iz[[n]] <- gen_I(n, spin_num, "z")
+  
+  # filter -1
+  sys$rho <- coherence_filter(sys, sys$rho, -1)
+  
+  # find the inverse of the eigenvector matrix
+  eig_vec_inv <- solve(sys$H_eig_vecs)
+  
+  # prepare first delay operators
+  t <- TE1 / 2 - pulse_dur / 2
+  lhs_d1 <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*%
+    eig_vec_inv
+  rhs_d1 <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * t)) %*%
+    eig_vec_inv
+  
+  # prepare second delay operators
+  t <- (TE1 + TE2) / 2 - pulse_dur
+  lhs_d2 <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*% 
+    eig_vec_inv
+  rhs_d2 <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * t)) %*% 
+    eig_vec_inv
+  
+  # prepare third delay operators
+  t <- TE2 / 2 - pulse_dur / 2
+  lhs_d3 <- sys$H_eig_vecs %*% diag(exp(sys$H_eig_vals * 2i * pi * t)) %*%
+    eig_vec_inv
+  rhs_d3 <- sys$H_eig_vecs %*% diag(exp(-sys$H_eig_vals * 2i * pi * t)) %*%
+    eig_vec_inv
+  
+  # apply first delay
+  sys$rho <- lhs_d1 %*% sys$rho %*% rhs_d1
+    
+  basis_size <- prod(sys$spin_n * 2 + 1)
+  
+  dt <- pulse_dur / nrow(pulse$data) 
+
+  pulse_cplx <- pulse$data$mag * exp(1i * pulse$data$pha)
+  pulse$data$mag <- pulse$data$mag / sum(Re(pulse_cplx)) * pi * 
+                    refoc_flip_angle / 180
+  
+  rho_spatial <- matrix(0, basis_size, basis_size)
+  start_rho <- sys$rho
+  
+  # precalculate pulse operators 
+  lhs_pulse <- vector(mode = "list", length = nrow(pulse$data))
+  rhs_pulse <- vector(mode = "list", length = nrow(pulse$data))
+  for (n in 1:nrow(pulse$data)) {
+    Fxy <- gen_F_xy(sys, pulse$data$pha[n] * 180 / pi + 90, "1H")
+    lhs_pulse[[n]] <- matexp(-Fxy * 1i * pulse$data$mag[n])
+    rhs_pulse[[n]] <- matexp( Fxy * 1i * pulse$data$mag[n])
+  }
+  
+  lhs_dt <- vector(mode = "list", length = length(xy_pulse_ppm))
+  rhs_dt <- vector(mode = "list", length = length(xy_pulse_ppm))
+ 
+  for (m in 1:length(xy_pulse_ppm)) {
+    sys <- spin_sys(spin_params, ft, xy_pulse_ppm[m], precomp_jc_H = H_mat_jc,
+                    precomp_Iz = precomp_Iz)
+    eig_vec_inv <- solve(sys$H_eig_vecs)
+    
+    lhs_dt[[m]] <- sys$H_eig_vecs %*%
+                   diag(exp(sys$H_eig_vals * 2i * pi * dt)) %*% eig_vec_inv
+    rhs_dt[[m]] <- sys$H_eig_vecs %*%
+                   diag(exp(-sys$H_eig_vals * 2i * pi * dt)) %*% eig_vec_inv
+  }
+  
+  for (m in 1:length(xy_pulse_ppm)) {
+      
+      rho <- start_rho
+      # first 180
+      for (n in 1:nrow(pulse$data)) {
+        rho <- lhs_pulse[[n]] %*% rho %*% rhs_pulse[[n]]
+        rho <- lhs_dt[[m]]    %*% rho %*% rhs_dt[[m]]
+      }
+      rho_spatial <- rho_spatial + rho / length(xy_pulse_ppm)
+    }
+      
+    # filter +1
+    rho <- coherence_filter(sys, rho_spatial, 1)
+    
+    # apply second delay
+    rho <- lhs_d2 %*% rho %*% rhs_d2
+    
+    rho_spatial <- matrix(0, basis_size, basis_size)
+    start_rho   <- rho
+    for (m in 1:length(xy_pulse_ppm)) {
+      
+      rho <- start_rho
+      
+      # second 180
+      for (n in 1:nrow(pulse$data)) {
+        rho <- lhs_pulse[[n]] %*% rho %*% rhs_pulse[[n]]
+        rho <- lhs_dt[[m]]    %*% rho %*% rhs_dt[[m]]
+      }
+      rho_spatial <- rho_spatial + rho / length(xy_pulse_ppm)
+    }
+    
+    # filter -1
+    rho <- coherence_filter(sys, rho_spatial, -1)
+    
+    # reset ref 
+    sys <- spin_sys(spin_params, ft, ref)
+    
+    # apply third delay
+    sys$rho <- lhs_d3 %*% rho %*% rhs_d3 
+    
+    # acquire
+    acquire(sys, detect = "1H")
+}
