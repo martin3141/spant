@@ -361,7 +361,7 @@ get_pfile_dict <- function(hdr_rev, con) {
     loc$tr          <- 199236
     loc$seq_name    <- 199812
     loc$prot_name   <- 196602
-  } else if (floor(hdr_rev) == 28L) {
+  } else if ((floor(hdr_rev) == 28L) | (floor(hdr_rev) == 30L)) {
     # some files from this version are corrupt due to a bug in the GE software
     # (relating to auto-coil selection "Air Touch")
     # don't spend ages trying to fix files that are inherently borked
