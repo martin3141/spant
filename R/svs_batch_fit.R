@@ -25,7 +25,7 @@
 #' @param fit_opts options to pass to the fitting method.
 #' @param verbose output potentially useful information.
 #' @export
-svs_1h_brain_analysis_new <- function(metab, w_ref = NULL, output_dir = NULL,
+svs_1h_brain_analysis_dev <- function(metab, w_ref = NULL, output_dir = NULL,
                                       p_vols = NULL, append_basis = NULL,
                                       remove_basis = NULL, basis = NULL,
                                       dfp_corr = TRUE, omit_bad_dynamics = TRUE,
