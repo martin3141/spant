@@ -380,6 +380,8 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
     # CMRR sLASER always starts with the first point
     if (endsWith(vars$seq_fname, "%CustomerSeq%\\svs_slaser_dkd")) {
       start_pt <- 1
+    } else if (vars$seq_fname == "%CustomerSeq%\\svs_slaserVOI_dkd2") {
+      start_pt <- 1
     } else if (vars$seq_fname == "%CustomerSeq%\\eja_svs_mpress") {
       start_pt <- floor(ima_kspace_center_column / 2) + 1
     } else if (vars$seq_fname == "%SiemensSeq%\\csi_slaser") {
@@ -393,6 +395,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
       }
     } else {
       warning("TWIX seqeuence not recognised, guessing the echo start point.")
+      cat(vars$seq_fname, "\n")
       warning("Contact the developer if you're not sure if this is a problem.")
       # find the max echo position from the first 50 data points in the FID
       # start_chunk <- crop_td_pts(mrs_data, 1, 50)
