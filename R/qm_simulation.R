@@ -481,6 +481,45 @@ get_1h_brain_basis_paras <- function(ft, metab_lw = NULL, lcm_compat = FALSE) {
   get_1h_brain_basis_paras_v2(ft, metab_lw, lcm_compat)
 }
 
+#' Return a character vector of molecules included in the Gold Star Phantoms 
+#' SPECTRE phantom.
+#' @return a character vector of molecule names.
+#' @export
+get_1h_spectre_basis_names <- function() {
+  names <- c("cho_rt", "cr_ch2_rt", "cr_ch3_rt", "gaba", "glu_rt", "ins_rt", 
+             "lac_rt", "naa_rt")
+  return(names)
+}
+
+#' Return a character vector of molecules included in the GE BRAINO phantom.
+#' @return a character vector of molecule names.
+#' @export
+get_1h_braino_basis_names <- function() {
+  names <- c("cho_rt", "cr_ch2_rt", "cr_ch3_rt", "glu_rt", "ins_rt", "lac_rt",
+             "naa_rt")
+  return(names)
+}
+
+#' Return a character vector of common 1H molecules found in healthy human
+#' brain.
+#' 
+#' Note, this is a basic set and PEth and Gly should be also be included for 
+#' higher quality MRS data.
+#' 
+#' @param inc_lip_mm include Lipid and MM basis signals.
+#' @return a character vector of molecule names.
+#' @export
+get_1h_brain_basis_names <- function(inc_lip_mm = TRUE) {
+  names <- c("m_cr_ch2", "ala", "asp", "cr", "gaba", "glc", "gln", "gsh", "glu",
+             "gpc", "ins", "lac", "naa", "naag", "pch", "pcr", "sins", "tau")
+  
+  if (inc_lip_mm) {
+    names <- c(names, "lip09", "lip13a", "lip13b", "lip20", "mm09", "mm12",
+               "mm14", "mm17", "mm20")
+  }
+  return(names)
+}
+
 #' Simulate a basis-set suitable for 1H brain MRS analysis acquired with a PRESS 
 #' sequence. Note, ideal pulses are assumed.
 #' @param pul_seq pulse sequence function to use.

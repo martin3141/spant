@@ -168,6 +168,42 @@ get_asp_paras <- function(lw = NULL, lg = 0, ...) {
   paras
 }
 
+get_cho_rt_paras <- function(lw = NULL, lg = 0, ...) {
+  if (is.null(lw)) lw = 0
+  nucleus <- c("1H", "14N")
+  chem_shift <- c(3.185, 0)
+  j_coupling_mat <- matrix(0, 2, 2)
+  j_coupling_mat[2,1] <- 0.57
+  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 9,
+                       lw = lw, lg = lg)
+  
+  nucleus <- c("1H", "1H", "1H", "1H", "14N")
+  chem_shift <- c(4.054, 4.054, 3.501, 3.501, 0)
+  j_coupling_mat <- matrix(0, 5, 5)
+  j_coupling_mat[2,1] <- -14.1
+  j_coupling_mat[3,1] <- 3.14
+  j_coupling_mat[4,1] <- 6.979
+  j_coupling_mat[5,1] <- 2.572
+  j_coupling_mat[3,2] <- 7.011
+  j_coupling_mat[4,2] <- 3.168
+  j_coupling_mat[5,2] <- 2.681
+  j_coupling_mat[4,3] <- -14.07
+  
+  spin_group_b <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 1,
+                       lw = lw, lg = lg)
+  
+  source <- "Corrigendum: Proton NMR chemical shifts and coupling constants for
+              brain metabolites. NMR Biomed. 2000; 13:129-153."
+  
+  paras <- list(spin_groups = list(spin_group_a, spin_group_b), name = "Cho",
+                source = source, full_name = "Choline")
+  
+  class(paras) <- "mol_parameters"
+  paras
+}
+
 get_cho_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- c("1H", "14N")
@@ -217,8 +253,8 @@ get_cr_paras <- function(lw = NULL, lg = 0, ...) {
   paras
 }
 
-get_cr_ch2_paras <- function(lw = NULL, lg = 0, ...) {
-  if (is.null(lw)) lw = 2
+get_cr_ch2_rt_paras <- function(lw = NULL, lg = 0, ...) {
+  if (is.null(lw)) lw = 0
   paras <- get_uncoupled_mol("CrCH2", 3.913, "1H", 2, lw, lg,
                              "Creatine CH2 group")
   
@@ -229,8 +265,8 @@ get_cr_ch2_paras <- function(lw = NULL, lg = 0, ...) {
   paras
 }
 
-get_cr_ch3_paras <- function(lw = NULL, lg = 0, ...) {
-  if (is.null(lw)) lw = 2
+get_cr_ch3_rt_paras <- function(lw = NULL, lg = 0, ...) {
+  if (is.null(lw)) lw = 0
   paras <- get_uncoupled_mol("CrCH3", 3.027, "1H", 3, lw, lg,
                              "Creatine CH2 group")
   
@@ -272,7 +308,7 @@ get_gaba_paras <- function(lw = NULL, lg = 0, ...) {
 }
 
 get_gaba_rt_paras <- function(lw = NULL, lg = 0, ...) {
-  if (is.null(lw)) lw = 0.5 
+  if (is.null(lw)) lw = 0 
   nucleus <- rep("1H", 6)
   chem_shift <- c(3.005, 3.005, 1.889, 1.889, 2.284, 2.284)
   j_coupling_mat <- matrix(0, 6, 6)
@@ -510,7 +546,7 @@ get_ins_paras <- function(lw = NULL, lg = 0, ...) {
 }
 
 get_ins_rt_paras <- function(lw = NULL, lg = 0, ...) {
-  if (is.null(lw)) lw = 0.5
+  if (is.null(lw)) lw = 0
   nucleus <- rep("1H", 6)
   chem_shift <- c(3.5217, 4.0538, 3.5217, 3.608, 3.265, 3.608)
   j_coupling_mat <- matrix(0, 6, 6)
@@ -681,7 +717,7 @@ get_naa_paras <- function(lw = NULL, lg = 0, ...) {
 }
 
 get_naa_rt_paras <- function(lw = NULL, lg = 0, ...) {
-  if (is.null(lw)) lw = 0.5
+  if (is.null(lw)) lw = 0
   nucleus <- c("1H")
   chem_shift <- c(2.008)
   j_coupling_mat <- matrix(0, 1, 1)
@@ -1040,7 +1076,7 @@ get_lac_paras <- function(lw = NULL, lg = 0, ...) {
 }
 
 get_lac_rt_paras <- function(lw = NULL, lg = 0, ...) {
-  if (is.null(lw)) lw = 0.5 
+  if (is.null(lw)) lw = 0 
   nucleus <- rep("1H", 4)
   chem_shift <- c(4.0974, 1.3142, 1.3142, 1.3142)
   j_coupling_mat <- matrix(0, 4, 4)
@@ -1091,7 +1127,7 @@ get_glu_paras <- function(lw = NULL, lg = 0, ...) {
 }
 
 get_glu_rt_paras <- function(lw = NULL, lg = 0, ...) {
-  if (is.null(lw)) lw = 0.5 
+  if (is.null(lw)) lw = 0 
   nucleus <- rep("1H", 5)
   chem_shift <- c(3.75, 2.0475, 2.1200, 2.3378, 2.352)
   j_coupling_mat <- matrix(0, 5, 5)
