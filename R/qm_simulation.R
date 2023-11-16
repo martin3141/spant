@@ -503,15 +503,19 @@ get_1h_braino_basis_names <- function() {
 #' Return a character vector of common 1H molecules found in healthy human
 #' brain.
 #' 
-#' Note, this is a basic set and PEth and Gly should be also be included for 
-#' higher quality MRS data.
+#' Note, this is a basic set and it may be appropriate to also include Asc, 
+#' Gly and PEth for high quality MRS data.
 #' 
+#' @param extra optional character vector of additional molecular names. Eg
+#' c("asc", "gly", "peth").
 #' @param inc_lip_mm include Lipid and MM basis signals.
 #' @return a character vector of molecule names.
 #' @export
-get_1h_brain_basis_names <- function(inc_lip_mm = TRUE) {
+get_1h_brain_basis_names <- function(extra = NULL, inc_lip_mm = TRUE) {
   names <- c("m_cr_ch2", "ala", "asp", "cr", "gaba", "glc", "gln", "gsh", "glu",
              "gpc", "ins", "lac", "naa", "naag", "pch", "pcr", "sins", "tau")
+  
+  if (!is.null(extra)) names <- sort(c(names, extra))
   
   if (inc_lip_mm) {
     names <- c(names, "lip09", "lip13a", "lip13b", "lip20", "mm09", "mm12",

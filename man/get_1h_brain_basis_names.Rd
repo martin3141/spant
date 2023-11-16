@@ -5,15 +5,18 @@
 \title{Return a character vector of common 1H molecules found in healthy human
 brain.}
 \usage{
-get_1h_brain_basis_names(inc_lip_mm = TRUE)
+get_1h_brain_basis_names(extra = NULL, inc_lip_mm = TRUE)
 }
 \arguments{
+\item{extra}{optional character vector of additional molecular names. Eg
+c("asc", "gly", "peth").}
+
 \item{inc_lip_mm}{include Lipid and MM basis signals.}
 }
 \value{
 a character vector of molecule names.
 }
 \description{
-Note, this is a basic set and PEth and Gly should be also be included for
-higher quality MRS data.
+Note, this is a basic set and it may be appropriate to also include Asc,
+Gly and PEth for high quality MRS data.
 }
