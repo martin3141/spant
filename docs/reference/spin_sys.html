@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.16.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.17.0</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">spin_sys</span><span class="op">(</span><span class="va">spin_params</span>, <span class="va">ft</span>, <span class="va">ref</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">spin_sys</span><span class="op">(</span><span class="va">spin_params</span>, <span class="va">ft</span>, <span class="va">ref</span>, precomp_jc_H <span class="op">=</span> <span class="cn">NULL</span>, precomp_Iz <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -93,6 +93,14 @@
 
 <dt>ref</dt>
 <dd><p>reference value for ppm scale.</p></dd>
+
+
+<dt>precomp_jc_H</dt>
+<dd><p>use a precomputed J-coupling H matrix to save time.</p></dd>
+
+
+<dt>precomp_Iz</dt>
+<dd><p>use precomputed Iz matrices to save time.</p></dd>
 
 </dl></div>
     <div id="value">

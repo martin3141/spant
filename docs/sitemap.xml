@@ -382,6 +382,9 @@
     <loc>https://martin3141.github.io/spant/reference/gen_I.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/get_1h_brain_basis_names.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/get_1h_brain_basis_paras.html</loc>
   </url>
   <url>
@@ -392,6 +395,12 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/get_1h_brain_basis_paras_v3.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/get_1h_braino_basis_names.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/get_1h_spectre_basis_names.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/get_2d_psf.html</loc>
@@ -467,6 +476,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/get_slice.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/get_spin_num.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/get_subset.html</loc>
@@ -757,6 +769,9 @@
     <loc>https://martin3141.github.io/spant/reference/read_mrs_tqn.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/read_pulse_ascii.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/read_pulse_bruker.html</loc>
   </url>
   <url>
@@ -863,6 +878,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/seq_mega_press_ideal.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/seq_press_2d_shaped.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/seq_press_fast.html</loc>
@@ -1015,6 +1033,9 @@
     <loc>https://martin3141.github.io/spant/reference/sub_mean_dyns.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/sub_median_dyns.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/sum_coils.html</loc>
   </url>
   <url>
@@ -1030,6 +1051,9 @@
     <loc>https://martin3141.github.io/spant/reference/svs_1h_brain_analysis.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/svs_1h_brain_analysis_dev.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/svs_1h_brain_batch_analysis.html</loc>
   </url>
   <url>
@@ -1040,6 +1064,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/tdsr.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/te.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/tr.html</loc>
@@ -1079,6 +1106,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/write_mrs_rds.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/write_pulse_ascii.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/zero_fade_spec.html</loc>

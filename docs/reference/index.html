@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.16.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.17.0</span>
       </span>
     </div>
 
@@ -501,6 +501,11 @@ shifted fft.</p></td>
         </td>
         <td><p>Generate the I product operator for a single spin.</p></td>
       </tr><tr><td>
+          <p><code><a href="get_1h_brain_basis_names.html">get_1h_brain_basis_names()</a></code> </p>
+        </td>
+        <td><p>Return a character vector of common 1H molecules found in healthy human
+brain.</p></td>
+      </tr><tr><td>
           <p><code><a href="get_1h_brain_basis_paras.html">get_1h_brain_basis_paras()</a></code> </p>
         </td>
         <td><p>Return a list of <code>mol_parameter</code> objects suitable for 1H brain MRS
@@ -520,6 +525,15 @@ analyses.</p></td>
         </td>
         <td><p>Return a list of <code>mol_parameter</code> objects suitable for 1H brain MRS
 analyses.</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_1h_braino_basis_names.html">get_1h_braino_basis_names()</a></code> </p>
+        </td>
+        <td><p>Return a character vector of molecules included in the GE BRAINO phantom.</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_1h_spectre_basis_names.html">get_1h_spectre_basis_names()</a></code> </p>
+        </td>
+        <td><p>Return a character vector of molecules included in the Gold Star Phantoms
+SPECTRE phantom.</p></td>
       </tr><tr><td>
           <p><code><a href="get_2d_psf.html">get_2d_psf()</a></code> </p>
         </td>
@@ -617,6 +631,10 @@ analyses.</p></td>
           <p><code><a href="get_slice.html">get_slice()</a></code> </p>
         </td>
         <td><p>Return a single slice from a larger MRSI dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="get_spin_num.html">get_spin_num()</a></code> </p>
+        </td>
+        <td><p>Return the spin number for a given nucleus.</p></td>
       </tr><tr><td>
           <p><code><a href="get_subset.html">get_subset()</a></code> </p>
         </td>
@@ -997,6 +1015,10 @@ name and should be checked when consistency is required.</p></td>
         </td>
         <td><p>Read MRS data using the TARQUIN software package.</p></td>
       </tr><tr><td>
+          <p><code><a href="read_pulse_ascii.html">read_pulse_ascii()</a></code> </p>
+        </td>
+        <td><p>Read an ASCII formatted pulse file.</p></td>
+      </tr><tr><td>
           <p><code><a href="read_pulse_bruker.html">read_pulse_bruker()</a></code> </p>
         </td>
         <td><p>Read a Bruker formatted pulse file</p></td>
@@ -1140,6 +1162,10 @@ volume correction.</p></td>
         </td>
         <td><p>MEGA-PRESS sequence with ideal localisation pulses and Gaussian shaped
 editing pulse.</p></td>
+      </tr><tr><td>
+          <p><code><a href="seq_press_2d_shaped.html">seq_press_2d_shaped()</a></code> </p>
+        </td>
+        <td><p>PRESS sequence with shaped refocusing pulses.</p></td>
       </tr><tr><td>
           <p><code><a href="seq_press_ideal.html">seq_press_ideal()</a></code> </p>
         </td>
@@ -1340,6 +1366,10 @@ individual basis set components shown.</p></td>
         </td>
         <td><p>Subtract the mean dynamic spectrum from a dynamic series.</p></td>
       </tr><tr><td>
+          <p><code><a href="sub_median_dyns.html">sub_median_dyns()</a></code> </p>
+        </td>
+        <td><p>Subtract the median dynamic spectrum from a dynamic series.</p></td>
+      </tr><tr><td>
           <p><code><a href="sum_coils.html">sum_coils()</a></code> </p>
         </td>
         <td><p>Calculate the sum across receiver coil elements.</p></td>
@@ -1360,6 +1390,10 @@ individual basis set components shown.</p></td>
         </td>
         <td><p>Standard SVS 1H brain analysis pipeline.</p></td>
       </tr><tr><td>
+          <p><code><a href="svs_1h_brain_analysis_dev.html">svs_1h_brain_analysis_dev()</a></code> </p>
+        </td>
+        <td><p>Standard SVS 1H brain analysis pipeline.</p></td>
+      </tr><tr><td>
           <p><code><a href="svs_1h_brain_batch_analysis.html">svs_1h_brain_batch_analysis()</a></code> </p>
         </td>
         <td><p>Batch interface to the standard SVS 1H brain analysis pipeline.</p></td>
@@ -1375,6 +1409,10 @@ individual basis set components shown.</p></td>
           <p><code><a href="tdsr.html">tdsr()</a></code> </p>
         </td>
         <td><p>Time-domain spectral registration.</p></td>
+      </tr><tr><td>
+          <p><code><a href="te.html">te()</a></code> </p>
+        </td>
+        <td><p>Return the echo time of an MRS dataset.</p></td>
       </tr><tr><td>
           <p><code><a href="tr.html">tr()</a></code> </p>
         </td>
@@ -1411,6 +1449,10 @@ individual basis set components shown.</p></td>
           <p><code><a href="write_mrs_nifti.html">write_mrs_nifti()</a></code> </p>
         </td>
         <td><p>Write MRS data object to file in NIFTI format.</p></td>
+      </tr><tr><td>
+          <p><code><a href="write_pulse_ascii.html">write_pulse_ascii()</a></code> </p>
+        </td>
+        <td><p>Write an ASCII formatted pulse file.</p></td>
       </tr><tr><td>
           <p><code><a href="zero_fade_spec.html">zero_fade_spec()</a></code> </p>
         </td>

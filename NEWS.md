@@ -1,6 +1,7 @@
 # spant 2.17.0
 * Simulation duration output is now rounded to 2dp.
 * sim_basis now accepts a character vector of molecular names.
+* Added get_1h_brain_basis_names function.
 
 # spant 2.16.0
 * Added subset option to mean_dyns function.
