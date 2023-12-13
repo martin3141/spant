@@ -67,6 +67,16 @@ print.mrs_data <- function(x, full = FALSE, ...) {
         sep = " ")
   }
   
+  if (!is.null(x$meta$SeriesDescription)) {
+    cat(paste(c("Series description      :", x$meta$SeriesDescription, "\n")),
+        sep = " ")
+  }
+  
+  if (!is.null(x$meta$SeriesNumber)) {
+    cat(paste(c("Series number           :", x$meta$SeriesNumber, "\n")),
+        sep = " ")
+  }
+  
   if (full) {
     #cat(paste(c("Row vector              :", x$row_vec, "\n")), sep = " ")
     #cat(paste(c("Column vector           :", x$col_vec, "\n")), sep = " ")
