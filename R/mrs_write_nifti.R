@@ -43,6 +43,7 @@ write_mrs_nifti <- function(mrs_data, fname) {
   # set the nucleus to a default value if not specified in mrs_data
   if (!exists("nuc", where = mrs_data)) mrs_data$nuc <- def_nuc()
   
+  
   # if (is.null(mrs_data$meta$EchoTime)) {
   #  te_val <- NULL
   #} else {
@@ -73,6 +74,10 @@ write_mrs_nifti <- function(mrs_data, fname) {
   # if (is_svs(mrs_data)) {
   #   json_list <- c(json_list, list(NumberOfTransients = Ndyns(mrs_data)))
   # }
+  
+  # remove any tags that aren't part of BIDS
+  mrs_data$meta$SeriesDescription <- NULL
+  mrs_data$meta$SeriesNumber      <- NULL
   
   # append any additional meta information
   json_list <- c(json_list, mrs_data$meta)
