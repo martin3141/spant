@@ -102,37 +102,37 @@ read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
 # try and guess the format from the filename extension
 guess_mrs_format <- function(fname) {
   fname_low <- tolower(fname)
-  if (stringr::str_ends(fname_low, ".nii.gz")) {
+  if (stringr::str_ends(fname_low, "\\.nii\\.gz")) {
     format <- "nifti"
-  } else if (stringr::str_ends(fname_low, ".nii")) {
+  } else if (stringr::str_ends(fname_low, "\\.nii")) {
     format <- "nifti"
-  } else if (stringr::str_ends(fname_low, ".rda")) {
+  } else if (stringr::str_ends(fname_low, "\\.rda")) {
     format <- "rda"
-  } else if (stringr::str_ends(fname_low, ".ima")) {
+  } else if (stringr::str_ends(fname_low, "\\.ima")) {
     format <- "dicom"
-  } else if (stringr::str_ends(fname_low, ".dcm")) {
+  } else if (stringr::str_ends(fname_low, "\\.dcm")) {
     format <- "dicom"
-  } else if (stringr::str_ends(fname_low, ".spar")) {
+  } else if (stringr::str_ends(fname_low, "\\.spar")) {
     format <- "spar_sdat"
-  } else if (stringr::str_ends(fname_low, ".sdat")) {
+  } else if (stringr::str_ends(fname_low, "\\.sdat")) {
     format <- "spar_sdat"
-  } else if (stringr::str_ends(fname_low, ".7")) {
+  } else if (stringr::str_ends(fname_low, "\\.7")) {
     format <- "pfile"
-  } else if (stringr::str_ends(fname_low, ".7.anon")) {
+  } else if (stringr::str_ends(fname_low, "\\.7\\.anon")) {
     format <- "pfile"
-  } else if (stringr::str_ends(fname_low, ".list")) {
+  } else if (stringr::str_ends(fname_low, "\\.list")) {
     format <- "list_data"
-  } else if (stringr::str_ends(fname_low, ".data")) {
+  } else if (stringr::str_ends(fname_low, "\\.data")) {
     format <- "list_data"
-  } else if (stringr::str_ends(fname_low, ".dat")) {
+  } else if (stringr::str_ends(fname_low, "\\.dat")) {
     format <- "twix"
-  } else if (stringr::str_ends(fname_low, ".dpt")) {
+  } else if (stringr::str_ends(fname_low, "\\.dpt")) {
     format <- "dpt"
-  } else if (stringr::str_ends(fname_low, ".rds")) {
+  } else if (stringr::str_ends(fname_low, "\\.rds")) {
     format <- "rds"
-  } else if (stringr::str_ends(fname_low, ".raw")) {
+  } else if (stringr::str_ends(fname_low, "\\.raw")) {
     format <- "lcm_raw"
-  } else if (stringr::str_ends(fname_low, ".txt")) {
+  } else if (stringr::str_ends(fname_low, "\\.txt")) {
     format <- "jmrui_txt"
   } else if (basename(fname_low) == "fid") {
     format <- "varian"

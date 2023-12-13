@@ -141,7 +141,8 @@ read_siemens_dicom <- function(fraw, extra, verbose) {
                cols    = "0028,0011",
                slices  = "0018,9159",
                Npt     = "0028,9002",
-               te      = "0018,9082")
+               te      = "0018,9082",
+               series_desc = "0008,103E")
 
   # read em out
   dcm_res <- dicom_reader(fraw, tags)
@@ -158,6 +159,8 @@ read_siemens_dicom <- function(fraw, extra, verbose) {
   slices <- readBin(dcm_res$slices, "integer", size = 2, signed = FALSE)
   N <- readBin(dcm_res$Npt, "integer")
   te <- readBin(dcm_res$te, "double") / 1e3
+  
+  # print(rawToChar(dcm_res$series_desc))
   
   row_ori <- iop[1:3]
   col_ori <- iop[4:6]
