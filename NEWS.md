@@ -1,6 +1,6 @@
 # spant 2.18.0
 * Improved automated file type detection.
-* Bug fix for Philips private DICOM MRS reader.
+* Bug fixes for DICOM MRS reader.
 
 # spant 2.17.0
 * Simulation duration output is now rounded to 2dp.

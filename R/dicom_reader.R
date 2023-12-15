@@ -52,7 +52,7 @@ dicom_reader <- function(input, tags = list(sop_class_uid = "0008,0016"),
   # for implicit dicom we don't know when we have hit a sequence without
   # prior knowledge - this is a list that should work for Philips DICOM MRS
   seq_tags <- c("5200,9229", "0020,9116", "5200,9230", "0018,9114",
-                "0020,9113", "2005,140F")
+                "0020,9113", "2005,140F", "0028,9110", "0018,9103")
   
   # current position in the data
   pos <- 0
