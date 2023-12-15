@@ -26,14 +26,17 @@ read_dicom <- function(fname, verbose, extra) {
     }
   } else if (grepl("Philips", manuf)) {
     if (sop_class_uid == "1.3.46.670589.11.0.0.12.1") {
+      if (verbose) cat("Philips private DICOM MRS found.\n")
       return(read_philips_priv_dicom(fraw, extra))
     } else if (sop_class_uid == "1.2.840.10008.5.1.4.1.1.4.2") {
+      if (verbose) cat("Philips DICOM MRS found.\n")
       return(read_philips_dicom(fraw, extra))
     } else {
       stop(paste0("Unsupported SOP class UID : ", sop_class_uid,
                   ". This doesn't look like MRS data."))
     }
   } else if (grepl("UIH", manuf)) {
+      if (verbose) cat("UIH DICOM MRS found.\n")
       return(read_uih_dicom(fraw, extra, verbose))
   } else {
     stop(paste0("DICOM MRS manufacturer format: \"", trimws(manuf),
@@ -300,16 +303,19 @@ read_philips_dicom <- function(fraw, extra) {
 read_philips_priv_dicom <- function(fraw, extra) {
   
   # list of tags to pull from the dicom file
-  tags <- list(data    = "2005,1270",
+  # tags <- list(data    = "2005,1270",
+  tags <- list(data    = "5600,0020",
                fs      = "2005,1030",
                ft      = "2001,1083",
-               te      = "2005,1310")
+               te      = "2005,1310",
+               Npts    = "0018,9127")
   
   dcm_res  <- dicom_reader(fraw, tags)
   
-  fs  <- readBin(dcm_res$fs, "double", size = 4, n = 2)[1]
-  ft  <- as.numeric(rawToChar(dcm_res$ft)) * 1e6
-  te  <- readBin(dcm_res$te, "double", size = 4) / 1e3
+  fs   <- readBin(dcm_res$fs, "double", size = 4, n = 2)[1]
+  ft   <- as.numeric(rawToChar(dcm_res$ft)) * 1e6
+  te   <- readBin(dcm_res$te, "double", size = 4) / 1e3
+  Npts <- readBin(dcm_res$Npts, "integer")
   
   raw_vec <- readBin(dcm_res$data, "double", length(dcm_res$data) / 4, size = 4)
   data    <- raw_vec[c(TRUE, FALSE)] - 1i * raw_vec[c(FALSE, TRUE)]
@@ -334,5 +340,16 @@ read_philips_priv_dicom <- function(fraw, extra) {
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = NULL,
                        meta = meta, extra = extra)
-  return(mrs_data)
+  
+  if (N == Npts) {
+    return(mrs_data)
+  } else if (N == 2 * Npts) {
+    metab_mrs <- crop_td_pts(mrs_data, end = Npts)
+    ref_mrs   <- crop_td_pts(mrs_data, start = Npts + 1)
+    out       <- list(metab = metab_mrs, ref = ref_mrs)
+    class(out) <- c("list", "mrs_data")
+    return(out)
+  } else {
+    stop("Unexpected number of data points.")
+  }
 }
