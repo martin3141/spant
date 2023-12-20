@@ -10,6 +10,9 @@ read_dicom <- function(fname, verbose, extra) {
   
   sop_class_uid <- rawToChar(res$sop_class_uid)
   manuf         <- rawToChar(res$manuf)
+      
+  if (verbose) cat(paste("SOP class UID :", sop_class_uid), "\n")
+  if (verbose) cat(paste("Manufacturer  :", manuf), "\n")
   
   if (grepl("SIEMENS", manuf, ignore.case = TRUE)) {
     if (sop_class_uid == "1.3.12.2.1107.5.9.1") {
@@ -27,10 +30,10 @@ read_dicom <- function(fname, verbose, extra) {
   } else if (grepl("Philips", manuf)) {
     if (sop_class_uid == "1.3.46.670589.11.0.0.12.1") {
       if (verbose) cat("Philips private DICOM MRS found.\n")
-      return(read_philips_priv_dicom(fraw, extra))
+      return(read_philips_priv_dicom(fraw, extra, verbose))
     } else if (sop_class_uid == "1.2.840.10008.5.1.4.1.1.4.2") {
       if (verbose) cat("Philips DICOM MRS found.\n")
-      return(read_philips_dicom(fraw, extra))
+      return(read_philips_dicom(fraw, extra, verbose))
     } else {
       stop(paste0("Unsupported SOP class UID : ", sop_class_uid,
                   ". This doesn't look like MRS data."))
@@ -218,7 +221,7 @@ read_siemens_dicom <- function(fraw, extra, verbose) {
   return(mrs_data)
 }
 
-read_philips_dicom <- function(fraw, extra) {
+read_philips_dicom <- function(fraw, extra, verbose) {
   
   # list of tags to pull from the dicom file
   tags <- list(data    = "5600,0020",
@@ -300,22 +303,25 @@ read_philips_dicom <- function(fraw, extra) {
 }
   
 
-read_philips_priv_dicom <- function(fraw, extra) {
+read_philips_priv_dicom <- function(fraw, extra, verbose) {
   
   # list of tags to pull from the dicom file
-  # tags <- list(data    = "2005,1270",
-  tags <- list(data    = "5600,0020",
-               fs      = "2005,1030",
-               ft      = "2001,1083",
-               te      = "2005,1310",
-               Npts    = "0018,9127")
+  tags <- list(data      = "5600,0020",
+               fs        = "2005,1030",
+               ft        = "2001,1083",
+               te        = "2005,1310",
+               Npts      = "0018,9127",
+               Nframes   = "0028,0008",
+               prot_name = "0018,1030")
   
   dcm_res  <- dicom_reader(fraw, tags)
   
-  fs   <- readBin(dcm_res$fs, "double", size = 4, n = 2)[1]
-  ft   <- as.numeric(rawToChar(dcm_res$ft)) * 1e6
-  te   <- readBin(dcm_res$te, "double", size = 4) / 1e3
-  Npts <- readBin(dcm_res$Npts, "integer")
+  fs        <- readBin(dcm_res$fs, "double", size = 4, n = 2)[1]
+  ft        <- as.numeric(rawToChar(dcm_res$ft)) * 1e6
+  te        <- readBin(dcm_res$te, "double", size = 4) / 1e3
+  Npts      <- readBin(dcm_res$Npts, "integer")
+  Nframes   <- as.numeric(rawToChar(dcm_res$Nframes))
+  prot_name <- rawToChar(dcm_res$prot_name)
   
   raw_vec <- readBin(dcm_res$data, "double", length(dcm_res$data) / 4, size = 4)
   data    <- raw_vec[c(TRUE, FALSE)] - 1i * raw_vec[c(FALSE, TRUE)]
@@ -341,6 +347,13 @@ read_philips_priv_dicom <- function(fraw, extra) {
                        nuc = nuc, freq_domain = freq_domain, affine = NULL,
                        meta = meta, extra = extra)
   
+  if (verbose) {
+    cat(paste("N          :", N), "\n")
+    cat(paste("Npts       :", Npts), "\n")
+    cat(paste("Nframes    :", Nframes), "\n")
+    cat(paste("Prot. name :", prot_name), "\n")
+  }
+  
   if (N == Npts) {
     return(mrs_data)
   } else if (N == 2 * Npts) {
@@ -350,6 +363,7 @@ read_philips_priv_dicom <- function(fraw, extra) {
     class(out) <- c("list", "mrs_data")
     return(out)
   } else {
-    stop("Unexpected number of data points.")
+    warning(paste0("Expecting ", Npts, ", but found ", N, " data points."))
+    return(mrs_data)
   }
 }
