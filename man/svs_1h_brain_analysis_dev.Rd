@@ -8,17 +8,17 @@ svs_1h_brain_analysis_dev(
   metab,
   w_ref = NULL,
   output_dir = NULL,
+  basis = NULL,
   p_vols = NULL,
   append_basis = NULL,
   remove_basis = NULL,
-  basis = NULL,
   dfp_corr = TRUE,
   omit_bad_dynamics = TRUE,
   te = NULL,
   tr = NULL,
   output_ratio = "tCr",
   ecc = FALSE,
-  fit_opts = NULL,
+  abfit_opts = NULL,
   verbose = FALSE
 )
 }
@@ -29,6 +29,8 @@ svs_1h_brain_analysis_dev(
 
 \item{output_dir}{directory path to output fitting results.}
 
+\item{basis}{precompiled basis set object to use for analysis.}
+
 \item{p_vols}{a numeric vector of partial volumes expressed as percentages.
 Defaults to 100\% white matter. A voxel containing 100\% gray matter tissue
 would use : p_vols = c(WM = 0, GM = 100, CSF = 0).}
@@ -38,8 +40,6 @@ append_basis = c("peth", "cit"). Cannot be used with precompiled basis sets.}
 
 \item{remove_basis}{names of signals to remove from the basis. Cannot be used
 with precompiled basis sets.}
-
-\item{basis}{basis set object to use for analysis.}
 
 \item{dfp_corr}{perform dynamic frequency and phase correction using the RATS
 method.}
@@ -54,12 +54,12 @@ this will be guessed from the metab data file.}
 
 \item{output_ratio}{optional string to specify a metabolite ratio to output.
 Defaults to "tCr" and multiple metabolites may be specified for multiple
-outputs. Set to NULL to omit.}
+outputs. Set as NULL to omit.}
 
 \item{ecc}{option to perform water reference based eddy current correction,
 defaults to FALSE.}
 
-\item{fit_opts}{options to pass to the fitting method.}
+\item{abfit_opts}{options to pass to ABfit.}
 
 \item{verbose}{output potentially useful information.}
 }

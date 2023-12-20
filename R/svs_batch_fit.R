@@ -19,7 +19,7 @@
 #' this will be guessed from the metab data file.
 #' @param output_ratio optional string to specify a metabolite ratio to output.
 #' Defaults to "tCr" and multiple metabolites may be specified for multiple
-#' outputs. Set to NULL to omit.
+#' outputs. Set as NULL to omit.
 #' @param ecc option to perform water reference based eddy current correction,
 #' defaults to FALSE.
 #' @param abfit_opts options to pass to ABfit.
