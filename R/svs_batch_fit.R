@@ -1,4 +1,7 @@
 #' Standard SVS 1H brain analysis pipeline.
+#' 
+#' Note this function is still under development and liable to changes.
+#' 
 #' @param metab filepath or mrs_data object containing MRS metabolite data.
 #' @param w_ref filepath or mrs_data object containing MRS water reference data.
 #' @param output_dir directory path to output fitting results.
@@ -24,18 +27,26 @@
 #' defaults to FALSE.
 #' @param abfit_opts options to pass to ABfit.
 #' @param verbose output potentially useful information.
+#' @examples
+#' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
+#'                      package = "spant")
+#' w_ref <- system.file("extdata", "philips_spar_sdat_W.SDAT",
+#'                      package = "spant")
+#' \dontrun{
+#' fit_result <- svs_1h_brain_analysis(metab, w_ref, "fit_res_dir")
+#' }
 #' @export
-svs_1h_brain_analysis_dev <- function(metab, w_ref = NULL, output_dir = NULL,
-                                      basis = NULL, p_vols = NULL,
-                                      append_basis = NULL, remove_basis = NULL,
-                                      dfp_corr = TRUE, omit_bad_dynamics = TRUE,
-                                      te = NULL, tr = NULL,
-                                      output_ratio = "tCr", ecc = FALSE,
-                                      abfit_opts = NULL, verbose = FALSE) {
+svs_1h_brain_analysis <- function(metab, w_ref = NULL, output_dir = NULL,
+                                  basis = NULL, p_vols = NULL,
+                                  append_basis = NULL, remove_basis = NULL,
+                                  dfp_corr = TRUE, omit_bad_dynamics = TRUE,
+                                  te = NULL, tr = NULL,
+                                  output_ratio = "tCr", ecc = FALSE,
+                                  abfit_opts = NULL, verbose = FALSE) {
   
   # TODO
-  # Auto sequence detection and override option
-  # Realistic PRESS sim for B0 > 2.9T
+  # Auto sequence detection.
+  # Realistic PRESS sim for B0 > 2.9T.
   
   if (!is.null(basis) & !is.null(append_basis)) {
     stop("basis and append_basis options cannot both be set. Use one or the other.")
@@ -122,6 +133,12 @@ svs_1h_brain_analysis_dev <- function(metab, w_ref = NULL, output_dir = NULL,
   # simulate a basis if needed
   if (is.null(basis)) {
     
+    TE1 <- 0.0126
+    TE2 <- te - TE1
+    
+    warning(paste0("Basis not specified, so assuming PRESS sequence with ",
+                   "ideal pulses, ", "TE1 = ", TE1, "s, TE2 = ", TE2, "s."))
+    
     mol_list_chars <- c("m_cr_ch2", "ala", "asp", "cr", "gaba", "glc", "gln",
                         "gsh", "glu", "gpc", "ins", "lac", "lip09", "lip13a",
                         "lip13b", "lip20", "mm09", "mm12", "mm14", "mm17",
@@ -137,7 +154,8 @@ svs_1h_brain_analysis_dev <- function(metab, w_ref = NULL, output_dir = NULL,
     
     mol_list <- get_mol_paras(mol_list_chars, ft = metab$ft)
     
-    basis <- sim_basis(mol_list, acq_paras = metab, pul_seq = seq_press_ideal)
+    basis <- sim_basis(mol_list, acq_paras = metab, pul_seq = seq_press_ideal,
+                       TE1 = TE1, TE2 = TE2)
     
     if (verbose) print(basis)
   }
