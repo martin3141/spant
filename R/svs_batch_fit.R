@@ -2,6 +2,7 @@
 #' @param metab filepath or mrs_data object containing MRS metabolite data.
 #' @param w_ref filepath or mrs_data object containing MRS water reference data.
 #' @param output_dir directory path to output fitting results.
+#' @param basis precompiled basis set object to use for analysis.
 #' @param p_vols a numeric vector of partial volumes expressed as percentages.
 #' Defaults to 100% white matter. A voxel containing 100% gray matter tissue
 #' would use : p_vols = c(WM = 0, GM = 100, CSF = 0).
@@ -9,7 +10,6 @@
 #' append_basis = c("peth", "cit"). Cannot be used with precompiled basis sets.
 #' @param remove_basis names of signals to remove from the basis. Cannot be used
 #' with precompiled basis sets.
-#' @param basis basis set object to use for analysis.
 #' @param dfp_corr perform dynamic frequency and phase correction using the RATS
 #' method.
 #' @param omit_bad_dynamics detect and remove bad dynamics.
@@ -22,16 +22,16 @@
 #' outputs. Set to NULL to omit.
 #' @param ecc option to perform water reference based eddy current correction,
 #' defaults to FALSE.
-#' @param fit_opts options to pass to the fitting method.
+#' @param abfit_opts options to pass to ABfit.
 #' @param verbose output potentially useful information.
 #' @export
 svs_1h_brain_analysis_dev <- function(metab, w_ref = NULL, output_dir = NULL,
-                                      p_vols = NULL, append_basis = NULL,
-                                      remove_basis = NULL, basis = NULL,
+                                      basis = NULL, p_vols = NULL,
+                                      append_basis = NULL, remove_basis = NULL,
                                       dfp_corr = TRUE, omit_bad_dynamics = TRUE,
                                       te = NULL, tr = NULL,
                                       output_ratio = "tCr", ecc = FALSE,
-                                      fit_opts = NULL, verbose = FALSE) {
+                                      abfit_opts = NULL, verbose = FALSE) {
   
   # TODO
   # Auto sequence detection and override option
@@ -77,7 +77,7 @@ svs_1h_brain_analysis_dev <- function(metab, w_ref = NULL, output_dir = NULL,
   
   # check for GE style data
   if (identical(class(metab), c("list", "mrs_data"))) {
-    x <- metab
+    x     <- metab
     metab <- x$metab
     w_ref <- x$ref
   }
@@ -137,13 +137,13 @@ svs_1h_brain_analysis_dev <- function(metab, w_ref = NULL, output_dir = NULL,
     
     mol_list <- get_mol_paras(mol_list_chars, ft = metab$ft)
     
-    basis <- sim_basis(mol_list, acq_paras = metab)
+    basis <- sim_basis(mol_list, acq_paras = metab, pul_seq = seq_press_ideal)
     
     if (verbose) print(basis)
   }
   
   # fitting
-  fit_res <- fit_mrs(metab, basis = basis, opts = fit_opts)
+  fit_res <- fit_mrs(metab, basis = basis, opts = abfit_opts)
     
   phase_offset <- fit_res$res_tab$phase
   shift_offset <- fit_res$res_tab$shift
@@ -199,14 +199,13 @@ svs_1h_brain_analysis_dev <- function(metab, w_ref = NULL, output_dir = NULL,
       if (ecc & (!is.null(w_ref))) metab <- ecc(metab, w_ref)
       
       # fitting
-      # TODO reuse basis set used for initial fit
       if (verbose) cat("Refitting without bad shots.\n")
-      fit_res <- fit_mrs(metab, basis = basis, opts = fit_opts)
+      fit_res <- fit_mrs(metab, basis = basis, opts = abfit_opts)
       
       phase_offset <- fit_res$res_tab$phase
       shift_offset <- fit_res$res_tab$shift
     } else {
-      cat("No bad shots detected.\n")
+      if (verbose) cat("No bad shots detected.\n")
     }
   }
   
