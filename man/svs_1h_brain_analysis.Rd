@@ -6,72 +6,71 @@
 \usage{
 svs_1h_brain_analysis(
   metab,
-  w_ref = NULL,
-  output_dir = NULL,
   basis = NULL,
-  p_vols = NULL,
-  append_basis = NULL,
-  remove_basis = NULL,
-  dfp_corr = TRUE,
-  omit_bad_dynamics = TRUE,
+  w_ref = NULL,
+  mri_seg = NULL,
+  mri = NULL,
+  output_dir = NULL,
+  extra = NULL,
+  decimate = NULL,
+  rats_corr = TRUE,
+  ecc = FALSE,
+  comb_dyns = TRUE,
+  hsvd_filt = FALSE,
+  scale_amps = TRUE,
   te = NULL,
   tr = NULL,
-  output_ratio = "tCr",
-  ecc = FALSE,
-  abfit_opts = NULL,
-  verbose = FALSE
+  preproc_only = FALSE,
+  method = "ABFIT",
+  opts = NULL
 )
 }
 \arguments{
 \item{metab}{filepath or mrs_data object containing MRS metabolite data.}
 
+\item{basis}{basis set object to use for analysis.}
+
 \item{w_ref}{filepath or mrs_data object containing MRS water reference data.}
+
+\item{mri_seg}{filepath or nifti object containing segmented MRI data.}
+
+\item{mri}{filepath or nifti object containing anatomical MRI data.}
 
 \item{output_dir}{directory path to output fitting results.}
 
-\item{basis}{precompiled basis set object to use for analysis.}
+\item{extra}{data.frame with one row containing additional information to be
+attached to the fit results table.}
 
-\item{p_vols}{a numeric vector of partial volumes expressed as percentages.
-Defaults to 100\% white matter. A voxel containing 100\% gray matter tissue
-would use : p_vols = c(WM = 0, GM = 100, CSF = 0).}
+\item{decimate}{option to decimate the input data by a factor of two. The
+default value of NULL does not perform decimation unless the spectral width
+is greater than 20 PPM.}
 
-\item{append_basis}{names of extra signals to add to the default basis. Eg
-append_basis = c("peth", "cit"). Cannot be used with precompiled basis sets.}
-
-\item{remove_basis}{names of signals to remove from the basis. Cannot be used
-with precompiled basis sets.}
-
-\item{dfp_corr}{perform dynamic frequency and phase correction using the RATS
-method.}
-
-\item{omit_bad_dynamics}{detect and remove bad dynamics.}
-
-\item{te}{metabolite mrs data echo time in seconds. If not supplied this will
-be guessed from the metab data file.}
-
-\item{tr}{metabolite mrs data repetition time in seconds. If not supplied
-this will be guessed from the metab data file.}
-
-\item{output_ratio}{optional string to specify a metabolite ratio to output.
-Defaults to "tCr" and multiple metabolites may be specified for multiple
-outputs. Set as NULL to omit.}
+\item{rats_corr}{option to perform rats correction, defaults to TRUE.}
 
 \item{ecc}{option to perform water reference based eddy current correction,
 defaults to FALSE.}
 
-\item{abfit_opts}{options to pass to ABfit.}
+\item{comb_dyns}{option to combine dynamic scans, defaults to TRUE.}
 
-\item{verbose}{output potentially useful information.}
+\item{hsvd_filt}{option to apply hsvd water removal, defaults to FALSE.}
+
+\item{scale_amps}{option to scale metabolite amplitude estimates, defaults to
+TRUE.}
+
+\item{te}{metabolite mrs data echo time in seconds.}
+
+\item{tr}{metabolite mrs data repetition time in seconds.}
+
+\item{preproc_only}{only perform the preprocessing steps and omit fitting.
+The preprocessed metabolite data will be returned in this case.}
+
+\item{method}{analysis method to use, see fit_mrs help.}
+
+\item{opts}{options to pass to the analysis method.}
+}
+\value{
+a fit_result or mrs_data object depending on the preproc_only option.
 }
 \description{
-Note this function is still under development and liable to changes.
-}
-\examples{
-metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
-                     package = "spant")
-w_ref <- system.file("extdata", "philips_spar_sdat_W.SDAT",
-                     package = "spant")
-\dontrun{
-fit_result <- svs_1h_brain_analysis(metab, w_ref, "fit_res_dir")
-}
+Standard SVS 1H brain analysis pipeline.
 }
