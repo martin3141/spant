@@ -10,7 +10,7 @@ scale_spec(
   operator = "sum",
   freq_scale = "ppm",
   mode = "re",
-  mean_dyns = TRUE,
+  mean_dyns = NULL,
   ret_scale_factor = FALSE
 )
 }

@@ -2422,13 +2422,23 @@ scale_basis_amp <- function(basis, amp) {
 #' @return normalised data.
 #' @export
 scale_spec <- function(mrs_data, xlim = NULL, operator = "sum",
-                       freq_scale = "ppm", mode = "re", mean_dyns = TRUE,
+                       freq_scale = "ppm", mode = "re", mean_dyns = NULL,
                        ret_scale_factor = FALSE) {
   
   if (inherits(mrs_data, "list")) {
     res <- lapply(mrs_data, scale_spec, xlim = xlim, operator = operator,
                   freq_scale = freq_scale, mode = mode, mean_dyns = mean_dyns)
     return(res)
+  }
+  
+  if (inherits(mrs_data, "basis_set")) {
+    names    <- mrs_data$names
+    mrs_data <- basis2mrs_data(mrs_data)
+    basis <- TRUE
+    if (is.null(mean_dyns)) mean_dyns <- FALSE
+  } else {
+    basis <- FALSE
+    if (is.null(mean_dyns)) mean_dyns <- TRUE
   }
   
   if (mean_dyns) {
@@ -2439,6 +2449,8 @@ scale_spec <- function(mrs_data, xlim = NULL, operator = "sum",
   }
   
   mrs_data <- scale_mrs_amp(mrs_data, 1 / amp)
+  
+  if (basis) mrs_data <- mrs_data2basis(mrs_data, names)
   
   if (ret_scale_factor) {
     return(list(mrs_data = mrs_data, scale_factor = 1 / amp))
