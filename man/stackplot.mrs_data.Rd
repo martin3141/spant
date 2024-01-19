@@ -23,7 +23,6 @@
   bty = NULL,
   labels = NULL,
   lab_cex = 1,
-  right_marg = NULL,
   bl_lty = NULL,
   restore_def_par = TRUE,
   show_grid = NULL,
@@ -31,6 +30,7 @@
   grid_ny = NA,
   lwd = NULL,
   vline = NULL,
+  mar = NULL,
   ...
 )
 }
@@ -78,8 +78,6 @@ collapsed into the dynamic dimension and displayed.}
 
 \item{lab_cex}{label size.}
 
-\item{right_marg}{change the size of the right plot margin.}
-
 \item{bl_lty}{linetype for the y = 0 baseline trace. A default value NULL
 results in no baseline being plotted.}
 
@@ -98,6 +96,8 @@ corresponding direction.}
 \item{lwd}{plot linewidth.}
 
 \item{vline}{x-value to draw a vertical line.}
+
+\item{mar}{option to adjust the plot margins. See ?par.}
 
 \item{...}{other arguments to pass to the matplot method.}
 }

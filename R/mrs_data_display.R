@@ -442,7 +442,6 @@ stackplot.list <- function(x, ...) {
 #' @param bty option to draw a box around the plot. See ?par.
 #' @param labels add labels to each data item.
 #' @param lab_cex label size.
-#' @param right_marg change the size of the right plot margin.
 #' @param bl_lty linetype for the y = 0 baseline trace. A default value NULL
 #' results in no baseline being plotted.
 #' @param restore_def_par restore default plotting par values after the plot has 
@@ -455,6 +454,7 @@ stackplot.list <- function(x, ...) {
 #' @param grid_ny as above.
 #' @param lwd plot linewidth.
 #' @param vline x-value to draw a vertical line.
+#' @param mar option to adjust the plot margins. See ?par.
 #' @param ... other arguments to pass to the matplot method.
 #' @export
 stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
@@ -462,10 +462,10 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                                x_offset = 0, y_offset = 0, plot_dim = NULL,
                                x_pos = NULL, y_pos = NULL, z_pos = NULL,
                                dyn = 1, coil = 1, bty = NULL, labels = NULL,
-                               lab_cex = 1, right_marg = NULL, bl_lty = NULL,
+                               lab_cex = 1, bl_lty = NULL,
                                restore_def_par = TRUE, show_grid = NULL,
                                grid_nx = NULL, grid_ny = NA, lwd = NULL,
-                               vline = NULL, ...) {
+                               vline = NULL, mar = NULL, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -495,12 +495,14 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   
   if (is.null(lwd)) lwd <- 2.0
   
-  if (is.null(right_marg) && is.null(labels)) right_marg = 1
-  if (is.null(right_marg) && !is.null(labels)) right_marg = 4
   
   graphics::par("xaxs" = "i") # tight axes limits
   graphics::par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
-  graphics::par(mar = c(3.5, 1, 1, right_marg)) # margins
+  
+  if (is.null(mar) && is.null(labels))  mar <- c(3.5, 1, 1, 1)
+  if (is.null(mar) && !is.null(labels)) mar <- c(3.5, 1, 1, 4)
+  
+  graphics::par(mar = mar) # margins
   
   if (fd) {
     xlab <- "Chemical shift"  
