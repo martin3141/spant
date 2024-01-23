@@ -19,6 +19,7 @@
   y_ticks = NULL,
   vline = NULL,
   hline = NULL,
+  legend = FALSE,
   ...
 )
 }
@@ -54,6 +55,9 @@ been made.}
 \item{vline}{draw a vertical line at the value of vline.}
 
 \item{hline}{draw a horizontal line at the value of hline.}
+
+\item{legend}{add a colour bar to the plot using the imagePlot function
+from the fields package.}
 
 \item{...}{other arguments to pass to the plot method.}
 }

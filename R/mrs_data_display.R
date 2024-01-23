@@ -293,13 +293,15 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
 #' @param y_ticks a vector of indices specifying where to place tick marks.
 #' @param vline draw a vertical line at the value of vline.
 #' @param hline draw a horizontal line at the value of hline.
+#' @param legend add a colour bar to the plot using the imagePlot function
+#' from the fields package.
 #' @param ... other arguments to pass to the plot method.
 #' @export
 image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL, 
                            plot_dim = NULL, x_pos = NULL, y_pos = NULL,
                            z_pos = NULL, dyn = 1, coil = 1,
                            restore_def_par = TRUE, y_ticks = NULL, 
-                           vline = NULL, hline = NULL, ...) { 
+                           vline = NULL, hline = NULL, legend = FALSE, ...) { 
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -379,15 +381,21 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
   # set masked spectra to zero
   plot_data[is.na(plot_data)] <- 0
   
-  
   yN <- ncol(plot_data)
   
   col <- viridisLite::viridis(128)
   
-  graphics::image(x_scale[subset][length(subset):1], (1:yN),
-                  plot_data[length(subset):1,,drop = F], xlim = xlim,
-                  xlab = "Chemical shift (ppm)", ylab = y_title, 
-                  col = col, ...)
+  if (legend == TRUE) {
+    fields::imagePlot(x_scale[subset][length(subset):1], (1:yN),
+                      plot_data[length(subset):1,,drop = F], xlim = xlim,
+                      xlab = "Chemical shift (ppm)", ylab = y_title, 
+                      col = col, ...)
+  } else {
+    graphics::image(x_scale[subset][length(subset):1], (1:yN),
+                    plot_data[length(subset):1,,drop = F], xlim = xlim,
+                    xlab = "Chemical shift (ppm)", ylab = y_title,
+                    col = col, ...)
+  }
   
   if (!is.null(y_ticks)) {
     graphics::axis(4, at = y_ticks, labels = F, col = NA, col.ticks = "red")
