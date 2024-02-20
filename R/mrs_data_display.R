@@ -77,6 +77,11 @@ print.mrs_data <- function(x, full = FALSE, ...) {
         sep = " ")
   }
   
+  if (!is.null(x$meta$TE3)) {
+    cat(paste0("TE1, TE2, TE3 (s)       : ", x$meta$TE1, ", ", x$meta$TE2,
+                 ", ", x$meta$TE3, "\n"))
+  }
+  
   if (full) {
     #cat(paste(c("Row vector              :", x$row_vec, "\n")), sep = " ")
     #cat(paste(c("Column vector           :", x$col_vec, "\n")), sep = " ")

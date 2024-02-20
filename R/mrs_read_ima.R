@@ -46,6 +46,13 @@ read_ima <- function(fraw, verbose = FALSE, extra) {
     meta <- append(meta, list(PulseSequenceType = "steam"))
   }
   
+  if (startsWith(toupper(vars$seq_fname), "%CUSTOMERSEQ%\\SVS_SLASER")) {
+    meta <- append(meta, list(PulseSequenceType = "slaser",
+                              TE1 = vars$te1,
+                              TE2 = vars$te2,
+                              TE3 = vars$te3))
+  }
+  
   mrs_data <- mrs_data(data = data, ft = vars$ft, resolution = paras$res,
                        ref = paras$ref, nuc = paras$nuc,
                        freq_domain = freq_domain, affine = paras$affine,

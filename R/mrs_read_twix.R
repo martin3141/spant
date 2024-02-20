@@ -501,11 +501,14 @@ read_siemens_txt_hdr <- function(input, version = "vd", verbose,
     } else if (startsWith(line, "sTXSPEC.asNucleusInfo[0].lFrequency")) {
       vars$ft <- as.numeric(strsplit(line, "=")[[1]][2])
     } else if (startsWith(line, "alTE[0]")) {
-      vars$te <- (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
+      vars$te  <- (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
+      vars$te1 <- (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
     } else if (startsWith(line, "alTE[1]")) {
-      vars$te <- vars$te + (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
+      vars$te  <- vars$te + (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
+      vars$te2 <- (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
     } else if (startsWith(line, "alTE[2]")) {
-      vars$te <- vars$te + (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
+      vars$te  <- vars$te + (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
+      vars$te3 <- (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
     } else if (startsWith(line, "alTR[0]")) {
       vars$tr <- (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
     } else if (startsWith(line, "adFlipAngleDegree[0]")) {
