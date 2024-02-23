@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.17.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.18.0</span>
       </span>
     </div>
 
@@ -98,7 +98,6 @@
 <span>  bty <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lab_cex <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  right_marg <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  bl_lty <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  restore_def_par <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  show_grid <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -106,6 +105,7 @@
 <span>  grid_ny <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  lwd <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  vline <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mar <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -191,10 +191,6 @@ collapsed into the dynamic dimension and displayed.</p></dd>
 <dd><p>label size.</p></dd>
 
 
-<dt>right_marg</dt>
-<dd><p>change the size of the right plot margin.</p></dd>
-
-
 <dt>bl_lty</dt>
 <dd><p>linetype for the y = 0 baseline trace. A default value NULL
 results in no baseline being plotted.</p></dd>
@@ -226,6 +222,10 @@ corresponding direction.</p></dd>
 
 <dt>vline</dt>
 <dd><p>x-value to draw a vertical line.</p></dd>
+
+
+<dt>mar</dt>
+<dd><p>option to adjust the plot margins. See ?par.</p></dd>
 
 
 <dt>...</dt>
