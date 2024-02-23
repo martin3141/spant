@@ -27,6 +27,7 @@ individual basis set components shown.}
   show_grid = TRUE,
   grid_nx = NULL,
   grid_ny = NA,
+  invert_fit = FALSE,
   ...
 )
 }
@@ -80,6 +81,8 @@ tickmarks as computed by axTicks). When NA, no grid lines are drawn in the
 corresponding direction.}
 
 \item{grid_ny}{as above.}
+
+\item{invert_fit}{show the fit result "upside-down"/}
 
 \item{...}{further arguments to plot method.}
 }

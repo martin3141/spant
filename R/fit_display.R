@@ -22,6 +22,7 @@
 #' tickmarks as computed by axTicks). When NA, no grid lines are drawn in the
 #' corresponding direction.
 #' @param grid_ny as above.
+#' @param invert_fit show the fit result "upside-down"/
 #' @param ... further arguments to plot method.
 #' @export
 plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
@@ -29,7 +30,8 @@ plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
                             label = NULL, plot_sigs = NULL, n = NULL,
                             sub_bl = FALSE, mar = NULL, restore_def_par = TRUE, 
                             ylim = NULL, y_scale = FALSE, show_grid = TRUE,
-                            grid_nx = NULL, grid_ny = NA, ...) {
+                            grid_nx = NULL, grid_ny = NA, invert_fit = FALSE,
+                            ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -43,6 +45,9 @@ plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
   
   opts <- x$opts
   x <- x$fits[[n]]
+ 
+  # invert the fit
+  if (invert_fit) x[2:ncol(x)] <- -x[2:ncol(x)]
   
   if (anyNA(x)) { 
     graphics::plot.new()
@@ -116,7 +121,7 @@ plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
     fit_line <- x$Fit + x$Baseline
     
     if (is.null(ylim)) {
-      max_dp <- max(x$Data[ind], fit_line[ind])
+      max_dp <- max(x$Data[ind], fit_line[ind], x$Baseline[ind])
       min_dp <- min(x$Data[ind], fit_line[ind], x$Baseline[ind])
     } else {
       max_dp <- ylim[2]
@@ -224,6 +229,7 @@ summary.fit_result <- function(object, ...) {
 #' tickmarks as computed by axTicks). When NA, no grid lines are drawn in the
 #' corresponding direction.
 #' @param grid_ny as above.
+#' @param invert_fit show the fit result "upside-down"/
 #' @param ... further arguments to plot method.
 #' @export
 stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0, dyn = 1, 
@@ -233,7 +239,7 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0, dyn = 1,
                                  restore_def_par = TRUE, omit_signals = NULL,
                                  combine_lipmm = FALSE, combine_metab = FALSE,
                                  mar = NULL, show_grid = TRUE, grid_nx = NULL,
-                                 grid_ny = NA,...) {
+                                 grid_ny = NA, invert_fit = FALSE, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -247,6 +253,9 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0, dyn = 1,
   
   opts <- x$opts
   x <- x$fits[[n]]
+  
+  # invert the fit
+  if (invert_fit) x[2:ncol(x)] <- -x[2:ncol(x)]
   
   if (is.null(xlim)) {
     if (inherits(opts, "list")) {
@@ -325,8 +334,8 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0, dyn = 1,
   }
   
   fit_line <- x$Fit + x$Baseline
-  max_dp <- max(x$Data[ind],fit_line[ind])
-  min_dp <- min(x$Data[ind],fit_line[ind],x$Baseline[ind])
+  max_dp <- max(x$Data[ind], fit_line[ind], x$Baseline[ind])
+  min_dp <- min(x$Data[ind], fit_line[ind], x$Baseline[ind])
   
   res <- x$Data - fit_line
   res_range <- max(res[ind]) - min(res[ind])
