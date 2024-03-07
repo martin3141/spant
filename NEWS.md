@@ -1,3 +1,6 @@
+# spant 2.19.0
+* Removed dependency on smoother package.
+
 # spant 2.18.0
 * Improved automated file type detection.
 * Bug fixes for DICOM MRS reader.

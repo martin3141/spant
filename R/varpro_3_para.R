@@ -77,9 +77,14 @@ varpro_3_para <- function(y, acq_paras, basis, opts = NULL) {
   Y <- ft_shift(y)
   resid <- Y - YHAT
   
+  # suppressPackageStartupMessages(
+  # BL <- smoother::smth.gaussian(Re(resid), opts$bl_smth_pts, tails = TRUE) + 
+  #       1i * smoother::smth.gaussian(Im(resid), opts$bl_smth_pts, tails = TRUE)
+  # )
+  
   suppressPackageStartupMessages(
-  BL <- smoother::smth.gaussian(Re(resid), opts$bl_smth_pts, tails = TRUE) + 
-        1i * smoother::smth.gaussian(Im(resid), opts$bl_smth_pts, tails = TRUE)
+  BL <- mmand::gaussianSmooth(Re(resid), opts$bl_smth_pts / 6) + 
+        1i * mmand::gaussianSmooth(Im(resid), opts$bl_smth_pts / 6)
   )
   
   RESID <- Y - YHAT
