@@ -658,6 +658,10 @@ smooth_dyns <- function(mrs_data, sigma) {
     return(lapply(mrs_data, smooth_dyns, sigma = sigma))
   }
   
+  if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
+    stop("TR not set, use set_tr function to set the repetition time.")
+  }
+  
   # covert data to the frequency domain if needed
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data) 
   
@@ -3409,8 +3413,12 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
   phi <- Arg(ref_pt)
   amp <- Mod(ref_pt)
   
+  # maintain relative acquired phases based on the phase of the coil with the
+  # strongest signal
+  # TODO
+  
   # maintain original spatial scaling
-  mean_amps <- apply(amp, c(1,2,3,4,5), mean)
+  mean_amps <- apply(amp, c(1, 2, 3, 4, 5), mean)
   dim(mean_amps) <- c(dim(mean_amps), 1, 1)
   mean_amps <- rep_array_dim(mean_amps, 6, Ncoils(ref))
   amp <- amp / mean_amps
@@ -3449,6 +3457,7 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
   
   # repeat across the FID and dynamic dimensions
   ang <- rep_array_dim(phi, 7, Npts(ref))
+  
   if (Ndyns(ref) > 1) ang <- rep_array_dim(ang, 5, Ndyns(ref))
   
   if (scale) {
