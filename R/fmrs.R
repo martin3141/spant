@@ -9,11 +9,13 @@
 #' Set to NULL to disable (default behavior).
 #' @param match_tr match the output to the input mrs_data.
 #' @param dt timing resolution for internal calculations.
+#' @param normalise normalise the response function to have a maximum value of 
+#' one.
 #' @return trapezoidal response function.
 #' @export
 gen_trap_rf <- function(onset, duration, trial_type, mrs_data, rise_t = 0,
                         fall_t = 0, smo_sigma = NULL, match_tr = TRUE,
-                        dt = 0.01) {
+                        dt = 0.01, normalise = TRUE) {
                          
   if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
     stop("TR not set, use set_tr function to set the repetition time.")
@@ -72,7 +74,7 @@ gen_trap_rf <- function(onset, duration, trial_type, mrs_data, rise_t = 0,
       rise_pts <- seq(from = 0, to = 1, length.out = 1 + sum(rise_inds))
       
       if (sum(stim_fine[rise_inds]) > 0) {
-        stop("Overlapping response functions")
+        stop("Overlapping response functions (rise)")
       }
       
       stim_fine[rise_inds] <- rise_pts[2:length(rise_pts)]
@@ -80,17 +82,17 @@ gen_trap_rf <- function(onset, duration, trial_type, mrs_data, rise_t = 0,
       plateau_inds <- (t_fine > (stim_frame$onset[n] + rise_t)) &
                       (t_fine <= stim_frame$end[n])
       
-      stim_fine[plateau_inds] <- rep(1, sum(plateau_inds))
-      
       if (sum(stim_fine[plateau_inds]) > 0) {
-        stop("Overlapping response functions")
+        stop("Overlapping response functions (plateau)")
       }
+      
+      stim_fine[plateau_inds] <- rep(1, sum(plateau_inds))
       
       fall_inds <- (t_fine > (stim_frame$end[n])) &
                    (t_fine <= (stim_frame$end[n] + fall_t))
       
       if (sum(stim_fine[fall_inds]) > 0) {
-        stop("Overlapping response functions")
+        stop("Overlapping response functions (fall)")
       }
       
       fall_pts <- seq(from = 1, to = 0, length.out = 1 + sum(fall_inds))
@@ -103,6 +105,8 @@ gen_trap_rf <- function(onset, duration, trial_type, mrs_data, rise_t = 0,
       stim_fine <- mmand::morph(stim_fine, gaus_ker, operator = "*",
                                 merge = "sum")
     }
+    
+    if (normalise) stim_fine <- stim_fine / max(stim_fine)
     
     t_acq    <- seq(from = 0, by = TR, length.out = n_trans)
     stim_acq <- stats::approx(t_fine, stim_fine, t_acq, method='linear')$y

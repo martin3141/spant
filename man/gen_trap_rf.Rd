@@ -13,7 +13,8 @@ gen_trap_rf(
   fall_t = 0,
   smo_sigma = NULL,
   match_tr = TRUE,
-  dt = 0.1
+  dt = 0.01,
+  normalise = TRUE
 )
 }
 \arguments{
@@ -35,6 +36,9 @@ Set to NULL to disable (default behavior).}
 \item{match_tr}{match the output to the input mrs_data.}
 
 \item{dt}{timing resolution for internal calculations.}
+
+\item{normalise}{normalise the response function to have a maximum value of
+one.}
 }
 \value{
 trapezoidal response function.
