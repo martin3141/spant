@@ -13,7 +13,7 @@
 #' @export
 gen_trap_rf <- function(onset, duration, trial_type, mrs_data, rise_t = 0,
                         fall_t = 0, smo_sigma = NULL, match_tr = TRUE,
-                        dt = 0.1) {
+                        dt = 0.01) {
                          
   if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
     stop("TR not set, use set_tr function to set the repetition time.")
@@ -61,32 +61,40 @@ gen_trap_rf <- function(onset, duration, trial_type, mrs_data, rise_t = 0,
     
     # loop over stims of the same trial type
     for (n in 1:length(stim_frame_trial$onset)) {
-      # generate the rise after stim. onset
-      if (rise_t > 0) {
-        rise_pts <- round(rise_t / dt)
-        start_pt <- round(stim_frame_trial$onset[n] / dt)
-        rise_seg <- seq(from = 0, to = 1, length.out = rise_pts + 1)
-        stim_fine[start_pt:(start_pt + rise_pts - 1)] <- rise_seg[1:rise_pts]
+      
+      if (rise_t > (stim_frame$end[n] - stim_frame$onset[n])) {
+        stop("Rise time cannot be shorter than duration.")
       }
       
-      # generate the plateau
-      start_pt <- round((stim_frame_trial$onset[n] + rise_t) / dt)
-      end_pt   <- round((stim_frame_trial$end[n]) / dt)
-      if (end_pt >= start_pt) {
-        stim_fine[start_pt:end_pt] <- 1
-        start_intensity <- 1
-      } else {
-        start_intensity <- stim_fine[end_pt]
+      rise_inds <- (t_fine > stim_frame$onset[n]) &
+                   (t_fine <= (stim_frame$onset[n] + rise_t))
+      
+      rise_pts <- seq(from = 0, to = 1, length.out = 1 + sum(rise_inds))
+      
+      if (sum(stim_fine[rise_inds]) > 0) {
+        stop("Overlapping response functions")
       }
       
-      # generate the fall after stim. stops
-      if (fall_t > 0) {
-        fall_pts <- round(fall_t / dt)
-        start_pt <- round(stim_frame_trial$end[n] / dt)
-        fall_seg <- seq(from = start_intensity, to = 0,
-                        length.out = fall_pts + 1)
-        stim_fine[start_pt:(start_pt + fall_pts - 1)] <- fall_seg[1:fall_pts]
+      stim_fine[rise_inds] <- rise_pts[2:length(rise_pts)]
+      
+      plateau_inds <- (t_fine > (stim_frame$onset[n] + rise_t)) &
+                      (t_fine <= stim_frame$end[n])
+      
+      stim_fine[plateau_inds] <- rep(1, sum(plateau_inds))
+      
+      if (sum(stim_fine[plateau_inds]) > 0) {
+        stop("Overlapping response functions")
       }
+      
+      fall_inds <- (t_fine > (stim_frame$end[n])) &
+                   (t_fine <= (stim_frame$end[n] + fall_t))
+      
+      if (sum(stim_fine[fall_inds]) > 0) {
+        stop("Overlapping response functions")
+      }
+      
+      fall_pts <- seq(from = 1, to = 0, length.out = 1 + sum(fall_inds))
+      stim_fine[fall_inds] <- fall_pts[2:length(fall_pts)]
     }
     
     if (!is.null(smo_sigma)) {
