@@ -1,6 +1,3 @@
-# spant 2.20.0
-* Removed dependency on ragg package.
-
 # spant 2.19.0
 * Removed dependency on smoother package.
 * Added functions for generating BOLD and trapezoidal response shapes.
