@@ -110,7 +110,8 @@ gen_trap_rf <- function(onset, duration, trial_type, mrs_data, rise_t = 0,
     
     t_acq    <- seq(from = 0, by = TR, length.out = n_trans)
     stim_acq <- stats::approx(t_fine, stim_fine, t_acq, method='linear')$y
-    
+   
+    # correct for missmatch between n_trans and n_dyns due to temporal averaging 
     if (n_trans != n_dyns) {
       if (n_trans%%n_dyns != 0) stop("Dynamics and transients do not match")
       

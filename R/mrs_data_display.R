@@ -286,8 +286,8 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
 #' of: "re", "im", "mod" or "arg".
 #' @param col Colour map to use, defaults to viridis.
 #' @param plot_dim the dimension to display on the y-axis, can be one of: "dyn", 
-#' "x", "y", "z", "coil" or NULL. If NULL (the default) all spectra will be
-#' collapsed into the dynamic dimension and displayed.
+#' "time_sec", x", "y", "z", "coil" or NULL. If NULL (the default) all spectra 
+#' are collapsed into the dynamic dimension and displayed.
 #' @param x_pos the x index to plot.
 #' @param y_pos the y index to plot.
 #' @param z_pos the z index to plot.
@@ -295,7 +295,8 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
 #' @param coil the coil element number to plot.
 #' @param restore_def_par restore default plotting par values after the plot has 
 #' been made.
-#' @param y_ticks a vector of indices specifying where to place tick marks.
+#' @param y_ticks a vector of indices specifying where to place additional red 
+#' tick marks.
 #' @param vline draw a vertical line at the value of vline.
 #' @param hline draw a horizontal line at the value of hline.
 #' @param legend add a colour bar to the plot using the imagePlot function
@@ -328,7 +329,7 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
   
   if (is.null(plot_dim)) {
     x <- collapse_to_dyns(x)
-    plot_dim = "dyn"
+    plot_dim <- "dyn"
   }
   
   data_dim <- dim(x$data)
@@ -341,26 +342,30 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
   
   if (plot_dim == "dyn") {
     plot_data <- t(x$data[1, x_pos, y_pos, y_pos, , coil, subset])
-    yN <- data_dim[5]
-    y_title = "Dynamic"
+    y_title <- "Dynamic"
+    y_ax <- 1:ncol(plot_data)
+  } else if (plot_dim == "time_sec") {
+    plot_data <- t(x$data[1, x_pos, y_pos, y_pos, , coil, subset])
+    y_title <- "Time (s)"
+    y_ax <- dyn_acq_times(x)
   } else if (plot_dim == "x") {
     plot_data <- t(x$data[1, , y_pos, z_pos, dyn, coil, subset])
-    yN <- data_dim[2]
-    y_title = "x position"
+    y_title <- "x position"
+    y_ax <- 1:ncol(plot_data)
   } else if (plot_dim == "y") {
     plot_data <- t(x$data[1, x_pos, , z_pos, dyn, coil, subset])
-    yN <- data_dim[3]
-    y_title = "y position"
+    y_title <- "y position"
+    y_ax <- 1:ncol(plot_data)
   } else if (plot_dim == "z") {
     plot_data <- t(x$data[1, x_pos, y_pos, , dyn, coil, subset])
-    yN <- data_dim[4]
-    y_title = "z position"
+    y_title <- "z position"
+    y_ax <- 1:ncol(plot_data)
   } else if (plot_dim == "coil") {
     plot_data <- t(x$data[1, x_pos, y_pos, z_pos, dyn, , subset])
-    yN <- data_dim[6]
-    y_title = "Coil"
+    y_title <- "Coil"
+    y_ax <- 1:ncol(plot_data)
   } else {
-    stop("Unrecognised dim value. Should be one of: dyn, x, y, z, coil")
+    stop("Unrecognised dim value. Should be one of: dyn, time_sec, x, y, z, coil")
   } 
   
   if (nrow(plot_data) == 1) {
@@ -386,17 +391,15 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
   # set masked spectra to zero
   plot_data[is.na(plot_data)] <- 0
   
-  yN <- ncol(plot_data)
-  
   col <- viridisLite::viridis(128)
   
   if (legend == TRUE) {
-    fields::imagePlot(x_scale[subset][length(subset):1], (1:yN),
+    fields::imagePlot(x_scale[subset][length(subset):1], y_ax,
                       plot_data[length(subset):1,,drop = F], xlim = xlim,
                       xlab = "Chemical shift (ppm)", ylab = y_title, 
                       col = col, ...)
   } else {
-    graphics::image(x_scale[subset][length(subset):1], (1:yN),
+    graphics::image(x_scale[subset][length(subset):1], y_ax,
                     plot_data[length(subset):1,,drop = F], xlim = xlim,
                     xlab = "Chemical shift (ppm)", ylab = y_title,
                     col = col, ...)
@@ -467,6 +470,8 @@ stackplot.list <- function(x, ...) {
 #' @param grid_ny as above.
 #' @param lwd plot linewidth.
 #' @param vline x-value to draw a vertical line.
+#' @param vline_lty linetype for the vertical line.
+#' @param vline_col colour for the vertical line.
 #' @param mar option to adjust the plot margins. See ?par.
 #' @param ... other arguments to pass to the matplot method.
 #' @export
@@ -478,7 +483,8 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                                lab_cex = 1, bl_lty = NULL,
                                restore_def_par = TRUE, show_grid = NULL,
                                grid_nx = NULL, grid_ny = NA, lwd = NULL,
-                               vline = NULL, mar = NULL, ...) {
+                               vline = NULL, vline_lty = 2, vline_col = "red",
+                               mar = NULL, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -699,7 +705,8 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   
   # if (show_grid) graphics::grid(nx = grid_nx, ny = grid_ny)
   
-  if (!is.null(vline)) graphics::abline(v = vline, col = "red")
+  if (!is.null(vline)) graphics::abline(v = vline, col = vline_col,
+                                        lty = vline_lty)
   
   if (restore_def_par) graphics::par(.pardefault)
 }

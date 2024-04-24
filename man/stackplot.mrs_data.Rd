@@ -30,6 +30,8 @@
   grid_ny = NA,
   lwd = NULL,
   vline = NULL,
+  vline_lty = 2,
+  vline_col = "red",
   mar = NULL,
   ...
 )
@@ -96,6 +98,10 @@ corresponding direction.}
 \item{lwd}{plot linewidth.}
 
 \item{vline}{x-value to draw a vertical line.}
+
+\item{vline_lty}{linetype for the vertical line.}
+
+\item{vline_col}{colour for the vertical line.}
 
 \item{mar}{option to adjust the plot margins. See ?par.}
 

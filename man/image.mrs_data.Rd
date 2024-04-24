@@ -34,8 +34,8 @@ of: "re", "im", "mod" or "arg".}
 \item{col}{Colour map to use, defaults to viridis.}
 
 \item{plot_dim}{the dimension to display on the y-axis, can be one of: "dyn",
-"x", "y", "z", "coil" or NULL. If NULL (the default) all spectra will be
-collapsed into the dynamic dimension and displayed.}
+"time_sec", x", "y", "z", "coil" or NULL. If NULL (the default) all spectra
+are collapsed into the dynamic dimension and displayed.}
 
 \item{x_pos}{the x index to plot.}
 
@@ -50,7 +50,8 @@ collapsed into the dynamic dimension and displayed.}
 \item{restore_def_par}{restore default plotting par values after the plot has
 been made.}
 
-\item{y_ticks}{a vector of indices specifying where to place tick marks.}
+\item{y_ticks}{a vector of indices specifying where to place additional red
+tick marks.}
 
 \item{vline}{draw a vertical line at the value of vline.}
 

@@ -1,3 +1,7 @@
+# spant 2.20.0
+* Added vertical line colour and linetype options for stackplots.
+* Added option to give Y axis labels in units of seconds for spectrograms.
+
 # spant 2.19.0
 * Removed dependency on smoother package.
 * Added functions for generating BOLD and trapezoidal response shapes.
