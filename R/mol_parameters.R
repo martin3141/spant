@@ -1352,6 +1352,33 @@ get_cit_paras <- function(lw = NULL, lg = 0, ...) {
   paras
 }
 
+get_val_paras <- function(lw = NULL, lg = 0, ...) {
+  if (is.null(lw)) lw = 2
+  nucleus <- rep("1H", 8)
+  chem_shift <- c(3.5953, 2.2577, 1.0271, 1.0271, 1.0271, 0.9764, 0.9764,
+                  0.9764)
+  j_coupling_mat <- matrix(0, 8, 8)
+  j_coupling_mat[2,1] <- 4.405
+  j_coupling_mat[3,2] <- 6.971
+  j_coupling_mat[4,2] <- 6.971
+  j_coupling_mat[5,2] <- 6.971
+  j_coupling_mat[6,2] <- 7.071
+  j_coupling_mat[7,2] <- 7.071
+  j_coupling_mat[8,2] <- 7.071
+  
+  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 1,
+                       lw = lw, lg = lg)
+  
+  source <- "Proton NMR chemical shifts and coupling constants for brain
+             metabolites. NMR Biomed. 2000; 13:129-153."
+  
+  paras <- list(spin_groups = list(spin_group_a), name = "Val",
+                source = source, full_name = "Valine")
+  class(paras) <- "mol_parameters"
+  paras
+}
+
 get_atp_31p_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 2
   nucleus <- rep("31P", 3)
