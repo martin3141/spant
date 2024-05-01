@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.19.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.20.0</span>
       </span>
     </div>
 
@@ -120,8 +120,8 @@ of: "re", "im", "mod" or "arg".</p></dd>
 
 <dt>plot_dim</dt>
 <dd><p>the dimension to display on the y-axis, can be one of: "dyn",
-"x", "y", "z", "coil" or NULL. If NULL (the default) all spectra will be
-collapsed into the dynamic dimension and displayed.</p></dd>
+"time_sec", x", "y", "z", "coil" or NULL. If NULL (the default) all spectra
+are collapsed into the dynamic dimension and displayed.</p></dd>
 
 
 <dt>x_pos</dt>
@@ -150,7 +150,8 @@ been made.</p></dd>
 
 
 <dt>y_ticks</dt>
-<dd><p>a vector of indices specifying where to place tick marks.</p></dd>
+<dd><p>a vector of indices specifying where to place additional red
+tick marks.</p></dd>
 
 
 <dt>vline</dt>
