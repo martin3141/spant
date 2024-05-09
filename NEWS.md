@@ -1,3 +1,5 @@
+# spant 2.21.0
+
 # spant 2.20.0
 * Added vertical line colour and linetype options for stackplots.
 * Added option to give Y axis labels in units of seconds for spectrograms.
