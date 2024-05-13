@@ -68,13 +68,14 @@ c     integer INDEX(N)
 c     double precision A(MDA,N), B(M), W(N), X(N), ZZ(M)   
       integer INDEX(*)  
       double precision A(MDA,*), B(*), W(*), X(*), ZZ(*)   
-      double precision ALPHA, ASAVE, CC, DIFF, DUMMY(1), FACTOR, RNORM
+      double precision ALPHA, ASAVE, CC, DIFF, DUMMY(MDA), FACTOR, RNORM
       double precision SM, SS, T, TEMP, TWO, UNORM, UP, WMAX
       double precision ZERO, ZTEST
       parameter(FACTOR = 0.01d0)
       parameter(TWO = 2.0d0, ZERO = 0.0d0)
 C     ------------------------------------------------------------------
 
+      JJ=0
       MODE=1
       IF (M .le. 0 .or. N .le. 0) then
          MODE=2
@@ -87,7 +88,8 @@ C                    INITIALIZE THE ARRAYS INDEX() AND X().
 C   
       DO 20 I=1,N   
          X(I)=ZERO     
-   20 INDEX(I)=I    
+         INDEX(I)=I
+ 20   enddo         
 C   
       IZ2=N 
 
@@ -111,7 +113,8 @@ C     Householder transformation for the frist K variables
          UNORM=ZERO
          IF (NK .ne. 0) then
             DO 510 L=1,NK
- 510           UNORM=UNORM+A(L,J)**2     
+               UNORM=UNORM+A(L,J)**2
+ 510        enddo               
          endif
          UNORM=sqrt(UNORM) 
          IF (DIFF(UNORM+ABS(A(NK+1,J))*FACTOR,UNORM) .gt. ZERO) then
@@ -123,17 +126,20 @@ C     Householder transformation for the frist K variables
  520        continue
             IF (NK .ne. M) then
                DO 530 L=NK+1,M   
- 530              A(L,J)=ZERO   
+                  A(L,J)=ZERO
+ 530           enddo                  
             endif
          else 
             A(NK+1,J)=ASAVE 
             if (NK+1 .le. IZ1-2) then
                do 540 IK=NK+1,IZ1-2
- 540              INDEX(IK) = INDEX(IK+1)
+                  INDEX(IK) = INDEX(IK+1)
+ 540           enddo                  
             endif
             if (IZ1 .le. IZ2) then
                do 550 IK=IZ1,IZ2
- 550              INDEX(IK-1) = INDEX(IK)
+                  INDEX(IK-1) = INDEX(IK)
+ 550           enddo                  
             endif
             INDEX(IZ2) = J   
             IZ1=IZ1-1
@@ -145,12 +151,14 @@ C     Householder transformation for the frist K variables
       RTNKEY=3
       JJ=NSETP
       do 570 IP=1,NK
- 570     ZZ(IP)=B(IP)
+         ZZ(IP)=B(IP)
+ 570  enddo         
       go to 400
  580  continue
       do 590 IP=1,NK
          L = INDEX(IP)
- 590     X(L)=ZZ(IP)
+         X(L)=ZZ(IP)
+ 590  end do
 
 C     Up to this point, the vector INDEX has two parts: the first K elements 
 C     store the indexes of free variables, and the remaining ones for those 
@@ -161,7 +169,7 @@ C     --- Yong's code ends here ---
 
 C                             ******  MAIN LOOP BEGINS HERE  ******     
 
-   30 CONTINUE  
+ 30   CONTINUE  
 C                  QUIT IF ALL COEFFICIENTS ARE ALREADY IN THE SOLUTION.
 C                        OR IF M COLS OF A HAVE BEEN TRIANGULARIZED.    
 C   
@@ -173,19 +181,21 @@ C
          J=INDEX(IZ)   
          SM=ZERO   
          DO 40 L=NPP1,M
-   40        SM=SM+A(L,J)*B(L)     
+            SM=SM+A(L,J)*B(L)
+ 40      enddo            
          W(J)=SM   
-   50 continue
+ 50   continue
 C                                   FIND LARGEST POSITIVE W(J). 
-   60 continue
-      WMAX=ZERO 
+ 60   continue
+      WMAX=ZERO
+      IZMAX=0
       DO 70 IZ=IZ1,IZ2  
          J=INDEX(IZ)   
          IF (W(J) .gt. WMAX) then
             WMAX=W(J)     
             IZMAX=IZ  
          endif
-   70 CONTINUE  
+ 70   CONTINUE  
 C   
 C             IF WMAX .LE. 0. GO TO TERMINATION.
 C             THIS INDICATES SATISFACTION OF THE KUHN-TUCKER CONDITIONS.
@@ -200,11 +210,12 @@ C     NEAR LINEAR DEPENDENCE.
 C   
       ASAVE=A(NPP1,J)   
       CALL H12 (1,NPP1,NPP1+1,M,A(1,J),1,UP,DUMMY,1,1,0)    
-
+      
       UNORM=ZERO
       IF (NSETP .ne. 0) then
-          DO 90 L=1,NSETP   
-   90        UNORM=UNORM+A(L,J)**2     
+         DO 90 L=1,NSETP   
+            UNORM=UNORM+A(L,J)**2
+ 90      enddo            
       endif
       UNORM=sqrt(UNORM) 
       IF (DIFF(UNORM+ABS(A(NPP1,J))*FACTOR,UNORM) .gt. ZERO) then
@@ -213,7 +224,8 @@ C        COL J IS SUFFICIENTLY INDEPENDENT.  COPY B INTO ZZ, UPDATE ZZ
 C        AND SOLVE FOR ZTEST ( = PROPOSED NEW VALUE FOR X(J) ).    
 C   
          DO 120 L=1,M  
-  120        ZZ(L)=B(L)    
+            ZZ(L)=B(L)
+ 120     enddo            
          CALL H12 (2,NPP1,NPP1+1,M,A(1,J),1,UP,ZZ,1,1,1)   
          ZTEST=ZZ(NPP1)/A(NPP1,J)  
 C   
@@ -235,11 +247,12 @@ C     SET Z TO SET P.    UPDATE B,  UPDATE INDICES,  APPLY HOUSEHOLDER
 C     TRANSFORMATIONS TO COLS IN NEW SET Z,  ZERO SUBDIAGONAL ELTS IN   
 C     COL J,  SET W(J)=0.   
 C   
-  140 continue
+ 140  continue
 
       DO 150 L=1,M  
-  150    B(L)=ZZ(L)    
-C   
+         B(L)=ZZ(L)
+ 150  enddo         
+C     
       INDEX(IZ)=INDEX(IZ1)  
       INDEX(IZ1)=J  
       IZ1=IZ1+1 
@@ -250,12 +263,13 @@ C
          DO 160 JZ=IZ1,IZ2 
             JJ=INDEX(JZ)  
             CALL H12 (2,NSETP,NPP1,M,A(1,J),1,UP,A(1,JJ),1,MDA,1)
-  160    continue
+ 160     continue
       endif
 C   
       IF (NSETP .ne. M) then
          DO 180 L=NPP1,M   
-  180       A(L,J)=ZERO   
+            A(L,J)=ZERO
+ 180     enddo            
       endif
 C   
       W(J)=ZERO 
@@ -263,13 +277,13 @@ C                                SOLVE THE TRIANGULAR SYSTEM.
 C                                STORE THE SOLUTION TEMPORARILY IN ZZ().
       RTNKEY = 1
       GO TO 400 
-  200 CONTINUE  
+ 200  CONTINUE  
 C   
 C                       ******  SECONDARY LOOP BEGINS HERE ******   
 C   
 C                          ITERATION COUNTER.   
 C 
-  210 continue  
+ 210  continue  
       ITER=ITER+1   
       IF (ITER .gt. ITMAX) then
          MODE=3
@@ -291,7 +305,7 @@ C
                JJ=IP 
             endif
          endif
-  240 CONTINUE  
+ 240  CONTINUE  
 C   
 C          IF ALL NEW CONSTRAINED COEFFS ARE FEASIBLE THEN ALPHA WILL   
 C          STILL = 2.    IF SO EXIT FROM SECONDARY LOOP TO MAIN LOOP.   
@@ -304,13 +318,13 @@ C
       DO 250 IP=K+1,NSETP 
          L=INDEX(IP)   
          X(L)=X(L)+ALPHA*(ZZ(IP)-X(L)) 
-  250 continue
+ 250  continue
 C   
 C        MODIFY A AND B AND THE INDEX ARRAYS TO MOVE COEFFICIENT I  
 C        FROM SET P TO SET Z.   
 C   
       I=INDEX(JJ)   
-  260 continue
+ 260  continue
       X(I)=ZERO 
 C   
       IF (JJ .ne. NSETP) then
@@ -329,14 +343,14 @@ c
                   A(J-1,L) = CC*TEMP + SS*A(J,L)
                   A(J,L)   =-SS*TEMP + CC*A(J,L)
                endif
-  270       CONTINUE  
+ 270        CONTINUE  
 c
 c                 Apply procedure G2 (CC,SS,B(J-1),B(J))   
 c
             TEMP = B(J-1)
             B(J-1) = CC*TEMP + SS*B(J)    
             B(J)   =-SS*TEMP + CC*B(J)    
-  280    continue
+ 280     continue
       endif
 c
       NPP1=NSETP
@@ -349,26 +363,28 @@ C        BE BECAUSE OF THE WAY ALPHA WAS DETERMINED.
 C        IF ANY ARE INFEASIBLE IT IS DUE TO ROUND-OFF ERROR.  ANY   
 C        THAT ARE NONPOSITIVE WILL BE SET TO ZERO   
 C        AND MOVED FROM SET P TO SET Z. 
-C   
+C     
       DO 300 JJ=K+1,NSETP 
          I=INDEX(JJ)   
          IF (X(I) .le. ZERO) go to 260
-  300 CONTINUE  
+ 300  CONTINUE  
 C   
 C         COPY B( ) INTO ZZ( ).  THEN SOLVE AGAIN AND LOOP BACK.
 C   
       DO 310 I=1,M  
-  310     ZZ(I)=B(I)    
+         ZZ(I)=B(I)
+ 310  enddo         
       RTNKEY = 2
       GO TO 400 
-  320 CONTINUE  
+ 320  CONTINUE  
       GO TO 210 
 C                      ******  END OF SECONDARY LOOP  ******
 C   
-  330 continue
+ 330  continue
       DO 340 IP=1,NSETP 
-          I=INDEX(IP)   
-  340     X(I)=ZZ(IP)   
+         I=INDEX(IP)   
+         X(I)=ZZ(IP)
+ 340  enddo         
 C        ALL NEW COEFFS ARE POSITIVE.  LOOP BACK TO BEGINNING.  
       GO TO 30  
 C   
@@ -377,14 +393,16 @@ C
 C                        COME TO HERE FOR TERMINATION.  
 C                     COMPUTE THE NORM OF THE FINAL RESIDUAL VECTOR.    
 C 
-  350 continue  
+ 350  continue  
       SM=ZERO   
       IF (NPP1 .le. M) then
          DO 360 I=NPP1,M   
-  360       SM=SM+B(I)**2 
+            SM=SM+B(I)**2
+ 360     enddo            
       else
          DO 380 J=K+1,N  
-  380       W(J)=ZERO     
+            W(J)=ZERO
+ 380     enddo            
       endif
       RNORM=sqrt(SM)    
       RETURN
@@ -392,17 +410,20 @@ C
 C     THE FOLLOWING BLOCK OF CODE IS USED AS AN INTERNAL SUBROUTINE     
 C     TO SOLVE THE TRIANGULAR SYSTEM, PUTTING THE SOLUTION IN ZZ().     
 C   
-  400 continue
+ 400  continue
       DO 430 L=1,NSETP  
          IP=NSETP+1-L  
          IF (L .ne. 1) then
             DO 410 II=1,IP
                ZZ(II)=ZZ(II)-A(II,JJ)*ZZ(IP+1)   
-  410       continue
+ 410        continue
          endif
          JJ=INDEX(IP)  
          ZZ(IP)=ZZ(IP)/A(IP,JJ)    
-  430 continue
-      go to (200, 320, 580), RTNKEY
-      END   
+ 430  continue
+c      go to (200, 320, 580), RTNKEY
+      if (RTNKEY .eq. 1) goto 200
+      if (RTNKEY .eq. 2) goto 320
+      if (RTNKEY .eq. 3) goto 580
+      END
 
