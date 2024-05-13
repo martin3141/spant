@@ -665,7 +665,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                                                    graphics::grid(nx = grid_nx,
                                                    ny = grid_ny)}, ...)
   
-  graphics::axis(1, lwd = 0, lwd.ticks = 1, at = pretty(xlim_labs))
+  graphics::axis(1, lwd = 0, lwd.ticks = 1, at = pretty(xlim_labs, 6))
   
   if (bty == "n") graphics::lines(xlim_labs, c(graphics::par("usr")[3],
                                                graphics::par("usr")[3]))
