@@ -1,5 +1,6 @@
 # spant 2.21.0
 * Fixed compiler warnings for Fortran code.
+* Added glm_spec function.
 
 # spant 2.20.0
 * Added vertical line colour and linetype options for stackplots.

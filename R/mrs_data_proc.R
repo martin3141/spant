@@ -3595,8 +3595,12 @@ est_noise_sd <- function(mrs_data, n = 100, offset = 100, p_order = 2) {
 est_noise_sd_vec <- function(x, n = 100, offset = 100, p_order = 2) {
   N <- length(x)
   seg <- Re(x[(N - offset - n + 1):(N - offset)])
-  lm_res <- stats::lm(seg ~ stats::poly(1:n, p_order))
-  stats::sd(lm_res$residual)
+  if (p_order != 0) {
+    lm_res <- stats::lm(seg ~ stats::poly(1:n, p_order))
+    stats::sd(lm_res$residual)
+  } else {
+    stats::sd(seg)
+  }
 }
 
 #' Calculate the noise correlation between coil elements.
