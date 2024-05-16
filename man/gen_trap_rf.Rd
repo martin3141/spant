@@ -14,7 +14,7 @@ gen_trap_rf(
   smo_sigma = NULL,
   match_tr = TRUE,
   dt = 0.01,
-  normalise = TRUE
+  normalise = FALSE
 )
 }
 \arguments{
@@ -26,9 +26,9 @@ gen_trap_rf(
 
 \item{mrs_data}{mrs_data object for timing information.}
 
-\item{rise_t}{rise time of the trapezoid in seconds.}
+\item{rise_t}{time to reach a plateau from baseline in seconds.}
 
-\item{fall_t}{fall time of the trapezoid in seconds}
+\item{fall_t}{time to fall from plateau level back to baseline in seconds.}
 
 \item{smo_sigma}{standard deviation of Gaussian smoothing kernel in seconds.
 Set to NULL to disable (default behavior).}
