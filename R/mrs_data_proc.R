@@ -323,6 +323,24 @@ add_noise <- function(mrs_data, sd = 0.1, fd = TRUE) {
   mrs_data
 }
 
+#' Add noise to an mrs_data object.
+#' @param mrs_data data to add noise to.
+#' @param target_snr desired spectral SNR, note this assumes the input data is
+#' noise-free, eg simulated data.
+#' @param sig_region spectral limits to search for the strongest spectral data
+#' point.
+#' @return mrs_data object with additive normally distributed noise.
+#' @export
+add_noise_spec_snr <- function(mrs_data, target_snr, sig_region = c(4, 0.5)) {
+  # measure max signal from the first scan and add noise
+  first_scan  <- get_subset(mrs_data, 1, 1, 1, 1, 1)
+  peak_height <- calc_spec_snr(mrs_data, sig_region = sig_region,
+                               full_output = TRUE)$max_sig
+  noise_sd    <- peak_height / target_snr
+  mrs_data    <- add_noise(mrs_data, noise_sd)
+  return(mrs_data)
+}
+
 #' Simulate an mrs_data object containing complex zero valued samples.
 #' @param fs sampling frequency in Hz.
 #' @param ft transmitter frequency in Hz.
