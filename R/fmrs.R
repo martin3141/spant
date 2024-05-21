@@ -5,6 +5,8 @@
 #' @param mrs_data mrs_data object for timing information.
 #' @param rise_t time to reach a plateau from baseline in seconds.
 #' @param fall_t time to fall from plateau level back to baseline in seconds.
+#' @param exp_fall model an exponential fall instead of linear.
+#' @param exp_fall_power exponential fall power.
 #' @param smo_sigma standard deviation of Gaussian smoothing kernel in seconds.
 #' Set to NULL to disable (default behavior).
 #' @param match_tr match the output to the input mrs_data.
@@ -14,8 +16,9 @@
 #' @return trapezoidal response function.
 #' @export
 gen_trap_rf <- function(onset, duration, trial_type, mrs_data, rise_t = 0,
-                        fall_t = 0, smo_sigma = NULL, match_tr = TRUE,
-                        dt = 0.01, normalise = FALSE) {
+                        fall_t = 0, exp_fall = FALSE, exp_fall_power = 1,
+                        smo_sigma = NULL, match_tr = TRUE, dt = 0.01,
+                        normalise = FALSE) {
                          
   if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
     stop("TR not set, use set_tr function to set the repetition time.")
@@ -53,6 +56,9 @@ gen_trap_rf <- function(onset, duration, trial_type, mrs_data, rise_t = 0,
   
   output_frame <- data.frame(empty_mat)
   colnames(output_frame) <- c("time", trial_types)
+  
+  # time for a 95% reduction
+  if (exp_fall) lambda <- -fall_t ^ exp_fall_power / log(0.05)
     
   # loop over trial types
   for (m in 1:trial_type_n) {
@@ -74,7 +80,14 @@ gen_trap_rf <- function(onset, duration, trial_type, mrs_data, rise_t = 0,
       if (stim_bool[n]) {
         new_val <- last_val + dt / rise_t
       } else {
-        new_val <- last_val - dt / fall_t
+        if (exp_fall) {
+          t <- (-lambda * log(last_val)) ^ (1 / exp_fall_power) + dt
+          new_val <- exp(-(t ^ exp_fall_power / lambda))
+          # new_val <-  last_val - dt / lambda * last_val ^ 2
+          # new_val <-  last_val - dt / lambda * last_val
+      } else {
+          new_val <- last_val - dt / fall_t
+        }
       }
       
       if (new_val > 1) new_val <- 1
