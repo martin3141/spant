@@ -314,9 +314,9 @@ plot_reg <- function(regressor_df) {
   X     <- t(regressor_df[, -1])
   graphics::image(y = time, z = X, col = viridisLite::viridis(128),
                   ylab = "Time (s)", axes = FALSE)
-  axis(1, at=seq(0, 1, length = length(names)), labels = names)
-  axis(2)
-  box()
+  graphics::axis(1, at=seq(0, 1, length = length(names)), labels = names)
+  graphics::axis(2)
+  graphics::box()
 }
 
 #' Append multiple regressor data frames into a single data frame.
