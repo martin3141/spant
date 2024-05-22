@@ -310,10 +310,13 @@ calc_design_efficiency <- function(regressor_df, contrasts) {
 #' @export
 plot_reg <- function(regressor_df) {
   time  <- regressor_df$time
-  names <- colnames(regressor_df)
+  names <- colnames(regressor_df)[-1]
   X     <- t(regressor_df[, -1])
   graphics::image(y = time, z = X, col = viridisLite::viridis(128),
-                  ylab = "Time (s)")
+                  ylab = "Time (s)", axes = FALSE)
+  axis(1, at=seq(0, 1, length = length(names)), labels = names)
+  axis(2)
+  box()
 }
 
 #' Append multiple regressor data frames into a single data frame.
