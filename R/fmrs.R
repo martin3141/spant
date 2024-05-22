@@ -1,4 +1,4 @@
-#' Generate a trapezoidal response function.
+#' Generate trapezoidal regressors.
 #' @param onset stimulus onset in seconds.
 #' @param duration stimulus duration in seconds.
 #' @param trial_type string label for the stimulus.
@@ -13,12 +13,12 @@
 #' @param dt timing resolution for internal calculations.
 #' @param normalise normalise the response function to have a maximum value of 
 #' one.
-#' @return trapezoidal response function.
+#' @return trapezoidal regressor data frame.
 #' @export
-gen_trap_rf <- function(onset, duration, trial_type = NULL, mrs_data,
-                        rise_t = 0, fall_t = 0, exp_fall = FALSE,
-                        exp_fall_power = 1, smo_sigma = NULL, match_tr = TRUE,
-                        dt = 0.01, normalise = FALSE) {
+gen_trap_reg <- function(onset, duration, trial_type = NULL, mrs_data,
+                         rise_t = 0, fall_t = 0, exp_fall = FALSE,
+                         exp_fall_power = 1, smo_sigma = NULL, match_tr = TRUE,
+                         dt = 0.01, normalise = FALSE) {
                          
   if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
     stop("TR not set, use set_tr function to set the repetition time.")
@@ -134,17 +134,17 @@ gen_trap_rf <- function(onset, duration, trial_type = NULL, mrs_data,
   return(output_frame)
 }
 
-#' Generate a BOLD response function.
+#' Generate BOLD regressors.
 #' @param onset stimulus onset in seconds.
 #' @param duration stimulus duration in seconds.
 #' @param trial_type string label for the stimulus.
 #' @param mrs_data mrs_data object for timing information.
 #' @param match_tr match the output to the input mrs_data.
 #' @param dt timing resolution for internal calculations.
-#' @return BOLD response function.
+#' @return BOLD regressor data frame.
 #' @export
-gen_bold_rf <- function(onset, duration, trial_type = NULL, mrs_data,
-                        match_tr = TRUE, dt = 0.1) {
+gen_bold_reg <- function(onset, duration, trial_type = NULL, mrs_data,
+                         match_tr = TRUE, dt = 0.1) {
   
   if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
     stop("TR not set, use set_tr function to set the repetition time.")
@@ -238,7 +238,7 @@ gen_hrf <- function(end_t = 30, res_t = 0.01) {
 
 #' Perform a GLM analysis of dynamic MRS data in the spectral domain.
 #' @param mrs_data single-voxel dynamics MRS data.
-#' @param regressor_df a data-frame containing temporal regressors to be applied
+#' @param regressor_df a data frame containing temporal regressors to be applied
 #' to each spectral datapoint.
 #' @return list of statistical results.
 #' @export
@@ -293,4 +293,110 @@ glm_spec <- function(mrs_data, regressor_df) {
               p_value_log = p_value_log, p_value_log_mrs = p_value_log_mrs,
               p_value_mrs = p_value_mrs, beta_weight_mrs = beta_weight_mrs,
               lm_res_list = lm_res_list))
+}
+
+#' Calculate the efficiency of a regressor data frame.
+#' @param regressor_df input regressor data frame.
+#' @param contrasts a vector of contrast values.
+#' @export
+calc_design_efficiency <- function(regressor_df, contrasts) {
+  X   <- as.matrix(regressor_df[, -1])
+  eff <- 1 / sum(diag(t(contrasts) %*% ginv(t(X) %*% X) %*% contrasts))
+  return(eff)
+}
+
+#' Plot regressors as an image.
+#' @param regressor_df input regressor data frame.
+#' @export
+plot_reg <- function(regressor_df) {
+  time  <- regressor_df$time
+  names <- colnames(regressor_df)
+  X     <- t(regressor_df[, -1])
+  graphics::image(y = time, z = X, col = viridisLite::viridis(128),
+                  ylab = "Time (s)")
+}
+
+#' Append multiple regressor data frames into a single data frame.
+#' @param ... input regressor data frames.
+#' @return output regressor data frame.
+#' @export
+append_regs <- function(...) {
+  df_list    <- list(...)
+  time       <- df_list[[1]]$time
+  df_list_nt <- lapply(df_list, subset, select = -time)
+  output     <- do.call("cbind", df_list_nt)
+  return(cbind(time, output)) 
+}
+
+#' Generate baseline regressor.
+#' @param mrs_data mrs_data object for timing information.
+#' @return a single baseline regressor with value of 1.
+#' @export
+gen_baseline_reg <- function(mrs_data) {
+  time   <- dyn_acq_times(mrs_data)
+  reg_df <- data.frame(time = time, baseline = rep(1, length(t)))
+  return(reg_df)
+}
+
+#' Generate polynomial regressors.
+#' @param mrs_data mrs_data object for timing information.
+#' @param degree the degree of the polynomial.
+#' @return polynomial regressors.
+#' @export
+gen_poly_reg <- function(mrs_data, degree) {
+  time       <- dyn_acq_times(mrs_data)
+  poly_mat   <- stats::poly(time, degree)
+  scale_vals <- apply(Mod(poly_mat), 2, max)
+  poly_mat   <- scale(poly_mat, center = FALSE, scale = scale_vals)
+  reg_df     <- data.frame(time = time, poly = poly_mat)
+  return(reg_df)
+}
+
+#' Generate impulse regressors.
+#' @param onset stimulus onset in seconds.
+#' @param trial_type string label for the stimulus.
+#' @param mrs_data mrs_data object for timing information.
+#' @return impulse regressors data frame.
+#' @export
+gen_impulse_reg <- function(onset, trial_type = NULL, mrs_data) {
+  
+  if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
+    stop("TR not set, use set_tr function to set the repetition time.")
+  }
+  
+  if (is.na(Ntrans(mrs_data)) | is.null(Ntrans(mrs_data))) {
+    stop("Number of transients not set, use set_Ntrans function to set the 
+         number of transients.")
+  }
+  
+  if (is.null(trial_type)) trial_type <- rep("stim_imp", length(onset))
+  
+  trial_types  <- unique(trial_type)
+  trial_type_n <- length(trial_types)
+  
+  stim_frame <- data.frame(onset, trial_type)
+ 
+  n_dyns    <- Ndyns(mrs_data)
+  empty_mat <- matrix(NA, nrow = n_dyns, ncol = trial_type_n)
+  
+  output_frame <- data.frame(empty_mat)
+  colnames(output_frame) <- c(trial_types)
+    
+  time <- dyn_acq_times(mrs_data)
+  
+  for (m in 1:trial_type_n) {
+    stim <- rep(0, length(time))
+    stim_frame_trial <- stim_frame[(stim_frame$trial_type == trial_types[m]),]
+    for (n in 1:length(stim_frame_trial$onset)) {
+      ind <- which.min(Mod(time - stim_frame_trial$onset[n]))
+      stim[ind] <- 1
+      if (Mod(stim_frame_trial$onset[n] - time[ind]) > 0.01) {
+        warning("onset and output impulse differ by more than 10 ms")
+      }
+    }
+    output_frame[, m] <- stim
+  }
+  output_frame <- cbind(time, output_frame)
+  
+  return(output_frame)
 }
