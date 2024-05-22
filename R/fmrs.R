@@ -29,7 +29,7 @@ gen_trap_rf <- function(onset, duration, trial_type = NULL, mrs_data,
          number of transients.")
   }
   
-  if (is.null(trial_type)) trial_type <- rep("stim", length(onset))
+  if (is.null(trial_type)) trial_type <- rep("stim_metab", length(onset))
   
   # check everything is the right length 
   input_lengths <- c(length(onset), length(duration), length(trial_type))
@@ -155,7 +155,7 @@ gen_bold_rf <- function(onset, duration, trial_type = NULL, mrs_data,
          number of transients.")
   }
   
-  if (is.null(trial_type)) trial_type <- rep("stim", length(onset))
+  if (is.null(trial_type)) trial_type <- rep("stim_bold", length(onset))
   
   # check everything is the right length 
   input_lengths <- c(length(onset), length(duration), length(trial_type))
