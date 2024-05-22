@@ -7,7 +7,7 @@
 gen_trap_rf(
   onset,
   duration,
-  trial_type,
+  trial_type = NULL,
   mrs_data,
   rise_t = 0,
   fall_t = 0,

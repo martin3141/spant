@@ -15,10 +15,10 @@
 #' one.
 #' @return trapezoidal response function.
 #' @export
-gen_trap_rf <- function(onset, duration, trial_type, mrs_data, rise_t = 0,
-                        fall_t = 0, exp_fall = FALSE, exp_fall_power = 1,
-                        smo_sigma = NULL, match_tr = TRUE, dt = 0.01,
-                        normalise = FALSE) {
+gen_trap_rf <- function(onset, duration, trial_type = NULL, mrs_data,
+                        rise_t = 0, fall_t = 0, exp_fall = FALSE,
+                        exp_fall_power = 1, smo_sigma = NULL, match_tr = TRUE,
+                        dt = 0.01, normalise = FALSE) {
                          
   if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
     stop("TR not set, use set_tr function to set the repetition time.")
@@ -28,6 +28,8 @@ gen_trap_rf <- function(onset, duration, trial_type, mrs_data, rise_t = 0,
     stop("Number of transients not set, use set_Ntrans function to set the 
          number of transients.")
   }
+  
+  if (is.null(trial_type)) trial_type <- rep("stim", length(onset))
   
   # check everything is the right length 
   input_lengths <- c(length(onset), length(duration), length(trial_type))
@@ -141,8 +143,8 @@ gen_trap_rf <- function(onset, duration, trial_type, mrs_data, rise_t = 0,
 #' @param dt timing resolution for internal calculations.
 #' @return BOLD response function.
 #' @export
-gen_bold_rf <- function(onset, duration, trial_type, mrs_data, match_tr = TRUE,
-                        dt = 0.1) {
+gen_bold_rf <- function(onset, duration, trial_type = NULL, mrs_data,
+                        match_tr = TRUE, dt = 0.1) {
   
   if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
     stop("TR not set, use set_tr function to set the repetition time.")
@@ -152,6 +154,8 @@ gen_bold_rf <- function(onset, duration, trial_type, mrs_data, match_tr = TRUE,
     stop("Number of transients not set, use set_Ntrans function to set the 
          number of transients.")
   }
+  
+  if (is.null(trial_type)) trial_type <- rep("stim", length(onset))
   
   # check everything is the right length 
   input_lengths <- c(length(onset), length(duration), length(trial_type))

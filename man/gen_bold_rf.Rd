@@ -4,7 +4,14 @@
 \alias{gen_bold_rf}
 \title{Generate a BOLD response function.}
 \usage{
-gen_bold_rf(onset, duration, trial_type, mrs_data, match_tr = TRUE, dt = 0.1)
+gen_bold_rf(
+  onset,
+  duration,
+  trial_type = NULL,
+  mrs_data,
+  match_tr = TRUE,
+  dt = 0.1
+)
 }
 \arguments{
 \item{onset}{stimulus onset in seconds.}
