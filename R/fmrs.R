@@ -15,10 +15,19 @@
 #' one.
 #' @return trapezoidal regressor data frame.
 #' @export
-gen_trap_reg <- function(onset, duration, trial_type = NULL, mrs_data,
+gen_trap_reg <- function(onset, duration, trial_type = NULL, mrs_data = NULL,
                          rise_t = 0, fall_t = 0, exp_fall = FALSE,
                          exp_fall_power = 1, smo_sigma = NULL, match_tr = TRUE,
                          dt = 0.01, normalise = FALSE) {
+  
+  if (is.null(mrs_data)) {
+    seq_tr   <- 1
+    N_scans  <- 800
+    mrs_data <- sim_resonances()
+    mrs_data <- set_tr(mrs_data, seq_tr)
+    mrs_data <- set_Ntrans(mrs_data, N_scans)
+    mrs_data <- rep_dyn(mrs_data, N_scans)
+  }
                          
   if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
     stop("TR not set, use set_tr function to set the repetition time.")
@@ -33,9 +42,7 @@ gen_trap_reg <- function(onset, duration, trial_type = NULL, mrs_data,
   
   # check everything is the right length 
   input_lengths <- c(length(onset), length(duration), length(trial_type))
-  if (length(unique(input_lengths)) != 1) {
-    stop("Stim length input error.")
-  }
+  if (length(unique(input_lengths)) != 1) stop("Stim length input error.")
   
   # make a time scale with dt seconds resolution for the duration of the scan
   # time
@@ -143,8 +150,23 @@ gen_trap_reg <- function(onset, duration, trial_type = NULL, mrs_data,
 #' @param dt timing resolution for internal calculations.
 #' @return BOLD regressor data frame.
 #' @export
-gen_bold_reg <- function(onset, duration, trial_type = NULL, mrs_data,
-                         match_tr = TRUE, dt = 0.1) {
+gen_bold_reg <- function(onset, duration = NULL, trial_type = NULL,
+                         mrs_data = NULL, match_tr = TRUE, dt = 0.1) {
+  
+  # create a dummy dataset if not specified
+  if (is.null(mrs_data)) {
+    seq_tr   <- 2
+    N_scans  <- 800
+    mrs_data <- sim_resonances()
+    mrs_data <- set_tr(mrs_data, seq_tr)
+    mrs_data <- set_Ntrans(mrs_data, N_scans)
+    mrs_data <- rep_dyn(mrs_data, N_scans)
+  }
+  
+  if (is.null(duration)) duration <- rep(dt, length(onset))
+  
+  # set the minimum duration to dt
+  duration[duration < dt] <- dt
   
   if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
     stop("TR not set, use set_tr function to set the repetition time.")
@@ -159,9 +181,7 @@ gen_bold_reg <- function(onset, duration, trial_type = NULL, mrs_data,
   
   # check everything is the right length 
   input_lengths <- c(length(onset), length(duration), length(trial_type))
-  if (length(unique(input_lengths)) != 1) {
-    stop("Stim length input error.")
-  }
+  if (length(unique(input_lengths)) != 1) stop("Stim length input error.")
   
   # make a time scale with dt seconds resolution for the duration of the scan
   # time
@@ -185,6 +205,8 @@ gen_bold_reg <- function(onset, duration, trial_type = NULL, mrs_data,
   output_frame <- data.frame(empty_mat)
   colnames(output_frame) <- c("time", trial_types)
   
+  resp_fn   <- gen_hrf(res_t = dt)$hrf
+    
   for (m in 1:trial_type_n) {
     stim_fine <- rep(0, length(t_fine))
     
@@ -196,7 +218,6 @@ gen_bold_reg <- function(onset, duration, trial_type = NULL, mrs_data,
                 t_fine < stim_frame_trial$end[n]] <- 1
     }
     
-    resp_fn   <- gen_hrf(res_t = dt)$hrf
     stim_fine <- stats::convolve(stim_fine, rev(resp_fn), type = 'open')
     stim_fine <- stim_fine[1:length(t_fine)]
     
@@ -225,11 +246,180 @@ gen_bold_reg <- function(onset, duration, trial_type = NULL, mrs_data,
   return(output_frame)
 }
 
+#' Generate regressors by convolving a specified response function with a
+#' stimulus.
+#' @param onset stimulus onset in seconds.
+#' @param duration stimulus duration in seconds.
+#' @param trial_type string label for the stimulus.
+#' @param mrs_data mrs_data object for timing information.
+#' @param resp_fn a data frame specifying the response function to be convolved.
+#' @param match_tr match the output to the input mrs_data.
+#' @return BOLD regressor data frame.
+#' @export
+gen_conv_reg <- function(onset, duration = NULL, trial_type = NULL,
+                         mrs_data = NULL, resp_fn, match_tr = TRUE) {
+  
+  # create a dummy dataset if not specified
+  if (is.null(mrs_data)) {
+    seq_tr   <- 2
+    N_scans  <- 800
+    mrs_data <- sim_resonances()
+    mrs_data <- set_tr(mrs_data, seq_tr)
+    mrs_data <- set_Ntrans(mrs_data, N_scans)
+    mrs_data <- rep_dyn(mrs_data, N_scans)
+  }
+  
+  dt <- resp_fn[2, 1] - resp_fn[1, 1]
+  
+  if (is.null(duration)) duration <- rep(dt, length(onset))
+  
+  # set the minimum duration to dt
+  duration[duration < dt] <- dt
+  
+  if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
+    stop("TR not set, use set_tr function to set the repetition time.")
+  }
+  
+  if (is.na(Ntrans(mrs_data)) | is.null(Ntrans(mrs_data))) {
+    stop("Number of transients not set, use set_Ntrans function to set the 
+         number of transients.")
+  }
+  
+  if (is.null(trial_type)) trial_type <- rep("stim_conv", length(onset))
+  
+  # check everything is the right length 
+  input_lengths <- c(length(onset), length(duration), length(trial_type))
+  if (length(unique(input_lengths)) != 1) {
+    print(input_lengths)
+    stop("Stim length input error.")
+  }
+  
+  # make a time scale with dt seconds resolution for the duration of the scan
+  # time
+  n_trans   <- mrs_data$meta$NumberOfTransients
+  TR        <- tr(mrs_data)
+  n_dyns    <- Ndyns(mrs_data)
+  t_fine    <- seq(from = 0, to = n_trans * TR - TR, by = dt)
+  end       <- onset + duration
+  
+  stim_frame   <- data.frame(onset, end, trial_type)
+  
+  trial_types  <- unique(trial_type)
+  trial_type_n <- length(trial_types)
+  
+  if (match_tr) {
+    empty_mat <- matrix(NA, nrow = n_dyns, ncol = trial_type_n + 1)
+  } else {
+    empty_mat <- matrix(NA, nrow = length(t_fine), ncol = trial_type_n + 1)
+  }
+  
+  output_frame <- data.frame(empty_mat)
+  colnames(output_frame) <- c("time", trial_types)
+  
+  resp_fn <- resp_fn[,2] 
+    
+  for (m in 1:trial_type_n) {
+    stim_fine <- rep(0, length(t_fine))
+    
+    # filter out the stim of interest
+    stim_frame_trial <- stim_frame[(stim_frame$trial_type == trial_types[m]),]
+    
+    for (n in 1:length(stim_frame_trial$onset)) {
+      stim_fine[t_fine >= stim_frame_trial$onset[n] & 
+                t_fine < stim_frame_trial$end[n]] <- 1
+    }
+    
+    stim_fine <- stats::convolve(stim_fine, rev(resp_fn), type = 'open')
+    stim_fine <- stim_fine[1:length(t_fine)]
+    
+    t_acq    <- seq(from = 0, by = TR, length.out = n_trans)
+    stim_acq <- stats::approx(t_fine, stim_fine, t_acq, method='linear')$y
+    
+    if (n_trans != n_dyns) {
+      if (n_trans%%n_dyns != 0) stop("Dynamics and transients do not match")
+      
+      block_size <- n_trans / n_dyns
+      
+      t_acq    <- colMeans(matrix(t_acq, nrow = block_size))
+      stim_acq <- colMeans(matrix(stim_acq, nrow = block_size))
+    }
+    
+    if (match_tr) {
+      if (m == 1) output_frame[, 1] <- t_acq
+      output_frame[, (1 + m)] <- stim_acq
+    } else {
+      if (m == 1) output_frame[, 1] <- t_fine
+      output_frame[, (1 + m)] <- stim_fine
+    }
+    
+  }
+  
+  return(output_frame)
+}
+
+#' Generate impulse regressors.
+#' @param onset stimulus onset in seconds.
+#' @param trial_type string label for the stimulus.
+#' @param mrs_data mrs_data object for timing information.
+#' @return impulse regressors data frame.
+#' @export
+gen_impulse_reg <- function(onset, trial_type = NULL, mrs_data = NULL) {
+  
+  if (is.null(mrs_data)) {
+    seq_tr   <- 1
+    N_scans  <- 800
+    mrs_data <- sim_resonances()
+    mrs_data <- set_tr(mrs_data, seq_tr)
+    mrs_data <- set_Ntrans(mrs_data, N_scans)
+    mrs_data <- rep_dyn(mrs_data, N_scans)
+  }
+  
+  if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
+    stop("TR not set, use set_tr function to set the repetition time.")
+  }
+  
+  if (is.na(Ntrans(mrs_data)) | is.null(Ntrans(mrs_data))) {
+    stop("Number of transients not set, use set_Ntrans function to set the 
+         number of transients.")
+  }
+  
+  if (is.null(trial_type)) trial_type <- rep("stim_imp", length(onset))
+  
+  trial_types  <- unique(trial_type)
+  trial_type_n <- length(trial_types)
+  
+  stim_frame <- data.frame(onset, trial_type)
+ 
+  n_dyns    <- Ndyns(mrs_data)
+  empty_mat <- matrix(NA, nrow = n_dyns, ncol = trial_type_n)
+  
+  output_frame <- data.frame(empty_mat)
+  colnames(output_frame) <- c(trial_types)
+    
+  time <- dyn_acq_times(mrs_data)
+  
+  for (m in 1:trial_type_n) {
+    stim <- rep(0, length(time))
+    stim_frame_trial <- stim_frame[(stim_frame$trial_type == trial_types[m]),]
+    for (n in 1:length(stim_frame_trial$onset)) {
+      ind <- which.min(Mod(time - stim_frame_trial$onset[n]))
+      stim[ind] <- 1
+      if (Mod(stim_frame_trial$onset[n] - time[ind]) > 0.01) {
+        warning("onset and output impulse differ by more than 10 ms")
+      }
+    }
+    output_frame[, m] <- stim
+  }
+  output_frame <- cbind(time, output_frame)
+  
+  return(output_frame)
+}
+
 # gen double gamma model of hrf (as used in SPM) with 10ms resolution
 # https://github.com/spm/spm12/blob/main/spm_hrf.m
 gen_hrf <- function(end_t = 30, res_t = 0.01) {
   t_hrf <- seq(from = 0, to = end_t, by = res_t)
-  a1 <- 6; a2 <- 16; b1 <- 1; b2 <- 1; c <- 1/6
+  a1 <- 6; a2 <- 16; b1 <- 1; b2 <- 1; c <- 1 / 6
   hrf <-     t_hrf ^ (a1 - 1) * b1 ^ a1 * exp(-b1 * t_hrf) / gamma(a1) -
          c * t_hrf ^ (a2 - 1) * b2 ^ a2 * exp(-b2 * t_hrf) / gamma(a2)
   hrf <- hrf / sum(hrf)
@@ -355,51 +545,3 @@ gen_poly_reg <- function(mrs_data, degree) {
   return(reg_df)
 }
 
-#' Generate impulse regressors.
-#' @param onset stimulus onset in seconds.
-#' @param trial_type string label for the stimulus.
-#' @param mrs_data mrs_data object for timing information.
-#' @return impulse regressors data frame.
-#' @export
-gen_impulse_reg <- function(onset, trial_type = NULL, mrs_data) {
-  
-  if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
-    stop("TR not set, use set_tr function to set the repetition time.")
-  }
-  
-  if (is.na(Ntrans(mrs_data)) | is.null(Ntrans(mrs_data))) {
-    stop("Number of transients not set, use set_Ntrans function to set the 
-         number of transients.")
-  }
-  
-  if (is.null(trial_type)) trial_type <- rep("stim_imp", length(onset))
-  
-  trial_types  <- unique(trial_type)
-  trial_type_n <- length(trial_types)
-  
-  stim_frame <- data.frame(onset, trial_type)
- 
-  n_dyns    <- Ndyns(mrs_data)
-  empty_mat <- matrix(NA, nrow = n_dyns, ncol = trial_type_n)
-  
-  output_frame <- data.frame(empty_mat)
-  colnames(output_frame) <- c(trial_types)
-    
-  time <- dyn_acq_times(mrs_data)
-  
-  for (m in 1:trial_type_n) {
-    stim <- rep(0, length(time))
-    stim_frame_trial <- stim_frame[(stim_frame$trial_type == trial_types[m]),]
-    for (n in 1:length(stim_frame_trial$onset)) {
-      ind <- which.min(Mod(time - stim_frame_trial$onset[n]))
-      stim[ind] <- 1
-      if (Mod(stim_frame_trial$onset[n] - time[ind]) > 0.01) {
-        warning("onset and output impulse differ by more than 10 ms")
-      }
-    }
-    output_frame[, m] <- stim
-  }
-  output_frame <- cbind(time, output_frame)
-  
-  return(output_frame)
-}

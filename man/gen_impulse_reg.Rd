@@ -4,7 +4,7 @@
 \alias{gen_impulse_reg}
 \title{Generate impulse regressors.}
 \usage{
-gen_impulse_reg(onset, trial_type = NULL, mrs_data)
+gen_impulse_reg(onset, trial_type = NULL, mrs_data = NULL)
 }
 \arguments{
 \item{onset}{stimulus onset in seconds.}

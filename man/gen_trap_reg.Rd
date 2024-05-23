@@ -8,7 +8,7 @@ gen_trap_reg(
   onset,
   duration,
   trial_type = NULL,
-  mrs_data,
+  mrs_data = NULL,
   rise_t = 0,
   fall_t = 0,
   exp_fall = FALSE,
