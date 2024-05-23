@@ -11,7 +11,8 @@ gen_conv_reg(
   trial_type = NULL,
   mrs_data = NULL,
   resp_fn,
-  match_tr = TRUE
+  match_tr = TRUE,
+  normalise = FALSE
 )
 }
 \arguments{
@@ -26,6 +27,9 @@ gen_conv_reg(
 \item{resp_fn}{a data frame specifying the response function to be convolved.}
 
 \item{match_tr}{match the output to the input mrs_data.}
+
+\item{normalise}{normalise the response function to have a maximum value of
+one.}
 }
 \value{
 BOLD regressor data frame.

@@ -254,10 +254,13 @@ gen_bold_reg <- function(onset, duration = NULL, trial_type = NULL,
 #' @param mrs_data mrs_data object for timing information.
 #' @param resp_fn a data frame specifying the response function to be convolved.
 #' @param match_tr match the output to the input mrs_data.
+#' @param normalise normalise the response function to have a maximum value of 
+#' one.
 #' @return BOLD regressor data frame.
 #' @export
 gen_conv_reg <- function(onset, duration = NULL, trial_type = NULL,
-                         mrs_data = NULL, resp_fn, match_tr = TRUE) {
+                         mrs_data = NULL, resp_fn, match_tr = TRUE,
+                         normalise = FALSE) {
   
   # create a dummy dataset if not specified
   if (is.null(mrs_data)) {
@@ -331,6 +334,8 @@ gen_conv_reg <- function(onset, duration = NULL, trial_type = NULL,
     
     stim_fine <- stats::convolve(stim_fine, rev(resp_fn), type = 'open')
     stim_fine <- stim_fine[1:length(t_fine)]
+    
+    if (normalise) stim_fine <- stim_fine / max(stim_fine)
     
     t_acq    <- seq(from = 0, by = TR, length.out = n_trans)
     stim_acq <- stats::approx(t_fine, stim_fine, t_acq, method='linear')$y
