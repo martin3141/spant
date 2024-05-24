@@ -21,7 +21,7 @@ gen_trap_reg <- function(onset, duration, trial_type = NULL, mrs_data = NULL,
                          dt = 0.01, normalise = FALSE) {
   
   if (is.null(mrs_data)) {
-    seq_tr   <- 1
+    seq_tr   <- 2
     N_scans  <- 800
     mrs_data <- sim_resonances()
     mrs_data <- set_tr(mrs_data, seq_tr)
@@ -395,7 +395,7 @@ gen_conv_reg <- function(onset, duration = NULL, trial_type = NULL,
 gen_impulse_reg <- function(onset, trial_type = NULL, mrs_data = NULL) {
   
   if (is.null(mrs_data)) {
-    seq_tr   <- 1
+    seq_tr   <- 2
     N_scans  <- 800
     mrs_data <- sim_resonances()
     mrs_data <- set_tr(mrs_data, seq_tr)
