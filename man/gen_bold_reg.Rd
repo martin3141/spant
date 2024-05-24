@@ -10,7 +10,8 @@ gen_bold_reg(
   trial_type = NULL,
   mrs_data = NULL,
   match_tr = TRUE,
-  dt = 0.1
+  dt = 0.1,
+  normalise = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,9 @@ gen_bold_reg(
 \item{match_tr}{match the output to the input mrs_data.}
 
 \item{dt}{timing resolution for internal calculations.}
+
+\item{normalise}{normalise the response function to have a maximum value of
+one.}
 }
 \value{
 BOLD regressor data frame.
