@@ -150,10 +150,13 @@ gen_trap_reg <- function(onset, duration, trial_type = NULL, mrs_data = NULL,
 #' @param mrs_data mrs_data object for timing information.
 #' @param match_tr match the output to the input mrs_data.
 #' @param dt timing resolution for internal calculations.
+#' @param normalise normalise the response function to have a maximum value of 
+#' one.
 #' @return BOLD regressor data frame.
 #' @export
 gen_bold_reg <- function(onset, duration = NULL, trial_type = NULL,
-                         mrs_data = NULL, match_tr = TRUE, dt = 0.1) {
+                         mrs_data = NULL, match_tr = TRUE, dt = 0.1,
+                         normalise = FALSE) {
   
   # create a dummy dataset if not specified
   if (is.null(mrs_data)) {
@@ -167,8 +170,9 @@ gen_bold_reg <- function(onset, duration = NULL, trial_type = NULL,
   
   if (is.null(duration)) duration <- rep(dt, length(onset))
   
-  # set the minimum duration to dt
-  duration[duration < dt] <- dt
+  # set the minimum duration to dt * 1.1
+  min_dur <- dt * 1.1
+  duration[duration < min_dur] <- min_dur
   
   if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
     stop("TR not set, use set_tr function to set the repetition time.")
@@ -190,10 +194,10 @@ gen_bold_reg <- function(onset, duration = NULL, trial_type = NULL,
   n_trans   <- mrs_data$meta$NumberOfTransients
   TR        <- tr(mrs_data)
   n_dyns    <- Ndyns(mrs_data)
-  t_fine    <- seq(from = 0, to = n_trans * TR - TR, by = dt)
+  t_fine    <- seq(from = 0, to = n_trans * TR, by = dt)
   end       <- onset + duration
   
-  stim_frame <- data.frame(onset, end, trial_type)
+  stim_frame   <- data.frame(onset, end, trial_type, duration)
   
   trial_types  <- unique(trial_type)
   trial_type_n <- length(trial_types)
@@ -216,15 +220,25 @@ gen_bold_reg <- function(onset, duration = NULL, trial_type = NULL,
     stim_frame_trial <- stim_frame[(stim_frame$trial_type == trial_types[m]),]
     
     for (n in 1:length(stim_frame_trial$onset)) {
-      stim_fine[t_fine >= stim_frame_trial$onset[n] & 
-                t_fine < stim_frame_trial$end[n]] <- 1
+      index_bool <- t_fine >= stim_frame_trial$onset[n] & 
+                    t_fine < stim_frame_trial$end[n]
+      index <- which(index_bool)
+      
+      # only use one point if an impulse
+      if (stim_frame_trial$duration[n] == min_dur) index <- index[1]
+      
+      stim_fine[index] <- 1
     }
     
     stim_fine <- stats::convolve(stim_fine, rev(resp_fn), type = 'open')
     stim_fine <- stim_fine[1:length(t_fine)]
     
+    if (normalise) stim_fine <- stim_fine / max(stim_fine)
+    
     t_acq    <- seq(from = 0, by = TR, length.out = n_trans)
     stim_acq <- stats::approx(t_fine, stim_fine, t_acq, method='linear')$y
+    
+    if (normalise) stim_acq <- stim_acq / max(stim_acq)
     
     if (n_trans != n_dyns) {
       if (n_trans%%n_dyns != 0) stop("Dynamics and transients do not match")
@@ -305,7 +319,7 @@ gen_conv_reg <- function(onset, duration = NULL, trial_type = NULL,
   n_trans   <- mrs_data$meta$NumberOfTransients
   TR        <- tr(mrs_data)
   n_dyns    <- Ndyns(mrs_data)
-  t_fine    <- seq(from = 0, to = n_trans * TR - TR, by = dt)
+  t_fine    <- seq(from = 0, to = n_trans * TR, by = dt)
   end       <- onset + duration
   
   stim_frame   <- data.frame(onset, end, trial_type, duration)
