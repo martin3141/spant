@@ -276,10 +276,11 @@ gen_conv_reg <- function(onset, duration = NULL, trial_type = NULL,
   
   dt <- resp_fn[2, 1] - resp_fn[1, 1]
   
-  if (is.null(duration)) duration <- rep(dt, length(onset))
+  if (is.null(duration)) duration <- rep(0, length(onset))
   
-  # set the minimum duration to dt
-  duration[duration < dt] <- dt
+  # set the minimum duration to dt * 1.1
+  min_dur <- dt * 1.1
+  duration[duration < min_dur] <- min_dur
   
   if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
     stop("TR not set, use set_tr function to set the repetition time.")
@@ -307,7 +308,7 @@ gen_conv_reg <- function(onset, duration = NULL, trial_type = NULL,
   t_fine    <- seq(from = 0, to = n_trans * TR - TR, by = dt)
   end       <- onset + duration
   
-  stim_frame   <- data.frame(onset, end, trial_type)
+  stim_frame   <- data.frame(onset, end, trial_type, duration)
   
   trial_types  <- unique(trial_type)
   trial_type_n <- length(trial_types)
@@ -330,8 +331,13 @@ gen_conv_reg <- function(onset, duration = NULL, trial_type = NULL,
     stim_frame_trial <- stim_frame[(stim_frame$trial_type == trial_types[m]),]
     
     for (n in 1:length(stim_frame_trial$onset)) {
-      stim_fine[t_fine >= stim_frame_trial$onset[n] & 
-                t_fine < stim_frame_trial$end[n]] <- 1
+      index_bool <- t_fine >= stim_frame_trial$onset[n] & 
+                    t_fine < stim_frame_trial$end[n]
+      index <- which(index_bool)
+      
+      # only use one point if an impulse
+      if (stim_frame_trial$duration[n] == min_dur) index <- index[1]
+      stim_fine[index] <- 1
     }
     
     stim_fine <- stats::convolve(stim_fine, rev(resp_fn), type = 'open')
