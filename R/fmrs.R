@@ -238,7 +238,7 @@ gen_bold_reg <- function(onset, duration = NULL, trial_type = NULL,
     t_acq    <- seq(from = 0, by = TR, length.out = n_trans)
     stim_acq <- stats::approx(t_fine, stim_fine, t_acq, method='linear')$y
     
-    if (normalise) stim_acq <- stim_acq / max(stim_acq)
+    # if (normalise) stim_acq <- stim_acq / max(stim_acq)
     
     if (n_trans != n_dyns) {
       if (n_trans%%n_dyns != 0) stop("Dynamics and transients do not match")
@@ -362,7 +362,7 @@ gen_conv_reg <- function(onset, duration = NULL, trial_type = NULL,
     t_acq    <- seq(from = 0, by = TR, length.out = n_trans)
     stim_acq <- stats::approx(t_fine, stim_fine, t_acq, method='linear')$y
     
-    if (normalise) stim_acq <- stim_acq / max(stim_acq)
+    # if (normalise) stim_acq <- stim_acq / max(stim_acq)
     
     if (n_trans != n_dyns) {
       if (n_trans%%n_dyns != 0) stop("Dynamics and transients do not match")
