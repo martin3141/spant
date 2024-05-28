@@ -281,16 +281,22 @@ basis2mrs_data <- function(basis, sum_elements = FALSE, amps = NULL,
   res
 }
 
+#' Convert a basis object to a dynamic mrs_data object.
+#' @param basis basis set object.
+#' @param amps a data frame with each column corresponding to a basis element
+#' and each row corresponding to each dynamic scan.
+#' @param tr the dataset repetition time in seconds.
+#' @return a dynamic mrs_data object.
 #' @export
-basis2dyn_mrs_data <- function(basis, basis_amps, tr) {
-  mrs_list <- vector(mode = "list", length = nrow(basis_amps))
-  for (n in 1:nrow(basis_amps)) {
-    amps_n <- as.numeric(basis_amps[n,])
+basis2dyn_mrs_data <- function(basis, amps, tr) {
+  mrs_list <- vector(mode = "list", length = nrow(amps))
+  for (n in 1:nrow(amps)) {
+    amps_n <- as.numeric(amps[n,])
     mrs_list[[n]] <- basis2mrs_data(basis, sum_elements = TRUE, amps = amps_n)
   }
   mrs_data <- append_dyns(mrs_list) 
   mrs_data <- set_tr(mrs_data, tr) 
-  mrs_data <- set_Ntrans(mrs_data, nrow(basis_amps)) 
+  mrs_data <- set_Ntrans(mrs_data, nrow(amps)) 
   return(mrs_data)
 }
 
