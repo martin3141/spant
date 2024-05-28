@@ -42,7 +42,10 @@ gen_trap_reg <- function(onset, duration, trial_type = NULL, mrs_data = NULL,
   
   # check everything is the right length 
   input_lengths <- c(length(onset), length(duration), length(trial_type))
-  if (length(unique(input_lengths)) != 1) stop("Stim length input error.")
+  if (length(unique(input_lengths)) != 1) {
+    print(input_lengths)
+    stop("Stim length input error.")
+  }
   
   # make a time scale with dt seconds resolution for the duration of the scan
   # time
