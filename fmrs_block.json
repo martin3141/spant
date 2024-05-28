@@ -1,0 +1,10 @@
+{
+  "SpectrometerFrequency": 127.8,
+  "ResonantNucleus": "1H",
+  "SpectralWidth": 2000,
+  "NumberOfSpectralPoints": 1024,
+  "AcquisitionVoxelSize": ["NA", "NA", "NA"],
+  "ChemicalShiftOffset": 4.65,
+  "RepetitionTime": 2,
+  "NumberOfTransients": 448
+}
