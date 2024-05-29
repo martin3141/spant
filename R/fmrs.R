@@ -651,3 +651,49 @@ auto_pad_seq <- function(x, min_pad = 2) {
   fmt_string <- paste0("%0", pad_n, "d")
   return(sprintf(fmt_string, x))
 }
+
+#' Search for MRS data files in a BIDS filesystem structure.
+#' @param path path to the directory containing the BIDS structure.
+#' @return data frame containing full paths and information on each MRS file.
+#' @export
+find_bids_mrs <- function(path) {
+  
+  # find the "mrs" directories
+  mrs_dirs <- dir(path, recursive = TRUE, include.dirs = TRUE, pattern = "mrs",
+                  full.names = TRUE)
+  
+  # list all files in "mrs" directories
+  mrs_paths <- list.files(mrs_dirs, full.names = TRUE)
+  
+  # remove any .json files
+  mrs_paths <- grep(".json$", mrs_paths, invert = TRUE, value = TRUE)
+  
+  mrs_names <- basename(mrs_paths)
+  mrs_names <- tools::file_path_sans_ext(tools::file_path_sans_ext(mrs_names))
+  
+  tags    <- strsplit(mrs_names, "_")
+  tags_ul <- unlist(tags)
+  
+  sub <- grep("sub-", tags_ul, value = TRUE)
+  sub <- substring(sub, 5)
+  
+  mrs_info <- data.frame(path = mrs_paths, sub = sub)
+  
+  ses <- grep("ses-", tags_ul, value = TRUE)
+  if (length(ses) != 0) {
+    ses <- substring(ses, 5)
+    mrs_info <- cbind(mrs_info, ses)
+  }
+  
+  run <- grep("run-", tags_ul, value = TRUE)
+  if (length(run) != 0) {
+    run <- substring(run, 5)
+    mrs_info <- cbind(mrs_info, run)
+  }
+  
+  suffix <- grep("-", tags_ul, value = TRUE, invert = TRUE)
+  
+  mrs_info <- cbind(mrs_info, suffix)
+ 
+  return(mrs_info) 
+}
