@@ -577,3 +577,77 @@ gen_poly_reg <- function(mrs_data, degree) {
   return(reg_df)
 }
 
+#' Create a BIDS directory and file structure from a list of mrs_data objects.
+#' @param mrs_data_list list of mrs_data objects.
+#' @param output_dir the base directory to create the BIDS structure.
+#' @param runs number of runs per subject and session.
+#' @param sessions number of sessions.
+#' @param sub_labels optional labels for subject level identification.
+#' @export
+mrs_data_list2bids <- function(mrs_data_list, output_dir, runs = 1,
+                               sessions = 1, sub_labels = NULL) {
+  
+  Nmrs <- length(mrs_data_list)
+  
+  # check the number of datasets can be cleanly divided by the number of runs
+  # and sessions
+  if ((Nmrs %% (runs * sessions)) != 0) stop("inconsistent number of datasets")
+  
+  Nsubs <- Nmrs / runs / sessions
+  
+  if (is.null(sub_labels)) sub_labels <- auto_pad_seq(1:Nsubs)
+  
+  if (Nsubs != length(sub_labels)) stop("inconsistent subject labels")
+  
+  sub_labels <- paste0("sub-", sub_labels)
+  sub_labels <- rep(sub_labels, each = runs * sessions)
+  
+  if (sessions != 1) {
+    ses_labels <- auto_pad_seq(1:sessions)
+    ses_labels <- paste0("ses-", ses_labels)
+    ses_labels <- rep(ses_labels, each = runs)
+    ses_labels <- rep(ses_labels, Nsubs * sessions)
+  }
+  
+  if (runs != 1) {
+    run_labels <- auto_pad_seq(1:runs)
+    run_labels <- paste0("run-", run_labels)
+    run_labels <- rep(run_labels, runs * sessions * Nsubs)
+  }
+  
+  # construct the directories
+  if (sessions == 1) {
+    dirs <- file.path(output_dir, sub_labels, "mrs")
+  } else {
+    dirs <- file.path(output_dir, sub_labels, ses_labels, "mrs")
+  }
+  
+  # create the directories
+  for (dir in dirs) dir.create(dir, recursive = TRUE, showWarnings = FALSE)
+  
+  # construct the filenames
+  fnames <- paste0(sub_labels)
+  
+  if (sessions != 1) fnames <- paste0(fnames, "_", ses_labels)
+  
+  if (runs != 1) fnames <- paste0(fnames, "_", run_labels)
+  
+  fnames <- paste0(fnames, "_svs.nii.gz")
+  
+  # construct the full path
+  full_path <- file.path(dirs, fnames)
+  
+  # write the data
+  for (n in 1:Nmrs) {
+    write_mrs(mrs_data_list[[n]], fname = full_path[n], format = "nifti",
+              force = TRUE) 
+  }
+}
+
+auto_pad_seq <- function(x, min_pad = 2) {
+  x_int <- sprintf("%d", x)
+  pad_n <- max(nchar(x_int))
+  if (pad_n < min_pad) pad_n <- min_pad
+  fmt_string <- paste0("%0", pad_n, "d")
+  return(sprintf(fmt_string, x))
+}

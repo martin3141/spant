@@ -311,6 +311,11 @@ sim_noise <- function(sd = 0.1, fs = def_fs(), ft = def_ft(), N = def_N(),
 #' @export
 add_noise <- function(mrs_data, sd = 0.1, fd = TRUE) {
   
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, add_noise, sd = sd, fd = fd)
+    return(res)
+  }
+  
   # covert data to the frequency domain if needed
   if (fd & !is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
@@ -318,20 +323,28 @@ add_noise <- function(mrs_data, sd = 0.1, fd = TRUE) {
   if (!fd & is_fd(mrs_data)) mrs_data <- fd2td(mrs_data)
  
   data_pts <- length(mrs_data$data)
-  noise <- stats::rnorm(data_pts, 0, sd) + 1i*stats::rnorm(data_pts, 0, sd)
+  noise <- stats::rnorm(data_pts, 0, sd) + 1i * stats::rnorm(data_pts, 0, sd)
   mrs_data$data <- mrs_data$data + noise
   mrs_data
 }
 
-#' Add noise to an mrs_data object.
+#' Add noise to an mrs_data object to match a given SNR.
 #' @param mrs_data data to add noise to.
 #' @param target_snr desired spectral SNR, note this assumes the input data is
-#' noise-free, eg simulated data.
+#' noise-free, eg simulated data. Note the SNR is estimated from the first 
+#' scan in the dataset and the same noise level is added to all spectra.
 #' @param sig_region spectral limits to search for the strongest spectral data
 #' point.
 #' @return mrs_data object with additive normally distributed noise.
 #' @export
 add_noise_spec_snr <- function(mrs_data, target_snr, sig_region = c(4, 0.5)) {
+  
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, add_noise_spec_snr, target_snr = target_snr,
+                  sig_region = sig_region)
+    return(res)
+  }
+  
   # measure max signal from the first scan and add noise
   first_scan  <- get_subset(mrs_data, 1, 1, 1, 1, 1)
   peak_height <- calc_spec_snr(mrs_data, sig_region = sig_region,
