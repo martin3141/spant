@@ -677,23 +677,23 @@ find_bids_mrs <- function(path) {
   sub <- grep("sub-", tags_ul, value = TRUE)
   sub <- substring(sub, 5)
   
-  mrs_info <- data.frame(path = mrs_paths, sub = sub)
+  mrs_info <- data.frame(path = mrs_paths, sub = as.factor(sub))
   
   ses <- grep("ses-", tags_ul, value = TRUE)
   if (length(ses) != 0) {
     ses <- substring(ses, 5)
-    mrs_info <- cbind(mrs_info, ses)
+    mrs_info <- cbind(mrs_info, ses = as.factor(ses))
   }
   
   run <- grep("run-", tags_ul, value = TRUE)
   if (length(run) != 0) {
     run <- substring(run, 5)
-    mrs_info <- cbind(mrs_info, run)
+    mrs_info <- cbind(mrs_info, run = as.factor(run))
   }
   
   suffix <- grep("-", tags_ul, value = TRUE, invert = TRUE)
   
-  mrs_info <- cbind(mrs_info, suffix)
+  mrs_info <- cbind(mrs_info, suffix = as.factor(suffix))
  
   return(mrs_info) 
 }
