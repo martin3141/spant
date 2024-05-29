@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.20.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.21.0</span>
       </span>
     </div>
 
@@ -150,6 +150,10 @@ analyses performed with version 1.9.0 (and earlier) of spant.</p></td>
         </td>
         <td><p>Add noise to an mrs_data object.</p></td>
       </tr><tr><td>
+          <p><code><a href="add_noise_spec_snr.html">add_noise_spec_snr()</a></code> </p>
+        </td>
+        <td><p>Add noise to an mrs_data object to match a given SNR.</p></td>
+      </tr><tr><td>
           <p><code><a href="align.html">align()</a></code> </p>
         </td>
         <td><p>Align spectra to a reference frequency using a convolution based method.</p></td>
@@ -171,6 +175,10 @@ other dimensions.</p></td>
         </td>
         <td><p>Append MRS data across the dynamic dimension, assumes they matched across the
 other dimensions.</p></td>
+      </tr><tr><td>
+          <p><code><a href="append_regs.html">append_regs()</a></code> </p>
+        </td>
+        <td><p>Append multiple regressor data frames into a single data frame.</p></td>
       </tr><tr><td>
           <p><code><a href="apply_axes.html">apply_axes()</a></code> </p>
         </td>
@@ -198,6 +206,10 @@ spectrum.</p></td>
           <p><code><a href="back_extrap_ar.html">back_extrap_ar()</a></code> </p>
         </td>
         <td><p>Back extrapolate time-domain data points using an autoregressive model.</p></td>
+      </tr><tr><td>
+          <p><code><a href="basis2dyn_mrs_data.html">basis2dyn_mrs_data()</a></code> </p>
+        </td>
+        <td><p>Convert a basis object to a dynamic mrs_data object.</p></td>
       </tr><tr><td>
           <p><code><a href="basis2mrs_data.html">basis2mrs_data()</a></code> </p>
         </td>
@@ -245,6 +257,10 @@ x * exp(-i * t * t * beta).</p></td>
           <p><code><a href="calc_coil_noise_sd.html">calc_coil_noise_sd()</a></code> </p>
         </td>
         <td><p>Calculate the noise standard deviation for each coil element.</p></td>
+      </tr><tr><td>
+          <p><code><a href="calc_design_efficiency.html">calc_design_efficiency()</a></code> </p>
+        </td>
+        <td><p>Calculate the efficiency of a regressor data frame.</p></td>
       </tr><tr><td>
           <p><code><a href="calc_ed_from_lambda.html">calc_ed_from_lambda()</a></code> </p>
         </td>
@@ -428,6 +444,10 @@ object.</p></td>
         </td>
         <td><p>Apply a Gaussian smoother in the spectral domain.</p></td>
       </tr><tr><td>
+          <p><code><a href="find_bids_mrs.html">find_bids_mrs()</a></code> </p>
+        </td>
+        <td><p>Search for MRS data files in a BIDS filesystem structure.</p></td>
+      </tr><tr><td>
           <p><code><a href="find_mrs_files.html">find_mrs_files()</a></code> </p>
         </td>
         <td><p>Find valid MRS data files recursively from a directory path.</p></td>
@@ -506,13 +526,30 @@ shifted fft.</p></td>
         </td>
         <td><p>Generate the I product operator for a single spin.</p></td>
       </tr><tr><td>
-          <p><code><a href="gen_bold_rf.html">gen_bold_rf()</a></code> </p>
+          <p><code><a href="gen_baseline_reg.html">gen_baseline_reg()</a></code> </p>
         </td>
-        <td><p>Generate a BOLD response function.</p></td>
+        <td><p>Generate baseline regressor.</p></td>
       </tr><tr><td>
-          <p><code><a href="gen_trap_rf.html">gen_trap_rf()</a></code> </p>
+          <p><code><a href="gen_bold_reg.html">gen_bold_reg()</a></code> </p>
         </td>
-        <td><p>Generate a trapezoidal response function.</p></td>
+        <td><p>Generate BOLD regressors.</p></td>
+      </tr><tr><td>
+          <p><code><a href="gen_conv_reg.html">gen_conv_reg()</a></code> </p>
+        </td>
+        <td><p>Generate regressors by convolving a specified response function with a
+stimulus.</p></td>
+      </tr><tr><td>
+          <p><code><a href="gen_impulse_reg.html">gen_impulse_reg()</a></code> </p>
+        </td>
+        <td><p>Generate impulse regressors.</p></td>
+      </tr><tr><td>
+          <p><code><a href="gen_poly_reg.html">gen_poly_reg()</a></code> </p>
+        </td>
+        <td><p>Generate polynomial regressors.</p></td>
+      </tr><tr><td>
+          <p><code><a href="gen_trap_reg.html">gen_trap_reg()</a></code> </p>
+        </td>
+        <td><p>Generate trapezoidal regressors.</p></td>
       </tr><tr><td>
           <p><code><a href="get_1h_brain_basis_names.html">get_1h_brain_basis_names()</a></code> </p>
         </td>
@@ -690,6 +727,10 @@ resonance.</p></td>
           <p><code><a href="get_voxel.html">get_voxel()</a></code> </p>
         </td>
         <td><p>Return a single voxel from a larger mrs dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="glm_spec.html">glm_spec()</a></code> </p>
+        </td>
+        <td><p>Perform a GLM analysis of dynamic MRS data in the spectral domain.</p></td>
       </tr><tr><td>
           <p><code><a href="grid_shift_xy.html">grid_shift_xy()</a></code> </p>
         </td>
@@ -885,6 +926,10 @@ dimension and dynamics in the row dimension.</p></td>
         </td>
         <td><p>Convert mrs_data object to a vector.</p></td>
       </tr><tr><td>
+          <p><code><a href="mrs_data_list2bids.html">mrs_data_list2bids()</a></code> </p>
+        </td>
+        <td><p>Create a BIDS directory and file structure from a list of mrs_data objects.</p></td>
+      </tr><tr><td>
           <p><code><a href="mvfftshift.html">mvfftshift()</a></code> </p>
         </td>
         <td><p>Perform a fftshift on a matrix, with each column replaced by its shifted
@@ -941,6 +986,10 @@ height and FWHM.</p></td>
           <p><code><a href="plot_bc.html">plot_bc()</a></code> </p>
         </td>
         <td><p>Convenience function to plot a baseline estimate with the original data.</p></td>
+      </tr><tr><td>
+          <p><code><a href="plot_reg.html">plot_reg()</a></code> </p>
+        </td>
+        <td><p>Plot regressors as an image.</p></td>
       </tr><tr><td>
           <p><code><a href="plot_slice_fit.html">plot_slice_fit()</a></code> </p>
         </td>

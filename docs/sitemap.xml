@@ -94,6 +94,9 @@
     <loc>https://martin3141.github.io/spant/reference/add_noise.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/add_noise_spec_snr.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/align.html</loc>
   </url>
   <url>
@@ -107,6 +110,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/append_dyns.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/append_regs.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/apply_axes.html</loc>
@@ -131,6 +137,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/back_extrap_ar.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/basis2dyn_mrs_data.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/basis2mrs_data.html</loc>
@@ -164,6 +173,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/calc_coil_noise_sd.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/calc_design_efficiency.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/calc_ed_from_lambda.html</loc>
@@ -319,6 +331,9 @@
     <loc>https://martin3141.github.io/spant/reference/fd_gauss_smo.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/find_bids_mrs.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/find_mrs_files.html</loc>
   </url>
   <url>
@@ -385,7 +400,25 @@
     <loc>https://martin3141.github.io/spant/reference/gen_I.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/gen_baseline_reg.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/gen_bold_reg.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/gen_bold_rf.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/gen_conv_reg.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/gen_impulse_reg.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/gen_poly_reg.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/gen_trap_reg.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/gen_trap_rf.html</loc>
@@ -518,6 +551,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/get_voxel.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/glm_spec.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/grid_shift_xy.html</loc>
@@ -661,6 +697,9 @@
     <loc>https://martin3141.github.io/spant/reference/mrs_data2vec.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/mrs_data_list2bids.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/mrsi2d_img2kspace.html</loc>
   </url>
   <url>
@@ -710,6 +749,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/plot_bc.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/plot_reg.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/plot_slice_fit.html</loc>
