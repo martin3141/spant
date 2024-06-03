@@ -767,6 +767,7 @@ preproc_fmrs <- function(path, label = NULL, output_dir = NULL) {
   }
   
   diag_table <- data.frame(dynamics = 1:length(snr),
+                           time_sec = dyn_acq_times(mrs_data),
                            shifts_hz = as.numeric(mrs_rats$shifts),
                            phases = as.numeric(mrs_rats$phases),
                            snr = snr, lw_ppm = lw_ppm,

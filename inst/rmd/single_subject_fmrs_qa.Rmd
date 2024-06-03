@@ -23,21 +23,34 @@ plot(zf(params$data$mean_corr), xlim = c(4, 0.2), restore_def_par = FALSE,
 plot(zf(params$data$mean_uncorr), xlim = c(4, 0.2), main = "Uncorrected")
 ```
 
+### Quality metrics
+Median single shot SNR : `r round(params$data$summary_diags['ss_median_spec_snr'], 1)`
+
+Linewidth of mean spectrum (post FP correction) : `r round(params$data$summary_diags['mean_corr_spec_lw'], 3)` ppm
+
+SNR of mean spectrum (post FP correction) : `r round(params$data$summary_diags['mean_corr_spec_snr'], 1)`
+
+Linewidth of mean spectrum (no correction) : `r round(params$data$summary_diags['mean_uncorr_spec_lw'], 3)` ppm
+
+SNR of mean spectrum (no correction) : `r round(params$data$summary_diags['mean_uncorr_spec_snr'], 1)`
+
+Frequency shift range : `r round(params$data$summary_diags['shift_hz_range'], 1)` Hz
+
 ### Dynamic frequency shifts
 ```{r, fig.width=10}
 diag_table <- params$data$diag_table
-    ggplot(diag_table, aes(x = dynamics, y = shifts_hz)) + geom_line() + 
-      xlab("Dynamic") + ylab("Shift (Hz)")
+    ggplot(diag_table, aes(x = time_sec, y = shifts_hz)) + geom_line() + 
+      xlab("Time (s)") + ylab("Shift (Hz)")
 ```
 
 ### Dynamic linewidths
 ```{r, fig.width=10}
 diag_table <- params$data$diag_table
-p <- ggplot(diag_table, aes(x = dynamics, y = lw_ppm)) + geom_line() +
-  xlab("Dynamic") + ylab("tNAA linewidth (ppm)") +
+p <- ggplot(diag_table, aes(x = time_sec, y = lw_ppm)) + geom_line() +
+  xlab("Time (s)") + ylab("tNAA linewidth (ppm)") +
   theme(legend.position = "none")
 if (!anyNA(diag_table$lw_ppm)) {
-  p <- p + geom_line(aes(x = dynamics, y = lw_ppm_smo), linewidth = 1.5,
+  p <- p + geom_line(aes(x = time_sec, y = lw_ppm_smo), linewidth = 1.5,
                      colour = "red")
 }
 print(p)
@@ -49,17 +62,15 @@ corr_spec   <- crop_spec(params$data$corrected)
 uncorr_spec <- crop_spec(params$data$uncorrected)
 par(mfcol = c(1, 2))
 image(corr_spec, xlim = c(4, 0.2), restore_def_par = FALSE,
-      main = "Freq & phase corrected")
-image(uncorr_spec, xlim = c(4, 0.2), main = "Uncorrected")
+      main = "Freq & phase corrected", plot_dim = "time_sec")
+image(uncorr_spec, xlim = c(4, 0.2), main = "Uncorrected", plot_dim = "time_sec")
 ```
 
 ### Mean subtracted spectrograms
 ```{r, fig.width=10}
 par(mfcol = c(1, 2))
 image(params$data$mrs_mean_sub, xlim = c(4, 0.2), restore_def_par = FALSE,
-      main = "Smoothed")
+      main = "Smoothed", plot_dim = "time_sec")
 image(params$data$mrs_mean_sub_bc, xlim = c(4, 0.2),
-      main = "Smoothed and baseline corrected")
+      main = "Smoothed and baseline corrected", plot_dim = "time_sec")
 ```
-
-
