@@ -697,3 +697,125 @@ find_bids_mrs <- function(path) {
  
   return(mrs_info) 
 }
+
+#' Preprocess and perform quality assessment of SVS fMRS data
+#' @param path path to the fMRS data file or IMA directory.
+#' @param label a label to describe the data file.
+#' @param output_dir output directory.
+#' @export
+preproc_fmrs <- function(path, label = NULL, output_dir = NULL) {
+  
+  # TODO combine coils if needed, make the noise region a parameter
+  # TODO deal with GE style data with wref included in the same file
+  
+  if (dir.exists(path)) {
+    mrs_data <- read_ima_dyn_dir(path)
+  } else {
+    mrs_data <- read_mrs(path)
+  }
+  
+  if (is.null(output_dir)) {
+    output_dir <- getwd()
+  } else {
+    if (!dir.exists(output_dir)) dir.create(output_dir)
+  }
+  
+  if (is.null(label)) {
+    label <- basename(path)
+    label <- tools::file_path_sans_ext(label)
+    label <- tools::file_path_sans_ext(label)
+  }
+  
+  mrs_rats  <- rats(mrs_data, xlim = c(4, 1.9), zero_freq_shift_t0 = TRUE,
+                    ret_corr_only = FALSE)
+  
+  # perform simple baseline offset corrected based on a noisy spectral region
+  mrs_rats$corrected <- bc_constant(mrs_rats$corrected, xlim = c(-0.5, -2.5))
+  
+  mean_mrs  <- mean_dyns(mrs_rats$corrected)
+    
+  # frequency and phase correct the mean spectrum
+  ref <- sim_resonances(acq_paras = mrs_data, freq = c(2.01, 3.03, 3.22),
+                        amp = 1, lw = 4, lg = 0)
+  
+  res <- rats(mean_mrs, ref, xlim = c(4, 1.9), p_deg = 4, ret_corr_only = FALSE)
+  
+  # apply mean spectrum phase and shift to the single shots
+  mrs_proc <- phase(mrs_rats$corrected, -as.numeric(res$phases))
+  mrs_proc <- shift(mrs_proc, -as.numeric(res$shifts), units = "hz")
+  
+  mrs_uncorr <-  phase(mrs_data,   -as.numeric(res$phases))
+  mrs_uncorr <-  shift(mrs_uncorr,
+                       -as.numeric(res$shifts) - mean(mrs_rats$shifts),
+                       units = "hz")
+  
+  mean_uncorr <- mean_dyns(mrs_uncorr)
+  
+  snr         <- as.numeric(calc_spec_snr(mrs_proc))
+  
+  # single shot SNR
+  ss_median_snr <- stats::median(snr)
+  
+  dyn_peak_info <- peak_info(mrs_proc, xlim = c(1.8, 2.2))
+  lw_ppm        <- as.numeric(dyn_peak_info$fwhm_ppm)
+  tnaa_height   <- as.numeric(dyn_peak_info$height)
+  
+  if (anyNA(lw_ppm)) {
+    lw_ppm_smo <- rep(NA, length(lw_ppm))
+  } else {
+    lw_ppm_smo <- stats::smooth.spline(lw_ppm, spar = 0.8)$y
+  }
+  
+  diag_table <- data.frame(dynamics = 1:length(snr),
+                           shifts_hz = as.numeric(mrs_rats$shifts),
+                           phases = as.numeric(mrs_rats$phases),
+                           snr = snr, lw_ppm = lw_ppm,
+                           lw_ppm_smo = lw_ppm_smo, tnaa_height = tnaa_height)
+  
+  # scale data to the tCr peak
+  amp <- spec_op(zf(res$corrected), xlim = c(2.9, 3.1), operator = "max-min")
+  amp <- as.numeric(amp)
+  mrs_proc      <- scale_mrs_amp(mrs_proc, 1 / amp)
+  mrs_uncorr    <- scale_mrs_amp(mrs_uncorr, 1 / amp)
+  res$corrected <- scale_mrs_amp(res$corrected, 1 / amp)
+  mean_uncorr   <- scale_mrs_amp(mean_uncorr, 1 / amp)
+  
+  # mean spec SNR and LW
+  mean_corr_spec_snr   <- calc_spec_snr(res$corrected)
+  corr_peak_info       <- peak_info(res$corrected, xlim = c(1.8, 2.2))
+  mean_corr_spec_lw    <- corr_peak_info$fwhm_ppm 
+  mean_uncorr_spec_snr <- calc_spec_snr(mean_uncorr)
+  uncorr_peak_info     <- peak_info(bc_constant(mean_uncorr,
+                                                xlim = c(-0.5, -2.5)),
+                                    xlim = c(1.8, 2.2))
+  mean_uncorr_spec_lw  <- uncorr_peak_info$fwhm_ppm
+  
+  # measure the dynamic fluctuation range
+  mrs_proc_smoothed <- smooth_dyns(crop_spec(lb(mrs_proc, 5)), 10)
+  mrs_mean_sub      <- sub_mean_dyns(mrs_proc_smoothed)
+  mrs_mean_sub_bc   <- bc_poly(mrs_mean_sub, 2)
+  dfr               <- diff(range(Re(mrs_data2mat(mrs_mean_sub))))
+  
+  summary_diags <- c(mean_corr_spec_snr = mean_corr_spec_snr,
+                     mean_corr_spec_lw = mean_corr_spec_lw,
+                     mean_uncorr_spec_snr = mean_uncorr_spec_snr,
+                     mean_uncorr_spec_lw = mean_uncorr_spec_lw,
+                     ss_median_spec_snr = ss_median_snr,
+                     lw_ppm_smo_range = diff(range(lw_ppm_smo)),
+                     shift_hz_range = diff(range(diag_table$shifts_hz)),
+                     dfr = dfr)
+  
+  res <- list(corrected = mrs_proc, uncorrected = mrs_uncorr,
+              mean_corr = res$corrected, mean_uncorr = mean_uncorr,
+              diag_table = diag_table, summary_diags = summary_diags,
+              mrs_mean_sub = mrs_mean_sub, mrs_mean_sub_bc = mrs_mean_sub_bc)
+  
+  rmd_file <- system.file("rmd", "single_subject_fmrs_qa.Rmd",
+                          package = "spant")
+  
+  rmarkdown::render(rmd_file,
+                    params = list(data = res, label = label),
+                    output_file = file.path(output_dir, label))
+  
+  return(res)
+}

@@ -1,0 +1,65 @@
+---
+title: "Single subject fMRS QA"
+output: html_document
+params:
+  data: ""
+  label: ""
+---
+
+```{r setup, include=FALSE}
+library(spant)
+library(ggplot2)
+knitr::opts_chunk$set(echo = FALSE)
+theme_set(theme_bw())
+```
+
+## `r params$label`
+
+### Mean spectra
+```{r, fig.width=10}
+par(mfcol = c(1, 2))
+plot(zf(params$data$mean_corr), xlim = c(4, 0.2), restore_def_par = FALSE,
+     main = "Freq & phase corrected")
+plot(zf(params$data$mean_uncorr), xlim = c(4, 0.2), main = "Uncorrected")
+```
+
+### Dynamic frequency shifts
+```{r, fig.width=10}
+diag_table <- params$data$diag_table
+    ggplot(diag_table, aes(x = dynamics, y = shifts_hz)) + geom_line() + 
+      xlab("Dynamic") + ylab("Shift (Hz)")
+```
+
+### Dynamic linewidths
+```{r, fig.width=10}
+diag_table <- params$data$diag_table
+p <- ggplot(diag_table, aes(x = dynamics, y = lw_ppm)) + geom_line() +
+  xlab("Dynamic") + ylab("tNAA linewidth (ppm)") +
+  theme(legend.position = "none")
+if (!anyNA(diag_table$lw_ppm)) {
+  p <- p + geom_line(aes(x = dynamics, y = lw_ppm_smo), linewidth = 1.5,
+                     colour = "red")
+}
+print(p)
+```
+
+### Spectrograms
+```{r, fig.width=10}
+corr_spec   <- crop_spec(params$data$corrected)
+uncorr_spec <- crop_spec(params$data$uncorrected)
+par(mfcol = c(1, 2))
+image(corr_spec, xlim = c(4, 0.2), restore_def_par = FALSE,
+      main = "Freq & phase corrected")
+image(uncorr_spec, xlim = c(4, 0.2), main = "Uncorrected")
+```
+
+### Mean subtracted spectrograms
+```{r, fig.width=10}
+par(mfcol = c(1, 2))
+image(params$data$mrs_mean_sub, xlim = c(4, 0.2), restore_def_par = FALSE,
+      main = "Smoothed")
+image(params$data$mrs_mean_sub_bc, xlim = c(4, 0.2),
+      main = "Smoothed and baseline corrected")
+```
+
+
