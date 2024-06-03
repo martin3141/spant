@@ -795,7 +795,13 @@ preproc_fmrs <- function(path, label = NULL, output_dir = NULL) {
   mrs_proc_smoothed <- smooth_dyns(crop_spec(lb(mrs_proc, 5)), 10)
   mrs_mean_sub      <- sub_mean_dyns(mrs_proc_smoothed)
   mrs_mean_sub_bc   <- bc_poly(mrs_mean_sub, 2)
-  dfr               <- diff(range(Re(mrs_data2mat(mrs_mean_sub))))
+  dfr               <- diff(range(Re(mrs_data2mat(mrs_mean_sub_bc))))
+  
+  # measure the dynamic lipid fluctuation range
+  mrs_proc_smoothed_lip <- crop_spec(mrs_proc_smoothed, xlim = c(1.8, 0.4))
+  mrs_mean_sub          <- sub_mean_dyns(mrs_proc_smoothed)
+  mrs_mean_sub_bc       <- bc_poly(mrs_mean_sub, 2)
+  dlfr                  <- diff(range(Re(mrs_data2mat(mrs_mean_sub_bc))))
   
   summary_diags <- c(mean_corr_spec_snr = mean_corr_spec_snr,
                      mean_corr_spec_lw = mean_corr_spec_lw,
@@ -804,7 +810,7 @@ preproc_fmrs <- function(path, label = NULL, output_dir = NULL) {
                      ss_median_spec_snr = ss_median_snr,
                      lw_ppm_smo_range = diff(range(lw_ppm_smo)),
                      shift_hz_range = diff(range(diag_table$shifts_hz)),
-                     dfr = dfr)
+                     dfr = dfr, dlfr = dlfr)
   
   res <- list(corrected = mrs_proc, uncorrected = mrs_uncorr,
               mean_corr = res$corrected, mean_uncorr = mean_uncorr,

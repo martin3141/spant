@@ -36,6 +36,8 @@ SNR of mean spectrum (no correction) : `r round(params$data$summary_diags['mean_
 
 Frequency shift range : `r round(params$data$summary_diags['shift_hz_range'], 1)` Hz
 
+Dynamic lipid fluctuation range : `r round(100 * params$data$summary_diags['dlfr'], 1)` % tCr intensity
+
 ### Dynamic frequency shifts
 ```{r, fig.width=10}
 diag_table <- params$data$diag_table
