@@ -65,3 +65,7 @@ Dataset standard deviation single shot SNR : `r params$data$summary$ss_median_sp
 Dataset mean spectral linewidth : `r params$data$summary$mean_corr_spec_lw |> mean() |> round(3)`
 
 Dataset standard deviation spectral linewidth : `r params$data$summary$mean_corr_spec_lw |> sd() |> round(3)`
+
+```{r, echo=TRUE}
+if (!is.null(params$data$exclude_labels)) print(params$data$exclude_labels)
+```

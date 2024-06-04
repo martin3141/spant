@@ -698,12 +698,12 @@ find_bids_mrs <- function(path) {
   return(mrs_info) 
 }
 
-#' Preprocess and perform quality assessment of a single SVS fMRS data set.
+#' Preprocess and perform quality assessment of a single SVS data set.
 #' @param path path to the fMRS data file or IMA directory.
 #' @param label a label to describe the data set.
 #' @param output_dir output directory.
 #' @export
-preproc_fmrs_single <- function(path, label = NULL, output_dir = NULL) {
+preproc_svs <- function(path, label = NULL, output_dir = NULL) {
   
   # TODO combine coils if needed, make the noise region a parameter
   # TODO deal with GE style data with wref included in the same file
@@ -828,14 +828,16 @@ preproc_fmrs_single <- function(path, label = NULL, output_dir = NULL) {
   return(res)
 }
 
-#' Preprocess and perform quality assessment of one or more SVS fMRS data sets.
+#' Preprocess and perform quality assessment of one or more SVS data sets.
 #' @param paths paths to the fMRS data file or IMA directory.
 #' @param labels labels to describe each data set.
 #' @param output_dir output directory.
+#' @param exclude_labels vector of labels of scans to exclude, eg poor quality
+#' data.
 #' @export
-preproc_fmrs_dataset <- function(paths, labels = NULL,
-                                 output_dir = "spant_fmrs_analysis",
-                                 exclude_labels = NULL) {
+preproc_svs_dataset <- function(paths, labels = NULL,
+                                output_dir = "spant_fmrs_analysis",
+                                exclude_labels = NULL) {
   
   if (is.null(labels)) {
     labels <- basename(paths)
@@ -848,6 +850,21 @@ preproc_fmrs_dataset <- function(paths, labels = NULL,
   
   # detect non unique labels and quit
   if (any(table(labels) > 1)) stop("Labels are non-unique.")
+  
+  # find the indices of any excluded scans
+  if (!is.null(exclude_labels)) {
+    if (any(table(exclude_labels) > 1)) stop("Exclude labels are non-unique.")
+    N_excl <- length(exclude_labels)
+    exclude_inds <- rep(NA, N_excl)
+    for (n in 1:N_excl) {
+      found_bool <- (labels == exclude_labels[n])
+      if (sum(found_bool) == 1) exclude_inds[n] <- which(found_bool)
+    }
+    if (anyNA(exclude_inds)) {
+      print(exclude_labels[is.na(exclude_inds)])
+      stop("Above exclude labels not found.")
+    }
+  }
   
   # root directory for all analysis results
   if (!dir.exists(output_dir)) dir.create(output_dir)
@@ -873,8 +890,8 @@ preproc_fmrs_dataset <- function(paths, labels = NULL,
       next
     }
     
-    preproc_res_list[[n]] <- preproc_fmrs_single(paths[n], labels[n],
-                                                 file.path(output_dir, "qa"))
+    preproc_res_list[[n]] <- preproc_svs(paths[n], labels[n],
+                                         file.path(output_dir, "qa"))
     
     saveRDS(preproc_res_list[[n]], preproc_rds)
   }
@@ -893,7 +910,7 @@ preproc_fmrs_dataset <- function(paths, labels = NULL,
   }
   
   res <- list(res_list = preproc_res_list, summary = preproc_summary,
-              mean_dataset = mean_dataset)
+              mean_dataset = mean_dataset, exclude_labels = NULL)
   
   rmd_file <- system.file("rmd", "dataset_summary_fmrs_qa.Rmd",
                           package = "spant")
@@ -906,12 +923,12 @@ preproc_fmrs_dataset <- function(paths, labels = NULL,
   
   if (!is.null(exclude_labels)) {
     # exclude unwanted scans
-    
+    preproc_res_list <- preproc_res_list[-exclude_inds]
     
     preproc_summary <- data.frame(t(sapply(preproc_res_list,
                                            (\(x) x$summary_diags))))
     
-    preproc_summary <- cbind(labels, preproc_summary)
+    preproc_summary <- cbind(labels = labels[-exclude_inds], preproc_summary)
     
     corrected_list <- lapply(preproc_res_list, \(x) x$corrected)
     
@@ -922,7 +939,7 @@ preproc_fmrs_dataset <- function(paths, labels = NULL,
     }
     
     res <- list(res_list = preproc_res_list, summary = preproc_summary,
-                mean_dataset = mean_dataset)
+                mean_dataset = mean_dataset, exclude_labels = exclude_labels)
     
     rmd_file <- system.file("rmd", "dataset_summary_fmrs_qa.Rmd",
                             package = "spant")
