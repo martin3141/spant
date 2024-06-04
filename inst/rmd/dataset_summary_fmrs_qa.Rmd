@@ -40,14 +40,14 @@ ggplot(params$data$summary, aes(x = mean_corr_spec_lw, y = labels)) +
 
 ### Dynamic lipid fluctuation range
 ```{r, fig.width=10}
-ggplot(params$data$summary, aes(x = dlfr, y = labels)) +
-  geom_col() + ylab("") + xlab("Dynamic lipid fluctuation range")
+ggplot(params$data$summary, aes(x = dlfr * 100, y = labels)) +
+  geom_col() + ylab("") + xlab("Dynamic lipid fluctuation range (% tCr intensity)")
 ```
 
 ### Dynamic fluctuation range
 ```{r, fig.width=10}
-ggplot(params$data$summary, aes(x = dfr, y = labels)) +
-  geom_col() + ylab("") + xlab("Dynamic fluctuation range")
+ggplot(params$data$summary, aes(x = dfr * 100, y = labels)) +
+  geom_col() + ylab("") + xlab("Dynamic fluctuation range (% tCr intensity)")
 ```
 
 ### Dataset quality summary
