@@ -66,6 +66,9 @@ Dataset mean spectral linewidth : `r params$data$summary$mean_corr_spec_lw |> me
 
 Dataset standard deviation spectral linewidth : `r params$data$summary$mean_corr_spec_lw |> sd() |> round(3)`
 
-```{r, echo=TRUE}
-if (!is.null(params$data$exclude_labels)) print(params$data$exclude_labels)
+```{r results='asis'}
+if (!is.null(params$data$exclude_labels)) {
+  cat("### Excluded scan labels\n")
+  for (x in params$data$exclude_labels) cat("- ", x, "\n")
+}
 ```
