@@ -834,7 +834,8 @@ preproc_fmrs_single <- function(path, label = NULL, output_dir = NULL) {
 #' @param output_dir output directory.
 #' @export
 preproc_fmrs_dataset <- function(paths, labels = NULL,
-                                 output_dir = "fmrs_analysis") {
+                                 output_dir = "spant_fmrs_analysis",
+                                 exclude_labels = NULL) {
   
   if (is.null(labels)) {
     labels <- basename(paths)
@@ -842,18 +843,40 @@ preproc_fmrs_dataset <- function(paths, labels = NULL,
     labels <- tools::file_path_sans_ext(labels)
   }
   
-  if (!dir.exists(output_dir)) dir.create(output_dir)
+  # lock in factor level order
+  labels <- factor(labels, levels = labels)
   
   # detect non unique labels and quit
   if (any(table(labels) > 1)) stop("Labels are non-unique.")
+  
+  # root directory for all analysis results
+  if (!dir.exists(output_dir)) dir.create(output_dir)
+  
+  # directory for qa html reports 
+  qa_dir <- file.path(output_dir, "qa")
+  if (!dir.exists(qa_dir)) dir.create(qa_dir)
+  
+  # directory for pre-processing results
+  preproc_dir <- file.path(output_dir, "preproc")
+  if (!dir.exists(preproc_dir)) dir.create(preproc_dir)
 
   tot_num <- length(paths)
   preproc_res_list <- vector(mode = "list", length = tot_num)
   for (n in 1:tot_num) {
-    cat(c("Processing ", n, " of ", tot_num, " : ",
-          labels[n],"\n"), sep = "")
+    cat(c("Processing ", n, " of ", tot_num, " : ", labels[n], "\n"), sep = "")
+    
+    preproc_rds <- file.path(output_dir, "preproc", paste0(labels[n], ".rds"))
+    
+    if (file.exists(preproc_rds)) {
+      cat("Preprocessing already performed, using saved results.\n")
+      preproc_res_list[[n]] <- readRDS(preproc_rds)
+      next
+    }
+    
     preproc_res_list[[n]] <- preproc_fmrs_single(paths[n], labels[n],
-                                                 output_dir)
+                                                 file.path(output_dir, "qa"))
+    
+    saveRDS(preproc_res_list[[n]], preproc_rds)
   }
   
   preproc_summary <- data.frame(t(sapply(preproc_res_list,
@@ -862,6 +885,7 @@ preproc_fmrs_dataset <- function(paths, labels = NULL,
   preproc_summary <- cbind(labels, preproc_summary)
   
   corrected_list <- lapply(preproc_res_list, \(x) x$corrected)
+  
   if (tot_num > 1) {
     mean_dataset <- mean_mrs_list(corrected_list)
   } else {
@@ -874,16 +898,46 @@ preproc_fmrs_dataset <- function(paths, labels = NULL,
   rmd_file <- system.file("rmd", "dataset_summary_fmrs_qa.Rmd",
                           package = "spant")
   
-  rmd_out_f <- file.path(tools::file_path_as_absolute(output_dir),
-                         "dataset_summary")
+  rmd_out_f <- file.path(tools::file_path_as_absolute(output_dir), "qa",
+                         "dataset_summary_full")
   
   rmarkdown::render(rmd_file, params = list(data = res),
                     output_file = rmd_out_f)
   
-  saveRDS(res, file.path(output_dir, "preproc_full.rds"))
+  if (!is.null(exclude_labels)) {
+    # exclude unwanted scans
+    
+    
+    preproc_summary <- data.frame(t(sapply(preproc_res_list,
+                                           (\(x) x$summary_diags))))
+    
+    preproc_summary <- cbind(labels, preproc_summary)
+    
+    corrected_list <- lapply(preproc_res_list, \(x) x$corrected)
+    
+    if (tot_num > 1) {
+      mean_dataset <- mean_mrs_list(corrected_list)
+    } else {
+      mean_dataset <- corrected_list
+    }
+    
+    res <- list(res_list = preproc_res_list, summary = preproc_summary,
+                mean_dataset = mean_dataset)
+    
+    rmd_file <- system.file("rmd", "dataset_summary_fmrs_qa.Rmd",
+                            package = "spant")
+    
+    rmd_out_f <- file.path(tools::file_path_as_absolute(output_dir), "qa",
+                           "dataset_summary_subset")
+    
+    rmarkdown::render(rmd_file, params = list(data = res),
+                      output_file = rmd_out_f)
+  }
   
-  cut_res <- list(corrected = corrected_list, mean_dataset = mean_dataset,
-                  labels = labels)
+  # saveRDS(res, file.path(output_dir, "preproc_full.rds"))
   
-  saveRDS(cut_res, file.path(output_dir, "preproc_corrected.rds"))
+  #cut_res <- list(corrected = corrected_list, mean_dataset = mean_dataset,
+  #                labels = labels)
+  
+  #saveRDS(cut_res, file.path(output_dir, "preproc_corrected.rds"))
 }

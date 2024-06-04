@@ -17,37 +17,43 @@ theme_set(theme_bw())
 ### Dynamic frequency shifts range
 ```{r, fig.width=10}
 ggplot(params$data$summary, aes(x = shift_hz_range, y = labels)) + geom_col() + 
-      ylab("") + xlab("Shift range (Hz)")
+      ylab("") + xlab("Shift range (Hz)") + scale_y_discrete(limits = rev)
 ```
 
 ### Smoothed dynamic linewidths range
 ```{r, fig.width=10, warning = FALSE, message = FALSE}
 ggplot(params$data$summary, aes(x = lw_ppm_smo_range, y = labels)) + 
-  geom_col() + ylab("") + xlab("Smoothed linewidth range (ppm)")
+  geom_col() + ylab("") + xlab("Smoothed linewidth range (ppm)") +
+  scale_y_discrete(limits = rev)
 ```
 
 ### Median single shot SNR
 ```{r, fig.width=10}
 ggplot(params$data$summary, aes(x = ss_median_spec_snr, y = labels)) + 
-  geom_col() + ylab("") + xlab("Median single shot SNR")
+  geom_col() + ylab("") + xlab("Median single shot SNR") +
+  scale_y_discrete(limits = rev)
 ```
 
 ### Dynamic mean corrected spectral linewidths
 ```{r, fig.width=10}
 ggplot(params$data$summary, aes(x = mean_corr_spec_lw, y = labels)) +
-  geom_col() + ylab("") + xlab("Linewidth for mean corrected data (ppm)")
+  geom_col() + ylab("") + xlab("Linewidth for mean corrected data (ppm)") +
+  scale_y_discrete(limits = rev)
 ```
 
 ### Dynamic lipid fluctuation range
 ```{r, fig.width=10}
 ggplot(params$data$summary, aes(x = dlfr * 100, y = labels)) +
-  geom_col() + ylab("") + xlab("Dynamic lipid fluctuation range (% tCr intensity)")
+  geom_col() + ylab("") + 
+  xlab("Dynamic lipid fluctuation range (% tCr intensity)") +
+  scale_y_discrete(limits = rev)
 ```
 
 ### Dynamic fluctuation range
 ```{r, fig.width=10}
 ggplot(params$data$summary, aes(x = dfr * 100, y = labels)) +
-  geom_col() + ylab("") + xlab("Dynamic fluctuation range (% tCr intensity)")
+  geom_col() + ylab("") + xlab("Dynamic fluctuation range (% tCr intensity)") +
+  scale_y_discrete(limits = rev)
 ```
 
 ### Dataset quality summary
