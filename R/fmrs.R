@@ -698,12 +698,12 @@ find_bids_mrs <- function(path) {
   return(mrs_info) 
 }
 
-#' Preprocess and perform quality assessment of SVS fMRS data
+#' Preprocess and perform quality assessment of a single SVS fMRS data set.
 #' @param path path to the fMRS data file or IMA directory.
-#' @param label a label to describe the data file.
+#' @param label a label to describe the data set.
 #' @param output_dir output directory.
 #' @export
-preproc_fmrs <- function(path, label = NULL, output_dir = NULL) {
+preproc_fmrs_single <- function(path, label = NULL, output_dir = NULL) {
   
   # TODO combine coils if needed, make the noise region a parameter
   # TODO deal with GE style data with wref included in the same file
@@ -817,12 +817,73 @@ preproc_fmrs <- function(path, label = NULL, output_dir = NULL) {
               diag_table = diag_table, summary_diags = summary_diags,
               mrs_mean_sub = mrs_mean_sub, mrs_mean_sub_bc = mrs_mean_sub_bc)
   
-  rmd_file <- system.file("rmd", "single_subject_fmrs_qa.Rmd",
+  rmd_file <- system.file("rmd", "single_scan_fmrs_qa.Rmd",
                           package = "spant")
   
-  rmarkdown::render(rmd_file,
-                    params = list(data = res, label = label),
-                    output_file = file.path(output_dir, label))
+  rmd_out_f <- file.path(tools::file_path_as_absolute(output_dir), label)
+  
+  rmarkdown::render(rmd_file, params = list(data = res, label = label),
+                    output_file = rmd_out_f)
   
   return(res)
+}
+
+#' Preprocess and perform quality assessment of one or more SVS fMRS data sets.
+#' @param paths paths to the fMRS data file or IMA directory.
+#' @param labels labels to describe each data set.
+#' @param output_dir output directory.
+#' @export
+preproc_fmrs_dataset <- function(paths, labels = NULL,
+                                 output_dir = "fmrs_analysis") {
+  
+  if (is.null(labels)) {
+    labels <- basename(paths)
+    labels <- tools::file_path_sans_ext(labels)
+    labels <- tools::file_path_sans_ext(labels)
+  }
+  
+  if (!dir.exists(output_dir)) dir.create(output_dir)
+  
+  # detect non unique labels and quit
+  if (any(table(labels) > 1)) stop("Labels are non-unique.")
+
+  tot_num <- length(paths)
+  preproc_res_list <- vector(mode = "list", length = tot_num)
+  for (n in 1:tot_num) {
+    cat(c("Processing ", n, " of ", tot_num, " : ",
+          labels[n],"\n"), sep = "")
+    preproc_res_list[[n]] <- preproc_fmrs_single(paths[n], labels[n],
+                                                 output_dir)
+  }
+  
+  preproc_summary <- data.frame(t(sapply(preproc_res_list,
+                                         (\(x) x$summary_diags))))
+  
+  preproc_summary <- cbind(labels, preproc_summary)
+  
+  corrected_list <- lapply(preproc_res_list, \(x) x$corrected)
+  if (tot_num > 1) {
+    mean_dataset <- mean_mrs_list(corrected_list)
+  } else {
+    mean_dataset <- corrected_list
+  }
+  
+  res <- list(res_list = preproc_res_list, summary = preproc_summary,
+              mean_dataset = mean_dataset)
+  
+  rmd_file <- system.file("rmd", "dataset_summary_fmrs_qa.Rmd",
+                          package = "spant")
+  
+  rmd_out_f <- file.path(tools::file_path_as_absolute(output_dir),
+                         "dataset_summary")
+  
+  rmarkdown::render(rmd_file, params = list(data = res),
+                    output_file = rmd_out_f)
+  
+  saveRDS(res, file.path(output_dir, "preproc_full.rds"))
+  
+  cut_res <- list(corrected = corrected_list, mean_dataset = mean_dataset,
+                  labels = labels)
+  
+  saveRDS(cut_res, file.path(output_dir, "preproc_corrected.rds"))
 }

@@ -17,8 +17,12 @@
   coil = 1,
   restore_def_par = TRUE,
   y_ticks = NULL,
-  vline = NULL,
   hline = NULL,
+  hline_lty = 2,
+  hline_col = "white",
+  vline = NULL,
+  vline_lty = 2,
+  vline_col = "white",
   legend = FALSE,
   ...
 )
@@ -53,9 +57,17 @@ been made.}
 \item{y_ticks}{a vector of indices specifying where to place additional red
 tick marks.}
 
-\item{vline}{draw a vertical line at the value of vline.}
+\item{hline}{add a horizontal line at the specified value.}
 
-\item{hline}{draw a horizontal line at the value of hline.}
+\item{hline_lty}{linetype for the horizontal line.}
+
+\item{hline_col}{colour for the horizontal line.}
+
+\item{vline}{add a vertical line at the specified value.}
+
+\item{vline_lty}{linetype for the vertical line.}
+
+\item{vline_col}{colour for the vertical line.}
 
 \item{legend}{add a colour bar to the plot using the imagePlot function
 from the fields package.}

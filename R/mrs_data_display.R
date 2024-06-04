@@ -297,8 +297,12 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
 #' been made.
 #' @param y_ticks a vector of indices specifying where to place additional red 
 #' tick marks.
-#' @param vline draw a vertical line at the value of vline.
-#' @param hline draw a horizontal line at the value of hline.
+#' @param hline add a horizontal line at the specified value.
+#' @param hline_lty linetype for the horizontal line.
+#' @param hline_col colour for the horizontal line.
+#' @param vline add a vertical line at the specified value.
+#' @param vline_lty linetype for the vertical line.
+#' @param vline_col colour for the vertical line.
 #' @param legend add a colour bar to the plot using the imagePlot function
 #' from the fields package.
 #' @param ... other arguments to pass to the plot method.
@@ -307,7 +311,9 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
                            plot_dim = NULL, x_pos = NULL, y_pos = NULL,
                            z_pos = NULL, dyn = 1, coil = 1,
                            restore_def_par = TRUE, y_ticks = NULL, 
-                           vline = NULL, hline = NULL, legend = FALSE, ...) { 
+                           hline = NULL, hline_lty = 2, hline_col = "white",
+                           vline = NULL, vline_lty = 2, vline_col = "white",
+                           legend = FALSE, ...) { 
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -410,9 +416,11 @@ image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
     graphics::axis(2, at = y_ticks, labels = F, col = NA, col.ticks = "red")
   }
   
-  if (!is.null(vline)) graphics::abline(v = vline, col = "white", lty = 2)
+  if (!is.null(vline)) graphics::abline(v = vline, col = vline_col,
+                                        lty = vline_lty)
   
-  if (!is.null(hline)) graphics::abline(h = hline, col = "white", lty = 2)
+  if (!is.null(hline)) graphics::abline(h = hline, col = hline_col,
+                                        lty = hline_lty)
   
   if (restore_def_par) graphics::par(.pardefault)
 }

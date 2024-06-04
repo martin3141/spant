@@ -1,0 +1,61 @@
+---
+title: "Dataset summary fMRS QA"
+output: html_document
+params:
+  data: ""
+---
+
+```{r setup, include=FALSE}
+library(spant)
+library(ggplot2)
+knitr::opts_chunk$set(echo = FALSE)
+theme_set(theme_bw())
+```
+
+## Summary metrics
+
+### Dynamic frequency shifts range
+```{r, fig.width=10}
+ggplot(params$data$summary, aes(x = shift_hz_range, y = labels)) + geom_col() + 
+      ylab("") + xlab("Shift range (Hz)")
+```
+
+### Smoothed dynamic linewidths range
+```{r, fig.width=10, warning = FALSE, message = FALSE}
+ggplot(params$data$summary, aes(x = lw_ppm_smo_range, y = labels)) + 
+  geom_col() + ylab("") + xlab("Smoothed linewidth range (ppm)")
+```
+
+### Median single shot SNR
+```{r, fig.width=10}
+ggplot(params$data$summary, aes(x = ss_median_spec_snr, y = labels)) + 
+  geom_col() + ylab("") + xlab("Median single shot SNR")
+```
+
+### Dynamic mean corrected spectral linewidths
+```{r, fig.width=10}
+ggplot(params$data$summary, aes(x = mean_corr_spec_lw, y = labels)) +
+  geom_col() + ylab("") + xlab("Linewidth for mean corrected data (ppm)")
+```
+
+### Dynamic lipid fluctuation range
+```{r, fig.width=10}
+ggplot(params$data$summary, aes(x = dlfr, y = labels)) +
+  geom_col() + ylab("") + xlab("Dynamic lipid fluctuation range")
+```
+
+### Dynamic fluctuation range
+```{r, fig.width=10}
+ggplot(params$data$summary, aes(x = dfr, y = labels)) +
+  geom_col() + ylab("") + xlab("Dynamic fluctuation range")
+```
+
+### Dataset quality summary
+
+Dataset mean single shot SNR : `r params$data$summary$ss_median_spec_snr |> mean() |> round(1)`
+
+Dataset standard deviation single shot SNR : `r params$data$summary$ss_median_spec_snr |> sd() |> round(1)`
+
+Dataset mean spectral linewidth : `r params$data$summary$mean_corr_spec_lw |> mean() |> round(3)`
+
+Dataset standard deviation spectral linewidth : `r params$data$summary$mean_corr_spec_lw |> sd() |> round(3)`
