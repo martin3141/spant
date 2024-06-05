@@ -1,5 +1,5 @@
 ---
-title: "Dataset summary fMRS QA"
+title: "Dataset QA summary"
 output: html_document
 params:
   data: ""

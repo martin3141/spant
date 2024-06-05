@@ -7,7 +7,7 @@
 preproc_svs_dataset(
   paths,
   labels = NULL,
-  output_dir = "spant_fmrs_analysis",
+  output_dir = "spant_analysis",
   exclude_labels = NULL
 )
 }
