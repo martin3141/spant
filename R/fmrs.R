@@ -534,6 +534,8 @@ plot_reg <- function(regressor_df) {
   time  <- regressor_df$time
   names <- colnames(regressor_df)[-1]
   X     <- t(regressor_df[, -1])
+  
+  graphics::par(mar = c(2.8, 4.3, 1, 1))
   graphics::image(y = time, z = X, col = viridisLite::viridis(128),
                   ylab = "Time (s)", axes = FALSE)
   graphics::axis(1, at=seq(0, 1, length = length(names)), labels = names)
