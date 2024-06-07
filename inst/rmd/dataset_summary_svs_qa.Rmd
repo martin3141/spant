@@ -58,13 +58,13 @@ ggplot(params$data$summary, aes(x = dfr * 100, y = labels)) +
 
 ### Dataset quality summary
 
-Dataset mean single shot SNR : `r params$data$summary$ss_median_spec_snr |> mean() |> round(1)`
+Dataset mean single shot SNR : `r round(mean(params$data$summary$ss_median_spec_snr), 1)`
 
-Dataset standard deviation single shot SNR : `r params$data$summary$ss_median_spec_snr |> sd() |> round(1)`
+Dataset standard deviation single shot SNR : `r round(sd(params$data$summary$ss_median_spec_snr), 1)`
 
-Dataset mean spectral linewidth : `r params$data$summary$mean_corr_spec_lw |> mean() |> round(3)`
+Dataset mean spectral linewidth : `r round(mean(params$data$summary$mean_corr_spec_lw), 3)`
 
-Dataset standard deviation spectral linewidth : `r params$data$summary$mean_corr_spec_lw |> sd() |> round(3)`
+Dataset standard deviation spectral linewidth : `r round(sd(params$data$summary$mean_corr_spec_lw), 3)`
 
 ```{r results='asis'}
 if (!is.null(params$data$exclude_labels)) {

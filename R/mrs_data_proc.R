@@ -3530,7 +3530,7 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
       metab_first <- get_dyns(metab, 1)
       noise_data  <- crop_spec(metab_first, noise_region)
       noise_sd    <- est_noise_sd(noise_data, offset = 0, n = Npts(noise_data),
-                               p_order = 2)
+                                  p_order = 2)
       
       if (any(noise_sd == 0)) stop("Some coil noise estimates are zero. Bad data?")
       

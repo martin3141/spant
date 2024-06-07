@@ -38,11 +38,11 @@ gen_trap_reg <- function(onset, duration, trial_type = NULL, mrs_data = NULL,
   
   # make a time scale with dt seconds resolution for the duration of the scan
   # time
-  n_trans   <- res$Ntrans
-  TR        <- res$tr
-  n_dyns    <- res$Ndyns
-  t_fine    <- seq(from = 0, to = n_trans * TR - TR, by = dt)
-  end       <- onset + duration
+  n_trans <- res$Ntrans
+  TR      <- res$tr
+  n_dyns  <- res$Ndyns
+  t_fine  <- seq(from = 0, to = n_trans * TR - TR, by = dt)
+  end     <- onset + duration
   
   stim_frame <- data.frame(onset, end, trial_type)
   
@@ -171,11 +171,11 @@ gen_bold_reg <- function(onset, duration = NULL, trial_type = NULL,
   
   # make a time scale with dt seconds resolution for the duration of the scan
   # time
-  n_trans   <- res$Ntrans
-  TR        <- res$tr
-  n_dyns    <- res$Ndyns
-  t_fine    <- seq(from = 0, to = n_trans * TR, by = dt)
-  end       <- onset + duration
+  n_trans <- res$Ntrans
+  TR      <- res$tr
+  n_dyns  <- res$Ndyns
+  t_fine  <- seq(from = 0, to = n_trans * TR, by = dt)
+  end     <- onset + duration
   
   stim_frame   <- data.frame(onset, end, trial_type, duration)
   
@@ -284,11 +284,11 @@ gen_conv_reg <- function(onset, duration = NULL, trial_type = NULL,
   
   # make a time scale with dt seconds resolution for the duration of the scan
   # time
-  n_trans   <- res$Ntrans
-  TR        <- res$tr
-  n_dyns    <- res$Ndyns
-  t_fine    <- seq(from = 0, to = n_trans * TR, by = dt)
-  end       <- onset + duration
+  n_trans <- res$Ntrans
+  TR      <- res$tr
+  n_dyns  <- res$Ndyns
+  t_fine  <- seq(from = 0, to = n_trans * TR, by = dt)
+  end     <- onset + duration
   
   stim_frame   <- data.frame(onset, end, trial_type, duration)
   
@@ -683,7 +683,6 @@ find_bids_mrs <- function(path) {
 #' @export
 preproc_svs <- function(path, label = NULL, output_dir = NULL) {
   
-  # TODO combine coils if needed, make the noise region a parameter
   # TODO deal with GE style data with wref included in the same file
   
   if (dir.exists(path)) {
@@ -703,6 +702,10 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL) {
     label <- tools::file_path_sans_ext(label)
     label <- tools::file_path_sans_ext(label)
   }
+  
+  # combine coils if needed
+  if (Ncoils(mrs_data) > 1) mrs_data <- comb_coils(mrs_data,
+                                                scale_method = "sig_noise_sq")
   
   mrs_rats  <- rats(mrs_data, xlim = c(4, 1.9), zero_freq_shift_t0 = TRUE,
                     ret_corr_only = FALSE)
@@ -933,7 +936,7 @@ preproc_svs_dataset <- function(paths, labels = NULL,
                       output_file = rmd_out_f)
   }
   
-  # return(mean_dataset)
+  return(mean_dataset)
   
   # saveRDS(res, file.path(output_dir, "preproc_full.rds"))
   
@@ -1051,4 +1054,6 @@ gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
                     regressor_df = regressor_df, label = label,
                     mrs_data_plot = mrs_data_plot, xlim = xlim),
                     output_file = rmd_out_f)
+  
+  return(glm_spec_res)
 }
