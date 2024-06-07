@@ -931,7 +931,7 @@ preproc_svs_dataset <- function(paths, labels = NULL,
                       output_file = rmd_out_f)
   }
   
-  return(mean_dataset)
+  # return(mean_dataset)
   
   # saveRDS(res, file.path(output_dir, "preproc_full.rds"))
   
