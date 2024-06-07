@@ -8,7 +8,8 @@ fmrs_dataset_spec_glm(
   regressor_df,
   analysis_dir = "spant_analysis",
   exclude_labels = NULL,
-  labels = NULL
+  labels = NULL,
+  xlim = c(4, 0.2)
 )
 }
 \arguments{
@@ -21,6 +22,8 @@ the preproc_svs_dataset function.}
 \item{exclude_labels}{vector of labels of scans to exclude, eg poor quality}
 
 \item{labels}{labels to describe each data set.}
+
+\item{xlim}{spectral range to include in the analysis.}
 }
 \description{
 Perform spectral GLM analysis of an fMRS dataset.

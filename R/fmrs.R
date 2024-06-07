@@ -462,9 +462,10 @@ gen_hrf <- function(end_t = 30, res_t = 0.01) {
 #' @param mrs_data single-voxel dynamics MRS data.
 #' @param regressor_df a data frame containing temporal regressors to be applied
 #' to each spectral datapoint.
+#' @param full_output append mrs_data and regressor_df to the output list.
 #' @return list of statistical results.
 #' @export
-glm_spec <- function(mrs_data, regressor_df) {
+glm_spec <- function(mrs_data, regressor_df, full_output = FALSE) {
   
   # warning, any column named time in regressor_df will be removed
   
@@ -472,6 +473,8 @@ glm_spec <- function(mrs_data, regressor_df) {
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
   mrs_mat <- Re(mrs_data2mat(mrs_data))
+  
+  regressor_df_in <- regressor_df
   
   # drop the time column if present
   regressor_df<- regressor_df[, !names(regressor_df) %in% c("time"),
@@ -511,10 +514,15 @@ glm_spec <- function(mrs_data, regressor_df) {
                                   ft = mrs_data$ft, ref = mrs_data$ref,
                                   nuc = mrs_data$nuc, fd = TRUE)
   
-  return(list(beta_weight = beta_weight, p_value = p_value,
+  output_list <- list(beta_weight = beta_weight, p_value = p_value,
               p_value_log = p_value_log, p_value_log_mrs = p_value_log_mrs,
               p_value_mrs = p_value_mrs, beta_weight_mrs = beta_weight_mrs,
-              lm_res_list = lm_res_list))
+              lm_res_list = lm_res_list)
+  
+  if (full_output) output_list <- c(output_list, list(mrs_data = mrs_data,
+                                               regressor_df = regressor_df_in))
+  
+  return(output_list)
 }
 
 #' Calculate the efficiency of a regressor data frame.
@@ -564,11 +572,11 @@ gen_baseline_reg <- function(mrs_data) {
 }
 
 #' Generate polynomial regressors.
-#' @param mrs_data mrs_data object for timing information.
 #' @param degree the degree of the polynomial.
+#' @param mrs_data mrs_data object for timing information.
 #' @return polynomial regressors.
 #' @export
-gen_poly_reg <- function(mrs_data, degree) {
+gen_poly_reg <- function(degree, mrs_data) {
   time       <- dyn_acq_times(mrs_data)
   poly_mat   <- stats::poly(time, degree)
   scale_vals <- apply(Mod(poly_mat), 2, max)
@@ -973,10 +981,11 @@ preproc_svs_dataset <- function(paths, labels = NULL,
 #' the preproc_svs_dataset function.
 #' @param exclude_labels vector of labels of scans to exclude, eg poor quality
 #' @param labels labels to describe each data set.
+#' @param xlim spectral range to include in the analysis.
 #' @export
-fmrs_dataset_spec_glm <- function(regressor_df,
-                                  analysis_dir = "spant_analysis",
-                                  exclude_labels = NULL, labels = NULL) {
+fmrs_dataset_spec_glm <- function(regressor_df, analysis_dir = "spant_analysis",
+                                  exclude_labels = NULL, labels = NULL,
+                                  xlim = c(4, 0.2)) {
   
   # TODO add optional arguments for datasets to preserve original
   # ordering if needed
@@ -1027,6 +1036,13 @@ fmrs_dataset_spec_glm <- function(regressor_df,
     preproc_res_list[[n]] <- readRDS(preproc_path) 
   }
   
+  # run glm spec on each result separately
+  for (n in 1:Nscans) {
+    mrs_data_glm <- preproc_res_list[[n]]$corrected
+    gen_glm_spec_report(mrs_data_glm, regressor_df, labels[n], analysis_dir,
+                        xlim)
+  }
+  
   # extract just the corrected data
   corrected_list <- lapply(preproc_res_list, \(x) x$corrected)
   
@@ -1037,24 +1053,33 @@ fmrs_dataset_spec_glm <- function(regressor_df,
     mean_dataset <- corrected_list[[1]]
   }
   
-  # process the data
-  mean_spec_glm <- lb(mean_dataset, 3)
-  mean_spec_glm <- zf(mean_spec_glm)
-  mean_spec_glm <- crop_spec(mean_spec_glm)
-  mean_spec_glm <- bc_poly(mean_spec_glm, 1)
+  # run glm spec on the mean dataset
+  gen_glm_spec_report(mean_dataset, regressor_df, "dataset_mean", analysis_dir,
+                      xlim)
+}
+
+gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
+                                xlim) {
   
-  glm_spec_res <- glm_spec(mean_spec_glm, regressor_df)
+  # process the data
+  mrs_data_glm <- lb(mrs_data, 3)
+  mrs_data_glm <- zf(mrs_data_glm)
+  mrs_data_glm <- crop_spec(mrs_data_glm)
+  mrs_data_glm <- bc_poly(mrs_data_glm, 1)
+  
+  mrs_data_plot <- zf(mean_dyns(mrs_data))
+  
+  # regress
+  glm_spec_res <- glm_spec(mrs_data_glm, regressor_df)
   
   # write output
   rmd_file <- system.file("rmd", "spec_glm_results.Rmd", package = "spant")
   
   rmd_out_f <- file.path(tools::file_path_as_absolute(analysis_dir), "spec_glm",
-                         "dataset_mean")
+                         label)
   
   rmarkdown::render(rmd_file, params = list(data = glm_spec_res, 
-                                            regressor_df = regressor_df,
-                                            label = "dataset mean"),
+                    regressor_df = regressor_df, label = label,
+                    mrs_data_plot = mrs_data_plot, xlim = xlim),
                     output_file = rmd_out_f)
-  
-  return(glm_spec_res)
 }

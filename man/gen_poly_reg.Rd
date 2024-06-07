@@ -4,12 +4,12 @@
 \alias{gen_poly_reg}
 \title{Generate polynomial regressors.}
 \usage{
-gen_poly_reg(mrs_data, degree)
+gen_poly_reg(degree, mrs_data)
 }
 \arguments{
-\item{mrs_data}{mrs_data object for timing information.}
-
 \item{degree}{the degree of the polynomial.}
+
+\item{mrs_data}{mrs_data object for timing information.}
 }
 \value{
 polynomial regressors.

@@ -4,13 +4,15 @@
 \alias{glm_spec}
 \title{Perform a GLM analysis of dynamic MRS data in the spectral domain.}
 \usage{
-glm_spec(mrs_data, regressor_df)
+glm_spec(mrs_data, regressor_df, full_output = FALSE)
 }
 \arguments{
 \item{mrs_data}{single-voxel dynamics MRS data.}
 
 \item{regressor_df}{a data frame containing temporal regressors to be applied
 to each spectral datapoint.}
+
+\item{full_output}{append mrs_data and regressor_df to the output list.}
 }
 \value{
 list of statistical results.
