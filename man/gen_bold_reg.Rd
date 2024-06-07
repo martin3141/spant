@@ -9,6 +9,9 @@ gen_bold_reg(
   duration = NULL,
   trial_type = NULL,
   mrs_data = NULL,
+  tr = NULL,
+  Ndyns = NULL,
+  Ntrans = NULL,
   match_tr = TRUE,
   dt = 0.1,
   normalise = FALSE
@@ -22,6 +25,13 @@ gen_bold_reg(
 \item{trial_type}{string label for the stimulus.}
 
 \item{mrs_data}{mrs_data object for timing information.}
+
+\item{tr}{repetition time.}
+
+\item{Ndyns}{number of dynamic scans stored, potentially less than Ntrans
+if block averaging has been performed.}
+
+\item{Ntrans}{number of dynamic scans acquired.}
 
 \item{match_tr}{match the output to the input mrs_data.}
 

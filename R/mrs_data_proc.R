@@ -1393,31 +1393,58 @@ seconds <- function(mrs_data) {
   seq(from = 0, to = (Npts(mrs_data) - 1) / fs, by = 1 / fs)
 }
 
+check_dyn_input <- function(mrs_data, tr, Ndyns, Ntrans) {
+  
+  if (is.null(mrs_data)) {
+    if (is.null(tr) | is.null(Ndyns)) {
+      stop("Specify mrs_data or tr and Ndyns")
+    }
+    if (is.null(Ntrans)) Ntrans = Ndyns
+  } else {
+    if (!is.null(tr) | !is.null(Ndyns) | !is.null(Ntrans)) {
+      stop("Specify mrs_data or tr, Ndyns and Ntrans")
+    }
+  }
+  
+  if (!is.null(mrs_data)) {
+    if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
+      stop("TR not set, use set_tr function to set the repetition time.")
+    }
+    
+    if (is.na(Ntrans(mrs_data)) | is.null(Ntrans(mrs_data))) {
+      stop("Number of transients not set, use set_Ntrans function to set the 
+         number of transients.")
+    }
+    
+    Ntrans <- Ntrans(mrs_data)
+    tr     <- tr(mrs_data)
+    Ndyns  <- Ndyns(mrs_data)
+    
+  }
+  
+  return(list(tr = tr, Ndyns = Ndyns, Ntrans = Ntrans))   
+}
+
 #' Return a time scale vector of acquisition times for a dynamic MRS scan. The
 #' first temporal scan is assigned a value of 0.
 #' @param mrs_data MRS data.
+#' @param tr repetition time.
+#' @param Ndyns number of dynamic scans stored, potentially less than Ntrans
+#' if block averaging has been performed.
+#' @param Ntrans number of dynamic scans acquired.
 #' @return time scale vector in units of seconds.
 #' @export
-dyn_acq_times <- function(mrs_data) {
+dyn_acq_times <- function(mrs_data = NULL, tr = NULL, Ndyns = NULL,
+                          Ntrans = NULL) {
   
-  if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
-    stop("TR not set, use set_tr function to set the repetition time.")
-  }
+  res <- check_dyn_input(mrs_data, tr, Ndyns, Ntrans) 
   
-  if (is.na(Ntrans(mrs_data)) | is.null(Ntrans(mrs_data))) {
-    stop("Number of transients not set, use set_Ntrans function to set the 
-         number of transients.")
-  }
-  
-  n_trans <- Ntrans(mrs_data)
-  TR      <- tr(mrs_data)
-  n_dyns  <- Ndyns(mrs_data)
-  t_acq   <- seq(from = 0, by = TR, length.out = n_trans)
+  t_acq   <- seq(from = 0, by = res$tr, length.out = res$Ntrans)
   
   # correct for missmatch between n_trans and n_dyns due to temporal averaging 
-  if (n_trans != n_dyns) {
-    if (n_trans%%n_dyns != 0) stop("Dynamics and transients do not match")
-    block_size <- n_trans / n_dyns
+  if (res$Ntrans != res$Ndyns) {
+    if (res$Ntrans%%res$Ndyns != 0) stop("Dynamics and transients do not match")
+    block_size <- res$Ntrans / res$Ndyns
     t_acq <- colMeans(matrix(t_acq, nrow = block_size))
   }
   

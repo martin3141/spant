@@ -9,6 +9,9 @@ gen_trap_reg(
   duration,
   trial_type = NULL,
   mrs_data = NULL,
+  tr = NULL,
+  Ndyns = NULL,
+  Ntrans = NULL,
   rise_t = 0,
   fall_t = 0,
   exp_fall = FALSE,
@@ -27,6 +30,13 @@ gen_trap_reg(
 \item{trial_type}{string label for the stimulus.}
 
 \item{mrs_data}{mrs_data object for timing information.}
+
+\item{tr}{repetition time.}
+
+\item{Ndyns}{number of dynamic scans stored, potentially less than Ntrans
+if block averaging has been performed.}
+
+\item{Ntrans}{number of dynamic scans acquired.}
 
 \item{rise_t}{time to reach a plateau from baseline in seconds.}
 

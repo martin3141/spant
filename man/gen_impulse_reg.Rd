@@ -4,7 +4,14 @@
 \alias{gen_impulse_reg}
 \title{Generate impulse regressors.}
 \usage{
-gen_impulse_reg(onset, trial_type = NULL, mrs_data = NULL)
+gen_impulse_reg(
+  onset,
+  trial_type = NULL,
+  mrs_data = NULL,
+  tr = NULL,
+  Ndyns = NULL,
+  Ntrans = NULL
+)
 }
 \arguments{
 \item{onset}{stimulus onset in seconds.}
@@ -12,6 +19,13 @@ gen_impulse_reg(onset, trial_type = NULL, mrs_data = NULL)
 \item{trial_type}{string label for the stimulus.}
 
 \item{mrs_data}{mrs_data object for timing information.}
+
+\item{tr}{repetition time.}
+
+\item{Ndyns}{number of dynamic scans stored, potentially less than Ntrans
+if block averaging has been performed.}
+
+\item{Ntrans}{number of dynamic scans acquired.}
 }
 \value{
 impulse regressors data frame.

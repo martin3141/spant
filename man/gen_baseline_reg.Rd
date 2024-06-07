@@ -4,10 +4,17 @@
 \alias{gen_baseline_reg}
 \title{Generate baseline regressor.}
 \usage{
-gen_baseline_reg(mrs_data)
+gen_baseline_reg(mrs_data = NULL, tr = NULL, Ndyns = NULL, Ntrans = NULL)
 }
 \arguments{
 \item{mrs_data}{mrs_data object for timing information.}
+
+\item{tr}{repetition time.}
+
+\item{Ndyns}{number of dynamic scans stored, potentially less than Ntrans
+if block averaging has been performed.}
+
+\item{Ntrans}{number of dynamic scans acquired.}
 }
 \value{
 a single baseline regressor with value of 1.

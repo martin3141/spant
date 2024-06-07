@@ -10,6 +10,9 @@ gen_conv_reg(
   duration = NULL,
   trial_type = NULL,
   mrs_data = NULL,
+  tr = NULL,
+  Ndyns = NULL,
+  Ntrans = NULL,
   resp_fn,
   match_tr = TRUE,
   normalise = FALSE
@@ -23,6 +26,13 @@ gen_conv_reg(
 \item{trial_type}{string label for the stimulus.}
 
 \item{mrs_data}{mrs_data object for timing information.}
+
+\item{tr}{repetition time.}
+
+\item{Ndyns}{number of dynamic scans stored, potentially less than Ntrans
+if block averaging has been performed.}
+
+\item{Ntrans}{number of dynamic scans acquired.}
 
 \item{resp_fn}{a data frame specifying the response function to be convolved.}
 

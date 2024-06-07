@@ -3,6 +3,10 @@
 #' @param duration stimulus duration in seconds.
 #' @param trial_type string label for the stimulus.
 #' @param mrs_data mrs_data object for timing information.
+#' @param tr repetition time.
+#' @param Ndyns number of dynamic scans stored, potentially less than Ntrans
+#' if block averaging has been performed.
+#' @param Ntrans number of dynamic scans acquired.
 #' @param rise_t time to reach a plateau from baseline in seconds.
 #' @param fall_t time to fall from plateau level back to baseline in seconds.
 #' @param exp_fall model an exponential fall instead of linear.
@@ -16,27 +20,12 @@
 #' @return trapezoidal regressor data frame.
 #' @export
 gen_trap_reg <- function(onset, duration, trial_type = NULL, mrs_data = NULL,
-                         rise_t = 0, fall_t = 0, exp_fall = FALSE,
-                         exp_fall_power = 1, smo_sigma = NULL, match_tr = TRUE,
-                         dt = 0.01, normalise = FALSE) {
+                         tr = NULL, Ndyns = NULL, Ntrans = NULL, rise_t = 0,
+                         fall_t = 0, exp_fall = FALSE, exp_fall_power = 1,
+                         smo_sigma = NULL, match_tr = TRUE, dt = 0.01,
+                         normalise = FALSE) {
   
-  if (is.null(mrs_data)) {
-    seq_tr   <- 2
-    N_scans  <- 800
-    mrs_data <- sim_resonances()
-    mrs_data <- set_tr(mrs_data, seq_tr)
-    mrs_data <- set_Ntrans(mrs_data, N_scans)
-    mrs_data <- rep_dyn(mrs_data, N_scans)
-  }
-                         
-  if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
-    stop("TR not set, use set_tr function to set the repetition time.")
-  }
-  
-  if (is.na(Ntrans(mrs_data)) | is.null(Ntrans(mrs_data))) {
-    stop("Number of transients not set, use set_Ntrans function to set the 
-         number of transients.")
-  }
+  res <- check_dyn_input(mrs_data, tr, Ndyns, Ntrans)  
   
   if (is.null(trial_type)) trial_type <- rep("stim", length(onset))
   
@@ -49,9 +38,9 @@ gen_trap_reg <- function(onset, duration, trial_type = NULL, mrs_data = NULL,
   
   # make a time scale with dt seconds resolution for the duration of the scan
   # time
-  n_trans   <- mrs_data$meta$NumberOfTransients
-  TR        <- tr(mrs_data)
-  n_dyns    <- Ndyns(mrs_data)
+  n_trans   <- res$Ntrans
+  TR        <- res$tr
+  n_dyns    <- res$Ndyns
   t_fine    <- seq(from = 0, to = n_trans * TR - TR, by = dt)
   end       <- onset + duration
   
@@ -151,6 +140,10 @@ gen_trap_reg <- function(onset, duration, trial_type = NULL, mrs_data = NULL,
 #' @param duration stimulus duration in seconds.
 #' @param trial_type string label for the stimulus.
 #' @param mrs_data mrs_data object for timing information.
+#' @param tr repetition time.
+#' @param Ndyns number of dynamic scans stored, potentially less than Ntrans
+#' if block averaging has been performed.
+#' @param Ntrans number of dynamic scans acquired.
 #' @param match_tr match the output to the input mrs_data.
 #' @param dt timing resolution for internal calculations.
 #' @param normalise normalise the response function to have a maximum value of 
@@ -158,33 +151,17 @@ gen_trap_reg <- function(onset, duration, trial_type = NULL, mrs_data = NULL,
 #' @return BOLD regressor data frame.
 #' @export
 gen_bold_reg <- function(onset, duration = NULL, trial_type = NULL,
-                         mrs_data = NULL, match_tr = TRUE, dt = 0.1,
+                         mrs_data = NULL, tr = NULL, Ndyns = NULL,
+                         Ntrans = NULL, match_tr = TRUE, dt = 0.1,
                          normalise = FALSE) {
   
-  # create a dummy dataset if not specified
-  if (is.null(mrs_data)) {
-    seq_tr   <- 2
-    N_scans  <- 800
-    mrs_data <- sim_resonances()
-    mrs_data <- set_tr(mrs_data, seq_tr)
-    mrs_data <- set_Ntrans(mrs_data, N_scans)
-    mrs_data <- rep_dyn(mrs_data, N_scans)
-  }
+  res <- check_dyn_input(mrs_data, tr, Ndyns, Ntrans)  
   
   if (is.null(duration)) duration <- rep(dt, length(onset))
   
   # set the minimum duration to dt * 1.1
   min_dur <- dt * 1.1
   duration[duration < min_dur] <- min_dur
-  
-  if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
-    stop("TR not set, use set_tr function to set the repetition time.")
-  }
-  
-  if (is.na(Ntrans(mrs_data)) | is.null(Ntrans(mrs_data))) {
-    stop("Number of transients not set, use set_Ntrans function to set the 
-         number of transients.")
-  }
   
   if (is.null(trial_type)) trial_type <- rep("stim_bold", length(onset))
   
@@ -194,9 +171,9 @@ gen_bold_reg <- function(onset, duration = NULL, trial_type = NULL,
   
   # make a time scale with dt seconds resolution for the duration of the scan
   # time
-  n_trans   <- mrs_data$meta$NumberOfTransients
-  TR        <- tr(mrs_data)
-  n_dyns    <- Ndyns(mrs_data)
+  n_trans   <- res$Ntrans
+  TR        <- res$tr
+  n_dyns    <- res$Ndyns
   t_fine    <- seq(from = 0, to = n_trans * TR, by = dt)
   end       <- onset + duration
   
@@ -271,6 +248,10 @@ gen_bold_reg <- function(onset, duration = NULL, trial_type = NULL,
 #' @param duration stimulus duration in seconds.
 #' @param trial_type string label for the stimulus.
 #' @param mrs_data mrs_data object for timing information.
+#' @param tr repetition time.
+#' @param Ndyns number of dynamic scans stored, potentially less than Ntrans
+#' if block averaging has been performed.
+#' @param Ntrans number of dynamic scans acquired.
 #' @param resp_fn a data frame specifying the response function to be convolved.
 #' @param match_tr match the output to the input mrs_data.
 #' @param normalise normalise the response function to have a maximum value of 
@@ -278,18 +259,11 @@ gen_bold_reg <- function(onset, duration = NULL, trial_type = NULL,
 #' @return BOLD regressor data frame.
 #' @export
 gen_conv_reg <- function(onset, duration = NULL, trial_type = NULL,
-                         mrs_data = NULL, resp_fn, match_tr = TRUE,
+                         mrs_data = NULL, tr = NULL, Ndyns = NULL,
+                         Ntrans = NULL, resp_fn, match_tr = TRUE,
                          normalise = FALSE) {
   
-  # create a dummy dataset if not specified
-  if (is.null(mrs_data)) {
-    seq_tr   <- 2
-    N_scans  <- 800
-    mrs_data <- sim_resonances()
-    mrs_data <- set_tr(mrs_data, seq_tr)
-    mrs_data <- set_Ntrans(mrs_data, N_scans)
-    mrs_data <- rep_dyn(mrs_data, N_scans)
-  }
+  res <- check_dyn_input(mrs_data, tr, Ndyns, Ntrans)  
   
   dt <- resp_fn[2, 1] - resp_fn[1, 1]
   
@@ -298,15 +272,6 @@ gen_conv_reg <- function(onset, duration = NULL, trial_type = NULL,
   # set the minimum duration to dt * 1.1
   min_dur <- dt * 1.1
   duration[duration < min_dur] <- min_dur
-  
-  if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
-    stop("TR not set, use set_tr function to set the repetition time.")
-  }
-  
-  if (is.na(Ntrans(mrs_data)) | is.null(Ntrans(mrs_data))) {
-    stop("Number of transients not set, use set_Ntrans function to set the 
-         number of transients.")
-  }
   
   if (is.null(trial_type)) trial_type <- rep("stim_conv", length(onset))
   
@@ -319,9 +284,9 @@ gen_conv_reg <- function(onset, duration = NULL, trial_type = NULL,
   
   # make a time scale with dt seconds resolution for the duration of the scan
   # time
-  n_trans   <- mrs_data$meta$NumberOfTransients
-  TR        <- tr(mrs_data)
-  n_dyns    <- Ndyns(mrs_data)
+  n_trans   <- res$Ntrans
+  TR        <- res$tr
+  n_dyns    <- res$Ndyns
   t_fine    <- seq(from = 0, to = n_trans * TR, by = dt)
   end       <- onset + duration
   
@@ -393,27 +358,16 @@ gen_conv_reg <- function(onset, duration = NULL, trial_type = NULL,
 #' @param onset stimulus onset in seconds.
 #' @param trial_type string label for the stimulus.
 #' @param mrs_data mrs_data object for timing information.
+#' @param tr repetition time.
+#' @param Ndyns number of dynamic scans stored, potentially less than Ntrans
+#' if block averaging has been performed.
+#' @param Ntrans number of dynamic scans acquired.
 #' @return impulse regressors data frame.
 #' @export
-gen_impulse_reg <- function(onset, trial_type = NULL, mrs_data = NULL) {
+gen_impulse_reg <- function(onset, trial_type = NULL, mrs_data = NULL,
+                            tr = NULL, Ndyns = NULL, Ntrans = NULL) {
   
-  if (is.null(mrs_data)) {
-    seq_tr   <- 2
-    N_scans  <- 800
-    mrs_data <- sim_resonances()
-    mrs_data <- set_tr(mrs_data, seq_tr)
-    mrs_data <- set_Ntrans(mrs_data, N_scans)
-    mrs_data <- rep_dyn(mrs_data, N_scans)
-  }
-  
-  if (is.na(tr(mrs_data)) | is.null(tr(mrs_data))) {
-    stop("TR not set, use set_tr function to set the repetition time.")
-  }
-  
-  if (is.na(Ntrans(mrs_data)) | is.null(Ntrans(mrs_data))) {
-    stop("Number of transients not set, use set_Ntrans function to set the 
-         number of transients.")
-  }
+  time <- dyn_acq_times(mrs_data, tr, Ndyns, Ntrans)
   
   if (is.null(trial_type)) trial_type <- rep("stim_imp", length(onset))
   
@@ -422,13 +376,11 @@ gen_impulse_reg <- function(onset, trial_type = NULL, mrs_data = NULL) {
   
   stim_frame <- data.frame(onset, trial_type)
  
-  n_dyns    <- Ndyns(mrs_data)
+  n_dyns    <- length(time)
   empty_mat <- matrix(NA, nrow = n_dyns, ncol = trial_type_n)
   
   output_frame <- data.frame(empty_mat)
   colnames(output_frame) <- c(trial_types)
-    
-  time <- dyn_acq_times(mrs_data)
   
   for (m in 1:trial_type_n) {
     stim <- rep(0, length(time))
@@ -445,6 +397,46 @@ gen_impulse_reg <- function(onset, trial_type = NULL, mrs_data = NULL) {
   output_frame <- cbind(time, output_frame)
   
   return(output_frame)
+}
+
+#' Generate baseline regressor.
+#' @param mrs_data mrs_data object for timing information.
+#' @param tr repetition time.
+#' @param Ndyns number of dynamic scans stored, potentially less than Ntrans
+#' if block averaging has been performed.
+#' @param Ntrans number of dynamic scans acquired.
+#' @return a single baseline regressor with value of 1.
+#' @export
+gen_baseline_reg <- function(mrs_data = NULL, tr = NULL, Ndyns = NULL,
+                               Ntrans = NULL) {
+    
+  time   <- dyn_acq_times(mrs_data, tr, Ndyns, Ntrans)
+  reg_df <- data.frame(time = time, baseline = rep(1, length(t)))
+  return(reg_df)
+}
+
+#' Generate polynomial regressors.
+#' @param degree the degree of the polynomial.
+#' @param mrs_data mrs_data object for timing information.
+#' @param tr repetition time.
+#' @param Ndyns number of dynamic scans stored, potentially less than Ntrans
+#' if block averaging has been performed.
+#' @param Ntrans number of dynamic scans acquired.
+#' @return polynomial regressors.
+#' @export
+gen_poly_reg <- function(degree, mrs_data = NULL, tr = NULL, Ndyns = NULL,
+                         Ntrans = NULL) {
+  
+  time       <- dyn_acq_times(mrs_data, tr, Ndyns, Ntrans)
+  poly_mat   <- stats::poly(time, degree)
+  scale_vals <- apply(Mod(poly_mat), 2, max)
+  poly_mat   <- scale(poly_mat, center = FALSE, scale = scale_vals)
+  reg_df     <- data.frame(time = time, poly = poly_mat)
+  colnames(reg_df) <- gsub("\\.", "_", colnames(reg_df)) # dots in names = bad
+ 
+  if (degree == 1) colnames(reg_df) <- c("time", "poly_1")
+  
+  return(reg_df)
 }
 
 # gen double gamma model of hrf (as used in SPM) with 10ms resolution
@@ -559,31 +551,6 @@ append_regs <- function(...) {
   df_list_nt <- lapply(df_list, subset, select = -time)
   output     <- do.call("cbind", df_list_nt)
   return(cbind(time, output)) 
-}
-
-#' Generate baseline regressor.
-#' @param mrs_data mrs_data object for timing information.
-#' @return a single baseline regressor with value of 1.
-#' @export
-gen_baseline_reg <- function(mrs_data) {
-  time   <- dyn_acq_times(mrs_data)
-  reg_df <- data.frame(time = time, baseline = rep(1, length(t)))
-  return(reg_df)
-}
-
-#' Generate polynomial regressors.
-#' @param degree the degree of the polynomial.
-#' @param mrs_data mrs_data object for timing information.
-#' @return polynomial regressors.
-#' @export
-gen_poly_reg <- function(degree, mrs_data) {
-  time       <- dyn_acq_times(mrs_data)
-  poly_mat   <- stats::poly(time, degree)
-  scale_vals <- apply(Mod(poly_mat), 2, max)
-  poly_mat   <- scale(poly_mat, center = FALSE, scale = scale_vals)
-  reg_df     <- data.frame(time = time, poly = poly_mat)
-  colnames(reg_df) <- gsub("\\.", "_", colnames(reg_df)) # dots in names = bad
-  return(reg_df)
 }
 
 #' Create a BIDS directory and file structure from a list of mrs_data objects.

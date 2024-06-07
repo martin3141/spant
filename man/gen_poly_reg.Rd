@@ -4,12 +4,19 @@
 \alias{gen_poly_reg}
 \title{Generate polynomial regressors.}
 \usage{
-gen_poly_reg(degree, mrs_data)
+gen_poly_reg(degree, mrs_data = NULL, tr = NULL, Ndyns = NULL, Ntrans = NULL)
 }
 \arguments{
 \item{degree}{the degree of the polynomial.}
 
 \item{mrs_data}{mrs_data object for timing information.}
+
+\item{tr}{repetition time.}
+
+\item{Ndyns}{number of dynamic scans stored, potentially less than Ntrans
+if block averaging has been performed.}
+
+\item{Ntrans}{number of dynamic scans acquired.}
 }
 \value{
 polynomial regressors.
