@@ -4663,3 +4663,61 @@ mod_td <- function(mrs_data) {
   # return the Modulus
   return(Mod(mrs_data))
 }
+
+#' Combine SVS coil data using the GLS method presented by An et al 
+#' JMRI 37:1445-1450 (2013).
+#' @param metab MRS data containing metabolite data.
+#' @param ref MRS data containing reference data (optional).
+#' @param noise_pts number of points from the end of the FIDs to use for noise
+#' covariance estimation.
+#' @return coil combined MRS data.
+#' @export
+comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256) {
+  
+  # time-domain operation
+  if (is_fd(metab)) metab <- fd2td(metab)
+  
+  # use the last few points in each FID to estimate the noise covariance matrix
+  noise_mrs <- crop_td_pts(metab, start = Npts(metab) - noise_pts + 1)
+  noise_mat <- drop(noise_mrs$data)
+  noise_mat <- aperm(noise_mat, c(2, 3, 1))
+  dim(noise_mat) <- c(Ncoils(metab), noise_pts * Ndyns(metab))
+  psi <- noise_mat %*% Conj(t(noise_mat))
+  
+  # use the first point of the mean data to estimate the sensitivity vector
+  phase_ref_data <- mean_dyns(crop_td_pts(metab, end = 1))
+  S <- drop(phase_ref_data$data)
+  
+  # construct matrices
+  psi_inv     <- solve(psi)
+  precomp_mat <- (Conj(S) %*% psi_inv / drop(Conj(S) %*% psi_inv %*% S))
+  comb_mat    <- matrix(nrow = Ndyns(metab), ncol = Npts(metab))
+ 
+  # combine coils for each dynamic
+  for (n in 1:Ndyns(metab)) {
+    comb_mat[n, ] <- precomp_mat %*% drop(get_dyns(metab, n)$data)
+  }
+  
+  # convert matrix back to an mrs_data object
+  mrs_data_temp <- mat2mrs_data(comb_mat)
+  metab$data    <- mrs_data_temp$data
+  
+  if (!is.null(ref)) {
+    # time-domain operation
+    if (is_fd(ref)) ref <- fd2td(ref)
+    
+    comb_mat <- matrix(nrow = Ndyns(ref), ncol = Npts(metab))
+    
+    # combine coils for each dynamic
+    for (n in 1:Ndyns(ref)) {
+      comb_mat[n, ] <- precomp_mat %*% drop(get_dyns(ref, n)$data)
+    }
+  
+    mrs_data_temp <- mat2mrs_data(comb_mat)
+    ref$data      <- mrs_data_temp$data
+    
+    return(list(metab = metab, ref = ref)) 
+  } else {
+    return(metab) 
+  }
+}
