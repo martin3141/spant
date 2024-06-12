@@ -267,10 +267,13 @@ phase_ref_1h_brain <- function(mrs_data, mean_ref = FALSE) {
   
   ref <- sim_resonances(acq_paras = mrs_data, freq = c(2.01, 3.03, 3.22),
                         amp = 1, lw = 4, lg = 0)
+  
+  p_deg <- 4
+  xlim  <- c(4, 1.9)
  
   if (mean_ref) {
     mean_mrs_data <- mean(mrs_data)
-    res <- rats(mean_mrs_data, ref, xlim = c(4, 1.9), p_deg = 4,
+    res <- rats(mean_mrs_data, ref, xlim = xlim, p_deg = p_deg,
                 ret_corr_only = FALSE)
     
     phase <- as.numeric(res$phases)
@@ -281,7 +284,7 @@ phase_ref_1h_brain <- function(mrs_data, mean_ref = FALSE) {
     
     return(mrs_corr)
   } else {
-    res <- rats(mrs_data, ref, xlim = c(4, 1.9), p_deg = 4,
+    res <- rats(mrs_data, ref, xlim = xlim, p_deg = p_deg,
                 ret_corr_only = FALSE)
     return(res$corrected)
   }
