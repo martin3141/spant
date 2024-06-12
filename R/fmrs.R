@@ -704,8 +704,7 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL) {
   }
   
   # combine coils if needed
-  if (Ncoils(mrs_data) > 1) mrs_data <- comb_coils(mrs_data,
-                                                scale_method = "sig_noise_sq")
+  if (Ncoils(mrs_data) > 1) mrs_data <- comb_coils_svs_gls(mrs_data)
   
   mrs_rats  <- rats(mrs_data, xlim = c(4, 1.9), zero_freq_shift_t0 = TRUE,
                     ret_corr_only = FALSE)
@@ -818,7 +817,8 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL) {
 #' @export
 preproc_svs_dataset <- function(paths, labels = NULL,
                                 output_dir = "spant_analysis",
-                                exclude_labels = NULL) {
+                                exclude_labels = NULL,
+                                overwrite = FALSE) {
   
   # TODO print warning if there are more preprocessed results than input
   # paths
@@ -870,9 +870,14 @@ preproc_svs_dataset <- function(paths, labels = NULL,
     preproc_rds <- file.path(output_dir, "preproc", paste0(labels[n], ".rds"))
     
     if (file.exists(preproc_rds)) {
-      cat("Preprocessing already performed, using saved results.\n")
-      preproc_res_list[[n]] <- readRDS(preproc_rds)
-      next
+      
+      if (overwrite) {
+        cat("Overwriting saved results.\n")
+      }  else {
+        cat("Preprocessing already performed, using saved results.\n")
+        preproc_res_list[[n]] <- readRDS(preproc_rds)
+        next
+      }
     }
     
     preproc_res_list[[n]] <- preproc_svs(paths[n], labels[n],
