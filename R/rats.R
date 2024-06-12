@@ -268,3 +268,34 @@ quick_phase_ref <- function(mrs_data) {
   mrs_data <- shift(mrs_data, res$shifts[1], units = "hz")
   mrs_data
 }
+
+#' Corrected zero order phase and chemical shift offset in 1H MRS data from the
+#' brain.
+#' @param mrs_data MRS data to be corrected.
+#' @param mean_ref apply the phase and offset of the mean spectrum to all
+#' others. Default is FALSE.
+#' @return corrected MRS data.
+#' @export
+phase_ref_1h_brain <- function(mrs_data, mean_ref = FALSE) {
+  
+  ref <- sim_resonances(acq_paras = mrs_data, freq = c(2.01, 3.03, 3.22),
+                        amp = 1, lw = 4, lg = 0)
+ 
+  if (mean_ref) {
+    mean_mrs_data <- mean(mrs_data)
+    res <- rats(mean_mrs_data, ref, xlim = c(4, 1.9), p_deg = 4,
+                ret_corr_only = FALSE)
+    
+    phase <- as.numeric(res$phases)
+    shift <- as.numeric(res$shifts)
+    
+    mrs_corr <- phase(mrs_data, -phase)
+    mrs_corr <- shift(mrs_corr, -shift, units = "hz")
+    
+    return(mrs_corr)
+  } else {
+    res <- rats(mrs_data, ref, xlim = c(4, 1.9), p_deg = 4,
+                ret_corr_only = FALSE)
+    return(res$corrected)
+  }
+}
