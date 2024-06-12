@@ -814,6 +814,7 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL) {
 #' @param output_dir output directory.
 #' @param exclude_labels vector of labels of scans to exclude, eg poor quality
 #' data.
+#' @param overwrite overwrite saved results, defaults to FALSE.
 #' @export
 preproc_svs_dataset <- function(paths, labels = NULL,
                                 output_dir = "spant_analysis",

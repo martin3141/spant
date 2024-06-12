@@ -8,7 +8,8 @@ preproc_svs_dataset(
   paths,
   labels = NULL,
   output_dir = "spant_analysis",
-  exclude_labels = NULL
+  exclude_labels = NULL,
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -20,6 +21,8 @@ preproc_svs_dataset(
 
 \item{exclude_labels}{vector of labels of scans to exclude, eg poor quality
 data.}
+
+\item{overwrite}{overwrite saved results, defaults to FALSE.}
 }
 \description{
 Preprocess and perform quality assessment of one or more SVS data sets.
