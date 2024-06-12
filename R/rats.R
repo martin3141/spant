@@ -256,19 +256,6 @@ rats_obj_fn <- function(par, x, ref, t, inds, basis) {
   sum(res ^ 2)
 }
 
-quick_phase_ref <- function(mrs_data) {
-  ref <- sim_resonances(freq = c(2.01, 3.03, 3.22),
-                        acq_paras = get_acq_paras(mrs_data))
-  
-  # correct the first dynamic
-  res <- rats(get_dyns(mrs_data,1), ref)
-  
-  # apply to full dataset
-  mrs_data <- phase(mrs_data, res$phases[1])
-  mrs_data <- shift(mrs_data, res$shifts[1], units = "hz")
-  mrs_data
-}
-
 #' Corrected zero order phase and chemical shift offset in 1H MRS data from the
 #' brain.
 #' @param mrs_data MRS data to be corrected.
