@@ -2377,8 +2377,8 @@ sum_mrs <- function(a, b, force = FALSE) {
 #' Perform a mathematical operation on a spectral region.
 #' @param mrs_data MRS data.
 #' @param xlim spectral range to be integrated (defaults to full range).
-#' @param operator can be "sum" (default), "mean", "l2", "max", "min" or
-#' "max-min".
+#' @param operator can be "sum" (default), "mean", "l2", "max", "max_cplx,
+#' "min" or "max-min".
 #' @param freq_scale units of xlim, can be : "ppm", "hz" or "points".
 #' @param mode spectral mode, can be : "re", "im", "mod" or "cplx".
 #' @return an array of integral values.
@@ -2432,6 +2432,8 @@ spec_op <- function(mrs_data, xlim = NULL, operator = "sum", freq_scale = "ppm",
     res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), sum)
   } else if (operator == "max") {
     res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), max)
+  } else if (operator == "max_cplx") {
+    res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), max_cplx)
   } else if (operator == "min") {
     res <- apply(data_arr, c(1, 2, 3, 4, 5, 6), min)
   } else if (operator == "max-min") {
@@ -2442,6 +2444,12 @@ spec_op <- function(mrs_data, xlim = NULL, operator = "sum", freq_scale = "ppm",
   }
   
   return(res) 
+}
+
+max_cplx <- function(x) {
+  x_mod <- Mod(x)
+  max_ind <- which.max(x_mod)
+  return(x[max_ind])
 }
 
 #' Integrate a spectral region.
@@ -2721,7 +2729,7 @@ collapse_to_dyns.fit_result <- function(x, rm_masked = FALSE) {
 mean_dyns <- function(mrs_data, subset = NULL) {
   
   if (inherits(mrs_data, "list")) {
-    return(lapply(mrs_data, mean_dyns))
+    return(lapply(mrs_data, mean_dyns, subset = subset))
   }
   
   # check the input
@@ -2729,6 +2737,8 @@ mean_dyns <- function(mrs_data, subset = NULL) {
  
   # extract a subset if requested 
   if (!is.null(subset)) mrs_data <- get_dyns(mrs_data, subset)
+  
+  if (Ndyns(mrs_data) == 1) return(mrs_data)
   
   mrs_data$data <- aperm(mrs_data$data, c(5, 1, 2, 3, 4, 6, 7))
   mrs_data$data <- colMeans(mrs_data$data, na.rm = TRUE)
@@ -3495,7 +3505,11 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
   
   # get the dynamic mean of the ref data (better to take the first dynamic in
   # some cases?)
-  if (average_ref_dyns) ref <- mean_dyns(ref)
+  if (average_ref_dyns) {
+    ref <- mean_dyns(ref)
+  } else {
+    ref <- get_dyns(ref, 1)
+  }
   
   # ref_pt <- get_fp(ref)
   ref_pt <- get_subset(ref, td_set = ref_pt_index)$data
@@ -3521,6 +3535,7 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
       
       if (scale_method == "sig_noise_sq") {
         amp <- amp / (noise_sd ^ 2)
+        #amp <- (amp / noise_sd) ^ 2
       } else {
         amp <- amp / noise_sd
       }
@@ -3536,6 +3551,7 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
       
       if (scale_method == "sig_noise_sq") {
         amp <- amp / (noise_sd ^ 2)
+        #amp <- (amp / noise_sd) ^ 2
       } else {
         amp <- amp / noise_sd
       }

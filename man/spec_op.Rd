@@ -17,8 +17,8 @@ spec_op(
 
 \item{xlim}{spectral range to be integrated (defaults to full range).}
 
-\item{operator}{can be "sum" (default), "mean", "l2", "max", "min" or
-"max-min".}
+\item{operator}{can be "sum" (default), "mean", "l2", "max", "max_cplx,
+"min" or "max-min".}
 
 \item{freq_scale}{units of xlim, can be : "ppm", "hz" or "points".}
 
