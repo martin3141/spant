@@ -4516,7 +4516,9 @@ recon_twix_2d_mrsi <- function(twix_mrs) {
   # invert every other k-space line (for some reason)
   k_sp_corr_x <- array(1, dim(twix_recon$data))
   k_sp_corr_y <- k_sp_corr_x
-  k_sp_corr_x[,c(T, F),,,,,] <- -1
+  # k_sp_corr_x[,c(T, F),,,,,] <- -1
+  # k_sp_corr_y[,,c(F, T),,,,] <- -1
+  k_sp_corr_x[,c(F, T),,,,,] <- -1
   k_sp_corr_y[,,c(F, T),,,,] <- -1
   twix_recon$data <- twix_recon$data * k_sp_corr_x * k_sp_corr_y
   
