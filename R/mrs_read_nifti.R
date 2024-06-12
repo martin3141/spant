@@ -59,10 +59,15 @@ read_mrs_nifti <- function(fname, extra, verbose) {
     json_data <- jsonlite::fromJSON(ext_char)
   }
   
-  # TODO
-  # if ("dim_5" %in% names(json_data)) stop("NIfTI MRS non-default dimensions are not currently supported")
-  # if ("dim_6" %in% names(json_data)) stop("NIfTI MRS non-default dimensions are not currently supported")
-  # if ("dim_7" %in% names(json_data)) stop("NIfTI MRS non-default dimensions are not currently supported")
+  if (!is.null(json_data$dim_5)) {
+    if (json_data$dim_5 != "DIM_COIL") warning("Unsupported NIfTI MRS dimension 5.")
+  }
+  
+  if (!is.null(json_data$dim_6)) {
+    if (json_data$dim_6 != "DIM_DYN") warning("Unsupported NIfTI MRS dimension 6.")
+  }
+  
+  if (!is.null(json_data$dim_7)) warning("Unsupported NIfTI MRS dimension 7.")
   
   # read voxel dimensions, dwell time and time between dynamic scans
   res <- c(NA, pixdim[2], pixdim[3], pixdim[4], pixdim[6], NA, pixdim[5])

@@ -62,7 +62,8 @@ write_mrs_nifti <- function(mrs_data, fname) {
   json_list <- c(json_list, list(SpectralWidth = 1 / mrs_data$res[7],
                                  NumberOfSpectralPoints = Npts(mrs_data),
                                  AcquisitionVoxelSize = mrs_data$res[2:4]),
-                                 ChemicalShiftOffset = mrs_data$ref)
+                                 ChemicalShiftOffset = mrs_data$ref,
+                                 dim_5 = "DIM_COIL", dim_6 = "DIM_DYN")
   
   # check to see if we know the TR
   if (!is.na(mrs_data$res[5])) {
