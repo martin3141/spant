@@ -43,7 +43,6 @@ write_mrs_nifti <- function(mrs_data, fname) {
   # set the nucleus to a default value if not specified in mrs_data
   if (!exists("nuc", where = mrs_data)) mrs_data$nuc <- def_nuc()
   
-  
   # if (is.null(mrs_data$meta$EchoTime)) {
   #  te_val <- NULL
   #} else {
@@ -62,9 +61,9 @@ write_mrs_nifti <- function(mrs_data, fname) {
   json_list <- c(json_list, list(SpectralWidth = 1 / mrs_data$res[7],
                                  NumberOfSpectralPoints = Npts(mrs_data),
                                  AcquisitionVoxelSize = mrs_data$res[2:4]),
-                                 ChemicalShiftOffset = mrs_data$ref,
-                                 dim_5 = "DIM_COIL", dim_6 = "DIM_DYN")
+                                 ChemicalShiftOffset = mrs_data$ref)
   
+    
   # check to see if we know the TR
   if (!is.na(mrs_data$res[5])) {
       json_list <- c(json_list, list(RepetitionTime = mrs_data$res[5]))
@@ -82,6 +81,9 @@ write_mrs_nifti <- function(mrs_data, fname) {
   
   # append any additional meta information
   json_list <- c(json_list, mrs_data$meta)
+  
+  if (is.null(json_list$dim_5)) json_list <- c(json_list, dim_5 = "DIM_COIL")
+  if (is.null(json_list$dim_6)) json_list <- c(json_list, dim_6 = "DIM_DYN")
   
   # json_data <- jsonlite::toJSON(json_list, digits = NA, null = "null")
   
