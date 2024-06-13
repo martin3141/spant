@@ -9,7 +9,7 @@ comb_coils(
   ref = NULL,
   noise = NULL,
   scale = TRUE,
-  scale_method = "sig",
+  scale_method = "sig_noise_sq",
   sum_coils = TRUE,
   noise_region = c(-0.5, -2.5),
   average_ref_dyns = TRUE,
