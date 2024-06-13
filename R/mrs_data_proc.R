@@ -4518,7 +4518,7 @@ recon_twix_2d_mrsi <- function(twix_mrs) {
   k_sp_corr_y <- k_sp_corr_x
   # k_sp_corr_x[,c(T, F),,,,,] <- -1
   # k_sp_corr_y[,,c(F, T),,,,] <- -1
-  k_sp_corr_x[,c(F, T),,,,,] <- -1
+  k_sp_corr_x[,c(T, F),,,,,] <- -1
   k_sp_corr_y[,,c(F, T),,,,] <- -1
   twix_recon$data <- twix_recon$data * k_sp_corr_x * k_sp_corr_y
   
@@ -4679,9 +4679,14 @@ comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256) {
   # time-domain operation
   if (is_fd(metab)) metab <- fd2td(metab)
   
+  if (Ncoils(metab) == 1) {
+    warning("Data contains data for only one coil.")
+  }
+  
   # use the last few points in each FID to estimate the noise covariance matrix
   noise_mrs <- crop_td_pts(metab, start = Npts(metab) - noise_pts + 1)
   noise_mat <- drop(noise_mrs$data)
+  if ((Ndyns(metab)) == 1) dim(noise_mat) <- c(1, Ncoils(metab), noise_pts)
   noise_mat <- aperm(noise_mat, c(2, 3, 1))
   dim(noise_mat) <- c(Ncoils(metab), noise_pts * Ndyns(metab))
   psi <- noise_mat %*% Conj(t(noise_mat))
