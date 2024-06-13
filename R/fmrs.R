@@ -1095,9 +1095,9 @@ glm_spec_group_analysis <- function(glm_spec_dataset) {
   p_value    <- matrix(nrow = Npts, ncol = Nreg)
   beta_mean <- matrix(nrow = Npts, ncol = Nreg)
   for (n in 1:Nreg) {
-    betas <- lapply(spec_glm_res, get_betas, n = n)
+    betas <- lapply(glm_spec_dataset, get_betas, n = n)
     betas <- do.call(rbind, betas)
-    stat_res <- apply(betas, 2, t.test)
+    stat_res <- apply(betas, 2, stats::t.test)
     p_value[, n] <- sapply(stat_res, get_p_val)
     beta_mean[, n] <- sapply(stat_res, get_beta_mean)
   }
