@@ -991,10 +991,12 @@ preproc_svs_dataset <- function(paths, labels = NULL,
 #' @param exclude_labels vector of labels of scans to exclude, eg poor quality
 #' @param labels labels to describe each data set.
 #' @param xlim spectral range to include in the analysis.
+#' @param vline vertical lines to add to the plot.
 #' @export
 fmrs_dataset_glm_spec <- function(regressor_df, analysis_dir = "spant_analysis",
                                   exclude_labels = NULL, labels = NULL,
-                                  xlim = c(4, 0.2)) {
+                                  xlim = c(4, 0.2),
+                                  vline = c(1.35, 1.28, 2.35, 2.29)) {
   
   # TODO add optional arguments for datasets to preserve original
   # ordering if needed
@@ -1051,7 +1053,8 @@ fmrs_dataset_glm_spec <- function(regressor_df, analysis_dir = "spant_analysis",
   for (n in 1:Nscans) {
     mrs_data_glm <- preproc_res_list[[n]]$corrected
     glm_spec_res_list[[n]] <- gen_glm_spec_report(mrs_data_glm, regressor_df,
-                                                  labels[n], analysis_dir, xlim)
+                                                  labels[n], analysis_dir, xlim,
+                                                  vline)
   }
   
   # extract just the corrected data
@@ -1066,7 +1069,7 @@ fmrs_dataset_glm_spec <- function(regressor_df, analysis_dir = "spant_analysis",
   
   # run glm spec on the mean dataset
   gen_glm_spec_report(mean_dataset, regressor_df, "dataset_mean", analysis_dir,
-                      xlim)
+                      xlim, vline)
   
   # perform group level analysis
   group_res <- glm_spec_group_analysis(glm_spec_res_list)
@@ -1080,14 +1083,14 @@ fmrs_dataset_glm_spec <- function(regressor_df, analysis_dir = "spant_analysis",
   
   rmarkdown::render(rmd_file, params = list(data = group_res, 
                     regressor_df = regressor_df, label = "group_level",
-                    mrs_data_plot = mrs_data_plot, xlim = xlim),
+                    mrs_data_plot = mrs_data_plot, xlim = xlim, vline = vline),
                     output_file = rmd_out_f)
   
   return(glm_spec_res_list)
 }
 
 gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
-                                xlim) {
+                                xlim, vline) {
   
   # process the data
   mrs_data_glm <- lb(mrs_data, 3)
@@ -1108,7 +1111,7 @@ gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
   
   rmarkdown::render(rmd_file, params = list(data = glm_spec_res, 
                     regressor_df = regressor_df, label = label,
-                    mrs_data_plot = mrs_data_plot, xlim = xlim),
+                    mrs_data_plot = mrs_data_plot, xlim = xlim, vline = vline),
                     output_file = rmd_out_f)
   
   return(glm_spec_res)

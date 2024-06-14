@@ -7,6 +7,7 @@ params:
   regressor_df: ""
   mrs_data_plot: ""
   xlim: ""
+  vline: ""
 ---
 
 ```{r setup, include=FALSE}
@@ -21,7 +22,8 @@ theme_set(theme_bw())
 ### Mean spectrum
 ```{r, fig.width=10}
 par(mfcol = c(1, 2))
-plot(params$mrs_data_plot, xlim = xlim, restore_def_par = FALSE)
+plot(params$mrs_data_plot, xlim = xlim, restore_def_par = FALSE,
+     vline = params$vline)
 ```
 
 ```{r, fig.width=10, results='asis'}
@@ -33,10 +35,11 @@ for (n in 1:Nregressors) {
   log_p_val_spec <- get_dyns(params$data$p_value_log_mrs, n)
   plot(log_p_val_spec, y_scale = TRUE,
        yaxis_lab = expression("-log"[10]*"(p-value)"),
-       restore_def_par = FALSE, main = "Manhattan plot", xlim = params$xlim)
+       restore_def_par = FALSE, main = "Manhattan plot", xlim = params$xlim,
+       vline = params$vline)
   beta_weight_spec <- get_dyns(params$data$beta_weight_mrs, n)
   plot(beta_weight_spec, y_scale = TRUE, yaxis_lab = "Intensity (au)",
-       main = "beta weights", xlim = params$xlim)
+       main = "beta weights", xlim = params$xlim, vline = params$vline)
 }
 ```
 
