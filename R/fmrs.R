@@ -482,6 +482,8 @@ glm_spec <- function(mrs_data, regressor_df, full_output = FALSE) {
   
   beta_weight <- as.data.frame(t(as.data.frame(sapply(lm_res_list, get_glm_stat,
                                                "Estimate", simplify = FALSE))))
+  #beta_weight <- as.data.frame(t(as.data.frame(sapply(lm_res_list, get_glm_stat,
+  #                                             "t value", simplify = FALSE))))
   p_value <- as.data.frame(t(as.data.frame(sapply(lm_res_list, get_glm_stat,
                                            "Pr(>|t|)", simplify = FALSE))))
   
@@ -691,6 +693,8 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL) {
     mrs_data <- read_mrs(path)
   }
   
+  mrs_data <- mrs_data |> get_dyns(3:(Ndyns(mrs_data) - 2))
+  
   if (is.null(output_dir)) {
     output_dir <- getwd()
   } else {
@@ -706,6 +710,20 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL) {
   # combine coils if needed
   if (Ncoils(mrs_data) > 1) mrs_data <- comb_coils_svs_gls(mrs_data)
   
+  # if the spectral width exceeds 20 PPM, then it should be ok
+  # to decimate the signal to improve analysis speed
+  decimate <- NULL
+  if (is.null(decimate) & ((fs(mrs_data) / mrs_data$ft * 1e6) > 20)) {
+    decimate <- TRUE
+  } else {
+    decimate <- FALSE
+  }
+  
+  if (decimate) {
+    metab <- decimate_mrs_fd(mrs_data)
+    # if (!is.null(w_ref)) w_ref <- decimate_mrs_fd(w_ref)
+  }
+  
   mrs_rats  <- rats(mrs_data, xlim = c(4, 1.9), zero_freq_shift_t0 = TRUE,
                     ret_corr_only = FALSE)
   
@@ -715,10 +733,7 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL) {
   mean_mrs  <- mean_dyns(mrs_rats$corrected)
     
   # frequency and phase correct the mean spectrum
-  ref <- sim_resonances(acq_paras = mrs_data, freq = c(2.01, 3.03, 3.22),
-                        amp = 1, lw = 4, lg = 0)
-  
-  res <- rats(mean_mrs, ref, xlim = c(4, 1.9), p_deg = 4, ret_corr_only = FALSE)
+  res <- phase_ref_1h_brain(mean_mrs, ret_corr_only = FALSE)
   
   # apply mean spectrum phase and shift to the single shots
   mrs_proc <- phase(mrs_rats$corrected, -as.numeric(res$phases))
@@ -861,6 +876,10 @@ preproc_svs_dataset <- function(paths, labels = NULL,
   # directory for pre-processing results
   preproc_dir <- file.path(output_dir, "preproc")
   if (!dir.exists(preproc_dir)) dir.create(preproc_dir)
+  rds_dir <- file.path(output_dir, "preproc", "rds")
+  if (!dir.exists(rds_dir)) dir.create(rds_dir)
+  metab_dir <- file.path(output_dir, "preproc", "metab")
+  if (!dir.exists(metab_dir)) dir.create(metab_dir)
 
   tot_num <- length(paths)
   preproc_res_list <- vector(mode = "list", length = tot_num)
@@ -868,10 +887,10 @@ preproc_svs_dataset <- function(paths, labels = NULL,
     cat(c("Processing ", n, " of ", tot_num, " : ",
           as.character(labels[n]), "\n"), sep = "")
     
-    preproc_rds <- file.path(output_dir, "preproc", paste0(labels[n], ".rds"))
+    preproc_rds <- file.path(output_dir, "preproc", "rds",
+                             paste0(labels[n], ".rds"))
     
     if (file.exists(preproc_rds)) {
-      
       if (overwrite) {
         cat("Overwriting saved results.\n")
       }  else {
@@ -885,6 +904,11 @@ preproc_svs_dataset <- function(paths, labels = NULL,
                                          file.path(output_dir, "qa"))
     
     saveRDS(preproc_res_list[[n]], preproc_rds)
+    
+    preproc_metab <- file.path(output_dir, "preproc", "metab",
+                               paste0(labels[n], ".nii.gz"))
+    
+    write_mrs(preproc_res_list[[n]]$corrected, preproc_metab, force = TRUE)
   }
   
   preproc_summary <- data.frame(t(sapply(preproc_res_list,
@@ -974,7 +998,8 @@ fmrs_dataset_glm_spec <- function(regressor_df, analysis_dir = "spant_analysis",
   if (is.null(labels)) {
     # discover data labels from file names
     labels <- tools::file_path_sans_ext(basename(dir(file.path(analysis_dir,
-                                                                   "preproc"))))
+                                                                   "preproc",
+                                                                   "rds"))))
   }
   
   # detect non unique labels and quit if found
@@ -1006,7 +1031,7 @@ fmrs_dataset_glm_spec <- function(regressor_df, analysis_dir = "spant_analysis",
   for (n in 1:Nscans) {
     cat(c("Reading ", n, " of ", Nscans, " : ",
           as.character(labels[n]), "\n"), sep = "")
-    preproc_path <- file.path(analysis_dir, "preproc",
+    preproc_path <- file.path(analysis_dir, "preproc", "rds",
                               paste0(labels[n], ".rds"))
     
     if (!file.exists(preproc_path)) stop("Preprocessing result not found.")
@@ -1044,11 +1069,12 @@ fmrs_dataset_glm_spec <- function(regressor_df, analysis_dir = "spant_analysis",
   rmd_out_f <- file.path(tools::file_path_as_absolute(analysis_dir),
                          "spec_glm", "group_level")
   
+  mrs_data_plot <- zf(mean_dyns(mean_dataset))
+  
   rmarkdown::render(rmd_file, params = list(data = group_res, 
                     regressor_df = regressor_df, label = "group_level",
-                    mrs_data_plot = mean_dataset, xlim = xlim),
+                    mrs_data_plot = mrs_data_plot, xlim = xlim),
                     output_file = rmd_out_f)
-  
   
   return(glm_spec_res_list)
 }
@@ -1059,8 +1085,8 @@ gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
   # process the data
   mrs_data_glm <- lb(mrs_data, 3)
   mrs_data_glm <- zf(mrs_data_glm)
-  mrs_data_glm <- crop_spec(mrs_data_glm)
-  mrs_data_glm <- bc_poly(mrs_data_glm, 1)
+  mrs_data_glm <- crop_spec(mrs_data_glm, xlim = xlim)
+  # mrs_data_glm <- bc_poly(mrs_data_glm, 1)
   
   mrs_data_plot <- zf(mean_dyns(mrs_data))
   
@@ -1092,7 +1118,7 @@ glm_spec_group_analysis <- function(glm_spec_dataset) {
   get_p_val <- function(x) x$p.value
   get_beta_mean <- function(x) x$estimate
   
-  p_value    <- matrix(nrow = Npts, ncol = Nreg)
+  p_value   <- matrix(nrow = Npts, ncol = Nreg)
   beta_mean <- matrix(nrow = Npts, ncol = Nreg)
   for (n in 1:Nreg) {
     betas <- lapply(glm_spec_dataset, get_betas, n = n)

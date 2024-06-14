@@ -261,9 +261,11 @@ rats_obj_fn <- function(par, x, ref, t, inds, basis) {
 #' @param mrs_data MRS data to be corrected.
 #' @param mean_ref apply the phase and offset of the mean spectrum to all
 #' others. Default is FALSE.
+#' @param ret_corr_only return the corrected data only.
 #' @return corrected MRS data.
 #' @export
-phase_ref_1h_brain <- function(mrs_data, mean_ref = FALSE) {
+phase_ref_1h_brain <- function(mrs_data, mean_ref = FALSE,
+                               ret_corr_only = TRUE) {
   
   ref <- sim_resonances(acq_paras = mrs_data, freq = c(2.01, 3.03, 3.22),
                         amp = 1, lw = 4, lg = 0)
@@ -282,10 +284,15 @@ phase_ref_1h_brain <- function(mrs_data, mean_ref = FALSE) {
     mrs_corr <- phase(mrs_data, -phase)
     mrs_corr <- shift(mrs_corr, -shift, units = "hz")
     
-    return(mrs_corr)
+    res$corrected <- mrs_corr
   } else {
     res <- rats(mrs_data, ref, xlim = xlim, p_deg = p_deg,
                 ret_corr_only = FALSE)
-    return(res$corrected)
+  }
+  
+  if (ret_corr_only) {
+    return(res$corrected) 
+  } else {
+    return(res)
   }
 }

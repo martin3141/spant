@@ -5,13 +5,15 @@
 \title{Corrected zero order phase and chemical shift offset in 1H MRS data from the
 brain.}
 \usage{
-phase_ref_1h_brain(mrs_data, mean_ref = FALSE)
+phase_ref_1h_brain(mrs_data, mean_ref = FALSE, ret_corr_only = TRUE)
 }
 \arguments{
 \item{mrs_data}{MRS data to be corrected.}
 
 \item{mean_ref}{apply the phase and offset of the mean spectrum to all
 others. Default is FALSE.}
+
+\item{ret_corr_only}{return the corrected data only.}
 }
 \value{
 corrected MRS data.
