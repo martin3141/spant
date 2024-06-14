@@ -682,8 +682,11 @@ find_bids_mrs <- function(path) {
 #' @param path path to the fMRS data file or IMA directory.
 #' @param label a label to describe the data set.
 #' @param output_dir output directory.
+#' @param ref_inds a vector of 1-based indices for any water reference dynamic
+#' scans.
 #' @export
-preproc_svs <- function(path, label = NULL, output_dir = NULL) {
+preproc_svs <- function(path, label = NULL, output_dir = NULL,
+                        ref_inds = NULL) {
   
   # TODO deal with GE style data with wref included in the same file
   
@@ -693,7 +696,9 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL) {
     mrs_data <- read_mrs(path)
   }
   
-  mrs_data <- mrs_data |> get_dyns(3:(Ndyns(mrs_data) - 2))
+  if (!is.null(ref_inds)) {
+    mrs_data   <- get_dyns(mrs_data, -ref_inds)
+  }
   
   if (is.null(output_dir)) {
     output_dir <- getwd()
@@ -830,11 +835,13 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL) {
 #' @param exclude_labels vector of labels of scans to exclude, eg poor quality
 #' data.
 #' @param overwrite overwrite saved results, defaults to FALSE.
+#' @param ref_inds a vector of 1-based indices for any water reference dynamic
+#' scans.
 #' @export
 preproc_svs_dataset <- function(paths, labels = NULL,
                                 output_dir = "spant_analysis",
-                                exclude_labels = NULL,
-                                overwrite = FALSE) {
+                                exclude_labels = NULL, overwrite = FALSE,
+                                ref_inds = NULL) {
   
   # TODO print warning if there are more preprocessed results than input
   # paths
@@ -901,7 +908,7 @@ preproc_svs_dataset <- function(paths, labels = NULL,
     }
     
     preproc_res_list[[n]] <- preproc_svs(paths[n], labels[n],
-                                         file.path(output_dir, "qa"))
+                                         file.path(output_dir, "qa"), ref_inds)
     
     saveRDS(preproc_res_list[[n]], preproc_rds)
     

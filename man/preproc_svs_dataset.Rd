@@ -9,7 +9,8 @@ preproc_svs_dataset(
   labels = NULL,
   output_dir = "spant_analysis",
   exclude_labels = NULL,
-  overwrite = FALSE
+  overwrite = FALSE,
+  ref_inds = NULL
 )
 }
 \arguments{
@@ -23,6 +24,9 @@ preproc_svs_dataset(
 data.}
 
 \item{overwrite}{overwrite saved results, defaults to FALSE.}
+
+\item{ref_inds}{a vector of 1-based indices for any water reference dynamic
+scans.}
 }
 \description{
 Preprocess and perform quality assessment of one or more SVS data sets.

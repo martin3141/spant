@@ -4,7 +4,7 @@
 \alias{preproc_svs}
 \title{Preprocess and perform quality assessment of a single SVS data set.}
 \usage{
-preproc_svs(path, label = NULL, output_dir = NULL)
+preproc_svs(path, label = NULL, output_dir = NULL, ref_inds = NULL)
 }
 \arguments{
 \item{path}{path to the fMRS data file or IMA directory.}
@@ -12,6 +12,9 @@ preproc_svs(path, label = NULL, output_dir = NULL)
 \item{label}{a label to describe the data set.}
 
 \item{output_dir}{output directory.}
+
+\item{ref_inds}{a vector of 1-based indices for any water reference dynamic
+scans.}
 }
 \description{
 Preprocess and perform quality assessment of a single SVS data set.
