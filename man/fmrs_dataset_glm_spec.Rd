@@ -9,7 +9,8 @@ fmrs_dataset_glm_spec(
   analysis_dir = "spant_analysis",
   exclude_labels = NULL,
   labels = NULL,
-  xlim = c(4, 0.2)
+  xlim = c(4, 0.2),
+  vline = c(1.35, 1.28, 2.35, 2.29)
 )
 }
 \arguments{
@@ -24,6 +25,8 @@ the preproc_svs_dataset function.}
 \item{labels}{labels to describe each data set.}
 
 \item{xlim}{spectral range to include in the analysis.}
+
+\item{vline}{vertical lines to add to the plot.}
 }
 \description{
 Perform spectral GLM analysis of an fMRS dataset.
