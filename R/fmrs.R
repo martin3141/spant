@@ -474,11 +474,18 @@ glm_spec <- function(mrs_data, regressor_df, full_output = FALSE) {
   
   lm_res_list <- vector("list", ncol(mrs_mat))
   for (n in 1:ncol(mrs_mat)) {
-    lm_res_list[[n]] <- summary(stats::lm(mrs_mat[, n] ~ ., regressor_df))
+    # no intercept
+    lm_res_list[[n]] <- summary(stats::lm(mrs_mat[, n] ~ . + 0, regressor_df))
+    
+    # with intercept
+    # lm_res_list[[n]] <- summary(stats::lm(mrs_mat[, n] ~ ., regressor_df))
   }
   
-  # extract stats
-  get_glm_stat <- function(x, name) x$coefficients[-1, name, drop = FALSE]
+  # extract stats with intercept
+  # get_glm_stat <- function(x, name) x$coefficients[-1, name, drop = FALSE]
+  
+  # extract stats no intercept
+  get_glm_stat <- function(x, name) x$coefficients[, name, drop = FALSE]
   
   beta_weight <- as.data.frame(t(as.data.frame(sapply(lm_res_list, get_glm_stat,
                                                "Estimate", simplify = FALSE))))
