@@ -844,11 +844,12 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL,
 #' @param overwrite overwrite saved results, defaults to FALSE.
 #' @param ref_inds a vector of 1-based indices for any water reference dynamic
 #' scans.
+#' @param return_results function will return key outputs, defaults to FALSE.
 #' @export
 preproc_svs_dataset <- function(paths, labels = NULL,
                                 output_dir = "spant_analysis",
                                 exclude_labels = NULL, overwrite = FALSE,
-                                ref_inds = NULL) {
+                                ref_inds = NULL, return_results = FALSE) {
   
   # TODO print warning if there are more preprocessed results than input
   # paths
@@ -980,14 +981,8 @@ preproc_svs_dataset <- function(paths, labels = NULL,
                       output_file = rmd_out_f)
   }
   
-  return(mean_dataset)
-  
-  # saveRDS(res, file.path(output_dir, "preproc_full.rds"))
-  
-  #cut_res <- list(corrected = corrected_list, mean_dataset = mean_dataset,
-  #                labels = labels)
-  
-  #saveRDS(cut_res, file.path(output_dir, "preproc_corrected.rds"))
+  if (return_results) return(list(preproc_metab_list = corrected_list,
+                             preproc_metab_mean = mean_dataset))
 }
 
 #' Perform spectral GLM analysis of an fMRS dataset.
@@ -1108,7 +1103,7 @@ gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
   mrs_data_plot <- zf(mean_dyns(mrs_data))
   
   # regress
-  glm_spec_res <- glm_spec(mrs_data_glm, regressor_df)
+  glm_spec_res <- glm_spec(mrs_data_glm, regressor_df, full_output = TRUE)
   
   # write output
   rmd_file <- system.file("rmd", "spec_glm_results.Rmd", package = "spant")
