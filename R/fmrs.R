@@ -564,6 +564,32 @@ append_regs <- function(...) {
   return(cbind(time, output)) 
 }
 
+#' Expand a regressor matrix for a group analysis.
+#' @param regressor_df input regressor data frame.
+#' @param n number of datasets n the group.
+#' @export
+gen_group_reg <- function(regressor_df, n) {
+  # remove the time column and convert to a matrix
+  tr <- regressor_df$time[2] - regressor_df$time[1]
+  Nreg <- ncol(regressor_df) - 1
+  offset <- utils::tail(regressor_df$time, 1) + tr
+  reg_mat <- as.matrix(regressor_df[-1])
+  reg_mat_group <- kronecker(diag(n), reg_mat)
+  group_regressor_df <- as.data.frame(reg_mat_group)
+  time <- rep(regressor_df$time, n) + 
+          rep(offset * (0:(n - 1)), each = nrow(regressor_df))
+  col_inds <- seq(from = 1, by = Nreg, length.out = n) + 
+              rep(0:(Nreg - 1), each = n)
+  
+  group_regressor_df <- group_regressor_df[col_inds]
+  
+  colnames(group_regressor_df) <- paste0(rep(colnames(regressor_df)[-1], 
+                                         each = n), "_scan_", 1:n)
+  
+  group_regressor_df <- cbind(time = time, group_regressor_df)
+  return(group_regressor_df)
+}
+
 #' Create a BIDS directory and file structure from a list of mrs_data objects.
 #' @param mrs_data_list list of mrs_data objects.
 #' @param output_dir the base directory to create the BIDS structure.
@@ -1169,3 +1195,5 @@ glm_spec_group_analysis <- function(glm_spec_dataset) {
               p_value = p_value,
               beta_weight = beta_mean))
 }
+
+
