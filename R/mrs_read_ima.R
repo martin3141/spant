@@ -145,5 +145,10 @@ extract_dkd_wref_scans <- function(mrs_data) {
   ref_inds <- c(ref_inds_start[((ref_n / 4) + 1):(ref_n / 2)],
                 ref_inds_end[((ref_n / 4) + 1):(ref_n / 2)])
   ref <- get_dyns(mrs_data, ref_inds)
-  return(list(metab = metab, ref = ref, ref_ecc = ref_ecc))
+  
+  out <- list(metab = metab, ref = ref, ref_ecc = ref_ecc)
+  
+  class(out) <- c("list", "mrs_data")
+  
+  return(out)
 }
