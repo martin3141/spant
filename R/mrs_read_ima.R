@@ -106,12 +106,44 @@ read_ima_dyn_dir <- function(dir, extra = NULL, verbose = FALSE) {
   files <- list.files(dir, full.names = TRUE)
   if (length(files) == 0) stop("Error, read_ima_dyn_dir files not found.")
   
-  #warning("coil ordering is based on file name only.")
-  
   files <- sort(files)
   mrs_list <- lapply(files, read_mrs, format = "dicom", verbose = verbose,
                      extra = extra)
   
   mrs_data <- append_dyns(mrs_list)
-  return(mrs_data)
+  
+  # deal with CMRR reference scans if needed
+  seq_name_upper <- toupper(mrs_data$meta$SequenceName)
+  if (startsWith(seq_name_upper, "%CUSTOMERSEQ%\\SVS_SLASER")) {
+    if (mrs_data$meta$NumberOfTransients == Ndyns(mrs_data)) {
+      return(mrs_data)
+    } else {
+      return(extract_dkd_wref_scans(mrs_data))
+    }
+  } else {
+    return(mrs_data)
+  }
+}
+
+extract_dkd_wref_scans <- function(mrs_data) {
+  
+  full_n  <- Ndyns(mrs_data)
+  metab_n <- mrs_data$meta$NumberOfTransients
+  ref_n   <- full_n - metab_n
+  metab_inds <- (ref_n / 2 + 1):(full_n - ref_n / 2)
+  metab <- get_dyns(mrs_data, metab_inds)
+  
+  ref_inds_start <- 1:(ref_n / 2)
+  ref_inds_end   <- ((full_n - ref_n / 2) + 1):full_n
+  
+  # water ecc inds
+  ref_ecc_inds <- c(ref_inds_start[1:(ref_n / 4)],
+                    ref_inds_end[1:(ref_n / 4)])
+  ref_ecc <- get_dyns(mrs_data, ref_ecc_inds)
+  
+  # water scaling inds
+  ref_inds <- c(ref_inds_start[((ref_n / 4) + 1):(ref_n / 2)],
+                ref_inds_end[((ref_n / 4) + 1):(ref_n / 2)])
+  ref <- get_dyns(mrs_data, ref_inds)
+  return(list(metab = metab, ref = ref, ref_ecc = ref_ecc))
 }

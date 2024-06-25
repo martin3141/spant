@@ -1,5 +1,6 @@
 # spant 2.22.0
 * Added functions for GLS coil combination.
+* Improved handling of CMRR semi-LASER SVS water reference scans.
 
 # spant 2.21.0
 * Fixed compiler warnings for Fortran code.

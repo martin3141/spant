@@ -431,7 +431,17 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
     mrs_data <- crop_td_pts_pot(mrs_data)
   }
   
-  return(mrs_data)
+  # deal with CMRR reference scans if needed
+  seq_name_upper <- toupper(mrs_data$meta$SequenceName)
+  if (startsWith(seq_name_upper, "%CUSTOMERSEQ%\\SVS_SLASER")) {
+    if (mrs_data$meta$NumberOfTransients == Ndyns(mrs_data)) {
+      return(mrs_data)
+    } else {
+      return(extract_dkd_wref_scans(mrs_data))
+    }
+  } else {
+    return(mrs_data)
+  }
 }
 
 #' Read the text format header found in Siemens IMA and TWIX data files.
@@ -441,7 +451,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
 #' @param offset offset to begin searching for the text header.
 #' @return a list of parameter values
 #' @export
-read_siemens_txt_hdr <- function(input, version = "vd", verbose,
+read_siemens_txt_hdr <- function(input, version = "vd", verbose = FALSE,
                                  offset = 0) {
   
   if (is.character(input)) {
