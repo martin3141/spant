@@ -3274,7 +3274,7 @@ ecc <- function(metab, ref, rev = FALSE) {
 
 #' Apodise MRSI data in the x-y direction with a k-space filter.
 #' @param mrs_data MRSI data.
-#' @param func must be "hamming" or "gaussian".
+#' @param func must be "hamming", "hanning" or "gaussian".
 #' @param w the reciprocal of the standard deviation for the Gaussian function.
 #' @return apodised data.
 #' @export
@@ -3299,6 +3299,9 @@ apodise_xy <- function(mrs_data, func = "hamming", w = 2.5) {
   if (func == "hamming") {
     x_fun <- signal::hamming(x_dim)
     y_fun <- signal::hamming(y_dim)
+  } else if (func == "hanning") {
+    x_fun <- signal::hanning(x_dim)
+    y_fun <- signal::hanning(y_dim)
   } else if (func == "gaussian") {
     x_fun <- signal::gausswin(x_dim, w = w)
     y_fun <- signal::gausswin(y_dim, w = w)
@@ -3536,6 +3539,7 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
       if (scale_method == "sig_noise_sq") {
         amp <- amp / (noise_sd ^ 2)
         #amp <- (amp / noise_sd) ^ 2
+        #amp <- amp ^ 2
       } else {
         amp <- amp / noise_sd
       }
@@ -3552,6 +3556,7 @@ comb_coils <- function(metab, ref = NULL, noise = NULL, scale = TRUE,
       if (scale_method == "sig_noise_sq") {
         amp <- amp / (noise_sd ^ 2)
         #amp <- (amp / noise_sd) ^ 2
+        #amp <- amp ^ 2
       } else {
         amp <- amp / noise_sd
       }
@@ -3667,6 +3672,8 @@ est_noise_sd <- function(mrs_data, n = 100, offset = 100, p_order = 2) {
 }
 
 est_noise_sd_vec <- function(x, n = 100, offset = 100, p_order = 2) {
+  if (is.na(x[1])) return(NA)
+  
   N <- length(x)
   seg <- Re(x[(N - offset - n + 1):(N - offset)])
   if (p_order != 0) {
@@ -3814,6 +3821,7 @@ calc_peak_info_vec <- function(data_pts, interp_f) {
   if (is.na(data_pts[1])) return(rep(NA, 3))
   
   data_pts <- stats::spline(data_pts, n = interp_f * length(data_pts))
+  
   data_pts_x <- data_pts$x
   data_pts <- data_pts$y
   peak_pos_n <- which.max(data_pts)
@@ -4672,9 +4680,12 @@ mod_td <- function(mrs_data) {
 #' @param ref MRS data containing reference data (optional).
 #' @param noise_pts number of points from the end of the FIDs to use for noise
 #' covariance estimation.
+#' @param noise_mrs MRS data containing noise information for each coil.
+#' @param use_mean_sens use the dynamic mean to estimate coil sensitivities.
 #' @return coil combined MRS data.
 #' @export
-comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256) {
+comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256,
+                               noise_mrs = NULL, use_mean_sens = TRUE) {
   
   # time-domain operation
   if (is_fd(metab)) metab <- fd2td(metab)
@@ -4683,26 +4694,49 @@ comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256) {
     warning("Data contains data for only one coil.")
   }
   
-  # use the last few points in each FID to estimate the noise covariance matrix
-  noise_mrs <- crop_td_pts(metab, start = Npts(metab) - noise_pts + 1)
+  if (is.null(noise_mrs)) {
+    # use the last few points in each FID to estimate the noise covariance
+    # matrix
+    noise_mrs <- crop_td_pts(metab, start = Npts(metab) - noise_pts + 1)
+  } else {
+    noise_pts <- Npts(noise_mrs)
+  }
+  
   noise_mat <- drop(noise_mrs$data)
-  if ((Ndyns(metab)) == 1) dim(noise_mat) <- c(1, Ncoils(metab), noise_pts)
+  if ((Ndyns(noise_mrs)) == 1) dim(noise_mat) <- c(1, Ncoils(noise_mrs), noise_pts)
   noise_mat <- aperm(noise_mat, c(2, 3, 1))
-  dim(noise_mat) <- c(Ncoils(metab), noise_pts * Ndyns(metab))
+  dim(noise_mat) <- c(Ncoils(noise_mrs), noise_pts * Ndyns(noise_mrs))
   psi <- noise_mat %*% Conj(t(noise_mat))
   
-  # use the first point of the mean data to estimate the sensitivity vector
-  phase_ref_data <- mean_dyns(crop_td_pts(metab, end = 1))
-  S <- drop(phase_ref_data$data)
-  
-  # construct matrices
-  psi_inv     <- solve(psi)
-  precomp_mat <- (Conj(S) %*% psi_inv / drop(Conj(S) %*% psi_inv %*% S))
-  comb_mat    <- matrix(nrow = Ndyns(metab), ncol = Npts(metab))
- 
-  # combine coils for each dynamic
-  for (n in 1:Ndyns(metab)) {
-    comb_mat[n, ] <- precomp_mat %*% drop(get_dyns(metab, n)$data)
+  if (use_mean_sens) {
+    # use the first point of the mean data to estimate the sensitivity vector
+    phase_ref_data <- mean_dyns(crop_td_pts(metab, end = 1, start = 1))
+    S <- drop(phase_ref_data$data)
+    
+    # construct matrices
+    psi_inv     <- solve(psi)
+    precomp_mat <- (Conj(S) %*% psi_inv / drop(Conj(S) %*% psi_inv %*% S))
+    comb_mat    <- matrix(nrow = Ndyns(metab), ncol = Npts(metab))
+    
+    # combine coils for each dynamic
+    for (n in 1:Ndyns(metab)) {
+      comb_mat[n, ] <- precomp_mat %*% drop(get_dyns(metab, n)$data)
+    }
+  } else {
+    # combine coils for each dynamic
+    comb_mat <- matrix(nrow = Ndyns(metab), ncol = Npts(metab))
+    psi_inv <- solve(psi)
+    for (n in 1:Ndyns(metab)) {
+      
+      # use the first point to estimate the sensitivity vector
+      phase_ref_data <- get_dyns(crop_td_pts(metab, end = 1, start = 1), n)
+      S <- drop(phase_ref_data$data)
+      
+      # construct matrices (can probably optimise this a bit)
+      precomp_mat <- (Conj(S) %*% psi_inv / drop(Conj(S) %*% psi_inv %*% S))
+      
+      comb_mat[n, ] <- precomp_mat %*% drop(get_dyns(metab, n)$data)
+    }
   }
   
   # convert matrix back to an mrs_data object
@@ -4728,3 +4762,92 @@ comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256) {
     return(metab) 
   }
 }
+
+#' Combine MRSI coil data using the GLS method presented by An et al 
+#' JMRI 37:1445-1450 (2013).
+#' @param metab MRSI data containing metabolite data.
+#' @param noise_pts number of points from the end of the FIDs to use for noise
+#' covariance estimation.
+#' @param noise_mrs MRS data containing noise information for each coil.
+#' @return coil combined MRSI data.
+#' @export
+comb_coils_mrsi_gls <- function(metab, noise_pts = 30, noise_mrs = NULL) {
+  
+  # start in the time-domain
+  if (is_fd(metab)) metab <- fd2td(metab)
+  
+  if (Ncoils(metab) == 1) {
+    warning("Data contains data for only one coil.")
+  }
+  
+  if (is.null(noise_mrs)) {
+    # use the last few points in each FID to estimate the noise covariance
+    # matrix
+    noise_mrs <- crop_td_pts(metab, start = Npts(metab) - noise_pts + 1)
+  } else {
+    noise_pts <- Npts(noise_mrs)
+  }
+  
+  noise_dyns <- Nx(noise_mrs) * Ny(noise_mrs) * Nz(noise_mrs) * Ndyns(noise_mrs)
+  dim(noise_mrs$data) <- c(1, 1, 1, 1, noise_dyns, Ncoils(noise_mrs), noise_pts)
+  
+  noise_mat <- drop(noise_mrs$data)
+  if ((Ndyns(noise_mrs)) == 1) {
+    dim(noise_mat) <- c(1, Ncoils(noise_mrs), noise_pts)
+  }
+  noise_mat <- aperm(noise_mat, c(2, 3, 1))
+  dim(noise_mat) <- c(Ncoils(noise_mrs), noise_pts * Ndyns(noise_mrs))
+  psi <- noise_mat %*% Conj(t(noise_mat))
+  
+  # create output dataset
+  comb_data <- get_subset(metab, coil_set = 1)
+  comb_data$data[] <- NA
+  
+  psi_inv <- solve(psi)
+  for (x in 1:Nx(metab)) {
+    for (y in 1:Ny(metab)) {
+      for (z in 1:Nz(metab)) {
+        
+        temp_spec <- get_subset(metab, x_set = x, y_set = y, z_set = z)
+        temp_spec_orig <- temp_spec
+        
+        temp_spec <- td2fd(lb(temp_spec, 2))
+        temp_spec_mod <- sum_coils(Mod(temp_spec))
+        suppressWarnings({
+          peak_freq <- peak_info(temp_spec_mod, xlim = c(1.7, 3.4))$freq_ppm
+        })
+        peak_range <- c(peak_freq - 0.14, peak_freq + 0.14)
+        phase_ref_data <- spec_op(temp_spec, operator = "sum",
+                                  mode = "cplx", xlim = peak_range)
+        S <- drop(phase_ref_data)
+        
+        # use the max td point from the first 10 points to estimate the
+        # sensitivity vector
+        # temp_spec_cut  <- get_subset(temp_spec_ref, td_set = 1:10)
+        # init_pts       <- Mod(temp_spec_cut$data)
+        # max_td_pt      <- which(init_pts == max(init_pts), arr.ind = TRUE)[7]
+        # phase_ref_data <- crop_td_pts(temp_spec_cut, end = max_td_pt,
+        #                               start = max_td_pt)
+        #
+        # S <- drop(phase_ref_data$data)
+        
+        # use the first point to estimate the sensitivity vector
+        # phase_ref_data <- crop_td_pts(temp_spec_ref, end = 1, start = 1)
+        # S <- drop(phase_ref_data$data)
+        
+        # fixed ref frequency band
+        # phase_ref_data <- spec_op(temp_spec_ref, operator = "sum",
+        #                           mode = "cplx", xlim = c(2.1, 1.9))
+        # S <- drop(phase_ref_data)
+        
+        # construct matrices (can probably optimise this a bit)
+        precomp_mat <- (Conj(S) %*% psi_inv / drop(Conj(S) %*% psi_inv %*% S))
+        
+        comb_data$data[, x, y,,,,] <- precomp_mat %*% drop(temp_spec_orig$data)
+      }
+    }
+  }
+
+ return(comb_data)
+}
+

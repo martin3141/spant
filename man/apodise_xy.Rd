@@ -9,7 +9,7 @@ apodise_xy(mrs_data, func = "hamming", w = 2.5)
 \arguments{
 \item{mrs_data}{MRSI data.}
 
-\item{func}{must be "hamming" or "gaussian".}
+\item{func}{must be "hamming", "hanning" or "gaussian".}
 
 \item{w}{the reciprocal of the standard deviation for the Gaussian function.}
 }

@@ -5,7 +5,13 @@
 \title{Combine SVS coil data using the GLS method presented by An et al
 JMRI 37:1445-1450 (2013).}
 \usage{
-comb_coils_svs_gls(metab, ref = NULL, noise_pts = 256)
+comb_coils_svs_gls(
+  metab,
+  ref = NULL,
+  noise_pts = 256,
+  noise_mrs = NULL,
+  use_mean_sens = TRUE
+)
 }
 \arguments{
 \item{metab}{MRS data containing metabolite data.}
@@ -14,6 +20,10 @@ comb_coils_svs_gls(metab, ref = NULL, noise_pts = 256)
 
 \item{noise_pts}{number of points from the end of the FIDs to use for noise
 covariance estimation.}
+
+\item{noise_mrs}{MRS data containing noise information for each coil.}
+
+\item{use_mean_sens}{use the dynamic mean to estimate coil sensitivities.}
 }
 \value{
 coil combined MRS data.

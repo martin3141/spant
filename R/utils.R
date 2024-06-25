@@ -213,6 +213,7 @@ re_max <- function(x) {
 }
 
 re_max_interp <- function(data_pts, interp_f) {
+  if (is.na(data_pts[1])) return(NA)
   data_pts <- stats::spline(Re(data_pts), n = interp_f * length(data_pts))
   max(data_pts$y)
 }

@@ -1,3 +1,6 @@
+# spant 2.22.0
+* Added functions for GLS coil combination.
+
 # spant 2.21.0
 * Fixed compiler warnings for Fortran code.
 * Added glm_spec function.
