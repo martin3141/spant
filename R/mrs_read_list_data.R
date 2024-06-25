@@ -75,7 +75,7 @@ read_list_data <- function(fname, ft, fs, ref, extra) {
   } else {
     ref_data <- cplx_vec[ref_start:ref_end]
     dim(ref_data) <- c(N, chans, ref_N / chans, 1, 1, 1, 1)
-    ref_data <- aperm(ref_data, c(7,6,5,4,3,2,1))
+    ref_data <- aperm(ref_data, c(7, 6, 5, 4, 3, 2, 1))
     
     ref_mrs <- mrs_data(data = ref_data, ft = ft, resolution = res, ref = ref,
                         nuc = nuc, freq_domain = freq_domain, affine = NULL,
@@ -84,11 +84,11 @@ read_list_data <- function(fname, ft, fs, ref, extra) {
   
   metab_data <- cplx_vec[metab_start:metab_end]
   dim(metab_data) <- c(N, chans, metab_N/chans, 1, 1, 1, 1)
-  metab_data <- aperm(metab_data, c(7,6,5,4,3,2,1))
+  metab_data <- aperm(metab_data, c(7, 6, 5, 4, 3, 2, 1))
   
   noise_data <- cplx_vec[noise_start:noise_end]
   dim(noise_data) <- c(N, chans, noise_N/chans, 1, 1, 1, 1)
-  noise_data <- aperm(noise_data, c(7,6,5,4,3,2,1))
+  noise_data <- aperm(noise_data, c(7, 6, 5, 4, 3, 2, 1))
   
   metab_mrs <- mrs_data(data = metab_data, ft = ft, resolution = res, ref = ref,
                         nuc = nuc, freq_domain = freq_domain, affine = NULL,
@@ -98,5 +98,9 @@ read_list_data <- function(fname, ft, fs, ref, extra) {
                         nuc = nuc, freq_domain = freq_domain, affine = NULL,
                         meta = NULL, extra = extra)
   
-  list(metab = metab_mrs, ref = ref_mrs, noise = noise_mrs)
+  out <- list(metab = metab_mrs, ref = ref_mrs, noise = noise_mrs)
+  
+  class(out) <- c("list", "mrs_data")
+  
+  return(out)
 }
