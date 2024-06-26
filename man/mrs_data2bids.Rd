@@ -53,8 +53,9 @@ corresponding to the mrs_data input indices.}
 
 \item{inv}{optional vector of inversion indices.}
 
-\item{skip_existing}{skip any existing data files. Defaults to TRUE, set to
-FALSE to overwrite existing data files.}
+\item{skip_existing}{skip any data files that have already been converted.
+Defaults to TRUE, set to FALSE to force an overwrite of any existing data
+files.}
 }
 \description{
 Create a BIDS file structure from a vector of MRS data paths or list of

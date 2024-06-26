@@ -609,8 +609,9 @@ gen_group_reg <- function(regressor_df, n) {
 #' @param run optional vector of run indices.
 #' @param echo optional vector of echo time indices.
 #' @param inv optional vector of inversion indices.
-#' @param skip_existing skip any existing data files. Defaults to TRUE, set to
-#' FALSE to overwrite existing data files.
+#' @param skip_existing skip any data files that have already been converted.
+#' Defaults to TRUE, set to FALSE to force an overwrite of any existing data
+#' files.
 #' @export
 mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
                           ses = NULL, task = NULL, acq = NULL, nuc = NULL,
