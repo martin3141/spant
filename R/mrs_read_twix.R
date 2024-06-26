@@ -380,12 +380,15 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
   y_pts <- max(mrs_data$twix_inds$Lin) + 1
   
   if (x_pts > 1 || y_pts > 1) {
+    mrsi <- TRUE
     mrs_data$resolution[2] <- vars$x_dim / x_pts
     mrs_data$resolution[3] <- vars$y_dim / y_pts
     
     # fix the affine
     mrs_data$affine[,1] <- mrs_data$affine[,1] * vars$x_pts / x_pts
     mrs_data$affine[,2] <- mrs_data$affine[,2] * vars$y_pts / y_pts
+  } else {
+    mrsi <- FALSE
   }
   
   # crop the first few points of the FID and set the length to a power of two if 
@@ -429,6 +432,10 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
     
     # crop to a power of 2 if needed
     mrs_data <- crop_td_pts_pot(mrs_data)
+  }
+  
+  if (mrsi) {
+    mrs_data <- recon_twix_2d_mrsi(mrs_data)
   }
   
   # deal with CMRR reference scans if needed

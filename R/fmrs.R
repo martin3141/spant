@@ -803,72 +803,6 @@ mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
   }
 }
 
-#' Create a BIDS directory and file structure from a list of mrs_data objects.
-#' @param mrs_data_list list of mrs_data objects.
-#' @param output_dir the base directory to create the BIDS structure.
-#' @param runs number of runs per subject and session.
-#' @param sessions number of sessions.
-#' @param sub_labels optional labels for subject level identification.
-mrs_data_list2bids <- function(mrs_data_list, output_dir, runs = 1,
-                               sessions = 1, sub_labels = NULL) {
-  
-  Nmrs <- length(mrs_data_list)
-  
-  # check the number of datasets can be cleanly divided by the number of runs
-  # and sessions
-  if ((Nmrs %% (runs * sessions)) != 0) stop("inconsistent number of datasets")
-  
-  Nsubs <- Nmrs / runs / sessions
-  
-  if (is.null(sub_labels)) sub_labels <- auto_pad_seq(1:Nsubs)
-  
-  if (Nsubs != length(sub_labels)) stop("inconsistent subject labels")
-  
-  sub_labels <- paste0("sub-", sub_labels)
-  sub_labels <- rep(sub_labels, each = runs * sessions)
-  
-  if (sessions != 1) {
-    ses_labels <- auto_pad_seq(1:sessions)
-    ses_labels <- paste0("ses-", ses_labels)
-    ses_labels <- rep(ses_labels, each = runs)
-    ses_labels <- rep(ses_labels, Nsubs * sessions)
-  }
-  
-  if (runs != 1) {
-    run_labels <- auto_pad_seq(1:runs)
-    run_labels <- paste0("run-", run_labels)
-    run_labels <- rep(run_labels, runs * sessions * Nsubs)
-  }
-  
-  # construct the directories
-  if (sessions == 1) {
-    dirs <- file.path(output_dir, sub_labels, "mrs")
-  } else {
-    dirs <- file.path(output_dir, sub_labels, ses_labels, "mrs")
-  }
-  
-  # create the directories
-  for (dir in dirs) dir.create(dir, recursive = TRUE, showWarnings = FALSE)
-  
-  # construct the filenames
-  fnames <- paste0(sub_labels)
-  
-  if (sessions != 1) fnames <- paste0(fnames, "_", ses_labels)
-  
-  if (runs != 1) fnames <- paste0(fnames, "_", run_labels)
-  
-  fnames <- paste0(fnames, "_svs.nii.gz")
-  
-  # construct the full path
-  full_path <- file.path(dirs, fnames)
-  
-  # write the data
-  for (n in 1:Nmrs) {
-    write_mrs(mrs_data_list[[n]], fname = full_path[n], format = "nifti",
-              force = TRUE) 
-  }
-}
-
 auto_pad_seq <- function(x, min_pad = 2) {
   x_int <- sprintf("%d", x)
   pad_n <- max(nchar(x_int))
@@ -910,10 +844,52 @@ find_bids_mrs <- function(path) {
     mrs_info <- cbind(mrs_info, ses = as.factor(ses))
   }
   
+  task <- grep("task-", tags_ul, value = TRUE)
+  if (length(task) != 0) {
+    task <- substring(task, 6)
+    mrs_info <- cbind(mrs_info, ses = as.factor(task))
+  }
+  
+  acq <- grep("acq-", tags_ul, value = TRUE)
+  if (length(acq) != 0) {
+    acq <- substring(acq, 5)
+    mrs_info <- cbind(mrs_info, ses = as.factor(acq))
+  }
+  
+  nuc <- grep("nuc-", tags_ul, value = TRUE)
+  if (length(nuc) != 0) {
+    nuc <- substring(nuc, 5)
+    mrs_info <- cbind(mrs_info, ses = as.factor(nuc))
+  }
+  
+  voi <- grep("voi-", tags_ul, value = TRUE)
+  if (length(voi) != 0) {
+    voi <- substring(voi, 5)
+    mrs_info <- cbind(mrs_info, ses = as.factor(voi))
+  }
+  
+  rec <- grep("rec-", tags_ul, value = TRUE)
+  if (length(rec) != 0) {
+    rec <- substring(rec, 5)
+    mrs_info <- cbind(mrs_info, ses = as.factor(rec))
+  }
+  
   run <- grep("run-", tags_ul, value = TRUE)
   if (length(run) != 0) {
     run <- substring(run, 5)
     mrs_info <- cbind(mrs_info, run = as.factor(run))
+  }
+  
+  echo <- grep("echo-", tags_ul, value = TRUE)
+  if (length(echo) != 0) {
+    echo <- substring(echo, 6)
+    mrs_info <- cbind(mrs_info, echo = as.factor(echo))
+  }
+  
+  inv <- grep("inv-", tags_ul, value = TRUE)
+  if (length(inv) != 0) {
+    inv <- substring(inv, 5)
+    mrs_info <- cbind(mrs_info, inv = as.factor(inv))
   }
   
   suffix <- grep("-", tags_ul, value = TRUE, invert = TRUE)
