@@ -53,7 +53,10 @@ read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
   
   if (!file.exists(fname)) stop("Error, read_mrs file does not exist.")
   
-  if (dir.exists(fname)) stop("Error, read_mrs file is a directory.")
+  if (dir.exists(fname)) {
+    # stop("Error, read_mrs file is a directory.")
+    return(read_ima_dyn_dir(dir = fname, extra = extra, verbose = verbose))
+  }
   
   # try and guess the format from the filename extension
   if (is.null(format)) format <- guess_mrs_format(fname) 
