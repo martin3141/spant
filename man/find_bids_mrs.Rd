@@ -4,10 +4,12 @@
 \alias{find_bids_mrs}
 \title{Search for MRS data files in a BIDS filesystem structure.}
 \usage{
-find_bids_mrs(path)
+find_bids_mrs(path, output_full_path = FALSE)
 }
 \arguments{
 \item{path}{path to the directory containing the BIDS structure.}
+
+\item{output_full_path}{output the full normalised data paths.}
 }
 \value{
 data frame containing full paths and information on each MRS file.
