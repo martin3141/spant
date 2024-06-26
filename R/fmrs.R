@@ -595,9 +595,8 @@ gen_group_reg <- function(regressor_df, n) {
 #' @param mrs_data vector of MRS data paths or list of mrs_data objects.
 #' @param output_dir the base directory to create the BIDS structure.
 #' @param suffix optional vector of file suffixes. Default behaviour is to
-#' automatically determine these from the input data, however these may need to
-#' be manually provided when metabolite and reference data are separate files or 
-#' data is unlocalised.
+#' automatically determine these from the input data, however it is recommended
+#' that they are specified to allow more efficient skipping of existing data.
 #' @param sub optional vector of subject labels. If not specified, these will be
 #' automatically generated as a series of increasing zero-padded integer values
 #' corresponding to the mrs_data input indices.
@@ -610,12 +609,13 @@ gen_group_reg <- function(regressor_df, n) {
 #' @param run optional vector of run indices.
 #' @param echo optional vector of echo time indices.
 #' @param inv optional vector of inversion indices.
-#' @param force overwrite any existing data files. Defaults to FALSE.
+#' @param skip_existing skip any existing data files. Defaults to TRUE, set to
+#' FALSE to overwrite existing data files.
 #' @export
 mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
                           ses = NULL, task = NULL, acq = NULL, nuc = NULL,
                           voi = NULL, rec = NULL, run = NULL, echo = NULL,
-                          inv = NULL, force = FALSE) {
+                          inv = NULL, skip_existing = TRUE) {
   
   Nscans <- length(mrs_data)
   
@@ -679,7 +679,47 @@ mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
   
   for (n in 1:Nscans) {
     
+    sub_lab <- paste0("sub-", sub[n])
+    
+    if (!is.null(ses)) ses_lab <- paste0("ses-", ses[n])
+    
+    # generate the directory structure
+    if (is.null(ses)) {
+      dir <- file.path(output_dir, sub_lab, "mrs")
+    } else {
+      dir <- file.path(output_dir, sub_lab, ses_lab, "mrs")
+    }
+    
     if (is.character(mrs_data[n])) {
+      
+      # skip if possible and we already know the suffix
+      if (skip_existing & !is.null(suffix)) {
+          
+        # construct the filename
+        fname <- paste0(sub_lab)
+        if (!is.null(ses))  fname <- paste0(fname, "_", ses_lab)
+        if (!is.null(task)) fname <- paste0(fname, "_task-", task[n])
+        if (!is.null(acq))  fname <- paste0(fname, "_acq-", acq[n])
+        if (!is.null(nuc))  fname <- paste0(fname, "_nuc-", nuc[n])
+        if (!is.null(voi))  fname <- paste0(fname, "_voi-", voi[n])
+        if (!is.null(rec))  fname <- paste0(fname, "_rec-", rec[n])
+        if (!is.null(run))  fname <- paste0(fname, "_run-", run[n])
+        if (!is.null(echo)) fname <- paste0(fname, "_echo-", echo[n])
+        if (!is.null(inv))  fname <- paste0(fname, "_inv-", inv[n])
+  
+        # suffix 
+        fname_main <- paste0(fname, "_", suffix[n], ".nii.gz")
+  
+        # construct the full path
+        full_path_main <- file.path(dir, fname_main)
+        
+        if (file.exists(full_path_main)) {
+          cat("Skipping dataset ", n," of ", Nscans, " : ", full_path_main,
+              "\n", sep = "")
+          next
+        }
+      }
+      
       mrs_n <- read_mrs(mrs_data[n])
     } else {
       mrs_n <- mrs_data[[n]]
@@ -706,16 +746,6 @@ mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
       suffix_main <- suffix[n] 
     }
   
-    sub_lab <- paste0("sub-", sub[n])
-    
-    # create the directory structure
-    if (is.null(ses)) {
-      dir <- file.path(output_dir, sub_lab, "mrs")
-    } else {
-      ses_lab <- paste0("ses-", ses[n])
-      dir <- file.path(output_dir, sub_lab, ses_lab, "mrs")
-    }
-    
     # create the directory
     dir.create(dir, recursive = TRUE, showWarnings = FALSE)
     
@@ -737,10 +767,15 @@ mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
     # construct the full path
     full_path_main <- file.path(dir, fname_main)
     
-    cat("Writing ", n," of ", Nscans, " : ", full_path_main, "\n", sep = "")
-  
-    # write the data
-    write_mrs(main, fname = full_path_main, format = "nifti", force = force)
+    if (skip_existing & file.exists(full_path_main)) {
+      cat("Skipping dataset ", n," of ", Nscans, " : ", full_path_main, "\n",
+          sep = "")
+    } else {
+      cat("Writing dataset ", n," of ", Nscans, " : ", full_path_main, "\n",
+          sep = "")
+      # write the data
+      write_mrs(main, fname = full_path_main, format = "nifti", force = TRUE)
+    }
     
     # just one ref file
     if (!is.null(ref) & is.null(ref_ecc)) {
@@ -748,9 +783,15 @@ mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
   
       # construct the full path
       full_path_ref <- file.path(dir, fname_ref)
-    
-      cat("Writing ", n," of ", Nscans, " : ", full_path_ref, "\n", sep = "")
-      write_mrs(ref, fname = full_path_ref, format = "nifti", force = force)
+      
+      if (skip_existing & file.exists(full_path_ref)) {
+        cat("Skipping dataset ", n," of ", Nscans, " : ", full_path_ref, "\n",
+            sep = "")
+      } else {
+        cat("Writing dataset ", n," of ", Nscans, " : ", full_path_ref, "\n",
+            sep = "")
+        write_mrs(ref, fname = full_path_ref, format = "nifti", force = TRUE)
+      }
     }
     
     # both conc and ecc ref files
@@ -775,8 +816,14 @@ mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
       fname_ref_conc <- paste0(fname, "_", "mrsref", ".nii.gz")
       full_path_conc <- file.path(dir, fname_ref_conc)
       
-      cat("Writing ", n," of ", Nscans, " : ", full_path_conc, "\n", sep = "")
-      write_mrs(ref, fname = full_path_conc, format = "nifti", force = force)
+      if (skip_existing & file.exists(full_path_conc)) {
+        cat("Skipping dataset ", n," of ", Nscans, " : ", full_path_conc, "\n",
+            sep = "")
+      } else {
+        cat("Writing dataset ", n," of ", Nscans, " : ", full_path_conc, "\n",
+            sep = "")
+        write_mrs(ref, fname = full_path_conc, format = "nifti", force = TRUE)
+      }
       
       # ecc filename
       if (is.null(acq)) {
@@ -797,8 +844,15 @@ mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
       fname_ref_ecc <- paste0(fname, "_", "mrsref", ".nii.gz")
       full_path_ecc <- file.path(dir, fname_ref_ecc)
       
-      cat("Writing ", n," of ", Nscans, " : ", full_path_ecc, "\n", sep = "")
-      write_mrs(ref_ecc, fname = full_path_ecc, format = "nifti", force = force)
+      if (skip_existing & file.exists(full_path_ecc)) {
+        cat("Skipping dataset ", n," of ", Nscans, " : ", full_path_ecc, "\n",
+            sep = "")
+      } else {
+        cat("Writing dataset ", n," of ", Nscans, " : ", full_path_ecc, "\n",
+            sep = "")
+        write_mrs(ref_ecc, fname = full_path_ecc, format = "nifti",
+                  force = TRUE)
+      }
     }
   }
 }

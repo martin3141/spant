@@ -19,7 +19,7 @@ mrs_data2bids(
   run = NULL,
   echo = NULL,
   inv = NULL,
-  force = FALSE
+  skip_existing = TRUE
 )
 }
 \arguments{
@@ -28,9 +28,8 @@ mrs_data2bids(
 \item{output_dir}{the base directory to create the BIDS structure.}
 
 \item{suffix}{optional vector of file suffixes. Default behaviour is to
-automatically determine these from the input data, however these may need to
-be manually provided when metabolite and reference data are separate files or
-data is unlocalised.}
+automatically determine these from the input data, however it is recommended
+that they are specified to allow more efficient skipping of existing data.}
 
 \item{sub}{optional vector of subject labels. If not specified, these will be
 automatically generated as a series of increasing zero-padded integer values
@@ -54,7 +53,8 @@ corresponding to the mrs_data input indices.}
 
 \item{inv}{optional vector of inversion indices.}
 
-\item{force}{overwrite any existing data files. Defaults to FALSE.}
+\item{skip_existing}{skip any existing data files. Defaults to TRUE, set to
+FALSE to overwrite existing data files.}
 }
 \description{
 Create a BIDS file structure from a vector of MRS data paths or list of
