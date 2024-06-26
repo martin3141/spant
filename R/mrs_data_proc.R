@@ -1150,6 +1150,7 @@ ift <- function(mrs_data, dims) {
   apply_mrs(mrs_data, dims, ift_shift)
 }
 
+#' @export
 dim.mrs_data <- function(x) {
   dim(x$data)
 }

@@ -140,11 +140,15 @@ extract_dkd_wref_scans <- function(mrs_data) {
   ref_ecc_inds <- c(ref_inds_start[1:(ref_n / 4)],
                     ref_inds_end[1:(ref_n / 4)])
   ref_ecc <- get_dyns(mrs_data, ref_ecc_inds)
+  ref_ecc <- set_Ntrans(ref_ecc, Ndyns(ref_ecc))
+  ref_ecc$meta$ChemicalShiftReference <- NULL
   
   # water scaling inds
   ref_inds <- c(ref_inds_start[((ref_n / 4) + 1):(ref_n / 2)],
                 ref_inds_end[((ref_n / 4) + 1):(ref_n / 2)])
   ref <- get_dyns(mrs_data, ref_inds)
+  ref <- set_Ntrans(ref, Ndyns(ref))
+  ref$meta$ChemicalShiftReference <- NULL
   
   out <- list(metab = metab, ref = ref, ref_ecc = ref_ecc)
   

@@ -647,6 +647,7 @@ test_fit <- function(method = "VARPRO_3P", n = 10, preproc = TRUE) {
   system.time(replicate(n, fit_mrs(mrs_data, basis, method = method)))
 }
 
+#' @export
 dim.fit_result <- function(x) {
   dim(x$data$data)
 }

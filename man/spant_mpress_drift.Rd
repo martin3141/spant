@@ -5,7 +5,7 @@
 \alias{spant_mpress_drift}
 \title{Example MEGA-PRESS data with significant B0 drift.}
 \format{
-An object of class \code{mrs_data} of length 13.
+An object of class \code{mrs_data} of dimension 1 x 1 x 1 x 1 x 40 x 1 x 1024.
 }
 \usage{
 spant_mpress_drift

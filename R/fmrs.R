@@ -590,13 +590,225 @@ gen_group_reg <- function(regressor_df, n) {
   return(group_regressor_df)
 }
 
+#' Create a BIDS file structure from a vector of MRS data paths or list of
+#' mrs_data objects.
+#' @param mrs_data vector of MRS data paths or list of mrs_data objects.
+#' @param output_dir the base directory to create the BIDS structure.
+#' @param suffix optional vector of file suffixes. Default behaviour is to
+#' automatically determine these from the input data, however these may need to
+#' be manually provided when metabolite and reference data are separate files or 
+#' data is unlocalised.
+#' @param sub optional vector of subject labels. If not specified, these will be
+#' automatically generated as a series of increasing zero-padded integer values
+#' corresponding to the mrs_data input indices.
+#' @param ses optional vector of session labels.
+#' @param task optional vector of task labels.
+#' @param acq optional vector of acquisition labels.
+#' @param nuc optional vector of nucleus labels.
+#' @param voi optional vector of volume of interest labels.
+#' @param rec optional vector of reconstruction labels.
+#' @param run optional vector of run indices.
+#' @param echo optional vector of echo time indices.
+#' @param inv optional vector of inversion indices.
+#' @param force overwrite any existing data files. Defaults to FALSE.
+#' @export
+mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
+                          ses = NULL, task = NULL, acq = NULL, nuc = NULL,
+                          voi = NULL, rec = NULL, run = NULL, echo = NULL,
+                          inv = NULL, force = FALSE) {
+  
+  Nscans <- length(mrs_data)
+  
+  if (!is.null(suffix)) {
+    
+    if (length(suffix) != Nscans) {
+      if (length(suffix) == 1) {
+        suffix <- rep(suffix, Nscans)
+      } else {
+        stop("suffix length does not match.")
+      }
+    } 
+    
+    allowed <- c("svs", "mrsi", "unloc", "mrsref")
+    wrong <- !(suffix %in% allowed)
+    if (any(wrong)) stop(paste0("one or more suffix labels are invalid,",
+                          " must be one of 'svs', 'mrsi', 'unloc', 'mrsref'"))
+  }
+  
+  if (is.null(sub)) sub <- auto_pad_seq(1:Nscans)
+  
+  if (length(sub) != Nscans) stop("sub length does not match.")
+  
+  if (!is.null(ses)) {
+    if (length(ses) != Nscans) stop("ses length does not match.")
+  }
+  
+  if (!is.null(acq)) {
+    if (length(acq) != Nscans) stop("acq length does not match.")
+  }
+  
+  if (!is.null(nuc)) {
+    if (length(nuc) != Nscans) stop("nuc length does not match.")
+  }
+  
+  if (!is.null(voi)) {
+    if (length(voi) != Nscans) stop("voi length does not match.")
+  }
+  
+  if (!is.null(rec)) {
+    if (length(rec) != Nscans) stop("rec length does not match.")
+  }
+  
+  if (!is.null(run)) {
+    if (length(run) != Nscans) stop("run length does not match.")
+    run <- as.integer(run)
+    if (any(is.na(run))) stop("non integer run")
+  }
+  
+  if (!is.null(echo)) {
+    if (length(echo) != Nscans) stop("echo length does not match.")
+    echo <- as.integer(echo)
+    if (any(is.na(echo))) stop("non integer echo")
+  }
+  
+  if (!is.null(inv)) {
+    if (length(inv) != Nscans) stop("inv length does not match.")
+    inv <- as.integer(inv)
+    if (any(is.na(inv))) stop("non integer inv")
+  }
+  
+  for (n in 1:Nscans) {
+    
+    if (is.character(mrs_data[n])) {
+      mrs_n <- read_mrs(mrs_data[n])
+    } else {
+      mrs_n <- mrs_data[[n]]
+    }
+    
+    if (identical(class(mrs_n), c("list", "mrs_data"))) {
+      main    <- mrs_n$metab
+      ref     <- mrs_n$ref
+      ref_ecc <- mrs_n$ref_ecc
+    } else {
+      main    <- mrs_n
+      ref     <- NULL
+      ref_ecc <- NULL
+    }
+    
+    if (is.null(suffix)) {
+      voxels <- Nx(main) * Ny(main) * Nz(main)
+      if (voxels == 1) {
+        suffix_main <- "svs" 
+      } else {
+        suffix_main <- "mrsi" 
+      }
+    } else {
+      suffix_main <- suffix[n] 
+    }
+  
+    sub_lab <- paste0("sub-", sub[n])
+    
+    # create the directory structure
+    if (is.null(ses)) {
+      dir <- file.path(output_dir, sub_lab, "mrs")
+    } else {
+      ses_lab <- paste0("ses-", ses[n])
+      dir <- file.path(output_dir, sub_lab, ses_lab, "mrs")
+    }
+    
+    # create the directory
+    dir.create(dir, recursive = TRUE, showWarnings = FALSE)
+    
+    # construct the filename
+    fname <- paste0(sub_lab)
+    if (!is.null(ses))  fname <- paste0(fname, "_", ses_lab)
+    if (!is.null(task)) fname <- paste0(fname, "_task-", task[n])
+    if (!is.null(acq))  fname <- paste0(fname, "_acq-", acq[n])
+    if (!is.null(nuc))  fname <- paste0(fname, "_nuc-", nuc[n])
+    if (!is.null(voi))  fname <- paste0(fname, "_voi-", voi[n])
+    if (!is.null(rec))  fname <- paste0(fname, "_rec-", rec[n])
+    if (!is.null(run))  fname <- paste0(fname, "_run-", run[n])
+    if (!is.null(echo)) fname <- paste0(fname, "_echo-", echo[n])
+    if (!is.null(inv))  fname <- paste0(fname, "_inv-", inv[n])
+  
+    # suffix 
+    fname_main <- paste0(fname, "_", suffix_main, ".nii.gz")
+  
+    # construct the full path
+    full_path_main <- file.path(dir, fname_main)
+    
+    cat("Writing ", n," of ", Nscans, " : ", full_path_main, "\n", sep = "")
+  
+    # write the data
+    write_mrs(main, fname = full_path_main, format = "nifti", force = force)
+    
+    # just one ref file
+    if (!is.null(ref) & is.null(ref_ecc)) {
+      fname_ref <- paste0(fname, "_", "mrsref", ".nii.gz")
+  
+      # construct the full path
+      full_path_ref <- file.path(dir, fname_ref)
+    
+      cat("Writing ", n," of ", Nscans, " : ", full_path_ref, "\n", sep = "")
+      write_mrs(ref, fname = full_path_ref, format = "nifti", force = force)
+    }
+    
+    # both conc and ecc ref files
+    if (!is.null(ref) & !is.null(ref_ecc)) {
+      
+      # conc filename
+      if (is.null(acq)) {
+        acq_lab <- paste0("_acq-conc")
+      } else {
+        acq_lab <- paste0("_acq-", acq[n], "conc")
+      }
+      fname <- paste0(sub_lab)
+      if (!is.null(ses))  fname <- paste0(fname, "_", ses_lab)
+      if (!is.null(task)) fname <- paste0(fname, "_task-", task[n])
+      fname <- paste0(fname, acq_lab)
+      if (!is.null(nuc))  fname <- paste0(fname, "_nuc-", nuc[n])
+      if (!is.null(voi))  fname <- paste0(fname, "_voi-", voi[n])
+      if (!is.null(rec))  fname <- paste0(fname, "_rec-", rec[n])
+      if (!is.null(run))  fname <- paste0(fname, "_run-", run[n])
+      if (!is.null(echo)) fname <- paste0(fname, "_echo-", echo[n])
+      if (!is.null(inv))  fname <- paste0(fname, "_inv-", inv[n])
+      fname_ref_conc <- paste0(fname, "_", "mrsref", ".nii.gz")
+      full_path_conc <- file.path(dir, fname_ref_conc)
+      
+      cat("Writing ", n," of ", Nscans, " : ", full_path_conc, "\n", sep = "")
+      write_mrs(ref, fname = full_path_conc, format = "nifti", force = force)
+      
+      # ecc filename
+      if (is.null(acq)) {
+        acq_lab <- paste0("_acq-ecc")
+      } else {
+        acq_lab <- paste0("_acq-", acq[n], "ecc")
+      }
+      fname <- paste0(sub_lab)
+      if (!is.null(ses))  fname <- paste0(fname, "_", ses_lab)
+      if (!is.null(task)) fname <- paste0(fname, "_task-", task[n])
+      fname <- paste0(fname, acq_lab)
+      if (!is.null(nuc))  fname <- paste0(fname, "_nuc-", nuc[n])
+      if (!is.null(voi))  fname <- paste0(fname, "_voi-", voi[n])
+      if (!is.null(rec))  fname <- paste0(fname, "_rec-", rec[n])
+      if (!is.null(run))  fname <- paste0(fname, "_run-", run[n])
+      if (!is.null(echo)) fname <- paste0(fname, "_echo-", echo[n])
+      if (!is.null(inv))  fname <- paste0(fname, "_inv-", inv[n])
+      fname_ref_ecc <- paste0(fname, "_", "mrsref", ".nii.gz")
+      full_path_ecc <- file.path(dir, fname_ref_ecc)
+      
+      cat("Writing ", n," of ", Nscans, " : ", full_path_ecc, "\n", sep = "")
+      write_mrs(ref_ecc, fname = full_path_ecc, format = "nifti", force = force)
+    }
+  }
+}
+
 #' Create a BIDS directory and file structure from a list of mrs_data objects.
 #' @param mrs_data_list list of mrs_data objects.
 #' @param output_dir the base directory to create the BIDS structure.
 #' @param runs number of runs per subject and session.
 #' @param sessions number of sessions.
 #' @param sub_labels optional labels for subject level identification.
-#' @export
 mrs_data_list2bids <- function(mrs_data_list, output_dir, runs = 1,
                                sessions = 1, sub_labels = NULL) {
   
