@@ -830,73 +830,56 @@ find_bids_mrs <- function(path) {
   mrs_names <- basename(mrs_paths)
   mrs_names <- tools::file_path_sans_ext(tools::file_path_sans_ext(mrs_names))
   
-  tags    <- strsplit(mrs_names, "_")
-  tags_ul <- unlist(tags)
+  Nscans <- length(mrs_paths)
+
+  # create an empty data frame
+  na_vec  <- rep(NA, Nscans) 
+  bids_df <- data.frame(path = mrs_paths, sub = na_vec, ses = na_vec,
+                        task = na_vec, acq = na_vec, nuc = na_vec,
+                        voi = na_vec, rec = na_vec, run = na_vec,
+                        echo = na_vec, inv = na_vec, suffix = na_vec)
   
-  sub <- grep("sub-", tags_ul, value = TRUE)
-  sub <- substring(sub, 5)
-  
-  mrs_info <- data.frame(path = mrs_paths, sub = as.factor(sub))
-  
-  ses <- grep("ses-", tags_ul, value = TRUE)
-  if (length(ses) != 0) {
-    ses <- substring(ses, 5)
-    mrs_info <- cbind(mrs_info, ses = as.factor(ses))
+  # for each scan
+  for (n in 1:Nscans) {
+    
+    tags    <- strsplit(mrs_names[n], "_")
+    tags_ul <- unlist(tags)
+    
+    sub <- grep("sub-", tags_ul, value = TRUE)
+    bids_df$sub[n] <- substring(sub, 5)
+    
+    ses <- grep("ses-", tags_ul, value = TRUE)
+    if (length(ses) != 0) bids_df$ses[n] <- substring(ses, 5)
+    
+    task <- grep("task-", tags_ul, value = TRUE)
+    if (length(task) != 0) bids_df$task[n] <- substring(task, 6)
+    
+    acq <- grep("acq-", tags_ul, value = TRUE)
+    if (length(acq) != 0) bids_df$acq[n] <- substring(acq, 5)
+    
+    nuc <- grep("nuc-", tags_ul, value = TRUE)
+    if (length(nuc) != 0) bids_df$nuc[n] <- substring(nuc, 5)
+    
+    voi <- grep("voi-", tags_ul, value = TRUE)
+    if (length(voi) != 0) bids_df$voi[n] <- substring(voi, 5)
+    
+    rec <- grep("rec-", tags_ul, value = TRUE)
+    if (length(rec) != 0) bid_df$rec[n] <- substring(rec, 5)
+    
+    run <- grep("run-", tags_ul, value = TRUE)
+    if (length(run) != 0) bids_df$run[n] <- substring(run, 5)
+    
+    echo <- grep("echo-", tags_ul, value = TRUE)
+    if (length(echo) != 0) bids_df$echo[n] <- substring(echo, 6)
+    
+    inv <- grep("inv-", tags_ul, value = TRUE)
+    if (length(inv) != 0) bids_df$inv[n] <- substring(inv, 5)
+    
+    suffix <- grep("-", tags_ul, value = TRUE, invert = TRUE)
+    bids_df$suffix[n] <- suffix
   }
-  
-  task <- grep("task-", tags_ul, value = TRUE)
-  if (length(task) != 0) {
-    task <- substring(task, 6)
-    mrs_info <- cbind(mrs_info, ses = as.factor(task))
-  }
-  
-  acq <- grep("acq-", tags_ul, value = TRUE)
-  if (length(acq) != 0) {
-    acq <- substring(acq, 5)
-    mrs_info <- cbind(mrs_info, ses = as.factor(acq))
-  }
-  
-  nuc <- grep("nuc-", tags_ul, value = TRUE)
-  if (length(nuc) != 0) {
-    nuc <- substring(nuc, 5)
-    mrs_info <- cbind(mrs_info, ses = as.factor(nuc))
-  }
-  
-  voi <- grep("voi-", tags_ul, value = TRUE)
-  if (length(voi) != 0) {
-    voi <- substring(voi, 5)
-    mrs_info <- cbind(mrs_info, ses = as.factor(voi))
-  }
-  
-  rec <- grep("rec-", tags_ul, value = TRUE)
-  if (length(rec) != 0) {
-    rec <- substring(rec, 5)
-    mrs_info <- cbind(mrs_info, ses = as.factor(rec))
-  }
-  
-  run <- grep("run-", tags_ul, value = TRUE)
-  if (length(run) != 0) {
-    run <- substring(run, 5)
-    mrs_info <- cbind(mrs_info, run = as.factor(run))
-  }
-  
-  echo <- grep("echo-", tags_ul, value = TRUE)
-  if (length(echo) != 0) {
-    echo <- substring(echo, 6)
-    mrs_info <- cbind(mrs_info, echo = as.factor(echo))
-  }
-  
-  inv <- grep("inv-", tags_ul, value = TRUE)
-  if (length(inv) != 0) {
-    inv <- substring(inv, 5)
-    mrs_info <- cbind(mrs_info, inv = as.factor(inv))
-  }
-  
-  suffix <- grep("-", tags_ul, value = TRUE, invert = TRUE)
-  
-  mrs_info <- cbind(mrs_info, suffix = as.factor(suffix))
  
-  return(mrs_info) 
+  return(bids_df) 
 }
 
 #' Preprocess and perform quality assessment of a single SVS data set.
