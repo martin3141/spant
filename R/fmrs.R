@@ -874,7 +874,7 @@ auto_pad_seq <- function(x, min_pad = 2) {
 find_bids_mrs <- function(path, output_full_path = FALSE) {
   
   # find the "mrs" directories
-  mrs_dirs <- dir(path, recursive = TRUE, include.dirs = TRUE, pattern = "mrs",
+  mrs_dirs <- dir(path, recursive = TRUE, include.dirs = TRUE, pattern = "mrs$",
                   full.names = TRUE)
   
   # list all files in "mrs" directories
