@@ -641,38 +641,46 @@ mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
   if (length(sub) != Nscans) stop("sub length does not match.")
   
   if (!is.null(ses)) {
+    if (length(ses) == 1) ses <- rep(ses, Nscans)
     if (length(ses) != Nscans) stop("ses length does not match.")
   }
   
   if (!is.null(acq)) {
+    if (length(acq) == 1) acq <- rep(acq, Nscans)
     if (length(acq) != Nscans) stop("acq length does not match.")
   }
   
   if (!is.null(nuc)) {
+    if (length(nuc) == 1) nuc <- rep(nuc, Nscans)
     if (length(nuc) != Nscans) stop("nuc length does not match.")
   }
   
   if (!is.null(voi)) {
+    if (length(voi) == 1) voi <- rep(voi, Nscans)
     if (length(voi) != Nscans) stop("voi length does not match.")
   }
   
   if (!is.null(rec)) {
+    if (length(rec) == 1) rec <- rep(rec, Nscans)
     if (length(rec) != Nscans) stop("rec length does not match.")
   }
   
   if (!is.null(run)) {
+    if (length(run) == 1) run <- rep(run, Nscans)
     if (length(run) != Nscans) stop("run length does not match.")
     run <- as.integer(run)
     if (any(is.na(run))) stop("non integer run")
   }
   
   if (!is.null(echo)) {
+    if (length(echo) == 1) echo <- rep(echo, Nscans)
     if (length(echo) != Nscans) stop("echo length does not match.")
     echo <- as.integer(echo)
     if (any(is.na(echo))) stop("non integer echo")
   }
   
   if (!is.null(inv)) {
+    if (length(inv) == 1) inv <- rep(inv, Nscans)
     if (length(inv) != Nscans) stop("inv length does not match.")
     inv <- as.integer(inv)
     if (any(is.na(inv))) stop("non integer inv")
