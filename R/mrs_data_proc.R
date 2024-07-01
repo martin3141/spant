@@ -303,6 +303,28 @@ mrs_data2mat <- function(mrs_data, collapse = TRUE) {
   as.matrix(mrs_data$data[1,1,1,1,,1,])
 }
 
+#' Convert mrs_data object to a matrix, with spectral points in the column
+#' dimension and dynamics in the row dimension.
+#' @param mrs_data MRS data object or list of MRS data objects.
+#' @param collapse collapse all other dimensions along the dynamic dimension, eg
+#' a 16x16 MRSI grid would be first collapsed across 256 dynamic scans.
+#' @return MRS data matrix.
+#' @export
+mrs_data2spec_mat <- function(mrs_data, collapse = TRUE) {
+  if (inherits(mrs_data, "list")) mrs_data <- append_dyns(mrs_data)
+  
+  # needs to be a FD operation
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  if (collapse) mrs_data <- collapse_to_dyns(mrs_data)
+  
+  out_mat <- as.matrix(mrs_data$data[1,1,1,1,,1,])
+  
+  out_mat <- Re(out_mat)
+  
+  return(out_mat)
+}
+
 #' Convert mrs_data object to a vector.
 #' @param mrs_data MRS data object.
 #' @param dyn dynamic index.
