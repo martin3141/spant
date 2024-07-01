@@ -4,7 +4,14 @@
 \alias{sim_zero}
 \title{Simulate an mrs_data object containing complex zero valued samples.}
 \usage{
-sim_zero(fs = def_fs(), ft = def_ft(), N = def_N(), ref = def_ref(), dyns = 1)
+sim_zero(
+  fs = def_fs(),
+  ft = def_ft(),
+  N = def_N(),
+  ref = def_ref(),
+  nuc = def_nuc(),
+  dyns = 1
+)
 }
 \arguments{
 \item{fs}{sampling frequency in Hz.}
@@ -14,6 +21,8 @@ sim_zero(fs = def_fs(), ft = def_ft(), N = def_N(), ref = def_ref(), dyns = 1)
 \item{N}{number of data points in the spectral dimension.}
 
 \item{ref}{reference value for ppm scale.}
+
+\item{nuc}{resonant nucleus.}
 
 \item{dyns}{number of dynamic scans to generate.}
 }

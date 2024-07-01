@@ -10,6 +10,7 @@ sim_noise(
   ft = def_ft(),
   N = def_N(),
   ref = def_ref(),
+  nuc = def_nuc(),
   dyns = 1,
   fd = TRUE
 )
@@ -24,6 +25,8 @@ sim_noise(
 \item{N}{number of data points in the spectral dimension.}
 
 \item{ref}{reference value for ppm scale.}
+
+\item{nuc}{resonant nucleus.}
 
 \item{dyns}{number of dynamic scans to generate.}
 

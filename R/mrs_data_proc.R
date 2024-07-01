@@ -192,13 +192,13 @@ vec2mrs_data <- function(vec, mrs_data = NULL, fs = NULL, ft = NULL, ref = NULL,
                          nuc = NULL, dyns = 1, fd = FALSE) {
   
   if (!is.null(mrs_data)) {
-    if (!is.null(fs))  fs  <- fs(mrs_data)
-    if (!is.null(ft))  ft  <- mrs_data$ft
-    if (!is.null(ref)) ref <- mrs_data$ref
-    if (!is.null(nuc)) nuc <- mrs_data$nuc
+    if (is.null(fs))  fs  <- fs(mrs_data)
+    if (is.null(ft))  ft  <- mrs_data$ft
+    if (is.null(ref)) ref <- mrs_data$ref
+    if (is.null(nuc)) nuc <- mrs_data$nuc
   } else {
-    if (is.null(fs)) stop("fs is missing")
-    if (is.null(ft)) stop("ft is missing")
+    if (is.null(fs))  stop("fs is missing")
+    if (is.null(ft))  stop("ft is missing")
     if (is.null(ref)) stop("ref is missing")
     if (is.null(nuc)) stop("nuc is missing")
   }
@@ -230,13 +230,13 @@ mat2mrs_data <- function(mat, mrs_data = NULL, fs = NULL, ft = NULL, ref = NULL,
                          nuc = NULL, fd = FALSE) {
   
   if (!is.null(mrs_data)) {
-    if (!is.null(fs))  fs  <- fs(mrs_data)
-    if (!is.null(ft))  ft  <- mrs_data$ft
-    if (!is.null(ref)) ref <- mrs_data$ref
-    if (!is.null(nuc)) nuc <- mrs_data$nuc
+    if (is.null(fs))  fs  <- fs(mrs_data)
+    if (is.null(ft))  ft  <- mrs_data$ft
+    if (is.null(ref)) ref <- mrs_data$ref
+    if (is.null(nuc)) nuc <- mrs_data$nuc
   } else {
-    if (is.null(fs)) stop("fs is missing")
-    if (is.null(ft)) stop("ft is missing")
+    if (is.null(fs))  stop("fs is missing")
+    if (is.null(ft))  stop("ft is missing")
     if (is.null(ref)) stop("ref is missing")
     if (is.null(nuc)) stop("nuc is missing")
   }
@@ -266,13 +266,13 @@ array2mrs_data <- function(data_array, mrs_data = NULL, fs = NULL, ft = NULL,
                            ref = NULL, nuc = NULL, fd = FALSE) {
   
   if (!is.null(mrs_data)) {
-    if (!is.null(fs))  fs  <- fs(mrs_data)
-    if (!is.null(ft))  ft  <- mrs_data$ft
-    if (!is.null(ref)) ref <- mrs_data$ref
-    if (!is.null(nuc)) nuc <- mrs_data$nuc
+    if (is.null(fs))  fs  <- fs(mrs_data)
+    if (is.null(ft))  ft  <- mrs_data$ft
+    if (is.null(ref)) ref <- mrs_data$ref
+    if (is.null(nuc)) nuc <- mrs_data$nuc
   } else {
-    if (is.null(fs)) stop("fs is missing")
-    if (is.null(ft)) stop("ft is missing")
+    if (is.null(fs))  stop("fs is missing")
+    if (is.null(ft))  stop("ft is missing")
     if (is.null(ref)) stop("ref is missing")
     if (is.null(nuc)) stop("nuc is missing")
   }
