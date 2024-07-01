@@ -1454,4 +1454,36 @@ glm_spec_group_analysis <- function(glm_spec_dataset) {
               beta_weight = beta_mean))
 }
 
+#' Perform a t-test on spectral data points.
+#' @param mrs_data an mrs_data object with spectra in the dynamic dimension.
+#' @param group vector describing the group membership of each dynamic spectrum.
+#' @return a list of statistical results.
+#' @export
+t_test_spec <- function(mrs_data, group) {
+  
+  if (missing(group)) stop("group argument is missing.")
+  
+  mrs_data_mat <- mrs_data2spec_mat(mrs_data)
+  
+  # catches errors when passing identical values which can crop up when
+  # normalising to a maximum spectral data point
+  t_test_calc <- function(x, group, y) {
+    tryCatch(stats::t.test(x ~ group), error = function(e) list(p.value = 1,
+                                                                statistic = 0))
+  }
 
+  t_test_res_list <- apply(mrs_data_mat, 2, t_test_calc, group)
+  
+  pvals     <- sapply(t_test_res_list, \(x) x$p.value)
+  pvals_mrs <- vec2mrs_data(pvals, mrs_data = mrs_data, fd = TRUE)
+  pvals_log <- -log10(pvals)
+  pvals_log_mrs <- vec2mrs_data(pvals_log, mrs_data = mrs_data, fd = TRUE)
+  
+  tvals     <- sapply(t_test_res_list, \(x) x$statistic)
+  tvals_mrs <- vec2mrs_data(tvals, mrs_data = mrs_data, fd = TRUE)
+  
+  return(list(p_value = pvals, p_value_mrs = pvals_mrs,
+              p_value_log = pvals_log, p_value_log_mrs = pvals_log_mrs,
+              t_stat = tvals, t_stat_mrs = tvals_mrs,
+              t_test_res_list = t_test_res_list))
+}
