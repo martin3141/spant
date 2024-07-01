@@ -7,15 +7,18 @@ in the row dimensions) into a mrs_data object.}
 \usage{
 mat2mrs_data(
   mat,
-  fs = def_fs(),
-  ft = def_ft(),
-  ref = def_ref(),
-  nuc = def_nuc(),
+  mrs_data = NULL,
+  fs = NULL,
+  ft = NULL,
+  ref = NULL,
+  nuc = NULL,
   fd = FALSE
 )
 }
 \arguments{
 \item{mat}{data matrix.}
+
+\item{mrs_data}{example data to copy acquisition parameters from.}
 
 \item{fs}{sampling frequency in Hz.}
 

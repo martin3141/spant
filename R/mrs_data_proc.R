@@ -179,16 +179,29 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
 
 #' Convert a vector into a mrs_data object.
 #' @param vec the data vector.
+#' @param mrs_data example data to copy acquisition parameters from.
 #' @param fs sampling frequency in Hz.
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.
 #' @param nuc resonant nucleus.
 #' @param dyns replicate the data across the dynamic dimension.
-#' @param fd flag to indicate if the matrix is in the frequency domain (logical).
+#' @param fd flag to indicate if the vector is in the frequency domain (logical).
 #' @return mrs_data object.
 #' @export
-vec2mrs_data <- function(vec, fs = def_fs(), ft = def_ft(), ref = def_ref(),
-                         nuc = def_nuc(), dyns = 1, fd = FALSE) {
+vec2mrs_data <- function(vec, mrs_data = NULL, fs = NULL, ft = NULL, ref = NULL,
+                         nuc = NULL, dyns = 1, fd = FALSE) {
+  
+  if (!is.null(mrs_data)) {
+    if (!is.null(fs))  fs  <- fs(mrs_data)
+    if (!is.null(ft))  ft  <- mrs_data$ft
+    if (!is.null(ref)) ref <- mrs_data$ref
+    if (!is.null(nuc)) nuc <- mrs_data$nuc
+  } else {
+    if (is.null(fs)) stop("fs is missing")
+    if (is.null(ft)) stop("ft is missing")
+    if (is.null(ref)) stop("ref is missing")
+    if (is.null(nuc)) stop("nuc is missing")
+  }
   
   data <- array(vec, dim = c(length(vec), dyns))
   data <- aperm(data,c(2, 1))
@@ -202,9 +215,46 @@ vec2mrs_data <- function(vec, fs = def_fs(), ft = def_ft(), ref = def_ref(),
   return(mrs_data)
 }
 
+#' Convert a matrix (with spectral points in the column dimension and dynamics
+#' in the row dimensions) into a mrs_data object.
+#' @param mat data matrix.
+#' @param mrs_data example data to copy acquisition parameters from.
+#' @param fs sampling frequency in Hz.
+#' @param ft transmitter frequency in Hz.
+#' @param ref reference value for ppm scale.
+#' @param nuc resonant nucleus.
+#' @param fd flag to indicate if the matrix is in the frequency domain (logical).
+#' @return mrs_data object.
+#' @export
+mat2mrs_data <- function(mat, mrs_data = NULL, fs = NULL, ft = NULL, ref = NULL,
+                         nuc = NULL, fd = FALSE) {
+  
+  if (!is.null(mrs_data)) {
+    if (!is.null(fs))  fs  <- fs(mrs_data)
+    if (!is.null(ft))  ft  <- mrs_data$ft
+    if (!is.null(ref)) ref <- mrs_data$ref
+    if (!is.null(nuc)) nuc <- mrs_data$nuc
+  } else {
+    if (is.null(fs)) stop("fs is missing")
+    if (is.null(ft)) stop("ft is missing")
+    if (is.null(ref)) stop("ref is missing")
+    if (is.null(nuc)) stop("nuc is missing")
+  }
+  
+  data <- array(mat, dim = c(1, 1, 1, 1, nrow(mat), 1, ncol(mat)))
+  res <- c(NA, NA, NA, NA, NA, NA, 1 / fs)
+  
+  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
+                       nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
+                       affine = NULL, meta = NULL, extra = NULL)
+  
+  return(mrs_data)
+}
+
 #' Convert a 7 dimensional array in into a mrs_data object. The array dimensions
 #' should be ordered as : dummy, X, Y, Z, dynamic, coil, FID.
 #' @param data_array 7d data array.
+#' @param mrs_data example data to copy acquisition parameters from.
 #' @param fs sampling frequency in Hz.
 #' @param ft transmitter frequency in Hz.
 #' @param ref reference value for ppm scale.
@@ -212,8 +262,20 @@ vec2mrs_data <- function(vec, fs = def_fs(), ft = def_ft(), ref = def_ref(),
 #' @param fd flag to indicate if the matrix is in the frequency domain (logical).
 #' @return mrs_data object.
 #' @export
-array2mrs_data <- function(data_array, fs = def_fs(), ft = def_ft(),
-                           ref = def_ref(), nuc = def_nuc(), fd = FALSE) {
+array2mrs_data <- function(data_array, mrs_data = NULL, fs = NULL, ft = NULL,
+                           ref = NULL, nuc = NULL, fd = FALSE) {
+  
+  if (!is.null(mrs_data)) {
+    if (!is.null(fs))  fs  <- fs(mrs_data)
+    if (!is.null(ft))  ft  <- mrs_data$ft
+    if (!is.null(ref)) ref <- mrs_data$ref
+    if (!is.null(nuc)) nuc <- mrs_data$nuc
+  } else {
+    if (is.null(fs)) stop("fs is missing")
+    if (is.null(ft)) stop("ft is missing")
+    if (is.null(ref)) stop("ref is missing")
+    if (is.null(nuc)) stop("nuc is missing")
+  }
   
   if (length(dim(data_array)) != 7) stop("Incorrect number of dimensions.")
   
@@ -251,35 +313,12 @@ mrs_data2mat <- function(mrs_data, collapse = TRUE) {
 #' @return MRS data vector.
 #' @export
 mrs_data2vec <- function(mrs_data, dyn = 1, x_pos = 1,
-                          y_pos = 1, z_pos = 1, coil = 1) {
+                         y_pos = 1, z_pos = 1, coil = 1) {
   
   # check the input
   check_mrs_data(mrs_data) 
   
   as.vector(mrs_data$data[1, x_pos, y_pos, z_pos, dyn, coil,])
-}
-
-#' Convert a matrix (with spectral points in the column dimension and dynamics
-#' in the row dimensions) into a mrs_data object.
-#' @param mat data matrix.
-#' @param fs sampling frequency in Hz.
-#' @param ft transmitter frequency in Hz.
-#' @param ref reference value for ppm scale.
-#' @param nuc resonant nucleus.
-#' @param fd flag to indicate if the matrix is in the frequency domain (logical).
-#' @return mrs_data object.
-#' @export
-mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
-                         nuc = def_nuc(), fd = FALSE) {
-  
-  data <- array(mat, dim = c(1, 1, 1, 1, nrow(mat), 1, ncol(mat)))
-  res <- c(NA, NA, NA, NA, NA, NA, 1 / fs)
-  
-  mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
-                       nuc = nuc, freq_domain = c(rep(FALSE, 6), fd),
-                       affine = NULL, meta = NULL, extra = NULL)
-  
-  return(mrs_data)
 }
 
 #' Simulate an mrs_data object containing simulated Gaussian noise.
@@ -288,17 +327,18 @@ mat2mrs_data <- function(mat, fs = def_fs(), ft = def_ft(), ref = def_ref(),
 #' @param ft transmitter frequency in Hz.
 #' @param N number of data points in the spectral dimension.
 #' @param ref reference value for ppm scale.
+#' @param nuc resonant nucleus.
 #' @param dyns number of dynamic scans to generate.
 #' @param fd return data in the frequency-domain (TRUE) or time-domain (FALSE)
 #' @return mrs_data object.
 #' @export
 sim_noise <- function(sd = 0.1, fs = def_fs(), ft = def_ft(), N = def_N(),
-                      ref = def_ref(), dyns = 1, fd = TRUE) {
+                      ref = def_ref(), nuc = def_nuc(), dyns = 1, fd = TRUE) {
  
   data_pts <- dyns * N 
   vec <- stats::rnorm(data_pts, 0, sd) + 1i*stats::rnorm(data_pts, 0, sd)
   data_array <- array(vec, dim = c(1, 1, 1, 1, dyns, 1, N))
-  array2mrs_data(data_array, fs = fs, ft = ft, ref = ref, fd = fd)
+  array2mrs_data(data_array, fs = fs, ft = ft, ref = ref, nuc = nuc, fd = fd)
 }
 
 #' Add noise to an mrs_data object.
@@ -359,16 +399,17 @@ add_noise_spec_snr <- function(mrs_data, target_snr, sig_region = c(4, 0.5)) {
 #' @param ft transmitter frequency in Hz.
 #' @param N number of data points in the spectral dimension.
 #' @param ref reference value for ppm scale.
+#' @param nuc resonant nucleus.
 #' @param dyns number of dynamic scans to generate.
 #' @return mrs_data object.
 #' @export
 sim_zero <- function(fs = def_fs(), ft = def_ft(), N = def_N(),
-                      ref = def_ref(), dyns = 1) {
+                     ref = def_ref(), nuc = def_nuc(), dyns = 1) {
   
   data_pts <- dyns * N 
   vec <- rep(0, data_pts) * 1i
   data_array <- array(vec, dim = c(1, 1, 1, 1, dyns, 1, N))
-  array2mrs_data(data_array, fs = fs, ft = ft, ref = ref)
+  array2mrs_data(data_array, fs = fs, ft = ft, ref = ref, nuc = nuc)
 }
 
 #' Apply a function across given dimensions of a MRS data object.
@@ -4610,7 +4651,8 @@ spec_decomp <- function(mrs_data, wm, gm, norm_fractions = TRUE) {
   S <- solve(t(W) %*% W) %*% t(W) %*% D
   
   # convert back to an mrs_data object
-  wm_gm_spec <- mat2mrs_data(S, fs(mrs_data), mrs_data$ft, mrs_data$ref,
+  wm_gm_spec <- mat2mrs_data(S, fs = fs(mrs_data), ft = mrs_data$ft,
+                             ref = mrs_data$ref, nuc = mrs_data$nuc,
                              fd = TRUE)
   
   return(list(wm = get_dyns(wm_gm_spec, 1), gm = get_dyns(wm_gm_spec, 2)))

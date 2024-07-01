@@ -252,8 +252,9 @@ write_basis <- function(basis, basis_file, fwhmba = 0.1) {
 basis2mrs_data <- function(basis, sum_elements = FALSE, amps = NULL,
                            shifts = NULL) {
   
+  # TODO nuc is just the default for now 
   res <- mat2mrs_data(t(basis$data), fs = basis$fs, ft = basis$ft,
-                      ref = basis$ref, fd = TRUE)
+                      ref = basis$ref, nuc = def_nuc(), fd = TRUE)
   
   n_sigs <- Ndyns(res)
   

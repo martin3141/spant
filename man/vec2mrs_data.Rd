@@ -6,16 +6,19 @@
 \usage{
 vec2mrs_data(
   vec,
-  fs = def_fs(),
-  ft = def_ft(),
-  ref = def_ref(),
-  nuc = def_nuc(),
+  mrs_data = NULL,
+  fs = NULL,
+  ft = NULL,
+  ref = NULL,
+  nuc = NULL,
   dyns = 1,
   fd = FALSE
 )
 }
 \arguments{
 \item{vec}{the data vector.}
+
+\item{mrs_data}{example data to copy acquisition parameters from.}
 
 \item{fs}{sampling frequency in Hz.}
 
@@ -27,7 +30,7 @@ vec2mrs_data(
 
 \item{dyns}{replicate the data across the dynamic dimension.}
 
-\item{fd}{flag to indicate if the matrix is in the frequency domain (logical).}
+\item{fd}{flag to indicate if the vector is in the frequency domain (logical).}
 }
 \value{
 mrs_data object.

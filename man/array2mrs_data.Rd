@@ -7,15 +7,18 @@ should be ordered as : dummy, X, Y, Z, dynamic, coil, FID.}
 \usage{
 array2mrs_data(
   data_array,
-  fs = def_fs(),
-  ft = def_ft(),
-  ref = def_ref(),
-  nuc = def_nuc(),
+  mrs_data = NULL,
+  fs = NULL,
+  ft = NULL,
+  ref = NULL,
+  nuc = NULL,
   fd = FALSE
 )
 }
 \arguments{
 \item{data_array}{7d data array.}
+
+\item{mrs_data}{example data to copy acquisition parameters from.}
 
 \item{fs}{sampling frequency in Hz.}
 

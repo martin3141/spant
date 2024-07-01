@@ -8,7 +8,8 @@ test_that("nifti MRS data can be written and read back from disk", {
   mrs_dims <- c(1, 3, 5, 7, 16, 8, 256)
   data <- rnorm(prod(mrs_dims)) + 1i * rnorm(prod(mrs_dims))
   dim(data) <- mrs_dims
-  sim_mrs <- array2mrs_data(data)
+  sim_mrs <- array2mrs_data(data, fs = def_fs(), ft = def_ft(), ref = def_ref(),
+                            nuc = def_nuc())
   sim_mrs$resolution[2:7] <- c(9, 2, 3, 4, NA, 5e-4)
   
   # slice is rotated at an angle of 30 degrees in the z-plane

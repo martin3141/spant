@@ -31,7 +31,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   
   # convert y vec to mrs_data object to use convenience functions
   mrs_data <- vec2mrs_data(y, fs = acq_paras$fs, ft = acq_paras$ft, 
-                           ref = acq_paras$ref)
+                           ref = acq_paras$ref, nuc = acq_paras$nuc)
   
   #### 1 coarse freq align ####
   if (opts$pre_align) {
@@ -335,7 +335,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       mrs_data_corr_noise_est <- vec2mrs_data(y_mod_noise_est,
                                               fs = acq_paras$fs,
                                               ft = acq_paras$ft, 
-                                              ref = acq_paras$ref)
+                                              ref = acq_paras$ref,
+                                              nuc = acq_paras$nuc)
       
       # estimate the noise sd 
       noise_sd_est <- as.numeric(calc_spec_snr(mrs_data_corr_noise_est,
@@ -524,7 +525,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   
   # SNR calc
   mrs_data_corr <- vec2mrs_data(y_mod, fs = acq_paras$fs, ft = acq_paras$ft, 
-                                ref = acq_paras$ref)
+                                ref = acq_paras$ref, nuc = acq_paras$nuc)
   
   noise_sd  <- as.numeric(calc_spec_snr(mrs_data_corr,
                                         noise_region = opts$noise_region,
