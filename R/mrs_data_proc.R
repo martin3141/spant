@@ -4783,7 +4783,7 @@ comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256,
   }
   
   # convert matrix back to an mrs_data object
-  mrs_data_temp <- mat2mrs_data(comb_mat)
+  mrs_data_temp <- mat2mrs_data(comb_mat, mrs_data = metab)
   metab$data    <- mrs_data_temp$data
   
   if (!is.null(ref)) {

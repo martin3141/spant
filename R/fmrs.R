@@ -897,7 +897,9 @@ find_bids_mrs <- function(path, output_full_path = FALSE) {
   mrs_names <- tools::file_path_sans_ext(tools::file_path_sans_ext(mrs_names))
   
   Nscans <- length(mrs_paths)
-
+  
+  if (Nscans == 0) stop("No data files were found.")
+  
   # create an empty data frame
   na_vec  <- rep(NA, Nscans) 
   bids_df <- data.frame(path = mrs_paths, sub = na_vec, ses = na_vec,
@@ -1156,7 +1158,9 @@ preproc_svs_dataset <- function(paths, labels = NULL,
   if (!dir.exists(preproc_dir)) dir.create(preproc_dir)
   rds_dir <- file.path(output_dir, "preproc", "rds")
   if (!dir.exists(rds_dir)) dir.create(rds_dir)
-  metab_dir <- file.path(output_dir, "preproc", "metab")
+  metab_dir <- file.path(output_dir, "preproc", "metab_dyn")
+  if (!dir.exists(metab_dir)) dir.create(metab_dir)
+  metab_dir <- file.path(output_dir, "preproc", "metab_av_dyn")
   if (!dir.exists(metab_dir)) dir.create(metab_dir)
 
   tot_num <- length(paths)
@@ -1183,10 +1187,27 @@ preproc_svs_dataset <- function(paths, labels = NULL,
     
     saveRDS(preproc_res_list[[n]], preproc_rds)
     
-    preproc_metab <- file.path(output_dir, "preproc", "metab",
-                               paste0(labels[n], ".nii.gz"))
+    # write dynamic MRS data if available
+    if (Ndyns(preproc_res_list[[n]]$corrected) > 1) {
+      preproc_metab <- file.path(output_dir, "preproc", "metab_dyn",
+                                 paste0(labels[n], ".nii.gz"))
     
-    write_mrs(preproc_res_list[[n]]$corrected, preproc_metab, force = TRUE)
+      write_mrs(preproc_res_list[[n]]$corrected, preproc_metab, force = TRUE)
+      
+      # write temporally averaged data 
+      preproc_metab <- file.path(output_dir, "preproc", "metab_av_dyn",
+                                 paste0(labels[n], ".nii.gz"))
+    
+      write_mrs(mean_dyns(preproc_res_list[[n]]$corrected), preproc_metab,
+                force = TRUE)
+      
+  } else {
+      # write temporally averaged data 
+      preproc_metab <- file.path(output_dir, "preproc", "metab_av_dyn",
+                                 paste0(labels[n], ".nii.gz"))
+    
+      write_mrs(preproc_res_list[[n]]$corrected, preproc_metab, force = TRUE)
+    }
   }
   
   preproc_summary <- data.frame(t(sapply(preproc_res_list,
