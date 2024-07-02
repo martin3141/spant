@@ -238,20 +238,23 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
   
   if (!is.null(mar)) graphics::par(mar = mar)
   
+  pan_first_fn <- function() {
+    if (show_grid) graphics::grid(nx = grid_nx, ny = grid_ny)
+    if (!is.null(bl_lty)) graphics::abline(h = 0, lty = bl_lty, lwd = 0.5)
+  }
+  
   if (y_scale) {
     if (is.null(mar)) graphics::par(mar = c(3.5, 3.5, 1, 1))
     graphics::plot(x_scale[subset], plot_data[subset], type = 'l', xlim = xlim, 
                    xlab = xlab, ylab = yaxis_lab, lwd = lwd, bty = bty, 
                    xaxt = "n", yaxt = "n", col = col,
-                   panel.first = {if (show_grid) graphics::grid(nx = grid_nx,
-                                                            ny = grid_ny)}, ...)
+                   panel.first = {pan_first_fn()}, ...)
     graphics::axis(2, lwd = 0, lwd.ticks = 1, at = yat, labels = ylabs)
   } else {
     if (is.null(mar)) graphics::par(mar = c(3.5, 1, 1, 1))
     graphics::plot(x_scale[subset], plot_data[subset], type = 'l', xlim = xlim,
          xlab = xlab, yaxt = "n", xaxt = "n", ylab = "", lwd = lwd, bty = bty,
-         col = col, panel.first = {if (show_grid) graphics::grid(nx = grid_nx,
-                                                      ny = grid_ny)}, ...)
+         col = col, panel.first = {pan_first_fn()}, ...)
   }
   
   if (x_ax) graphics::axis(1, lwd = 0, lwd.ticks = 1, at = xat, labels = xlabs)
@@ -265,9 +268,6 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
     graphics::par(xpd = F) 
   }
   
-  # draw baseline(s)
-  if (!is.null(bl_lty)) graphics::abline(h = 0, lty = bl_lty, lwd = 0.5)
- 
   # draw horizontal line(s)
   if (!is.null(hline)) graphics::abline(h = hline, col = hline_col,
                                         lty = hline_lty)

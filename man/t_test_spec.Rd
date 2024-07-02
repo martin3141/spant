@@ -2,18 +2,18 @@
 % Please edit documentation in R/fmrs.R
 \name{t_test_spec}
 \alias{t_test_spec}
-\title{Perform a t-test to spectral data points.}
+\title{Perform a t-test on spectral data points.}
 \usage{
 t_test_spec(mrs_data, group)
 }
 \arguments{
 \item{mrs_data}{an mrs_data object with spectra in the dynamic dimension.}
 
-\item{group}{a vector containing the group of each dynamic spectrum.}
+\item{group}{vector describing the group membership of each dynamic spectrum.}
 }
 \value{
 a list of statistical results.
 }
 \description{
-Perform a t-test to spectral data points.
+Perform a t-test on spectral data points.
 }
