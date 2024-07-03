@@ -270,7 +270,7 @@ phase_ref_1h_brain <- function(mrs_data, mean_ref = FALSE,
   ref <- sim_resonances(acq_paras = mrs_data, freq = c(2.01, 3.03, 3.22),
                         amp = 1, lw = 4, lg = 0)
   
-  p_deg <- 4
+  p_deg <- 3
   xlim  <- c(4, 1.9)
  
   if (mean_ref) {
