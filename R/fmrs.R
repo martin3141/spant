@@ -1235,6 +1235,11 @@ preproc_svs_dataset <- function(paths, labels = NULL,
   rmarkdown::render(rmd_file, params = list(data = res),
                     output_file = rmd_out_f)
   
+  csv_out_f <- file.path(tools::file_path_as_absolute(output_dir), "qa",
+                         "qa_summary_full.csv")
+  
+  utils::write.csv(preproc_summary, csv_out_f)
+  
   if (!is.null(exclude_labels)) {
     # exclude unwanted scans
     preproc_res_list <- preproc_res_list[-exclude_inds]
@@ -1263,6 +1268,11 @@ preproc_svs_dataset <- function(paths, labels = NULL,
     
     rmarkdown::render(rmd_file, params = list(data = res),
                       output_file = rmd_out_f)
+    
+    csv_out_f <- file.path(tools::file_path_as_absolute(output_dir), "qa",
+                           "qa_summary_subset.csv")
+    
+    utils::write.csv(preproc_summary, csv_out_f)
   }
   
   if (return_results) return(list(preproc_metab_list = corrected_list,
