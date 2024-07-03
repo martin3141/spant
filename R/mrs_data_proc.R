@@ -397,19 +397,27 @@ add_noise <- function(mrs_data, sd = 0.1, fd = TRUE) {
 #' scan in the dataset and the same noise level is added to all spectra.
 #' @param sig_region spectral limits to search for the strongest spectral data
 #' point.
+#' @param ref_data measure the signal from the first scan in this reference data
+#' and apply the same target noise level to mrs_data.
 #' @return mrs_data object with additive normally distributed noise.
 #' @export
-add_noise_spec_snr <- function(mrs_data, target_snr, sig_region = c(4, 0.5)) {
+add_noise_spec_snr <- function(mrs_data, target_snr, sig_region = c(4, 0.5),
+                               ref_data = NULL) {
   
   if (inherits(mrs_data, "list")) {
     res <- lapply(mrs_data, add_noise_spec_snr, target_snr = target_snr,
-                  sig_region = sig_region)
+                  sig_region = sig_region, ref_data = ref_data)
     return(res)
   }
   
+  if (is.null(ref_data)) {
+    ref_data <- get_subset(mrs_data, 1, 1, 1, 1, 1)
+  } else {
+    ref_data <- get_subset(ref_data, 1, 1, 1, 1, 1)
+  }
+  
   # measure max signal from the first scan and add noise
-  first_scan  <- get_subset(mrs_data, 1, 1, 1, 1, 1)
-  peak_height <- calc_spec_snr(mrs_data, sig_region = sig_region,
+  peak_height <- calc_spec_snr(ref_data, sig_region = sig_region,
                                full_output = TRUE)$max_sig
   noise_sd    <- peak_height / target_snr
   mrs_data    <- add_noise(mrs_data, noise_sd)
