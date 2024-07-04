@@ -10,7 +10,8 @@ glm_spec_fmrs_dataset(
   exclude_labels = NULL,
   labels = NULL,
   xlim = c(4, 0.2),
-  vline = c(1.35, 1.28, 2.35, 2.29)
+  vline = c(1.35, 1.28, 2.35, 2.29),
+  return_results = FALSE
 )
 }
 \arguments{
@@ -27,6 +28,8 @@ the preproc_svs_dataset function.}
 \item{xlim}{spectral range to include in the analysis.}
 
 \item{vline}{vertical lines to add to the plot.}
+
+\item{return_results}{function will return key outputs, defaults to FALSE.}
 }
 \description{
 Perform spectral GLM analysis of an fMRS dataset.
