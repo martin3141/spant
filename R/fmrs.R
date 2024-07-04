@@ -1289,11 +1289,13 @@ preproc_svs_dataset <- function(paths, labels = NULL,
 #' @param labels labels to describe each data set.
 #' @param xlim spectral range to include in the analysis.
 #' @param vline vertical lines to add to the plot.
+#' @param return_results function will return key outputs, defaults to FALSE.
 #' @export
 glm_spec_fmrs_dataset <- function(regressor_df, analysis_dir = "spant_analysis",
                                   exclude_labels = NULL, labels = NULL,
                                   xlim = c(4, 0.2),
-                                  vline = c(1.35, 1.28, 2.35, 2.29)) {
+                                  vline = c(1.35, 1.28, 2.35, 2.29),
+                                  return_results = FALSE) {
   
   # TODO add optional arguments for datasets to preserve original
   # ordering if needed
@@ -1365,26 +1367,13 @@ glm_spec_fmrs_dataset <- function(regressor_df, analysis_dir = "spant_analysis",
   }
   
   # run glm spec on the mean dataset
-  gen_glm_spec_report(mean_dataset, regressor_df, "dataset_mean", analysis_dir,
-                      xlim, vline, exclude_labels)
+  glm_spec_mean_res <- gen_glm_spec_report(mean_dataset, regressor_df,
+                          "dataset_mean", analysis_dir,
+                           xlim, vline, exclude_labels)
   
-  # perform group level analysis
-  group_res <- glm_spec_group_analysis(glm_spec_res_list)
-  
-  rmd_file <- system.file("rmd", "spec_glm_results.Rmd", package = "spant")
-  
-  rmd_out_f <- file.path(tools::file_path_as_absolute(analysis_dir),
-                         "spec_glm", "group_level")
-  
-  mrs_data_plot <- zf(mean_dyns(mean_dataset))
-  
-  rmarkdown::render(rmd_file, params = list(data = group_res, 
-                    regressor_df = regressor_df, label = "group_level",
-                    mrs_data_plot = mrs_data_plot, xlim = xlim, vline = vline,
-                    exclude_labels = exclude_labels),
-                    output_file = rmd_out_f)
-  
-  # return(glm_spec_res_list)
+  if (return_results) {
+    return(list(indiv_res = glm_spec_res_list, mean_res = glm_spec_mean_res))
+  }
 }
 
 gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
@@ -1416,56 +1405,57 @@ gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
   return(glm_spec_res)
 }
 
-glm_spec_group_analysis <- function(glm_spec_dataset) {
-  Nreg <- ncol(glm_spec_dataset[[1]]$beta_weight) - 1
-  Npts <- nrow(glm_spec_dataset[[1]]$beta_weight)
-  out_colnames <- colnames(glm_spec_dataset[[1]]$beta_weight)
-  ppm_sc <- glm_spec_dataset[[1]]$beta_weight$ppm
-  mrs_data <- glm_spec_dataset[[1]]$beta_weight_mrs
-  
-  get_betas <- function(x, n) x$beta_weight[, n + 1]
-  get_p_val <- function(x) x$p.value
-  get_beta_mean <- function(x) x$estimate
-  
-  p_value   <- matrix(nrow = Npts, ncol = Nreg)
-  beta_mean <- matrix(nrow = Npts, ncol = Nreg)
-  for (n in 1:Nreg) {
-    betas <- lapply(glm_spec_dataset, get_betas, n = n)
-    betas <- do.call(rbind, betas)
-    stat_res <- apply(betas, 2, stats::t.test)
-    p_value[, n] <- sapply(stat_res, get_p_val)
-    beta_mean[, n] <- sapply(stat_res, get_beta_mean)
-  }
-  
-  beta_mean             <-  as.data.frame(beta_mean)
-  p_value               <-  as.data.frame(p_value)
-  p_value_log           <- -log10(p_value)
-  beta_mean             <-  cbind(ppm = ppm_sc, beta_mean)
-  p_value               <-  cbind(ppm = ppm_sc, p_value)
-  p_value_log           <-  cbind(ppm = ppm_sc, p_value_log)
-  colnames(beta_mean)   <-  out_colnames
-  colnames(p_value)     <-  out_colnames
-  colnames(p_value_log) <-  out_colnames
-  
-  beta_mean_mrs <- mat2mrs_data(t(beta_mean[, -1]), fs = fs(mrs_data),
-                                  ft = mrs_data$ft, ref = mrs_data$ref,
-                                  nuc = mrs_data$nuc, fd = TRUE)
-  
-  p_value_log_mrs <- mat2mrs_data(t(p_value_log[, -1]), fs = fs(mrs_data),
-                                  ft = mrs_data$ft, ref = mrs_data$ref,
-                                  nuc = mrs_data$nuc, fd = TRUE)
-  
-  p_value_mrs <- mat2mrs_data(t(p_value[, -1]), fs = fs(mrs_data),
-                              ft = mrs_data$ft, ref = mrs_data$ref,
-                              nuc = mrs_data$nuc, fd = TRUE)
-  
-  return(list(p_value_log_mrs = p_value_log_mrs,
-              p_value_mrs = p_value_mrs,
-              beta_weight_mrs = beta_mean_mrs,
-              p_value_log = p_value_log,
-              p_value = p_value,
-              beta_weight = beta_mean))
-}
+# Doesn't work...
+# glm_spec_group_analysis <- function(glm_spec_dataset) {
+#   Nreg <- ncol(glm_spec_dataset[[1]]$beta_weight) - 1
+#   Npts <- nrow(glm_spec_dataset[[1]]$beta_weight)
+#   out_colnames <- colnames(glm_spec_dataset[[1]]$beta_weight)
+#   ppm_sc <- glm_spec_dataset[[1]]$beta_weight$ppm
+#   mrs_data <- glm_spec_dataset[[1]]$beta_weight_mrs
+#   
+#   get_betas <- function(x, n) x$beta_weight[, n + 1]
+#   get_p_val <- function(x) x$p.value
+#   get_beta_mean <- function(x) x$estimate
+#   
+#   p_value   <- matrix(nrow = Npts, ncol = Nreg)
+#   beta_mean <- matrix(nrow = Npts, ncol = Nreg)
+#   for (n in 1:Nreg) {
+#     betas <- lapply(glm_spec_dataset, get_betas, n = n)
+#     betas <- do.call(rbind, betas)
+#     stat_res <- apply(betas, 2, stats::t.test)
+#     p_value[, n] <- sapply(stat_res, get_p_val)
+#     beta_mean[, n] <- sapply(stat_res, get_beta_mean)
+#   }
+#   
+#   beta_mean             <-  as.data.frame(beta_mean)
+#   p_value               <-  as.data.frame(p_value)
+#   p_value_log           <- -log10(p_value)
+#   beta_mean             <-  cbind(ppm = ppm_sc, beta_mean)
+#   p_value               <-  cbind(ppm = ppm_sc, p_value)
+#   p_value_log           <-  cbind(ppm = ppm_sc, p_value_log)
+#   colnames(beta_mean)   <-  out_colnames
+#   colnames(p_value)     <-  out_colnames
+#   colnames(p_value_log) <-  out_colnames
+#   
+#   beta_mean_mrs <- mat2mrs_data(t(beta_mean[, -1]), fs = fs(mrs_data),
+#                                   ft = mrs_data$ft, ref = mrs_data$ref,
+#                                   nuc = mrs_data$nuc, fd = TRUE)
+#   
+#   p_value_log_mrs <- mat2mrs_data(t(p_value_log[, -1]), fs = fs(mrs_data),
+#                                   ft = mrs_data$ft, ref = mrs_data$ref,
+#                                   nuc = mrs_data$nuc, fd = TRUE)
+#   
+#   p_value_mrs <- mat2mrs_data(t(p_value[, -1]), fs = fs(mrs_data),
+#                               ft = mrs_data$ft, ref = mrs_data$ref,
+#                               nuc = mrs_data$nuc, fd = TRUE)
+#   
+#   return(list(p_value_log_mrs = p_value_log_mrs,
+#               p_value_mrs = p_value_mrs,
+#               beta_weight_mrs = beta_mean_mrs,
+#               p_value_log = p_value_log,
+#               p_value = p_value,
+#               beta_weight = beta_mean))
+# }
 
 #' Perform a t-test on spectral data points.
 #' @param mrs_data an mrs_data object with spectra in the dynamic dimension.
