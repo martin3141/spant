@@ -500,6 +500,7 @@ glm_spec <- function(mrs_data, regressor_df, full_output = FALSE) {
   ppm_sc      <-  ppm(mrs_data)
   beta_weight <-  cbind(ppm = ppm_sc, beta_weight)
   p_value_log <- -log10(p_value)
+  p_value_log[p_value_log > 300] <- 300
   p_value     <-  cbind(ppm = ppm_sc, p_value)
   p_value_log <-  cbind(ppm = ppm_sc, p_value_log)
   
@@ -1383,7 +1384,7 @@ glm_spec_fmrs_dataset <- function(regressor_df, analysis_dir = "spant_analysis",
                     exclude_labels = exclude_labels),
                     output_file = rmd_out_f)
   
-  return(glm_spec_res_list)
+  # return(glm_spec_res_list)
 }
 
 gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
