@@ -1289,7 +1289,7 @@ preproc_svs_dataset <- function(paths, labels = NULL,
 #' @param xlim spectral range to include in the analysis.
 #' @param vline vertical lines to add to the plot.
 #' @export
-fmrs_dataset_glm_spec <- function(regressor_df, analysis_dir = "spant_analysis",
+glm_spec_fmrs_dataset <- function(regressor_df, analysis_dir = "spant_analysis",
                                   exclude_labels = NULL, labels = NULL,
                                   xlim = c(4, 0.2),
                                   vline = c(1.35, 1.28, 2.35, 2.29)) {
@@ -1365,7 +1365,7 @@ fmrs_dataset_glm_spec <- function(regressor_df, analysis_dir = "spant_analysis",
   
   # run glm spec on the mean dataset
   gen_glm_spec_report(mean_dataset, regressor_df, "dataset_mean", analysis_dir,
-                      xlim, vline)
+                      xlim, vline, exclude_labels)
   
   # perform group level analysis
   group_res <- glm_spec_group_analysis(glm_spec_res_list)
@@ -1379,14 +1379,15 @@ fmrs_dataset_glm_spec <- function(regressor_df, analysis_dir = "spant_analysis",
   
   rmarkdown::render(rmd_file, params = list(data = group_res, 
                     regressor_df = regressor_df, label = "group_level",
-                    mrs_data_plot = mrs_data_plot, xlim = xlim, vline = vline),
+                    mrs_data_plot = mrs_data_plot, xlim = xlim, vline = vline,
+                    exclude_labels = exclude_labels),
                     output_file = rmd_out_f)
   
   return(glm_spec_res_list)
 }
 
 gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
-                                xlim, vline) {
+                                xlim, vline, exclude_labels = NULL) {
   
   # process the data
   mrs_data_glm <- lb(mrs_data, 3)
@@ -1407,7 +1408,8 @@ gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
   
   rmarkdown::render(rmd_file, params = list(data = glm_spec_res, 
                     regressor_df = regressor_df, label = label,
-                    mrs_data_plot = mrs_data_plot, xlim = xlim, vline = vline),
+                    mrs_data_plot = mrs_data_plot, xlim = xlim, vline = vline,
+                    exclude_labels = exclude_labels),
                     output_file = rmd_out_f)
   
   return(glm_spec_res)
@@ -1513,7 +1515,7 @@ spant_sim_fmrs_dataset <- function(output_dir = NULL) {
   N_scans     <- 448  # just under 15 mins with TR = 2s
   bz_inhom_lb <- 4    # Gaussian line-broadening to simulate B0 inhomogeneity
   bold_lb_hz  <- 0.0  # linewidth differences in Hz from BOLD T2* effect
-  ss_spec_snr <- 10   # single shot spectral SNR
+  ss_spec_snr <- 50   # single shot spectral SNR
   subjects    <- 5    # number of subject scans to generate in BIDS format
   set.seed(1)         # random number generator seed used for noise samples
   

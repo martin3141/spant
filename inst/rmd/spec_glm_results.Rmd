@@ -8,6 +8,7 @@ params:
   mrs_data_plot: ""
   xlim: ""
   vline: ""
+  exclude_labels: ""
 ---
 
 ```{r setup, include=FALSE}
@@ -46,4 +47,11 @@ for (n in 1:Nregressors) {
 ### Design matrix
 ```{r, fig.width=8, fig.height=8}
 plot_reg(params$regressor_df)
+```
+
+```{r results='asis'}
+if (!is.null(params$exclude_labels)) {
+  cat("\n\n### Excluded scan labels\n")
+  for (x in params$exclude_labels) cat("- ", x, "\n")
+}
 ```
