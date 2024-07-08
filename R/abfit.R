@@ -27,7 +27,17 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   }
  
   # zero pad input to twice length
-  if (opts$zp) y <- c(y, rep(0, length(y))) 
+  if (opts$zp) {
+    if (is.null(opts$zf_offset)) {
+      y <- c(y, rep(0, length(y))) 
+    } else {
+      if (opts$zf_offset == 0) {
+        y <- c(y, rep(0, length(y))) 
+      } else {
+        y <- append(y, rep(0, length(y)), after = (length(y) - opts$zf_offset))
+      }
+    } 
+  }
   
   # convert y vec to mrs_data object to use convenience functions
   mrs_data <- vec2mrs_data(y, fs = acq_paras$fs, ft = acq_paras$ft, 

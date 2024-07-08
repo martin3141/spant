@@ -130,6 +130,11 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
     # use default fitting opts if not specified 
     if (is.null(opts)) opts <- abfit_opts()
     
+    # check for FID distortion to adjust zero-filling method
+    if ((is_fid_filt_dist(metab) & is.null(opts$zf_offset))) {
+      opts$zf_offset <- 50
+    }
+    
     acq_paras <- get_acq_paras(metab)
     
     plyr <- TRUE
