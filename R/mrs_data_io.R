@@ -58,8 +58,8 @@ read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
   if (!file.exists(fname)) stop("Error, read_mrs file does not exist.")
   
   if (dir.exists(fname)) {
-    # stop("Error, read_mrs file is a directory.")
     res <- read_ima_dyn_dir(dir = fname, extra = extra, verbose = verbose)
+    if (!is.null(fid_filt_dist)) res$meta$fid_filt_dist <- fid_filt_dist
     return(res)
   }
   
@@ -105,8 +105,16 @@ read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
     stop("Unrecognised file format.")
   }
   
+  if (!is.null(fid_filt_dist)) {
+    if (identical(class(res), c("list", "mrs_data"))) {
+      res$metab$meta$fid_filt_dist <- fid_filt_dist
+      if (!is.null(res$ref)) res$ref$meta$fid_filt_dist <- fid_filt_dist
+      if (!is.null(res$ref_ecc)) res$ref_ecc$meta$fid_filt_dist <- fid_filt_dist
+    } else {
+      res$meta$fid_filt_dist <- fid_filt_dist
+    }
+  }
   return(res)
-  
 }
 
 # try and guess the format from the filename extension

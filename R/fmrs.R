@@ -970,7 +970,7 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL,
   }
   
   if (!is.null(ref_inds)) {
-    mrs_data   <- get_dyns(mrs_data, -ref_inds)
+    mrs_data <- get_dyns(mrs_data, -ref_inds)
   }
   
   if (is.null(output_dir)) {
