@@ -702,9 +702,8 @@ lb.mrs_data <- function(x, lb, lg = 1) {
   x <- collapse_to_dyns(x)
   
   # needs to be a time-domain operation
-  if (is_fd(x)) {
-    x <- fd2td(x)
-  }
+  if (is_fd(x)) x <- fd2td(x)
+    
   t <- rep(seconds(x), each = Nspec(x))
   
   if (lg < 1)  x$data = x$data * exp(-(1 - lg) * lb * t * pi)
@@ -801,6 +800,14 @@ zf.list <- function(x, factor = 2, offset = 0) {
   lapply(x, zf, factor = factor, offset = offset)
 }
 
+is_fid_filt_dist <- function(mrs_data) {
+  if (is.null(mrs_data$meta$fid_filt_dist)) {
+    return(FALSE)  
+  } else {
+    return(mrs_data$meta$fid_filt_dist)
+  }
+}
+
 #' @rdname zf
 #' @export
 zf.mrs_data <- function(x, factor = 2, offset = 0) {
@@ -817,6 +824,12 @@ zf.mrs_data <- function(x, factor = 2, offset = 0) {
   zero_dim[7] <- pts - data_dim[7]
   zero_array <- array(0, dim = zero_dim)
   x$data = abind::abind(x$data, zero_array, along = 7)
+  
+  if (is_fid_filt_dist(x) & is.null(offset)) {
+    offset <- 50
+  } else {
+    offset <- 0
+  }
   
   if (offset > 0) {
     orig_inds <- (pts_orig - offset + 1):pts_orig
