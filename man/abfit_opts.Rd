@@ -51,7 +51,8 @@ abfit_opts(
   input_paras_raw = NULL,
   optim_lw_only = FALSE,
   optim_lw_only_limit = 20,
-  lb_init = 0.001
+  lb_init = 0.001,
+  zf_offset = NULL
 )
 }
 \arguments{
@@ -177,6 +178,10 @@ of the starting value when optim_lw_only is TRUE.}
 \item{lb_init}{initial Lorentzian line broadening value for the individual
 basis signals. Setting to 0 will clash with the minimum allowable value
 (eg hard constraint) during the detailed fit.}
+
+\item{zf_offset}{offset in number of data points from the end of the FID to
+zero-fill. Default is NULL and will automatically set this to 50 points when
+the FID distortion flag is set for the mrs_data.}
 }
 \value{
 full list of options.

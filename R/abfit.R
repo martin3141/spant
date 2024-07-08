@@ -817,6 +817,9 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param lb_init initial Lorentzian line broadening value for the individual 
 #' basis signals. Setting to 0 will clash with the minimum allowable value
 #' (eg hard constraint) during the detailed fit.
+#' @param zf_offset offset in number of data points from the end of the FID to 
+#' zero-fill. Default is NULL and will automatically set this to 50 points when
+#' the FID distortion flag is set for the mrs_data.
 #' @return full list of options.
 #' @examples
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
@@ -845,7 +848,7 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
                        lb_reg = NULL, output_all_paras = FALSE,
                        output_all_paras_raw = FALSE, input_paras_raw = NULL,
                        optim_lw_only = FALSE, optim_lw_only_limit = 20,
-                       lb_init = 0.001) {
+                       lb_init = 0.001, zf_offset = NULL) {
                          
   list(init_damping = init_damping, maxiters = maxiters,
        max_shift = max_shift, max_damping = max_damping, max_phase = max_phase,
@@ -872,7 +875,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
        lb_reg = lb_reg, output_all_paras = output_all_paras,
        output_all_paras_raw = output_all_paras_raw,
        input_paras_raw = input_paras_raw, optim_lw_only = optim_lw_only,
-       optim_lw_only_limit = optim_lw_only_limit, lb_init = lb_init)
+       optim_lw_only_limit = optim_lw_only_limit, lb_init = lb_init,
+       zf_offset = zf_offset)
 }
 
 #' Return a list of options for an ABfit analysis to maintain comparability with
