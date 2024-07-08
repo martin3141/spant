@@ -825,11 +825,9 @@ zf.mrs_data <- function(x, factor = 2, offset = 0) {
   zero_array <- array(0, dim = zero_dim)
   x$data = abind::abind(x$data, zero_array, along = 7)
   
-  if (is_fid_filt_dist(x) & is.null(offset)) {
-    offset <- 50
-  } else {
-    offset <- 0
-  }
+  if (is_fid_filt_dist(x) & is.null(offset)) offset <- 50
+  
+  if (is.null(offset)) offset <- 0
   
   if (offset > 0) {
     orig_inds <- (pts_orig - offset + 1):pts_orig

@@ -53,6 +53,8 @@ read_ima <- function(fraw, verbose = FALSE, extra) {
                               TE3 = vars$te3))
   }
   
+  if (vars$rm_oversampling) meta <- append(meta, list(fid_filt_dist = TRUE))
+  
   mrs_data <- mrs_data(data = data, ft = vars$ft, resolution = paras$res,
                        ref = paras$ref, nuc = paras$nuc,
                        freq_domain = freq_domain, affine = paras$affine,
