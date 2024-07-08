@@ -14,7 +14,8 @@ read_mrs(
   full_fid = FALSE,
   omit_svs_ref_scans = TRUE,
   verbose = FALSE,
-  extra = NULL
+  extra = NULL,
+  fid_filt_dist = NULL
 )
 }
 \arguments{
@@ -44,6 +45,11 @@ SVS twix data (default = TRUE).}
 
 \item{extra}{an optional data frame to provide additional variables for use
 in subsequent analysis steps, eg id or grouping variables.}
+
+\item{fid_filt_dist}{indicate if the data has a distorted FID due to a
+brick-wall filter being used to downsample the data. Default is to auto
+detect this from the data, but TRUE or FALSE options can be given to override
+detection.}
 }
 \value{
 MRS data object.

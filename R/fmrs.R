@@ -1306,8 +1306,8 @@ glm_spec_fmrs_dataset <- function(regressor_df, analysis_dir = "spant_analysis",
   if (is.null(labels)) {
     # discover data labels from file names
     labels <- tools::file_path_sans_ext(basename(dir(file.path(analysis_dir,
-                                                                   "preproc",
-                                                                   "rds"))))
+                                                               "preproc",
+                                                               "rds"))))
   }
   
   # detect non unique labels and quit if found
@@ -1333,6 +1333,10 @@ glm_spec_fmrs_dataset <- function(regressor_df, analysis_dir = "spant_analysis",
   spec_glm_dir <- file.path(analysis_dir, "spec_glm")
   if (!dir.exists(spec_glm_dir)) dir.create(spec_glm_dir)
   
+  # directory for processed spectra
+  spec_glm_mrs_dir <- file.path(analysis_dir, "spec_glm", "proc_fmrs")
+  if (!dir.exists(spec_glm_mrs_dir)) dir.create(spec_glm_mrs_dir)
+  
   # read preprocessed results
   Nscans <- length(labels)
   preproc_res_list <- vector(mode = "list", length = Nscans)
@@ -1354,6 +1358,13 @@ glm_spec_fmrs_dataset <- function(regressor_df, analysis_dir = "spant_analysis",
     glm_spec_res_list[[n]] <- gen_glm_spec_report(mrs_data_glm, regressor_df,
                                                   labels[n], analysis_dir, xlim,
                                                   vline)
+    
+    # write processed data 
+    preproc_metab <- file.path(spec_glm_mrs_dir, paste0(labels[n], ".nii.gz"))
+    
+    write_mrs(glm_spec_res_list[[n]]$mrs_data, preproc_metab,
+              force = TRUE)
+    
   }
   
   # extract just the corrected data
@@ -1386,6 +1397,9 @@ gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
   # mrs_data_glm <- bc_poly(mrs_data_glm, 1)
   
   mrs_data_plot <- zf(mean_dyns(mrs_data))
+  
+  # write the processed spectra
+  
   
   # regress
   glm_spec_res <- glm_spec(mrs_data_glm, regressor_df, full_output = TRUE)

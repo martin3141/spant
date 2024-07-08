@@ -28,6 +28,10 @@ mrs_data <- function(data, ft, resolution, ref, nuc, freq_domain, affine,
 #' @param verbose print data file information (default = FALSE).
 #' @param extra an optional data frame to provide additional variables for use
 #' in subsequent analysis steps, eg id or grouping variables.
+#' @param fid_filt_dist indicate if the data has a distorted FID due to a 
+#' brick-wall filter being used to downsample the data. Default is to auto
+#' detect this from the data, but TRUE or FALSE options can be given to override
+#' detection.
 #' @return MRS data object.
 #' @examples
 #' fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
@@ -37,7 +41,7 @@ mrs_data <- function(data, ft, resolution, ref, nuc, freq_domain, affine,
 read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
                      n_ref_scans = NULL, full_fid = FALSE,
                      omit_svs_ref_scans = TRUE, verbose = FALSE,
-                     extra = NULL) {
+                     extra = NULL, fid_filt_dist = NULL) {
   
   # glob the input and check the result is sane
   fname <- Sys.glob(fname)
@@ -48,58 +52,61 @@ read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
     return(lapply(fname, read_mrs, format = format, ft = ft, fs = fs, ref = ref,
                   n_ref_scans = n_ref_scans, full_fid = full_fid,
                   omit_svs_ref_scans = omit_svs_ref_scans, verbose = verbose,
-                  extra = extra))
+                  extra = extra, fid_filt_dist = fid_filt_dist))
   }
   
   if (!file.exists(fname)) stop("Error, read_mrs file does not exist.")
   
   if (dir.exists(fname)) {
     # stop("Error, read_mrs file is a directory.")
-    return(read_ima_dyn_dir(dir = fname, extra = extra, verbose = verbose))
+    res <- read_ima_dyn_dir(dir = fname, extra = extra, verbose = verbose)
+    return(res)
   }
   
   # try and guess the format from the filename extension
   if (is.null(format)) format <- guess_mrs_format(fname) 
   
   if (format == "spar_sdat") {
-    return(read_spar_sdat(fname, extra))
+    res <- read_spar_sdat(fname, extra)
   } else if (format == "rda") {
-    return(read_rda(fname, extra))
+    res <- read_rda(fname, extra)
   } else if (format == "dicom") {
-    return(read_dicom(fname, verbose, extra))
+    res <- read_dicom(fname, verbose, extra)
   } else if (format == "twix") {
-    return(read_twix(fname, verbose, full_fid, omit_svs_ref_scans,
-                     extra))
+    res <- read_twix(fname, verbose, full_fid, omit_svs_ref_scans, extra)
   } else if (format == "pfile") {
-    return(read_pfile(fname, n_ref_scans, verbose, extra))
+    res <- read_pfile(fname, n_ref_scans, verbose, extra)
   } else if (format == "list_data") {
     if (is.null(ft)) stop("Please specify ft parameter for list_data format")
     if (is.null(fs)) stop("Please specify fs parameter for list_data format")
     if (is.null(ref)) stop("Please specify ref parameter for list_data format")
-    return(read_list_data(fname, ft, fs, ref, extra))
+    res <- read_list_data(fname, ft, fs, ref, extra)
   } else if (format == "dpt") {
-    return(read_mrs_dpt(fname, extra))
+    res <- read_mrs_dpt(fname, extra)
   } else if (format == "jmrui_txt") {
-    return(read_mrs_jmrui_txt(fname, extra))
+    res <- read_mrs_jmrui_txt(fname, extra)
   } else if (format == "paravis") {
-    return(read_paravis_raw(fname, extra))
+    res <- read_paravis_raw(fname, extra)
   } else if (format == "lcm_raw") {
     if (is.null(ft)) stop("Please specify ft parameter for lcm_raw format")
     if (is.null(fs)) stop("Please specify fs parameter for lcm_raw format")
     if (is.null(ref)) stop("Please specify ref parameter for lcm_raw format")
-    return(read_lcm_raw(fname, ft, fs, ref, extra))
+    res <- read_lcm_raw(fname, ft, fs, ref, extra)
   } else if (format == "rds") {
     mrs_data <- readRDS(fname)
     mrs_data$extra <- extra
     if (!inherits(mrs_data, "mrs_data")) stop("rds file is not mrs_data format")
-    return(mrs_data)
+    res <- mrs_data
   } else if (format == "nifti") {
-    return(read_mrs_nifti(fname, extra, verbose))
+    res <- read_mrs_nifti(fname, extra, verbose)
   } else if (format == "varian") {
-    return(read_varian(fname, extra))
+    res <- read_varian(fname, extra)
   } else {
     stop("Unrecognised file format.")
   }
+  
+  return(res)
+  
 }
 
 # try and guess the format from the filename extension
