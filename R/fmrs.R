@@ -1330,8 +1330,8 @@ glm_spec_fmrs_dataset <- function(regressor_df, analysis_dir = "spant_analysis",
   }
   
   # directory for spec glm html reports 
-  spec_glm_dir <- file.path(analysis_dir, "spec_glm")
-  if (!dir.exists(spec_glm_dir)) dir.create(spec_glm_dir)
+  spec_glm_dir <- file.path(analysis_dir, "spec_glm", "first_level")
+  if (!dir.exists(spec_glm_dir)) dir.create(spec_glm_dir, recursive = TRUE)
   
   # directory for processed spectra
   spec_glm_mrs_dir <- file.path(analysis_dir, "spec_glm", "proc_fmrs")
@@ -1408,7 +1408,7 @@ gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
   rmd_file <- system.file("rmd", "spec_glm_results.Rmd", package = "spant")
   
   rmd_out_f <- file.path(tools::file_path_as_absolute(analysis_dir), "spec_glm",
-                         label)
+                         "first_level", label)
   
   rmarkdown::render(rmd_file, params = list(data = glm_spec_res, 
                     regressor_df = regressor_df, label = label,
@@ -1602,4 +1602,110 @@ spant_sim_fmrs_dataset <- function(output_dir = NULL) {
   
   # export to BIDS structure
   mrs_data2bids(mrs_dyn_list, output_dir, skip_existing = FALSE)
+}
+
+#' @export
+glm_spec_fmrs_group_analysis <- function(regressor_df,
+                                         analysis_dir = "spant_analysis",
+                                         exclude_labels = NULL, labels = NULL) {
+  
+  # check preproc_dir exists
+  if (!dir.exists(analysis_dir)) stop("analysis_dir not found.")
+  
+  # directory for output
+  spec_glm_group_dir <- file.path(analysis_dir, "spec_glm", "group_level")
+  if (!dir.exists(spec_glm_group_dir)) dir.create(spec_glm_group_dir)
+  
+  if (is.null(labels)) {
+    # discover data labels from file names
+    fnames <- Sys.glob(file.path(analysis_dir, "spec_glm", "proc_fmrs",
+                                               "*.nii.gz"))
+    labels <- basename(fnames)
+    labels <- tools::file_path_sans_ext(tools::file_path_sans_ext(labels))
+  }
+  
+  # detect non unique labels and quit if found
+  if (any(table(labels) > 1)) stop("Labels are non-unique.")
+  
+  # remove any excluded labels
+  if (!is.null(exclude_labels)) {
+    if (any(table(exclude_labels) > 1)) stop("Exclude labels are non-unique.")
+    N_excl <- length(exclude_labels)
+    exclude_inds <- rep(NA, N_excl)
+    for (n in 1:N_excl) {
+      found_bool <- (labels == exclude_labels[n])
+      if (sum(found_bool) == 1) exclude_inds[n] <- which(found_bool)
+    }
+    # remove any unfound labels
+    exclude_inds <- exclude_inds[!is.na(exclude_inds)]
+    if (length(exclude_inds) > 0) labels <- labels[-exclude_inds]
+  }
+  
+  # read the processed data
+  Nscans      <- length(labels)
+  preproc_mrs <- vector(mode = "list", length = Nscans)
+  for (n in 1:Nscans) {
+    fname <- paste0(labels[n], ".nii.gz")
+    fpath <- file.path(analysis_dir, "spec_glm", "proc_fmrs", fname)
+    preproc_mrs[[n]] <- read_mrs(fpath)
+  }
+  
+  # modelling
+  glm_spec_group_res <- glm_spec_group_level(preproc_mrs, regressor_df)
+  
+  # write the results
+  output <- list(glm_spec_group_res = glm_spec_group_res, labels = labels,
+                 exclude_labels = exclude_labels, regressor_df = regressor_df,
+                 acq_paras = get_acq_paras(preproc_mrs[[1]]))
+  
+  saveRDS(output, file.path(spec_glm_group_dir, "group_fit.rds"))
+}
+
+#' @export
+glm_spec_group_linhyp <- function(analysis_dir = "spant_analysis", hmat) {
+  
+  group_dir   <- file.path(analysis_dir, "spec_glm", "group_level")
+  group_fit_f <- file.path(group_dir, "group_fit.rds")
+  group_fit   <- readRDS(group_fit_f)
+  
+  lin_hyp_res <- lapply(group_fit$glm_spec_group_res, car::linearHypothesis,
+                        hmat)
+  
+  F_vals      <- sapply(lin_hyp_res, \(x) x$`F`[2])
+  p_vals      <- sapply(lin_hyp_res, \(x) x$`Pr(>F)`[2])
+  p_vals_log  <- -log10(p_vals)
+  
+  acq_paras <- group_fit$acq_paras
+  
+  p_vals_mrs <- vec2mrs_data(p_vals, fs = acq_paras$fs,
+                             ft = acq_paras$ft, ref = acq_paras$ref,
+                             nuc = acq_paras$nuc, fd = TRUE)
+  
+  p_vals_log_mrs <- vec2mrs_data(p_vals_log, fs = acq_paras$fs,
+                                 ft = acq_paras$ft, ref = acq_paras$ref,
+                                 nuc = acq_paras$nuc, fd = TRUE)
+  
+  F_vals_mrs <- vec2mrs_data(F_vals, fs = acq_paras$fs, ft = acq_paras$ft,
+                             ref = acq_paras$ref, nuc = acq_paras$nuc,
+                             fd = TRUE)
+  
+  return(list(p_vals_log_mrs = p_vals_log_mrs, p_vals_mrs = p_vals_mrs, 
+              F_vals_mrs = F_vals_mrs))
+}
+
+glm_spec_group_level <- function(mrs_data_list, regressor_df) {
+  Ngroup <- length(mrs_data_list)
+  group_regressor_df <- gen_group_reg(regressor_df, Ngroup)
+  mrs_data_dyn <- append_dyns(mrs_data_list) 
+  mrs_mat <- mrs_data2spec_mat(mrs_data_dyn)
+  
+  # drop the time column if present
+  group_regressor_df <- group_regressor_df[, !names(group_regressor_df) %in% 
+                                             c("time"), drop = FALSE]
+  lm_res_list <- vector("list", ncol(mrs_mat))
+  for (n in 1:ncol(mrs_mat)) {
+    lm_res_list[[n]] <- stats::lm(mrs_mat[, n] ~ . + 0, group_regressor_df)
+  }
+  
+  return(lm_res_list)
 }
