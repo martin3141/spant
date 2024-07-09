@@ -1291,11 +1291,11 @@ preproc_svs_dataset <- function(paths, labels = NULL,
 #' @param vline vertical lines to add to the plot.
 #' @param return_results function will return key outputs, defaults to FALSE.
 #' @export
-glm_spec_fmrs_dataset <- function(regressor_df, analysis_dir = "spant_analysis",
-                                  exclude_labels = NULL, labels = NULL,
-                                  xlim = c(4, 0.2),
-                                  vline = c(1.35, 1.28, 2.35, 2.29),
-                                  return_results = FALSE) {
+glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
+                             exclude_labels = NULL, labels = NULL,
+                             xlim = c(4, 0.2),
+                             vline = c(1.35, 1.28, 2.35, 2.29),
+                             return_results = FALSE) {
   
   # TODO add optional arguments for datasets to preserve original
   # ordering if needed
@@ -1605,9 +1605,8 @@ spant_sim_fmrs_dataset <- function(output_dir = NULL) {
 }
 
 #' @export
-glm_spec_fmrs_group_analysis <- function(regressor_df,
-                                         analysis_dir = "spant_analysis",
-                                         exclude_labels = NULL, labels = NULL) {
+glm_spec_fmrs_group <- function(regressor_df, analysis_dir = "spant_analysis",
+                                exclude_labels = NULL, labels = NULL) {
   
   # check preproc_dir exists
   if (!dir.exists(analysis_dir)) stop("analysis_dir not found.")
