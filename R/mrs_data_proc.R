@@ -3818,17 +3818,18 @@ calc_coil_noise_sd <- function(noise_data) {
 #' @param full_output output signal, noise and SNR values separately.
 #' @return an array of SNR values.
 #' @export
-calc_spec_snr <- function(mrs_data, sig_region = c(4,0.5), 
-                          noise_region = c(-0.5,-2.5), p_order = 2,
+calc_spec_snr <- function(mrs_data, sig_region = c(4, 0.5), 
+                          noise_region = c(-0.5, -2.5), p_order = 2,
                           interp_f = 4, full_output = FALSE) {
   
-  sig_data <- crop_spec(mrs_data, sig_region)
+  sig_data   <- crop_spec(mrs_data, sig_region)
   noise_data <- crop_spec(mrs_data, noise_region)
   
   #max_sig <- apply_mrs(sig_data, 7, re_max, data_only = TRUE)
-  max_sig <- apply_mrs(sig_data, 7, re_max_interp, interp_f, data_only = TRUE)
+  max_sig    <- apply_mrs(sig_data, 7, re_max_interp, interp_f,
+                          data_only = TRUE)
   noise_mean <- apply_mrs(noise_data, 7, re_mean, data_only = TRUE)
-  max_sig <- max_sig - noise_mean
+  max_sig    <- max_sig - noise_mean
   
   #noise_sd <- apply_mrs(noise_data, 7, re_sd, data_only = TRUE)
   
