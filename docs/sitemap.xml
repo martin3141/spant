@@ -217,6 +217,12 @@
     <loc>https://martin3141.github.io/spant/reference/comb_coils_fp_pc.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/comb_coils_mrsi_gls.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/comb_coils_svs_gls.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/comb_csv_results.html</loc>
   </url>
   <url>
@@ -412,6 +418,9 @@
     <loc>https://martin3141.github.io/spant/reference/gen_conv_reg.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/gen_group_reg.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/gen_impulse_reg.html</loc>
   </url>
   <url>
@@ -556,6 +565,15 @@
     <loc>https://martin3141.github.io/spant/reference/glm_spec.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/glm_spec_fmrs_fl.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/glm_spec_fmrs_group.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/glm_spec_group_linhyp.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/grid_shift_xy.html</loc>
   </url>
   <url>
@@ -691,7 +709,13 @@
     <loc>https://martin3141.github.io/spant/reference/mrs_data2basis.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/mrs_data2bids.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/mrs_data2mat.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/mrs_data2spec_mat.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/mrs_data2vec.html</loc>
@@ -742,6 +766,9 @@
     <loc>https://martin3141.github.io/spant/reference/phase.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/phase_ref_1h_brain.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/plot.fit_result.html</loc>
   </url>
   <url>
@@ -779,6 +806,12 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/precomp.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/preproc_svs.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/preproc_svs_dataset.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/print.fit_result.html</loc>
@@ -1051,6 +1084,9 @@
     <loc>https://martin3141.github.io/spant/reference/spant_mpress_drift.html</loc>
   </url>
   <url>
+    <loc>https://martin3141.github.io/spant/reference/spant_sim_fmrs_dataset.html</loc>
+  </url>
+  <url>
     <loc>https://martin3141.github.io/spant/reference/spant_simulation_benchmark.html</loc>
   </url>
   <url>
@@ -1106,6 +1142,9 @@
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/svs_1h_brain_batch_analysis.html</loc>
+  </url>
+  <url>
+    <loc>https://martin3141.github.io/spant/reference/t_test_spec.html</loc>
   </url>
   <url>
     <loc>https://martin3141.github.io/spant/reference/td2fd.html</loc>
