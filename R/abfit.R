@@ -1199,19 +1199,32 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   # cut out fitting region
   lb_jac <- -Re(lb_jac[inds,,drop = FALSE])
   
-  # if (is.null(freq_reg)) {
+  if (!is.null(freq_reg) | !is.null(lb_reg)) {
+    lb_reg_jac   <- lb_reg / pi
+    freq_reg_jac <- freq_reg
+    if (!is.null(freq_reg)) {
+      freq_reg_jac_mat <- matrix(freq_reg_jac, ncol = Nbasis, nrow = Nbasis)
+    }
+    if (!is.null(lb_reg)) {
+      lb_reg_jac_mat <- matrix(lb_reg_jac, ncol = Nbasis, nrow = Nbasis)
+    }
+    zero_jac_mat <- matrix(0, ncol = Nbasis, nrow = Nbasis)
+  }
+  
   if (is.null(freq_reg) & is.null(lb_reg)) {
     ret_mat <- cbind(global_paras_jac, freq_jac, lb_jac)
-  } else if (xor(is.null(freq_reg), is.null(lb_reg))) {
+  } else if (!is.null(freq_reg) & is.null(lb_reg)) {
     ret_mat <- cbind(global_paras_jac,
-                     rbind(freq_jac, matrix(0, ncol = Nbasis, nrow = Nbasis)),
-                     rbind(lb_jac,   matrix(0, ncol = Nbasis, nrow = Nbasis)))
+                     rbind(freq_jac, freq_reg_jac_mat),
+                     rbind(lb_jac,   zero_jac_mat))
+  } else if (is.null(freq_reg) & !is.null(lb_reg)) {
+    ret_mat <- cbind(global_paras_jac,
+                     rbind(freq_jac, zero_jac_mat),
+                     rbind(lb_jac,   lb_reg_jac_mat))
   } else {
     ret_mat <- cbind(global_paras_jac,
-                     rbind(freq_jac, matrix(0, ncol = Nbasis,
-                                            nrow = 2 * Nbasis)),
-                     rbind(lb_jac,   matrix(0, ncol = Nbasis,
-                                            nrow = 2 * Nbasis)))
+                     rbind(freq_jac, freq_reg_jac_mat, zero_jac_mat),
+                     rbind(lb_jac,   zero_jac_mat, lb_reg_jac_mat))
   }
   
   return(ret_mat)
