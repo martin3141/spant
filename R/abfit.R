@@ -284,11 +284,10 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                      (lambda ^ 0.5))
   
     # set phase, damping, shift, asym, basis_shift and basis_damping limits
-    
     asym_init <- 0
     
-    par   <- c(res$par[1], res$par[2], res$par[3], asym_init, rep(0, Nbasis),
-               rep(opts$lb_init, Nbasis))
+    par <- c(res$par[1], res$par[2], res$par[3], asym_init, rep(0, Nbasis),
+             rep(opts$lb_init, Nbasis))
     
    
     # find any signals with names starting with Lip or MM as they may have
@@ -448,8 +447,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     lb_vec_hz   <- res$par[(5 + Nbasis):(4 + 2 * Nbasis)]
   }
   
-  freq_vec      <- 2i * pi * freq_vec_hz
-  lb_vec        <- lw2alpha(lb_vec_hz)
+  freq_vec <- 2i * pi * freq_vec_hz
+  lb_vec   <- lw2alpha(lb_vec_hz)
   
   freq_lb_mat <- matrix(freq_vec - lb_vec, nrow = N, ncol = Nbasis,
                         byrow = TRUE) 
@@ -608,13 +607,13 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   #### crlb calc ####
   
   # calculate the analytical jacobian for the non-linear parameters
-  para_crlb     <- abfit_full_anal_jac(final_par, y, raw_metab_basis,
-                                       bl_basis_final, t, f, sp_bas_final$inds,
-                                       sp_bas_final$bl_comps, FALSE, NULL,
-                                       opts$phi1_optim, opts$ahat_calc_method,
-                                       NULL, NULL, opts$lb_init)
-                                       # nb freq_reg, lb_reg not 
-                                       # included in the crlb calc
+  para_crlb <- abfit_full_anal_jac(final_par, y, raw_metab_basis,
+                                    bl_basis_final, t, f, sp_bas_final$inds,
+                                    sp_bas_final$bl_comps, FALSE, NULL,
+                                    opts$phi1_optim, opts$ahat_calc_method,
+                                    NULL, NULL, opts$lb_init)
+                                    # nb freq_reg, lb_reg not 
+                                    # included in the crlb calc
    
   bl_comps_crlb <- sp_bas_final$bl_comps
   para_crlb     <- rbind(Re(para_crlb), matrix(0, nrow = bl_comps_crlb - 2,
