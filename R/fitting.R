@@ -56,7 +56,6 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
   if (inherits(metab, "list")) {
     
     if (!is.null(w_ref)) {
-      # if (class(w_ref) != "list") stop("w_ref is not a list but metab is")
       if (!inherits(w_ref, "list")) stop("w_ref is not a list but metab is")
       
       if (length(metab) != length(w_ref)) {
@@ -138,8 +137,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
     
     acq_paras <- get_acq_paras(metab)
     
-    plyr <- TRUE
-    if (plyr) {
+    if (!parallel) {
       result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6), abfit,
                                  acq_paras, basis, opts,
                                  .parallel = parallel,
@@ -147,13 +145,22 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
                                                  .packages = "spant"),
                                  .progress = progress, .inform = FALSE)
     } else {
-      result_list <- apply(metab$data, c(2, 3, 4, 5, 6), abfit, acq_paras,
-                           basis, opts)
+      if (is.null(cl)) stop("pass cl argument to fit_mrs for parallel analyses")
+      result_list <- parallel::parApply(cl, metab$data, c(2, 3, 4, 5, 6), abfit,
+                                        acq_paras, basis, opts)
       labs <- which(array(TRUE, dim(result_list)), arr.ind = TRUE)
       result_list <- result_list[,,,,]
       attr(result_list, "split_labels") <- labs
       names(result_list) <- seq_len(nrow(labs))
     }
+    
+    # method using base apply
+    # result_list <- apply(metab$data, c(2, 3, 4, 5, 6), abfit, acq_paras,
+    #                      basis, opts)
+    # labs <- which(array(TRUE, dim(result_list)), arr.ind = TRUE)
+    # result_list <- result_list[,,,,]
+    # attr(result_list, "split_labels") <- labs
+    # names(result_list) <- seq_len(nrow(labs))
     
   } else if (METHOD == "VARPRO") {
     # read basis into memory if a file
