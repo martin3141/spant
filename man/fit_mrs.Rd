@@ -32,7 +32,8 @@ LCModel .basis format.}
 
 \item{parallel}{perform analyses in parallel (TRUE or FALSE).}
 
-\item{cl}{a parallel socket cluster required to run analyses in parallel.}
+\item{cl}{a parallel socket cluster required to run analyses in parallel.
+Eg, cl <- parallel::makeCluster(4).}
 
 \item{time}{measure the time taken for the analysis to complete
 (TRUE or FALSE).}

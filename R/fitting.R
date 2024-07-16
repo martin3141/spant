@@ -32,6 +32,7 @@
 #' @param opts options to pass to the analysis method.
 #' @param parallel perform analyses in parallel (TRUE or FALSE).
 #' @param cl a parallel socket cluster required to run analyses in parallel.
+#' Eg, cl <- parallel::makeCluster(4).
 #' @param time measure the time taken for the analysis to complete
 #' (TRUE or FALSE).
 #' @param progress option is passed to plyr::alply function to display a
