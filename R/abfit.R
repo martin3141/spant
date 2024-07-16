@@ -969,7 +969,7 @@ abfit_full_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   
   res <- Re(Y[inds]) - Y_hat[1:length(inds)]
   if (!is.null(freq_reg)) res <- c(res, freq_reg * freq_shifts)
-  if (!is.null(lb_reg)) res <- c(res, lb_reg * (lb_vec / pi - lb_init)) 
+  if (!is.null(lb_reg))   res <- c(res, lb_reg * (lb_vec / pi - lb_init)) 
   
   if (sum_sq) {
     return(sum(res ^ 2))
