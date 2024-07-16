@@ -31,6 +31,7 @@
 #' @param w_ref water reference data for concentration scaling (optional).
 #' @param opts options to pass to the analysis method.
 #' @param parallel perform analyses in parallel (TRUE or FALSE).
+#' @param cl a parallel socket cluster required to run analyses in parallel.
 #' @param time measure the time taken for the analysis to complete
 #' (TRUE or FALSE).
 #' @param progress option is passed to plyr::alply function to display a
@@ -49,7 +50,7 @@
 #' }
 #' @export
 fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
-                    opts = NULL, parallel = FALSE, time = TRUE,
+                    opts = NULL, parallel = FALSE, cl = NULL, time = TRUE,
                     progress = "text", extra = NULL) {
   
   if (inherits(metab, "list")) {

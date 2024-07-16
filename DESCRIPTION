@@ -50,6 +50,7 @@ Suggests:
     testthat,
     ragg,
     doParallel,
+    parallel,
     car
 VignetteBuilder:
     knitr
