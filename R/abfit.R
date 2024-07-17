@@ -82,6 +82,13 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   lower <- c(-opts$max_phase * pi / 180, 0,
              init_shift - opts$max_shift * acq_paras$ft * 1e-6)
   
+  # apply lb_init to approximate fix stages
+  if (opts$lb_init_approx_fit) {
+    lb_init_approx_fit <- opts$lb_init
+  } else {
+    lb_init_approx_fit <- NULL
+  }
+  
   #### 2 approx iter fit ####
   # 3 para pre-fit with flexable bl and no broad signals in basis
   # to get good starting values
@@ -111,11 +118,6 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       metab_basis_pre <- raw_metab_basis
     }
     
-    if (opts$lb_init_approx_fit) {
-      lb_init_approx_fit <- opts$lb_init
-    } else {
-      lb_init_approx_fit <- NULL
-    }
     
     # Do a 1D search to improve the starting value of the phase estimate.
     # Note, this is not part of the published method, but was added in Jan 2021
@@ -834,9 +836,9 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param optim_lw_only optimize the global line-broadening term only.
 #' @param optim_lw_only_limit limits for the line-breading term as a percentage
 #' of the starting value when optim_lw_only is TRUE.
-#' @param lb_init initial Lorentzian line broadening value for the individual 
-#' basis signals. Setting to 0 will clash with the minimum allowable value
-#' (eg hard constraint) during the detailed fit.
+#' @param lb_init initial Lorentzian line broadening value (in Hz) for the
+#' individual basis signals. Setting to 0 will clash with the minimum allowable
+#' value (eg hard constraint) during the detailed fit.
 #' @param lb_init_approx_fit apply lb_init to the basis during the approximate
 #' iterative fit.
 #' @param zf_offset offset in number of data points from the end of the FID to 
@@ -1258,6 +1260,10 @@ abfit_3p_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   
   # apply damping parameter to basis
   damp_vec <- exp(-t * t * lw2beta(par[2]))
+  
+  # apply lb_init parameter to basis if not NULL
+  if (!is.null(lb_init)) damp_vec <- damp_vec * exp(-t * lw2alpha(lb_init))
+  
   damp_mat <- matrix(damp_vec, nrow = nrow(raw_metab_basis), 
                      ncol = ncol(raw_metab_basis), byrow = F)
   raw_metab_basis <- raw_metab_basis * damp_mat

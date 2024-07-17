@@ -176,9 +176,9 @@ use only.}
 \item{optim_lw_only_limit}{limits for the line-breading term as a percentage
 of the starting value when optim_lw_only is TRUE.}
 
-\item{lb_init}{initial Lorentzian line broadening value for the individual
-basis signals. Setting to 0 will clash with the minimum allowable value
-(eg hard constraint) during the detailed fit.}
+\item{lb_init}{initial Lorentzian line broadening value (in Hz) for the
+individual basis signals. Setting to 0 will clash with the minimum allowable
+value (eg hard constraint) during the detailed fit.}
 
 \item{lb_init_approx_fit}{apply lb_init to the basis during the approximate
 iterative fit.}
