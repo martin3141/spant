@@ -111,6 +111,12 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       metab_basis_pre <- raw_metab_basis
     }
     
+    if (opts$lb_init_approx_fit) {
+      lb_init_approx_fit <- opts$lb_init
+    } else {
+      lb_init_approx_fit <- NULL
+    }
+    
     # Do a 1D search to improve the starting value of the phase estimate.
     # Note, this is not part of the published method, but was added in Jan 2021
     # to avoid issues with the simplex "prefit" getting stuck in a local minima
@@ -125,7 +131,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                          bl_basis = bl_basis_pre_fit, t = t, f = f,
                          inds = sp_bas_pf$inds, bl_comps = sp_bas_pf$bl_comps,
                          sum_sq = TRUE, ret_full = FALSE,
-                         ahat_calc_method = opts$ahat_calc_method)
+                         ahat_calc_method = opts$ahat_calc_method,
+                         lb_init = lb_init_approx_fit)
       
       # find the optimum value and update the starting value for the next step
       par[1] <- phi_zero[which.min(phase_res)]
@@ -140,7 +147,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                                        ctrl, y, metab_basis_pre,
                                        bl_basis_pre_fit, t, f, sp_bas_pf$inds,
                                        sp_bas_pf$bl_comps, FALSE, FALSE,
-                                       opts$ahat_calc_method)
+                                       opts$ahat_calc_method,
+                                       lb_init_approx_fit)
       
       res        <- prelim_res
     } else {
@@ -155,7 +163,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                                    inds = sp_bas_pf$inds,
                                    bl_comps = sp_bas_pf$bl_comps, sum_sq = TRUE,
                                    ret_full = FALSE,
-                                   ahat_calc_method = opts$ahat_calc_method)
+                                   ahat_calc_method = opts$ahat_calc_method,
+                                   lb_init = lb_init_approx_fit)
       
       res          <- prelim_res
       res$par      <- prelim_res$solution
@@ -213,7 +222,9 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                              bl_basis = bl_basis_ab, t = t, f = f,
                              inds = sp_bas_ab$inds,
                              bl_comps = sp_bas_ab$bl_comps, sum_sq = FALSE,
-                             ret_full = TRUE, opts$ahat_calc_method)
+                             ret_full = TRUE,
+                             ahat_calc_method = opts$ahat_calc_method,
+                             lb_init = lb_init_approx_fit)
       
       resid_spec <- ab_res$resid
       
@@ -826,6 +837,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param lb_init initial Lorentzian line broadening value for the individual 
 #' basis signals. Setting to 0 will clash with the minimum allowable value
 #' (eg hard constraint) during the detailed fit.
+#' @param lb_init_approx_fit apply lb_init to the basis during the approximate
+#' iterative fit.
 #' @param zf_offset offset in number of data points from the end of the FID to 
 #' zero-fill. Default is NULL and will automatically set this to 50 points when
 #' the FID distortion flag is set for the mrs_data.
@@ -857,7 +870,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
                        lb_reg = NULL, output_all_paras = FALSE,
                        output_all_paras_raw = FALSE, input_paras_raw = NULL,
                        optim_lw_only = FALSE, optim_lw_only_limit = 20,
-                       lb_init = 0.001, zf_offset = NULL) {
+                       lb_init = 0.001, lb_init_approx_fit = FALSE,
+                       zf_offset = NULL) {
                          
   list(init_damping = init_damping, maxiters = maxiters,
        max_shift = max_shift, max_damping = max_damping, max_phase = max_phase,
@@ -885,7 +899,7 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
        output_all_paras_raw = output_all_paras_raw,
        input_paras_raw = input_paras_raw, optim_lw_only = optim_lw_only,
        optim_lw_only_limit = optim_lw_only_limit, lb_init = lb_init,
-       zf_offset = zf_offset)
+       lb_init_approx_fit = lb_init_approx_fit, zf_offset = zf_offset)
 }
 
 #' Return a list of options for an ABfit analysis to maintain comparability with
@@ -1232,7 +1246,8 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
 
 # objective function for 3 parameter spline fitting method
 abfit_3p_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
-                           bl_comps, sum_sq, ret_full, ahat_calc_method) {
+                         bl_comps, sum_sq, ret_full, ahat_calc_method,
+                         lb_init) {
   
   # apply phase parameter to data
   y <- y * exp(1i * par[1])
