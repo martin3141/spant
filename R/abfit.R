@@ -1219,6 +1219,9 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
                      rbind(freq_jac, zero_jac_mat),
                      rbind(lb_jac,   lb_reg_jac_mat))
   } else {
+    #ret_mat <- cbind(global_paras_jac,
+    #                 rbind(lb_jac,   zero_jac_mat, lb_reg_jac_mat))
+    #                 rbind(freq_jac, freq_reg_jac_mat, zero_jac_mat),
     ret_mat <- cbind(global_paras_jac,
                      rbind(freq_jac, freq_reg_jac_mat, zero_jac_mat),
                      rbind(lb_jac,   zero_jac_mat, lb_reg_jac_mat))
