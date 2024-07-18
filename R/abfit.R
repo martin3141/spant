@@ -508,8 +508,11 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   # if maxiters = 0 and maxiters_pre = 0 then we need to calculate the spectral
   # residual in the final phase
   if (is.na(diags$res.deviance)) {
-    diags$res.deviance = sum(res[1:length(sp_bas_final$inds)] ^ 2)
+    diags$res.deviance <- sum(res[1:length(sp_bas_final$inds)] ^ 2)
   }
+  
+  # fit residual of spectral points - no penalty weightings
+  diags$spec_resid <- sum(res[1:length(sp_bas_final$inds)] ^ 2)
   
   # number of data points used in the fit
   diags$fit_pts <- length(sp_bas_final$inds)
