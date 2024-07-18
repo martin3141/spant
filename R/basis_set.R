@@ -246,11 +246,13 @@ write_basis <- function(basis, basis_file, fwhmba = 0.1) {
 #' @param amps a vector of scaling factors to apply to each basis element.
 #' @param shifts a vector of frequency shifts (in ppm) to apply to each basis
 #' element.
+#' @param lbs a vector of Lorentzian line broadening terms (in Hz) to apply to
+#' each basis element.
 #' @return an mrs_data object with basis signals spread across the dynamic 
 #' dimension or summed.
 #' @export
 basis2mrs_data <- function(basis, sum_elements = FALSE, amps = NULL,
-                           shifts = NULL) {
+                           shifts = NULL, lbs = NULL) {
   
   # TODO nuc is just the default for now 
   res <- mat2mrs_data(t(basis$data), fs = basis$fs, ft = basis$ft,
@@ -277,9 +279,17 @@ basis2mrs_data <- function(basis, sum_elements = FALSE, amps = NULL,
     res <- shift(res, shifts)
   }
   
+  # Lorentzian line broaden basis elements
+  if (!is.null(lbs)) {
+    if (n_sigs != length(lbs)) {
+      stop(paste("Error, length of amps does not match the number of basis elements :", dim(basis$data)[2]))
+    }
+    res <- lb(res, lbs, 0)
+  }
+  
   if (sum_elements) res <- sum_dyns(res)
   
-  res
+  return(res)
 }
 
 #' Convert a basis object to a dynamic mrs_data object.
