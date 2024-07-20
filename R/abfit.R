@@ -379,18 +379,30 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       lb_reg_scaled <- NULL
     }
     
-    # nloptr::check.derivatives((upper + lower) / 2, func = abfit_full_obj,
-    #                           func_grad = abfit_full_anal_jac,
-    #                           check_derivatives_tol = 5e3,
-    #                           check_derivatives_print = "none",
-    #                           y = y, raw_metab_basis = raw_metab_basis,
-    #                           bl_basis = bl_basis_full, t = t, f = f, 
-    #                           inds = sp_bas_full$inds,
-    #                           bl_comps = sp_bas_full$bl_comps, sum_sq = FALSE, 
-    #                           basis_paras = NULL, phi1_optim = opts$phi1_optim,
-    #                           ahat_calc_method = opts$ahat_calc_method,
-    #                           freq_reg = freq_reg_scaled,
-    #                           lb_reg = lb_reg_scaled, lb_init = opts$lb_init)
+    # useful code to check the jacobian
+    # num_jac <- abfit_full_num_jac(par, y = y, raw_metab_basis = raw_metab_basis,
+    #                               bl_basis = bl_basis_full, t = t, f = f, 
+    #                               inds = sp_bas_full$inds,
+    #                               bl_comps = sp_bas_full$bl_comps,
+    #                               sum_sq = FALSE, basis_paras = NULL,
+    #                               phi1_optim = opts$phi1_optim,
+    #                               ahat_calc_method = opts$ahat_calc_method,
+    #                               freq_reg = freq_reg_scaled,
+    #                               lb_reg = lb_reg_scaled,
+    #                               lb_init = opts$lb_init)
+    # anal_jac <- abfit_full_anal_jac(par, y = y,
+    #                                 raw_metab_basis = raw_metab_basis,
+    #                                 bl_basis = bl_basis_full, t = t, f = f, 
+    #                                 inds = sp_bas_full$inds,
+    #                                 bl_comps = sp_bas_full$bl_comps,
+    #                                 sum_sq = FALSE, basis_paras = NULL,
+    #                                 phi1_optim = opts$phi1_optim,
+    #                                 ahat_calc_method = opts$ahat_calc_method,
+    #                                 freq_reg = freq_reg_scaled,
+    #                                 lb_reg = lb_reg_scaled,
+    #                                 lb_init = opts$lb_init)
+    # print(sum((num_jac - anal_jac) ^ 2))
+    # image(Mod(anal_jac - num_jac))
     
     res <- minpack.lm::nls.lm(par, lower, upper, abfit_full_obj, jac_fn,
                               ctrl, y, raw_metab_basis, bl_basis_full, t,
@@ -1218,8 +1230,8 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   freq_jac <- -Re(freq_jac[inds,,drop = FALSE])
   
   # multiply by -a * t * pi for basis lw adjustment
-  lb_vec <- ahat[(bl_comps + 1):length(ahat)]
-  lb_mat <- matrix(lb_vec, nrow = N, ncol = Nbasis, byrow = TRUE)
+  lb_vec <-  ahat[(bl_comps + 1):length(ahat)]
+  lb_mat <-  matrix(lb_vec, nrow = N, ncol = Nbasis, byrow = TRUE)
   lb_jac <- -raw_metab_basis_mod * t_mat * lb_mat * pi
   
   # back to fd
@@ -1229,13 +1241,15 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   lb_jac <- -Re(lb_jac[inds,,drop = FALSE])
   
   if (!is.null(freq_reg) | !is.null(lb_reg)) {
-    if (!is.null(lb_reg))   lb_reg_jac   <- -lb_reg / pi
-    if (!is.null(freq_reg)) freq_reg_jac <- -freq_reg
+    if (!is.null(lb_reg))   lb_reg_jac   <- lb_reg
+    if (!is.null(freq_reg)) freq_reg_jac <- freq_reg
     if (!is.null(freq_reg)) {
-      freq_reg_jac_mat <- matrix(freq_reg_jac, ncol = Nbasis, nrow = Nbasis)
+      freq_reg_jac_mat <- matrix(0, ncol = Nbasis, nrow = Nbasis)
+      diag(freq_reg_jac_mat) <- freq_reg_jac
     }
     if (!is.null(lb_reg)) {
-      lb_reg_jac_mat <- matrix(lb_reg_jac, ncol = Nbasis, nrow = Nbasis)
+      lb_reg_jac_mat <- matrix(0, ncol = Nbasis, nrow = Nbasis)
+      diag(lb_reg_jac_mat) <- lb_reg_jac
     }
     zero_jac_mat <- matrix(0, ncol = Nbasis, nrow = Nbasis)
   }
@@ -1251,9 +1265,6 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
                      rbind(freq_jac, zero_jac_mat),
                      rbind(lb_jac,   lb_reg_jac_mat))
   } else {
-    #ret_mat <- cbind(global_paras_jac,
-    #                 rbind(lb_jac,   zero_jac_mat, lb_reg_jac_mat))
-    #                 rbind(freq_jac, freq_reg_jac_mat, zero_jac_mat),
     ret_mat <- cbind(global_paras_jac,
                      rbind(freq_jac, freq_reg_jac_mat, zero_jac_mat),
                      rbind(lb_jac,   zero_jac_mat, lb_reg_jac_mat))
