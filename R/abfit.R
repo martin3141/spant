@@ -379,6 +379,19 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       lb_reg_scaled <- NULL
     }
     
+    # nloptr::check.derivatives((upper + lower) / 2, func = abfit_full_obj,
+    #                           func_grad = abfit_full_anal_jac,
+    #                           check_derivatives_tol = 5e3,
+    #                           check_derivatives_print = "none",
+    #                           y = y, raw_metab_basis = raw_metab_basis,
+    #                           bl_basis = bl_basis_full, t = t, f = f, 
+    #                           inds = sp_bas_full$inds,
+    #                           bl_comps = sp_bas_full$bl_comps, sum_sq = FALSE, 
+    #                           basis_paras = NULL, phi1_optim = opts$phi1_optim,
+    #                           ahat_calc_method = opts$ahat_calc_method,
+    #                           freq_reg = freq_reg_scaled,
+    #                           lb_reg = lb_reg_scaled, lb_init = opts$lb_init)
+    
     res <- minpack.lm::nls.lm(par, lower, upper, abfit_full_obj, jac_fn,
                               ctrl, y, raw_metab_basis, bl_basis_full, t,
                               f, sp_bas_full$inds, sp_bas_full$bl_comps, FALSE,
@@ -1216,8 +1229,8 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   lb_jac <- -Re(lb_jac[inds,,drop = FALSE])
   
   if (!is.null(freq_reg) | !is.null(lb_reg)) {
-    lb_reg_jac   <- lb_reg / pi
-    freq_reg_jac <- freq_reg
+    if (!is.null(lb_reg))   lb_reg_jac   <- -lb_reg / pi
+    if (!is.null(freq_reg)) freq_reg_jac <- -freq_reg
     if (!is.null(freq_reg)) {
       freq_reg_jac_mat <- matrix(freq_reg_jac, ncol = Nbasis, nrow = Nbasis)
     }
