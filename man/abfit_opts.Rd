@@ -40,8 +40,8 @@ abfit_opts(
   phi1_optim = FALSE,
   phi1_init = 0,
   max_dphi1 = 0.2,
-  max_basis_shift_broad = 0.0078,
-  max_basis_damping_broad = 2,
+  max_basis_shift_broad = NULL,
+  max_basis_damping_broad = NULL,
   ahat_calc_method = "lh_pnnls",
   prefit_phase_search = TRUE,
   freq_reg = NULL,
@@ -146,11 +146,12 @@ coarse fitting stage of the algorithm (ppm).}
 dependant phase term (ms).}
 
 \item{max_basis_shift_broad}{maximum allowable shift for broad signals in the
-basis (ppm). Determined based on their name beginning with Lip or MM.}
+basis (ppm). Determined based on their name beginning with Lip or MM. The
+default value is set to max_basis_shift.}
 
 \item{max_basis_damping_broad}{maximum allowable Lorentzian damping for broad
 signals in the basis (Hz). Determined based on their name beginning with Lip
-or MM.}
+or MM. The default value is set to max_basis_damping.}
 
 \item{ahat_calc_method}{method to calculate the metabolite amplitudes. May be
 one of: "lh_pnnls" or "ls".}

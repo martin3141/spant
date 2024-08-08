@@ -1,3 +1,7 @@
+# spant 2.23.0
+* abfit options for lipid and MM maximum broadening and maximum frequency shift
+now default to be the same as the metabolite values unless explicitly changed.
+
 # spant 2.22.0
 * Added find_bids_mrs and mrs_data2bids helper functions.
 * Improved handling of CMRR semi-LASER SVS water reference scans.

@@ -309,11 +309,16 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     
     max_basis_shifts <- rep(opts$max_basis_shift, Nbasis) * acq_paras$ft * 1e-6
     
-    max_basis_shifts[broad_indices] <- opts$max_basis_shift_broad * 
-                                       acq_paras$ft * 1e-6
+    if (!is.null(opts$max_basis_shift_broad)) {
+      max_basis_shifts[broad_indices] <- opts$max_basis_shift_broad * 
+                                         acq_paras$ft * 1e-6
+    }
     
     max_basis_dampings <- rep(opts$max_basis_damping, Nbasis)
-    max_basis_dampings[broad_indices] <- opts$max_basis_damping_broad
+    
+    if (!is.null(opts$max_basis_damping_broad)) {
+      max_basis_dampings[broad_indices] <- opts$max_basis_damping_broad
+    }
     
     upper <- c(opts$max_phase * pi / 180, opts$max_damping,
                res$par[3] + opts$max_shift, opts$max_asym,
@@ -845,10 +850,11 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param max_dphi1 maximum allowable change from the initial frequency
 #' dependant phase term (ms).
 #' @param max_basis_shift_broad maximum allowable shift for broad signals in the
-#' basis (ppm). Determined based on their name beginning with Lip or MM.
+#' basis (ppm). Determined based on their name beginning with Lip or MM. The
+#' default value is set to max_basis_shift.
 #' @param max_basis_damping_broad maximum allowable Lorentzian damping for broad
 #' signals in the basis (Hz). Determined based on their name beginning with Lip
-#' or MM.
+#' or MM. The default value is set to max_basis_damping.
 #' @param ahat_calc_method method to calculate the metabolite amplitudes. May be
 #' one of: "lh_pnnls" or "ls".
 #' @param prefit_phase_search perform a 1D search for the optimal phase in the
@@ -893,8 +899,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
                        aic_smoothing_factor = 5, anal_jac = TRUE,
                        pre_fit_ppm_left = 4, pre_fit_ppm_right = 1.8,
                        phi1_optim = FALSE, phi1_init = 0, max_dphi1 = 0.2,
-                       max_basis_shift_broad = 0.0078,
-                       max_basis_damping_broad = 2,
+                       max_basis_shift_broad = NULL,
+                       max_basis_damping_broad = NULL,
                        ahat_calc_method = "lh_pnnls",
                        prefit_phase_search = TRUE, freq_reg = NULL,
                        lb_reg = NULL, output_all_paras = FALSE,
