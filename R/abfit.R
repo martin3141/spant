@@ -43,6 +43,25 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   mrs_data <- vec2mrs_data(y, fs = acq_paras$fs, ft = acq_paras$ft, 
                            ref = acq_paras$ref, nuc = acq_paras$nuc)
   
+  # adjust some options if the lcm_compat flag is used
+  if (!is.null(opts$lb_init)) {
+    if (opts$lb_init == "lcm_compat") {
+      hzpppm <- acq_paras$ft * 1e-6
+      deext2 <- 2
+      opts$lb_init <- deext2 / pi * sqrt(hzpppm / 85.15)
+      # print(opts$lb_init)
+    }
+  }
+    
+  if (!is.null(opts$lb_reg)) {
+    if (opts$lb_reg == "lcm_compat") {
+      hzpppm <- acq_paras$ft * 1e-6
+      desdt2 <- 0.4
+      opts$lb_reg <- desdt2 / pi * sqrt(hzpppm / 85.15)
+      # print(opts$lb_reg)
+    }
+  }
+  
   #### 1 coarse freq align ####
   if (opts$pre_align) {
     max_init_shift_hz <- acq_paras$ft * 1e-6 * opts$max_pre_align_shift
@@ -353,6 +372,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       jac_fn <- abfit_full_num_jac
     }
    
+    # estimate the noise sd if needed
     if (is.def(opts$freq_reg) | is.def(opts$lb_reg)) { 
       # apply best guess for phase parameter to data
       y_mod_noise_est <- y * exp(1i * res$par[1])
