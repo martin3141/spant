@@ -394,6 +394,15 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     if (is.def(opts$freq_reg)) { 
       # convert ppm sd to Hz
       freq_reg_scaled <- noise_sd_est / (opts$freq_reg * acq_paras$ft * 1e-6)
+      freq_reg_scaled <- rep(freq_reg_scaled, Nbasis)
+      
+      if (is.def(opts$freq_reg_naa)) { 
+        # different value for NAA and NAAG
+        naa_indices <- grep("^NAAG?$", basis$names)
+        freq_reg_scaled[naa_indices] <- noise_sd_est / 
+                                       (opts$freq_reg_naa * acq_paras$ft * 1e-6)
+      }
+      
     } else {
       freq_reg_scaled <- NULL
     }
