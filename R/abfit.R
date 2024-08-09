@@ -868,6 +868,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param noise_region spectral region to estimate the noise level (ppm).
 #' @param optimal_smooth_criterion method to determine the optimal smoothness.
 #' @param aic_smoothing_factor modification factor for the AIC calculation.
+#' Larger values result in less flexible baselines.
 #' @param anal_jac use a analytical approximation to the jacobian in the 
 #' detailed fitting stage.
 #' @param pre_fit_ppm_left downfield frequency limit for the fitting range in

@@ -128,7 +128,8 @@ the pre-alignment step (ppm).}
 
 \item{optimal_smooth_criterion}{method to determine the optimal smoothness.}
 
-\item{aic_smoothing_factor}{modification factor for the AIC calculation.}
+\item{aic_smoothing_factor}{modification factor for the AIC calculation.
+Larger values result in less flexible baselines.}
 
 \item{anal_jac}{use a analytical approximation to the jacobian in the
 detailed fitting stage.}
