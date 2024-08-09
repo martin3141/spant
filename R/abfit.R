@@ -248,8 +248,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                      (lambda_vec[n] ^ 0.5))
       
       # apply par to metabolite basis and find the fit residual
-      # ab_res <- abfit_3p_obj(res$par, y = y, raw_metab_basis = raw_metab_basis,
-      ab_res <- abfit_3p_obj(res$par, y = y, raw_metab_basis = metab_basis_pre,
+      ab_res <- abfit_3p_obj(res$par, y = y, raw_metab_basis = raw_metab_basis,
                              bl_basis = bl_basis_ab, t = t, f = f,
                              inds = sp_bas_ab$inds,
                              bl_comps = sp_bas_ab$bl_comps, sum_sq = FALSE,
