@@ -129,12 +129,22 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     bl_basis_pre_fit <- rbind(sp_bas_pf$bl_bas, sp_bas_pf$deriv_mat *
                              (lambda ^ 0.5))
     
+    metab_basis_pre <- raw_metab_basis
+    metab_basis_pre_names <- basis$names
+    
     # remove broad signal components for the prefit
     if (opts$remove_lip_mm_prefit) {
-      broad_indices <- c(grep("^Lip", basis$names), grep("^MM", basis$names))
-      metab_basis_pre <- raw_metab_basis[, -broad_indices]
-    } else {
-      metab_basis_pre <- raw_metab_basis
+      broad_indices <- c(grep("^Lip", metab_basis_pre_names),
+                         grep("^MM", metab_basis_pre_names))
+      metab_basis_pre <- metab_basis_pre[, -broad_indices]
+      metab_basis_pre_names <- metab_basis_pre_names[-broad_indices]
+    }
+    
+    # remove -ve CrCH2 signal for the prefit
+    if (opts$remove_m_cr_ch2_prefit) {
+      rm_index <- grep("^-CrCH2$", metab_basis_pre_names)
+      metab_basis_pre <- metab_basis_pre[, -rm_index]
+      metab_basis_pre_names <- metab_basis_pre_names[-rm_index]
     }
     
     # Do a 1D search to improve the starting value of the phase estimate.
