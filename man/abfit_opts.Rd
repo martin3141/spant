@@ -45,6 +45,7 @@ abfit_opts(
   ahat_calc_method = "lh_pnnls",
   prefit_phase_search = TRUE,
   freq_reg = NULL,
+  freq_reg_naa = NULL,
   lb_reg = NULL,
   output_all_paras = FALSE,
   output_all_paras_raw = FALSE,
@@ -160,6 +161,8 @@ one of: "lh_pnnls" or "ls".}
 prefit stage of the algorithm.}
 
 \item{freq_reg}{frequency shift parameter.}
+
+\item{freq_reg_naa}{frequency shift parameter for NAA and NAAG.}
 
 \item{lb_reg}{individual line broadening parameter.}
 

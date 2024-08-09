@@ -880,6 +880,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param prefit_phase_search perform a 1D search for the optimal phase in the
 #' prefit stage of the algorithm.
 #' @param freq_reg frequency shift parameter.
+#' @param freq_reg_naa frequency shift parameter for NAA and NAAG.
 #' @param lb_reg individual line broadening parameter.
 #' @param output_all_paras include more fitting parameters in the fit table,
 #' e.g. individual shift and damping factors for each basis set element.
@@ -923,7 +924,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
                        max_basis_damping_broad = NULL,
                        ahat_calc_method = "lh_pnnls",
                        prefit_phase_search = TRUE, freq_reg = NULL,
-                       lb_reg = NULL, output_all_paras = FALSE,
+                       freq_reg_naa = NULL, lb_reg = NULL,
+                       output_all_paras = FALSE,
                        output_all_paras_raw = FALSE, input_paras_raw = NULL,
                        optim_lw_only = FALSE, optim_lw_only_limit = 20,
                        lb_init = 0.001, lb_init_approx_fit = FALSE,
@@ -951,7 +953,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
        max_basis_damping_broad = max_basis_damping_broad,
        ahat_calc_method = ahat_calc_method,
        prefit_phase_search = prefit_phase_search, freq_reg = freq_reg,
-       lb_reg = lb_reg, output_all_paras = output_all_paras,
+       freq_reg_naa = freq_reg_naa, lb_reg = lb_reg,
+       output_all_paras = output_all_paras,
        output_all_paras_raw = output_all_paras_raw,
        input_paras_raw = input_paras_raw, optim_lw_only = optim_lw_only,
        optim_lw_only_limit = optim_lw_only_limit, lb_init = lb_init,
