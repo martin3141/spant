@@ -397,7 +397,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       
       if (is.def(opts$freq_reg_naa)) { 
         # different value for NAA and NAAG
-        naa_indices <- grep("^NAAG?$", basis$names)
+        # naa_indices <- grep("^NAAG?$", basis$names)
+        naa_indices <- grep("^-CrCH2$", basis$names)
         freq_reg_scaled[naa_indices] <- noise_sd_est / 
                                        (opts$freq_reg_naa * acq_paras$ft * 1e-6)
       }
