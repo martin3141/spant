@@ -28,6 +28,7 @@ abfit_opts(
   auto_bl_flex_n = 20,
   pre_fit_bl_ed_pppm = 1,
   remove_lip_mm_prefit = FALSE,
+  remove_m_cr_ch2_prefit = FALSE,
   pre_align = TRUE,
   max_pre_align_shift = 0.1,
   pre_align_ref_freqs = c(2.01, 3.03, 3.22),
@@ -115,6 +116,9 @@ fitting stage of the algorithm (ED per ppm).}
 
 \item{remove_lip_mm_prefit}{remove broad signals in the coarse fitting stage
 of the algorithm.}
+
+\item{remove_m_cr_ch2_prefit}{remove negative CrCH2 basis signals in the
+coarse fitting stage.}
 
 \item{pre_align}{perform a pre-alignment step before coarse fitting.}
 

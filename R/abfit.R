@@ -397,8 +397,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       
       if (is.def(opts$freq_reg_naa)) { 
         # different value for NAA and NAAG
-        # naa_indices <- grep("^NAAG?$", basis$names)
-        naa_indices <- grep("^-CrCH2$", basis$names)
+        naa_indices <- grep("^NAAG?$", basis$names)
         freq_reg_scaled[naa_indices] <- noise_sd_est / 
                                        (opts$freq_reg_naa * acq_paras$ft * 1e-6)
       }
@@ -860,6 +859,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' fitting stage of the algorithm (ED per ppm).
 #' @param remove_lip_mm_prefit remove broad signals in the coarse fitting stage
 #' of the algorithm.
+#' @param remove_m_cr_ch2_prefit remove negative CrCH2 basis signals in the
+#' coarse fitting stage.
 #' @param pre_align perform a pre-alignment step before coarse fitting.
 #' @param max_pre_align_shift maximum allowable shift in the pre-alignment step
 #' (ppm).
@@ -923,6 +924,7 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
                        algo_pre = "NLOPT_LN_NELDERMEAD", min_bl_ed_pppm = NULL,
                        max_bl_ed_pppm = 7, auto_bl_flex_n = 20, 
                        pre_fit_bl_ed_pppm = 1, remove_lip_mm_prefit = FALSE,
+                       remove_m_cr_ch2_prefit = FALSE,
                        pre_align = TRUE, max_pre_align_shift = 0.1,
                        pre_align_ref_freqs = c(2.01, 3.03, 3.22),
                        noise_region = c(-0.5, -2.5),
@@ -951,7 +953,9 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
        algo_pre = algo_pre, min_bl_ed_pppm = min_bl_ed_pppm,
        max_bl_ed_pppm = max_bl_ed_pppm, auto_bl_flex_n = auto_bl_flex_n,
        pre_fit_bl_ed_pppm = pre_fit_bl_ed_pppm,
-       remove_lip_mm_prefit = remove_lip_mm_prefit, pre_align = pre_align,
+       remove_lip_mm_prefit = remove_lip_mm_prefit,
+       remove_m_cr_ch2_prefit = remove_m_cr_ch2_prefit,
+       pre_align = pre_align,
        max_pre_align_shift = max_pre_align_shift,
        pre_align_ref_freqs = pre_align_ref_freqs, noise_region = noise_region,
        optimal_smooth_criterion = optimal_smooth_criterion,
