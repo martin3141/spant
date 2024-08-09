@@ -137,7 +137,6 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       metab_basis_pre <- raw_metab_basis
     }
     
-    
     # Do a 1D search to improve the starting value of the phase estimate.
     # Note, this is not part of the published method, but was added in Jan 2021
     # to avoid issues with the simplex "prefit" getting stuck in a local minima
