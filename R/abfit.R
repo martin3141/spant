@@ -349,10 +349,11 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     }
     
     upper <- c(opts$max_phase * pi / 180, opts$max_damping,
-               res$par[3] + opts$max_shift, opts$max_asym,
+               res$par[3] + opts$max_shift * acq_paras$ft * 1e-6, opts$max_asym,
                max_basis_shifts, max_basis_dampings)
     
-    lower <- c(-opts$max_phase * pi / 180, 0, res$par[3] -opts$max_shift,
+    lower <- c(-opts$max_phase * pi / 180, 0,
+               res$par[3] - opts$max_shift * acq_paras$ft * 1e-6,
                -opts$max_asym, -max_basis_shifts, rep(0, Nbasis))
     
     if (opts$phi1_optim) {
@@ -424,7 +425,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     
     # useful code to check the jacobian
     # num_jac <- abfit_full_num_jac(par, y = y, raw_metab_basis = raw_metab_basis,
-    #                               bl_basis = bl_basis_full, t = t, f = f, 
+    #                               bl_basis = bl_basis_full, t = t, f = f,
     #                               inds = sp_bas_full$inds,
     #                               bl_comps = sp_bas_full$bl_comps,
     #                               sum_sq = FALSE, basis_paras = NULL,
@@ -435,7 +436,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     #                               lb_init = opts$lb_init)
     # anal_jac <- abfit_full_anal_jac(par, y = y,
     #                                 raw_metab_basis = raw_metab_basis,
-    #                                 bl_basis = bl_basis_full, t = t, f = f, 
+    #                                 bl_basis = bl_basis_full, t = t, f = f,
     #                                 inds = sp_bas_full$inds,
     #                                 bl_comps = sp_bas_full$bl_comps,
     #                                 sum_sq = FALSE, basis_paras = NULL,
@@ -1292,6 +1293,17 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   
   # cut out fitting region
   lb_jac <- -Re(lb_jac[inds,,drop = FALSE])
+  
+  # if (!is.null(freq_reg)) {
+  #    y_hat <- drop(raw_metab_basis_mod %*% ahat[(bl_comps + 1):length(ahat)])
+  #    y_hat <- y_hat * exp(1i * par[1])
+  #    y_hat <- y_hat * exp(2i * pi * t * par[3])
+  #    bl    <- drop(bl_basis %*% ahat[1:bl_comps])[1:length(inds)]
+  #    global_paras_jac[, 3] <- c(bl + Re(ft_shift(2i * pi * t * y_hat)[inds]), rep(0, 2*Nbasis))
+  #    global_paras_jac[, 1] <- c(bl + Re(ft_shift(1i * y_hat)[inds]), rep(0, 2*Nbasis))
+  #    # global_paras_jac[, 1] <- c(Re(ft_shift(1i * y)[inds]), rep(0, 2*Nbasis))
+  #    # global_paras_jac[, 3] <- c(Re(ft_shift(2i * pi * t * y)[inds]), rep(0, 2*Nbasis))
+  # }
   
   if (!is.null(freq_reg) | !is.null(lb_reg)) {
     if (!is.null(lb_reg))   lb_reg_jac   <- lb_reg
