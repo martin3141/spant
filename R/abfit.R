@@ -871,8 +871,6 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' fitting stage of the algorithm (ED per ppm).
 #' @param remove_lip_mm_prefit remove broad signals in the coarse fitting stage
 #' of the algorithm.
-#' @param remove_m_cr_ch2_prefit remove negative CrCH2 basis signals in the
-#' coarse fitting stage.
 #' @param pre_align perform a pre-alignment step before coarse fitting.
 #' @param max_pre_align_shift maximum allowable shift in the pre-alignment step
 #' (ppm).
