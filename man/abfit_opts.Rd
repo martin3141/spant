@@ -8,7 +8,7 @@ abfit_opts(
   init_damping = 5,
   maxiters = 1024,
   max_shift_pre = 0.078,
-  max_shift_fine = NULL,
+  max_shift_fine = 0.00061,
   max_damping = 15,
   max_phase = 360,
   lambda = NULL,

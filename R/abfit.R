@@ -355,8 +355,16 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                max_basis_shifts, max_basis_dampings)
     
     lower <- c(-opts$max_phase * pi / 180, 0,
-               res$par[3] - opts$max_shift_pre,
-               -opts$max_asym, -max_basis_shifts, rep(0, Nbasis))
+               res$par[3] - opts$max_shift_pre, -opts$max_asym,
+              -max_basis_shifts, rep(0, Nbasis))
+    
+    # upper <- c(opts$max_phase * pi / 180, opts$max_damping,
+    #            res$par[3] + opts$max_shift_fine * acq_paras$ft * 1e-6,
+    #            opts$max_asym, max_basis_shifts, max_basis_dampings)
+    # 
+    # lower <- c(-opts$max_phase * pi / 180, 0,
+    #            res$par[3] - opts$max_shift_fine * acq_paras$ft * 1e-6,
+    #            -opts$max_asym, -max_basis_shifts, rep(0, Nbasis))
     
     if (opts$phi1_optim) {
       par   <- append(par,    opts$phi1_init, 4)
@@ -927,7 +935,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
 #' @export
 abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift_pre = 0.078, 
-                       max_shift_fine = NULL,
+                       max_shift_fine = 0.00061,
                        max_damping = 15, max_phase = 360, lambda = NULL, 
                        ppm_left = 4, ppm_right = 0.2, zp = TRUE,
                        bl_ed_pppm = 2.0, auto_bl_flex = TRUE,
