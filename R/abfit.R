@@ -841,6 +841,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param maxiters The maximum number of iterations to run for the detailed fit.
 #' @param max_shift_pre The maximum allowable global shift to be applied in the
 #' approximate (pre-fit) phases of analysis (ppm).
+#' @param max_shift_fine The maximum allowable global shift to be applied in the
+#' detailed fit phase of analysis (ppm).
 #' @param max_damping maximum permitted value of the global damping parameter
 #' (Hz).
 #' @param max_phase the maximum absolute permitted value of the global
@@ -925,6 +927,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
 #' @export
 abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift_pre = 0.078, 
+                       max_shift_fine = NULL,
                        max_damping = 15, max_phase = 360, lambda = NULL, 
                        ppm_left = 4, ppm_right = 0.2, zp = TRUE,
                        bl_ed_pppm = 2.0, auto_bl_flex = TRUE,
@@ -953,7 +956,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift_pre = 0.078,
                        zf_offset = NULL) {
                          
   list(init_damping = init_damping, maxiters = maxiters,
-       max_shift_pre = max_shift_pre, max_damping = max_damping,
+       max_shift_pre = max_shift_pre, max_shift_fine = max_shift_fine,
+       max_damping = max_damping,
        max_phase = max_phase, lambda = lambda, ppm_left = ppm_left,
        ppm_right = ppm_right, zp = zp, bl_ed_pppm = bl_ed_pppm,
        auto_bl_flex = auto_bl_flex,

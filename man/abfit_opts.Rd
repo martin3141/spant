@@ -8,6 +8,7 @@ abfit_opts(
   init_damping = 5,
   maxiters = 1024,
   max_shift_pre = 0.078,
+  max_shift_fine = NULL,
   max_damping = 15,
   max_phase = 360,
   lambda = NULL,
@@ -65,6 +66,9 @@ abfit_opts(
 
 \item{max_shift_pre}{The maximum allowable global shift to be applied in the
 approximate (pre-fit) phases of analysis (ppm).}
+
+\item{max_shift_fine}{The maximum allowable global shift to be applied in the
+detailed fit phase of analysis (ppm).}
 
 \item{max_damping}{maximum permitted value of the global damping parameter
 (Hz).}
