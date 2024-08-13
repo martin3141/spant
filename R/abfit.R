@@ -348,23 +348,22 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       max_basis_dampings[broad_indices] <- opts$max_basis_damping_broad
     }
     
-    # opts$max_shift * acq_paras$ft * 1e-6
-    
-    upper <- c(opts$max_phase * pi / 180, opts$max_damping,
-               res$par[3] + opts$max_shift_pre, opts$max_asym,
-               max_basis_shifts, max_basis_dampings)
-    
-    lower <- c(-opts$max_phase * pi / 180, 0,
-               res$par[3] - opts$max_shift_pre, -opts$max_asym,
-              -max_basis_shifts, rep(0, Nbasis))
-    
+    # old method - faster but less accurate in rare cases
     # upper <- c(opts$max_phase * pi / 180, opts$max_damping,
-    #            res$par[3] + opts$max_shift_fine * acq_paras$ft * 1e-6,
-    #            opts$max_asym, max_basis_shifts, max_basis_dampings)
+    #            res$par[3] + opts$max_shift_pre, opts$max_asym,
+    #            max_basis_shifts, max_basis_dampings)
     # 
     # lower <- c(-opts$max_phase * pi / 180, 0,
-    #            res$par[3] - opts$max_shift_fine * acq_paras$ft * 1e-6,
-    #            -opts$max_asym, -max_basis_shifts, rep(0, Nbasis))
+    #            res$par[3] - opts$max_shift_pre, -opts$max_asym,
+    #           -max_basis_shifts, rep(0, Nbasis))
+    
+    upper <- c(opts$max_phase * pi / 180, opts$max_damping,
+               res$par[3] + opts$max_shift_fine * acq_paras$ft * 1e-6,
+               opts$max_asym, max_basis_shifts, max_basis_dampings)
+
+    lower <- c(-opts$max_phase * pi / 180, 0,
+               res$par[3] - opts$max_shift_fine * acq_paras$ft * 1e-6,
+               -opts$max_asym, -max_basis_shifts, rep(0, Nbasis))
     
     if (opts$phi1_optim) {
       par   <- append(par,    opts$phi1_init, 4)
