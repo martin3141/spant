@@ -96,10 +96,10 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   # set phase, damping and shift limits for the pre-fit
   par   <- c(0, opts$init_damping, init_shift)
   upper <- c(opts$max_phase * pi / 180, opts$max_damping,
-             init_shift + opts$max_shift * acq_paras$ft * 1e-6)
+             init_shift + opts$max_shift_pre * acq_paras$ft * 1e-6)
   
   lower <- c(-opts$max_phase * pi / 180, 0,
-             init_shift - opts$max_shift * acq_paras$ft * 1e-6)
+             init_shift - opts$max_shift_pre * acq_paras$ft * 1e-6)
   
   # apply lb_init to approximate fix stages
   if (opts$lb_init_approx_fit) {
@@ -351,11 +351,11 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     # opts$max_shift * acq_paras$ft * 1e-6
     
     upper <- c(opts$max_phase * pi / 180, opts$max_damping,
-               res$par[3] + opts$max_shift, opts$max_asym,
+               res$par[3] + opts$max_shift_pre, opts$max_asym,
                max_basis_shifts, max_basis_dampings)
     
     lower <- c(-opts$max_phase * pi / 180, 0,
-               res$par[3] - opts$max_shift,
+               res$par[3] - opts$max_shift_pre,
                -opts$max_asym, -max_basis_shifts, rep(0, Nbasis))
     
     if (opts$phi1_optim) {
@@ -839,7 +839,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param init_damping initial value of the Gaussian global damping parameter
 #' (Hz). Very poorly shimmed or high field data may benefit from a larger value.
 #' @param maxiters The maximum number of iterations to run for the detailed fit.
-#' @param max_shift The maximum allowable global shift to be applied in the
+#' @param max_shift_pre The maximum allowable global shift to be applied in the
 #' approximate (pre-fit) phases of analysis (ppm).
 #' @param max_damping maximum permitted value of the global damping parameter
 #' (Hz).
@@ -924,7 +924,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @examples
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
 #' @export
-abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078, 
+abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift_pre = 0.078, 
                        max_damping = 15, max_phase = 360, lambda = NULL, 
                        ppm_left = 4, ppm_right = 0.2, zp = TRUE,
                        bl_ed_pppm = 2.0, auto_bl_flex = TRUE,
@@ -953,9 +953,10 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
                        zf_offset = NULL) {
                          
   list(init_damping = init_damping, maxiters = maxiters,
-       max_shift = max_shift, max_damping = max_damping, max_phase = max_phase,
-       lambda = lambda, ppm_left = ppm_left, ppm_right = ppm_right, zp = zp,
-       bl_ed_pppm = bl_ed_pppm, auto_bl_flex = auto_bl_flex,
+       max_shift_pre = max_shift_pre, max_damping = max_damping,
+       max_phase = max_phase, lambda = lambda, ppm_left = ppm_left,
+       ppm_right = ppm_right, zp = zp, bl_ed_pppm = bl_ed_pppm,
+       auto_bl_flex = auto_bl_flex,
        bl_comps_pppm = bl_comps_pppm, export_sp_fit = export_sp_fit,
        max_asym = max_asym, max_basis_shift = max_basis_shift, 
        max_basis_damping = max_basis_damping, maxiters_pre = maxiters_pre,
