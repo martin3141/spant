@@ -839,8 +839,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param init_damping initial value of the Gaussian global damping parameter
 #' (Hz). Very poorly shimmed or high field data may benefit from a larger value.
 #' @param maxiters The maximum number of iterations to run for the detailed fit.
-#' @param max_shift The maximum allowable shift to be applied in the
-#' optimisation phase of fitting (ppm).
+#' @param max_shift The maximum allowable global shift to be applied in the
+#' approximate (pre-fit) phases of analysis (ppm).
 #' @param max_damping maximum permitted value of the global damping parameter
 #' (Hz).
 #' @param max_phase the maximum absolute permitted value of the global

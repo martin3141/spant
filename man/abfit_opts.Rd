@@ -63,8 +63,8 @@ abfit_opts(
 
 \item{maxiters}{The maximum number of iterations to run for the detailed fit.}
 
-\item{max_shift}{The maximum allowable shift to be applied in the
-optimisation phase of fitting (ppm).}
+\item{max_shift}{The maximum allowable global shift to be applied in the
+approximate (pre-fit) phases of analysis (ppm).}
 
 \item{max_damping}{maximum permitted value of the global damping parameter
 (Hz).}
