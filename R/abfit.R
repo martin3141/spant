@@ -357,6 +357,11 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     #            res$par[3] - opts$max_shift_pre, -opts$max_asym,
     #           -max_basis_shifts, rep(0, Nbasis))
     
+    # this is to maintain compatibility with old behaviour
+    if (is.null(opts$max_shift_fine)) {
+      opts$max_shift_fine <- opts$max_shift_pre / (acq_paras$ft * 1e-6)
+    }
+    
     upper <- c(opts$max_phase * pi / 180, opts$max_damping,
                res$par[3] + opts$max_shift_fine * acq_paras$ft * 1e-6,
                opts$max_asym, max_basis_shifts, max_basis_dampings)
@@ -934,9 +939,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
 #' @export
 abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift_pre = 0.078, 
-                       max_shift_fine = 0.00061,
-                       max_damping = 15, max_phase = 360, lambda = NULL, 
-                       ppm_left = 4, ppm_right = 0.2, zp = TRUE,
+                       max_shift_fine = NULL, max_damping = 15, max_phase = 360,
+                       lambda = NULL, ppm_left = 4, ppm_right = 0.2, zp = TRUE,
                        bl_ed_pppm = 2.0, auto_bl_flex = TRUE,
                        bl_comps_pppm = 15, export_sp_fit = FALSE,
                        max_asym = 0.25, max_basis_shift = 0.0078,
