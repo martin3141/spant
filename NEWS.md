@@ -1,6 +1,7 @@
 # spant 2.23.0
 * abfit options for lipid and MM maximum broadening and maximum frequency shift
 now default to be the same as the metabolite values unless explicitly changed.
+* Added function to calculate the correlation matrix from a basis_set.
 
 # spant 2.22.0
 * Added find_bids_mrs and mrs_data2bids helper functions.

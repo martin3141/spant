@@ -488,3 +488,86 @@ make_basis_from_raw <- function(dir_path, ft, fs, ref) {
   basis <- mrs_data2basis(mrs_data_dynamic, names = names)
   return(basis)
 }
+
+#' Estimate the CRLB for each element in a basis set.
+#' @param basis basis_set object.
+#' @param xlim spectral range to use in ppm.
+#' @param zf zero-fill the basis set.
+#' @param sd standard deviation of the noise.
+#' @param bl_comp_pppm number spline baseline components to append per-ppm.
+#' @return a vector of predicted errors.
+#' @export
+calc_basis_crlbs <- function(basis, xlim = c(4, 0.2), zf = TRUE, sd = 1,
+                             bl_comp_pppm = NULL) {
+  
+  basis_mrs <- basis2mrs_data(basis)
+  
+  if (zf) basis_mrs <- zf(basis_mrs)
+  
+  if (is.null(xlim)) {
+    ppm_sc <- ppm(basis_mrs)
+    xlim <- c(ppm_sc[1], ppm_sc[length(ppm_sc)])
+    basis_mrs <- td2fd(basis_mrs)
+  } else {
+    basis_mrs <- crop_spec(basis_mrs, xlim = xlim)
+  }
+ 
+  if (is.null(bl_comp_pppm)) {
+    D <- t(Re(mrs_data2mat(basis_mrs)))
+  } else {
+    D <- t(Re(mrs_data2mat(basis_mrs)))
+    comps <- diff(sort(xlim)) * bl_comp_pppm
+    sp_basis <- bbase(dim(D)[1], round(comps))
+    D <- cbind(D, sp_basis)
+  }
+  
+  F <- (t(D) %*% D) / (sd ^ 2)
+  
+  F_inv <- pracma::pinv(F)
+  
+  errors <- diag(F_inv) ^ 0.5
+  
+  if (is.null(bl_comp_pppm)) {
+    names(errors) <- basis$names
+  } else {
+    spline_names  <- paste("SPLINE", as.character(1:dim(sp_basis)[2]),
+                           sep = "_")
+    
+    names(errors) <- c(basis$names, spline_names)
+  }
+ 
+  return(errors) 
+}
+
+#' Estimate the correlation matrix for a basis set.
+#' @param basis basis_set object.
+#' @param xlim spectral range to use in ppm.
+#' @param zf zero-fill the basis set.
+#' @return correlation matrix.
+#' @export
+calc_basis_corr_mat <- function(basis, xlim = c(4, 0.2), zf = TRUE) {
+  
+  basis_mrs <- basis2mrs_data(basis)
+  
+  if (zf) basis_mrs <- zf(basis_mrs)
+  
+  basis_mrs <- crop_spec(basis_mrs, xlim = xlim)
+  
+  D <- t(Re(mrs_data2mat(basis_mrs)))
+  
+  F     <- (t(D) %*% D)
+  F_inv <- pracma::pinv(F)
+
+  corr_mat <- matrix(nrow = nrow(F_inv), ncol = ncol(F_inv))
+
+  for (x in 1:nrow(corr_mat)) {
+    for (y in 1:ncol(corr_mat)) {
+      corr_mat[x, y] <- F_inv[x, y] / ((F_inv[x, x] * F_inv[y, y]) ^ 0.5)
+    }
+  }
+  
+  rownames(corr_mat) <- basis$names
+  colnames(corr_mat) <- basis$names
+
+  return(corr_mat)
+}
