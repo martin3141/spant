@@ -43,6 +43,25 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   mrs_data <- vec2mrs_data(y, fs = acq_paras$fs, ft = acq_paras$ft, 
                            ref = acq_paras$ref, nuc = acq_paras$nuc)
   
+  # adjust some options if the lcm_compat flag is used
+  if (!is.null(opts$lb_init)) {
+    if (opts$lb_init == "lcm_compat") {
+      hzpppm <- acq_paras$ft * 1e-6
+      deext2 <- 2
+      opts$lb_init <- deext2 / pi * sqrt(hzpppm / 85.15)
+      # print(opts$lb_init)
+    }
+  }
+    
+  if (!is.null(opts$lb_reg)) {
+    if (opts$lb_reg == "lcm_compat") {
+      hzpppm <- acq_paras$ft * 1e-6
+      desdt2 <- 0.4
+      opts$lb_reg <- desdt2 / pi * sqrt(hzpppm / 85.15)
+      # print(opts$lb_reg)
+    }
+  }
+  
   #### 1 coarse freq align ####
   if (opts$pre_align) {
     max_init_shift_hz <- acq_paras$ft * 1e-6 * opts$max_pre_align_shift
@@ -77,10 +96,17 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   # set phase, damping and shift limits for the pre-fit
   par   <- c(0, opts$init_damping, init_shift)
   upper <- c(opts$max_phase * pi / 180, opts$max_damping,
-             init_shift + opts$max_shift * acq_paras$ft * 1e-6)
+             init_shift + opts$max_shift_pre * acq_paras$ft * 1e-6)
   
   lower <- c(-opts$max_phase * pi / 180, 0,
-             init_shift - opts$max_shift * acq_paras$ft * 1e-6)
+             init_shift - opts$max_shift_pre * acq_paras$ft * 1e-6)
+  
+  # apply lb_init to approximate fix stages
+  if (opts$lb_init_approx_fit) {
+    lb_init_approx_fit <- opts$lb_init
+  } else {
+    lb_init_approx_fit <- NULL
+  }
   
   #### 2 approx iter fit ####
   # 3 para pre-fit with flexable bl and no broad signals in basis
@@ -103,13 +129,23 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     bl_basis_pre_fit <- rbind(sp_bas_pf$bl_bas, sp_bas_pf$deriv_mat *
                              (lambda ^ 0.5))
     
+    metab_basis_pre <- raw_metab_basis
+    metab_basis_pre_names <- basis$names
+    
     # remove broad signal components for the prefit
     if (opts$remove_lip_mm_prefit) {
-      broad_indices <- c(grep("^Lip", basis$names), grep("^MM", basis$names))
-      metab_basis_pre <- raw_metab_basis[, -broad_indices]
-    } else {
-      metab_basis_pre <- raw_metab_basis
+      broad_indices <- c(grep("^Lip", metab_basis_pre_names),
+                         grep("^MM", metab_basis_pre_names))
+      metab_basis_pre <- metab_basis_pre[, -broad_indices]
+      metab_basis_pre_names <- metab_basis_pre_names[-broad_indices]
     }
+    
+    # remove -ve CrCH2 signal for the prefit
+    # if (opts$remove_m_cr_ch2_prefit) {
+    #   rm_index <- grep("^-CrCH2$", metab_basis_pre_names)
+    #   metab_basis_pre <- metab_basis_pre[, -rm_index]
+    #   metab_basis_pre_names <- metab_basis_pre_names[-rm_index]
+    # }
     
     # Do a 1D search to improve the starting value of the phase estimate.
     # Note, this is not part of the published method, but was added in Jan 2021
@@ -125,7 +161,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                          bl_basis = bl_basis_pre_fit, t = t, f = f,
                          inds = sp_bas_pf$inds, bl_comps = sp_bas_pf$bl_comps,
                          sum_sq = TRUE, ret_full = FALSE,
-                         ahat_calc_method = opts$ahat_calc_method)
+                         ahat_calc_method = opts$ahat_calc_method,
+                         lb_init = lb_init_approx_fit)
       
       # find the optimum value and update the starting value for the next step
       par[1] <- phi_zero[which.min(phase_res)]
@@ -140,7 +177,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                                        ctrl, y, metab_basis_pre,
                                        bl_basis_pre_fit, t, f, sp_bas_pf$inds,
                                        sp_bas_pf$bl_comps, FALSE, FALSE,
-                                       opts$ahat_calc_method)
+                                       opts$ahat_calc_method,
+                                       lb_init_approx_fit)
       
       res        <- prelim_res
     } else {
@@ -155,7 +193,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                                    inds = sp_bas_pf$inds,
                                    bl_comps = sp_bas_pf$bl_comps, sum_sq = TRUE,
                                    ret_full = FALSE,
-                                   ahat_calc_method = opts$ahat_calc_method)
+                                   ahat_calc_method = opts$ahat_calc_method,
+                                   lb_init = lb_init_approx_fit)
       
       res          <- prelim_res
       res$par      <- prelim_res$solution
@@ -213,7 +252,9 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                              bl_basis = bl_basis_ab, t = t, f = f,
                              inds = sp_bas_ab$inds,
                              bl_comps = sp_bas_ab$bl_comps, sum_sq = FALSE,
-                             ret_full = TRUE, opts$ahat_calc_method)
+                             ret_full = TRUE,
+                             ahat_calc_method = opts$ahat_calc_method,
+                             lb_init = lb_init_approx_fit)
       
       resid_spec <- ab_res$resid
       
@@ -284,11 +325,10 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                      (lambda ^ 0.5))
   
     # set phase, damping, shift, asym, basis_shift and basis_damping limits
-    
     asym_init <- 0
     
-    par   <- c(res$par[1], res$par[2], res$par[3], asym_init, rep(0, Nbasis),
-               rep(opts$lb_init, Nbasis))
+    par <- c(res$par[1], res$par[2], res$par[3], asym_init, rep(0, Nbasis),
+             rep(opts$lb_init, Nbasis))
     
    
     # find any signals with names starting with Lip or MM as they may have
@@ -297,17 +337,37 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     
     max_basis_shifts <- rep(opts$max_basis_shift, Nbasis) * acq_paras$ft * 1e-6
     
-    max_basis_shifts[broad_indices] <- opts$max_basis_shift_broad * 
-                                       acq_paras$ft * 1e-6
+    if (!is.null(opts$max_basis_shift_broad)) {
+      max_basis_shifts[broad_indices] <- opts$max_basis_shift_broad * 
+                                         acq_paras$ft * 1e-6
+    }
     
     max_basis_dampings <- rep(opts$max_basis_damping, Nbasis)
-    max_basis_dampings[broad_indices] <- opts$max_basis_damping_broad
+    
+    if (!is.null(opts$max_basis_damping_broad)) {
+      max_basis_dampings[broad_indices] <- opts$max_basis_damping_broad
+    }
+    
+    # old method - faster but less accurate in rare cases
+    # upper <- c(opts$max_phase * pi / 180, opts$max_damping,
+    #            res$par[3] + opts$max_shift_pre, opts$max_asym,
+    #            max_basis_shifts, max_basis_dampings)
+    # 
+    # lower <- c(-opts$max_phase * pi / 180, 0,
+    #            res$par[3] - opts$max_shift_pre, -opts$max_asym,
+    #           -max_basis_shifts, rep(0, Nbasis))
+    
+    # this is to maintain compatibility with old behaviour
+    if (is.null(opts$max_shift_fine)) {
+      opts$max_shift_fine <- opts$max_shift_pre / (acq_paras$ft * 1e-6)
+    }
     
     upper <- c(opts$max_phase * pi / 180, opts$max_damping,
-               res$par[3] + opts$max_shift, opts$max_asym,
-               max_basis_shifts, max_basis_dampings)
-    
-    lower <- c(-opts$max_phase * pi / 180, 0, res$par[3] -opts$max_shift,
+               res$par[3] + opts$max_shift_fine * acq_paras$ft * 1e-6,
+               opts$max_asym, max_basis_shifts, max_basis_dampings)
+
+    lower <- c(-opts$max_phase * pi / 180, 0,
+               res$par[3] - opts$max_shift_fine * acq_paras$ft * 1e-6,
                -opts$max_asym, -max_basis_shifts, rep(0, Nbasis))
     
     if (opts$phi1_optim) {
@@ -336,6 +396,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       jac_fn <- abfit_full_num_jac
     }
    
+    # estimate the noise sd if needed
     if (is.def(opts$freq_reg) | is.def(opts$lb_reg)) { 
       # apply best guess for phase parameter to data
       y_mod_noise_est <- y * exp(1i * res$par[1])
@@ -357,6 +418,14 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     if (is.def(opts$freq_reg)) { 
       # convert ppm sd to Hz
       freq_reg_scaled <- noise_sd_est / (opts$freq_reg * acq_paras$ft * 1e-6)
+      freq_reg_scaled <- rep(freq_reg_scaled, Nbasis)
+      
+      if (is.def(opts$freq_reg_naa)) { 
+        # different value for NAA and NAAG
+        naa_indices <- grep("^NAAG?$", basis$names)
+        freq_reg_scaled[naa_indices] <- noise_sd_est / 
+                                       (opts$freq_reg_naa * acq_paras$ft * 1e-6)
+      }
     } else {
       freq_reg_scaled <- NULL
     }
@@ -366,6 +435,31 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     } else {
       lb_reg_scaled <- NULL
     }
+    
+    # useful code to check the jacobian
+    # num_jac <- abfit_full_num_jac(par, y = y, raw_metab_basis = raw_metab_basis,
+    #                               bl_basis = bl_basis_full, t = t, f = f,
+    #                               inds = sp_bas_full$inds,
+    #                               bl_comps = sp_bas_full$bl_comps,
+    #                               sum_sq = FALSE, basis_paras = NULL,
+    #                               phi1_optim = opts$phi1_optim,
+    #                               ahat_calc_method = opts$ahat_calc_method,
+    #                               freq_reg = freq_reg_scaled,
+    #                               lb_reg = lb_reg_scaled,
+    #                               lb_init = opts$lb_init)
+    # anal_jac <- abfit_full_anal_jac(par, y = y,
+    #                                 raw_metab_basis = raw_metab_basis,
+    #                                 bl_basis = bl_basis_full, t = t, f = f,
+    #                                 inds = sp_bas_full$inds,
+    #                                 bl_comps = sp_bas_full$bl_comps,
+    #                                 sum_sq = FALSE, basis_paras = NULL,
+    #                                 phi1_optim = opts$phi1_optim,
+    #                                 ahat_calc_method = opts$ahat_calc_method,
+    #                                 freq_reg = freq_reg_scaled,
+    #                                 lb_reg = lb_reg_scaled,
+    #                                 lb_init = opts$lb_init)
+    # print(sum((num_jac - anal_jac) ^ 2))
+    # image(Mod(anal_jac - num_jac))
     
     res <- minpack.lm::nls.lm(par, lower, upper, abfit_full_obj, jac_fn,
                               ctrl, y, raw_metab_basis, bl_basis_full, t,
@@ -448,8 +542,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     lb_vec_hz   <- res$par[(5 + Nbasis):(4 + 2 * Nbasis)]
   }
   
-  freq_vec      <- 2i * pi * freq_vec_hz
-  lb_vec        <- lw2alpha(lb_vec_hz)
+  freq_vec <- 2i * pi * freq_vec_hz
+  lb_vec   <- lw2alpha(lb_vec_hz)
   
   freq_lb_mat <- matrix(freq_vec - lb_vec, nrow = N, ncol = Nbasis,
                         byrow = TRUE) 
@@ -496,8 +590,11 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   # if maxiters = 0 and maxiters_pre = 0 then we need to calculate the spectral
   # residual in the final phase
   if (is.na(diags$res.deviance)) {
-    diags$res.deviance = sum(res[1:length(sp_bas_final$inds)] ^ 2)
+    diags$res.deviance <- sum(res[1:length(sp_bas_final$inds)] ^ 2)
   }
+  
+  # fit residual of spectral points - no penalty weightings
+  diags$spec_resid <- sum(res[1:length(sp_bas_final$inds)] ^ 2)
   
   # number of data points used in the fit
   diags$fit_pts <- length(sp_bas_final$inds)
@@ -608,13 +705,13 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   #### crlb calc ####
   
   # calculate the analytical jacobian for the non-linear parameters
-  para_crlb     <- abfit_full_anal_jac(final_par, y, raw_metab_basis,
-                                       bl_basis_final, t, f, sp_bas_final$inds,
-                                       sp_bas_final$bl_comps, FALSE, NULL,
-                                       opts$phi1_optim, opts$ahat_calc_method,
-                                       NULL, NULL, opts$lb_init)
-                                       # nb freq_reg, lb_reg not 
-                                       # included in the crlb calc
+  para_crlb <- abfit_full_anal_jac(final_par, y, raw_metab_basis,
+                                    bl_basis_final, t, f, sp_bas_final$inds,
+                                    sp_bas_final$bl_comps, FALSE, NULL,
+                                    opts$phi1_optim, opts$ahat_calc_method,
+                                    NULL, NULL, opts$lb_init)
+                                    # nb freq_reg, lb_reg not 
+                                    # included in the crlb calc
    
   bl_comps_crlb <- sp_bas_final$bl_comps
   para_crlb     <- rbind(Re(para_crlb), matrix(0, nrow = bl_comps_crlb - 2,
@@ -754,8 +851,10 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param init_damping initial value of the Gaussian global damping parameter
 #' (Hz). Very poorly shimmed or high field data may benefit from a larger value.
 #' @param maxiters The maximum number of iterations to run for the detailed fit.
-#' @param max_shift The maximum allowable shift to be applied in the
-#' optimisation phase of fitting (ppm).
+#' @param max_shift_pre The maximum allowable global shift to be applied in the
+#' approximate (pre-fit) phases of analysis (ppm).
+#' @param max_shift_fine The maximum allowable global shift to be applied in the
+#' detailed fit phase of analysis (ppm).
 #' @param max_damping maximum permitted value of the global damping parameter
 #' (Hz).
 #' @param max_phase the maximum absolute permitted value of the global
@@ -794,6 +893,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param noise_region spectral region to estimate the noise level (ppm).
 #' @param optimal_smooth_criterion method to determine the optimal smoothness.
 #' @param aic_smoothing_factor modification factor for the AIC calculation.
+#' Larger values result in less flexible baselines.
 #' @param anal_jac use a analytical approximation to the jacobian in the 
 #' detailed fitting stage.
 #' @param pre_fit_ppm_left downfield frequency limit for the fitting range in
@@ -805,15 +905,17 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param max_dphi1 maximum allowable change from the initial frequency
 #' dependant phase term (ms).
 #' @param max_basis_shift_broad maximum allowable shift for broad signals in the
-#' basis (ppm). Determined based on their name beginning with Lip or MM.
+#' basis (ppm). Determined based on their name beginning with Lip or MM. The
+#' default value is set to max_basis_shift.
 #' @param max_basis_damping_broad maximum allowable Lorentzian damping for broad
 #' signals in the basis (Hz). Determined based on their name beginning with Lip
-#' or MM.
+#' or MM. The default value is set to max_basis_damping.
 #' @param ahat_calc_method method to calculate the metabolite amplitudes. May be
 #' one of: "lh_pnnls" or "ls".
 #' @param prefit_phase_search perform a 1D search for the optimal phase in the
 #' prefit stage of the algorithm.
 #' @param freq_reg frequency shift parameter.
+#' @param freq_reg_naa frequency shift parameter for NAA and NAAG.
 #' @param lb_reg individual line broadening parameter.
 #' @param output_all_paras include more fitting parameters in the fit table,
 #' e.g. individual shift and damping factors for each basis set element.
@@ -824,9 +926,11 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param optim_lw_only optimize the global line-broadening term only.
 #' @param optim_lw_only_limit limits for the line-breading term as a percentage
 #' of the starting value when optim_lw_only is TRUE.
-#' @param lb_init initial Lorentzian line broadening value for the individual 
-#' basis signals. Setting to 0 will clash with the minimum allowable value
-#' (eg hard constraint) during the detailed fit.
+#' @param lb_init initial Lorentzian line broadening value (in Hz) for the
+#' individual basis signals. Setting to 0 will clash with the minimum allowable
+#' value (eg hard constraint) during the detailed fit.
+#' @param lb_init_approx_fit apply lb_init to the basis during the approximate
+#' iterative fit.
 #' @param zf_offset offset in number of data points from the end of the FID to 
 #' zero-fill. Default is NULL and will automatically set this to 50 points when
 #' the FID distortion flag is set for the mrs_data.
@@ -834,9 +938,9 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @examples
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
 #' @export
-abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078, 
-                       max_damping = 15, max_phase = 360, lambda = NULL, 
-                       ppm_left = 4, ppm_right = 0.2, zp = TRUE,
+abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift_pre = 0.078, 
+                       max_shift_fine = NULL, max_damping = 15, max_phase = 360,
+                       lambda = NULL, ppm_left = 4, ppm_right = 0.2, zp = TRUE,
                        bl_ed_pppm = 2.0, auto_bl_flex = TRUE,
                        bl_comps_pppm = 15, export_sp_fit = FALSE,
                        max_asym = 0.25, max_basis_shift = 0.0078,
@@ -851,26 +955,31 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
                        aic_smoothing_factor = 5, anal_jac = TRUE,
                        pre_fit_ppm_left = 4, pre_fit_ppm_right = 1.8,
                        phi1_optim = FALSE, phi1_init = 0, max_dphi1 = 0.2,
-                       max_basis_shift_broad = 0.0078,
-                       max_basis_damping_broad = 2,
+                       max_basis_shift_broad = NULL,
+                       max_basis_damping_broad = NULL,
                        ahat_calc_method = "lh_pnnls",
                        prefit_phase_search = TRUE, freq_reg = NULL,
-                       lb_reg = NULL, output_all_paras = FALSE,
+                       freq_reg_naa = NULL, lb_reg = NULL,
+                       output_all_paras = FALSE,
                        output_all_paras_raw = FALSE, input_paras_raw = NULL,
                        optim_lw_only = FALSE, optim_lw_only_limit = 20,
-                       lb_init = 0.001, zf_offset = NULL) {
+                       lb_init = 0.001, lb_init_approx_fit = FALSE,
+                       zf_offset = NULL) {
                          
   list(init_damping = init_damping, maxiters = maxiters,
-       max_shift = max_shift, max_damping = max_damping, max_phase = max_phase,
-       lambda = lambda, ppm_left = ppm_left, ppm_right = ppm_right, zp = zp,
-       bl_ed_pppm = bl_ed_pppm, auto_bl_flex = auto_bl_flex,
+       max_shift_pre = max_shift_pre, max_shift_fine = max_shift_fine,
+       max_damping = max_damping,
+       max_phase = max_phase, lambda = lambda, ppm_left = ppm_left,
+       ppm_right = ppm_right, zp = zp, bl_ed_pppm = bl_ed_pppm,
+       auto_bl_flex = auto_bl_flex,
        bl_comps_pppm = bl_comps_pppm, export_sp_fit = export_sp_fit,
        max_asym = max_asym, max_basis_shift = max_basis_shift, 
        max_basis_damping = max_basis_damping, maxiters_pre = maxiters_pre,
        algo_pre = algo_pre, min_bl_ed_pppm = min_bl_ed_pppm,
        max_bl_ed_pppm = max_bl_ed_pppm, auto_bl_flex_n = auto_bl_flex_n,
        pre_fit_bl_ed_pppm = pre_fit_bl_ed_pppm,
-       remove_lip_mm_prefit = remove_lip_mm_prefit, pre_align = pre_align,
+       remove_lip_mm_prefit = remove_lip_mm_prefit,
+       pre_align = pre_align,
        max_pre_align_shift = max_pre_align_shift,
        pre_align_ref_freqs = pre_align_ref_freqs, noise_region = noise_region,
        optimal_smooth_criterion = optimal_smooth_criterion,
@@ -882,11 +991,12 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift = 0.078,
        max_basis_damping_broad = max_basis_damping_broad,
        ahat_calc_method = ahat_calc_method,
        prefit_phase_search = prefit_phase_search, freq_reg = freq_reg,
-       lb_reg = lb_reg, output_all_paras = output_all_paras,
+       freq_reg_naa = freq_reg_naa, lb_reg = lb_reg,
+       output_all_paras = output_all_paras,
        output_all_paras_raw = output_all_paras_raw,
        input_paras_raw = input_paras_raw, optim_lw_only = optim_lw_only,
        optim_lw_only_limit = optim_lw_only_limit, lb_init = lb_init,
-       zf_offset = zf_offset)
+       lb_init_approx_fit = lb_init_approx_fit, zf_offset = zf_offset)
 }
 
 #' Return a list of options for an ABfit analysis to maintain comparability with
@@ -968,15 +1078,13 @@ abfit_full_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   # signal estimate 
   Y_hat <- Re(full_bas) %*% ahat
   
+  res <- Re(Y[inds]) - Y_hat[1:length(inds)]
+  if (!is.null(freq_reg)) res <- c(res, freq_reg * freq_shifts)
+  if (!is.null(lb_reg))   res <- c(res, lb_reg * (lb_vec / pi - lb_init)) 
+  
   if (sum_sq) {
-    return(sum((Re(Y[inds]) - Y_hat[1:length(inds)]) ^ 2))
+    return(sum(res ^ 2))
   } else {
-    res <- Re(Y[inds]) - Y_hat[1:length(inds)]
-    
-    if (!is.null(freq_reg)) res <- c(res, freq_reg * freq_shifts)
-    
-    if (!is.null(lb_reg)) res <- c(res, lb_reg * (lb_vec / pi - lb_init)) 
-    
     return(res)
   }
 }
@@ -1189,8 +1297,8 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   freq_jac <- -Re(freq_jac[inds,,drop = FALSE])
   
   # multiply by -a * t * pi for basis lw adjustment
-  lb_vec <- ahat[(bl_comps + 1):length(ahat)]
-  lb_mat <- matrix(lb_vec, nrow = N, ncol = Nbasis, byrow = TRUE)
+  lb_vec <-  ahat[(bl_comps + 1):length(ahat)]
+  lb_mat <-  matrix(lb_vec, nrow = N, ncol = Nbasis, byrow = TRUE)
   lb_jac <- -raw_metab_basis_mod * t_mat * lb_mat * pi
   
   # back to fd
@@ -1199,19 +1307,45 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   # cut out fitting region
   lb_jac <- -Re(lb_jac[inds,,drop = FALSE])
   
-  # if (is.null(freq_reg)) {
+  # if (!is.null(freq_reg)) {
+  #    y_hat <- drop(raw_metab_basis_mod %*% ahat[(bl_comps + 1):length(ahat)])
+  #    y_hat <- y_hat * exp(1i * par[1])
+  #    y_hat <- y_hat * exp(2i * pi * t * par[3])
+  #    bl    <- drop(bl_basis %*% ahat[1:bl_comps])[1:length(inds)]
+  #    global_paras_jac[, 3] <- c(bl + Re(ft_shift(2i * pi * t * y_hat)[inds]), rep(0, 2*Nbasis))
+  #    global_paras_jac[, 1] <- c(bl + Re(ft_shift(1i * y_hat)[inds]), rep(0, 2*Nbasis))
+  #    # global_paras_jac[, 1] <- c(Re(ft_shift(1i * y)[inds]), rep(0, 2*Nbasis))
+  #    # global_paras_jac[, 3] <- c(Re(ft_shift(2i * pi * t * y)[inds]), rep(0, 2*Nbasis))
+  # }
+  
+  if (!is.null(freq_reg) | !is.null(lb_reg)) {
+    if (!is.null(lb_reg))   lb_reg_jac   <- lb_reg
+    if (!is.null(freq_reg)) freq_reg_jac <- freq_reg
+    if (!is.null(freq_reg)) {
+      freq_reg_jac_mat <- matrix(0, ncol = Nbasis, nrow = Nbasis)
+      diag(freq_reg_jac_mat) <- freq_reg_jac
+    }
+    if (!is.null(lb_reg)) {
+      lb_reg_jac_mat <- matrix(0, ncol = Nbasis, nrow = Nbasis)
+      diag(lb_reg_jac_mat) <- lb_reg_jac
+    }
+    zero_jac_mat <- matrix(0, ncol = Nbasis, nrow = Nbasis)
+  }
+  
   if (is.null(freq_reg) & is.null(lb_reg)) {
     ret_mat <- cbind(global_paras_jac, freq_jac, lb_jac)
-  } else if (xor(is.null(freq_reg), is.null(lb_reg))) {
+  } else if (!is.null(freq_reg) & is.null(lb_reg)) {
     ret_mat <- cbind(global_paras_jac,
-                     rbind(freq_jac, matrix(0, ncol = Nbasis, nrow = Nbasis)),
-                     rbind(lb_jac,   matrix(0, ncol = Nbasis, nrow = Nbasis)))
+                     rbind(freq_jac, freq_reg_jac_mat),
+                     rbind(lb_jac,   zero_jac_mat))
+  } else if (is.null(freq_reg) & !is.null(lb_reg)) {
+    ret_mat <- cbind(global_paras_jac,
+                     rbind(freq_jac, zero_jac_mat),
+                     rbind(lb_jac,   lb_reg_jac_mat))
   } else {
     ret_mat <- cbind(global_paras_jac,
-                     rbind(freq_jac, matrix(0, ncol = Nbasis,
-                                            nrow = 2 * Nbasis)),
-                     rbind(lb_jac,   matrix(0, ncol = Nbasis,
-                                            nrow = 2 * Nbasis)))
+                     rbind(freq_jac, freq_reg_jac_mat, zero_jac_mat),
+                     rbind(lb_jac,   zero_jac_mat, lb_reg_jac_mat))
   }
   
   return(ret_mat)
@@ -1219,7 +1353,8 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
 
 # objective function for 3 parameter spline fitting method
 abfit_3p_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
-                           bl_comps, sum_sq, ret_full, ahat_calc_method) {
+                         bl_comps, sum_sq, ret_full, ahat_calc_method,
+                         lb_init) {
   
   # apply phase parameter to data
   y <- y * exp(1i * par[1])
@@ -1230,6 +1365,10 @@ abfit_3p_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   
   # apply damping parameter to basis
   damp_vec <- exp(-t * t * lw2beta(par[2]))
+  
+  # apply lb_init parameter to basis if not NULL
+  if (!is.null(lb_init)) damp_vec <- damp_vec * exp(-t * lw2alpha(lb_init))
+  
   damp_mat <- matrix(damp_vec, nrow = nrow(raw_metab_basis), 
                      ncol = ncol(raw_metab_basis), byrow = F)
   raw_metab_basis <- raw_metab_basis * damp_mat

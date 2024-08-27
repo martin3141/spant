@@ -3,7 +3,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -17,7 +17,11 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
+<<<<<<< HEAD
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.22.0</span>
+=======
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.23.0</span>
+>>>>>>> devel
       </span>
     </div>
 
@@ -28,7 +32,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorials
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -56,14 +60,14 @@
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/martin3141/spant/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -81,7 +85,8 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">abfit_opts</span><span class="op">(</span></span>
 <span>  init_damping <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  maxiters <span class="op">=</span> <span class="fl">1024</span>,</span>
-<span>  max_shift <span class="op">=</span> <span class="fl">0.078</span>,</span>
+<span>  max_shift_pre <span class="op">=</span> <span class="fl">0.078</span>,</span>
+<span>  max_shift_fine <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  max_damping <span class="op">=</span> <span class="fl">15</span>,</span>
 <span>  max_phase <span class="op">=</span> <span class="fl">360</span>,</span>
 <span>  lambda <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -114,11 +119,12 @@
 <span>  phi1_optim <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  phi1_init <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  max_dphi1 <span class="op">=</span> <span class="fl">0.2</span>,</span>
-<span>  max_basis_shift_broad <span class="op">=</span> <span class="fl">0.0078</span>,</span>
-<span>  max_basis_damping_broad <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  max_basis_shift_broad <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  max_basis_damping_broad <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ahat_calc_method <span class="op">=</span> <span class="st">"lh_pnnls"</span>,</span>
 <span>  prefit_phase_search <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  freq_reg <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  freq_reg_naa <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lb_reg <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_all_paras <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  output_all_paras_raw <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -126,227 +132,255 @@
 <span>  optim_lw_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  optim_lw_only_limit <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>  lb_init <span class="op">=</span> <span class="fl">0.001</span>,</span>
+<<<<<<< HEAD
+=======
+<span>  lb_init_approx_fit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+>>>>>>> devel
 <span>  zf_offset <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>init_damping</dt>
+
+
+<dl><dt id="arg-init-damping">init_damping<a class="anchor" aria-label="anchor" href="#arg-init-damping"></a></dt>
 <dd><p>initial value of the Gaussian global damping parameter
 (Hz). Very poorly shimmed or high field data may benefit from a larger value.</p></dd>
 
 
-<dt>maxiters</dt>
+<dt id="arg-maxiters">maxiters<a class="anchor" aria-label="anchor" href="#arg-maxiters"></a></dt>
 <dd><p>The maximum number of iterations to run for the detailed fit.</p></dd>
 
 
-<dt>max_shift</dt>
-<dd><p>The maximum allowable shift to be applied in the
-optimisation phase of fitting (ppm).</p></dd>
+<dt id="arg-max-shift-pre">max_shift_pre<a class="anchor" aria-label="anchor" href="#arg-max-shift-pre"></a></dt>
+<dd><p>The maximum allowable global shift to be applied in the
+approximate (pre-fit) phases of analysis (ppm).</p></dd>
 
 
-<dt>max_damping</dt>
+<dt id="arg-max-shift-fine">max_shift_fine<a class="anchor" aria-label="anchor" href="#arg-max-shift-fine"></a></dt>
+<dd><p>The maximum allowable global shift to be applied in the
+detailed fit phase of analysis (ppm).</p></dd>
+
+
+<dt id="arg-max-damping">max_damping<a class="anchor" aria-label="anchor" href="#arg-max-damping"></a></dt>
 <dd><p>maximum permitted value of the global damping parameter
 (Hz).</p></dd>
 
 
-<dt>max_phase</dt>
+<dt id="arg-max-phase">max_phase<a class="anchor" aria-label="anchor" href="#arg-max-phase"></a></dt>
 <dd><p>the maximum absolute permitted value of the global
 zero-order phase term (degrees). Note, the prefit_phase_search option is not
 constrained by this term.</p></dd>
 
 
-<dt>lambda</dt>
+<dt id="arg-lambda">lambda<a class="anchor" aria-label="anchor" href="#arg-lambda"></a></dt>
 <dd><p>manually set the the baseline smoothness parameter.</p></dd>
 
 
-<dt>ppm_left</dt>
+<dt id="arg-ppm-left">ppm_left<a class="anchor" aria-label="anchor" href="#arg-ppm-left"></a></dt>
 <dd><p>downfield frequency limit for the fitting range (ppm).</p></dd>
 
 
-<dt>ppm_right</dt>
+<dt id="arg-ppm-right">ppm_right<a class="anchor" aria-label="anchor" href="#arg-ppm-right"></a></dt>
 <dd><p>upfield frequency limit for the fitting range (ppm).</p></dd>
 
 
-<dt>zp</dt>
+<dt id="arg-zp">zp<a class="anchor" aria-label="anchor" href="#arg-zp"></a></dt>
 <dd><p>zero pad the data to twice the original length before fitting.</p></dd>
 
 
-<dt>bl_ed_pppm</dt>
+<dt id="arg-bl-ed-pppm">bl_ed_pppm<a class="anchor" aria-label="anchor" href="#arg-bl-ed-pppm"></a></dt>
 <dd><p>manually set the the baseline smoothness parameter (ED per
 ppm).</p></dd>
 
 
-<dt>auto_bl_flex</dt>
+<dt id="arg-auto-bl-flex">auto_bl_flex<a class="anchor" aria-label="anchor" href="#arg-auto-bl-flex"></a></dt>
 <dd><p>automatically determine the level of baseline smoothness.</p></dd>
 
 
-<dt>bl_comps_pppm</dt>
+<dt id="arg-bl-comps-pppm">bl_comps_pppm<a class="anchor" aria-label="anchor" href="#arg-bl-comps-pppm"></a></dt>
 <dd><p>spline basis density (signals per ppm).</p></dd>
 
 
-<dt>export_sp_fit</dt>
+<dt id="arg-export-sp-fit">export_sp_fit<a class="anchor" aria-label="anchor" href="#arg-export-sp-fit"></a></dt>
 <dd><p>add the fitted spline functions to the fit result.</p></dd>
 
 
-<dt>max_asym</dt>
+<dt id="arg-max-asym">max_asym<a class="anchor" aria-label="anchor" href="#arg-max-asym"></a></dt>
 <dd><p>maximum allowable value of the asymmetry parameter.</p></dd>
 
 
-<dt>max_basis_shift</dt>
+<dt id="arg-max-basis-shift">max_basis_shift<a class="anchor" aria-label="anchor" href="#arg-max-basis-shift"></a></dt>
 <dd><p>maximum allowable frequency shift for individual basis
 signals (ppm).</p></dd>
 
 
-<dt>max_basis_damping</dt>
+<dt id="arg-max-basis-damping">max_basis_damping<a class="anchor" aria-label="anchor" href="#arg-max-basis-damping"></a></dt>
 <dd><p>maximum allowable Lorentzian damping factor for
 individual basis signals (Hz).</p></dd>
 
 
-<dt>maxiters_pre</dt>
+<dt id="arg-maxiters-pre">maxiters_pre<a class="anchor" aria-label="anchor" href="#arg-maxiters-pre"></a></dt>
 <dd><p>maximum iterations for the coarse (pre-)fit.</p></dd>
 
 
-<dt>algo_pre</dt>
+<dt id="arg-algo-pre">algo_pre<a class="anchor" aria-label="anchor" href="#arg-algo-pre"></a></dt>
 <dd><p>optimisation method for the coarse (pre-)fit.</p></dd>
 
 
-<dt>min_bl_ed_pppm</dt>
+<dt id="arg-min-bl-ed-pppm">min_bl_ed_pppm<a class="anchor" aria-label="anchor" href="#arg-min-bl-ed-pppm"></a></dt>
 <dd><p>minimum value for the candidate baseline flexibility
 analyses (ED per ppm).</p></dd>
 
 
-<dt>max_bl_ed_pppm</dt>
+<dt id="arg-max-bl-ed-pppm">max_bl_ed_pppm<a class="anchor" aria-label="anchor" href="#arg-max-bl-ed-pppm"></a></dt>
 <dd><p>minimum value for the candidate baseline flexibility
 analyses (ED per ppm).</p></dd>
 
 
-<dt>auto_bl_flex_n</dt>
+<dt id="arg-auto-bl-flex-n">auto_bl_flex_n<a class="anchor" aria-label="anchor" href="#arg-auto-bl-flex-n"></a></dt>
 <dd><p>number of candidate baseline analyses to perform.</p></dd>
 
 
-<dt>pre_fit_bl_ed_pppm</dt>
+<dt id="arg-pre-fit-bl-ed-pppm">pre_fit_bl_ed_pppm<a class="anchor" aria-label="anchor" href="#arg-pre-fit-bl-ed-pppm"></a></dt>
 <dd><p>level of baseline flexibility to use in the coarse
 fitting stage of the algorithm (ED per ppm).</p></dd>
 
 
-<dt>remove_lip_mm_prefit</dt>
+<dt id="arg-remove-lip-mm-prefit">remove_lip_mm_prefit<a class="anchor" aria-label="anchor" href="#arg-remove-lip-mm-prefit"></a></dt>
 <dd><p>remove broad signals in the coarse fitting stage
 of the algorithm.</p></dd>
 
 
-<dt>pre_align</dt>
+<dt id="arg-pre-align">pre_align<a class="anchor" aria-label="anchor" href="#arg-pre-align"></a></dt>
 <dd><p>perform a pre-alignment step before coarse fitting.</p></dd>
 
 
-<dt>max_pre_align_shift</dt>
+<dt id="arg-max-pre-align-shift">max_pre_align_shift<a class="anchor" aria-label="anchor" href="#arg-max-pre-align-shift"></a></dt>
 <dd><p>maximum allowable shift in the pre-alignment step
 (ppm).</p></dd>
 
 
-<dt>pre_align_ref_freqs</dt>
+<dt id="arg-pre-align-ref-freqs">pre_align_ref_freqs<a class="anchor" aria-label="anchor" href="#arg-pre-align-ref-freqs"></a></dt>
 <dd><p>a vector of prominent spectral frequencies used in
 the pre-alignment step (ppm).</p></dd>
 
 
-<dt>noise_region</dt>
+<dt id="arg-noise-region">noise_region<a class="anchor" aria-label="anchor" href="#arg-noise-region"></a></dt>
 <dd><p>spectral region to estimate the noise level (ppm).</p></dd>
 
 
-<dt>optimal_smooth_criterion</dt>
+<dt id="arg-optimal-smooth-criterion">optimal_smooth_criterion<a class="anchor" aria-label="anchor" href="#arg-optimal-smooth-criterion"></a></dt>
 <dd><p>method to determine the optimal smoothness.</p></dd>
 
 
-<dt>aic_smoothing_factor</dt>
-<dd><p>modification factor for the AIC calculation.</p></dd>
+<dt id="arg-aic-smoothing-factor">aic_smoothing_factor<a class="anchor" aria-label="anchor" href="#arg-aic-smoothing-factor"></a></dt>
+<dd><p>modification factor for the AIC calculation.
+Larger values result in less flexible baselines.</p></dd>
 
 
-<dt>anal_jac</dt>
+<dt id="arg-anal-jac">anal_jac<a class="anchor" aria-label="anchor" href="#arg-anal-jac"></a></dt>
 <dd><p>use a analytical approximation to the jacobian in the
 detailed fitting stage.</p></dd>
 
 
-<dt>pre_fit_ppm_left</dt>
+<dt id="arg-pre-fit-ppm-left">pre_fit_ppm_left<a class="anchor" aria-label="anchor" href="#arg-pre-fit-ppm-left"></a></dt>
 <dd><p>downfield frequency limit for the fitting range in
 the coarse fitting stage of the algorithm (ppm).</p></dd>
 
 
-<dt>pre_fit_ppm_right</dt>
+<dt id="arg-pre-fit-ppm-right">pre_fit_ppm_right<a class="anchor" aria-label="anchor" href="#arg-pre-fit-ppm-right"></a></dt>
 <dd><p>upfield frequency limit for the fitting range in the
 coarse fitting stage of the algorithm (ppm).</p></dd>
 
 
-<dt>phi1_optim</dt>
+<dt id="arg-phi-optim">phi1_optim<a class="anchor" aria-label="anchor" href="#arg-phi-optim"></a></dt>
 <dd><p>apply and optimise a frequency dependant phase term.</p></dd>
 
 
-<dt>phi1_init</dt>
+<dt id="arg-phi-init">phi1_init<a class="anchor" aria-label="anchor" href="#arg-phi-init"></a></dt>
 <dd><p>initial value for the frequency dependant phase term (ms).</p></dd>
 
 
-<dt>max_dphi1</dt>
+<dt id="arg-max-dphi-">max_dphi1<a class="anchor" aria-label="anchor" href="#arg-max-dphi-"></a></dt>
 <dd><p>maximum allowable change from the initial frequency
 dependant phase term (ms).</p></dd>
 
 
-<dt>max_basis_shift_broad</dt>
+<dt id="arg-max-basis-shift-broad">max_basis_shift_broad<a class="anchor" aria-label="anchor" href="#arg-max-basis-shift-broad"></a></dt>
 <dd><p>maximum allowable shift for broad signals in the
-basis (ppm). Determined based on their name beginning with Lip or MM.</p></dd>
+basis (ppm). Determined based on their name beginning with Lip or MM. The
+default value is set to max_basis_shift.</p></dd>
 
 
-<dt>max_basis_damping_broad</dt>
+<dt id="arg-max-basis-damping-broad">max_basis_damping_broad<a class="anchor" aria-label="anchor" href="#arg-max-basis-damping-broad"></a></dt>
 <dd><p>maximum allowable Lorentzian damping for broad
 signals in the basis (Hz). Determined based on their name beginning with Lip
-or MM.</p></dd>
+or MM. The default value is set to max_basis_damping.</p></dd>
 
 
-<dt>ahat_calc_method</dt>
+<dt id="arg-ahat-calc-method">ahat_calc_method<a class="anchor" aria-label="anchor" href="#arg-ahat-calc-method"></a></dt>
 <dd><p>method to calculate the metabolite amplitudes. May be
 one of: "lh_pnnls" or "ls".</p></dd>
 
 
-<dt>prefit_phase_search</dt>
+<dt id="arg-prefit-phase-search">prefit_phase_search<a class="anchor" aria-label="anchor" href="#arg-prefit-phase-search"></a></dt>
 <dd><p>perform a 1D search for the optimal phase in the
 prefit stage of the algorithm.</p></dd>
 
 
-<dt>freq_reg</dt>
+<dt id="arg-freq-reg">freq_reg<a class="anchor" aria-label="anchor" href="#arg-freq-reg"></a></dt>
 <dd><p>frequency shift parameter.</p></dd>
 
 
-<dt>lb_reg</dt>
+<dt id="arg-freq-reg-naa">freq_reg_naa<a class="anchor" aria-label="anchor" href="#arg-freq-reg-naa"></a></dt>
+<dd><p>frequency shift parameter for NAA and NAAG.</p></dd>
+
+
+<dt id="arg-lb-reg">lb_reg<a class="anchor" aria-label="anchor" href="#arg-lb-reg"></a></dt>
 <dd><p>individual line broadening parameter.</p></dd>
 
 
-<dt>output_all_paras</dt>
+<dt id="arg-output-all-paras">output_all_paras<a class="anchor" aria-label="anchor" href="#arg-output-all-paras"></a></dt>
 <dd><p>include more fitting parameters in the fit table,
 e.g. individual shift and damping factors for each basis set element.</p></dd>
 
 
-<dt>output_all_paras_raw</dt>
+<dt id="arg-output-all-paras-raw">output_all_paras_raw<a class="anchor" aria-label="anchor" href="#arg-output-all-paras-raw"></a></dt>
 <dd><p>include raw fitting parameters in the fit table.
 For advanced diagnostic use only.</p></dd>
 
 
-<dt>input_paras_raw</dt>
+<dt id="arg-input-paras-raw">input_paras_raw<a class="anchor" aria-label="anchor" href="#arg-input-paras-raw"></a></dt>
 <dd><p>input raw fitting parameters. For advanced diagnostic
 use only.</p></dd>
 
 
-<dt>optim_lw_only</dt>
+<dt id="arg-optim-lw-only">optim_lw_only<a class="anchor" aria-label="anchor" href="#arg-optim-lw-only"></a></dt>
 <dd><p>optimize the global line-broadening term only.</p></dd>
 
 
-<dt>optim_lw_only_limit</dt>
+<dt id="arg-optim-lw-only-limit">optim_lw_only_limit<a class="anchor" aria-label="anchor" href="#arg-optim-lw-only-limit"></a></dt>
 <dd><p>limits for the line-breading term as a percentage
 of the starting value when optim_lw_only is TRUE.</p></dd>
 
 
-<dt>lb_init</dt>
-<dd><p>initial Lorentzian line broadening value for the individual
-basis signals. Setting to 0 will clash with the minimum allowable value
-(eg hard constraint) during the detailed fit.</p></dd>
+<dt id="arg-lb-init">lb_init<a class="anchor" aria-label="anchor" href="#arg-lb-init"></a></dt>
+<dd><p>initial Lorentzian line broadening value (in Hz) for the
+individual basis signals. Setting to 0 will clash with the minimum allowable
+value (eg hard constraint) during the detailed fit.</p></dd>
+
+
+<dt id="arg-lb-init-approx-fit">lb_init_approx_fit<a class="anchor" aria-label="anchor" href="#arg-lb-init-approx-fit"></a></dt>
+<dd><p>apply lb_init to the basis during the approximate
+iterative fit.</p></dd>
+
+
+<dt id="arg-zf-offset">zf_offset<a class="anchor" aria-label="anchor" href="#arg-zf-offset"></a></dt>
+<dd><p>offset in number of data points from the end of the FID to
+zero-fill. Default is NULL and will automatically set this to 50 points when
+the FID distortion flag is set for the mrs_data.</p></dd>
 
 
 <dt>zf_offset</dt>
@@ -357,9 +391,7 @@ the FID distortion flag is set for the mrs_data.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>full list of options.</p>
+    <p>full list of options.</p>
     </div>
 
     <div id="ref-examples">
@@ -379,15 +411,19 @@ the FID distortion flag is set for the mrs_data.</p></dd>
 </div>
 
 <div class="pkgdown">
+<<<<<<< HEAD
   <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+=======
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+>>>>>>> devel
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

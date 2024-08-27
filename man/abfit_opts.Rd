@@ -7,7 +7,8 @@
 abfit_opts(
   init_damping = 5,
   maxiters = 1024,
-  max_shift = 0.078,
+  max_shift_pre = 0.078,
+  max_shift_fine = NULL,
   max_damping = 15,
   max_phase = 360,
   lambda = NULL,
@@ -40,11 +41,12 @@ abfit_opts(
   phi1_optim = FALSE,
   phi1_init = 0,
   max_dphi1 = 0.2,
-  max_basis_shift_broad = 0.0078,
-  max_basis_damping_broad = 2,
+  max_basis_shift_broad = NULL,
+  max_basis_damping_broad = NULL,
   ahat_calc_method = "lh_pnnls",
   prefit_phase_search = TRUE,
   freq_reg = NULL,
+  freq_reg_naa = NULL,
   lb_reg = NULL,
   output_all_paras = FALSE,
   output_all_paras_raw = FALSE,
@@ -52,6 +54,7 @@ abfit_opts(
   optim_lw_only = FALSE,
   optim_lw_only_limit = 20,
   lb_init = 0.001,
+  lb_init_approx_fit = FALSE,
   zf_offset = NULL
 )
 }
@@ -61,8 +64,11 @@ abfit_opts(
 
 \item{maxiters}{The maximum number of iterations to run for the detailed fit.}
 
-\item{max_shift}{The maximum allowable shift to be applied in the
-optimisation phase of fitting (ppm).}
+\item{max_shift_pre}{The maximum allowable global shift to be applied in the
+approximate (pre-fit) phases of analysis (ppm).}
+
+\item{max_shift_fine}{The maximum allowable global shift to be applied in the
+detailed fit phase of analysis (ppm).}
 
 \item{max_damping}{maximum permitted value of the global damping parameter
 (Hz).}
@@ -126,7 +132,8 @@ the pre-alignment step (ppm).}
 
 \item{optimal_smooth_criterion}{method to determine the optimal smoothness.}
 
-\item{aic_smoothing_factor}{modification factor for the AIC calculation.}
+\item{aic_smoothing_factor}{modification factor for the AIC calculation.
+Larger values result in less flexible baselines.}
 
 \item{anal_jac}{use a analytical approximation to the jacobian in the
 detailed fitting stage.}
@@ -145,11 +152,12 @@ coarse fitting stage of the algorithm (ppm).}
 dependant phase term (ms).}
 
 \item{max_basis_shift_broad}{maximum allowable shift for broad signals in the
-basis (ppm). Determined based on their name beginning with Lip or MM.}
+basis (ppm). Determined based on their name beginning with Lip or MM. The
+default value is set to max_basis_shift.}
 
 \item{max_basis_damping_broad}{maximum allowable Lorentzian damping for broad
 signals in the basis (Hz). Determined based on their name beginning with Lip
-or MM.}
+or MM. The default value is set to max_basis_damping.}
 
 \item{ahat_calc_method}{method to calculate the metabolite amplitudes. May be
 one of: "lh_pnnls" or "ls".}
@@ -158,6 +166,8 @@ one of: "lh_pnnls" or "ls".}
 prefit stage of the algorithm.}
 
 \item{freq_reg}{frequency shift parameter.}
+
+\item{freq_reg_naa}{frequency shift parameter for NAA and NAAG.}
 
 \item{lb_reg}{individual line broadening parameter.}
 
@@ -175,9 +185,12 @@ use only.}
 \item{optim_lw_only_limit}{limits for the line-breading term as a percentage
 of the starting value when optim_lw_only is TRUE.}
 
-\item{lb_init}{initial Lorentzian line broadening value for the individual
-basis signals. Setting to 0 will clash with the minimum allowable value
-(eg hard constraint) during the detailed fit.}
+\item{lb_init}{initial Lorentzian line broadening value (in Hz) for the
+individual basis signals. Setting to 0 will clash with the minimum allowable
+value (eg hard constraint) during the detailed fit.}
+
+\item{lb_init_approx_fit}{apply lb_init to the basis during the approximate
+iterative fit.}
 
 \item{zf_offset}{offset in number of data points from the end of the FID to
 zero-fill. Default is NULL and will automatically set this to 50 points when

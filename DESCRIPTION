@@ -1,8 +1,8 @@
 Package: spant
 Type: Package
 Title: MR Spectroscopy Analysis Tools
-Version: 2.22.0
-Date: 2024-07-11
+Version: 2.23.0
+Date: 2024-08-27
 Authors@R: c(
     person("Martin", "Wilson", email = "martin@pipegrep.co.uk",
            role = c("cre", "aut"), comment = c(ORCID = "0000-0002-2089-3956")),
@@ -14,7 +14,7 @@ Description: Tools for reading, visualising and processing Magnetic Resonance
     <DOI:10.1002/mrm.27605>. 
 BugReports: https://github.com/martin3141/spant/issues/
 License: GPL-3
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE, roclets = c("rd", "namespace", "collate"))
 NeedsCompilation: yes
 LazyData: yes
@@ -50,6 +50,7 @@ Suggests:
     testthat,
     ragg,
     doParallel,
+    parallel,
     car
 VignetteBuilder:
     knitr

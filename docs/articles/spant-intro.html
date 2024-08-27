@@ -18,15 +18,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to spant">
-<meta property="og:description" content="spant">
-<meta property="og:image" content="https://martin3141.github.io/spant/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -40,7 +38,11 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
+<<<<<<< HEAD
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.22.0</span>
+=======
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.23.0</span>
+>>>>>>> devel
       </span>
     </div>
 
@@ -52,7 +54,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorials
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -84,7 +86,7 @@
 <li>
   <a href="https://github.com/martin3141/spant/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -95,7 +97,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -195,6 +197,7 @@ diagnostics, such as SNR, are given in the <code>fit_res</code> results
 table:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span></span>
+<<<<<<< HEAD
 <span><span class="co">#&gt;   X Y Z Dynamic Coil X.CrCH2          Ala          Asp          Cr         GABA</span></span>
 <span><span class="co">#&gt; 1 1 1 1       1    1       0 8.133932e-06 3.547065e-05 4.02672e-05 1.697281e-05</span></span>
 <span><span class="co">#&gt;            Glc          Gln          GSH          Glu          GPC          Ins</span></span>
@@ -227,23 +230,74 @@ table:</p>
 <span><span class="co">#&gt; 1            FALSE 7.754368e-05     497       3.8 62.71687 51.3328 1.492722</span></span>
 <span><span class="co">#&gt;      tNAA_lw     tCr_lw    tCho_lw auto_bl_crit_7 auto_bl_crit_5.901</span></span>
 <span><span class="co">#&gt; 1 0.04562445 0.05189506 0.05438237      -8.900349          -8.944159</span></span>
+=======
+<span><span class="co">#&gt;   X Y Z Dynamic Coil X.CrCH2          Ala          Asp           Cr</span></span>
+<span><span class="co">#&gt; 1 1 1 1       1    1       0 8.133802e-06 3.547064e-05 4.026719e-05</span></span>
+<span><span class="co">#&gt;           GABA          Glc          Gln          GSH          Glu          GPC</span></span>
+<span><span class="co">#&gt; 1 1.697276e-05 2.446591e-06 3.036118e-06 2.228048e-05 6.503219e-05 1.606706e-05</span></span>
+<span><span class="co">#&gt;            Ins          Lac        Lip09       Lip13a Lip13b Lip20         MM09</span></span>
+<span><span class="co">#&gt; 1 5.906155e-05 5.802244e-06 2.387705e-05 2.670583e-06      0     0 9.630767e-06</span></span>
+<span><span class="co">#&gt;           MM12         MM14         MM17         MM20          NAA        NAAG</span></span>
+<span><span class="co">#&gt; 1 6.511376e-06 2.603852e-05 2.238403e-05 9.203742e-05 6.011109e-05 1.53653e-05</span></span>
+<span><span class="co">#&gt;   PCh          PCr         sIns Tau         tNAA         tCr         tCho</span></span>
+<span><span class="co">#&gt; 1   0 2.101921e-05 6.504096e-06   0 7.547639e-05 6.12864e-05 1.606706e-05</span></span>
+<span><span class="co">#&gt;           Glx        tLM09        tLM13        tLM20   X.CrCH2.sd       Ala.sd</span></span>
+<span><span class="co">#&gt; 1 6.80683e-05 3.350782e-05 3.522048e-05 9.203742e-05 2.386862e-06 4.343934e-06</span></span>
+<span><span class="co">#&gt;         Asp.sd        Cr.sd      GABA.sd       Glc.sd       Gln.sd       GSH.sd</span></span>
+<span><span class="co">#&gt; 1 9.235327e-06 3.689004e-06 4.574399e-06 4.421682e-06 5.083001e-06 2.020427e-06</span></span>
+<span><span class="co">#&gt;         Glu.sd       GPC.sd       Ins.sd       Lac.sd     Lip09.sd    Lip13a.sd</span></span>
+<span><span class="co">#&gt; 1 5.082976e-06 2.602652e-06 2.093225e-06 5.301706e-06 4.119256e-06 1.328304e-05</span></span>
+<span><span class="co">#&gt;      Lip13b.sd     Lip20.sd      MM09.sd      MM12.sd      MM14.sd      MM17.sd</span></span>
+<span><span class="co">#&gt; 1 6.474468e-06 7.510908e-06 3.827554e-06 4.594028e-06 7.223426e-06 3.811301e-06</span></span>
+<span><span class="co">#&gt;        MM20.sd       NAA.sd      NAAG.sd       PCh.sd       PCr.sd      sIns.sd</span></span>
+<span><span class="co">#&gt; 1 8.595853e-06 1.017711e-06 1.208984e-06 2.236874e-06 3.084599e-06 7.240069e-07</span></span>
+<span><span class="co">#&gt;         Tau.sd      tNAA.sd       tCr.sd      tCho.sd      Glx.sd     tLM09.sd</span></span>
+<span><span class="co">#&gt; 1 3.759957e-06 7.031382e-07 5.890482e-07 2.110662e-07 3.16966e-06 1.006794e-06</span></span>
+<span><span class="co">#&gt;       tLM13.sd     tLM20.sd    phase       lw       shift      asym</span></span>
+<span><span class="co">#&gt; 1 1.573147e-06 3.016809e-06 11.10963 5.023682 -0.00376505 0.1771067</span></span>
+<span><span class="co">#&gt;   res.deviance res.niter res.info</span></span>
+<span><span class="co">#&gt; 1 7.307671e-05        28        2</span></span>
+<span><span class="co">#&gt;                                                        res.message bl_ed_pppm</span></span>
+<span><span class="co">#&gt; 1 Relative error between `par' and the solution is at most `ptol'.   2.364083</span></span>
+<span><span class="co">#&gt;   max_bl_flex_used    full_res   spec_resid fit_pts ppm_range      SNR      SRR</span></span>
+<span><span class="co">#&gt; 1            FALSE 7.75437e-05 7.307671e-05     497       3.8 62.71686 51.33279</span></span>
+<span><span class="co">#&gt;        FQN    tNAA_lw     tCr_lw    tCho_lw auto_bl_crit_7 auto_bl_crit_5.901</span></span>
+<span><span class="co">#&gt; 1 1.492722 0.04562445 0.05189506 0.05438237      -8.900349          -8.944159</span></span>
+>>>>>>> devel
 <span><span class="co">#&gt;   auto_bl_crit_4.942 auto_bl_crit_4.12 auto_bl_crit_3.425 auto_bl_crit_2.844</span></span>
 <span><span class="co">#&gt; 1          -8.977355         -9.000064          -9.013367           -9.02055</span></span>
 <span><span class="co">#&gt;   auto_bl_crit_2.364 auto_bl_crit_1.969 auto_bl_crit_1.647 auto_bl_crit_1.384</span></span>
 <span><span class="co">#&gt; 1          -9.024177          -9.023462          -9.009854          -8.958654</span></span>
 <span><span class="co">#&gt;   auto_bl_crit_1.17 auto_bl_crit_0.997 auto_bl_crit_0.856 auto_bl_crit_0.743</span></span>
+<<<<<<< HEAD
 <span><span class="co">#&gt; 1         -8.844271          -8.690744          -8.562631          -8.485471</span></span>
 <span><span class="co">#&gt;   auto_bl_crit_0.654 auto_bl_crit_0.593 auto_bl_crit_0.558 auto_bl_crit_0.54</span></span>
 <span><span class="co">#&gt; 1          -8.447136          -8.430174          -8.423053         -8.420086</span></span>
+=======
+<span><span class="co">#&gt; 1         -8.844271          -8.690744           -8.56263          -8.485471</span></span>
+<span><span class="co">#&gt;   auto_bl_crit_0.654 auto_bl_crit_0.593 auto_bl_crit_0.558 auto_bl_crit_0.54</span></span>
+<span><span class="co">#&gt; 1          -8.447135          -8.430173          -8.423052         -8.420085</span></span>
+>>>>>>> devel
 <span><span class="co">#&gt;   auto_bl_crit_0.532 auto_bl_crit_0.529</span></span>
 <span><span class="co">#&gt; 1          -8.418839          -8.418312</span></span></code></pre></div>
 <p>Note that signal names appended with “.sd” are the CRLB estimates for
 the uncertainty (standard deviation) in the metabolite quantity
 estimate. e.g. to calculate the percentage s.d. for tNAA:</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">tNAA.sd</span> <span class="op">/</span> <span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">tNAA</span> <span class="op">*</span> <span class="fl">100</span></span>
 <span><span class="co">#&gt; [1] 0.9316001</span></span></code></pre></div>
 <p>Spectral SNR:</p>
+=======
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">tNAA.sd</span> <span class="op">/</span> <span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">tNAA</span> <span class="op">*</span> <span class="fl">100</span></span>
+<span><span class="co">#&gt; [1] 0.9316002</span></span></code></pre></div>
+<p>Spectral SNR:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">SNR</span></span>
+<span><span class="co">#&gt; [1] 62.71686</span></span></code></pre></div>
+<p>Linewidth of the tNAA resonance in PPM:</p>
+>>>>>>> devel
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_res</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">SNR</span></span>
 <span><span class="co">#&gt; [1] 62.71687</span></span></code></pre></div>
@@ -265,6 +319,7 @@ total-creatine:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">amps</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;               [,1]</span></span>
 <span><span class="co">#&gt; X.CrCH2 0.00000000</span></span>
+<<<<<<< HEAD
 <span><span class="co">#&gt; Ala     0.13272001</span></span>
 <span><span class="co">#&gt; Asp     0.57876874</span></span>
 <span><span class="co">#&gt; Cr      0.65703313</span></span>
@@ -298,6 +353,41 @@ total-creatine:</p>
 <span><span class="co">#&gt; tLM09   0.54674163</span></span>
 <span><span class="co">#&gt; tLM13   0.57468844</span></span>
 <span><span class="co">#&gt; tLM20   1.50175937</span></span></code></pre></div>
+=======
+<span><span class="co">#&gt; Ala     0.13271789</span></span>
+<span><span class="co">#&gt; Asp     0.57876852</span></span>
+<span><span class="co">#&gt; Cr      0.65703306</span></span>
+<span><span class="co">#&gt; GABA    0.27694176</span></span>
+<span><span class="co">#&gt; Glc     0.03992062</span></span>
+<span><span class="co">#&gt; Gln     0.04953983</span></span>
+<span><span class="co">#&gt; GSH     0.36354693</span></span>
+<span><span class="co">#&gt; Glu     1.06111932</span></span>
+<span><span class="co">#&gt; GPC     0.26216353</span></span>
+<span><span class="co">#&gt; Ins     0.96369742</span></span>
+<span><span class="co">#&gt; Lac     0.09467424</span></span>
+<span><span class="co">#&gt; Lip09   0.38959787</span></span>
+<span><span class="co">#&gt; Lip13a  0.04357545</span></span>
+<span><span class="co">#&gt; Lip13b  0.00000000</span></span>
+<span><span class="co">#&gt; Lip20   0.00000000</span></span>
+<span><span class="co">#&gt; MM09    0.15714362</span></span>
+<span><span class="co">#&gt; MM12    0.10624504</span></span>
+<span><span class="co">#&gt; MM14    0.42486612</span></span>
+<span><span class="co">#&gt; MM17    0.36523650</span></span>
+<span><span class="co">#&gt; MM20    1.50175914</span></span>
+<span><span class="co">#&gt; NAA     0.98082262</span></span>
+<span><span class="co">#&gt; NAAG    0.25071302</span></span>
+<span><span class="co">#&gt; PCh     0.00000000</span></span>
+<span><span class="co">#&gt; PCr     0.34296694</span></span>
+<span><span class="co">#&gt; sIns    0.10612625</span></span>
+<span><span class="co">#&gt; Tau     0.00000000</span></span>
+<span><span class="co">#&gt; tNAA    1.23153565</span></span>
+<span><span class="co">#&gt; tCr     1.00000000</span></span>
+<span><span class="co">#&gt; tCho    0.26216353</span></span>
+<span><span class="co">#&gt; Glx     1.11065914</span></span>
+<span><span class="co">#&gt; tLM09   0.54674149</span></span>
+<span><span class="co">#&gt; tLM13   0.57468661</span></span>
+<span><span class="co">#&gt; tLM20   1.50175914</span></span></code></pre></div>
+>>>>>>> devel
 </div>
 <div class="section level2">
 <h2 id="water-reference-scaling-aka-absolute-quantification">Water reference scaling, AKA “absolute-quantification”<a class="anchor" aria-label="anchor" href="#water-reference-scaling-aka-absolute-quantification"></a>
@@ -327,7 +417,11 @@ TARQUIN.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_res_molar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scale_amp_molar.html">scale_amp_molar</a></span><span class="op">(</span><span class="va">fit_res</span>, <span class="va">mrs_data_wref</span><span class="op">)</span></span>
 <span><span class="va">fit_res_molar</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">tNAA</span></span>
+<<<<<<< HEAD
 <span><span class="co">#&gt; [1] 6.826336</span></span></code></pre></div>
+=======
+<span><span class="co">#&gt; [1] 6.826335</span></span></code></pre></div>
+>>>>>>> devel
 <p>Note, while “absolute” units are attractive, a large number of
 assumptions about metabolite and water relaxation rates are necessary to
 arrive at these mM estimates. If you’re not confident at being able to
@@ -340,9 +434,7 @@ to the simplicity of the approach.</p>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -355,16 +447,20 @@ to the simplicity of the approach.</p>
 
 <div class="pkgdown">
   <p></p>
+<<<<<<< HEAD
 <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+=======
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+>>>>>>> devel
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

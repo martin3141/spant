@@ -31,6 +31,8 @@
 #' @param w_ref water reference data for concentration scaling (optional).
 #' @param opts options to pass to the analysis method.
 #' @param parallel perform analyses in parallel (TRUE or FALSE).
+#' @param cl a parallel socket cluster required to run analyses in parallel.
+#' Eg, cl <- parallel::makeCluster(4).
 #' @param time measure the time taken for the analysis to complete
 #' (TRUE or FALSE).
 #' @param progress option is passed to plyr::alply function to display a
@@ -49,13 +51,12 @@
 #' }
 #' @export
 fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
-                    opts = NULL, parallel = FALSE, time = TRUE,
+                    opts = NULL, parallel = FALSE, cl = NULL, time = TRUE,
                     progress = "text", extra = NULL) {
   
   if (inherits(metab, "list")) {
     
     if (!is.null(w_ref)) {
-      # if (class(w_ref) != "list") stop("w_ref is not a list but metab is")
       if (!inherits(w_ref, "list")) stop("w_ref is not a list but metab is")
       
       if (length(metab) != length(w_ref)) {
@@ -137,8 +138,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
     
     acq_paras <- get_acq_paras(metab)
     
-    plyr <- TRUE
-    if (plyr) {
+    if (!parallel) {
       result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6), abfit,
                                  acq_paras, basis, opts,
                                  .parallel = parallel,
@@ -146,13 +146,22 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
                                                  .packages = "spant"),
                                  .progress = progress, .inform = FALSE)
     } else {
-      result_list <- apply(metab$data, c(2, 3, 4, 5, 6), abfit, acq_paras,
-                           basis, opts)
+      if (is.null(cl)) stop("pass cl argument to fit_mrs for parallel analyses")
+      result_list <- parallel::parApply(cl, metab$data, c(2, 3, 4, 5, 6), abfit,
+                                        acq_paras, basis, opts)
       labs <- which(array(TRUE, dim(result_list)), arr.ind = TRUE)
       result_list <- result_list[,,,,]
       attr(result_list, "split_labels") <- labs
       names(result_list) <- seq_len(nrow(labs))
     }
+    
+    # method using base apply
+    # result_list <- apply(metab$data, c(2, 3, 4, 5, 6), abfit, acq_paras,
+    #                      basis, opts)
+    # labs <- which(array(TRUE, dim(result_list)), arr.ind = TRUE)
+    # result_list <- result_list[,,,,]
+    # attr(result_list, "split_labels") <- labs
+    # names(result_list) <- seq_len(nrow(labs))
     
   } else if (METHOD == "VARPRO") {
     # read basis into memory if a file
@@ -266,12 +275,30 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
     temp_mrs$data = temp_mrs$data[1, 1, 1, 1, 1, 1,]
     dim(temp_mrs$data) <- c(1, 1, 1, 1, 1, 1, length(temp_mrs$data))
     
-    result_list <- plyr::alply(metab$data, c(2,3,4,5,6), lcmodel_fit, 
-                               temp_mrs, basis_file, opts,
-                               .parallel = parallel, 
-                               .paropts = list(.inorder = TRUE,
-                                               .packages = "spant"),
-                               .progress = progress, .inform = FALSE)
+    if (!parallel) {
+      result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6), lcmodel_fit,
+                                 temp_mrs, basis_file, opts,
+                                 .parallel = parallel,
+                                 .paropts = list(.inorder = TRUE,
+                                                 .packages = "spant"),
+                                 .progress = progress, .inform = FALSE)
+    } else {
+      if (is.null(cl)) stop("pass cl argument to fit_mrs for parallel analyses")
+      result_list <- parallel::parApply(cl, metab$data, c(2, 3, 4, 5, 6),
+                                        lcmodel_fit, temp_mrs, basis_file, opts)
+      labs <- which(array(TRUE, dim(result_list)), arr.ind = TRUE)
+      result_list <- result_list[,,,,]
+      attr(result_list, "split_labels") <- labs
+      names(result_list) <- seq_len(nrow(labs))
+    }
+    
+    # result_list <- plyr::alply(metab$data, c(2,3,4,5,6), lcmodel_fit, 
+    #                            temp_mrs, basis_file, opts,
+    #                            .parallel = parallel, 
+    #                            .paropts = list(.inorder = TRUE,
+    #                                            .packages = "spant"),
+    #                            .progress = progress, .inform = FALSE)
+    
   } else if (exists(method)) {
     message(paste("Using external fit method :", method))
     
