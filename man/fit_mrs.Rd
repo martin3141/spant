@@ -11,6 +11,7 @@ fit_mrs(
   w_ref = NULL,
   opts = NULL,
   parallel = FALSE,
+  cl = NULL,
   time = TRUE,
   progress = "text",
   extra = NULL
@@ -30,6 +31,9 @@ LCModel .basis format.}
 \item{opts}{options to pass to the analysis method.}
 
 \item{parallel}{perform analyses in parallel (TRUE or FALSE).}
+
+\item{cl}{a parallel socket cluster required to run analyses in parallel.
+Eg, cl <- parallel::makeCluster(4).}
 
 \item{time}{measure the time taken for the analysis to complete
 (TRUE or FALSE).}
