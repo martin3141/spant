@@ -25,6 +25,9 @@ read_rda <- function(fname, extra) {
   col_ori <- rep(NA, 3)
   pos_vec <- rep(NA, 3)
   
+  # a fix for when commas are used as decimal points
+  txt$V2 <- gsub(",", ".", txt$V2)
+  
   N <- as.integer(txt$V2[which(txt$V1 == "VectorSize")])
   fs <- 1e6 / as.numeric(txt$V2[which(txt$V1 == "DwellTime")])
   ft <- 1e6 * as.numeric(txt$V2[which(txt$V1 == "MRFrequency")])
