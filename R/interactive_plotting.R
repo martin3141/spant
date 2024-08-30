@@ -353,7 +353,7 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
     #text(xcutoff / 2, ycutoff, "I", col = "white", cex = cex_lab,
     #     adj = c(1.7, lm_neg), font = lab_font)
     
-  graphics::text(1.0, ycutoff + (1 - ycutoff) / 2, right_labs, col = "white",
+    graphics::text(1.0, ycutoff + (1 - ycutoff) / 2, right_labs, col = "white",
                    cex = cex_lab, adj = lm_pos, font = lab_font)
     
     #text(xcutoff, ycutoff + (1 - ycutoff) / 2, "A", col = "white", cex = cex_lab,
