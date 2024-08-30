@@ -1,3 +1,6 @@
+# spant 2.24.0
+* Added argument to adjust the legend font size in ortho3 function.
+
 # spant 2.23.0
 * abfit options for lipid and MM maximum broadening and maximum frequency shift
 now default to be the same as the metabolite values unless explicitly changed.
