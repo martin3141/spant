@@ -19,7 +19,8 @@ ortho3(
   colourbar = TRUE,
   bg = "black",
   mar = c(0, 0, 0, 0),
-  smallplot = c(0.63, 0.65, 0.07, 0.42)
+  smallplot = c(0.63, 0.65, 0.07, 0.42),
+  legend_axis_cex = 0.75
 )
 }
 \arguments{
@@ -52,6 +53,8 @@ ortho3(
 \item{mar}{plot margins.}
 
 \item{smallplot}{smallplot option for positioning the colourbar.}
+
+\item{legend_axis_cex}{fornt expansion factor for the legend axis text.}
 }
 \description{
 Display an orthographic projection plot of a nifti object.

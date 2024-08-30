@@ -198,12 +198,15 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
 #' @param bg plot background colour.
 #' @param mar plot margins.
 #' @param smallplot smallplot option for positioning the colourbar.
+#' @param legend_axis_cex fornt expansion factor for the legend axis text.
 #' @export
 ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
-                   zlim_ol = NULL, alpha = 0.7, col_ol = viridisLite::viridis(64),
+                   zlim_ol = NULL, alpha = 0.7,
+                   col_ol = viridisLite::viridis(64),
                    orient_lab = TRUE, rescale = 1, crosshairs = TRUE,
                    ch_lwd = 1, colourbar = TRUE, bg = "black",
-                   mar = c(0, 0, 0, 0), smallplot = c(0.63, 0.65, 0.07, 0.42)) {
+                   mar = c(0, 0, 0, 0), smallplot = c(0.63, 0.65, 0.07, 0.42),
+                   legend_axis_cex = 0.75) {
   
   # check the images are comparable
   if (!is.null(overlay)) check_geom(underlay, overlay)
@@ -269,7 +272,8 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
     if (colourbar) {
       fields::image.plot(full_y, useRaster = TRUE, col = col_ol, axes = FALSE,
                          asp = asp, add = TRUE, zlim = zlim_ol,
-                         smallplot = smallplot)
+                         smallplot = smallplot,
+                         axis.args = list(cex.axis = legend_axis_cex))
     } else {
       graphics::image(full_y, useRaster = TRUE, col = col_ol, axes = FALSE,
                       asp = asp, add = TRUE, zlim = zlim_ol)
