@@ -329,7 +329,6 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     
     par <- c(res$par[1], res$par[2], res$par[3], asym_init, rep(0, Nbasis),
              rep(opts$lb_init, Nbasis))
-    
    
     # find any signals with names starting with Lip or MM as they may have
     # different parameter limits
