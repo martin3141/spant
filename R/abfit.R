@@ -413,7 +413,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                                                noise_region = opts$noise_region,
                                                full_output = TRUE)$noise_sd)
       
-      noise_scale <- noise_sd_est
+      noise_scale <- noise_sd_est ^ 2
     }
       
     if (is.def(opts$freq_reg)) { 
