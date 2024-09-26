@@ -429,7 +429,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       freq_reg_scaled <- noise_scale / (opts$freq_reg * acq_paras$ft * 1e-6)
       freq_reg_scaled <- rep(freq_reg_scaled, Nbasis)
       
-      freq_reg_scaled <- freq_reg_scaled #* basis_scale
+      freq_reg_scaled <- freq_reg_scaled * basis_scale
       
       if (is.def(opts$freq_reg_naa)) { 
         # different value for NAA and NAAG
@@ -444,7 +444,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     if (is.def(opts$lb_reg)) { 
       lb_reg_scaled <- noise_scale / opts$lb_reg
       lb_reg_scaled <- rep(lb_reg_scaled, Nbasis)
-      lb_reg_scaled <- lb_reg_scaled #* basis_scale
+      lb_reg_scaled <- lb_reg_scaled * basis_scale
     } else {
       lb_reg_scaled <- NULL
     }
