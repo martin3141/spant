@@ -420,7 +420,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       basis_scale <- basis |> basis2mrs_data() |> lb(2) |> zf() |> 
         spec_op(operator = "max", mode = "mod",
                 xlim = c(opts$ppm_left, opts$ppm_right)) |> as.numeric()
-      basis_scale <- basis_scale / mean(basis_scale)
+      basis_scale <- basis_scale * mean(basis_scale)
       
     }
       
@@ -429,7 +429,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       freq_reg_scaled <- noise_scale / (opts$freq_reg * acq_paras$ft * 1e-6)
       freq_reg_scaled <- rep(freq_reg_scaled, Nbasis)
       
-      freq_reg_scaled <- freq_reg_scaled / basis_scale
+      freq_reg_scaled <- freq_reg_scaled * basis_scale
       
       if (is.def(opts$freq_reg_naa)) { 
         # different value for NAA and NAAG
