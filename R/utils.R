@@ -728,7 +728,11 @@ matexp <- function(x) {
   # eE <- expm::expm(E)
   # eA <- eE[1:n, 1:n] + (0 + 1i) * eE[(1:n) + n, 1:n]
   # eA <- matrix(Imzap(eA), ncol = n)
+  
+  d  <- dim(x)
+  n  <- d[1]
   eA <- expm::expm(x) # complex matrices supported since v1.0
+  eA <- matrix(Imzap(eA), ncol = n)
   return(eA)
 }
 
