@@ -25,7 +25,7 @@ Imports:
     plyr,
     pracma,
     stringr,
-    expm,
+    expm (>= 1.0-0),
     signal,
     minpack.lm,
     utils,
