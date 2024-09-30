@@ -719,15 +719,16 @@ ginv <- function(X, tol = sqrt(.Machine$double.eps)) {
 #' @return the matrix exponential of x.
 #' @export
 matexp <- function(x) {
-  d  <- dim(x)
-  n  <- d[1]
-  p  <- d[2]
-  Ar <- Re(x)
-  Ai <- Im(x)
-  E  <- rbind(cbind(Ar, -Ai), cbind(Ai, Ar))
-  eE <- expm::expm(E)
-  eA <- eE[1:n, 1:n] + (0 + 1i) * eE[(1:n) + n, 1:n]
-  eA <- matrix(Imzap(eA), ncol = n)
+  # d  <- dim(x)
+  # n  <- d[1]
+  # p  <- d[2]
+  # Ar <- Re(x)
+  # Ai <- Im(x)
+  # E  <- rbind(cbind(Ar, -Ai), cbind(Ai, Ar))
+  # eE <- expm::expm(E)
+  # eA <- eE[1:n, 1:n] + (0 + 1i) * eE[(1:n) + n, 1:n]
+  # eA <- matrix(Imzap(eA), ncol = n)
+  eA <- expm::expm(x) # complex matrices supported since v1.0
   return(eA)
 }
 

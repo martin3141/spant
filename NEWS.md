@@ -1,5 +1,7 @@
 # spant 2.24.0
 * Added argument to adjust the legend font size in ortho3 function.
+* Improved metabolite simulation performance thanks to the expm package recently
+adding support for complex matrices.
 
 # spant 2.23.0
 * abfit options for lipid and MM maximum broadening and maximum frequency shift
