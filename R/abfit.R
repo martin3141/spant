@@ -1580,6 +1580,17 @@ calc_lambda_from_ed <- function(spline_basis, deriv_mat, target_ed,
     warning(paste("ED of less than 2.0095 requested : ", target_ed))
   }
   
+  # do a coarse search to eliminate flat regions of the objective function
+  vals <- 10 ^ seq(log10(lower_lim), log10(upper_lim))
+  
+  ed <- rep(NA, length(vals))
+  for (n in 1:length(vals)) {
+    ed[n] <- calc_ed_from_lambda(spline_basis, deriv_mat, vals[n]) 
+  }
+  
+  # adjust the upper limit if needed
+  if (any(ed < 2.0001)) upper_lim <- vals[sum(ed > 2.0001)]
+  
   res <- stats::optim(start_val, ed_obj_fn, method = "Brent", lower = lower_lim,
                       upper = upper_lim, spline_basis = spline_basis,
                       deriv_mat = deriv_mat, target_ed = target_ed)
