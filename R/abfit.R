@@ -1559,6 +1559,8 @@ calc_ed_from_lambda_stable <- function(spline_basis, deriv_mat, lambda) {
 #' @return the effective dimension value.
 #' @export
 calc_ed_from_lambda <- function(spline_basis, deriv_mat, lambda) {
+  # see eqn 26 in :  Paul H. C. Eilers. Brian D. Marx. "Flexible smoothing with
+  # B-splines and penalties." Statist. Sci. 11 (2) 89 - 121, May 1996.
   inv_mat <- solve(t(spline_basis) %*% spline_basis +
                      lambda * (t(deriv_mat) %*% deriv_mat))
   H       <- inv_mat %*% (t(spline_basis) %*% spline_basis)
