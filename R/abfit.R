@@ -305,9 +305,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   if (opts$maxiters > 0) {
     
     # estimate the required spine functions based on the auto bl flex
-    if (is.null(opts$bl_comps_pppm)) {
-      opts$bl_comps_pppm <- opts$bl_ed_pppm * 1.25
-    }
+    if (opts$adaptive_bl_comps_pppm) opts$bl_comps_pppm <- opts$bl_ed_pppm * 2
     
     # generate the spline basis
     sp_bas_full <- generate_sp_basis(mrs_data, opts$ppm_right, opts$ppm_left,
@@ -881,6 +879,9 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' ppm).
 #' @param auto_bl_flex automatically determine the level of baseline smoothness.
 #' @param bl_comps_pppm spline basis density (signals per ppm).
+#' @param adaptive_bl_comps_pppm adjust the spline basis density in the detailed
+#' fit phase, based on the required level of smoothness, to reduce computation
+#' time.
 #' @param export_sp_fit add the fitted spline functions to the fit result.
 #' @param max_asym maximum allowable value of the asymmetry parameter.
 #' @param max_basis_shift maximum allowable frequency shift for individual basis
@@ -955,7 +956,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift_pre = 0.078,
                        max_shift_fine = NULL, max_damping = 15, max_phase = 360,
                        lambda = NULL, ppm_left = 4, ppm_right = 0.2, zp = TRUE,
                        bl_ed_pppm = 2.0, auto_bl_flex = TRUE,
-                       bl_comps_pppm = 15, export_sp_fit = FALSE,
+                       bl_comps_pppm = 15, adaptive_bl_comps_pppm = FALSE, 
+                       export_sp_fit = FALSE,
                        max_asym = 0.25, max_basis_shift = 0.0078,
                        max_basis_damping = 2, maxiters_pre = 1000,
                        algo_pre = "NLOPT_LN_NELDERMEAD", min_bl_ed_pppm = NULL,
@@ -985,7 +987,9 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift_pre = 0.078,
        max_phase = max_phase, lambda = lambda, ppm_left = ppm_left,
        ppm_right = ppm_right, zp = zp, bl_ed_pppm = bl_ed_pppm,
        auto_bl_flex = auto_bl_flex,
-       bl_comps_pppm = bl_comps_pppm, export_sp_fit = export_sp_fit,
+       bl_comps_pppm = bl_comps_pppm,
+       adaptive_bl_comps_pppm = adaptive_bl_comps_pppm,
+       export_sp_fit = export_sp_fit,
        max_asym = max_asym, max_basis_shift = max_basis_shift, 
        max_basis_damping = max_basis_damping, maxiters_pre = maxiters_pre,
        algo_pre = algo_pre, min_bl_ed_pppm = min_bl_ed_pppm,
