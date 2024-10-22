@@ -394,7 +394,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     }
    
     # estimate the noise sd if needed
-    if (is.def(opts$freq_reg) | is.def(opts$lb_reg)) { 
+    if (is.def(opts$freq_reg) | is.def(opts$lb_reg) | is.def(opts$asym_reg)) { 
       # apply best guess for phase parameter to data
       y_mod_noise_est <- y * exp(1i * res$par[1])
       
@@ -411,15 +411,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                                                noise_region = opts$noise_region,
                                                full_output = TRUE)$noise_sd)
       
-      # noise_scale <- noise_sd_est ^ 2
       noise_scale <- noise_sd_est
-      
-      # calculate basis scaling 
-      # basis_scale <- basis |> basis2mrs_data() |> lb(2) |> zf() |> 
-      #   spec_op(operator = "max", mode = "mod",
-      #           xlim = c(opts$ppm_left, opts$ppm_right)) |> as.numeric()
-      # basis_scale <- basis_scale * mean(basis_scale)
-      
     }
       
     if (is.def(opts$freq_reg)) { 
@@ -447,6 +439,12 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       lb_reg_scaled <- NULL
     }
     
+    if (is.def(opts$asym_reg)) { 
+      asym_reg_scaled <- noise_scale / opts$asym_reg
+    } else {
+      asym_reg_scaled <- NULL
+    }
+    
     # useful code to check the jacobian
     # num_jac <- abfit_full_num_jac(par, y = y, raw_metab_basis = raw_metab_basis,
     #                               bl_basis = bl_basis_full, t = t, f = f,
@@ -457,7 +455,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     #                               ahat_calc_method = opts$ahat_calc_method,
     #                               freq_reg = freq_reg_scaled,
     #                               lb_reg = lb_reg_scaled,
-    #                               lb_init = opts$lb_init)
+    #                               lb_init = opts$lb_init,
+    #.                              asym_reg = asym_reg_scaled)
     # anal_jac <- abfit_full_anal_jac(par, y = y,
     #                                 raw_metab_basis = raw_metab_basis,
     #                                 bl_basis = bl_basis_full, t = t, f = f,
@@ -468,7 +467,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     #                                 ahat_calc_method = opts$ahat_calc_method,
     #                                 freq_reg = freq_reg_scaled,
     #                                 lb_reg = lb_reg_scaled,
-    #                                 lb_init = opts$lb_init)
+    #                                 lb_init = opts$lb_init,
+    #                                 asym_reg = asym_reg_scaled)
     # print(sum((num_jac - anal_jac) ^ 2))
     # image(Mod(anal_jac - num_jac))
     
@@ -476,7 +476,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                               ctrl, y, raw_metab_basis, bl_basis_full, t,
                               f, sp_bas_full$inds, sp_bas_full$bl_comps, FALSE,
                               NULL, opts$phi1_optim, opts$ahat_calc_method,
-                              freq_reg_scaled, lb_reg_scaled, opts$lb_init)
+                              freq_reg_scaled, lb_reg_scaled, opts$lb_init,
+                              asym_reg_scaled)
   } 
   
   if (opts$maxiters == 0) {
@@ -720,8 +721,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
                                     bl_basis_final, t, f, sp_bas_final$inds,
                                     sp_bas_final$bl_comps, FALSE, NULL,
                                     opts$phi1_optim, opts$ahat_calc_method,
-                                    NULL, NULL, opts$lb_init)
-                                    # nb freq_reg, lb_reg not 
+                                    NULL, NULL, opts$lb_init, NULL)
+                                    # nb freq_reg, lb_reg, asym_reg not 
                                     # included in the crlb calc
    
   bl_comps_crlb <- sp_bas_final$bl_comps
@@ -931,6 +932,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' @param freq_reg frequency shift parameter.
 #' @param freq_reg_naa frequency shift parameter for NAA and NAAG.
 #' @param lb_reg individual line broadening parameter.
+#' @param asym_reg lineshape asymmetry parameter.
 #' @param output_all_paras include more fitting parameters in the fit table,
 #' e.g. individual shift and damping factors for each basis set element.
 #' @param output_all_paras_raw include raw fitting parameters in the fit table.
@@ -974,7 +976,7 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift_pre = 0.078,
                        max_basis_damping_broad = NULL,
                        ahat_calc_method = "lh_pnnls",
                        prefit_phase_search = TRUE, freq_reg = NULL,
-                       freq_reg_naa = NULL, lb_reg = NULL,
+                       freq_reg_naa = NULL, lb_reg = NULL, asym_reg = NULL,
                        output_all_paras = FALSE,
                        output_all_paras_raw = FALSE, input_paras_raw = NULL,
                        optim_lw_only = FALSE, optim_lw_only_limit = 20,
@@ -1008,7 +1010,7 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift_pre = 0.078,
        max_basis_damping_broad = max_basis_damping_broad,
        ahat_calc_method = ahat_calc_method,
        prefit_phase_search = prefit_phase_search, freq_reg = freq_reg,
-       freq_reg_naa = freq_reg_naa, lb_reg = lb_reg,
+       freq_reg_naa = freq_reg_naa, lb_reg = lb_reg, asym_reg = asym_reg,
        output_all_paras = output_all_paras,
        output_all_paras_raw = output_all_paras_raw,
        input_paras_raw = input_paras_raw, optim_lw_only = optim_lw_only,
@@ -1029,7 +1031,8 @@ abfit_opts_v1_9_0 <- function(...) {
 # objective function for 4 parameter full spine fitting method
 abfit_full_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
                            bl_comps, sum_sq, basis_paras, phi1_optim,
-                           ahat_calc_method, freq_reg, lb_reg, lb_init) {
+                           ahat_calc_method, freq_reg, lb_reg, lb_init,
+                           asym_reg) {
   
   if (!is.null(basis_paras)) par <- c(par, basis_paras)
   
@@ -1098,6 +1101,7 @@ abfit_full_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   res <- Re(Y[inds]) - Y_hat[1:length(inds)]
   if (!is.null(freq_reg)) res <- c(res, freq_reg * freq_shifts)
   if (!is.null(lb_reg))   res <- c(res, lb_reg * (lb_vec / pi - lb_init)) 
+  if (!is.null(asym_reg)) res <- c(res, asym_reg * par[4]) 
   
   if (sum_sq) {
     return(sum(res ^ 2))
@@ -1108,7 +1112,8 @@ abfit_full_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
 
 abfit_full_num_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
                                bl_comps, sum_sq, basis_paras, phi1_optim,
-                               ahat_calc_method, freq_reg, lb_reg, lb_init) {
+                               ahat_calc_method, freq_reg, lb_reg, lb_init,
+                               asym_reg) {
   
   numDeriv::jacobian(func = abfit_full_obj, x = par, method = "simple",
                      y = y, raw_metab_basis = raw_metab_basis,
@@ -1116,12 +1121,13 @@ abfit_full_num_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
                      bl_comps = bl_comps, sum_sq = sum_sq, basis_paras = NULL,
                      phi1_optim = phi1_optim,
                      ahat_calc_method = ahat_calc_method, freq_reg = freq_reg,
-                     lb_reg = lb_reg, lb_init = lb_init)
+                     lb_reg = lb_reg, lb_init = lb_init, asym_reg = asym_reg)
 }
 
 abfit_partial_num_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
                                   bl_comps, sum_sq, basis_paras, phi1_optim,
-                                  ahat_calc_method, freq_reg, lb_reg, lb_init) {
+                                  ahat_calc_method, freq_reg, lb_reg, lb_init,
+                                  asym_reg) {
   
   if (phi1_optim) {
     global_paras <- par[1:5]
@@ -1137,7 +1143,7 @@ abfit_partial_num_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
                      bl_comps = bl_comps, sum_sq = sum_sq,
                      basis_paras = basis_paras_fixed, phi1_optim = phi1_optim,
                      ahat_calc_method = ahat_calc_method, freq_reg = freq_reg,
-                     lb_reg = lb_reg, lb_init = lb_init)
+                     lb_reg = lb_reg, lb_init = lb_init, asym_reg = asym_reg)
 }
 
 # attempt to calc approx Jacobian for some of the global parameters
@@ -1145,14 +1151,14 @@ abfit_partial_num_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
 abfit_full_anal_jac_test <- function(par, y, raw_metab_basis, bl_basis, t,
                                      f, inds, bl_comps, sum_sq, basis_paras,
                                      phi1_optim, ahat_calc_method, freq_reg,
-                                     lb_reg, lb_init) {
+                                     lb_reg, lb_init, asym_reg) {
   
   # calculate the first 4 paras numerically
   global_paras_jac <- abfit_partial_num_jac(par, y, raw_metab_basis, bl_basis,
                                             t, f, inds, bl_comps, sum_sq,
                                             basis_paras, phi1_optim,
                                             ahat_calc_method, freq_reg, lb_reg,
-                                            lb_init)
+                                            lb_init, asym_reg)
   
   # apply phase parameter to data
   y <- y * exp(1i * par[1])
@@ -1235,14 +1241,15 @@ abfit_full_anal_jac_test <- function(par, y, raw_metab_basis, bl_basis, t,
 # jacobian function for the full spine fitting method
 abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
                                 bl_comps, sum_sq, basis_paras, phi1_optim,
-                                ahat_calc_method, freq_reg, lb_reg, lb_init) {
+                                ahat_calc_method, freq_reg, lb_reg, lb_init,
+                                asym_reg) {
   
   # calculate the first 4 paras numerically
   global_paras_jac <- abfit_partial_num_jac(par, y, raw_metab_basis, bl_basis,
                                             t, f, inds, bl_comps, sum_sq,
                                             basis_paras, phi1_optim,
                                             ahat_calc_method, freq_reg, lb_reg,
-                                            lb_init)
+                                            lb_init, asym_reg)
   
   # apply phase parameter to data
   y <- y * exp(1i * par[1])
@@ -1338,10 +1345,12 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   if (!is.null(freq_reg) | !is.null(lb_reg)) {
     if (!is.null(lb_reg))   lb_reg_jac   <- lb_reg
     if (!is.null(freq_reg)) freq_reg_jac <- freq_reg
+    
     if (!is.null(freq_reg)) {
       freq_reg_jac_mat <- matrix(0, ncol = Nbasis, nrow = Nbasis)
       diag(freq_reg_jac_mat) <- freq_reg_jac
     }
+    
     if (!is.null(lb_reg)) {
       lb_reg_jac_mat <- matrix(0, ncol = Nbasis, nrow = Nbasis)
       diag(lb_reg_jac_mat) <- lb_reg_jac
@@ -1364,6 +1373,8 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
                      rbind(freq_jac, freq_reg_jac_mat, zero_jac_mat),
                      rbind(lb_jac,   zero_jac_mat, lb_reg_jac_mat))
   }
+  
+  # ret_mat <- cbind(global_paras_jac, lb_freq_paras_jac)
   
   return(ret_mat)
 }

@@ -49,6 +49,7 @@ abfit_opts(
   freq_reg = NULL,
   freq_reg_naa = NULL,
   lb_reg = NULL,
+  asym_reg = NULL,
   output_all_paras = FALSE,
   output_all_paras_raw = FALSE,
   input_paras_raw = NULL,
@@ -175,6 +176,8 @@ prefit stage of the algorithm.}
 \item{freq_reg_naa}{frequency shift parameter for NAA and NAAG.}
 
 \item{lb_reg}{individual line broadening parameter.}
+
+\item{asym_reg}{lineshape asymmetry parameter.}
 
 \item{output_all_paras}{include more fitting parameters in the fit table,
 e.g. individual shift and damping factors for each basis set element.}
