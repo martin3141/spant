@@ -1359,22 +1359,38 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   }
   
   if (is.null(freq_reg) & is.null(lb_reg)) {
-    ret_mat <- cbind(global_paras_jac, freq_jac, lb_jac)
+    # ret_mat <- cbind(global_paras_jac, freq_jac, lb_jac)
+    
+    lb_freq_paras_jac <- cbind(freq_jac, lb_jac)
   } else if (!is.null(freq_reg) & is.null(lb_reg)) {
-    ret_mat <- cbind(global_paras_jac,
-                     rbind(freq_jac, freq_reg_jac_mat),
-                     rbind(lb_jac,   zero_jac_mat))
+    # ret_mat <- cbind(global_paras_jac,
+    #                  rbind(freq_jac, freq_reg_jac_mat),
+    #                  rbind(lb_jac,   zero_jac_mat))
+    
+    lb_freq_paras_jac <- cbind(rbind(freq_jac, freq_reg_jac_mat),
+                               rbind(lb_jac,   zero_jac_mat))
   } else if (is.null(freq_reg) & !is.null(lb_reg)) {
-    ret_mat <- cbind(global_paras_jac,
-                     rbind(freq_jac, zero_jac_mat),
-                     rbind(lb_jac,   lb_reg_jac_mat))
+    # ret_mat <- cbind(global_paras_jac,
+    #                  rbind(freq_jac, zero_jac_mat),
+    #                  rbind(lb_jac,   lb_reg_jac_mat))
+    
+    lb_freq_paras_jac <- cbind(rbind(freq_jac, zero_jac_mat),
+                               rbind(lb_jac,   lb_reg_jac_mat))
   } else {
-    ret_mat <- cbind(global_paras_jac,
-                     rbind(freq_jac, freq_reg_jac_mat, zero_jac_mat),
-                     rbind(lb_jac,   zero_jac_mat, lb_reg_jac_mat))
+    # ret_mat <- cbind(global_paras_jac,
+    #                  rbind(freq_jac, freq_reg_jac_mat, zero_jac_mat),
+    #                  rbind(lb_jac,   zero_jac_mat, lb_reg_jac_mat))
+    
+    lb_freq_paras_jac <- cbind(rbind(freq_jac, freq_reg_jac_mat, zero_jac_mat),
+                               rbind(lb_jac,   zero_jac_mat, lb_reg_jac_mat))
   }
   
-  # ret_mat <- cbind(global_paras_jac, lb_freq_paras_jac)
+  if (!is.null(asym_reg)) {
+    lb_freq_paras_jac <- rbind(lb_freq_paras_jac,
+                               rep(0, ncol(lb_freq_paras_jac)))
+  }
+  
+  ret_mat <- cbind(global_paras_jac, lb_freq_paras_jac)
   
   return(ret_mat)
 }
