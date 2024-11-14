@@ -17,11 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-<<<<<<< HEAD
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.22.0</span>
-=======
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.23.0</span>
->>>>>>> devel
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.24.0</span>
       </span>
     </div>
 
@@ -96,6 +92,7 @@
 <span>  bl_ed_pppm <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  auto_bl_flex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  bl_comps_pppm <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>  adaptive_bl_comps_pppm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  export_sp_fit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  max_asym <span class="op">=</span> <span class="fl">0.25</span>,</span>
 <span>  max_basis_shift <span class="op">=</span> <span class="fl">0.0078</span>,</span>
@@ -126,16 +123,14 @@
 <span>  freq_reg <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  freq_reg_naa <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lb_reg <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  asym_reg <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_all_paras <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  output_all_paras_raw <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  input_paras_raw <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  optim_lw_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  optim_lw_only_limit <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>  lb_init <span class="op">=</span> <span class="fl">0.001</span>,</span>
-<<<<<<< HEAD
-=======
 <span>  lb_init_approx_fit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
->>>>>>> devel
 <span>  zf_offset <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -201,6 +196,12 @@ ppm).</p></dd>
 
 <dt id="arg-bl-comps-pppm">bl_comps_pppm<a class="anchor" aria-label="anchor" href="#arg-bl-comps-pppm"></a></dt>
 <dd><p>spline basis density (signals per ppm).</p></dd>
+
+
+<dt id="arg-adaptive-bl-comps-pppm">adaptive_bl_comps_pppm<a class="anchor" aria-label="anchor" href="#arg-adaptive-bl-comps-pppm"></a></dt>
+<dd><p>adjust the spline basis density in the detailed
+fit phase, based on the required level of smoothness, to reduce computation
+time.</p></dd>
 
 
 <dt id="arg-export-sp-fit">export_sp_fit<a class="anchor" aria-label="anchor" href="#arg-export-sp-fit"></a></dt>
@@ -342,6 +343,10 @@ prefit stage of the algorithm.</p></dd>
 <dd><p>individual line broadening parameter.</p></dd>
 
 
+<dt id="arg-asym-reg">asym_reg<a class="anchor" aria-label="anchor" href="#arg-asym-reg"></a></dt>
+<dd><p>lineshape asymmetry parameter.</p></dd>
+
+
 <dt id="arg-output-all-paras">output_all_paras<a class="anchor" aria-label="anchor" href="#arg-output-all-paras"></a></dt>
 <dd><p>include more fitting parameters in the fit table,
 e.g. individual shift and damping factors for each basis set element.</p></dd>
@@ -382,12 +387,6 @@ iterative fit.</p></dd>
 zero-fill. Default is NULL and will automatically set this to 50 points when
 the FID distortion flag is set for the mrs_data.</p></dd>
 
-
-<dt>zf_offset</dt>
-<dd><p>offset in number of data points from the end of the FID to
-zero-fill. Default is NULL and will automatically set this to 50 points when
-the FID distortion flag is set for the mrs_data.</p></dd>
-
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -411,11 +410,7 @@ the FID distortion flag is set for the mrs_data.</p></dd>
 </div>
 
 <div class="pkgdown">
-<<<<<<< HEAD
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
-=======
   <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
->>>>>>> devel
 </div>
 
       </footer></div>
