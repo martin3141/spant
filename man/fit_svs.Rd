@@ -18,7 +18,7 @@ fit_svs(
   tr = NULL,
   output_ratio = "tCr",
   ecc = FALSE,
-  abfit_opts = NULL,
+  fit_opts = NULL,
   verbose = FALSE
 )
 }
@@ -59,7 +59,7 @@ outputs. Set as NULL to omit.}
 \item{ecc}{option to perform water reference based eddy current correction,
 defaults to FALSE.}
 
-\item{abfit_opts}{options to pass to ABfit.}
+\item{fit_opts}{options to pass to ABfit.}
 
 \item{verbose}{output potentially useful information.}
 }

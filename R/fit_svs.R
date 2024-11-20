@@ -25,7 +25,7 @@
 #' outputs. Set as NULL to omit.
 #' @param ecc option to perform water reference based eddy current correction,
 #' defaults to FALSE.
-#' @param abfit_opts options to pass to ABfit.
+#' @param fit_opts options to pass to ABfit.
 #' @param verbose output potentially useful information.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
@@ -40,7 +40,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
                     p_vols = NULL, append_basis = NULL, remove_basis = NULL,
                     dfp_corr = FALSE, omit_bad_dynamics = FALSE, te = NULL,
                     tr = NULL, output_ratio = "tCr", ecc = FALSE,
-                    abfit_opts = NULL, verbose = FALSE) {
+                    fit_opts = NULL, verbose = FALSE) {
   
   # TODO
   # Auto sequence detection.
@@ -158,8 +158,10 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     if (verbose) print(basis)
   }
   
+  if (is.null(fit_opts)) fit_opts <- abfit_reg_opts()
+  
   # fitting
-  fit_res <- fit_mrs(metab, basis = basis, opts = abfit_opts)
+  fit_res <- fit_mrs(metab, basis = basis, opts = fit_opts)
     
   phase_offset <- fit_res$res_tab$phase
   shift_offset <- fit_res$res_tab$shift
