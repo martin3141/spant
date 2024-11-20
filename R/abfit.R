@@ -858,6 +858,168 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   list(amps = amps, crlbs = t(crlbs_out), diags = diags, fit = fit_frame)
 }
 
+#' Return a list of options for an ABfit analysis with regularision.
+#' 
+#' @param init_damping initial value of the Gaussian global damping parameter
+#' (Hz). Very poorly shimmed or high field data may benefit from a larger value.
+#' @param maxiters The maximum number of iterations to run for the detailed fit.
+#' @param max_shift_pre The maximum allowable global shift to be applied in the
+#' approximate (pre-fit) phases of analysis (ppm).
+#' @param max_shift_fine The maximum allowable global shift to be applied in the
+#' detailed fit phase of analysis (ppm).
+#' @param max_damping maximum permitted value of the global damping parameter
+#' (Hz).
+#' @param max_phase the maximum absolute permitted value of the global
+#' zero-order phase term (degrees). Note, the prefit_phase_search option is not
+#' constrained by this term.
+#' @param lambda manually set the the baseline smoothness parameter.
+#' @param ppm_left downfield frequency limit for the fitting range (ppm).
+#' @param ppm_right upfield frequency limit for the fitting range (ppm).
+#' @param zp zero pad the data to twice the original length before fitting.
+#' @param bl_ed_pppm manually set the the baseline smoothness parameter (ED per
+#' ppm).
+#' @param auto_bl_flex automatically determine the level of baseline smoothness.
+#' @param bl_comps_pppm spline basis density (signals per ppm).
+#' @param adaptive_bl_comps_pppm adjust the spline basis density in the detailed
+#' fit phase, based on the required level of smoothness, to reduce computation
+#' time.
+#' @param export_sp_fit add the fitted spline functions to the fit result.
+#' @param max_asym maximum allowable value of the asymmetry parameter.
+#' @param max_basis_shift maximum allowable frequency shift for individual basis
+#' signals (ppm).
+#' @param max_basis_damping maximum allowable Lorentzian damping factor for
+#' individual basis signals (Hz).
+#' @param maxiters_pre maximum iterations for the coarse (pre-)fit.
+#' @param algo_pre optimisation method for the coarse (pre-)fit.
+#' @param min_bl_ed_pppm minimum value for the candidate baseline flexibility
+#' analyses (ED per ppm).
+#' @param max_bl_ed_pppm minimum value for the candidate baseline flexibility
+#' analyses (ED per ppm).
+#' @param auto_bl_flex_n number of candidate baseline analyses to perform.
+#' @param pre_fit_bl_ed_pppm level of baseline flexibility to use in the coarse
+#' fitting stage of the algorithm (ED per ppm).
+#' @param remove_lip_mm_prefit remove broad signals in the coarse fitting stage
+#' of the algorithm.
+#' @param pre_align perform a pre-alignment step before coarse fitting.
+#' @param max_pre_align_shift maximum allowable shift in the pre-alignment step
+#' (ppm).
+#' @param pre_align_ref_freqs a vector of prominent spectral frequencies used in
+#' the pre-alignment step (ppm).
+#' @param noise_region spectral region to estimate the noise level (ppm).
+#' @param optimal_smooth_criterion method to determine the optimal smoothness.
+#' @param aic_smoothing_factor modification factor for the AIC calculation.
+#' Larger values result in less flexible baselines.
+#' @param anal_jac use a analytical approximation to the jacobian in the 
+#' detailed fitting stage.
+#' @param pre_fit_ppm_left downfield frequency limit for the fitting range in
+#' the coarse fitting stage of the algorithm (ppm).
+#' @param pre_fit_ppm_right upfield frequency limit for the fitting range in the
+#' coarse fitting stage of the algorithm (ppm).
+#' @param phi1_optim apply and optimise a frequency dependant phase term.
+#' @param phi1_init initial value for the frequency dependant phase term (ms).
+#' @param max_dphi1 maximum allowable change from the initial frequency
+#' dependant phase term (ms).
+#' @param max_basis_shift_broad maximum allowable shift for broad signals in the
+#' basis (ppm). Determined based on their name beginning with Lip or MM. The
+#' default value is set to max_basis_shift.
+#' @param max_basis_damping_broad maximum allowable Lorentzian damping for broad
+#' signals in the basis (Hz). Determined based on their name beginning with Lip
+#' or MM. The default value is set to max_basis_damping.
+#' @param ahat_calc_method method to calculate the metabolite amplitudes. May be
+#' one of: "lh_pnnls" or "ls".
+#' @param prefit_phase_search perform a 1D search for the optimal phase in the
+#' prefit stage of the algorithm.
+#' @param freq_reg frequency shift parameter.
+#' @param freq_reg_naa frequency shift parameter for NAA and NAAG.
+#' @param lb_reg individual line broadening parameter.
+#' @param asym_reg lineshape asymmetry parameter.
+#' @param output_all_paras include more fitting parameters in the fit table,
+#' e.g. individual shift and damping factors for each basis set element.
+#' @param output_all_paras_raw include raw fitting parameters in the fit table.
+#' For advanced diagnostic use only.
+#' @param input_paras_raw input raw fitting parameters. For advanced diagnostic
+#' use only.
+#' @param optim_lw_only optimize the global line-broadening term only.
+#' @param optim_lw_only_limit limits for the line-breading term as a percentage
+#' of the starting value when optim_lw_only is TRUE.
+#' @param lb_init initial Lorentzian line broadening value (in Hz) for the
+#' individual basis signals. Setting to 0 will clash with the minimum allowable
+#' value (eg hard constraint) during the detailed fit.
+#' @param lb_init_approx_fit apply lb_init to the basis during the approximate
+#' iterative fit.
+#' @param zf_offset offset in number of data points from the end of the FID to 
+#' zero-fill. Default is NULL and will automatically set this to 50 points when
+#' the FID distortion flag is set for the mrs_data.
+#' @return full list of options.
+#' @examples
+#' opts <- abfit_reg_opts(ppm_left = 4.2, noise_region = c(-1, -3))
+#' @export
+abfit_reg_opts <- function(init_damping = 5, maxiters = 128,
+                           max_shift_pre = 0.078, max_shift_fine = 0.05,
+                           max_damping = 15, max_phase = 360, lambda = NULL,
+                           ppm_left = 4, ppm_right = 0.2, zp = TRUE,
+                           bl_ed_pppm = 2.0, auto_bl_flex = TRUE,
+                           bl_comps_pppm = 15, adaptive_bl_comps_pppm = TRUE, 
+                           export_sp_fit = FALSE, max_asym = Inf,
+                           max_basis_shift = Inf, max_basis_damping = Inf,
+                           maxiters_pre = 1000,
+                           algo_pre = "NLOPT_LN_NELDERMEAD",
+                           min_bl_ed_pppm = NULL,
+                           max_bl_ed_pppm = 7, auto_bl_flex_n = 20, 
+                           pre_fit_bl_ed_pppm = 1, remove_lip_mm_prefit = FALSE,
+                           pre_align = TRUE, max_pre_align_shift = 0.1,
+                           pre_align_ref_freqs = c(2.01, 3.03, 3.22),
+                           noise_region = c(-0.5, -2.5),
+                           optimal_smooth_criterion = "maic",
+                           aic_smoothing_factor = 5, anal_jac = TRUE,
+                           pre_fit_ppm_left = 4, pre_fit_ppm_right = 1.8,
+                           phi1_optim = FALSE, phi1_init = 0, max_dphi1 = 0.2,
+                           max_basis_shift_broad = NULL,
+                           max_basis_damping_broad = NULL,
+                           ahat_calc_method = "lh_pnnls",
+                           prefit_phase_search = TRUE, freq_reg = 0.004,
+                           freq_reg_naa = NULL, lb_reg = "lcm_compat",
+                           asym_reg = 0.1, output_all_paras = FALSE,
+                           output_all_paras_raw = FALSE, input_paras_raw = NULL,
+                           optim_lw_only = FALSE, optim_lw_only_limit = 20,
+                           lb_init = "lcm_compat", lb_init_approx_fit = FALSE,
+                           zf_offset = NULL) {
+  
+  list(init_damping = init_damping, maxiters = maxiters,
+       max_shift_pre = max_shift_pre, max_shift_fine = max_shift_fine,
+       max_damping = max_damping,
+       max_phase = max_phase, lambda = lambda, ppm_left = ppm_left,
+       ppm_right = ppm_right, zp = zp, bl_ed_pppm = bl_ed_pppm,
+       auto_bl_flex = auto_bl_flex,
+       bl_comps_pppm = bl_comps_pppm,
+       adaptive_bl_comps_pppm = adaptive_bl_comps_pppm,
+       export_sp_fit = export_sp_fit,
+       max_asym = max_asym, max_basis_shift = max_basis_shift, 
+       max_basis_damping = max_basis_damping, maxiters_pre = maxiters_pre,
+       algo_pre = algo_pre, min_bl_ed_pppm = min_bl_ed_pppm,
+       max_bl_ed_pppm = max_bl_ed_pppm, auto_bl_flex_n = auto_bl_flex_n,
+       pre_fit_bl_ed_pppm = pre_fit_bl_ed_pppm,
+       remove_lip_mm_prefit = remove_lip_mm_prefit,
+       pre_align = pre_align,
+       max_pre_align_shift = max_pre_align_shift,
+       pre_align_ref_freqs = pre_align_ref_freqs, noise_region = noise_region,
+       optimal_smooth_criterion = optimal_smooth_criterion,
+       aic_smoothing_factor = aic_smoothing_factor, anal_jac = anal_jac,
+       pre_fit_ppm_left = pre_fit_ppm_left,
+       pre_fit_ppm_right = pre_fit_ppm_right, phi1_optim = phi1_optim,
+       phi1_init = phi1_init, max_dphi1 = max_dphi1,
+       max_basis_shift_broad = max_basis_shift_broad,
+       max_basis_damping_broad = max_basis_damping_broad,
+       ahat_calc_method = ahat_calc_method,
+       prefit_phase_search = prefit_phase_search, freq_reg = freq_reg,
+       freq_reg_naa = freq_reg_naa, lb_reg = lb_reg, asym_reg = asym_reg,
+       output_all_paras = output_all_paras,
+       output_all_paras_raw = output_all_paras_raw,
+       input_paras_raw = input_paras_raw, optim_lw_only = optim_lw_only,
+       optim_lw_only_limit = optim_lw_only_limit, lb_init = lb_init,
+       lb_init_approx_fit = lb_init_approx_fit, zf_offset = zf_offset)
+}
+
 #' Return a list of options for an ABfit analysis.
 #' 
 #' @param init_damping initial value of the Gaussian global damping parameter
@@ -982,6 +1144,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift_pre = 0.078,
                        optim_lw_only = FALSE, optim_lw_only_limit = 20,
                        lb_init = 0.001, lb_init_approx_fit = FALSE,
                        zf_offset = NULL) {
+  
+  # TODO append any missing options from abfit_reg_opts - not needed yet
                          
   list(init_damping = init_damping, maxiters = maxiters,
        max_shift_pre = max_shift_pre, max_shift_fine = max_shift_fine,
