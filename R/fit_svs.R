@@ -63,12 +63,14 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     if (is.null(output_dir)) {
       output_dir <- sub("\\.", "_", basename(metab))
       output_dir <- paste0(output_dir, "_results")
+      output_dir <- file.path(normalizePath(dirname(metab)), output_dir)
     }
     metab <- read_ima_dyn_dir(metab) 
   } else {
     if (is.null(output_dir)) {
       output_dir <- sub("\\.", "_", basename(metab))
       output_dir <- paste0(output_dir, "_results")
+      output_dir <- file.path(normalizePath(dirname(metab)), output_dir)
     }
     metab <- read_mrs(metab)
   }
