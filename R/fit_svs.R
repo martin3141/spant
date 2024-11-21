@@ -274,5 +274,13 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     utils::write.csv(fit_res_molal$res_tab, file_out)
   }
   
+  results <- list(fit_res = fit_res) 
+  
+  rmd_file <- system.file("rmd", "svs_report.Rmd", package = "spant")
+  
+  rmd_out_f <- file.path(tools::file_path_as_absolute(output_dir), "report")
+  
+  rmarkdown::render(rmd_file, params = results, output_file = rmd_out_f)
+  
   return(fit_res)
 }
