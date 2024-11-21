@@ -18,6 +18,11 @@ theme_set(theme_bw())
 plot(params$fit_res)
 ```
 
+# Result table
+```{r}
+print(t(fit_amps(params$fit_res)))
+```
+
 # Provenance
 ```{r, echo = TRUE}
 packageVersion("spant")

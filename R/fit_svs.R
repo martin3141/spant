@@ -276,7 +276,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     utils::write.csv(fit_res_molal$res_tab, file_out)
   }
   
-  results <- list(fit_res = fit_res, argg = argg) 
+  results <- list(fit_res = fit_res_rat, argg = argg) 
   
   rmd_file <- system.file("rmd", "svs_report.Rmd", package = "spant")
   
