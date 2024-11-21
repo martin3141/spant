@@ -3,6 +3,7 @@ title: "spant SVS analysis results"
 output: html_document
 params:
   fit_res: ""
+  argg: ""
 ---
 
 ```{r setup, include=FALSE}
@@ -13,6 +14,13 @@ theme_set(theme_bw())
 ```
 
 # Fit plot
-```{r, fig.width=10}
+```{r, fig.width=7, fig.height=6}
 plot(params$fit_res)
+```
+
+# Provenance
+```{r, echo = TRUE}
+packageVersion("spant")
+Sys.time()
+print(argg)
 ```

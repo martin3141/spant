@@ -42,6 +42,8 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
                     tr = NULL, output_ratio = "tCr", ecc = FALSE,
                     fit_opts = NULL, verbose = FALSE) {
   
+  argg <- c(as.list(environment()))
+  
   # TODO
   # Auto sequence detection.
   # Realistic PRESS sim for B0 > 2.9T.
@@ -274,7 +276,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     utils::write.csv(fit_res_molal$res_tab, file_out)
   }
   
-  results <- list(fit_res = fit_res) 
+  results <- list(fit_res = fit_res, argg = argg) 
   
   rmd_file <- system.file("rmd", "svs_report.Rmd", package = "spant")
   
