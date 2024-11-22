@@ -26,6 +26,11 @@
 #' @param ecc option to perform water reference based eddy current correction,
 #' defaults to FALSE.
 #' @param fit_opts options to pass to ABfit.
+#' @param w_att water attenuation factor (default = 0.7). Assumes water T2 of
+#' 80ms and a TE = 30 ms. exp(-30ms / 80ms) ~ 0.7.
+#' @param w_conc assumed water concentration (default = 35880). Default value
+#' corresponds to typical white matter. Set to 43300 for gray matter, and 55556 
+#' for phantom measurements.
 #' @param verbose output potentially useful information.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
@@ -40,11 +45,20 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
                     p_vols = NULL, append_basis = NULL, remove_basis = NULL,
                     dfp_corr = FALSE, omit_bad_dynamics = FALSE, te = NULL,
                     tr = NULL, output_ratio = "tCr", ecc = FALSE,
-                    fit_opts = NULL, verbose = FALSE) {
+                    fit_opts = NULL, w_att = 0.7, w_conc = 35880,
+                    verbose = FALSE) {
   
   argg <- c(as.list(environment()))
   
   # TODO
+  # For report
+  # if no WREF
+  #   if output_ratio = NULL first set is unscaled values
+  # if WREF
+  #   if first set is unscaled values
+  
+  
+  # Output molar and molal csv files
   # Auto sequence detection.
   # Realistic PRESS sim for B0 > 2.9T.
   
@@ -232,9 +246,9 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     }
   }
   
-  grDevices::pdf(file.path(output_dir, "fit_plot.pdf"))
-  plot(fit_res)
-  grDevices::dev.off()
+  # grDevices::pdf(file.path(output_dir, "fit_plot.pdf"))
+  # plot(fit_res)
+  # grDevices::dev.off()
   
   if (Ndyns(metab_pre_dfp_corr) > 1) {
     
@@ -275,6 +289,9 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     fit_res_molal <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, te, tr)
     file_out <- file.path(output_dir, "fit_res_molal_conc.csv")
     utils::write.csv(fit_res_molal$res_tab, file_out)
+    fit_res_molar <- scale_amp_molar(fit_res, w_ref, w_att, w_conc)
+    file_out <- file.path(output_dir, "fit_res_molar_conc.csv")
+    utils::write.csv(fit_res_molar$res_tab, file_out)
   }
   
   results <- list(fit_res = fit_res_rat, argg = argg) 
@@ -283,7 +300,8 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   
   rmd_out_f <- file.path(tools::file_path_as_absolute(output_dir), "report")
   
-  rmarkdown::render(rmd_file, params = results, output_file = rmd_out_f)
+  rmarkdown::render(rmd_file, params = results, output_file = rmd_out_f,
+                    quiet = !verbose)
   
-  return(fit_res)
+  # return(fit_res)
 }

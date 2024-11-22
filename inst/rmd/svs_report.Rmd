@@ -18,7 +18,7 @@ theme_set(theme_bw())
 plot(params$fit_res)
 ```
 
-# Result table
+# Results table
 ```{r}
 amps  <- as.numeric(fit_amps(params$fit_res))
 amps  <- format(amps, digits = 3)
