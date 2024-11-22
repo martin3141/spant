@@ -21,11 +21,13 @@ plot(params$fit_res)
 # Result table
 ```{r}
 amps  <- as.numeric(fit_amps(params$fit_res))
+amps  <- format(amps, digits = 3)
 names <- names(fit_amps(params$fit_res))
 tab   <- data.frame(names, amps)
 
 kableExtra::kable_styling(kableExtra::kbl(tab,
-                          col.names = c("Name", "Amp. (/tCr)")),
+                          col.names = c("Name", "Amp. (/tCr)"),
+                          align = c("l", "r")),
                           full_width = FALSE,
                           position = "left",
                           bootstrap_options = c("striped", "hover",
