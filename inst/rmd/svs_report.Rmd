@@ -20,7 +20,16 @@ plot(params$fit_res)
 
 # Result table
 ```{r}
-print(t(fit_amps(params$fit_res)))
+amps  <- as.numeric(fit_amps(params$fit_res))
+names <- names(fit_amps(params$fit_res))
+tab   <- data.frame(names, amps)
+
+kableExtra::kable_styling(kableExtra::kbl(tab,
+                          col.names = c("Name", "Amp. (/tCr)")),
+                          full_width = FALSE,
+                          position = "left",
+                          bootstrap_options = c("striped", "hover",
+                                                "condensed"))
 ```
 
 # Provenance

@@ -46,6 +46,7 @@ Suggests:
     ggplot2,
     miniUI,
     knitr,
+    kableExtra,
     rmarkdown,
     testthat,
     ragg,
