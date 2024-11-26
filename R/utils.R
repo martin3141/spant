@@ -812,6 +812,8 @@ sv_res_table <- function(fit_res, format_out = FALSE) {
                          row.names = names)
     df_out <- format(df_out, digits = 3)
     df_out$sds_perc <- round(sds_perc)
+    df_out$sds_perc[sds_perc > 999] <- "999"
+    df_out$sds_perc <- paste0(df_out$sds_perc, "%")
     df_out$CI95 <- paste0("[", gsub(" ", "", df_out$CI95_LB), ", ",
                           gsub(" ", "", df_out$CI95_UB), "]")
   } else {
