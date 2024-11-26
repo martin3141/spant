@@ -786,3 +786,38 @@ mean_vec_blocks <- function(x, block_size) {
   
   return(x_out / block_size)
 }
+
+#' Output a table of fit amplitudes and error estimates for a single-voxel fit.
+#' @param fit_res input vector.
+#' @param format_out reduce the accuracy of values to aid table formatting.
+#' @return data.frame of values.
+#' @export 
+sv_res_table <- function(fit_res, format_out = FALSE) {
+  basis_n          <- length(fit_res$basis$names)
+  first_sig        <- names(fit_res$res_tab)[6]
+  first_sig_sd     <- paste0(first_sig, ".sd")
+  first_sig_sd_idx <- which(names(fit_res$res_tab) == first_sig_sd)
+  amp_indx <- 6:(first_sig_sd_idx - 1)
+  amps     <- as.numeric(fit_res$res_tab[1, amp_indx])
+  names    <- colnames(fit_res$res_tab[1, amp_indx])
+  sds      <- as.numeric(fit_res$res_tab[1, amp_indx + 
+                                           amp_indx[length(amp_indx)] - 5])
+  sds_perc <- sds / amps * 100
+  CI95_UB <- amps + sds * 1.96
+  CI95_LB <- amps - sds * 1.96
+  CI95_LB[CI95_LB < 0] <- 0
+  
+  if (format_out) {
+    df_out <- data.frame(amps, sds, sds_perc, CI95_LB, CI95_UB,
+                         row.names = names)
+    df_out <- format(df_out, digits = 3)
+    df_out$sds_perc <- round(sds_perc)
+    df_out$CI95 <- paste0("[", gsub(" ", "", df_out$CI95_LB), ", ",
+                          gsub(" ", "", df_out$CI95_UB), "]")
+  } else {
+    df_out <- data.frame(amps, sds, sds_perc, CI95_LB, CI95_UB,
+                         row.names = names)
+  }
+  
+  return(df_out)
+}
