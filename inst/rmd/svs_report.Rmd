@@ -20,14 +20,18 @@ plot(params$fit_res)
 
 # Results table
 ```{r}
+
+res_tab <- sv_res_table(params$fit_res, format_out = TRUE)
+
 amps  <- as.numeric(fit_amps(params$fit_res))
 amps  <- format(amps, digits = 3)
 names <- names(fit_amps(params$fit_res))
 tab   <- data.frame(names, amps)
 
-kableExtra::kable_styling(kableExtra::kbl(tab,
-                          col.names = c("Name", "Amp. (/tCr)"),
-                          align = c("l", "r")),
+col_names <- c("amps", "CI95", "sds_perc")
+kableExtra::kable_styling(kableExtra::kbl(res_tab[col_names],
+                          col.names = c("Name", "Amp. (/tCr)", "95% CI (/tCr)", "SD %"),
+                          align = c("r", "r", "r")),
                           full_width = FALSE,
                           position = "left",
                           bootstrap_options = c("striped", "hover",
