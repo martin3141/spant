@@ -28,22 +28,35 @@ plot(params$fit_res)
 
 ## Results table
 ```{r}
-
-res_tab <- sv_res_table(params$fit_res, format_out = TRUE)
-
-amps  <- as.numeric(fit_amps(params$fit_res))
-amps  <- format(amps, digits = 3)
-names <- names(fit_amps(params$fit_res))
-tab   <- data.frame(names, amps)
-
+ratio_str   <- params$argg$output_ratio
 if (params$w_ref_available) {
-  col_names <- c("amps", "CI95", "sds_perc")
+  col_names <- c("amps", "CI95")
+  res_tab   <- sv_res_table(params$res_tab_molal, format_out = TRUE)
   out_tab   <- res_tab[col_names]
-  col.names <- c("Name", "Amp. (/tCr)", "95% CI (/tCr)", "SD %")
+  col.names <- c("Name", "Amp. (mmol/kg)", "95% CI (mmol/kg)")
+  res_tab   <- sv_res_table(params$res_tab_molar, format_out = TRUE)
+  out_tab   <- cbind(out_tab, res_tab[col_names])
+  col.names <- c(col.names, "Amp. (mmol/L)", "95% CI (mmol/L)")
+  if (!is.null(ratio_str)) {
+    res_tab   <- sv_res_table(params$res_tab_ratio, format_out = TRUE)
+    out_tab   <- cbind(out_tab, res_tab[col_names])
+    col.names <- c(col.names, paste0("Amp. (/", ratio_str, ")"),
+                              paste0("95% CI (/", ratio_str, ")"))
+  }
+  out_tab   <- cbind(out_tab, res_tab["sds_perc"])
+  col.names <- c(col.names, "SD %")
 } else {
   col_names <- c("amps", "CI95", "sds_perc")
-  out_tab   <- res_tab[col_names]
-  col.names <- c("Name", "Amp. (/tCr)", "95% CI (/tCr)", "SD %")
+  if (is.null(ratio_str)) {
+    res_tab   <- sv_res_table(params$res_tab_unscaled, format_out = TRUE)
+    out_tab   <- res_tab[col_names]
+    col.names <- c("Name", "Amp. (a.u.)", "95% CI (a.u.)", "SD %")
+  } else {
+    res_tab   <- sv_res_table(params$res_tab_ratio, format_out = TRUE)
+    out_tab   <- res_tab[col_names]
+    col.names <- c("Name", paste0("Amp. (/", ratio_str, ")"),
+                   paste0("95% CI (/", ratio_str, ")"), "SD %")
+  }
 }
 
 boot_opts <- c("striped", "hover", "condensed")
@@ -53,9 +66,26 @@ kableExtra::kable_styling(kableExtra::kbl(out_tab, col.names = col.names,
                           position = "left", bootstrap_options = boot_opts)
 ```
 
+## Spectrogram
+
+Single shot data is unavailable.
+
 ## Diagnostics table
 ```{r}
-print("TODO")
+name  <- c("Spectral SNR", "tNAA linewidth (ppm)", "tCho linewidth (ppm)",
+           "tCr linewidth (ppm)", "Fit quality number (FQN)",
+           "Baseline effective d.f. per ppm", "Lineshape asymmetry",
+           "Spectral signal to residual ratio")
+
+value <- c(params$fit_res$res_tab$SNR, params$fit_res$res_tab$tNAA_lw,
+           params$fit_res$res_tab$tCho_lw, params$fit_res$res_tab$tCr_lw,
+           params$fit_res$res_tab$FQN, params$fit_res$res_tab$bl_ed_pppm,
+           params$fit_res$res_tab$asym, params$fit_res$res_tab$SRR)
+
+diag_tab <- data.frame(name, value)
+kableExtra::kable_styling(kableExtra::kbl(diag_tab, col.names = NULL),
+                          full_width = FALSE, position = "left",
+                          bootstrap_options = boot_opts)
 ```
 
 ## Fit stackplot

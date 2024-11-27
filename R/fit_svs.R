@@ -51,15 +51,9 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   argg <- c(as.list(environment()))
   
   # TODO
-  # For report
-  # if no WREF
-  #   if output_ratio = NULL first set is unscaled values
-  # if WREF
-  #   if first set is unscaled values
-  
-  
-  # Output molar and molal csv files
-  # Auto sequence detection.
+  # Add spectrograms to output report.
+  # Get confirmation from Paul about LCModel mM definition.
+  # Auto sequence detection and options to specify sequence and data format.
   # Realistic PRESS sim for B0 > 2.9T.
   
   if (!is.null(basis) & !is.null(append_basis)) {
@@ -137,8 +131,8 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   
   # combine coils if needed
   if (Ncoils(metab) > 1) {
-    coil_comb_res <- comb_coils_svs_gls(metab, w_ref)
-    if (is.null(w_ref)) {
+    coil_comb_res <- comb_coils_svs_gls(metab, w_ref) # may not want to use
+    if (is.null(w_ref)) {                             # w_ref in some cases?
       metab <- coil_comb_res
     } else {
       metab <- coil_comb_res$metab

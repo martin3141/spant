@@ -140,6 +140,62 @@ scale_amp_molal <- function(fit_result, ref_data, te, tr, water_t1, water_t2,
   
   return(fit_result)
 }
+
+#' Apply water reference scaling to a fitting results object to yield metabolite 
+#' quantities in units of "mmol per Kg wet weight".
+#' 
+#' See the LCModel manual (section 10.2) on water-scaling for details on the
+#' assumptions and relevant references. Use this type of concentration scaling
+#' to compare fit results with LCModel and TARQUIN defaults. Otherwise
+#' scale_amp_molal_pvc is generally the preferred method. Note, the LCModel 
+#' manual (section 1.3) states: 
+#' 
+#' "Concentrations should be labelled 'mmol per Kg wet weight'. We use the
+#' shorter (incorrect) abbreviation mM. The actual mM is the mmol per Kg wet
+#' weight multiplied by the specific gravity of the tissue, typically 1.04 in 
+#' brain."
+#' 
+#' @param fit_result a result object generated from fitting.
+#' @param ref_data water reference MRS data object.
+#' @param w_att water attenuation factor (default = 0.7). Assumes water T2 of
+#' 80ms and a TE = 30 ms. exp(-30ms / 80ms) ~ 0.7.
+#' @param w_conc assumed water concentration (default = 35880). Default value
+#' corresponds to typical white matter. Set to 43300 for gray matter, and 55556 
+#' for phantom measurements.
+#' @param ... additional arguments to get_td_amp function.
+#' @return a \code{fit_result} object with a rescaled results table.
+#' @export
+scale_amp_molal_lcm <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880,
+                                ...) {
+  
+  # check if res_tab_unscaled exists, and if not create it
+  if (is.null(fit_result$res_tab_unscaled)) {
+    fit_result$res_tab_unscaled <- fit_result$res_tab
+  } else {
+    fit_result$res_tab <- fit_result$res_tab_unscaled
+  }
+  
+  w_amp <- as.numeric(get_td_amp(ref_data, ...))
+  
+  # if there is only one water ref amp, extend if needed, eg for fMRS
+  if ((length(w_amp) == 1) & (nrow(fit_result$res_tab) > 1)) {
+    w_amp <- rep(w_amp, nrow(fit_result$res_tab)) 
+  }
+  
+  if (length(w_amp) != nrow(fit_result$res_tab)) {
+    stop("Mismatch between fit result and reference data.")
+  }
+  
+  fit_result$res_tab$w_amp <- w_amp
+  
+  amp_cols <- fit_result$amp_cols
+  ws_cols <- 6:(5 + amp_cols * 2)
+  
+  fit_result$res_tab[, ws_cols] <- (fit_result$res_tab[, ws_cols] * w_att *
+                                    w_conc / w_amp)
+    
+  fit_result
+}
   
 #' Apply water reference scaling to a fitting results object to yield metabolite 
 #' quantities in millimolar (mM) units (mol / Litre of tissue).
@@ -165,6 +221,8 @@ scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880,
   # if (!identical(dim(fit_result$data$data)[2:6], dim(ref_data$data)[2:6])) {
   #   stop("Mismatch between fit result and reference data dimensions.")
   # }
+  
+  warning("Function name (scale_amp_molar) is missleading and has been replaced with scale_amp_molal_lcm.")
   
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
