@@ -107,7 +107,21 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   if (identical(class(metab), c("list", "mrs_data"))) {
     x     <- metab
     metab <- x$metab
-    w_ref <- x$ref
+    if (is.null(w_ref)) {
+      if (verbose) cat("Using water reference data within metab file.\n")
+      w_ref <- x$ref
+    } else {
+      if (verbose) cat("Overriding water reference data within metab file.\n")
+    } 
+  }
+  
+  # by this point we know if we have water reference data available
+  if (is.null(w_ref)) {
+    if (verbose) cat("Water reference is not available.\n")
+    w_ref_available = FALSE
+  } else {
+    if (verbose) cat("Water reference data is available.\n")
+    w_ref_available = TRUE
   }
   
   # create the output dir if it doesn't exist
@@ -268,33 +282,46 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   }
   
   # output unscaled results
-  utils::write.csv(fit_res$res_tab, file.path(output_dir,
-                                              "fit_res_unscaled.csv"))
+  res_tab_unscaled <- fit_res$res_tab
+  utils::write.csv(res_tab_unscaled, file.path(output_dir,
+                                               "fit_res_unscaled.csv"))
  
   # output ratio results if requested 
   if (!is.null(output_ratio)) {
     for (output_ratio_element in output_ratio) {
       fit_res_rat <- scale_amp_ratio(fit_res, output_ratio_element)
       
+      res_tab_ratio <- fit_res_rat$res_tab
       file_out <- file.path(output_dir, paste0("fit_res_", output_ratio_element,
                                                "_ratio.csv"))
       
-      utils::write.csv(fit_res_rat$res_tab, file_out)
+      utils::write.csv(res_tab_ratio, file_out)
     }
+  } else {
+    res_tab_ratio <- NULL  
   }
   
   if (!is.null(w_ref)) {
     # assume 100% white matter if not told otherwise
     if (is.null(p_vols)) p_vols <- c(WM = 100, GM = 0, CSF = 0)
     fit_res_molal <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, te, tr)
+    res_tab_molal <- fit_res_molal$res_tab
     file_out <- file.path(output_dir, "fit_res_molal_conc.csv")
-    utils::write.csv(fit_res_molal$res_tab, file_out)
+    utils::write.csv(res_tab_molal, file_out)
     fit_res_molar <- scale_amp_molar(fit_res, w_ref, w_att, w_conc)
+    res_tab_molar <- fit_res_molar$res_tab
     file_out <- file.path(output_dir, "fit_res_molar_conc.csv")
-    utils::write.csv(fit_res_molar$res_tab, file_out)
+    utils::write.csv(res_tab_molar, file_out)
+  } else {
+    res_tab_molar <- NULL 
+    res_tab_molal <- NULL 
   }
   
-  results <- list(fit_res = fit_res_rat, argg = argg) 
+  results <- list(fit_res = fit_res, argg = argg,
+                  w_ref_available = w_ref_available, w_ref = w_ref,
+                  res_tab_unscaled = res_tab_unscaled,
+                  res_tab_ratio = res_tab_ratio, res_tab_molar = res_tab_molar,
+                  res_tab_molal = res_tab_molal) 
   
   rmd_file <- system.file("rmd", "svs_report.Rmd", package = "spant")
   
@@ -303,5 +330,5 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   rmarkdown::render(rmd_file, params = results, output_file = rmd_out_f,
                     quiet = !verbose)
   
-  # return(fit_res)
+  return(fit_res)
 }

@@ -793,7 +793,10 @@ mean_vec_blocks <- function(x, block_size) {
 #' @return data.frame of values.
 #' @export 
 sv_res_table <- function(fit_res, format_out = FALSE) {
-  basis_n          <- length(fit_res$basis$names)
+  
+  # pretend it's a full fit result if only a table is passed in
+  if (is.data.frame(fit_res)) fit_res <- list(res_tab = fit_res)
+  
   first_sig        <- names(fit_res$res_tab)[6]
   first_sig_sd     <- paste0(first_sig, ".sd")
   first_sig_sd_idx <- which(names(fit_res$res_tab) == first_sig_sd)

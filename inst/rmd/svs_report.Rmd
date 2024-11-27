@@ -4,6 +4,12 @@ output: html_document
 params:
   fit_res: ""
   argg: ""
+  w_ref_available: ""
+  w_ref: ""
+  res_tab_unscaled: ""
+  res_tab_ratio: ""    
+  res_tab_molar: ""
+  res_tab_molal: ""
 ---
 
 ```{r setup, include=FALSE}
@@ -13,12 +19,14 @@ knitr::opts_chunk$set(echo = FALSE)
 theme_set(theme_bw())
 ```
 
-# Fit plot
+# {.tabset}
+
+## Fit plot
 ```{r, fig.width=7, fig.height=6}
 plot(params$fit_res)
 ```
 
-# Results table
+## Results table
 ```{r}
 
 res_tab <- sv_res_table(params$fit_res, format_out = TRUE)
@@ -28,19 +36,53 @@ amps  <- format(amps, digits = 3)
 names <- names(fit_amps(params$fit_res))
 tab   <- data.frame(names, amps)
 
-col_names <- c("amps", "CI95", "sds_perc")
-kableExtra::kable_styling(kableExtra::kbl(res_tab[col_names],
-                          col.names = c("Name", "Amp. (/tCr)", "95% CI (/tCr)", "SD %"),
-                          align = c("r", "r", "r")),
-                          full_width = FALSE,
-                          position = "left",
-                          bootstrap_options = c("striped", "hover",
-                                                "condensed"))
+if (params$w_ref_available) {
+  col_names <- c("amps", "CI95", "sds_perc")
+  out_tab   <- res_tab[col_names]
+  col.names <- c("Name", "Amp. (/tCr)", "95% CI (/tCr)", "SD %")
+} else {
+  col_names <- c("amps", "CI95", "sds_perc")
+  out_tab   <- res_tab[col_names]
+  col.names <- c("Name", "Amp. (/tCr)", "95% CI (/tCr)", "SD %")
+}
+
+boot_opts <- c("striped", "hover", "condensed")
+
+kableExtra::kable_styling(kableExtra::kbl(out_tab, col.names = col.names,
+                          align = rep("r", 10)), full_width = FALSE,
+                          position = "left", bootstrap_options = boot_opts)
 ```
 
-# Provenance
+## Diagnostics table
+```{r}
+print("TODO")
+```
+
+## Fit stackplot
+```{r, fig.width=7, fig.height=8}
+stackplot(params$fit_res, y_offset = 3, combine_lipmm = TRUE, labels = TRUE)
+```
+
+## Provenance
 ```{r, echo = TRUE}
 packageVersion("spant")
 Sys.time()
+print(params$fit_res$data)
+print(params$w_ref)
 print(argg)
 ```
+
+# {-}
+
+**Please cite the following if you found ABfit and spant useful in your research:**
+
+Wilson M. Adaptive baseline fitting for 1H MR spectroscopy analysis. Magn Reson 
+Med. 2021 Jan;85(1):13-29. https://doi.org/10.1002/mrm.28385
+
+Wilson, M. spant: An R package for magnetic resonance spectroscopy 
+analysis. Journal of Open Source Software. 2021 6(67), 3646. 
+https://doi.org/10.21105/joss.03646
+
+Wilson M. Robust retrospective frequency and phase correction for single-voxel 
+MR spectroscopy. Magn Reson Med. 2019 May;81(5):2878-2886. 
+https://doi.org/10.1002/mrm.27605
