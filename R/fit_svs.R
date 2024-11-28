@@ -43,7 +43,7 @@
 #' @export
 fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
                     p_vols = NULL, append_basis = NULL, remove_basis = NULL,
-                    dfp_corr = FALSE, omit_bad_dynamics = FALSE, te = NULL,
+                    dfp_corr = TRUE, omit_bad_dynamics = FALSE, te = NULL,
                     tr = NULL, output_ratio = "tCr", ecc = FALSE,
                     fit_opts = NULL, w_att = 0.7, w_conc = 35880,
                     verbose = FALSE) {
@@ -52,7 +52,6 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   
   # TODO
   # Add spectrograms to output report.
-  # Get confirmation from Paul about LCModel mM definition.
   # Auto sequence detection and options to specify sequence and data format.
   # Realistic PRESS sim for B0 > 2.9T.
   
@@ -304,18 +303,46 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     utils::write.csv(res_tab_molal, file_out)
     fit_res_molar <- scale_amp_molar(fit_res, w_ref, w_att, w_conc)
     res_tab_molar <- fit_res_molar$res_tab
-    file_out <- file.path(output_dir, "fit_res_molar_conc.csv")
+    file_out <- file.path(output_dir, "fit_res_pseudo_molar_conc.csv")
     utils::write.csv(res_tab_molar, file_out)
   } else {
     res_tab_molar <- NULL 
     res_tab_molal <- NULL 
   }
   
+  if (Ndyns(metab_pre_dfp_corr) > 1) {
+    # phase according to the fit results
+    dyn_data_uncorr <- phase(metab_pre_dfp_corr, fit_res$res_tab$phase)
+    # correct chem. shift scale according to the fit results
+    dyn_data_uncorr <- shift(dyn_data_uncorr, fit_res$res_tab$shift,
+                             units = "ppm")
+    # add 2 Hz LB
+    dyn_data_uncorr <- lb(dyn_data_uncorr, 2)
+    
+    if (dfp_corr) {
+      # phase according to the fit results
+      dyn_data_corr <- phase(metab_post_dfp_corr, fit_res$res_tab$phase)
+      # correct chem. shift scale according to the fit results
+      dyn_data_corr <- shift(dyn_data_corr, fit_res$res_tab$shift,
+                               units = "ppm")
+      # add 2 Hz LB
+      dyn_data_corr <- lb(dyn_data_corr, 2)
+    } else {
+      dyn_data_corr <- NULL
+    }
+    
+  } else {
+    dyn_data_uncorr <- NULL
+    dyn_data_corr   <- NULL
+  }
+  
   results <- list(fit_res = fit_res, argg = argg,
                   w_ref_available = w_ref_available, w_ref = w_ref,
                   res_tab_unscaled = res_tab_unscaled,
                   res_tab_ratio = res_tab_ratio, res_tab_molar = res_tab_molar,
-                  res_tab_molal = res_tab_molal) 
+                  res_tab_molal = res_tab_molal,
+                  dyn_data_uncorr = dyn_data_uncorr,
+                  dyn_data_corr = dyn_data_corr) 
   
   rmd_file <- system.file("rmd", "svs_report.Rmd", package = "spant")
   
