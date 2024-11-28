@@ -12,7 +12,7 @@ fit_svs(
   p_vols = NULL,
   append_basis = NULL,
   remove_basis = NULL,
-  dfp_corr = FALSE,
+  dfp_corr = TRUE,
   omit_bad_dynamics = FALSE,
   te = NULL,
   tr = NULL,

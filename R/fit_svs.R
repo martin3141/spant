@@ -51,7 +51,6 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   argg <- c(as.list(environment()))
   
   # TODO
-  # Add spectrograms to output report.
   # Auto sequence detection and options to specify sequence and data format.
   # Realistic PRESS sim for B0 > 2.9T.
   
@@ -257,22 +256,22 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   # plot(fit_res)
   # grDevices::dev.off()
   
-  if (Ndyns(metab_pre_dfp_corr) > 1) {
-    
-    grDevices::png(file.path(output_dir, "drift_plot.png"), res = 2 * 72,
-                   height = 2 * 480, width = 2 * 480)
-    graphics::image(lb(phase(metab_pre_dfp_corr, phase_offset), 2),
-                    xlim = c(4, 0.5))
-    grDevices::dev.off()
-    
-    if (dfp_corr) {
-      grDevices::png(file.path(output_dir, "drift_plot_dfp_corr.png"),
-                     res = 2 * 72, height = 2 * 480, width = 2 * 480)
-      graphics::image(lb(phase(metab_post_dfp_corr, phase_offset), 2),
-                      xlim = c(4, 0.5))
-      grDevices::dev.off()
-    }
-  }
+  # if (Ndyns(metab_pre_dfp_corr) > 1) {
+  #   
+  #   grDevices::png(file.path(output_dir, "drift_plot.png"), res = 2 * 72,
+  #                  height = 2 * 480, width = 2 * 480)
+  #   graphics::image(lb(phase(metab_pre_dfp_corr, phase_offset), 2),
+  #                   xlim = c(4, 0.5))
+  #   grDevices::dev.off()
+  #   
+  #   if (dfp_corr) {
+  #     grDevices::png(file.path(output_dir, "drift_plot_dfp_corr.png"),
+  #                    res = 2 * 72, height = 2 * 480, width = 2 * 480)
+  #     graphics::image(lb(phase(metab_post_dfp_corr, phase_offset), 2),
+  #                     xlim = c(4, 0.5))
+  #     grDevices::dev.off()
+  #   }
+  # }
   
   # output unscaled results
   res_tab_unscaled <- fit_res$res_tab
