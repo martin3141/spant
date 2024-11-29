@@ -5,7 +5,7 @@
 #' @param metab path or mrs_data object containing MRS metabolite data.
 #' @param w_ref path or mrs_data object containing MRS water reference data.
 #' @param output_dir directory path to output fitting results.
-#' @param basis precompiled basis set object to use for analysis.
+#' @param external_basis precompiled basis set object to use for analysis.
 #' @param p_vols a numeric vector of partial volumes expressed as percentages.
 #' Defaults to 100% white matter. A voxel containing 100% gray matter tissue
 #' would use : p_vols = c(WM = 0, GM = 100, CSF = 0).
@@ -57,22 +57,38 @@
 #' fit_result <- svs_1h_brain_analysis(metab, w_ref, "fit_res_dir")
 #' }
 #' @export
-fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
-                    p_vols = NULL, format = NULL, pul_seq = NULL, TE = NULL,
-                    TR = NULL, TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
-                    append_basis = NULL, remove_basis = NULL, dfp_corr = TRUE, 
-                    output_ratio = "tCr", ecc = FALSE, fit_opts = NULL,
-                    legacy_ws = FALSE, w_att = 0.7, w_conc = 35880,
-                    verbose = FALSE) {
+fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
+                    external_basis = NULL, p_vols = NULL, format = NULL,
+                    pul_seq = NULL, TE = NULL, TR = NULL, TE1 = NULL,
+                    TE2 = NULL, TE3 = NULL, TM = NULL, append_basis = NULL,
+                    remove_basis = NULL, dfp_corr = TRUE, output_ratio = "tCr",
+                    ecc = FALSE, fit_opts = NULL, legacy_ws = FALSE,
+                    w_att = 0.7, w_conc = 35880, verbose = FALSE) {
+  
+  # TODO
+  #
+  # bug fix for when NAA and NAAG, Cr and PCr etc are not in the basis
+  #
+  # document all the things
+  #
+  # validate 3T PRESS simulation
+  #
+  # document basic phantom analysis
+  #
+  # support using a directory of NIfTI MRS files or LCM basis file to
+  # external_basis argument
+  #
+  # add append_external_basis option for using a directory of NIfTI MRS files or
+  # LCM basis file to basis - handy for adding custom MM basis files etc
   
   argg <- c(as.list(environment()))
   
-  if (!is.null(basis) & !is.null(append_basis)) {
-    stop("basis and append_basis options cannot both be set. Use one or the other.")
+  if (!is.null(external_basis) & !is.null(append_basis)) {
+    stop("external_basis and append_basis options cannot both be set. Use one or the other.")
   }
   
-  if (!is.null(basis) & !is.null(remove_basis)) {
-    stop("basis and remove_basis options cannot both be set. Use one or the other.")
+  if (!is.null(external_basis) & !is.null(remove_basis)) {
+    stop("external_basis and remove_basis options cannot both be set. Use one or the other.")
   }
   
   # read the data file if not already an mrs_data object
@@ -159,7 +175,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   if (ecc & (!is.null(w_ref))) metab <- ecc(metab, w_ref)
   
   # simulate a basis if needed
-  if (is.null(basis)) {
+  if (is.null(external_basis)) {
     
     if (is.null(TE)) stop("Could not determine the sequence echo time. Please provide the TE argument.")
     
@@ -274,6 +290,8 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     }
      
     if (verbose) print(basis)
+  } else {
+    basis <- external_basis
   }
   
   if (is.null(fit_opts)) fit_opts <- abfit_reg_opts()
