@@ -26,8 +26,11 @@
 #' @param TM STEAM mixing time parameter in seconds.
 #' @param append_basis names of extra signals to add to the default basis. Eg 
 #' append_basis = c("peth", "cit"). Cannot be used with precompiled basis sets.
-#' @param remove_basis names of signals to remove from the basis. Cannot be used
-#' with precompiled basis sets.
+#' @param remove_basis grep expression to match names of signals to remove from
+#' the basis. For example: use "*" to remove all signals, "^mm|^lip" to remove
+#' all macromolecular and lipid signals, "^lac" to remove lactate. This operation
+#' is performed before signals are added with append_basis. Cannot be used with
+#' precompiled basis sets.
 #' @param dfp_corr perform dynamic frequency and phase correction using the RATS
 #' method.
 #' @param output_ratio optional string to specify a metabolite ratio to output.
@@ -166,15 +169,19 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
                         "lip13b", "lip20", "mm09", "mm12", "mm14", "mm17",
                         "mm20", "naa", "naag", "pch", "pcr", "sins", "tau")
     
+    # option to remove signals
+    if (!is.null(remove_basis)) {
+        inds <- grep(remove_basis, mol_list_chars)
+        if (length(inds) == 0) stop("No signals matching remove_basis found.")
+        mol_list_chars <- mol_list_chars[-inds]
+    }
+    
     # option to append signals
     if (!is.null(append_basis)) mol_list_chars <- c(mol_list_chars,
                                                     append_basis)
     
-    # option to remove signals
-    if (!is.null(remove_basis)) {
-      inds <- which(mol_list_chars == remove_basis)
-      mol_list_chars <- mol_list_chars[-inds]
-    }
+    # probably set remove_basis to * and forgot to use append_basis
+    if (is.null(mol_list_chars)) stop("No basis signals named for simulation.")
     
     # get the parameters
     mol_list <- get_mol_paras(mol_list_chars, ft = metab$ft)

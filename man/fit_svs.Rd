@@ -69,8 +69,11 @@ this will be guessed from the metab data file.}
 \item{append_basis}{names of extra signals to add to the default basis. Eg
 append_basis = c("peth", "cit"). Cannot be used with precompiled basis sets.}
 
-\item{remove_basis}{names of signals to remove from the basis. Cannot be used
-with precompiled basis sets.}
+\item{remove_basis}{grep expression to match names of signals to remove from
+the basis. For example: use "*" to remove all signals, "^mm|^lip" to remove
+all macromolecular and lipid signals, "^lac" to remove lactate. This operation
+is performed before signals are added with append_basis. Cannot be used with
+precompiled basis sets.}
 
 \item{dfp_corr}{perform dynamic frequency and phase correction using the RATS
 method.}

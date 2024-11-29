@@ -275,12 +275,14 @@ stackplot.fit_result <- function(x, xlim = NULL, y_offset = 0, dyn = 1,
   if (combine_lipmm) {
     # find lip/mm indices
     indices <- c(grep("^Lip",colnames(x)), grep("^MM",colnames(x)))
-    new_col <- rowSums(x[indices])
-    x <- x[, -indices]
-    x$LipMM <- new_col
-    cols <- length(colnames(x))
-    reorder <- c(1:4, cols, 5:(cols-1))
-    x <- x[,reorder]
+    if (length(indices) > 0) {
+      new_col <- rowSums(x[indices])
+      x <- x[, -indices]
+      x$LipMM <- new_col
+      cols <- length(colnames(x))
+      reorder <- c(1:4, cols, 5:(cols-1))
+      x <- x[,reorder]
+    }
   }
   
   if (combine_metab) {
