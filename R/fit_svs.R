@@ -15,7 +15,6 @@
 #' with precompiled basis sets.
 #' @param dfp_corr perform dynamic frequency and phase correction using the RATS
 #' method.
-#' @param omit_bad_dynamics detect and remove bad dynamics.
 #' @param te metabolite mrs data echo time in seconds. If not supplied this will
 #' be guessed from the metab data file.
 #' @param tr metabolite mrs data repetition time in seconds. If not supplied
@@ -26,9 +25,9 @@
 #' @param ecc option to perform water reference based eddy current correction,
 #' defaults to FALSE.
 #' @param fit_opts options to pass to ABfit.
-#' @param legacy_scaling perform and output legacy water scaling values
-#' compatible with default LCModel and TARQUIN behaviour. See w_att and w_conc
-#' arguments. Deafult is FALSE.
+#' @param legacy_ws perform and output legacy water scaling compatible with
+#' default LCModel and TARQUIN behaviour. See w_att and w_conc arguments to 
+#' change the default assumptions. Default value is FALSE.
 #' @param w_att water attenuation factor (default = 0.7) for legacy water 
 #' scaling. Assumes water T2 of 80ms and a TE = 30 ms. exp(-30ms / 80ms) ~ 0.7.
 #' @param w_conc assumed water concentration (default = 35880) for legacy water 
@@ -46,10 +45,9 @@
 #' @export
 fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
                     p_vols = NULL, append_basis = NULL, remove_basis = NULL,
-                    dfp_corr = TRUE, omit_bad_dynamics = FALSE, te = NULL,
-                    tr = NULL, output_ratio = "tCr", ecc = FALSE,
-                    fit_opts = NULL, legacy_scaling = FALSE, w_att = 0.7,
-                    w_conc = 35880, verbose = FALSE) {
+                    dfp_corr = TRUE, te = NULL, tr = NULL, output_ratio = "tCr",
+                    ecc = FALSE, fit_opts = NULL, legacy_ws = FALSE,
+                    w_att = 0.7, w_conc = 35880, verbose = FALSE) {
   
   argg <- c(as.list(environment()))
   
@@ -195,6 +193,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   shift_offset <- fit_res$res_tab$shift
   
   # check for poor dynamics
+  omit_bad_dynamics <- FALSE # not an option yet
   if (omit_bad_dynamics & (Ndyns(metab_pre_dfp_corr) > 1)) {
     if (dfp_corr) {
       dyn_data <- shift(phase(metab_post_dfp_corr, phase_offset), shift_offset)
@@ -303,7 +302,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     res_tab_molal <- fit_res_molal$res_tab
     file_out <- file.path(output_dir, "fit_res_molal_conc.csv")
     utils::write.csv(res_tab_molal, file_out)
-    if (legacy_scaling) {
+    if (legacy_ws) {
       fit_res_legacy <- scale_amp_legacy(fit_res, w_ref, w_att, w_conc)
       res_tab_legacy <- fit_res_legacy$res_tab
       file_out <- file.path(output_dir, "fit_res_legacy_conc.csv")

@@ -13,13 +13,12 @@ fit_svs(
   append_basis = NULL,
   remove_basis = NULL,
   dfp_corr = TRUE,
-  omit_bad_dynamics = FALSE,
   te = NULL,
   tr = NULL,
   output_ratio = "tCr",
   ecc = FALSE,
   fit_opts = NULL,
-  legacy_scaling = FALSE,
+  legacy_ws = FALSE,
   w_att = 0.7,
   w_conc = 35880,
   verbose = FALSE
@@ -47,8 +46,6 @@ with precompiled basis sets.}
 \item{dfp_corr}{perform dynamic frequency and phase correction using the RATS
 method.}
 
-\item{omit_bad_dynamics}{detect and remove bad dynamics.}
-
 \item{te}{metabolite mrs data echo time in seconds. If not supplied this will
 be guessed from the metab data file.}
 
@@ -64,9 +61,9 @@ defaults to FALSE.}
 
 \item{fit_opts}{options to pass to ABfit.}
 
-\item{legacy_scaling}{perform and output legacy water scaling values
-compatible with default LCModel and TARQUIN behaviour. See w_att and w_conc
-arguments. Deafult is FALSE.}
+\item{legacy_ws}{perform and output legacy water scaling compatible with
+default LCModel and TARQUIN behaviour. See w_att and w_conc arguments to
+change the default assumptions. Default value is FALSE.}
 
 \item{w_att}{water attenuation factor (default = 0.7) for legacy water
 scaling. Assumes water T2 of 80ms and a TE = 30 ms. exp(-30ms / 80ms) ~ 0.7.}
