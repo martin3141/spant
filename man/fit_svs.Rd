@@ -10,11 +10,17 @@ fit_svs(
   output_dir = NULL,
   basis = NULL,
   p_vols = NULL,
+  format = NULL,
+  pul_seq = NULL,
+  TE1 = NULL,
+  TE2 = NULL,
+  TE3 = NULL,
+  TM = NULL,
   append_basis = NULL,
   remove_basis = NULL,
   dfp_corr = TRUE,
-  te = NULL,
-  tr = NULL,
+  TE = NULL,
+  TR = NULL,
   output_ratio = "tCr",
   ecc = FALSE,
   fit_opts = NULL,
@@ -37,6 +43,20 @@ fit_svs(
 Defaults to 100\% white matter. A voxel containing 100\% gray matter tissue
 would use : p_vols = c(WM = 0, GM = 100, CSF = 0).}
 
+\item{format}{Override automatic data format detection. See format argument
+in \code{\link[=read_mrs]{read_mrs()}} for permitted values.}
+
+\item{pul_seq}{Pulse sequence to use for basis simulation. Can be one of the
+following values : "press_ideal", "press_shaped", "steam" or "slaser".}
+
+\item{TE1}{PRESS or sLASER sequence timing parameter in seconds.}
+
+\item{TE2}{PRESS or sLASER sequence timing parameter in seconds.}
+
+\item{TE3}{sLASER sequence timing parameter in seconds.}
+
+\item{TM}{STEAM mixing time parameter in seconds.}
+
 \item{append_basis}{names of extra signals to add to the default basis. Eg
 append_basis = c("peth", "cit"). Cannot be used with precompiled basis sets.}
 
@@ -46,10 +66,10 @@ with precompiled basis sets.}
 \item{dfp_corr}{perform dynamic frequency and phase correction using the RATS
 method.}
 
-\item{te}{metabolite mrs data echo time in seconds. If not supplied this will
+\item{TE}{metabolite mrs data echo time in seconds. If not supplied this will
 be guessed from the metab data file.}
 
-\item{tr}{metabolite mrs data repetition time in seconds. If not supplied
+\item{TR}{metabolite mrs data repetition time in seconds. If not supplied
 this will be guessed from the metab data file.}
 
 \item{output_ratio}{optional string to specify a metabolite ratio to output.

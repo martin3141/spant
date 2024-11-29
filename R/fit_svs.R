@@ -9,15 +9,23 @@
 #' @param p_vols a numeric vector of partial volumes expressed as percentages.
 #' Defaults to 100% white matter. A voxel containing 100% gray matter tissue
 #' would use : p_vols = c(WM = 0, GM = 100, CSF = 0).
+#' @param format Override automatic data format detection. See format argument
+#' in [read_mrs()] for permitted values.
+#' @param pul_seq Pulse sequence to use for basis simulation. Can be one of the
+#' following values : "press_ideal", "press_shaped", "steam" or "slaser".
+#' @param TE1 PRESS or sLASER sequence timing parameter in seconds.
+#' @param TE2 PRESS or sLASER sequence timing parameter in seconds.
+#' @param TE3 sLASER sequence timing parameter in seconds.
+#' @param TM STEAM mixing time parameter in seconds.
 #' @param append_basis names of extra signals to add to the default basis. Eg 
 #' append_basis = c("peth", "cit"). Cannot be used with precompiled basis sets.
 #' @param remove_basis names of signals to remove from the basis. Cannot be used
 #' with precompiled basis sets.
 #' @param dfp_corr perform dynamic frequency and phase correction using the RATS
 #' method.
-#' @param te metabolite mrs data echo time in seconds. If not supplied this will
+#' @param TE metabolite mrs data echo time in seconds. If not supplied this will
 #' be guessed from the metab data file.
-#' @param tr metabolite mrs data repetition time in seconds. If not supplied
+#' @param TR metabolite mrs data repetition time in seconds. If not supplied
 #' this will be guessed from the metab data file.
 #' @param output_ratio optional string to specify a metabolite ratio to output.
 #' Defaults to "tCr" and multiple metabolites may be specified for multiple
@@ -44,10 +52,12 @@
 #' }
 #' @export
 fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
-                    p_vols = NULL, append_basis = NULL, remove_basis = NULL,
-                    dfp_corr = TRUE, te = NULL, tr = NULL, output_ratio = "tCr",
-                    ecc = FALSE, fit_opts = NULL, legacy_ws = FALSE,
-                    w_att = 0.7, w_conc = 35880, verbose = FALSE) {
+                    p_vols = NULL, format = NULL, pul_seq = NULL, TE1 = NULL,
+                    TE2 = NULL, TE3 = NULL, TM = NULL, append_basis = NULL,
+                    remove_basis = NULL, dfp_corr = TRUE, TE = NULL, TR = NULL,
+                    output_ratio = "tCr", ecc = FALSE, fit_opts = NULL,
+                    legacy_ws = FALSE, w_att = 0.7, w_conc = 35880,
+                    verbose = FALSE) {
   
   argg <- c(as.list(environment()))
   
@@ -120,12 +130,14 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   # create the output dir if it doesn't exist
   if(!dir.exists(output_dir)) dir.create(output_dir)
   
-  if (is.null(tr)) tr <- tr(metab)
-      
-  # check we have what we need for concentration scaling
-  if (is.null(te)) {
-    te <- te(metab)
-    if (is.null(te)) stop("Unable to determine echo-time from the data file, please pass as an argument.")
+  # try get TE and TR from the data if not passed in
+  if (is.null(TR)) TR <- TR(metab)
+  if (is.null(TE)) TE <- TE(metab)
+  
+  # check we have what's needed for standard water concentration scaling
+  if (!is.null(w_ref)) {
+    if (is.null(TR)) stop("Please provide seqeuence TR argument for water concentration scaling.")
+    if (is.null(TE)) stop("Please provide seqeuence TE argument for water concentration scaling.")
   }
   
   # combine coils if needed
@@ -298,7 +310,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   if (!is.null(w_ref)) {
     # assume 100% white matter if not told otherwise
     if (is.null(p_vols)) p_vols <- c(WM = 100, GM = 0, CSF = 0)
-    fit_res_molal <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, te, tr)
+    fit_res_molal <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, TE, TR)
     res_tab_molal <- fit_res_molal$res_tab
     file_out <- file.path(output_dir, "fit_res_molal_conc.csv")
     utils::write.csv(res_tab_molal, file_out)
