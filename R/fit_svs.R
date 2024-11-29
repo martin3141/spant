@@ -62,8 +62,10 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   argg <- c(as.list(environment()))
   
   # TODO
-  # Auto sequence detection and options to specify sequence and data format.
+  # Implement and test format, pul_seq, TE1, TE2, TE3 and TM arguments.
+  # Check reading Siemens dynamic data is sensible.
   # Realistic PRESS sim for B0 > 2.9T.
+  # Add an option to select a subset of dynamics.
   
   if (!is.null(basis) & !is.null(append_basis)) {
     stop("basis and append_basis options cannot both be set. Use one or the other.")
@@ -78,21 +80,20 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     if (is.null(output_dir)) output_dir <- paste0("mrs_res_",
                                                   format(Sys.time(),
                                                          "%Y-%M-%d_%H%M%S"))
-  } else if (dir.exists(metab)) {
+  # } else if (dir.exists(metab)) {
     # ima dyn directory
-    if (is.null(output_dir)) {
-      output_dir <- sub("\\.", "_", basename(metab))
-      output_dir <- paste0(output_dir, "_results")
+  #   if (is.null(output_dir)) {
+  #    output_dir <- sub("\\.", "_", basename(metab))
+  #    output_dir <- paste0(output_dir, "_results")
       # output_dir <- file.path(normalizePath(dirname(metab)), output_dir)
-    }
-    metab <- read_ima_dyn_dir(metab) 
+   # }
+    #metab <- read_ima_dyn_dir(metab) 
   } else {
+    metab <- read_mrs(metab, format = format)
     if (is.null(output_dir)) {
       output_dir <- sub("\\.", "_", basename(metab))
       output_dir <- paste0(output_dir, "_results")
-      # output_dir <- file.path(normalizePath(dirname(metab)), output_dir)
     }
-    metab <- read_mrs(metab)
   }
   
   if (verbose) cat(paste0("Output directory : ", output_dir, "\n"))
@@ -131,8 +132,8 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   if(!dir.exists(output_dir)) dir.create(output_dir)
   
   # try get TE and TR from the data if not passed in
-  if (is.null(TR)) TR <- TR(metab)
-  if (is.null(TE)) TE <- TE(metab)
+  if (is.null(TR)) TR <- tr(metab)
+  if (is.null(TE)) TE <- te(metab)
   
   # check we have what's needed for standard water concentration scaling
   if (!is.null(w_ref)) {

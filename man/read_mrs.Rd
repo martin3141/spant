@@ -5,7 +5,7 @@
 \title{Read MRS data from a file.}
 \usage{
 read_mrs(
-  fname,
+  path,
   format = NULL,
   ft = NULL,
   fs = NULL,
@@ -19,12 +19,13 @@ read_mrs(
 )
 }
 \arguments{
-\item{fname}{filename of the dpt format MRS data.}
+\item{path}{filename or directory of the MRS data.}
 
 \item{format}{string describing the data format. Must be one of the
 following : "spar_sdat", "rda", "dicom", "twix", "pfile", "list_data",
 "paravis", "dpt", "lcm_raw", "rds", "nifti", "varian", "jmrui_txt". If not
-specified, the format will be guessed from the filename extension.}
+specified, the format will be guessed from the filename extension, or will
+be assumed to be a Siemens ima dynamic data if the path is a directory.}
 
 \item{ft}{transmitter frequency in Hz (required for list_data format).}
 

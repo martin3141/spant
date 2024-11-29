@@ -10,12 +10,13 @@ mrs_data <- function(data, ft, resolution, ref, nuc, freq_domain, affine,
   return(mrs_data)
 }
 
-#' Read MRS data from a file.
-#' @param fname filename of the dpt format MRS data.
+#' Read MRS data from the filesystem.
+#' @param path file name or directory containing the MRS data.
 #' @param format string describing the data format. Must be one of the 
 #' following : "spar_sdat", "rda", "dicom", "twix", "pfile", "list_data",
 #' "paravis", "dpt", "lcm_raw", "rds", "nifti", "varian", "jmrui_txt". If not 
-#' specified, the format will be guessed from the filename extension.
+#' specified, the format will be guessed from the filename extension, or will
+#' be assumed to be a Siemens ima dynamic data if the path is a directory.
 #' @param ft transmitter frequency in Hz (required for list_data format).
 #' @param fs sampling frequency in Hz (required for list_data format).
 #' @param ref reference value for ppm scale (required for list_data format).
@@ -38,69 +39,69 @@ mrs_data <- function(data, ft, resolution, ref, nuc, freq_domain, affine,
 #' mrs_data <- read_mrs(fname)
 #' print(mrs_data)
 #' @export
-read_mrs <- function(fname, format = NULL, ft = NULL, fs = NULL, ref = NULL,
+read_mrs <- function(path, format = NULL, ft = NULL, fs = NULL, ref = NULL,
                      n_ref_scans = NULL, full_fid = FALSE,
                      omit_svs_ref_scans = TRUE, verbose = FALSE,
                      extra = NULL, fid_filt_dist = NULL) {
   
   # glob the input and check the result is sane
-  fname <- Sys.glob(fname)
+  path <- Sys.glob(path)
   
-  if (length(fname) == 0) stop("Error, read_mrs file not found.")
+  if (length(path) == 0) stop("Error, read_mrs file not found.")
   
-  if (length(fname) > 1) {
-    return(lapply(fname, read_mrs, format = format, ft = ft, fs = fs, ref = ref,
+  if (length(path) > 1) {
+    return(lapply(path, read_mrs, format = format, ft = ft, fs = fs, ref = ref,
                   n_ref_scans = n_ref_scans, full_fid = full_fid,
                   omit_svs_ref_scans = omit_svs_ref_scans, verbose = verbose,
                   extra = extra, fid_filt_dist = fid_filt_dist))
   }
   
-  if (!file.exists(fname)) stop("Error, read_mrs file does not exist.")
+  if (!file.exists(path)) stop("Error, read_mrs file does not exist.")
   
-  if (dir.exists(fname)) {
-    res <- read_ima_dyn_dir(dir = fname, extra = extra, verbose = verbose)
+  if (dir.exists(path)) {
+    res <- read_ima_dyn_dir(dir = path, extra = extra, verbose = verbose)
     if (!is.null(fid_filt_dist)) res$meta$fid_filt_dist <- fid_filt_dist
     return(res)
   }
   
   # try and guess the format from the filename extension
-  if (is.null(format)) format <- guess_mrs_format(fname) 
+  if (is.null(format)) format <- guess_mrs_format(path) 
   
   if (format == "spar_sdat") {
-    res <- read_spar_sdat(fname, extra)
+    res <- read_spar_sdat(path, extra)
   } else if (format == "rda") {
-    res <- read_rda(fname, extra)
+    res <- read_rda(path, extra)
   } else if (format == "dicom") {
-    res <- read_dicom(fname, verbose, extra)
+    res <- read_dicom(path, verbose, extra)
   } else if (format == "twix") {
-    res <- read_twix(fname, verbose, full_fid, omit_svs_ref_scans, extra)
+    res <- read_twix(path, verbose, full_fid, omit_svs_ref_scans, extra)
   } else if (format == "pfile") {
-    res <- read_pfile(fname, n_ref_scans, verbose, extra)
+    res <- read_pfile(path, n_ref_scans, verbose, extra)
   } else if (format == "list_data") {
     if (is.null(ft)) stop("Please specify ft parameter for list_data format")
     if (is.null(fs)) stop("Please specify fs parameter for list_data format")
     if (is.null(ref)) stop("Please specify ref parameter for list_data format")
-    res <- read_list_data(fname, ft, fs, ref, extra)
+    res <- read_list_data(path, ft, fs, ref, extra)
   } else if (format == "dpt") {
-    res <- read_mrs_dpt(fname, extra)
+    res <- read_mrs_dpt(path, extra)
   } else if (format == "jmrui_txt") {
-    res <- read_mrs_jmrui_txt(fname, extra)
+    res <- read_mrs_jmrui_txt(path, extra)
   } else if (format == "paravis") {
-    res <- read_paravis_raw(fname, extra)
+    res <- read_paravis_raw(path, extra)
   } else if (format == "lcm_raw") {
     if (is.null(ft)) stop("Please specify ft parameter for lcm_raw format")
     if (is.null(fs)) stop("Please specify fs parameter for lcm_raw format")
     if (is.null(ref)) stop("Please specify ref parameter for lcm_raw format")
-    res <- read_lcm_raw(fname, ft, fs, ref, extra)
+    res <- read_lcm_raw(path, ft, fs, ref, extra)
   } else if (format == "rds") {
-    mrs_data <- readRDS(fname)
+    mrs_data <- readRDS(path)
     mrs_data$extra <- extra
     if (!inherits(mrs_data, "mrs_data")) stop("rds file is not mrs_data format")
     res <- mrs_data
   } else if (format == "nifti") {
-    res <- read_mrs_nifti(fname, extra, verbose)
+    res <- read_mrs_nifti(path, extra, verbose)
   } else if (format == "varian") {
-    res <- read_varian(fname, extra)
+    res <- read_varian(path, extra)
   } else {
     stop("Unrecognised file format.")
   }
