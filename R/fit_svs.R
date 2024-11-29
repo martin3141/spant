@@ -300,13 +300,13 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     res_tab_molal <- fit_res_molal$res_tab
     file_out <- file.path(output_dir, "fit_res_molal_conc.csv")
     utils::write.csv(res_tab_molal, file_out)
-    fit_res_molar <- scale_amp_molar(fit_res, w_ref, w_att, w_conc)
-    res_tab_molar <- fit_res_molar$res_tab
-    file_out <- file.path(output_dir, "fit_res_pseudo_molar_conc.csv")
-    utils::write.csv(res_tab_molar, file_out)
+    fit_res_legacy <- scale_amp_legacy(fit_res, w_ref, w_att, w_conc)
+    res_tab_legacy <- fit_res_legacy$res_tab
+    file_out <- file.path(output_dir, "fit_res_legacy_conc.csv")
+    utils::write.csv(res_tab_legacy, file_out)
   } else {
-    res_tab_molar <- NULL 
-    res_tab_molal <- NULL 
+    res_tab_legacy <- NULL 
+    res_tab_molal  <- NULL 
   }
   
   if (Ndyns(metab_pre_dfp_corr) > 1) {
@@ -338,7 +338,8 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   results <- list(fit_res = fit_res, argg = argg,
                   w_ref_available = w_ref_available, w_ref = w_ref,
                   res_tab_unscaled = res_tab_unscaled,
-                  res_tab_ratio = res_tab_ratio, res_tab_molar = res_tab_molar,
+                  res_tab_ratio = res_tab_ratio,
+                  res_tab_legacy = res_tab_legacy,
                   res_tab_molal = res_tab_molal,
                   dyn_data_uncorr = dyn_data_uncorr,
                   dyn_data_corr = dyn_data_corr) 

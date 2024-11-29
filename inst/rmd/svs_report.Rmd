@@ -8,7 +8,7 @@ params:
   w_ref: ""
   res_tab_unscaled: ""
   res_tab_ratio: ""    
-  res_tab_molar: ""
+  res_tab_legacy: ""
   res_tab_molal: ""
   dyn_data_uncorr: ""
   dyn_data_corr: ""
@@ -36,7 +36,7 @@ if (params$w_ref_available) {
   res_tab   <- sv_res_table(params$res_tab_molal, format_out = TRUE)
   out_tab   <- res_tab[col_names]
   col.names <- c("Name", "Amp. (mmol/kg)", "95% CI (mmol/kg)")
-  res_tab   <- sv_res_table(params$res_tab_molar, format_out = TRUE)
+  res_tab   <- sv_res_table(params$res_tab_legacy, format_out = TRUE)
   out_tab   <- cbind(out_tab, res_tab[col_names])
   col.names <- c(col.names, "Amp. (mmol/kg)", "95% CI (mmol/kg)")
   if (!is.null(ratio_str)) {

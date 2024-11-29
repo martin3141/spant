@@ -3,7 +3,8 @@
 \name{scale_amp_molar}
 \alias{scale_amp_molar}
 \title{Apply water reference scaling to a fitting results object to yield metabolite
-quantities in millimolar (mM) units (mol / Litre of tissue).}
+quantities in millimolar (mM) units (mol / Litre of tissue). This function is
+depreciated, please use scale_amp_legacy instead.}
 \usage{
 scale_amp_molar(fit_result, ref_data, w_att = 0.7, w_conc = 35880, ...)
 }

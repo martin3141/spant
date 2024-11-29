@@ -147,8 +147,8 @@ scale_amp_molal <- function(fit_result, ref_data, te, tr, water_t1, water_t2,
 #' See the LCModel manual (section 10.2) on water-scaling for details on the
 #' assumptions and relevant references. Use this type of concentration scaling
 #' to compare fit results with LCModel and TARQUIN defaults. Otherwise
-#' scale_amp_molal_pvc is generally the preferred method. Note, the LCModel 
-#' manual (section 1.3) states: 
+#' scale_amp_molal_pvc is the preferred method. Note, the LCModel manual 
+#' (section 1.3) states: 
 #' 
 #' "Concentrations should be labelled 'mmol per Kg wet weight'. We use the
 #' shorter (incorrect) abbreviation mM. The actual mM is the mmol per Kg wet
@@ -165,7 +165,7 @@ scale_amp_molal <- function(fit_result, ref_data, te, tr, water_t1, water_t2,
 #' @param ... additional arguments to get_td_amp function.
 #' @return a \code{fit_result} object with a rescaled results table.
 #' @export
-scale_amp_molal_lcm <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880,
+scale_amp_legacy <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880,
                                 ...) {
   
   # check if res_tab_unscaled exists, and if not create it
@@ -198,7 +198,8 @@ scale_amp_molal_lcm <- function(fit_result, ref_data, w_att = 0.7, w_conc = 3588
 }
   
 #' Apply water reference scaling to a fitting results object to yield metabolite 
-#' quantities in millimolar (mM) units (mol / Litre of tissue).
+#' quantities in millimolar (mM) units (mol / Litre of tissue). This function is
+#' depreciated, please use scale_amp_legacy instead.
 #' 
 #' See the LCModel manual (section 10.2) on water-scaling for details on the
 #' assumptions and relevant references. Use this type of concentration scaling
@@ -222,7 +223,7 @@ scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880,
   #   stop("Mismatch between fit result and reference data dimensions.")
   # }
   
-  warning("Function name (scale_amp_molar) is missleading and has been replaced with scale_amp_molal_lcm.")
+  warning("Function name (scale_amp_molar) is missleading and has been replaced with scale_amp_legacy.")
   
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
