@@ -19,6 +19,7 @@ fit_svs(
   output_ratio = "tCr",
   ecc = FALSE,
   fit_opts = NULL,
+  legacy_scaling = FALSE,
   w_att = 0.7,
   w_conc = 35880,
   verbose = FALSE
@@ -63,12 +64,16 @@ defaults to FALSE.}
 
 \item{fit_opts}{options to pass to ABfit.}
 
-\item{w_att}{water attenuation factor (default = 0.7). Assumes water T2 of
-80ms and a TE = 30 ms. exp(-30ms / 80ms) ~ 0.7.}
+\item{legacy_scaling}{perform and output legacy water scaling values
+compatible with default LCModel and TARQUIN behaviour. See w_att and w_conc
+arguments. Deafult is FALSE.}
 
-\item{w_conc}{assumed water concentration (default = 35880). Default value
-corresponds to typical white matter. Set to 43300 for gray matter, and 55556
-for phantom measurements.}
+\item{w_att}{water attenuation factor (default = 0.7) for legacy water
+scaling. Assumes water T2 of 80ms and a TE = 30 ms. exp(-30ms / 80ms) ~ 0.7.}
+
+\item{w_conc}{assumed water concentration (default = 35880) for legacy water
+scaling. Default value corresponds to typical white matter. Set to 43300 for
+gray matter, and 55556 for phantom measurements.}
 
 \item{verbose}{output potentially useful information.}
 }
