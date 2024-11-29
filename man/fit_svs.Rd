@@ -12,6 +12,8 @@ fit_svs(
   p_vols = NULL,
   format = NULL,
   pul_seq = NULL,
+  TE = NULL,
+  TR = NULL,
   TE1 = NULL,
   TE2 = NULL,
   TE3 = NULL,
@@ -19,8 +21,6 @@ fit_svs(
   append_basis = NULL,
   remove_basis = NULL,
   dfp_corr = TRUE,
-  TE = NULL,
-  TR = NULL,
   output_ratio = "tCr",
   ecc = FALSE,
   fit_opts = NULL,
@@ -47,7 +47,16 @@ would use : p_vols = c(WM = 0, GM = 100, CSF = 0).}
 in \code{\link[=read_mrs]{read_mrs()}} for permitted values.}
 
 \item{pul_seq}{Pulse sequence to use for basis simulation. Can be one of the
-following values : "press_ideal", "press_shaped", "steam" or "slaser".}
+following values : "press", "press_ideal", "press_shaped", "steam" or
+"slaser". If "press" then "press_ideal" will be assumed unless the magnetic
+field is stronger that 2.8 Tesla, "press_shaped" will be assumed for 2.9
+Tesla and above.}
+
+\item{TE}{metabolite mrs data echo time in seconds. If not supplied this will
+be guessed from the metab data file.}
+
+\item{TR}{metabolite mrs data repetition time in seconds. If not supplied
+this will be guessed from the metab data file.}
 
 \item{TE1}{PRESS or sLASER sequence timing parameter in seconds.}
 
@@ -65,12 +74,6 @@ with precompiled basis sets.}
 
 \item{dfp_corr}{perform dynamic frequency and phase correction using the RATS
 method.}
-
-\item{TE}{metabolite mrs data echo time in seconds. If not supplied this will
-be guessed from the metab data file.}
-
-\item{TR}{metabolite mrs data repetition time in seconds. If not supplied
-this will be guessed from the metab data file.}
 
 \item{output_ratio}{optional string to specify a metabolite ratio to output.
 Defaults to "tCr" and multiple metabolites may be specified for multiple

@@ -12,7 +12,14 @@
 #' @param format Override automatic data format detection. See format argument
 #' in [read_mrs()] for permitted values.
 #' @param pul_seq Pulse sequence to use for basis simulation. Can be one of the
-#' following values : "press_ideal", "press_shaped", "steam" or "slaser".
+#' following values : "press", "press_ideal", "press_shaped", "steam" or
+#' "slaser". If "press" then "press_ideal" will be assumed unless the magnetic
+#' field is stronger that 2.8 Tesla, "press_shaped" will be assumed for 2.9 
+#' Tesla and above. 
+#' @param TE metabolite mrs data echo time in seconds. If not supplied this will
+#' be guessed from the metab data file.
+#' @param TR metabolite mrs data repetition time in seconds. If not supplied
+#' this will be guessed from the metab data file.
 #' @param TE1 PRESS or sLASER sequence timing parameter in seconds.
 #' @param TE2 PRESS or sLASER sequence timing parameter in seconds.
 #' @param TE3 sLASER sequence timing parameter in seconds.
@@ -23,10 +30,6 @@
 #' with precompiled basis sets.
 #' @param dfp_corr perform dynamic frequency and phase correction using the RATS
 #' method.
-#' @param TE metabolite mrs data echo time in seconds. If not supplied this will
-#' be guessed from the metab data file.
-#' @param TR metabolite mrs data repetition time in seconds. If not supplied
-#' this will be guessed from the metab data file.
 #' @param output_ratio optional string to specify a metabolite ratio to output.
 #' Defaults to "tCr" and multiple metabolites may be specified for multiple
 #' outputs. Set as NULL to omit.
@@ -52,20 +55,14 @@
 #' }
 #' @export
 fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
-                    p_vols = NULL, format = NULL, pul_seq = NULL, TE1 = NULL,
-                    TE2 = NULL, TE3 = NULL, TM = NULL, append_basis = NULL,
-                    remove_basis = NULL, dfp_corr = TRUE, TE = NULL, TR = NULL,
+                    p_vols = NULL, format = NULL, pul_seq = NULL, TE = NULL,
+                    TR = NULL, TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
+                    append_basis = NULL, remove_basis = NULL, dfp_corr = TRUE, 
                     output_ratio = "tCr", ecc = FALSE, fit_opts = NULL,
                     legacy_ws = FALSE, w_att = 0.7, w_conc = 35880,
                     verbose = FALSE) {
   
   argg <- c(as.list(environment()))
-  
-  # TODO
-  # Implement and test pul_seq, TE1, TE2, TE3 and TM arguments.
-  # Check reading Siemens dynamic data is sensible.
-  # Realistic PRESS sim for B0 > 2.9T.
-  # Add an option to select a subset of dynamics.
   
   if (!is.null(basis) & !is.null(append_basis)) {
     stop("basis and append_basis options cannot both be set. Use one or the other.")
@@ -81,9 +78,10 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
       output_dir <- paste0("mrs_res_", format(Sys.time(), "%Y-%M-%d_%H%M%S"))
     }
   } else {
-    metab <- read_mrs(metab, format = format)
+    metab_path <- metab
+    metab      <- read_mrs(metab, format = format)
     if (is.null(output_dir)) {
-      output_dir <- sub("\\.", "_", basename(metab))
+      output_dir <- sub("\\.", "_", basename(metab_path))
       output_dir <- paste0(output_dir, "_results")
     }
   }
@@ -92,7 +90,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   
   # read the ref data file if not already an mrs_data object
   if (is.def(w_ref) & (class(w_ref)[[1]] != "mrs_data")) {
-    w_ref <- read_mrs(w_ref)
+    w_ref <- read_mrs(w_ref, format = format)
   }
   
   # check for GE style data with metabolite and water reference data
@@ -160,30 +158,114 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   # simulate a basis if needed
   if (is.null(basis)) {
     
-    TE1 <- 0.0126
-    TE2 <- te - TE1
+    if (is.null(TE)) stop("Could not determine the sequence echo time. Please provide the TE argument.")
     
-    warning(paste0("Basis not specified, so assuming PRESS sequence with ",
-                   "ideal pulses, ", "TE1 = ", TE1, "s, TE2 = ", TE2, "s."))
-    
+    # list of "standard" signals to include in the basis set
     mol_list_chars <- c("m_cr_ch2", "ala", "asp", "cr", "gaba", "glc", "gln",
                         "gsh", "glu", "gpc", "ins", "lac", "lip09", "lip13a",
                         "lip13b", "lip20", "mm09", "mm12", "mm14", "mm17",
                         "mm20", "naa", "naag", "pch", "pcr", "sins", "tau")
     
+    # option to append signals
     if (!is.null(append_basis)) mol_list_chars <- c(mol_list_chars,
                                                     append_basis)
     
+    # option to remove signals
     if (!is.null(remove_basis)) {
       inds <- which(mol_list_chars == remove_basis)
       mol_list_chars <- mol_list_chars[-inds]
     }
     
+    # get the parameters
     mol_list <- get_mol_paras(mol_list_chars, ft = metab$ft)
     
-    basis <- sim_basis(mol_list, acq_paras = metab, pul_seq = seq_press_ideal,
-                       TE1 = TE1, TE2 = TE2)
+    # try to guess the pulse sequence from the MRS data if not specified
+    if (is.null(pul_seq)) {
+      if (!is.null(metab$meta$PulseSequenceType)){
+        pul_seq <- metab$meta$PulseSequenceType
+      } else {
+        warning(paste0("Could not determine the pulse sequence, so assuming ",
+                       "PRESS. Provide the pul_seq argument to stop this ",
+                       "warning."))
+        pul_seq <- "press"
+      }
+    }
     
+    # force lowercase
+    pul_seq <- tolower(pul_seq)
+    
+    if (pul_seq == "press") {
+      B0 <- round(metab$ft / 42.58e6, 1)
+      if (B0 > 2.8) {
+        pul_seq <- "press_shaped"
+      } else {
+        pul_seq <- "press_ideal"
+      }
+    }
+    
+    if (pul_seq == "press_ideal") {
+      if (is.null(TE1)) {
+        TE1 <- 0.0126
+        warning("TE1 assumed to be 0.0126s. Provide the TE1 argument to stop this warning.")
+      }
+      if (is.null(TE2)) TE2 <- TE - TE1
+      if ((TE1 + TE2) != TE) warning("TE, TE1 and TE2 do not match.")
+      if (verbose) cat("Simulating ideal PRESS sequence.\n")
+      basis <- sim_basis(mol_list, acq_paras = metab,
+                         pul_seq = seq_press_ideal, TE1 = TE1, TE2 = TE2)
+    } else if (pul_seq == "press_shaped") {
+      if (is.null(TE1)) {
+        TE1 <- 0.0126
+        warning("TE1 assumed to be 0.0126s.")
+      }
+      if (is.null(TE2)) TE2 <- TE - TE1
+      if ((TE1 + TE2) != TE) warning("TE, TE1 and TE2 do not match.")
+      if (verbose) cat("Simulating shaped PRESS sequence.\n")
+      warning("shaped press basis simulation not implemented yet")
+      basis <- sim_basis(mol_list, acq_paras = metab,
+                         pul_seq = seq_press_ideal, TE1 = TE1, TE2 = TE2)
+    } else if (pul_seq == "steam") {
+      if (is.null(TM)) {
+        TM <- 0.01
+        warning("TM assumed to be 0.01s.")
+      }
+      if (verbose) cat("Simulating STEAM sequence.\n")
+      basis <- sim_basis(mol_list, acq_paras = metab,
+                         pul_seq = seq_steam_ideal_cof, TE = TE, TM = TM)
+    } else if (pul_seq == "slaser") {
+      if (is.null(TE1)) {
+        if (!is.null(metab$meta$TE1)) {
+          TE1 <- metab$meta$TE1
+        } else {
+          TE1 <- 0.0008
+          warning("TE3 assumed to be 0.0008s.")
+        }
+      }
+      if (is.null(TE2)) {
+        if (!is.null(metab$meta$TE2)) {
+          TE2 <- metab$meta$TE2
+        } else {
+          TE2 <- 0.0011
+          warning("TE2 assumed to be 0.0011s.")
+        }
+      }
+      if (is.null(TE3)) {
+        if (!is.null(metab$meta$TE3)) {
+          TE3 <- metab$meta$TE3
+        } else {
+          TE3 <- 0.0009
+          warning("TE3 assumed to be 0.0009s.")
+        }
+      }
+      if ((TE1 + TE2 + TE3) != TE) warning("TE, TE1, TE2 and TE3 do not match.")
+      if (verbose) cat("Simulating sLASER sequence.\n")
+      basis <- sim_basis(mol_list, acq_paras = metab,
+                         pul_seq = seq_slaser_ideal, TE1 = TE1, TE2 = TE2,
+                         TE3 = TE3)
+    } else {
+      stop(paste0("pul_seq not recognised : ", pul_seq))
+    }
+     
     if (verbose) print(basis)
   }
   
@@ -196,66 +278,66 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   shift_offset <- fit_res$res_tab$shift
   
   # check for poor dynamics - needs work, so not used at the moment!
-  omit_bad_dynamics <- FALSE # not an option yet
-  if (omit_bad_dynamics & (Ndyns(metab_pre_dfp_corr) > 1)) {
-    if (dfp_corr) {
-      dyn_data <- shift(phase(metab_post_dfp_corr, phase_offset), shift_offset)
-    } else {
-      dyn_data <- shift(phase(metab_pre_dfp_corr, phase_offset), shift_offset)
-    }
-    
-    dyn_data_proc <- bc_poly(crop_spec(zf(lb(dyn_data, 2)), c(3.5, 1.8)), 2)
-    
-    peak_height <- spec_op(dyn_data_proc, operator = "max")
-    
-    peak_height <- peak_height / max(peak_height) * 100
-    
-    bad_shots      <- peak_height < 75
-    bad_shots_n    <- sum(bad_shots)
-    bad_shots_perc <- bad_shots_n / length(peak_height) * 100
-    
-    grDevices::png(file.path(output_dir, "drift_plot_peak_height.png"),
-                   res = 2 * 72, height = 2 * 480, width = 2 * 480)
-    graphics::image(dyn_data_proc)
-    grDevices::dev.off()
-    
-    grDevices::pdf(file.path(output_dir, "dynamic_peak_height.pdf"))
-    graphics::plot(peak_height, type = "l", ylim = c(0, 100),
-                   ylab = "Max peak height (%)", xlab = "Dynamic")
-    graphics::abline(h = 75, lty = 2)
-    grDevices::dev.off()
-    
-    if (bad_shots_n > 0) {
-      subset <- which(!bad_shots)
-      
-      cat(paste0(bad_shots_n, " bad shots (", round(bad_shots_perc), 
-                 "%) detected.\n"))
-      
-      # remove bad shots and refit
-      metab_pre_dfp_corr  <- get_dyns(metab_pre_dfp_corr, subset)
-      
-      if (dfp_corr) {
-        metab_post_dfp_corr <- get_dyns(metab_post_dfp_corr, subset)
-        metab <- metab_post_dfp_corr
-      } else {
-        metab <- metab_pre_dfp_corr
-      }
-      
-      metab <- mean_dyns(metab)
-  
-      # eddy current correction
-      if (ecc & (!is.null(w_ref))) metab <- ecc(metab, w_ref)
-      
-      # fitting
-      if (verbose) cat("Refitting without bad shots.\n")
-      fit_res <- fit_mrs(metab, basis = basis, opts = abfit_opts)
-      
-      phase_offset <- fit_res$res_tab$phase
-      shift_offset <- fit_res$res_tab$shift
-    } else {
-      if (verbose) cat("No bad shots detected.\n")
-    }
-  }
+  # omit_bad_dynamics <- FALSE # not an option yet
+  # if (omit_bad_dynamics & (Ndyns(metab_pre_dfp_corr) > 1)) {
+  #   if (dfp_corr) {
+  #     dyn_data <- shift(phase(metab_post_dfp_corr, phase_offset), shift_offset)
+  #   } else {
+  #     dyn_data <- shift(phase(metab_pre_dfp_corr, phase_offset), shift_offset)
+  #   }
+  #   
+  #   dyn_data_proc <- bc_poly(crop_spec(zf(lb(dyn_data, 2)), c(3.5, 1.8)), 2)
+  #   
+  #   peak_height <- spec_op(dyn_data_proc, operator = "max")
+  #   
+  #   peak_height <- peak_height / max(peak_height) * 100
+  #   
+  #   bad_shots      <- peak_height < 75
+  #   bad_shots_n    <- sum(bad_shots)
+  #   bad_shots_perc <- bad_shots_n / length(peak_height) * 100
+  #   
+  #   grDevices::png(file.path(output_dir, "drift_plot_peak_height.png"),
+  #                  res = 2 * 72, height = 2 * 480, width = 2 * 480)
+  #   graphics::image(dyn_data_proc)
+  #   grDevices::dev.off()
+  #   
+  #   grDevices::pdf(file.path(output_dir, "dynamic_peak_height.pdf"))
+  #   graphics::plot(peak_height, type = "l", ylim = c(0, 100),
+  #                  ylab = "Max peak height (%)", xlab = "Dynamic")
+  #   graphics::abline(h = 75, lty = 2)
+  #   grDevices::dev.off()
+  #   
+  #   if (bad_shots_n > 0) {
+  #     subset <- which(!bad_shots)
+  #     
+  #     cat(paste0(bad_shots_n, " bad shots (", round(bad_shots_perc), 
+  #                "%) detected.\n"))
+  #     
+  #     # remove bad shots and refit
+  #     metab_pre_dfp_corr  <- get_dyns(metab_pre_dfp_corr, subset)
+  #     
+  #     if (dfp_corr) {
+  #       metab_post_dfp_corr <- get_dyns(metab_post_dfp_corr, subset)
+  #       metab <- metab_post_dfp_corr
+  #     } else {
+  #       metab <- metab_pre_dfp_corr
+  #     }
+  #     
+  #     metab <- mean_dyns(metab)
+  # 
+  #     # eddy current correction
+  #     if (ecc & (!is.null(w_ref))) metab <- ecc(metab, w_ref)
+  #     
+  #     # fitting
+  #     if (verbose) cat("Refitting without bad shots.\n")
+  #     fit_res <- fit_mrs(metab, basis = basis, opts = abfit_opts)
+  #     
+  #     phase_offset <- fit_res$res_tab$phase
+  #     shift_offset <- fit_res$res_tab$shift
+  #   } else {
+  #     if (verbose) cat("No bad shots detected.\n")
+  #   }
+  # }
   
   # output unscaled results
   res_tab_unscaled <- fit_res$res_tab
@@ -297,6 +379,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     res_tab_molal  <- NULL 
   }
   
+  # prepare dynamic data for plotting
   if (Ndyns(metab_pre_dfp_corr) > 1) {
     # phase according to the fit results
     dyn_data_uncorr <- phase(metab_pre_dfp_corr, fit_res$res_tab$phase)
@@ -311,13 +394,12 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
       dyn_data_corr <- phase(metab_post_dfp_corr, fit_res$res_tab$phase)
       # correct chem. shift scale according to the fit results
       dyn_data_corr <- shift(dyn_data_corr, fit_res$res_tab$shift,
-                               units = "ppm")
+                             units = "ppm")
       # add 2 Hz LB
       dyn_data_corr <- lb(dyn_data_corr, 2)
     } else {
       dyn_data_corr <- NULL
     }
-    
   } else {
     dyn_data_uncorr <- NULL
     dyn_data_corr   <- NULL
@@ -325,7 +407,8 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   
   # data needed to produce the output html report
   results <- list(fit_res = fit_res, argg = argg,
-                  w_ref_available = w_ref_available, w_ref = w_ref,
+                  w_ref_available = w_ref_available,
+                  w_ref = w_ref,
                   res_tab_unscaled = res_tab_unscaled,
                   res_tab_ratio = res_tab_ratio,
                   res_tab_legacy = res_tab_legacy,

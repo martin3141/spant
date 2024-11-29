@@ -53,6 +53,13 @@ read_ima <- function(fraw, verbose = FALSE, extra) {
                               TE3 = vars$te3))
   }
   
+  if (startsWith(toupper(vars$seq_fname), "%CUSTOMERSEQ%\\DKD_SVS_SLASER")) {
+    meta <- append(meta, list(PulseSequenceType = "slaser",
+                              TE1 = vars$te1,
+                              TE2 = vars$te2,
+                              TE3 = vars$te3))
+  }
+  
   if (vars$rm_oversampling) meta <- append(meta, list(fid_filt_dist = TRUE))
   
   mrs_data <- mrs_data(data = data, ft = vars$ft, resolution = paras$res,
