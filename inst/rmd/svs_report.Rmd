@@ -36,9 +36,13 @@ if (params$w_ref_available) {
   res_tab   <- sv_res_table(params$res_tab_molal, format_out = TRUE)
   out_tab   <- res_tab[col_names]
   col.names <- c("Name", "Amp. (mmol/kg)", "95% CI (mmol/kg)")
-  res_tab   <- sv_res_table(params$res_tab_legacy, format_out = TRUE)
-  out_tab   <- cbind(out_tab, res_tab[col_names])
-  col.names <- c(col.names, "Amp. (mmol/kg)", "95% CI (mmol/kg)")
+  
+  if (!is.null(params$res_tab_legacy)) {
+    res_tab   <- sv_res_table(params$res_tab_legacy, format_out = TRUE)
+    out_tab   <- cbind(out_tab, res_tab[col_names])
+    col.names <- c(col.names, "Amp. (mmol/kg)", "95% CI (mmol/kg)")
+  }
+  
   if (!is.null(ratio_str)) {
     res_tab   <- sv_res_table(params$res_tab_ratio, format_out = TRUE)
     out_tab   <- cbind(out_tab, res_tab[col_names])
@@ -66,10 +70,10 @@ boot_opts <- c("striped", "hover", "condensed")
 kable_table <- kableExtra::kbl(out_tab, col.names = col.names,
                                align = rep("r", 10))
 
-if (params$w_ref_available) {
+if (params$w_ref_available & !is.null(params$res_tab_legacy)) {
   extra_cols  <- ifelse(is.null(ratio_str), 1, 3)
-  header_str  <- c(" " = 1, "mmol/water weight (kg)^1^" = 2,
-                   "mmol/water and tissue weight (kg)^2^" = 2, " " = extra_cols)
+  header_str  <- c(" " = 1, "standard concentration scaling" = 2,
+                   "legacy concentration scaling" = 2, " " = extra_cols)
   
   kable_table <- kableExtra::add_header_above(kable_table, header_str)
 }
@@ -80,8 +84,9 @@ kableExtra::kable_styling(kable_table, full_width = FALSE, position = "left",
 
 ```{r, results = 'asis'}
 if (params$w_ref_available) {
-  cat("^1^ Concentrations listed in molal units: moles of solute / mass of solvent. See the following papers for details :\n\nGasparovic C, Chen H, Mullins PG. Errors in 1H-MRS estimates of brain metabolite concentrations caused by failing to take into account tissue-specific signal relaxation. NMR Biomed. 2018 Jun;31(6):e3914. https://doi.org/10.1002/nbm.3914\n\nGasparovic C, Song T, Devier D, Bockholt HJ, Caprihan A, Mullins PG, Posse S, Jung RE, Morrison LA. Use of tissue water as a concentration reference for proton spectroscopic imaging. Magn Reson Med. 2006 Jun;55(6):1219-26. https://doi.org/10.1002/mrm.20901\n\n")  
-  cat("^2^ Concentrations listed in pseduo-molar units: moles of solute / (mass of solvent + mass of tissue). These values are included for legacy puposes, for example to directly compare results from the default scaling method used by LCModel and TARQUIN. See sections 1.3 and 10.2 of the [LCModel manual](http://s-provencher.com/pub/LCModel/manual/manual.pdf) for details.")
+cat("See the [spant User Guide](https://spantdoc.wilsonlab.co.uk/water_scaling) for details on water scaling.\n")
+#  cat("^1^ Concentrations listed in molal units: moles of solute / mass of solvent. See the following papers for details :\n\nGasparovic C, Chen H, Mullins PG. Errors in 1H-MRS estimates of brain metabolite concentrations caused by failing to take into account tissue-specific signal relaxation. NMR Biomed. 2018 Jun;31(6):e3914. https://doi.org/10.1002/nbm.3914\n\nGasparovic C, Song T, Devier D, Bockholt HJ, Caprihan A, Mullins PG, Posse S, Jung RE, Morrison LA. Use of tissue water as a concentration reference for proton spectroscopic imaging. Magn Reson Med. 2006 Jun;55(6):1219-26. https://doi.org/10.1002/mrm.20901\n\n")  
+#  cat("^2^ Concentrations listed in pseduo-molar units: moles of solute / (mass of solvent + mass of tissue). These values are included for legacy puposes, for example to directly compare results from the default scaling method used by LCModel and TARQUIN. See sections 1.3 and 10.2 of the [LCModel manual](http://s-provencher.com/pub/LCModel/manual/manual.pdf) for details.")
 }
 ```
 

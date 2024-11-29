@@ -26,11 +26,14 @@
 #' @param ecc option to perform water reference based eddy current correction,
 #' defaults to FALSE.
 #' @param fit_opts options to pass to ABfit.
-#' @param w_att water attenuation factor (default = 0.7). Assumes water T2 of
-#' 80ms and a TE = 30 ms. exp(-30ms / 80ms) ~ 0.7.
-#' @param w_conc assumed water concentration (default = 35880). Default value
-#' corresponds to typical white matter. Set to 43300 for gray matter, and 55556 
-#' for phantom measurements.
+#' @param legacy_scaling perform and output legacy water scaling values
+#' compatible with default LCModel and TARQUIN behaviour. See w_att and w_conc
+#' arguments. Deafult is FALSE.
+#' @param w_att water attenuation factor (default = 0.7) for legacy water 
+#' scaling. Assumes water T2 of 80ms and a TE = 30 ms. exp(-30ms / 80ms) ~ 0.7.
+#' @param w_conc assumed water concentration (default = 35880) for legacy water 
+#' scaling. Default value corresponds to typical white matter. Set to 43300 for
+#' gray matter, and 55556 for phantom measurements.
 #' @param verbose output potentially useful information.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
@@ -45,8 +48,8 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
                     p_vols = NULL, append_basis = NULL, remove_basis = NULL,
                     dfp_corr = TRUE, omit_bad_dynamics = FALSE, te = NULL,
                     tr = NULL, output_ratio = "tCr", ecc = FALSE,
-                    fit_opts = NULL, w_att = 0.7, w_conc = 35880,
-                    verbose = FALSE) {
+                    fit_opts = NULL, legacy_scaling = FALSE, w_att = 0.7,
+                    w_conc = 35880, verbose = FALSE) {
   
   argg <- c(as.list(environment()))
   
@@ -300,10 +303,14 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     res_tab_molal <- fit_res_molal$res_tab
     file_out <- file.path(output_dir, "fit_res_molal_conc.csv")
     utils::write.csv(res_tab_molal, file_out)
-    fit_res_legacy <- scale_amp_legacy(fit_res, w_ref, w_att, w_conc)
-    res_tab_legacy <- fit_res_legacy$res_tab
-    file_out <- file.path(output_dir, "fit_res_legacy_conc.csv")
-    utils::write.csv(res_tab_legacy, file_out)
+    if (legacy_scaling) {
+      fit_res_legacy <- scale_amp_legacy(fit_res, w_ref, w_att, w_conc)
+      res_tab_legacy <- fit_res_legacy$res_tab
+      file_out <- file.path(output_dir, "fit_res_legacy_conc.csv")
+      utils::write.csv(res_tab_legacy, file_out)
+    } else {
+      res_tab_legacy <- NULL
+    }
   } else {
     res_tab_legacy <- NULL 
     res_tab_molal  <- NULL 
