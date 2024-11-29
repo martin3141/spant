@@ -2,7 +2,7 @@
 % Please edit documentation in R/mrs_data_io.R
 \name{read_mrs}
 \alias{read_mrs}
-\title{Read MRS data from a file.}
+\title{Read MRS data from the filesystem.}
 \usage{
 read_mrs(
   path,
@@ -19,7 +19,7 @@ read_mrs(
 )
 }
 \arguments{
-\item{path}{filename or directory of the MRS data.}
+\item{path}{file name or directory containing the MRS data.}
 
 \item{format}{string describing the data format. Must be one of the
 following : "spar_sdat", "rda", "dicom", "twix", "pfile", "list_data",
@@ -56,7 +56,7 @@ detection.}
 MRS data object.
 }
 \description{
-Read MRS data from a file.
+Read MRS data from the filesystem.
 }
 \examples{
 fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")

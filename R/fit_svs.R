@@ -62,7 +62,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   argg <- c(as.list(environment()))
   
   # TODO
-  # Implement and test format, pul_seq, TE1, TE2, TE3 and TM arguments.
+  # Implement and test pul_seq, TE1, TE2, TE3 and TM arguments.
   # Check reading Siemens dynamic data is sensible.
   # Realistic PRESS sim for B0 > 2.9T.
   # Add an option to select a subset of dynamics.
@@ -77,17 +77,9 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   
   # read the data file if not already an mrs_data object
   if (class(metab)[[1]] == "mrs_data") {
-    if (is.null(output_dir)) output_dir <- paste0("mrs_res_",
-                                                  format(Sys.time(),
-                                                         "%Y-%M-%d_%H%M%S"))
-  # } else if (dir.exists(metab)) {
-    # ima dyn directory
-  #   if (is.null(output_dir)) {
-  #    output_dir <- sub("\\.", "_", basename(metab))
-  #    output_dir <- paste0(output_dir, "_results")
-      # output_dir <- file.path(normalizePath(dirname(metab)), output_dir)
-   # }
-    #metab <- read_ima_dyn_dir(metab) 
+    if (is.null(output_dir)) {
+      output_dir <- paste0("mrs_res_", format(Sys.time(), "%Y-%M-%d_%H%M%S"))
+    }
   } else {
     metab <- read_mrs(metab, format = format)
     if (is.null(output_dir)) {
@@ -100,14 +92,11 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   
   # read the ref data file if not already an mrs_data object
   if (is.def(w_ref) & (class(w_ref)[[1]] != "mrs_data")) {
-    if (dir.exists(w_ref)) {
-      w_ref <- read_ima_dyn_dir(w_ref) 
-    } else {
-      w_ref <- read_mrs(w_ref)
-    }
+    w_ref <- read_mrs(w_ref)
   }
   
-  # check for GE style data
+  # check for GE style data with metabolite and water reference data
+  # contained in the same file
   if (identical(class(metab), c("list", "mrs_data"))) {
     x     <- metab
     metab <- x$metab
@@ -131,12 +120,12 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   # create the output dir if it doesn't exist
   if(!dir.exists(output_dir)) dir.create(output_dir)
   
-  # try get TE and TR from the data if not passed in
+  # try to get TE and TR parameters from the data if not passed in
   if (is.null(TR)) TR <- tr(metab)
   if (is.null(TE)) TE <- te(metab)
   
   # check we have what's needed for standard water concentration scaling
-  if (!is.null(w_ref)) {
+  if (w_ref_available) {
     if (is.null(TR)) stop("Please provide seqeuence TR argument for water concentration scaling.")
     if (is.null(TE)) stop("Please provide seqeuence TE argument for water concentration scaling.")
   }
@@ -152,16 +141,17 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     }
   }
   
-  metab_pre_dfp_corr <- metab
-  
   # dynamic frequency and phase correction
+  metab_pre_dfp_corr <- metab
   if (dfp_corr & (Ndyns(metab) > 1)) {
     metab <- rats(metab, zero_freq_shift_t0 = TRUE, xlim = c(4, 1.8))
     metab_post_dfp_corr <- metab
   }
   
+  # take the mean of the metabolite data
   metab <- mean_dyns(metab)
  
+  # take the mean of the water reference data
   if (!is.null(w_ref)) w_ref <- mean_dyns(w_ref)
   
   # eddy current correction
@@ -205,7 +195,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   phase_offset <- fit_res$res_tab$phase
   shift_offset <- fit_res$res_tab$shift
   
-  # check for poor dynamics
+  # check for poor dynamics - needs work, so not used at the moment!
   omit_bad_dynamics <- FALSE # not an option yet
   if (omit_bad_dynamics & (Ndyns(metab_pre_dfp_corr) > 1)) {
     if (dfp_corr) {
@@ -267,27 +257,6 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     }
   }
   
-  # grDevices::pdf(file.path(output_dir, "fit_plot.pdf"))
-  # plot(fit_res)
-  # grDevices::dev.off()
-  
-  # if (Ndyns(metab_pre_dfp_corr) > 1) {
-  #   
-  #   grDevices::png(file.path(output_dir, "drift_plot.png"), res = 2 * 72,
-  #                  height = 2 * 480, width = 2 * 480)
-  #   graphics::image(lb(phase(metab_pre_dfp_corr, phase_offset), 2),
-  #                   xlim = c(4, 0.5))
-  #   grDevices::dev.off()
-  #   
-  #   if (dfp_corr) {
-  #     grDevices::png(file.path(output_dir, "drift_plot_dfp_corr.png"),
-  #                    res = 2 * 72, height = 2 * 480, width = 2 * 480)
-  #     graphics::image(lb(phase(metab_post_dfp_corr, phase_offset), 2),
-  #                     xlim = c(4, 0.5))
-  #     grDevices::dev.off()
-  #   }
-  # }
-  
   # output unscaled results
   res_tab_unscaled <- fit_res$res_tab
   utils::write.csv(res_tab_unscaled, file.path(output_dir,
@@ -309,7 +278,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
   }
   
   if (!is.null(w_ref)) {
-    # assume 100% white matter if not told otherwise
+    # assume 100% white matter unless told otherwise
     if (is.null(p_vols)) p_vols <- c(WM = 100, GM = 0, CSF = 0)
     fit_res_molal <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, TE, TR)
     res_tab_molal <- fit_res_molal$res_tab
@@ -354,6 +323,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL, basis = NULL,
     dyn_data_corr   <- NULL
   }
   
+  # data needed to produce the output html report
   results <- list(fit_res = fit_res, argg = argg,
                   w_ref_available = w_ref_available, w_ref = w_ref,
                   res_tab_unscaled = res_tab_unscaled,
