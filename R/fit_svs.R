@@ -73,6 +73,10 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   #
   # validate 3T PRESS simulation
   #
+  # add water amplitude to csv and html output
+  #
+  # calculate and add water surpession quality % to csv and html output
+  #
   # document basic phantom analysis
   #
   # support using a directory of NIfTI MRS files or LCM basis file to
