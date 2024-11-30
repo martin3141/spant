@@ -8,7 +8,7 @@ fit_svs(
   metab,
   w_ref = NULL,
   output_dir = NULL,
-  basis = NULL,
+  external_basis = NULL,
   p_vols = NULL,
   format = NULL,
   pul_seq = NULL,
@@ -37,7 +37,7 @@ fit_svs(
 
 \item{output_dir}{directory path to output fitting results.}
 
-\item{basis}{precompiled basis set object to use for analysis.}
+\item{external_basis}{precompiled basis set object to use for analysis.}
 
 \item{p_vols}{a numeric vector of partial volumes expressed as percentages.
 Defaults to 100\% white matter. A voxel containing 100\% gray matter tissue

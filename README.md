@@ -7,7 +7,7 @@
 status](https://github.com/martin3141/spant/workflows/R-CMD-check/badge.svg)](https://github.com/martin3141/spant/actions)
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.03646/status.svg)](https://doi.org/10.21105/joss.03646)
 [![](http://cranlogs.r-pkg.org/badges/spant)](http://cran.rstudio.com/web/packages/spant/index.html)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant)
 [![Coverage
 Status](https://coveralls.io/repos/github/martin3141/spant/badge.svg?branch=master)](https://coveralls.io/github/martin3141/spant?branch=master)
 
@@ -17,26 +17,47 @@ spant provides a full suite of tools to build automated analysis
 pipelines for Magnetic Resonance Spectroscopy (MRS) data. The following
 features and algorithms are included:
 
--   Advanced fully-automated metabolite fitting algorithm - ABfit
-    <https://onlinelibrary.wiley.com/doi/10.1002/mrm.28385>.
--   Robust retrospective frequency and phase correction - RATS
-    <https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.27605>.
--   Support for common MRS data formats including read / write NIfTI
-    MRS - <https://onlinelibrary.wiley.com/doi/10.1002/mrm.29418>.
--   Flexible data types to support single voxel, dynamic and
-    spectroscopic imaging data types.
--   Raw data import from individual coils and dynamic measurements, eg
-    support for importing individual FIDs from Siemens TWIX formatted
-    data.
--   Publication quality plotting.
--   Extensive set of pre-processing steps (phasing, coil-combination,
-    zero-filling, HSVD filtering…).
--   Quantum mechanical based simulation for experimental design and
-    basis-set generation.
--   Set of metabolite, macromolecule and lipid parameters for typical
-    brain analyses.
--   Voxel registration to anatomical images for partial volume
-    concentration corrections.
+- Advanced fully-automated metabolite fitting algorithm - ABfit
+  <https://onlinelibrary.wiley.com/doi/10.1002/mrm.28385>.
+- Robust retrospective frequency and phase correction - RATS
+  <https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.27605>.
+- Support for common MRS data formats including read / write NIfTI MRS -
+  <https://onlinelibrary.wiley.com/doi/10.1002/mrm.29418>.
+- Flexible data types to support single voxel, dynamic and spectroscopic
+  imaging data types.
+- Raw data import from individual coils and dynamic measurements, eg
+  support for importing individual FIDs from Siemens TWIX formatted
+  data.
+- Publication quality plotting.
+- Extensive set of pre-processing steps (phasing, coil-combination,
+  zero-filling, HSVD filtering…).
+- Quantum mechanical based simulation for experimental design and
+  basis-set generation.
+- Set of metabolite, macromolecule and lipid parameters for typical
+  brain analyses.
+- Voxel registration to anatomical images for partial volume
+  concentration corrections.
+
+## Documentation
+
+The [spant user manual](https://spantdoc.wilsonlab.co.uk/) is written
+for users with minimal experience in R or MRS processing and is the best
+place to start.
+
+For more advanced users, help developing custom analysis pipeline can be
+found below.
+
+Introduction :
+<https://martin3141.github.io/spant/articles/spant-intro.html>
+
+Short tutorials : <https://martin3141.github.io/spant/articles/>
+
+Function reference : <https://martin3141.github.io/spant/reference/>
+
+Once the spant library has been loaded with `library(spant)`, type
+`?spant` on the console for instructions on how to access the offline
+documentation. Note that offline help on the available functions can be
+quickly shown in RStudio using `?function_name`, eg `?read_mrs`.
 
 ## Basic installation
 
@@ -63,20 +84,6 @@ package):
 install.packages("devtools")
 devtools::install_github("martin3141/spant", ref = "devel", dependencies = TRUE)
 ```
-
-## Documentation
-
-Quick introduction to the basic analysis workflow :
-<https://martin3141.github.io/spant/articles/spant-intro.html>
-
-Short tutorials : <https://martin3141.github.io/spant/articles/>
-
-Function reference : <https://martin3141.github.io/spant/reference/>
-
-Once the spant library has been loaded with `library(spant)`, type
-`?spant` on the console for instructions on how to access the offline
-documentation. Note that offline help on the available functions can be
-quickly shown in RStudio using `?function_name`, eg `?read_mrs`.
 
 ## Ubuntu 20.04 installation
 

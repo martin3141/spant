@@ -3,6 +3,8 @@
 instead.
 * Tentative implementation of a standard single voxel MRS processing pipeline
 function: fit_svs.
+* spant user guide has been added to the projet: 
+https://spantdoc.wilsonlab.co.uk/
 
 # spant 2.24.0
 * Added argument to adjust the legend font size in ortho3 function.
