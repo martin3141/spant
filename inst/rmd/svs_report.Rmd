@@ -128,8 +128,14 @@ value <- c(params$fit_res$res_tab$SNR, params$fit_res$res_tab$tNAA_lw,
            params$fit_res$res_tab$FQN, params$fit_res$res_tab$bl_ed_pppm,
            params$fit_res$res_tab$asym, params$fit_res$res_tab$SRR)
 
+if (params$w_ref_available) {
+  name  <- c(name,  "Water amplitude")
+  value <- c(value, params$res_tab_molal$w_amp)
+}
+
 diag_tab <- data.frame(name, value)
-kableExtra::kable_styling(kableExtra::kbl(diag_tab, col.names = NULL),
+kableExtra::kable_styling(kableExtra::kbl(diag_tab, col.names = c("Parameter",
+                                                                  "Value")),
                           full_width = FALSE, position = "left",
                           bootstrap_options = boot_opts)
 ```
