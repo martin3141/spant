@@ -16,7 +16,6 @@ params:
 
 ```{r setup, include=FALSE}
 library(spant)
-library(ggplot2)
 knitr::opts_chunk$set(echo = FALSE)
 theme_set(theme_bw())
 ```
