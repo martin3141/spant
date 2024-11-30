@@ -24,6 +24,7 @@ fit_svs(
   output_ratio = "tCr",
   ecc = FALSE,
   fit_opts = NULL,
+  fit_subset = NULL,
   legacy_ws = FALSE,
   w_att = 0.7,
   w_conc = 35880,
@@ -86,6 +87,9 @@ outputs. Set as NULL to omit.}
 defaults to FALSE.}
 
 \item{fit_opts}{options to pass to ABfit.}
+
+\item{fit_subset}{specify a subset of dynamics to analyse, for example
+1:16 would only fit the first 16 dynamic scans.}
 
 \item{legacy_ws}{perform and output legacy water scaling compatible with
 default LCModel and TARQUIN behaviour. See w_att and w_conc arguments to
