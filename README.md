@@ -40,9 +40,10 @@ features and algorithms are included:
 
 ## Documentation
 
-The [spant user manual](https://spantdoc.wilsonlab.co.uk/) is written
-for users with minimal experience in R or MRS processing and is the best
-place to start.
+The [online spant user manual](https://spantdoc.wilsonlab.co.uk/) ([pdf
+version](https://spantdoc.wilsonlab.co.uk/spant-User-Manual.pdf)) is
+written for users with minimal experience in R or MRS processing and is
+the best place to start.
 
 For more advanced users, help developing custom analysis pipeline can be
 found below.
