@@ -67,8 +67,6 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   
   # TODO important
   #
-  # bug fix for when NAA and NAAG, Cr and PCr etc are not in the basis
-  #
   # calculate and add water suppression quality % to csv and html output
   #
   # document all the things

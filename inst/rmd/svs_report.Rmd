@@ -118,14 +118,42 @@ if (!is.null(dyn_data_uncorr)) {
 
 ## Diagnostics table
 ```{r}
-name  <- c("Spectral SNR", "tNAA linewidth (ppm)", "tCho linewidth (ppm)",
-           "tCr linewidth (ppm)", "Fit quality number (FQN)",
-           "Baseline effective d.f. per ppm", "Lineshape asymmetry",
-           "Spectral signal to residual ratio")
+name  <- c("Spectral SNR")
+value <- c(params$fit_res$res_tab$SNR)
 
-value <- c(params$fit_res$res_tab$SNR, params$fit_res$res_tab$tNAA_lw,
-           params$fit_res$res_tab$tCho_lw, params$fit_res$res_tab$tCr_lw,
-           params$fit_res$res_tab$FQN, params$fit_res$res_tab$bl_ed_pppm,
+if (!is.null(params$fit_res$res_tab$tNAA_lw)) {
+  name  <- c(name, "tNAA linewidth (ppm)")
+  value <- c(value, params$fit_res$res_tab$tNAA_lw)
+}
+
+if (!is.null(params$fit_res$res_tab$NAA_lw)) {
+  name  <- c(name, "tNAA linewidth (ppm)")
+  value <- c(value, params$fit_res$res_tab$tNAA_lw)
+}
+
+if (!is.null(params$fit_res$res_tab$tCho_lw)) {
+  name  <- c(name, "tCho linewidth (ppm)")
+  value <- c(value, params$fit_res$res_tab$tCho_lw)
+}
+
+if (!is.null(params$fit_res$res_tab$Cho_lw)) {
+  name  <- c(name, "Cho linewidth (ppm)")
+  value <- c(value, params$fit_res$res_tab$Cho_lw)
+}
+
+if (!is.null(params$fit_res$res_tab$tCr_lw)) {
+  name  <- c(name, "tCr linewidth (ppm)")
+  value <- c(value, params$fit_res$res_tab$tCr_lw)
+}
+
+if (!is.null(params$fit_res$res_tab$Cr_lw)) {
+  name  <- c(name, "Cr linewidth (ppm)")
+  value <- c(value, params$fit_res$res_tab$Cr_lw)
+}
+
+name  <- c(name, "Fit quality number (FQN)", "Baseline effective d.f. per ppm",
+           "Lineshape asymmetry", "Spectral signal to residual ratio")
+value <- c(value, params$fit_res$res_tab$FQN, params$fit_res$res_tab$bl_ed_pppm,
            params$fit_res$res_tab$asym, params$fit_res$res_tab$SRR)
 
 if (params$w_ref_available) {
