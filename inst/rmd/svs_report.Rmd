@@ -17,14 +17,29 @@ params:
 ```{r setup, include=FALSE}
 library(spant)
 knitr::opts_chunk$set(echo = FALSE)
-theme_set(theme_bw())
 ```
 
 # {.tabset}
 
-## Fit plot
+## Fit plots {.tabset}
+
+### Standard
 ```{r, fig.width=7, fig.height=6}
 plot(params$fit_res)
+```
+
+### Stackplot
+```{r, fig.width=7, fig.height=8}
+stackplot(params$fit_res, y_offset = 3, combine_lipmm = TRUE, labels = TRUE)
+```
+
+```{r, results = 'asis', fig.width=7, fig.height=6}
+basis_names <- params$fit_res$basis$names
+for (n in 1:length(basis_names)) {
+  cat("\n### ", basis_names[n], "\n", sep = "")
+  plot(params$fit_res, plot_sigs = basis_names[n])
+  cat("\n")
+}
 ```
 
 ## Results table
@@ -117,11 +132,6 @@ diag_tab <- data.frame(name, value)
 kableExtra::kable_styling(kableExtra::kbl(diag_tab, col.names = NULL),
                           full_width = FALSE, position = "left",
                           bootstrap_options = boot_opts)
-```
-
-## Fit stackplot
-```{r, fig.width=7, fig.height=8}
-stackplot(params$fit_res, y_offset = 3, combine_lipmm = TRUE, labels = TRUE)
 ```
 
 ## Provenance

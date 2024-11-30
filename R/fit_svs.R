@@ -77,8 +77,6 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   #
   # calculate and add water suppression quality % to csv and html output
   #
-  # document basic phantom analysis
-  #
   # support using a directory of NIfTI MRS files or LCM basis file to
   # external_basis argument
   #
