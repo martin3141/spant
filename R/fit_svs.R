@@ -69,8 +69,6 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   #
   # calculate and add water suppression quality % to csv and html output
   #
-  # document all the things
-  #
   # validate 3T PRESS simulation
   
   # TODO less important
