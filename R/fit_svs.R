@@ -65,7 +65,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                     ecc = FALSE, fit_opts = NULL, legacy_ws = FALSE,
                     w_att = 0.7, w_conc = 35880, verbose = FALSE) {
   
-  # TODO
+  # TODO important
   #
   # bug fix for when NAA and NAAG, Cr and PCr etc are not in the basis
   #
@@ -73,9 +73,11 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   #
   # validate 3T PRESS simulation
   #
-  # add water amplitude to csv and html output
-  #
   # calculate and add water suppression quality % to csv and html output
+  #
+  # 
+  
+  # TODO less important
   #
   # support using a directory of NIfTI MRS files or LCM basis file to
   # external_basis argument
@@ -366,10 +368,8 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   #   }
   # }
   
-  # output unscaled results
+  # keep unscaled results
   res_tab_unscaled <- fit_res$res_tab
-  utils::write.csv(res_tab_unscaled, file.path(output_dir,
-                                               "fit_res_unscaled.csv"))
  
   # output ratio results if requested 
   if (!is.null(output_ratio)) {
@@ -405,6 +405,16 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
     res_tab_legacy <- NULL 
     res_tab_molal  <- NULL 
   }
+  
+  # add water amplitude and PVC info to the unscaled output
+  res_tab_unscaled <- cbind(res_tab_unscaled, w_amp = res_tab_molal$w_amp,
+                            GM_vol = res_tab_molal$GM_vol,
+                            WM_vol = res_tab_molal$WM_vol,
+                            CSF_vol = res_tab_molal$CSF_vol,
+                            GM_frac = res_tab_molal$GM_frac)
+  
+  utils::write.csv(res_tab_unscaled, file.path(output_dir,
+                                               "fit_res_unscaled.csv"))
   
   # prepare dynamic data for plotting
   if (Ndyns(metab_pre_dfp_corr) > 1) {

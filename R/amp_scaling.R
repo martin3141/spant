@@ -348,8 +348,8 @@ scale_amp_ratio_value <- function(fit_result, value) {
 }
 
 get_corr_factor <- function(te, tr, B0, gm_vol, wm_vol, csf_vol) {
-  # Correction factor calcualted according to the method of Gasparovic et al (MRM 55:1219-1226 2006)
-  # NOTE - gives concs as Mol/kg of water NOT Mol/liter of tissue like default LCM/TQN analysis.
+  # Correction factor calculated according to the method of Gasparovic et al
+  # (MRM 55:1219-1226 2006)
   if ((B0 == 3.0) | (B0 == 2.9)) {
     # Wanasapura values given in Harris paper
     t1_gm    <- 1.331
@@ -371,7 +371,16 @@ get_corr_factor <- function(te, tr, B0, gm_vol, wm_vol, csf_vol) {
     t1_metab <- 1.15
     t2_metab <- 0.3
   } else {
-    stop("Error. Relaxation values not available for this field strength.")
+    warning("Error. Relaxation values not available for this field strength. Assuming values for 3 Telsa.")
+    # Wanasapura values given in Harris paper
+    t1_gm    <- 1.331
+    t2_gm    <- 0.110
+    t1_wm    <- 0.832
+    t2_wm    <- 0.0792
+    t1_csf   <- 3.817
+    t2_csf   <- 0.503
+    t1_metab <- 1.15
+    t2_metab <- 0.3
   }
   
   # MR-visible water densities
@@ -392,12 +401,7 @@ get_corr_factor <- function(te, tr, B0, gm_vol, wm_vol, csf_vol) {
   f_csf <- csf_vol * csf_vis / 
           (gm_vol * gm_vis + wm_vol * wm_vis + csf_vol * csf_vis)
   
-  # This might give the result in Mol/kg?
-  # f_gm  <- gm_vol  * gm_vis   / ( gm_vol + wm_vol + csf_vol )
-  # f_wm  <- wm_vol  * wm_vis   / ( gm_vol + wm_vol + csf_vol )
-  # f_csf <- csf_vol * csf_vis  / ( gm_vol + wm_vol + csf_vol )
-  
-  # Relaxtion attenuation factors
+  # Relaxation attenuation factors
   R_h2o_gm  <- exp(-te / t2_gm)    * (1.0 - exp(-tr / t1_gm))
   R_h2o_wm  <- exp(-te / t2_wm)    * (1.0 - exp(-tr / t1_wm))
   R_h2o_csf <- exp(-te / t2_csf)   * (1.0 - exp(-tr / t1_csf))
