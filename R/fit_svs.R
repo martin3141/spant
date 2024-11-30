@@ -39,6 +39,8 @@
 #' @param ecc option to perform water reference based eddy current correction,
 #' defaults to FALSE.
 #' @param fit_opts options to pass to ABfit.
+#' @param fit_subset specify a subset of dynamics to analyse, for example
+#' 1:16 would only fit the first 16 dynamic scans.
 #' @param legacy_ws perform and output legacy water scaling compatible with
 #' default LCModel and TARQUIN behaviour. See w_att and w_conc arguments to 
 #' change the default assumptions. Default value is FALSE.
@@ -62,8 +64,9 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                     pul_seq = NULL, TE = NULL, TR = NULL, TE1 = NULL,
                     TE2 = NULL, TE3 = NULL, TM = NULL, append_basis = NULL,
                     remove_basis = NULL, dfp_corr = TRUE, output_ratio = "tCr",
-                    ecc = FALSE, fit_opts = NULL, legacy_ws = FALSE,
-                    w_att = 0.7, w_conc = 35880, verbose = FALSE) {
+                    ecc = FALSE, fit_opts = NULL, fit_subset = NULL, 
+                    legacy_ws = FALSE, w_att = 0.7, w_conc = 35880,
+                    verbose = FALSE) {
   
   # TODO important
   #
@@ -154,6 +157,11 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
       metab <- coil_comb_res$metab
       w_ref <- coil_comb_res$ref
     }
+  }
+  
+  # extract a subset of dynamic scans if specified
+  if (!is.null(fit_subset)) {
+    metab <- get_dyns(metab, fit_subset) 
   }
   
   # dynamic frequency and phase correction

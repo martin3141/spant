@@ -127,8 +127,8 @@ if (!is.null(params$fit_res$res_tab$tNAA_lw)) {
 }
 
 if (!is.null(params$fit_res$res_tab$NAA_lw)) {
-  name  <- c(name, "tNAA linewidth (ppm)")
-  value <- c(value, params$fit_res$res_tab$tNAA_lw)
+  name  <- c(name, "NAA linewidth (ppm)")
+  value <- c(value, params$fit_res$res_tab$NAA_lw)
 }
 
 if (!is.null(params$fit_res$res_tab$tCho_lw)) {
