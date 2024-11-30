@@ -70,8 +70,6 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   
   # TODO important
   #
-  # calculate and add water suppression quality % to csv and html output
-  #
   # validate 3T PRESS simulation
   
   # TODO less important
@@ -175,10 +173,24 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   metab <- mean_dyns(metab)
  
   # take the mean of the water reference data
-  if (!is.null(w_ref)) w_ref <- mean_dyns(w_ref)
+  if (w_ref_available) w_ref <- mean_dyns(w_ref)
+  
+  # calculate the water suppression efficiency
+  # the ratio of the residual water peak height
+  # relative to the height of the unsuppressed water signal
+  
+  if (w_ref_available) {
+    w_ref_peak   <- peak_info(w_ref, xlim = c(7, 3), mode = "mod")
+    w_ref_height <- w_ref_peak$height[1]
+    w_ref_freq   <- w_ref_peak$freq_ppm[1]
+    x_range      <- c(w_ref_freq - 0.2, w_ref_freq + 0.2)
+    metab_water_height <- spec_op(metab, xlim = x_range, operator = "max",
+                                  mode = "mod")[1]
+    ws_efficiency <- metab_water_height / w_ref_height * 100
+  }
   
   # eddy current correction
-  if (ecc & (!is.null(w_ref))) metab <- ecc(metab, w_ref)
+  if (ecc & w_ref_available) metab <- ecc(metab, w_ref)
   
   # simulate a basis if needed
   if (is.null(external_basis)) {
@@ -308,6 +320,8 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   phase_offset <- fit_res$res_tab$phase
   shift_offset <- fit_res$res_tab$shift
   
+  if (w_ref_available) fit_res$res_tab$ws_eff <- ws_efficiency
+  
   # check for poor dynamics - needs work, so not used at the moment!
   # omit_bad_dynamics <- FALSE # not an option yet
   # if (omit_bad_dynamics & (Ndyns(metab_pre_dfp_corr) > 1)) {
@@ -388,7 +402,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
     res_tab_ratio <- NULL  
   }
   
-  if (!is.null(w_ref)) {
+  if (w_ref_available) {
     # assume 100% white matter unless told otherwise
     if (is.null(p_vols)) p_vols <- c(WM = 100, GM = 0, CSF = 0)
     fit_res_molal <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, TE, TR)
