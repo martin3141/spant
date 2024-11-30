@@ -24,7 +24,7 @@ features and algorithms are included:
 - Support for common MRS data formats including read / write NIfTI MRS -
   <https://onlinelibrary.wiley.com/doi/10.1002/mrm.29418>.
 - Flexible data types to support single voxel, dynamic and spectroscopic
-  imaging data types.
+  imaging.
 - Raw data import from individual coils and dynamic measurements, eg
   support for importing individual FIDs from Siemens TWIX formatted
   data.
