@@ -68,18 +68,6 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                     legacy_ws = FALSE, w_att = 0.7, w_conc = 35880,
                     verbose = FALSE) {
   
-  # TODO important
-  #
-  # validate 3T PRESS simulation
-  
-  # TODO less important
-  #
-  # support using a directory of NIfTI MRS files or LCM basis file to
-  # external_basis argument
-  #
-  # add append_external_basis option for using a directory of NIfTI MRS files or
-  # LCM basis file to basis - handy for adding custom MM basis files etc
-  
   argg <- c(as.list(environment()))
   
   if (!is.null(external_basis) & !is.null(append_basis)) {
