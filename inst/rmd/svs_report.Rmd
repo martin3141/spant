@@ -177,8 +177,8 @@ kableExtra::kable_styling(kableExtra::kbl(diag_tab, align = c("l", "r"),
 ```{r, echo = TRUE}
 packageVersion("spant")
 Sys.time()
-print(params$fit_res$data)
-print(params$w_ref)
+print(params$fit_res$data, full = TRUE)
+print(params$w_ref, full = TRUE)
 print(argg)
 ```
 

@@ -42,11 +42,6 @@ print.mrs_data <- function(x, full = FALSE, ...) {
         sep = " ")
   }
   
-  # if (!is.null(x$meta$RepetitionTime)) {
-  #   cat(paste(c("Repetition time (s)     :", x$meta$RepetitionTime, "\n")),
-  #       sep = " ")
-  # }
-  
   if (!is.null(x$meta$Manufacturer)) {
     cat(paste(c("Manufacturer            :", x$meta$Manufacturer, "\n")),
         sep = " ")
@@ -83,10 +78,10 @@ print.mrs_data <- function(x, full = FALSE, ...) {
   }
   
   if (full) {
-    #cat(paste(c("Row vector              :", x$row_vec, "\n")), sep = " ")
-    #cat(paste(c("Column vector           :", x$col_vec, "\n")), sep = " ")
-    #cat(paste(c("Slice vector            :", x$sli_vec, "\n")), sep = " ")
-    #cat(paste(c("Position vector         :", x$pos_vec, "\n")), sep = " ")
+    cat("\nMeta data\n\n")
+    print(x$meta)
+    cat("Affine matrix\n")
+    print(x$affine)
   }
 }
 
