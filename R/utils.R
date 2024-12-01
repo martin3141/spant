@@ -589,6 +589,8 @@ circ_mask <- function(d, n, offset = 1) {
   return(dist <= d / 2)
 }
 
+round_dp <- function(x, dp) format(round(x, dp), nsmall = dp)
+
 # equation for following function taken from:
 # https://math.stackexchange.com/questions/2645689/what-is-the-parametric-equation-of-a-rotated-ellipse-given-the-angle-of-rotatio
 

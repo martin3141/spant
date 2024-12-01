@@ -106,7 +106,7 @@ cat("See the [spant User Guide](https://spantdoc.wilsonlab.co.uk/water_scaling) 
 
 ```{r, results = 'asis', fig.width=7, fig.height=7}
 if (!is.null(dyn_data_uncorr)) {
-  cat("## Dynamic information\n")
+  cat("## Dynamic plots\n")
   if (!is.null(dyn_data_corr)) {
     cat("### Spectrogram with dynamic correction")
     image(dyn_data_corr, xlim = c(4, 0.5))
@@ -119,51 +119,56 @@ if (!is.null(dyn_data_uncorr)) {
 ## Diagnostics table
 ```{r}
 name  <- c("Spectral SNR")
-value <- c(params$fit_res$res_tab$SNR)
+value <- round_dp(params$fit_res$res_tab$SNR, 2)
 
 if (!is.null(params$fit_res$res_tab$tNAA_lw)) {
   name  <- c(name, "tNAA linewidth (ppm)")
-  value <- c(value, params$fit_res$res_tab$tNAA_lw)
+  value <- c(value, round_dp(params$fit_res$res_tab$tNAA_lw, 4))
 }
 
 if (!is.null(params$fit_res$res_tab$NAA_lw)) {
   name  <- c(name, "NAA linewidth (ppm)")
-  value <- c(value, params$fit_res$res_tab$NAA_lw)
+  value <- c(value, round_dp(params$fit_res$res_tab$NAA_lw, 4))
 }
 
 if (!is.null(params$fit_res$res_tab$tCho_lw)) {
   name  <- c(name, "tCho linewidth (ppm)")
-  value <- c(value, params$fit_res$res_tab$tCho_lw)
+  value <- c(value, round_dp(params$fit_res$res_tab$tCho_lw, 4))
 }
 
 if (!is.null(params$fit_res$res_tab$Cho_lw)) {
   name  <- c(name, "Cho linewidth (ppm)")
-  value <- c(value, params$fit_res$res_tab$Cho_lw)
+  value <- c(value, round_dp(params$fit_res$res_tab$Cho_lw, 4))
 }
 
 if (!is.null(params$fit_res$res_tab$tCr_lw)) {
   name  <- c(name, "tCr linewidth (ppm)")
-  value <- c(value, params$fit_res$res_tab$tCr_lw)
+  value <- c(value, round_dp(params$fit_res$res_tab$tCr_lw, 4))
 }
 
 if (!is.null(params$fit_res$res_tab$Cr_lw)) {
   name  <- c(name, "Cr linewidth (ppm)")
-  value <- c(value, params$fit_res$res_tab$Cr_lw)
+  value <- c(value, round_dp(params$fit_res$res_tab$Cr_lw, 4))
 }
 
 if (params$w_ref_available) {
   name  <- c(name,  "Water amplitude", "Water suppression efficiency (%)")
-  value <- c(value, params$res_tab_molal$w_amp, params$res_tab_molal$ws_eff)
+  value <- c(value, format(params$res_tab_molal$w_amp),
+             round_dp(params$res_tab_molal$ws_eff, 3))
 }
 
 name  <- c(name, "Fit quality number (FQN)", "Baseline effective d.f. per ppm",
            "Lineshape asymmetry", "Spectral signal to residual ratio")
-value <- c(value, params$fit_res$res_tab$FQN, params$fit_res$res_tab$bl_ed_pppm,
-           params$fit_res$res_tab$asym, params$fit_res$res_tab$SRR)
+value <- c(value, round_dp(params$fit_res$res_tab$FQN, 2),
+           round_dp(params$fit_res$res_tab$bl_ed_pppm, 2),
+           round_dp(params$fit_res$res_tab$asym, 2),
+           round_dp(params$fit_res$res_tab$SRR, 2))
+
+# value <- format(value, digits = 2, nsmall = 0, scientific = FALSE)
 
 diag_tab <- data.frame(name, value)
-kableExtra::kable_styling(kableExtra::kbl(diag_tab, col.names = c("Parameter",
-                                                                  "Value")),
+kableExtra::kable_styling(kableExtra::kbl(diag_tab, align = c("l", "r"),
+                                          col.names = c("Parameter", "Value")),
                           full_width = FALSE, position = "left",
                           bootstrap_options = boot_opts)
 ```
