@@ -459,42 +459,32 @@ check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM) {
   if (pul_seq == "press_ideal") {
     if (is.null(TE1)) {
       TE1 <- 0.0126
-      warning("TE1 assumed to be 0.0126s. Provide the TE1 argument to stop this warning.")
+      # warning("TE1 assumed to be 0.0126s. Provide the TE1 argument to stop this warning.")
     }
     if (is.null(TE2)) TE2 <- TE - TE1
     if ((TE1 + TE2) != TE) warning("TE, TE1 and TE2 do not match.")
     return(list(pul_seq = pul_seq, TE1 = TE1, TE2 = TE2))
-    # if (verbose) cat("Simulating ideal PRESS sequence.\n")
-    # basis <- sim_basis(mol_list, acq_paras = metab,
-    #                    pul_seq = seq_press_ideal, TE1 = TE1, TE2 = TE2)
   } else if (pul_seq == "press_shaped") {
     if (is.null(TE1)) {
       TE1 <- 0.0126
-      warning("TE1 assumed to be 0.0126s.")
+      # warning("TE1 assumed to be 0.0126s.")
     }
     if (is.null(TE2)) TE2 <- TE - TE1
     if ((TE1 + TE2) != TE) warning("TE, TE1 and TE2 do not match.")
     return(list(pul_seq = pul_seq, TE1 = TE1, TE2 = TE2))
-    # if (verbose) cat("Simulating shaped PRESS sequence.\n")
-    # warning("shaped press basis simulation not implemented yet")
-    # basis <- sim_basis(mol_list, acq_paras = metab,
-    #                    pul_seq = seq_press_ideal, TE1 = TE1, TE2 = TE2)
   } else if (pul_seq == "steam") {
     if (is.null(TM)) {
       TM <- 0.01
       warning("TM assumed to be 0.01s.")
     }
     return(list(pul_seq = pul_seq, TE = TE, TM = TM))
-    # if (verbose) cat("Simulating STEAM sequence.\n")
-    # basis <- sim_basis(mol_list, acq_paras = metab,
-    #                    pul_seq = seq_steam_ideal_cof, TE = TE, TM = TM)
   } else if (pul_seq == "slaser") {
     if (is.null(TE1)) {
       if (!is.null(metab$meta$TE1)) {
         TE1 <- metab$meta$TE1
       } else {
         TE1 <- 0.0008
-        warning("TE3 assumed to be 0.0008s.")
+        warning("TE1 assumed to be 0.0008s.")
       }
     }
     if (is.null(TE2)) {
@@ -515,10 +505,6 @@ check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM) {
     }
     if ((TE1 + TE2 + TE3) != TE) warning("TE, TE1, TE2 and TE3 do not match.")
     return(list(pul_seq = pul_seq, TE1 = TE1, TE2 = TE2, TE3 = TE3))
-    # if (verbose) cat("Simulating sLASER sequence.\n")
-    # basis <- sim_basis(mol_list, acq_paras = metab,
-    #                    pul_seq = seq_slaser_ideal, TE1 = TE1, TE2 = TE2,
-    #                    TE3 = TE3)
   } else {
     stop(paste0("pul_seq not supported : ", pul_seq))
   }
