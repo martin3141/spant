@@ -52,6 +52,7 @@ Suggests:
     ragg,
     doParallel,
     parallel,
+    digest,
     car
 VignetteBuilder:
     knitr

@@ -1,10 +1,11 @@
 # spant 3.1.0
-* scale_amp_molar function has been depreciated. Please use scale_amp_legacy
-instead.
 * Tentative implementation of a standard single voxel MRS processing pipeline
 function: fit_svs.
-* spant user guide has been added to the projet: 
+* spant user guide has been added to the project: 
 https://spantdoc.wilsonlab.co.uk/
+* Implemented basis caching for sim_basis.
+* scale_amp_molar function has been depreciated. Please use scale_amp_legacy
+instead.
 
 # spant 2.24.0
 * Added argument to adjust the legend font size in ortho3 function.

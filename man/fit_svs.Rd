@@ -28,6 +28,7 @@ fit_svs(
   legacy_ws = FALSE,
   w_att = 0.7,
   w_conc = 35880,
+  use_basis_cache = "auto",
   verbose = FALSE
 )
 }
@@ -101,6 +102,11 @@ scaling. Assumes water T2 of 80ms and a TE = 30 ms. exp(-30ms / 80ms) ~ 0.7.}
 \item{w_conc}{assumed water concentration (default = 35880) for legacy water
 scaling. Default value corresponds to typical white matter. Set to 43300 for
 gray matter, and 55556 for phantom measurements.}
+
+\item{use_basis_cache}{Pre-cache basis sets to reduce analysis speed. Can be
+one of the following : "auto", "all" or "none". The default value of "auto"
+will only use the cache for 3T PRESS - which generally requires more detailed
+simulation due to high CSD.}
 
 \item{verbose}{output potentially useful information.}
 }

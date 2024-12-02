@@ -49,6 +49,10 @@
 #' @param w_conc assumed water concentration (default = 35880) for legacy water 
 #' scaling. Default value corresponds to typical white matter. Set to 43300 for
 #' gray matter, and 55556 for phantom measurements.
+#' @param use_basis_cache Pre-cache basis sets to reduce analysis speed. Can be
+#' one of the following : "auto", "all" or "none". The default value of "auto" 
+#' will only use the cache for 3T PRESS - which generally requires more detailed
+#' simulation due to high CSD.
 #' @param verbose output potentially useful information.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
@@ -66,7 +70,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                     remove_basis = NULL, dfp_corr = TRUE, output_ratio = "tCr",
                     ecc = FALSE, fit_opts = NULL, fit_subset = NULL, 
                     legacy_ws = FALSE, w_att = 0.7, w_conc = 35880,
-                    verbose = FALSE) {
+                    use_basis_cache = "auto", verbose = FALSE) {
   
   argg <- c(as.list(environment()))
   
@@ -208,93 +212,50 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
     # get the parameters
     mol_list <- get_mol_paras(mol_list_chars, ft = metab$ft)
     
-    # try to guess the pulse sequence from the MRS data if not specified
-    if (is.null(pul_seq)) {
-      if (!is.null(metab$meta$PulseSequenceType)){
-        pul_seq <- metab$meta$PulseSequenceType
+    # check parameters are consistent and infer any missing values
+    sim_paras <- check_sim_paras(pul_seq, metab, TE1, TE2, TE3, TE, TM)
+    
+    # determine if basis caching should be used
+    if (use_basis_cache == "always") {
+      use_basis_cache = TRUE
+    } else if (use_basis_cache == "never") {
+      use_basis_cache = FALSE
+    } else if (use_basis_cache == "auto") {
+      if (sim_paras$pul_seq == "press_shaped") {
+        use_basis_cache = TRUE
       } else {
-        warning(paste0("Could not determine the pulse sequence, so assuming ",
-                       "PRESS. Provide the pul_seq argument to stop this ",
-                       "warning."))
-        pul_seq <- "press"
+        use_basis_cache = FALSE
       }
+    } else {
+      stop("incorrect value for use_basis_cache, should be: 'auto', 'never' or 'always'") 
     }
     
-    # force lowercase
-    pul_seq <- tolower(pul_seq)
-    
-    if (pul_seq == "press") {
-      B0 <- round(metab$ft / 42.58e6, 1)
-      if (B0 > 2.8) {
-        pul_seq <- "press_shaped"
-      } else {
-        pul_seq <- "press_ideal"
-      }
-    }
-    
-    if (pul_seq == "press_ideal") {
-      if (is.null(TE1)) {
-        TE1 <- 0.0126
-        warning("TE1 assumed to be 0.0126s. Provide the TE1 argument to stop this warning.")
-      }
-      if (is.null(TE2)) TE2 <- TE - TE1
-      if ((TE1 + TE2) != TE) warning("TE, TE1 and TE2 do not match.")
+    if (sim_paras$pul_seq == "press_ideal") {
       if (verbose) cat("Simulating ideal PRESS sequence.\n")
       basis <- sim_basis(mol_list, acq_paras = metab,
-                         pul_seq = seq_press_ideal, TE1 = TE1, TE2 = TE2)
-    } else if (pul_seq == "press_shaped") {
-      if (is.null(TE1)) {
-        TE1 <- 0.0126
-        warning("TE1 assumed to be 0.0126s.")
-      }
-      if (is.null(TE2)) TE2 <- TE - TE1
-      if ((TE1 + TE2) != TE) warning("TE, TE1 and TE2 do not match.")
+                         pul_seq = seq_press_ideal, TE1 = sim_paras$TE1,
+                         TE2 = sim_paras$TE2, use_basis_cache = use_basis_cache,
+                         verbose = verbose)
+    } else if (sim_paras$pul_seq == "press_shaped") {
       if (verbose) cat("Simulating shaped PRESS sequence.\n")
       warning("shaped press basis simulation not implemented yet")
       basis <- sim_basis(mol_list, acq_paras = metab,
-                         pul_seq = seq_press_ideal, TE1 = TE1, TE2 = TE2)
-    } else if (pul_seq == "steam") {
-      if (is.null(TM)) {
-        TM <- 0.01
-        warning("TM assumed to be 0.01s.")
-      }
+                         pul_seq = seq_press_ideal, TE1 = sim_paras$TE1,
+                         TE2 = sim_paras$TE2, use_basis_cache = use_basis_cache,
+                         verbose = verbose)
+    } else if (sim_paras$pul_seq == "steam") {
       if (verbose) cat("Simulating STEAM sequence.\n")
       basis <- sim_basis(mol_list, acq_paras = metab,
-                         pul_seq = seq_steam_ideal_cof, TE = TE, TM = TM)
-    } else if (pul_seq == "slaser") {
-      if (is.null(TE1)) {
-        if (!is.null(metab$meta$TE1)) {
-          TE1 <- metab$meta$TE1
-        } else {
-          TE1 <- 0.0008
-          warning("TE3 assumed to be 0.0008s.")
-        }
-      }
-      if (is.null(TE2)) {
-        if (!is.null(metab$meta$TE2)) {
-          TE2 <- metab$meta$TE2
-        } else {
-          TE2 <- 0.0011
-          warning("TE2 assumed to be 0.0011s.")
-        }
-      }
-      if (is.null(TE3)) {
-        if (!is.null(metab$meta$TE3)) {
-          TE3 <- metab$meta$TE3
-        } else {
-          TE3 <- 0.0009
-          warning("TE3 assumed to be 0.0009s.")
-        }
-      }
-      if ((TE1 + TE2 + TE3) != TE) warning("TE, TE1, TE2 and TE3 do not match.")
+                         pul_seq = seq_steam_ideal_cof, TE = sim_paras$TE,
+                         TM = sim_paras$TM, use_basis_cache = use_basis_cache,
+                         verbose = verbose)
+    } else if (sim_paras$pul_seq == "slaser") {
       if (verbose) cat("Simulating sLASER sequence.\n")
       basis <- sim_basis(mol_list, acq_paras = metab,
-                         pul_seq = seq_slaser_ideal, TE1 = TE1, TE2 = TE2,
-                         TE3 = TE3)
-    } else {
-      stop(paste0("pul_seq not recognised : ", pul_seq))
+                         pul_seq = seq_slaser_ideal, TE1 = sim_paras$TE1,
+                         TE2 = sim_paras$TE2, TE3 = sim_paras$TE3,
+                         use_basis_cache = use_basis_cache, verbose = verbose)
     }
-     
     if (verbose) print(basis)
   } else {
     basis <- external_basis
@@ -465,4 +426,98 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                     quiet = !verbose)
   
   return(fit_res)
+}
+
+check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM) {
+  
+  # try to guess the pulse sequence from the MRS data if not specified
+  if (is.null(pul_seq)) {
+    if (!is.null(metab$meta$PulseSequenceType)){
+      pul_seq <- metab$meta$PulseSequenceType
+    } else {
+      warning(paste0("Could not determine the pulse sequence, so assuming ",
+                     "PRESS. Provide the pul_seq argument to stop this ",
+                     "warning."))
+      pul_seq <- "press"
+    }
+  }
+  
+  # force lowercase
+  pul_seq <- tolower(pul_seq)
+  
+  if (pul_seq == "press") {
+    B0 <- round(metab$ft / 42.58e6, 1)
+    if (B0 > 2.8) {
+      pul_seq <- "press_shaped"
+    } else {
+      pul_seq <- "press_ideal"
+    }
+  }
+  
+  if (pul_seq == "press_ideal") {
+    if (is.null(TE1)) {
+      TE1 <- 0.0126
+      warning("TE1 assumed to be 0.0126s. Provide the TE1 argument to stop this warning.")
+    }
+    if (is.null(TE2)) TE2 <- TE - TE1
+    if ((TE1 + TE2) != TE) warning("TE, TE1 and TE2 do not match.")
+    return(list(pul_seq = pul_seq, TE1 = TE1, TE2 = TE2))
+    # if (verbose) cat("Simulating ideal PRESS sequence.\n")
+    # basis <- sim_basis(mol_list, acq_paras = metab,
+    #                    pul_seq = seq_press_ideal, TE1 = TE1, TE2 = TE2)
+  } else if (pul_seq == "press_shaped") {
+    if (is.null(TE1)) {
+      TE1 <- 0.0126
+      warning("TE1 assumed to be 0.0126s.")
+    }
+    if (is.null(TE2)) TE2 <- TE - TE1
+    if ((TE1 + TE2) != TE) warning("TE, TE1 and TE2 do not match.")
+    return(list(pul_seq = pul_seq, TE1 = TE1, TE2 = TE2))
+    # if (verbose) cat("Simulating shaped PRESS sequence.\n")
+    # warning("shaped press basis simulation not implemented yet")
+    # basis <- sim_basis(mol_list, acq_paras = metab,
+    #                    pul_seq = seq_press_ideal, TE1 = TE1, TE2 = TE2)
+  } else if (pul_seq == "steam") {
+    if (is.null(TM)) {
+      TM <- 0.01
+      warning("TM assumed to be 0.01s.")
+    }
+    return(list(pul_seq = pul_seq, TE = TE, TM = TM))
+    # if (verbose) cat("Simulating STEAM sequence.\n")
+    # basis <- sim_basis(mol_list, acq_paras = metab,
+    #                    pul_seq = seq_steam_ideal_cof, TE = TE, TM = TM)
+  } else if (pul_seq == "slaser") {
+    if (is.null(TE1)) {
+      if (!is.null(metab$meta$TE1)) {
+        TE1 <- metab$meta$TE1
+      } else {
+        TE1 <- 0.0008
+        warning("TE3 assumed to be 0.0008s.")
+      }
+    }
+    if (is.null(TE2)) {
+      if (!is.null(metab$meta$TE2)) {
+        TE2 <- metab$meta$TE2
+      } else {
+        TE2 <- 0.0011
+        warning("TE2 assumed to be 0.0011s.")
+      }
+    }
+    if (is.null(TE3)) {
+      if (!is.null(metab$meta$TE3)) {
+        TE3 <- metab$meta$TE3
+      } else {
+        TE3 <- 0.0009
+        warning("TE3 assumed to be 0.0009s.")
+      }
+    }
+    if ((TE1 + TE2 + TE3) != TE) warning("TE, TE1, TE2 and TE3 do not match.")
+    return(list(pul_seq = pul_seq, TE1 = TE1, TE2 = TE2, TE3 = TE3))
+    # if (verbose) cat("Simulating sLASER sequence.\n")
+    # basis <- sim_basis(mol_list, acq_paras = metab,
+    #                    pul_seq = seq_slaser_ideal, TE1 = TE1, TE2 = TE2,
+    #                    TE3 = TE3)
+  } else {
+    stop(paste0("pul_seq not supported : ", pul_seq))
+  }
 }

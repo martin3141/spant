@@ -613,13 +613,16 @@ get_mol_para_list_names <- function(mol_para_list) {
 #' @param acq_paras list of acquisition parameters or an mrs_data object. See
 #' \code{\link{def_acq_paras}}
 #' @param xlim ppm range limiting signals to be simulated.
+#' @param use_basis_cache create and use a cache of simulated basis sets stored
+#' in the "spant_basis_cache" folder in the users home directory. Defults to
+#' FALSE.
 #' @param verbose output simulation progress and timings.
 #' @param ... extra parameters to pass to the pulse sequence function.
 #' @return basis object.
 #' @export
 sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
-                      acq_paras = def_acq_paras(), xlim = NULL, verbose = FALSE,
-                      ...) {
+                      acq_paras = def_acq_paras(), xlim = NULL,
+                      use_basis_cache = FALSE, verbose = FALSE, ...) {
   
   if (inherits(acq_paras, "mrs_data")) acq_paras <- get_acq_paras(acq_paras)
   
@@ -628,6 +631,31 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
   fs  <- acq_paras$fs
   N   <- acq_paras$N
   
+  if (use_basis_cache) {
+    # make sure the cache directory exists
+    basis_cache_path <- file.path(path.expand('~'), "spant_basis_cache")
+    dir.create(basis_cache_path, showWarnings = FALSE)
+    hash_obj <- list(pul_seq = as.character(substitute(pul_seq)), 
+                     ft = round(ft, 1), ref = ref, fs = round(fs, 1), N = N,
+                     xlim = xlim, ..., mol_list = mol_list)
+    
+    hash <- digest::digest(hash_obj)
+    
+    if (verbose) cat("Basis hash :", hash, "\n")
+    
+    hash_base_path <- file.path(basis_cache_path, hash)
+    basis_path     <- file.path(hash_base_path, "basis.rds")
+    
+    if (file.exists(basis_path)) {
+      if (verbose) cat("Importing precomputated basis :", basis_path, "\n")
+      basis <- readRDS(basis_path) 
+      return(basis)
+    } else {
+      dir.create(hash_base_path)
+      if (verbose) cat("Precomputated basis not found, calculating...\n")
+    }
+  }
+  
   if (inherits(mol_list[[1]], "character")) {
     if (length(mol_list) == 1) {
       mol_list <- list(get_mol_paras(mol_list, ft = ft))
@@ -635,9 +663,9 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
       mol_list <- get_mol_paras(mol_list, ft = ft)
     }
   }
-    
+   
   basis_mrs_data <- sim_zero(ft = ft, ref = ref, fs = fs, N = N,
-                              dyns = length(mol_list))
+                             dyns = length(mol_list))
   
   if (verbose) {
     cat("Simulation started.\n")
@@ -657,13 +685,25 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
       print(round(end_time - start_time, 2))
     }
   }
+  
   if (verbose) {
     cat("Simulation finished.\n")
     end_time_full <- Sys.time()
     print(round(end_time_full - start_time_full, 2))
   }
   names <- get_mol_para_list_names(mol_list)
-  mrs_data2basis(basis_mrs_data, names = names)
+  basis <- mrs_data2basis(basis_mrs_data, names = names)
+  
+  if (use_basis_cache) {
+    # if we got here then we need to store the basis for future use
+    if (verbose) cat("Saving precomputated basis :", basis_path, "\n")
+    saveRDS(basis, basis_path)
+    jsonlite::write_json(hash_obj, file.path(hash_base_path,
+                                             "basis_paras.json"), pretty = TRUE,
+                         auto_unbox = TRUE, force = TRUE)
+  }
+    
+  return(basis)
 }
 
 #' Simulate a \code{mol_parameter} object.
