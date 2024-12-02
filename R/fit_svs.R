@@ -244,7 +244,8 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                          pul_seq = seq_press_2d_shaped, TE1 = sim_paras$TE1,
                          TE2 = sim_paras$TE2, use_basis_cache = use_basis_cache,
                          verbose = verbose, pulse_file = pulse_file,
-                         pulse_dur = 5e-3, pulse_file_format = "pta")
+                         pulse_dur = 5e-3, pulse_file_format = "pta",
+                         auto_scale = TRUE)
     } else if (sim_paras$pul_seq == "steam") {
       if (verbose) cat("Simulating STEAM sequence.\n")
       basis <- sim_basis(mol_list, acq_paras = metab,

@@ -9,6 +9,7 @@ sim_basis(
   pul_seq = seq_pulse_acquire,
   acq_paras = def_acq_paras(),
   xlim = NULL,
+  auto_scale = FALSE,
   use_basis_cache = FALSE,
   verbose = FALSE,
   ...
@@ -25,6 +26,9 @@ get_mol_names function for a full list of molecules.}
 \code{\link{def_acq_paras}}}
 
 \item{xlim}{ppm range limiting signals to be simulated.}
+
+\item{auto_scale}{scale the basis based on the intensity of a singlet
+resonance. Needed for sequences with spatial simulation.}
 
 \item{use_basis_cache}{create and use a cache of simulated basis sets stored
 in the "spant_basis_cache" folder in the users home directory. Defults to

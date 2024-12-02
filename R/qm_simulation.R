@@ -613,6 +613,8 @@ get_mol_para_list_names <- function(mol_para_list) {
 #' @param acq_paras list of acquisition parameters or an mrs_data object. See
 #' \code{\link{def_acq_paras}}
 #' @param xlim ppm range limiting signals to be simulated.
+#' @param auto_scale scale the basis based on the intensity of a singlet
+#' resonance. Needed for sequences with spatial simulation.
 #' @param use_basis_cache create and use a cache of simulated basis sets stored
 #' in the "spant_basis_cache" folder in the users home directory. Defults to
 #' FALSE.
@@ -622,7 +624,8 @@ get_mol_para_list_names <- function(mol_para_list) {
 #' @export
 sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
                       acq_paras = def_acq_paras(), xlim = NULL,
-                      use_basis_cache = FALSE, verbose = FALSE, ...) {
+                      auto_scale = FALSE, use_basis_cache = FALSE,
+                      verbose = FALSE, ...) {
   
   if (inherits(acq_paras, "mrs_data")) acq_paras <- get_acq_paras(acq_paras)
   
@@ -637,7 +640,8 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
     dir.create(basis_cache_path, showWarnings = FALSE)
     hash_obj <- list(pul_seq = as.character(substitute(pul_seq)), 
                      ft = round(ft, 1), ref = ref, fs = round(fs, 1), N = N,
-                     xlim = xlim, ..., mol_list = mol_list)
+                     xlim = xlim, auto_scale = auto_scale, ...,
+                     mol_list = mol_list)
     
     hash <- digest::digest(hash_obj)
     
@@ -694,8 +698,21 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
     end_time_full <- Sys.time()
     print(round(end_time_full - start_time_full, 2))
   }
+  
   names <- get_mol_para_list_names(mol_list)
   basis <- mrs_data2basis(basis_mrs_data, names = names)
+ 
+  # auto scale the basis
+  if (auto_scale) {
+    if (verbose) cat("Auto scaling the basis set.\n")
+    # simulate a singlet for scaling basis sets with CSD
+    protons     <- 1
+    singlet     <- get_uncoupled_mol("scaling_singlet", 2, "1H", 1, 2, 0)
+    mrs_singlet <- sim_mol(singlet, pul_seq, ft, ref, fs, N, xlim, ...) 
+    sc_factor   <- get_td_amp(mrs_singlet, nstart = 2) / protons * 2
+    if (verbose) cat("Rescale value :", sc_factor, "\n")
+    basis$data  <- basis$data / as.numeric(sc_factor)
+  }
   
   if (use_basis_cache) {
     # if we got here then we need to store the basis for future use
