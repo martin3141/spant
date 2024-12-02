@@ -647,14 +647,14 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
     basis_path     <- file.path(hash_base_path, "basis.rds")
     
     if (file.exists(basis_path)) {
-      if (verbose) cat("Importing precomputated basis :", basis_path, "\n")
+      cat("Using precomputated basis :", basis_path, "\n")
       basis <- readRDS(basis_path) 
       return(basis)
     } else {
       dir.create(hash_base_path)
       if (verbose) cat("Precomputated basis not found, calculating...\n")
       cat("Cached basis not found, simulation may take a few minutes.\n")
-      cat("Subseqent requests with matched parameters will use precomputed ")
+      cat("Subseqent requests with matched parameters will use precomputed\n")
       cat("results to save computation time.\n")
     }
   }
