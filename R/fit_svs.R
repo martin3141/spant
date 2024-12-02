@@ -463,7 +463,11 @@ check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM) {
       # warning("TE1 assumed to be 0.0126s. Provide the TE1 argument to stop this warning.")
     }
     if (is.null(TE2)) TE2 <- TE - TE1
-    if ((TE1 + TE2) != TE) warning("TE, TE1 and TE2 do not match.")
+    
+    if (!isTRUE(all.equal(TE1 + TE2, TE))) {
+      warning("TE, TE1 and TE2 do not match.")
+    }
+    
     return(list(pul_seq = pul_seq, TE1 = TE1, TE2 = TE2))
   } else if (pul_seq == "press_shaped") {
     if (is.null(TE1)) {
@@ -471,7 +475,11 @@ check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM) {
       # warning("TE1 assumed to be 0.0126s.")
     }
     if (is.null(TE2)) TE2 <- TE - TE1
-    if ((TE1 + TE2) != TE) warning("TE, TE1 and TE2 do not match.")
+    
+    if (!isTRUE(all.equal(TE1 + TE2, TE))) {
+      warning("TE, TE1 and TE2 do not match.")
+    }
+      
     return(list(pul_seq = pul_seq, TE1 = TE1, TE2 = TE2))
   } else if (pul_seq == "steam") {
     if (is.null(TM)) {
@@ -504,7 +512,9 @@ check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM) {
         warning("TE3 assumed to be 0.0009s.")
       }
     }
-    if ((TE1 + TE2 + TE3) != TE) warning("TE, TE1, TE2 and TE3 do not match.")
+    if (!isTRUE(all.equal(TE1 + TE2 + TE3, TE))) {
+      warning("TE, TE1, TE2 and TE3 do not match.")
+    }
     return(list(pul_seq = pul_seq, TE1 = TE1, TE2 = TE2, TE3 = TE3))
   } else {
     stop(paste0("pul_seq not supported : ", pul_seq))
