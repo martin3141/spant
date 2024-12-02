@@ -653,6 +653,9 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
     } else {
       dir.create(hash_base_path)
       if (verbose) cat("Precomputated basis not found, calculating...\n")
+      cat("Cached basis not found, simulation may take a few minutes.\n")
+      cat("Subseqent requests with matched parameters will use precomputed ")
+      cat("results to save computation time.\n")
     }
   }
   

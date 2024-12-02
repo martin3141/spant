@@ -238,11 +238,13 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                          verbose = verbose)
     } else if (sim_paras$pul_seq == "press_shaped") {
       if (verbose) cat("Simulating shaped PRESS sequence.\n")
-      warning("shaped press basis simulation not implemented yet")
+      pulse_file <- system.file("extdata", "press_refocus.pta",
+                                package = "spant")
       basis <- sim_basis(mol_list, acq_paras = metab,
-                         pul_seq = seq_press_ideal, TE1 = sim_paras$TE1,
+                         pul_seq = seq_press_2d_shaped, TE1 = sim_paras$TE1,
                          TE2 = sim_paras$TE2, use_basis_cache = use_basis_cache,
-                         verbose = verbose)
+                         verbose = verbose, pulse_file = pulse_file,
+                         pulse_dur = 5e-3, pulse_file_format = "pta")
     } else if (sim_paras$pul_seq == "steam") {
       if (verbose) cat("Simulating STEAM sequence.\n")
       basis <- sim_basis(mol_list, acq_paras = metab,
