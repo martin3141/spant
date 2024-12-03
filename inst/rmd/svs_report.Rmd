@@ -106,13 +106,40 @@ cat("See the [spant User Guide](https://spantdoc.wilsonlab.co.uk/water_scaling) 
 
 ```{r, results = 'asis', fig.width=7, fig.height=7}
 if (!is.null(dyn_data_uncorr)) {
-  cat("## Dynamic plots\n")
+  cat("## Dynamic plots {.tabset}\n")
   if (!is.null(dyn_data_corr)) {
-    cat("### Spectrogram with dynamic correction")
+    cat("### Spectrogram with dynamic correction\n")
     image(dyn_data_corr, xlim = c(4, 0.5))
   }
-  cat("\n\n### Spectrogram without dynamic correction")
+  cat("\n\n### Spectrogram without dynamic correction\n")
   image(dyn_data_uncorr, xlim = c(4, 0.5))
+}
+```
+
+## Spectral plots {.tabset}
+
+### Processed cropped
+```{r, fig.width=7, fig.height=6}
+phase_offset <- params$fit_res$res_tab$phase
+shift_offset <- params$fit_res$res_tab$shift
+proc_spec <- phase(params$fit_res$data, phase_offset)
+proc_spec <- shift(proc_spec, shift_offset, units = "ppm")
+proc_spec <- zf(proc_spec)
+plot(proc_spec, xlim = c(4, 0.5))
+```
+
+### Processed full
+```{r, fig.width=7, fig.height=6}
+plot(proc_spec)
+```
+
+```{r, results = 'asis', fig.width=7, fig.height=6}
+if (params$w_ref_available) {
+  cat("### Water reference resonance\n")
+  w_ref_proc <- shift(w_ref, shift_offset, units = "ppm")
+  w_ref_proc <- auto_phase(w_ref_proc, xlim = c(5.3, 4))
+  w_ref_proc <- zf(w_ref_proc)
+  plot(w_ref_proc, xlim = c(5.3, 4))
 }
 ```
 
