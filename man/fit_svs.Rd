@@ -23,6 +23,7 @@ fit_svs(
   dfp_corr = TRUE,
   output_ratio = "tCr",
   ecc = FALSE,
+  hsvd_width = 30,
   fit_opts = NULL,
   fit_subset = NULL,
   legacy_ws = FALSE,
@@ -86,6 +87,11 @@ outputs. Set as NULL to omit.}
 
 \item{ecc}{option to perform water reference based eddy current correction,
 defaults to FALSE.}
+
+\item{hsvd_width}{set the width of the HSVD filter in Hz. Note the applied
+width is between -width and +width Hz, with 0 Hz being defined at the centre
+of the spectral width. Filtering is applied just before fitting and defaults
+to 30 Hz. Set to NULL to disable.}
 
 \item{fit_opts}{options to pass to ABfit.}
 

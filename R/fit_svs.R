@@ -38,6 +38,10 @@
 #' outputs. Set as NULL to omit.
 #' @param ecc option to perform water reference based eddy current correction,
 #' defaults to FALSE.
+#' @param hsvd_width set the width of the HSVD filter in Hz. Note the applied
+#' width is between -width and +width Hz, with 0 Hz being defined at the centre
+#' of the spectral width. Filtering is applied just before fitting and defaults
+#' to 30 Hz. Set to NULL to disable.
 #' @param fit_opts options to pass to ABfit.
 #' @param fit_subset specify a subset of dynamics to analyse, for example
 #' 1:16 would only fit the first 16 dynamic scans.
@@ -68,9 +72,9 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                     pul_seq = NULL, TE = NULL, TR = NULL, TE1 = NULL,
                     TE2 = NULL, TE3 = NULL, TM = NULL, append_basis = NULL,
                     remove_basis = NULL, dfp_corr = TRUE, output_ratio = "tCr",
-                    ecc = FALSE, fit_opts = NULL, fit_subset = NULL, 
-                    legacy_ws = FALSE, w_att = 0.7, w_conc = 35880,
-                    use_basis_cache = "auto", verbose = FALSE) {
+                    ecc = FALSE, hsvd_width = 30, fit_opts = NULL,
+                    fit_subset = NULL,  legacy_ws = FALSE, w_att = 0.7,
+                    w_conc = 35880, use_basis_cache = "auto", verbose = FALSE) {
   
   argg <- c(as.list(environment()))
   
@@ -170,7 +174,6 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   # calculate the water suppression efficiency
   # the ratio of the residual water peak height
   # relative to the height of the unsuppressed water signal
-  
   if (w_ref_available) {
     w_ref_peak   <- peak_info(w_ref, xlim = c(7, 3), mode = "mod")
     w_ref_height <- w_ref_peak$height[1]
@@ -266,6 +269,12 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   
   if (is.null(fit_opts)) fit_opts <- abfit_reg_opts()
   
+  # filter residual water
+  if (!is.null(hsvd_width)) {
+    if (verbose) cat("Applying HSVD filter.\n")
+    metab <- hsvd_filt(metab, xlim = c(-hsvd_width, hsvd_width))
+  }
+  
   # fitting
   fit_res <- fit_mrs(metab, basis = basis, opts = fit_opts)
     
@@ -273,68 +282,6 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   shift_offset <- fit_res$res_tab$shift
   
   if (w_ref_available) fit_res$res_tab$ws_eff <- ws_efficiency
-  
-  # check for poor dynamics - needs work, so not used at the moment!
-  # omit_bad_dynamics <- FALSE # not an option yet
-  # if (omit_bad_dynamics & (Ndyns(metab_pre_dfp_corr) > 1)) {
-  #   if (dfp_corr) {
-  #     dyn_data <- shift(phase(metab_post_dfp_corr, phase_offset), shift_offset)
-  #   } else {
-  #     dyn_data <- shift(phase(metab_pre_dfp_corr, phase_offset), shift_offset)
-  #   }
-  #   
-  #   dyn_data_proc <- bc_poly(crop_spec(zf(lb(dyn_data, 2)), c(3.5, 1.8)), 2)
-  #   
-  #   peak_height <- spec_op(dyn_data_proc, operator = "max")
-  #   
-  #   peak_height <- peak_height / max(peak_height) * 100
-  #   
-  #   bad_shots      <- peak_height < 75
-  #   bad_shots_n    <- sum(bad_shots)
-  #   bad_shots_perc <- bad_shots_n / length(peak_height) * 100
-  #   
-  #   grDevices::png(file.path(output_dir, "drift_plot_peak_height.png"),
-  #                  res = 2 * 72, height = 2 * 480, width = 2 * 480)
-  #   graphics::image(dyn_data_proc)
-  #   grDevices::dev.off()
-  #   
-  #   grDevices::pdf(file.path(output_dir, "dynamic_peak_height.pdf"))
-  #   graphics::plot(peak_height, type = "l", ylim = c(0, 100),
-  #                  ylab = "Max peak height (%)", xlab = "Dynamic")
-  #   graphics::abline(h = 75, lty = 2)
-  #   grDevices::dev.off()
-  #   
-  #   if (bad_shots_n > 0) {
-  #     subset <- which(!bad_shots)
-  #     
-  #     cat(paste0(bad_shots_n, " bad shots (", round(bad_shots_perc), 
-  #                "%) detected.\n"))
-  #     
-  #     # remove bad shots and refit
-  #     metab_pre_dfp_corr  <- get_dyns(metab_pre_dfp_corr, subset)
-  #     
-  #     if (dfp_corr) {
-  #       metab_post_dfp_corr <- get_dyns(metab_post_dfp_corr, subset)
-  #       metab <- metab_post_dfp_corr
-  #     } else {
-  #       metab <- metab_pre_dfp_corr
-  #     }
-  #     
-  #     metab <- mean_dyns(metab)
-  # 
-  #     # eddy current correction
-  #     if (ecc & (!is.null(w_ref))) metab <- ecc(metab, w_ref)
-  #     
-  #     # fitting
-  #     if (verbose) cat("Refitting without bad shots.\n")
-  #     fit_res <- fit_mrs(metab, basis = basis, opts = abfit_opts)
-  #     
-  #     phase_offset <- fit_res$res_tab$phase
-  #     shift_offset <- fit_res$res_tab$shift
-  #   } else {
-  #     if (verbose) cat("No bad shots detected.\n")
-  #   }
-  # }
   
   # keep unscaled results
   res_tab_unscaled <- fit_res$res_tab
