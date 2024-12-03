@@ -31,6 +31,7 @@
 #' all macromolecular and lipid signals, "^lac" to remove lactate. This operation
 #' is performed before signals are added with append_basis. Cannot be used with
 #' precompiled basis sets.
+#' @param pre_align perform simple frequency alignment to known reference peaks.
 #' @param dfp_corr perform dynamic frequency and phase correction using the RATS
 #' method.
 #' @param output_ratio optional string to specify a metabolite ratio to output.
@@ -40,8 +41,8 @@
 #' defaults to FALSE.
 #' @param hsvd_width set the width of the HSVD filter in Hz. Note the applied
 #' width is between -width and +width Hz, with 0 Hz being defined at the centre
-#' of the spectral width. Filtering is applied just before fitting and defaults
-#' to 30 Hz. Set to NULL to disable.
+#' of the spectral width. Default is disabled (set to NULL), 30 Hz is a
+#' reasonable value.
 #' @param fit_opts options to pass to ABfit.
 #' @param fit_subset specify a subset of dynamics to analyse, for example
 #' 1:16 would only fit the first 16 dynamic scans.
@@ -71,10 +72,11 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                     external_basis = NULL, p_vols = NULL, format = NULL,
                     pul_seq = NULL, TE = NULL, TR = NULL, TE1 = NULL,
                     TE2 = NULL, TE3 = NULL, TM = NULL, append_basis = NULL,
-                    remove_basis = NULL, dfp_corr = TRUE, output_ratio = "tCr",
-                    ecc = FALSE, hsvd_width = 30, fit_opts = NULL,
-                    fit_subset = NULL,  legacy_ws = FALSE, w_att = 0.7,
-                    w_conc = 35880, use_basis_cache = "auto", verbose = FALSE) {
+                    remove_basis = NULL, pre_align = TRUE, dfp_corr = TRUE,
+                    output_ratio = "tCr", ecc = FALSE, hsvd_width = NULL,
+                    fit_opts = NULL, fit_subset = NULL,  legacy_ws = FALSE,
+                    w_att = 0.7, w_conc = 35880, use_basis_cache = "auto",
+                    verbose = FALSE) {
   
   argg <- c(as.list(environment()))
   
@@ -158,12 +160,21 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
     metab <- get_dyns(metab, fit_subset) 
   }
   
-  # dynamic frequency and phase correction
   metab_pre_dfp_corr <- metab
+  
+  # pre-alignment
+  if (pre_align) {
+    metab <- align(metab, c(2.01, 3.03, 3.22), max_shift = 40)
+    if (Ndyns(metab) > 1) metab_post_dfp_corr <- metab
+  }
+  
+  # rats correction
   if (dfp_corr & (Ndyns(metab) > 1)) {
     metab <- rats(metab, zero_freq_shift_t0 = TRUE, xlim = c(4, 1.8))
     metab_post_dfp_corr <- metab
   }
+  
+  if (!exists("metab_post_dfp_corr")) metab_post_dfp_corr <- NULL
   
   # take the mean of the metabolite data
   metab <- mean_dyns(metab)
@@ -342,7 +353,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
     # add 2 Hz LB
     dyn_data_uncorr <- lb(dyn_data_uncorr, 2)
     
-    if (dfp_corr) {
+    if (!is.null(metab_post_dfp_corr)) {
       # phase according to the fit results
       dyn_data_corr <- phase(metab_post_dfp_corr, fit_res$res_tab$phase)
       # correct chem. shift scale according to the fit results
@@ -386,7 +397,7 @@ check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM) {
     if (!is.null(metab$meta$PulseSequenceType)){
       pul_seq <- metab$meta$PulseSequenceType
     } else {
-      warning(paste0("Could not determine the pulse sequence, so assuming ",
+      warning(paste0("Could not determine the pulse sequence, so assuming\n",
                      "PRESS. Provide the pul_seq argument to stop this ",
                      "warning."))
       pul_seq <- "press"

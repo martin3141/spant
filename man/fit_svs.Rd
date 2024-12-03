@@ -20,10 +20,11 @@ fit_svs(
   TM = NULL,
   append_basis = NULL,
   remove_basis = NULL,
+  pre_align = TRUE,
   dfp_corr = TRUE,
   output_ratio = "tCr",
   ecc = FALSE,
-  hsvd_width = 30,
+  hsvd_width = NULL,
   fit_opts = NULL,
   fit_subset = NULL,
   legacy_ws = FALSE,
@@ -78,6 +79,8 @@ all macromolecular and lipid signals, "^lac" to remove lactate. This operation
 is performed before signals are added with append_basis. Cannot be used with
 precompiled basis sets.}
 
+\item{pre_align}{perform simple frequency alignment to known reference peaks.}
+
 \item{dfp_corr}{perform dynamic frequency and phase correction using the RATS
 method.}
 
@@ -90,8 +93,8 @@ defaults to FALSE.}
 
 \item{hsvd_width}{set the width of the HSVD filter in Hz. Note the applied
 width is between -width and +width Hz, with 0 Hz being defined at the centre
-of the spectral width. Filtering is applied just before fitting and defaults
-to 30 Hz. Set to NULL to disable.}
+of the spectral width. Default is disabled (set to NULL), 30 Hz is a
+reasonable value.}
 
 \item{fit_opts}{options to pass to ABfit.}
 
