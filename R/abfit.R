@@ -16,9 +16,12 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   ppm_lim <- sort(range(ppm_sc))
   noise_reg_lim <- sort(opts$noise_region)
   if ((noise_reg_lim[1] < ppm_lim[1]) | (noise_reg_lim[2] > ppm_lim[2])) {
-    stop(paste0("The spectral range for the noise region estimate is outside",
-                " the acquired spectral width. Change the noise_region",
-                " parameter in the fitting options."))
+    opts$noise_region <- round(c(ppm_lim[1] + 0.6 + 0.1, ppm_lim[1] + 0.1), 2)
+    warning(paste0("The spectral range for the noise region is outside\n",
+                " the data spectral width. Increase the acquistion spectral ",
+                "bandwidth\nor change noise_region in the fitting options.\n",
+                "Automatically adjusting noise region to : ", opts$noise_region[1], ", ", 
+                opts$noise_region[2], " ppm\n"))
   }
   
   # check the basis has the correct number of data points
@@ -472,12 +475,16 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     # print(sum((num_jac - anal_jac) ^ 2))
     # image(Mod(anal_jac - num_jac))
     
+    # turn off warnings to avoid maxiter messages
+    oldw <- getOption("warn")
+    options(warn = -1)
     res <- minpack.lm::nls.lm(par, lower, upper, abfit_full_obj, jac_fn,
                               ctrl, y, raw_metab_basis, bl_basis_full, t,
                               f, sp_bas_full$inds, sp_bas_full$bl_comps, FALSE,
                               NULL, opts$phi1_optim, opts$ahat_calc_method,
                               freq_reg_scaled, lb_reg_scaled, opts$lb_init,
                               asym_reg_scaled)
+    options(warn = oldw)
   } 
   
   if (opts$maxiters == 0) {

@@ -375,12 +375,13 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   }
   
   # add water amplitude and PVC info to the unscaled output
-  res_tab_unscaled <- cbind(res_tab_unscaled, w_amp = res_tab_molal$w_amp,
-                            GM_vol = res_tab_molal$GM_vol,
-                            WM_vol = res_tab_molal$WM_vol,
-                            CSF_vol = res_tab_molal$CSF_vol,
-                            GM_frac = res_tab_molal$GM_frac)
-  
+  if (w_ref_available) {
+    res_tab_unscaled <- cbind(res_tab_unscaled, w_amp = res_tab_molal$w_amp,
+                              GM_vol = res_tab_molal$GM_vol,
+                              WM_vol = res_tab_molal$WM_vol,
+                              CSF_vol = res_tab_molal$CSF_vol,
+                              GM_frac = res_tab_molal$GM_frac)
+  }
   utils::write.csv(res_tab_unscaled, file.path(output_dir,
                                                "fit_res_unscaled.csv"))
   
