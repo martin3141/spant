@@ -97,7 +97,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
     metab_path <- metab
     metab      <- read_mrs(metab, format = format)
     if (is.null(output_dir)) {
-      output_dir <- sub("\\.", "_", basename(metab_path))
+      output_dir <- gsub("\\.", "_", basename(metab_path))
       output_dir <- paste0(output_dir, "_results")
     }
   }
