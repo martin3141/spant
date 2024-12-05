@@ -58,6 +58,8 @@
 #' one of the following : "auto", "all" or "none". The default value of "auto" 
 #' will only use the cache for 3T PRESS - which generally requires more detailed
 #' simulation due to high CSD.
+#' @param summary_measures output an additional table with a subset of
+#' metabolite levels, eg c("tNAA", "tNAA/tCr", "tNAA/tCho", "Lac/tNAA").
 #' @param verbose output potentially useful information.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
@@ -76,7 +78,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                     output_ratio = "tCr", ecc = FALSE, hsvd_width = NULL,
                     fit_opts = NULL, fit_subset = NULL,  legacy_ws = FALSE,
                     w_att = 0.7, w_conc = 35880, use_basis_cache = "auto",
-                    verbose = FALSE) {
+                    summary_measures = NULL, verbose = FALSE) {
   
   argg <- c(as.list(environment()))
   
@@ -369,6 +371,15 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
     dyn_data_corr   <- NULL
   }
   
+  # generate a summary table
+  if (is.null(summary_measures)) {
+    summary_tab <- NULL
+  } else {
+    # extract the values from the fit results
+    summary_tab <- data.frame(name = c("NAN (mM)", "Cr (mM)"),
+                              value = c(1, 4))
+  }
+  
   # data needed to produce the output html report
   results <- list(fit_res = fit_res, argg = argg,
                   w_ref_available = w_ref_available,
@@ -378,7 +389,8 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                   res_tab_legacy = res_tab_legacy,
                   res_tab_molal = res_tab_molal,
                   dyn_data_uncorr = dyn_data_uncorr,
-                  dyn_data_corr = dyn_data_corr) 
+                  dyn_data_corr = dyn_data_corr,
+                  summary_tab = summary_tab) 
   
   rmd_file <- system.file("rmd", "svs_report.Rmd", package = "spant")
   

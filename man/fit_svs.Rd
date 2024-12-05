@@ -31,6 +31,7 @@ fit_svs(
   w_att = 0.7,
   w_conc = 35880,
   use_basis_cache = "auto",
+  summary_measures = NULL,
   verbose = FALSE
 )
 }
@@ -116,6 +117,9 @@ gray matter, and 55556 for phantom measurements.}
 one of the following : "auto", "all" or "none". The default value of "auto"
 will only use the cache for 3T PRESS - which generally requires more detailed
 simulation due to high CSD.}
+
+\item{summary_measures}{output an additional table with a subset of
+metabolite levels, eg c("tNAA", "tNAA/tCr", "tNAA/tCho", "Lac/tNAA").}
 
 \item{verbose}{output potentially useful information.}
 }

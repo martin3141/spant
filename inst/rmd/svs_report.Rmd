@@ -12,6 +12,7 @@ params:
   res_tab_molal: ""
   dyn_data_uncorr: ""
   dyn_data_corr: ""
+  summary_tab: ""
 ---
 
 ```{r setup, include=FALSE}
@@ -39,6 +40,19 @@ for (n in 1:length(basis_names)) {
   cat("\n### ", basis_names[n], "\n", sep = "")
   plot(params$fit_res, plot_sigs = basis_names[n])
   cat("\n")
+}
+```
+
+```{r, results = 'asis'}
+if (!is.null(params$summary_tab)) {
+  cat("## Summary table\n")
+  
+  col.names <- c("Name", "Value")
+  kable_table <- kableExtra::kbl(params$summary_tab, col.names = col.names,
+                                 align = c("l", "r"))
+  
+  kableExtra::kable_styling(kable_table, full_width = FALSE, position = "left",
+                          bootstrap_options = boot_opts)
 }
 ```
 
@@ -195,7 +209,7 @@ value <- c(value, round_dp(params$fit_res$res_tab$FQN, 2),
 
 diag_tab <- data.frame(name, value)
 kableExtra::kable_styling(kableExtra::kbl(diag_tab, align = c("l", "r"),
-                                          col.names = c("Parameter", "Value")),
+                                          col.names = c("Name", "Value")),
                           full_width = FALSE, position = "left",
                           bootstrap_options = boot_opts)
 ```
