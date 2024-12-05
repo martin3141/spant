@@ -136,8 +136,8 @@ plot(proc_spec)
 ```{r, results = 'asis', fig.width=7, fig.height=6}
 if (params$w_ref_available) {
   cat("### Water reference resonance\n")
-  w_ref_proc <- shift(w_ref, shift_offset, units = "ppm")
-  w_ref_proc <- auto_phase(w_ref_proc, xlim = c(5.3, 4))
+  # w_ref_proc <- shift(w_ref, shift_offset, units = "ppm")
+  w_ref_proc <- auto_phase(w_ref, xlim = c(5.3, 4))
   w_ref_proc <- zf(w_ref_proc)
   plot(w_ref_proc, xlim = c(5.3, 4))
 }
