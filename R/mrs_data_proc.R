@@ -533,7 +533,7 @@ phase <- function(mrs_data, zero_order, first_order = 0) {
   } else if ((first_order == 0) && (is.null(dim(zero_order)))) { 
     # array of zero order phase terms given
     if (length(zero_order) != Ndyns(mrs_data)) {
-      stop("Shift vector has an incorrect length.")
+      stop("Phase vector has an incorrect length.")
     }
     # assume array should be applied in the dynamic dimension
     phase_array <- array(zero_order, dim = c(1, 1, 1, 1, Ndyns(mrs_data), 1,
