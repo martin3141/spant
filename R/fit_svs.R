@@ -422,7 +422,11 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                   dyn_data_corr = dyn_data_corr,
                   summary_tab = summary_tab) 
   
-  rmd_file <- system.file("rmd", "svs_report.Rmd", package = "spant")
+  if (Ndyns(metab) == 1) {
+    rmd_file <- system.file("rmd", "svs_report.Rmd", package = "spant")
+  } else {
+    rmd_file <- system.file("rmd", "dyn_svs_report.Rmd", package = "spant")
+  }
   
   rmd_out_f <- file.path(tools::file_path_as_absolute(output_dir), "report")
   
