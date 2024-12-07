@@ -123,9 +123,12 @@ simulation due to high CSD.}
 \item{summary_measures}{output an additional table with a subset of
 metabolite levels, eg c("tNAA", "tNAA/tCr", "tNAA/tCho", "Lac/tNAA").}
 
-\item{dyn_av_block_size}{TODO.}
+\item{dyn_av_block_size}{perform temporal averaging with the specified block
+size. Defaults to NULL, eg average across all dynamic scans.}
 
-\item{dyn_av_scheme}{TODO.}
+\item{dyn_av_scheme}{a numerical vector of sequential integers starting at 1,
+with the same length as the number of dynamic scans in the metabolite data.
+For example: c(1, 1, 2, 1, 1, 3, 1, 1, 3).}
 
 \item{verbose}{output potentially useful information.}
 }

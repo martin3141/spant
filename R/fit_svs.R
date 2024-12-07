@@ -60,8 +60,11 @@
 #' simulation due to high CSD.
 #' @param summary_measures output an additional table with a subset of
 #' metabolite levels, eg c("tNAA", "tNAA/tCr", "tNAA/tCho", "Lac/tNAA").
-#' @param dyn_av_block_size TODO.
-#' @param dyn_av_scheme TODO.
+#' @param dyn_av_block_size perform temporal averaging with the specified block
+#' size. Defaults to NULL, eg average across all dynamic scans.
+#' @param dyn_av_scheme a numerical vector of sequential integers starting at 1,
+#' with the same length as the number of dynamic scans in the metabolite data.
+#' For example: c(1, 1, 2, 1, 1, 3, 1, 1, 3).
 #' @param verbose output potentially useful information.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
