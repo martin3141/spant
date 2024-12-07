@@ -60,6 +60,8 @@
 #' simulation due to high CSD.
 #' @param summary_measures output an additional table with a subset of
 #' metabolite levels, eg c("tNAA", "tNAA/tCr", "tNAA/tCho", "Lac/tNAA").
+#' @param dyn_av_block_size TODO.
+#' @param dyn_av_scheme TODO.
 #' @param verbose output potentially useful information.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
@@ -78,7 +80,8 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                     output_ratio = "tCr", ecc = FALSE, hsvd_width = NULL,
                     fit_opts = NULL, fit_subset = NULL,  legacy_ws = FALSE,
                     w_att = 0.7, w_conc = 35880, use_basis_cache = "auto",
-                    summary_measures = NULL, verbose = FALSE) {
+                    summary_measures = NULL, dyn_av_block_size = NULL,
+                    dyn_av_scheme = NULL, verbose = FALSE) {
   
   argg <- c(as.list(environment()))
   
@@ -88,6 +91,10 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   
   if (!is.null(external_basis) & !is.null(remove_basis)) {
     stop("external_basis and remove_basis options cannot both be set. Use one or the other.")
+  }
+  
+  if (!is.null(dyn_av_block_size) & !is.null(dyn_av_scheme)) {
+    stop("dyn_av_block_size and dyn_av_scheme options cannot both be set. Use one or the other.")
   }
   
   # read the data file if not already an mrs_data object
@@ -179,7 +186,14 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   if (!exists("metab_post_dfp_corr")) metab_post_dfp_corr <- NULL
   
   # take the mean of the metabolite data
-  metab <- mean_dyns(metab)
+  if (!is.null(dyn_av_block_size)) {
+    metab <- mean_dyn_blocks(metab, dyn_av_block_size)
+  } else if (!is.null(dyn_av_scheme)) {
+    warning("dyn_av_scheme not implemented")
+    metab <- mean_dyns(metab)
+  } else {
+    metab <- mean_dyns(metab)
+  }
  
   # take the mean of the water reference data
   if (w_ref_available) w_ref <- mean_dyns(w_ref)
@@ -348,18 +362,18 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   # prepare dynamic data for plotting
   if (Ndyns(metab_pre_dfp_corr) > 1) {
     # phase according to the fit results
-    dyn_data_uncorr <- phase(metab_pre_dfp_corr, fit_res$res_tab$phase)
+    dyn_data_uncorr <- phase(metab_pre_dfp_corr, mean(fit_res$res_tab$phase))
     # correct chem. shift scale according to the fit results
-    dyn_data_uncorr <- shift(dyn_data_uncorr, fit_res$res_tab$shift,
+    dyn_data_uncorr <- shift(dyn_data_uncorr, mean(fit_res$res_tab$shift),
                              units = "ppm")
     # add 2 Hz LB
     dyn_data_uncorr <- lb(dyn_data_uncorr, 2)
     
     if (!is.null(metab_post_dfp_corr)) {
       # phase according to the fit results
-      dyn_data_corr <- phase(metab_post_dfp_corr, fit_res$res_tab$phase)
+      dyn_data_corr <- phase(metab_post_dfp_corr, mean(fit_res$res_tab$phase))
       # correct chem. shift scale according to the fit results
-      dyn_data_corr <- shift(dyn_data_corr, fit_res$res_tab$shift,
+      dyn_data_corr <- shift(dyn_data_corr, mean(fit_res$res_tab$shift),
                              units = "ppm")
       # add 2 Hz LB
       dyn_data_corr <- lb(dyn_data_corr, 2)

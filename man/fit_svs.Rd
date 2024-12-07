@@ -32,6 +32,8 @@ fit_svs(
   w_conc = 35880,
   use_basis_cache = "auto",
   summary_measures = NULL,
+  dyn_av_block_size = NULL,
+  dyn_av_scheme = NULL,
   verbose = FALSE
 )
 }
@@ -120,6 +122,10 @@ simulation due to high CSD.}
 
 \item{summary_measures}{output an additional table with a subset of
 metabolite levels, eg c("tNAA", "tNAA/tCr", "tNAA/tCho", "Lac/tNAA").}
+
+\item{dyn_av_block_size}{TODO.}
+
+\item{dyn_av_scheme}{TODO.}
 
 \item{verbose}{output potentially useful information.}
 }
