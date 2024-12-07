@@ -376,8 +376,12 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
     summary_tab <- NULL
   } else {
     # extract the values from the fit results
-    summary_tab <- data.frame(name = c("NAN (mM)", "Cr (mM)"),
-                              value = c(1, 4))
+    if (w_ref_available) {
+      summary_tab <- parse_summary(summary_measures, fit_res_molal, " (mM)") 
+    } else {
+      summary_tab <- parse_summary(summary_measures, fit_res, " (a.u.)") 
+    }
+    summary_tab$values <- format(summary_tab$values, digits = 3)
   }
   
   # data needed to produce the output html report
@@ -492,7 +496,32 @@ check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM) {
   }
 }
 
-#' GUI interface for the standard SVS 1H brain analysis pipeline
+parse_summary <- function(measures, fit_res, units) {
+  res_names <- colnames(fit_res$res_tab)
+  val_num   <- length(measures)
+  values    <- rep(NA, val_num)
+  
+  for (n in 1:val_num) {
+    measure <- gsub(" ", "", measures[n])
+
+    if (length(grep("/", measure)) > 0) {
+      # looks like a ratio
+      numerator   <- strsplit(measure, "/")[[1]][1]
+      denominator <- strsplit(measure, "/")[[1]][2]
+      values[n]   <- as.numeric(fit_res$res_tab[numerator] / 
+                                  fit_res$res_tab[denominator])
+      measures[n] <- measure
+    } else {
+      # looks like a single value
+      values[n]   <- as.numeric(fit_res$res_tab[measure])
+      measures[n] <- paste0(measure, units)
+    }
+  }
+  return(data.frame(measures = measures, values = values)) 
+}
+
+#' GUI interface for the standard SVS 1H brain analysis pipeline, this is a 
+#' work in progress, and not ready for serious use.
 #' @export
 fit_svs_gui <-function() {
   

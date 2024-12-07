@@ -51,6 +51,7 @@ if (!is.null(params$summary_tab)) {
   kable_table <- kableExtra::kbl(params$summary_tab, col.names = col.names,
                                  align = c("l", "r"))
   
+  boot_opts <- c("striped", "hover", "condensed")
   kableExtra::kable_styling(kable_table, full_width = FALSE, position = "left",
                           bootstrap_options = boot_opts)
 }

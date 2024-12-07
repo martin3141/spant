@@ -2,10 +2,12 @@
 % Please edit documentation in R/fit_svs.R
 \name{fit_svs_gui}
 \alias{fit_svs_gui}
-\title{GUI interface for the standard SVS 1H brain analysis pipeline}
+\title{GUI interface for the standard SVS 1H brain analysis pipeline, this is a
+work in progress, and not ready for serious use.}
 \usage{
 fit_svs_gui()
 }
 \description{
-GUI interface for the standard SVS 1H brain analysis pipeline
+GUI interface for the standard SVS 1H brain analysis pipeline, this is a
+work in progress, and not ready for serious use.
 }
