@@ -64,7 +64,7 @@
 #' size. Defaults to NULL, eg average across all dynamic scans.
 #' @param dyn_av_scheme a numerical vector of sequential integers starting at 1,
 #' with the same length as the number of dynamic scans in the metabolite data.
-#' For example: c(1, 1, 2, 1, 1, 3, 1, 1, 3).
+#' For example: c(1, 1, 2, 1, 1, 3, 1, 1).
 #' @param verbose output potentially useful information.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
@@ -192,8 +192,17 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   if (!is.null(dyn_av_block_size)) {
     metab <- mean_dyn_blocks(metab, dyn_av_block_size)
   } else if (!is.null(dyn_av_scheme)) {
-    warning("dyn_av_scheme not implemented")
-    metab <- mean_dyns(metab)
+    if (length(dyn_av_scheme) != Ndyns(metab)) {
+      stop("dyn_av_scheme is the wrong length")
+    }
+    dyn_av_scheme <- as.integer(dyn_av_scheme)
+    max_dyn       <- max(dyn_av_scheme)
+    metab_list    <- vector("list", length = max_dyn)
+    for (n in 1:max_dyn) {
+      subset <- which(dyn_av_scheme == n) 
+      metab_list[[n]] <- mean_dyns(get_dyns(metab, subset))
+    }
+    metab <- append_dyns(metab_list)
   } else {
     metab <- mean_dyns(metab)
   }

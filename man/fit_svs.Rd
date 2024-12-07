@@ -128,7 +128,7 @@ size. Defaults to NULL, eg average across all dynamic scans.}
 
 \item{dyn_av_scheme}{a numerical vector of sequential integers starting at 1,
 with the same length as the number of dynamic scans in the metabolite data.
-For example: c(1, 1, 2, 1, 1, 3, 1, 1, 3).}
+For example: c(1, 1, 2, 1, 1, 3, 1, 1).}
 
 \item{verbose}{output potentially useful information.}
 }
