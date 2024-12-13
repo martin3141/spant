@@ -350,37 +350,43 @@ scale_amp_ratio_value <- function(fit_result, value) {
 get_corr_factor <- function(te, tr, B0, gm_vol, wm_vol, csf_vol) {
   # Correction factor calculated according to the method of Gasparovic et al
   # (MRM 55:1219-1226 2006)
-  if ((B0 == 3.0) | (B0 == 2.9)) {
-    # Wanasapura values given in Harris paper
-    t1_gm    <- 1.331
-    t2_gm    <- 0.110
-    t1_wm    <- 0.832
-    t2_wm    <- 0.0792
-    t1_csf   <- 3.817
-    t2_csf   <- 0.503
-    t1_metab <- 1.15
-    t2_metab <- 0.3
-  } else if (B0 == 1.5) {
-    # values from Gasparovic 2006 MRM paper
-    t1_gm    <- 1.304
-    t2_gm    <- 0.093
-    t1_wm    <- 0.660
-    t2_wm    <- 0.073
-    t1_csf   <- 2.93
-    t2_csf   <- 0.23
-    t1_metab <- 1.15
-    t2_metab <- 0.3
+  # see online docs for references to these numbers
+  
+  if (B0 == 1.5) {
+    t1_gm    <- 1.304 # Gasparovic et al, page 1223
+    t2_gm    <- 0.093 # Gasparovic et al, page 1223
+    t1_wm    <- 0.660 # Gasparovic et al, page 1223
+    t2_wm    <- 0.073 # Gasparovic et al, page 1223
+    t1_csf   <- 2.39  # Ibrahim et al, Abstract
+    t2_csf   <- 0.23  # Ibrahim et al, Abstract
+    t1_metab <- 1.153 # Gasparovic et al, page 1223
+                      # (1.28+1.09+1.09)/3
+    t2_metab <- 0.347 # Gasparovic et al, page 1223
+                      # (0.34+0.35+0.35)/3
+  } else if ((B0 == 3.0) | (B0 == 2.9)) {
+    t1_gm    <- 1.331  # Wansapura et al, Table 7
+    t2_gm    <- 0.110  # Wansapura et al, Table 2
+    t1_wm    <- 0.832  # Wansapura et al, Table 7
+    t2_wm    <- 0.0796 # Wansapura et al, Table 2
+    t1_csf   <- 3.817  # Lu et at, Discussion
+    t2_csf   <- 0.503  # Piechnik et al, Table 1
+    t1_metab <- 1.317  # Mlynarik et al, Table 1 
+                       # (1.47+1.46+1.30+1.35+1.24+1.08)/6
+    t2_metab <- 0.207  # Mlynarik et al, Table 2
+                       # (247+152+207+295+156+187)/6000
+  } else if (B0 == 7.0) {
+    t1_gm    <- 2.132 # Rooney et al, Table 1
+    t2_gm    <- 0.050 # Bartha et al, Table 1, LASER
+    t1_wm    <- 1.220 # Rooney et al, Table 1
+    t2_wm    <- 0.055 # Bartha et al, Table 1, LASER
+    t1_csf   <- 4.425 # Rooney et al, Table 1
+    t2_csf   <- 1.050 # Spijkerman et al, supp. materials S3, 1x1x4
+    t1_metab <- 1.583 # Li et al, Table 1
+                      # (1.24+1.78+1.73)/3
+    t2_metab <- 0.141 # Li et al, Table 1
+                      # (131+121+170)/3000
   } else {
     warning("Error. Relaxation values not available for this field strength. Assuming values for 3 Telsa.")
-    # Wanasapura values given in Harris paper
-    t1_gm    <- 1.331
-    t2_gm    <- 0.110
-    t1_wm    <- 0.832
-    t2_wm    <- 0.0792
-    t1_csf   <- 3.817
-    t2_csf   <- 0.503
-    t1_metab <- 1.15
-    t2_metab <- 0.3
   }
   
   # MR-visible water densities
