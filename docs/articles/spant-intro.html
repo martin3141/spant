@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.24.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.0</span>
       </span>
     </div>
 
@@ -315,7 +315,7 @@ tissue water) based on the method described by Gasparovic et al MRM 2006
 <span><span class="va">TR</span> <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="va">fit_res_molal</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scale_amp_molal_pvc.html">scale_amp_molal_pvc</a></span><span class="op">(</span><span class="va">fit_res</span>, <span class="va">mrs_data_wref</span>, <span class="va">p_vols</span>, <span class="va">TE</span>, <span class="va">TR</span><span class="op">)</span></span>
 <span><span class="va">fit_res_molal</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">tNAA</span></span>
-<span><span class="co">#&gt; [1] 12.59789</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 13.9346</span></span></code></pre></div>
 <p>An alternative method scales the metabolite values into molar (mM)
 units (mol / Litre of tissue) based on assumptions outlined in the
 LCModel manual and references therein (section 10.2). This approach may
@@ -323,6 +323,8 @@ be preferred when comparing results to those obtained LCModel or
 TARQUIN.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_res_molar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scale_amp_molar.html">scale_amp_molar</a></span><span class="op">(</span><span class="va">fit_res</span>, <span class="va">mrs_data_wref</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in scale_amp_molar(fit_res, mrs_data_wref): Function name</span></span>
+<span><span class="co">#&gt; (scale_amp_molar) is missleading and has been replaced with scale_amp_legacy.</span></span>
 <span><span class="va">fit_res_molar</span><span class="op">$</span><span class="va">res_tab</span><span class="op">$</span><span class="va">tNAA</span></span>
 <span><span class="co">#&gt; [1] 6.826335</span></span></code></pre></div>
 <p>Note, while “absolute” units are attractive, a large number of
@@ -350,7 +352,7 @@ to the simplicity of the approach.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>

@@ -28,6 +28,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/Re.mrs_data.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/abfit_opts.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/abfit_opts_v1_9_0.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/abfit_reg_opts.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/acquire.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/add_noise.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/add_noise_spec_snr.html</loc></url>
@@ -119,6 +120,8 @@
 <url><loc>https://martin3141.github.io/spant/reference/fit_diags.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_mrs.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_res2csv.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/fit_svs.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/fit_svs_gui.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_t1_ti_array.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_t1_tr_array.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_t2_te_array.html</loc></url>
@@ -305,6 +308,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/reslice_to_mrs.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/reson_table2mrs_data.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/rm_dyns.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/scale_amp_legacy.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/scale_amp_molal.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/scale_amp_molal_pvc.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/scale_amp_molar.html</loc></url>
@@ -379,6 +383,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/sum_dyns.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/sum_mrs.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/sum_mrs_list.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/sv_res_table.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/svs_1h_brain_analysis.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/svs_1h_brain_analysis_dev.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/svs_1h_brain_batch_analysis.html</loc></url>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.24.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.0</span>
       </span>
     </div>
 
@@ -73,7 +73,16 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.24.0" id="spant-2240">spant 2.24.0<a class="anchor" aria-label="anchor" href="#spant-2240"></a></h2>
+<h2 class="page-header" data-toc-text="3.1.0" id="spant-310">spant 3.1.0<a class="anchor" aria-label="anchor" href="#spant-310"></a></h2>
+<ul><li>Tentative implementation of a standard single voxel MRS processing pipeline function: fit_svs.</li>
+<li>spant user guide has been added to the project: <a href="https://spantdoc.wilsonlab.co.uk/" class="external-link uri">https://spantdoc.wilsonlab.co.uk/</a>
+</li>
+<li>Implemented basis caching for sim_basis.</li>
+<li>scale_amp_molar function has been depreciated. Please use scale_amp_legacy for LCModel style concentration scaling instead.</li>
+<li>Assumed T1 and T2 relaxation values for molal concentration scaling have been updated. See the user guide for details.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="2.24.0" id="spant-2240">spant 2.24.0<small>2024-11-14</small><a class="anchor" aria-label="anchor" href="#spant-2240"></a></h2>
 <ul><li>Added argument to adjust the legend font size in ortho3 function.</li>
 <li>Improved metabolite simulation performance thanks to the expm package recently adding support for complex matrices.</li>
 </ul></div>
@@ -601,7 +610,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer></div>

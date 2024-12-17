@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.24.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.0</span>
       </span>
     </div>
 
@@ -111,7 +111,7 @@
 <li>Advanced fully-automated metabolite fitting algorithm - ABfit <a href="https://onlinelibrary.wiley.com/doi/10.1002/mrm.28385" class="external-link uri">https://onlinelibrary.wiley.com/doi/10.1002/mrm.28385</a>.</li>
 <li>Robust retrospective frequency and phase correction - RATS <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.27605" class="external-link uri">https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.27605</a>.</li>
 <li>Support for common MRS data formats including read / write NIfTI MRS - <a href="https://onlinelibrary.wiley.com/doi/10.1002/mrm.29418" class="external-link uri">https://onlinelibrary.wiley.com/doi/10.1002/mrm.29418</a>.</li>
-<li>Flexible data types to support single voxel, dynamic and spectroscopic imaging data types.</li>
+<li>Flexible data types to support single voxel, dynamic and spectroscopic imaging.</li>
 <li>Raw data import from individual coils and dynamic measurements, eg support for importing individual FIDs from Siemens TWIX formatted data.</li>
 <li>Publication quality plotting.</li>
 <li>Extensive set of pre-processing steps (phasing, coil-combination, zero-filling, HSVD filtering…).</li>
@@ -119,6 +119,16 @@
 <li>Set of metabolite, macromolecule and lipid parameters for typical brain analyses.</li>
 <li>Voxel registration to anatomical images for partial volume concentration corrections.</li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
+<p>The <a href="https://spantdoc.wilsonlab.co.uk/" class="external-link">online spant user manual</a> (<a href="https://spantdoc.wilsonlab.co.uk/spant-User-Manual.pdf" class="external-link">pdf version</a>) is written for users with minimal experience in R or MRS processing and is the best place to start.</p>
+<p>For more advanced users, help developing custom analysis pipeline can be found below.</p>
+<p>Introduction : <a href="https://martin3141.github.io/spant/articles/spant-intro.html" class="uri">https://martin3141.github.io/spant/articles/spant-intro.html</a></p>
+<p>Short tutorials : <a href="https://martin3141.github.io/spant/articles/" class="uri">https://martin3141.github.io/spant/articles/</a></p>
+<p>Function reference : <a href="https://martin3141.github.io/spant/reference/" class="uri">https://martin3141.github.io/spant/reference/</a></p>
+<p>Once the spant library has been loaded with <code><a href="https://martin3141.github.io/spant/">library(spant)</a></code>, type <code><a href="reference/spant-package.html">?spant</a></code> on the console for instructions on how to access the offline documentation. Note that offline help on the available functions can be quickly shown in RStudio using <code>?function_name</code>, eg <code><a href="reference/read_mrs.html">?read_mrs</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="basic-installation">Basic installation<a class="anchor" aria-label="anchor" href="#basic-installation"></a>
@@ -132,14 +142,6 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"martin3141/spant"</span>, ref <span class="op">=</span> <span class="st">"devel"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
-</h2>
-<p>Quick introduction to the basic analysis workflow : <a href="https://martin3141.github.io/spant/articles/spant-intro.html" class="uri">https://martin3141.github.io/spant/articles/spant-intro.html</a></p>
-<p>Short tutorials : <a href="https://martin3141.github.io/spant/articles/" class="uri">https://martin3141.github.io/spant/articles/</a></p>
-<p>Function reference : <a href="https://martin3141.github.io/spant/reference/" class="uri">https://martin3141.github.io/spant/reference/</a></p>
-<p>Once the spant library has been loaded with <code><a href="https://martin3141.github.io/spant/">library(spant)</a></code>, type <code><a href="reference/spant-package.html">?spant</a></code> on the console for instructions on how to access the offline documentation. Note that offline help on the available functions can be quickly shown in RStudio using <code>?function_name</code>, eg <code><a href="reference/read_mrs.html">?read_mrs</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="ubuntu-2004-installation">Ubuntu 20.04 installation<a class="anchor" aria-label="anchor" href="#ubuntu-2004-installation"></a>
@@ -265,7 +267,7 @@ conda activate spant</code></pre>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>
