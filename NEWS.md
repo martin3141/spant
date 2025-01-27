@@ -2,6 +2,7 @@
 * Individual metabolite plots in the html report are now labelled to workaround
 an R Markdown bug where identical plots (eg when signal is zero) are sometimes
 not shown.
+* Added get_hrf function to spant namespace.
 
 # spant 3.1.0
 * Tentative implementation of a standard single voxel MRS processing pipeline

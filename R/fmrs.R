@@ -191,7 +191,7 @@ gen_bold_reg <- function(onset, duration = NULL, trial_type = NULL,
   output_frame <- data.frame(empty_mat)
   colnames(output_frame) <- c("time", trial_types)
   
-  resp_fn   <- gen_hrf(res_t = dt)$hrf
+  resp_fn   <- get_hrf(res_t = dt)$resp_fn
     
   for (m in 1:trial_type_n) {
     stim_fine <- rep(0, length(t_fine))
@@ -439,15 +439,19 @@ gen_poly_reg <- function(degree, mrs_data = NULL, tr = NULL, Ndyns = NULL,
   return(reg_df)
 }
 
-# gen double gamma model of hrf (as used in SPM) with 10ms resolution
+#' Generate a double gamma model of the HRF as used in SPM.
+#' @param end_t last time point to generate in seconds.
+#' @param res_t temporal resolution in seconds, defaults to 10ms.
+#' @return a data.frame of time and HRF vectors.
+#' @export
 # https://github.com/spm/spm12/blob/main/spm_hrf.m
-gen_hrf <- function(end_t = 30, res_t = 0.01) {
+get_hrf <- function(end_t = 30, res_t = 0.01) {
   t_hrf <- seq(from = 0, to = end_t, by = res_t)
   a1 <- 6; a2 <- 16; b1 <- 1; b2 <- 1; c <- 1 / 6
   hrf <-     t_hrf ^ (a1 - 1) * b1 ^ a1 * exp(-b1 * t_hrf) / gamma(a1) -
          c * t_hrf ^ (a2 - 1) * b2 ^ a2 * exp(-b2 * t_hrf) / gamma(a2)
   hrf <- hrf / sum(hrf)
-  return(list(hrf = hrf, t = t_hrf))
+  return(data.frame(t = t_hrf, resp_fn = hrf))
 }
 
 #' Perform a GLM analysis of dynamic MRS data in the spectral domain.
