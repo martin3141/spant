@@ -25,6 +25,7 @@ fit_svs(
   output_ratio = "tCr",
   ecc = FALSE,
   hsvd_width = NULL,
+  fit_method = NULL,
   fit_opts = NULL,
   fit_subset = NULL,
   legacy_ws = FALSE,
@@ -99,6 +100,8 @@ width is between -width and +width Hz, with 0 Hz being defined at the centre
 of the spectral width. Default is disabled (set to NULL), 30 Hz is a
 reasonable value.}
 
+\item{fit_method}{can be "ABFIT-REG" or "LCMODEL. Defaults to "ABFIT-REG".}
+
 \item{fit_opts}{options to pass to ABfit.}
 
 \item{fit_subset}{specify a subset of dynamics to analyse, for example
@@ -140,7 +143,8 @@ metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
                      package = "spant")
 w_ref <- system.file("extdata", "philips_spar_sdat_W.SDAT",
                      package = "spant")
+out_dir <- system.file("~", "fit_svs_result")
 \dontrun{
-fit_result <- svs_1h_brain_analysis(metab, w_ref, "fit_res_dir")
+fit_result <- fit_svs(metab, w_ref, out_dir)
 }
 }

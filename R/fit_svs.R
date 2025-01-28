@@ -43,6 +43,7 @@
 #' width is between -width and +width Hz, with 0 Hz being defined at the centre
 #' of the spectral width. Default is disabled (set to NULL), 30 Hz is a
 #' reasonable value.
+#' @param fit_method can be "ABFIT-REG" or "LCMODEL. Defaults to "ABFIT-REG".
 #' @param fit_opts options to pass to ABfit.
 #' @param fit_subset specify a subset of dynamics to analyse, for example
 #' 1:16 would only fit the first 16 dynamic scans.
@@ -71,8 +72,9 @@
 #'                      package = "spant")
 #' w_ref <- system.file("extdata", "philips_spar_sdat_W.SDAT",
 #'                      package = "spant")
+#' out_dir <- file.path("~", "fit_svs_result")
 #' \dontrun{
-#' fit_result <- svs_1h_brain_analysis(metab, w_ref, "fit_res_dir")
+#' fit_result <- fit_svs(metab, w_ref, out_dir)
 #' }
 #' @export
 fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
@@ -81,10 +83,11 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                     TE2 = NULL, TE3 = NULL, TM = NULL, append_basis = NULL,
                     remove_basis = NULL, pre_align = TRUE, dfp_corr = TRUE,
                     output_ratio = "tCr", ecc = FALSE, hsvd_width = NULL,
-                    fit_opts = NULL, fit_subset = NULL,  legacy_ws = FALSE,
-                    w_att = 0.7, w_conc = 35880, use_basis_cache = "auto",
-                    summary_measures = NULL, dyn_av_block_size = NULL,
-                    dyn_av_scheme = NULL, verbose = FALSE) {
+                    fit_method = NULL, fit_opts = NULL, fit_subset = NULL,
+                    legacy_ws = FALSE, w_att = 0.7, w_conc = 35880,
+                    use_basis_cache = "auto", summary_measures = NULL,
+                    dyn_av_block_size = NULL, dyn_av_scheme = NULL,
+                    verbose = FALSE) {
   
   argg <- c(as.list(environment()))
   
@@ -306,7 +309,25 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
     basis <- external_basis
   }
   
-  if (is.null(fit_opts)) fit_opts <- abfit_reg_opts()
+  # check the fit_method is sane
+  if (!is.null(fit_method)) {
+    fit_method <- toupper(fit_method)
+    allowed <- c("ABFIT-REG", "LCMODEL")
+    if (!(fit_method %in% allowed)) {
+      print(allowed)
+      stop("Error, incorrect fit method, must be one of the above.")
+    }
+  }
+  
+  if (is.null(fit_method)) {
+    fit_method <- "ABFIT"
+    if (is.null(fit_opts)) fit_opts <- abfit_reg_opts()
+  } else {
+    if (fit_method == "ABFIT-REG") {
+      fit_method <- "ABFIT"
+      if (is.null(fit_opts)) fit_opts <- abfit_reg_opts()
+    }
+  }
   
   # filter residual water
   if (!is.null(hsvd_width)) {
@@ -315,7 +336,9 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   }
   
   # fitting
-  fit_res <- fit_mrs(metab, basis = basis, opts = fit_opts)
+  if (verbose) cat("Starting fitting.\n")
+  fit_res <- fit_mrs(metab, basis = basis, method = fit_method, opts = fit_opts)
+  if (verbose) cat("Fitting complete.\n")
     
   phase_offset <- fit_res$res_tab$phase
   shift_offset <- fit_res$res_tab$shift
@@ -430,8 +453,11 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   
   rmd_out_f <- file.path(tools::file_path_as_absolute(output_dir), "report")
   
+  if (verbose) cat("Generating html report.\n")
   rmarkdown::render(rmd_file, params = results, output_file = rmd_out_f,
                     quiet = !verbose)
+  
+  if (verbose) cat("fit_svs finished.\n")
   
   return(fit_res)
 }
@@ -552,7 +578,6 @@ parse_summary <- function(measures, fit_res, units) {
 
 #' GUI interface for the standard SVS 1H brain analysis pipeline, this is a 
 #' work in progress, and not ready for serious use.
-#' @export
 fit_svs_gui <-function() {
   
   run_fit <- function() {
