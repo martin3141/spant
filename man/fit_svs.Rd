@@ -143,7 +143,7 @@ metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
                      package = "spant")
 w_ref <- system.file("extdata", "philips_spar_sdat_W.SDAT",
                      package = "spant")
-out_dir <- system.file("~", "fit_svs_result")
+out_dir <- file.path("~", "fit_svs_result")
 \dontrun{
 fit_result <- fit_svs(metab, w_ref, out_dir)
 }

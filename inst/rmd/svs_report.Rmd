@@ -35,13 +35,14 @@ stackplot(params$fit_res, y_offset = 3, combine_lipmm = TRUE, labels = TRUE)
 ```
 
 ```{r basisplot, results = 'asis', fig.width=7, fig.height=6}
-basis_names <- params$fit_res$basis$names
+# basis_names <- params$fit_res$basis$names
+basis_names <- colnames(fit_result$fits[[1]][-1:-4])
 for (n in 1:length(basis_names)) {
-  if (basis_names[n] %in% colnames(params$fit_res$fits[[1]])) {
-    cat("\n### ", basis_names[n], "\n", sep = "")
-    plot(params$fit_res, plot_sigs = basis_names[n], main = basis_names[n])
-    cat("\n")
-  }
+  #if (basis_names[n] %in% colnames(params$fit_res$fits[[1]])) {
+  cat("\n### ", basis_names[n], "\n", sep = "")
+  plot(params$fit_res, plot_sigs = basis_names[n], main = basis_names[n])
+  cat("\n")
+  #}
 }
 ```
 
