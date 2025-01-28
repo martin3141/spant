@@ -25,21 +25,23 @@ knitr::opts_chunk$set(echo = FALSE)
 ## Fit plots {.tabset}
 
 ### Standard
-```{r, fig.width=7, fig.height=6}
+```{r fitplot, fig.width=7, fig.height=6}
 plot(params$fit_res)
 ```
 
 ### Stackplot
-```{r, fig.width=7, fig.height=8}
+```{r stackplot, fig.width=7, fig.height=8}
 stackplot(params$fit_res, y_offset = 3, combine_lipmm = TRUE, labels = TRUE)
 ```
 
-```{r, results = 'asis', fig.width=7, fig.height=6}
+```{r basisplot, results = 'asis', fig.width=7, fig.height=6}
 basis_names <- params$fit_res$basis$names
 for (n in 1:length(basis_names)) {
-  cat("\n### ", basis_names[n], "\n", sep = "")
-  plot(params$fit_res, plot_sigs = basis_names[n], main = basis_names[n])
-  cat("\n")
+  if (basis_names[n] %in% colnames(params$fit_res$fits[[1]])) {
+    cat("\n### ", basis_names[n], "\n", sep = "")
+    plot(params$fit_res, plot_sigs = basis_names[n], main = basis_names[n])
+    cat("\n")
+  }
 }
 ```
 
@@ -135,8 +137,18 @@ if (!is.null(dyn_data_uncorr)) {
 
 ### Processed cropped
 ```{r, fig.width=7, fig.height=6}
-phase_offset <- params$fit_res$res_tab$phase
-shift_offset <- params$fit_res$res_tab$shift
+if (!is.null(params$fit_res$res_tab$phase)) {
+  phase_offset <- params$fit_res$res_tab$phase
+} else {
+  phase_offset <- 0
+}
+
+if (!is.null(params$fit_res$res_tab$shift)) {
+  shift_offset <- params$fit_res$res_tab$shift
+} else {
+  shift_offset <- 0
+}
+
 proc_spec <- phase(params$fit_res$data, phase_offset)
 proc_spec <- shift(proc_spec, shift_offset, units = "ppm")
 proc_spec <- zf(proc_spec)
@@ -199,14 +211,14 @@ if (params$w_ref_available) {
              round_dp(params$res_tab_molal$ws_eff, 3))
 }
 
-name  <- c(name, "Fit quality number (FQN)", "Baseline effective d.f. per ppm",
-           "Lineshape asymmetry", "Spectral signal to residual ratio")
-value <- c(value, round_dp(params$fit_res$res_tab$FQN, 2),
-           round_dp(params$fit_res$res_tab$bl_ed_pppm, 2),
-           round_dp(params$fit_res$res_tab$asym, 2),
-           round_dp(params$fit_res$res_tab$SRR, 2))
-
-# value <- format(value, digits = 2, nsmall = 0, scientific = FALSE)
+if (params$fit_res$method == "ABFIT") {
+  name  <- c(name, "Fit quality number (FQN)", "Baseline effective d.f. per ppm",
+             "Lineshape asymmetry", "Spectral signal to residual ratio")
+  value <- c(value, round_dp(params$fit_res$res_tab$FQN, 2),
+             round_dp(params$fit_res$res_tab$bl_ed_pppm, 2),
+             round_dp(params$fit_res$res_tab$asym, 2),
+             round_dp(params$fit_res$res_tab$SRR, 2))
+}
 
 diag_tab <- data.frame(name, value)
 kableExtra::kable_styling(kableExtra::kbl(diag_tab, align = c("l", "r"),
