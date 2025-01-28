@@ -35,6 +35,7 @@ fit_svs(
   summary_measures = NULL,
   dyn_av_block_size = NULL,
   dyn_av_scheme = NULL,
+  lcm_bin_path = NULL,
   verbose = FALSE
 )
 }
@@ -132,6 +133,8 @@ size. Defaults to NULL, eg average across all dynamic scans.}
 \item{dyn_av_scheme}{a numerical vector of sequential integers starting at 1,
 with the same length as the number of dynamic scans in the metabolite data.
 For example: c(1, 1, 2, 1, 1, 3, 1, 1).}
+
+\item{lcm_bin_path}{set the path to LCModel binary.}
 
 \item{verbose}{output potentially useful information.}
 }

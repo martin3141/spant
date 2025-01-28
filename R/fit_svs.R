@@ -66,6 +66,7 @@
 #' @param dyn_av_scheme a numerical vector of sequential integers starting at 1,
 #' with the same length as the number of dynamic scans in the metabolite data.
 #' For example: c(1, 1, 2, 1, 1, 3, 1, 1).
+#' @param lcm_bin_path set the path to LCModel binary.
 #' @param verbose output potentially useful information.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
@@ -87,7 +88,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                     legacy_ws = FALSE, w_att = 0.7, w_conc = 35880,
                     use_basis_cache = "auto", summary_measures = NULL,
                     dyn_av_block_size = NULL, dyn_av_scheme = NULL,
-                    verbose = FALSE) {
+                    lcm_bin_path = NULL, verbose = FALSE) {
   
   argg <- c(as.list(environment()))
   
@@ -334,6 +335,9 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
     if (verbose) cat("Applying HSVD filter.\n")
     metab <- hsvd_filt(metab, xlim = c(-hsvd_width, hsvd_width))
   }
+  
+  # set path to the LCModel binary
+  if (!is.null(lcm_bin_path)) set_lcm_cmd(lcm_bin_path)
   
   # fitting
   if (verbose) cat("Starting fitting.\n")
