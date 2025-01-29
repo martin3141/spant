@@ -144,16 +144,23 @@ if (!is.null(params$fit_res$res_tab$phase)) {
   phase_offset <- 0
 }
 
+if (!is.null(params$fit_res$res_tab$phi1)) {
+  phi1_offset <- params$fit_res$res_tab$phi1
+} else {
+  phi1_offset <- 0
+}
+
 if (!is.null(params$fit_res$res_tab$shift)) {
   shift_offset <- params$fit_res$res_tab$shift
 } else {
   shift_offset <- 0
 }
 
-proc_spec <- phase(params$fit_res$data, phase_offset)
+proc_spec <- params$fit_res$data
+proc_spec <- phase(proc_spec, phase_offset, phi1_offset)
 proc_spec <- shift(proc_spec, shift_offset, units = "ppm")
 proc_spec <- zf(proc_spec)
-plot(proc_spec, xlim = c(4, 0.5))
+plot(proc_spec, xlim = c(4, 0.2))
 ```
 
 ### Processed full
@@ -228,7 +235,12 @@ if (!is.null(params$fit_res$res_tab$phase)) {
 
 if (!is.null(params$fit_res$res_tab$phi1)) {
   name  <- c(name, "First-order phase (ms)")
-  value <- c(value, round_dp(params$fit_res$res_tab$phi1, 1))
+  value <- c(value, round_dp(params$fit_res$res_tab$phi1, 3))
+}
+
+if (!is.null(params$fit_res$res_tab$shift)) {
+  name  <- c(name, "Frequency offset (ppm)")
+  value <- c(value, round_dp(params$fit_res$res_tab$shift, 4))
 }
 
 if (params$w_ref_available) {
@@ -238,7 +250,8 @@ if (params$w_ref_available) {
 }
 
 if (params$fit_res$method == "ABFIT") {
-  name  <- c(name, "Fit quality number (FQN)", "Baseline effective d.f. per ppm",
+  name  <- c(name, "Fit quality number (FQN)",
+             "Baseline effective d.f. per ppm",
              "Lineshape asymmetry")
   value <- c(value, round_dp(params$fit_res$res_tab$FQN, 2),
              round_dp(params$fit_res$res_tab$bl_ed_pppm, 2),

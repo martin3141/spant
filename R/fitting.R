@@ -543,6 +543,11 @@ lcmodel_fit <- function(element, temp_mrs, basis_file, opts) {
   #file.copy(coord_f, "~/coord.file", overwrite = TRUE)
   
   coord_res <- read_lcm_coord(coord_f)
+  
+  # change phi1 units from deg / ppm to ms
+  coord_res$res_tab$diags$phi1 <- coord_res$res_tab$diags$phi1 * 
+                                  1000 / 360 / metab$ft * 1e6
+  
   res_tab <- coord_res$res_tab
   fit <- coord_res$fit
   
