@@ -609,9 +609,14 @@ read_lcm_coord <- function(coord_f) {
     }
   }
   
-  FWHM <- as.double(strsplit(trimws(line_reader[signals + 6]),"  *")[[1]][3])
-  SNR <- as.double(strsplit(trimws(line_reader[signals + 6]),"  *")[[1]][7])
-  diags <- data.frame(FWHM = FWHM, SNR = SNR)
+  FWHM  <- as.double(strsplit(trimws(line_reader[signals + 6]),"  *")[[1]][3])
+  SNR   <- as.double(strsplit(trimws(line_reader[signals + 6]),"  *")[[1]][7])
+  shift <- as.numeric(gsub("[^0-9.-]", "", line_reader[signals + 7]))
+  phase <- gsub("[^0-9.-]", "", 
+                strsplit(line_reader[signals + 8], "deg")[[1]][1:2])
+  phase <- as.numeric(phase)
+  diags <- data.frame(FWHM = FWHM, SRR = SNR, shift = shift, phase = phase[1],
+                      phi1 = phase[2])
   
   #print(coord_f)  
   # -1 width needed to avoid issues when the metab name is

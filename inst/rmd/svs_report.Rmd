@@ -36,7 +36,7 @@ stackplot(params$fit_res, y_offset = 3, combine_lipmm = TRUE, labels = TRUE)
 
 ```{r basisplot, results = 'asis', fig.width=7, fig.height=6}
 # basis_names <- params$fit_res$basis$names
-basis_names <- colnames(fit_result$fits[[1]][-1:-4])
+basis_names <- colnames(params$fit_res$fits[[1]][-1:-4])
 for (n in 1:length(basis_names)) {
   #if (basis_names[n] %in% colnames(params$fit_res$fits[[1]])) {
   cat("\n### ", basis_names[n], "\n", sep = "")
@@ -173,8 +173,23 @@ if (params$w_ref_available) {
 
 ## Diagnostics table
 ```{r}
-name  <- c("Spectral SNR")
-value <- round_dp(params$fit_res$res_tab$SNR, 2)
+name  <- NULL
+value <- NULL
+
+if (!is.null(params$fit_res$res_tab$SNR)) {
+  name  <- c(name, "Spectral signal to noise ratio")
+  value <- c(value, round_dp(params$fit_res$res_tab$SNR, 2))
+}
+
+if (!is.null(params$fit_res$res_tab$SRR)) {
+  name  <- c(name, "Spectral signal to residual ratio")
+  value <- c(value, round_dp(params$fit_res$res_tab$SRR, 2))
+}
+
+if (!is.null(params$fit_res$res_tab$FWHM)) {
+  name  <- c(name, "Spectral linewidth (ppm)")
+  value <- c(value, round_dp(params$fit_res$res_tab$FWHM, 4))
+}
 
 if (!is.null(params$fit_res$res_tab$tNAA_lw)) {
   name  <- c(name, "tNAA linewidth (ppm)")
@@ -206,6 +221,16 @@ if (!is.null(params$fit_res$res_tab$Cr_lw)) {
   value <- c(value, round_dp(params$fit_res$res_tab$Cr_lw, 4))
 }
 
+if (!is.null(params$fit_res$res_tab$phase)) {
+  name  <- c(name, "Zero-order phase (degrees)")
+  value <- c(value, round_dp(params$fit_res$res_tab$phase, 1))
+}
+
+if (!is.null(params$fit_res$res_tab$phi1)) {
+  name  <- c(name, "First-order phase (ms)")
+  value <- c(value, round_dp(params$fit_res$res_tab$phi1, 1))
+}
+
 if (params$w_ref_available) {
   name  <- c(name,  "Water amplitude", "Water suppression efficiency (%)")
   value <- c(value, format(params$res_tab_molal$w_amp),
@@ -214,11 +239,10 @@ if (params$w_ref_available) {
 
 if (params$fit_res$method == "ABFIT") {
   name  <- c(name, "Fit quality number (FQN)", "Baseline effective d.f. per ppm",
-             "Lineshape asymmetry", "Spectral signal to residual ratio")
+             "Lineshape asymmetry")
   value <- c(value, round_dp(params$fit_res$res_tab$FQN, 2),
              round_dp(params$fit_res$res_tab$bl_ed_pppm, 2),
-             round_dp(params$fit_res$res_tab$asym, 2),
-             round_dp(params$fit_res$res_tab$SRR, 2))
+             round_dp(params$fit_res$res_tab$asym, 2))
 }
 
 diag_tab <- data.frame(name, value)
