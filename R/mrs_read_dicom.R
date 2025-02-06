@@ -6,19 +6,24 @@ read_dicom <- function(fname, verbose, extra) {
   
   # read the SOP class and manufacturer tags
   res <- dicom_reader(fraw, tags = list(sop_class_uid = "0008,0016",
-                                        manuf         = "0008,0070"))
+                                        manuf         = "0008,0070",
+                                        series_time   = "0008,0031"))
   
   sop_class_uid <- rawToChar(res$sop_class_uid)
   manuf         <- rawToChar(res$manuf)
+  series_time   <- rawToChar(res$series_time)
       
   if (verbose) cat(paste("SOP class UID :", sop_class_uid), "\n")
   if (verbose) cat(paste("Manufacturer  :", manuf), "\n")
+  if (verbose) cat(paste("SeriesTime    :", series_time), "\n")
   
   if (grepl("SIEMENS", manuf, ignore.case = TRUE)) {
     if (sop_class_uid == "1.3.12.2.1107.5.9.1") {
       if (verbose) cat("Siemens IMA MRS found.\n")
       # SiemensPrivateCSA Non-ImageStorage - AKA ima format
-      return(read_ima(fraw, verbose, extra))
+      ima_data <- read_ima(fraw, verbose, extra)
+      ima_data$meta$SeriesTime <- trimws(series_time)
+      return(ima_data)
     } else if (sop_class_uid == "1.2.840.10008.5.1.4.1.1.4.2") { 
       if (verbose) cat("Siemens DICOM MRS found.\n")
       # MR Spectroscopy Storage

@@ -244,7 +244,10 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
     # option to remove signals
     if (!is.null(remove_basis)) {
         inds <- grep(remove_basis, mol_list_chars)
-        if (length(inds) == 0) stop("No signals matching remove_basis found.")
+        if (length(inds) == 0) {
+          print(mol_list_chars)
+          stop("No signals (as listed above) matching remove_basis found.")
+        }
         mol_list_chars <- mol_list_chars[-inds]
     }
     
