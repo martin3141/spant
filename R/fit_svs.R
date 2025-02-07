@@ -333,9 +333,8 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
     }
   }
   
-  if (fit_method == "LCMODEL" & is.null(fit_opts)) {
-    fit_opts <- c("NSIMUL=0")
-  }
+  # ask LCModel not to simulate any additional signals by defaults
+  if (fit_method == "LCMODEL" & is.null(fit_opts)) fit_opts <- c("NSIMUL=0")
   
   if (is.null(output_ratio)) {
     if (fit_method == "LCMODEL") {
@@ -357,9 +356,17 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   # set path to the LCModel binary
   if (!is.null(lcm_bin_path)) set_lcm_cmd(lcm_bin_path)
   
+  # water referencing is performed internally by LCModel
+  if (fit_method == "LCMODEL" & w_ref_available) {
+    w_ref_fit <- w_ref 
+  } else {
+    w_ref_fit <- NULL
+  }
+  
   # fitting
   if (verbose) cat("Starting fitting.\n")
-  fit_res <- fit_mrs(metab, basis = basis, method = fit_method, opts = fit_opts)
+  fit_res <- fit_mrs(metab = metab, basis = basis, method = fit_method,
+                     w_ref = w_ref_fit, opts = fit_opts)
   if (verbose) cat("Fitting complete.\n")
     
   phase_offset <- fit_res$res_tab$phase
@@ -389,17 +396,26 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   if (w_ref_available) {
     # assume 100% white matter unless told otherwise
     if (is.null(p_vols)) p_vols <- c(WM = 100, GM = 0, CSF = 0)
-    fit_res_molal <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, TE, TR)
-    res_tab_molal <- fit_res_molal$res_tab
-    file_out <- file.path(output_dir, "fit_res_molal_conc.csv")
-    utils::write.csv(res_tab_molal, file_out)
-    if (legacy_ws) {
-      fit_res_legacy <- scale_amp_legacy(fit_res, w_ref, w_att, w_conc)
-      res_tab_legacy <- fit_res_legacy$res_tab
-      file_out <- file.path(output_dir, "fit_res_legacy_conc.csv")
-      utils::write.csv(res_tab_legacy, file_out)
+    
+    if (fit_method != "LCMODEL") {
+      fit_res_molal <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, TE, TR)
+      res_tab_molal <- fit_res_molal$res_tab
+      file_out <- file.path(output_dir, "fit_res_molal_conc.csv")
+      utils::write.csv(res_tab_molal, file_out)
+      if (legacy_ws) {
+        fit_res_legacy <- scale_amp_legacy(fit_res, w_ref, w_att, w_conc)
+        res_tab_legacy <- fit_res_legacy$res_tab
+        file_out <- file.path(output_dir, "fit_res_legacy_conc.csv")
+        utils::write.csv(res_tab_legacy, file_out)
+      } else {
+        res_tab_legacy <- NULL
+      }
     } else {
-      res_tab_legacy <- NULL
+      fit_res_molal <- scale_amp_molar2molal_pvc(fit_res, p_vols, TE, TR)
+      res_tab_molal <- fit_res_molal$res_tab
+      file_out <- file.path(output_dir, "fit_res_molal_conc.csv")
+      utils::write.csv(res_tab_molal, file_out)
+      res_tab_legacy <- NULL 
     }
   } else {
     res_tab_legacy <- NULL 
@@ -407,15 +423,18 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   }
   
   # add water amplitude and PVC info to the unscaled output
-  if (w_ref_available) {
+  if (w_ref_available & (fit_method != "LCMODEL")) {
     res_tab_unscaled <- cbind(res_tab_unscaled, w_amp = res_tab_molal$w_amp,
                               GM_vol = res_tab_molal$GM_vol,
                               WM_vol = res_tab_molal$WM_vol,
                               CSF_vol = res_tab_molal$CSF_vol,
                               GM_frac = res_tab_molal$GM_frac)
   }
-  utils::write.csv(res_tab_unscaled, file.path(output_dir,
-                                               "fit_res_unscaled.csv"))
+  
+  if (fit_method != "LCMODEL") {
+    utils::write.csv(res_tab_unscaled, file.path(output_dir,
+                                                 "fit_res_unscaled.csv"))
+  }
   
   # prepare dynamic data for plotting
   if (Ndyns(metab_pre_dfp_corr) > 1) {
