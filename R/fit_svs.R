@@ -148,7 +148,11 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   }
   
   # create the output dir if it doesn't exist
-  if(!dir.exists(output_dir)) dir.create(output_dir)
+  if(!dir.exists(output_dir)) {
+    dir.create(output_dir)
+  } else {
+    warning(paste0("Output directory already exists : ", output_dir))
+  }
   
   # try to get TE and TR parameters from the data if not passed in
   if (is.null(TR)) TR <- tr(metab)
