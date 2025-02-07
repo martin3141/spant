@@ -3,6 +3,7 @@
 an R Markdown bug where identical plots (eg when signal is zero) are sometimes
 not shown.
 * Added get_hrf function to spant namespace.
+* Tentative support for LCModel in the fit_svs function.
 
 # spant 3.1.0
 * Tentative implementation of a standard single voxel MRS processing pipeline
