@@ -15,7 +15,7 @@
 #' following values : "press", "press_ideal", "press_shaped", "steam" or
 #' "slaser". If "press" then "press_ideal" will be assumed unless the magnetic
 #' field is stronger that 2.8 Tesla, "press_shaped" will be assumed for 2.9 
-#' Tesla and above. 
+#' Tesla and above.
 #' @param TE metabolite mrs data echo time in seconds. If not supplied this will
 #' be guessed from the metab data file.
 #' @param TR metabolite mrs data repetition time in seconds. If not supplied
