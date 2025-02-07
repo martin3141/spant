@@ -3,11 +3,9 @@
 
 # Spectroscopy Analysis Tools (spant) <img src="man/figures/logo.png" align="right" width=130/>
 
-[![R build
-status](https://github.com/martin3141/spant/workflows/R-CMD-check/badge.svg)](https://github.com/martin3141/spant/actions)
+[![R_build_status](https://github.com/martin3141/spant/workflows/R-CMD-check/badge.svg)](https://github.com/martin3141/spant/actions)
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.03646/status.svg)](https://doi.org/10.21105/joss.03646)
-[![CRAN status
-badge](http://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant)
+[![CRAN_status_badge](http://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant)
 [![Downloads](http://cranlogs.r-pkg.org/badges/last-month/spant)](https://cran.r-project.org/package=spant)
 
 ## Overview
