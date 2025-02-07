@@ -35,8 +35,8 @@
 #' @param dfp_corr perform dynamic frequency and phase correction using the RATS
 #' method.
 #' @param output_ratio optional string to specify a metabolite ratio to output.
-#' Defaults to "tCr" and multiple metabolites may be specified for multiple
-#' outputs. Set as NULL to omit.
+#' Defaults to "tCr". Multiple metabolites may be specified for multiple
+#' outputs. Set to NA to omit.
 #' @param ecc option to perform water reference based eddy current correction,
 #' defaults to FALSE.
 #' @param hsvd_width set the width of the HSVD filter in Hz. Note the applied
@@ -83,7 +83,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                     pul_seq = NULL, TE = NULL, TR = NULL, TE1 = NULL,
                     TE2 = NULL, TE3 = NULL, TM = NULL, append_basis = NULL,
                     remove_basis = NULL, pre_align = TRUE, dfp_corr = TRUE,
-                    output_ratio = "tCr", ecc = FALSE, hsvd_width = NULL,
+                    output_ratio = NULL, ecc = FALSE, hsvd_width = NULL,
                     fit_method = NULL, fit_opts = NULL, fit_subset = NULL,
                     legacy_ws = FALSE, w_att = 0.7, w_conc = 35880,
                     use_basis_cache = "auto", summary_measures = NULL,
@@ -333,6 +333,21 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
     }
   }
   
+  if (fit_method == "LCMODEL" & is.null(fit_opts)) {
+    fit_opts <- c("NSIMUL=0")
+  }
+  
+  if (is.null(output_ratio)) {
+    if (fit_method == "LCMODEL") {
+      output_ratio <- "Cr.PCr"
+    } else {
+      output_ratio <- "tCr"
+    }
+  }
+  
+  # output_ratio of NA means we only want unscaled values
+  if (anyNA(output_ratio)) output_ratio <- NULL
+  
   # filter residual water
   if (!is.null(hsvd_width)) {
     if (verbose) cat("Applying HSVD filter.\n")
@@ -358,7 +373,8 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   # output ratio results if requested 
   if (!is.null(output_ratio)) {
     for (output_ratio_element in output_ratio) {
-      fit_res_rat <- scale_amp_ratio(fit_res, output_ratio_element)
+      fit_res_rat <- scale_amp_ratio(fit_res, output_ratio_element,
+                                     use_mean_value = TRUE)
       
       res_tab_ratio <- fit_res_rat$res_tab
       file_out <- file.path(output_dir, paste0("fit_res_", output_ratio_element,
@@ -444,6 +460,7 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
   results <- list(fit_res = fit_res, argg = argg,
                   w_ref_available = w_ref_available,
                   w_ref = w_ref,
+                  output_ratio = output_ratio,
                   res_tab_unscaled = res_tab_unscaled,
                   res_tab_ratio = res_tab_ratio,
                   res_tab_legacy = res_tab_legacy,

@@ -304,6 +304,12 @@ scale_amp_water_ratio <- function(fit_result, ref_data, ...) {
 #' @export
 scale_amp_ratio <- function(fit_result, name, use_mean_value = FALSE) {
   
+  if (!(name %in% colnames(fit_result$res_tab))) {
+    print(name)
+    print(colnames(fit_result$res_tab))
+    stop("Ratio denominator not found.")
+  }
+  
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
     fit_result$res_tab_unscaled <- fit_result$res_tab
