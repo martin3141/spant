@@ -22,7 +22,7 @@ fit_svs(
   remove_basis = NULL,
   pre_align = TRUE,
   dfp_corr = TRUE,
-  output_ratio = "tCr",
+  output_ratio = NULL,
   ecc = FALSE,
   hsvd_width = NULL,
   fit_method = NULL,
@@ -90,8 +90,8 @@ precompiled basis sets.}
 method.}
 
 \item{output_ratio}{optional string to specify a metabolite ratio to output.
-Defaults to "tCr" and multiple metabolites may be specified for multiple
-outputs. Set as NULL to omit.}
+Defaults to "tCr". Multiple metabolites may be specified for multiple
+outputs. Set to NA to omit.}
 
 \item{ecc}{option to perform water reference based eddy current correction,
 defaults to FALSE.}
