@@ -52,6 +52,7 @@ Function reference : https://martin3141.github.io/spant/reference/
 Once the spant library has been loaded with `library(spant)`, type `?spant` on the console for instructions on how to access the offline documentation. Note that offline help on the available functions can be quickly shown in RStudio using `?function_name`, eg `?read_mrs`.
 
 ## Basic installation
+
 Download and install the latest version of R (https://cloud.r-project.org/), or with your package manager if using a recent Linux distribution, eg `sudo apt install r-base`.
 
 It is also strongly recommended to install RStudio Desktop (https://rstudio.com/products/rstudio/download) to provide a modern environment for interactive data analysis.
@@ -65,20 +66,4 @@ Or the the development version from GitHub (requires the `devtools` package):
 ```{r github, eval = FALSE}
 install.packages("devtools")
 devtools::install_github("martin3141/spant", ref = "devel", dependencies = TRUE)
-```
-
-## Ubuntu 20.04 installation
-CRAN packages need to be compiled on Linux, and therefore you may need to ensure some additional system libraries are installed. spant may be installed from a clean installation of Ubuntu 20.04 with the following commands pasted into the terminal:
-
-```{ubuntu install, eval = FALSE}
-sudo apt install -y r-base libcurl4-openssl-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libtiff5-dev
-mkdir -p ~/R/x86_64-pc-linux-gnu-library/3.6
-Rscript -e 'install.packages("spant", dependencies = TRUE)'
-```
-
-## Ubuntu 21.10 installation
-```{ubuntu 2110 install, eval = FALSE}
-sudo apt install -y r-base libcurl4-openssl-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libtiff5-dev
-mkdir -p ~/R/x86_64-pc-linux-gnu-library/4.0
-Rscript -e 'install.packages("spant", dependencies = TRUE)'
 ```

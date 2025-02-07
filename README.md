@@ -82,24 +82,3 @@ package):
 install.packages("devtools")
 devtools::install_github("martin3141/spant", ref = "devel", dependencies = TRUE)
 ```
-
-## Ubuntu 20.04 installation
-
-CRAN packages need to be compiled on Linux, and therefore you may need
-to ensure some additional system libraries are installed. spant may be
-installed from a clean installation of Ubuntu 20.04 with the following
-commands pasted into the terminal:
-
-``` ubuntu
-sudo apt install -y r-base libcurl4-openssl-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libtiff5-dev
-mkdir -p ~/R/x86_64-pc-linux-gnu-library/3.6
-Rscript -e 'install.packages("spant", dependencies = TRUE)'
-```
-
-## Ubuntu 21.10 installation
-
-``` ubuntu
-sudo apt install -y r-base libcurl4-openssl-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libtiff5-dev
-mkdir -p ~/R/x86_64-pc-linux-gnu-library/4.0
-Rscript -e 'install.packages("spant", dependencies = TRUE)'
-```
