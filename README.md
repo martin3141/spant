@@ -6,10 +6,9 @@
 [![R build
 status](https://github.com/martin3141/spant/workflows/R-CMD-check/badge.svg)](https://github.com/martin3141/spant/actions)
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.03646/status.svg)](https://doi.org/10.21105/joss.03646)
-[![](http://cranlogs.r-pkg.org/badges/spant)](http://cran.rstudio.com/web/packages/spant/index.html)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant)
-[![Coverage
-Status](https://coveralls.io/repos/github/martin3141/spant/badge.svg?branch=master)](https://coveralls.io/github/martin3141/spant?branch=master)
+[![CRAN status
+badge](http://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant)
+[![Downloads](http://cranlogs.r-pkg.org/badges/last-month/spant)](https://cran.r-project.org/package=spant)
 
 ## Overview
 
