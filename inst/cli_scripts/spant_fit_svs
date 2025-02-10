@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+#!/usr/bin/env Rscript --vanilla
 
 suppressPackageStartupMessages(library(spant))
 suppressPackageStartupMessages(library(optparse))
