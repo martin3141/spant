@@ -106,7 +106,7 @@ opt <- parse_args(parser)
 
 if (is.null(opt$input)) {
     print_help(parser)
-    stop("Input MRS metabolite data file needed, specify with -i or --input arguments.")
+    stop("Input MRS file needed, specify with -i or --input arguments.")
 }
 
 fit_res <- fit_svs(input = opt$input, w_ref = opt$w_ref,
