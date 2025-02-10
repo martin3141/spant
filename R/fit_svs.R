@@ -44,7 +44,7 @@
 #' of the spectral width. Default is disabled (set to NULL), 30 Hz is a
 #' reasonable value.
 #' @param fit_method can be "ABFIT-REG" or "LCMODEL. Defaults to "ABFIT-REG".
-#' @param fit_opts options to pass to ABfit.
+#' @param fit_opts options to pass to the fitting method.
 #' @param fit_subset specify a subset of dynamics to analyse, for example
 #' 1:16 would only fit the first 16 dynamic scans.
 #' @param legacy_ws perform and output legacy water scaling compatible with
@@ -63,7 +63,7 @@
 #' metabolite levels, eg c("tNAA", "tNAA/tCr", "tNAA/tCho", "Lac/tNAA").
 #' @param dyn_av_block_size perform temporal averaging with the specified block
 #' size. Defaults to NULL, eg average across all dynamic scans.
-#' @param dyn_av_scheme a numerical vector of sequential integers starting at 1,
+#' @param dyn_av_scheme a numeric vector of sequential integers starting at 1,
 #' with the same length as the number of dynamic scans in the metabolite data.
 #' For example: c(1, 1, 2, 1, 1, 3, 1, 1).
 #' @param lcm_bin_path set the path to LCModel binary.
