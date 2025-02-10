@@ -6,8 +6,8 @@ suppressPackageStartupMessages(library(optparse))
 parser <- OptionParser(prog = "spant_fit_svs", description = "Command-line interface for the fit_svs function in the spant R package",
                        formatter = IndentedHelpFormatter)
 
-parser <- add_option(parser, c("-i", "--metab"), action = "store",
-                     help="Path to input MRS metabolite data file (required).")
+parser <- add_option(parser, c("-i", "--input"), action = "store",
+                     help="Path to input MRS data file (required).")
 
 parser <- add_option(parser, c("-w", "--w_ref"), action = "store",
                      help="Path to input MRS water reference data file.")
@@ -104,11 +104,11 @@ parser <- add_option(parser, c("-v", "--verbose"), action = "store",
 
 opt <- parse_args(parser)
 
-if (is.null(opt$metab)) {
+if (is.null(opt$input)) {
     print_help(parser)
-    stop("Input MRS metabolite data file needed, specify with -m or --metab arguments.")
+    stop("Input MRS metabolite data file needed, specify with -i or --input arguments.")
 }
 
-fit_res <- fit_svs(metab = opt$metab, w_ref = opt$w_ref,
+fit_res <- fit_svs(input = opt$input, w_ref = opt$w_ref,
                    output_dir = opt$output_dir, pul_seq = opt$pul_seq,
                    fit_method = opt$fit_method)

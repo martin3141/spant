@@ -5,7 +5,7 @@
 \title{Standard SVS 1H brain analysis pipeline.}
 \usage{
 fit_svs(
-  metab,
+  input,
   w_ref = NULL,
   output_dir = NULL,
   external_basis = NULL,
@@ -40,7 +40,7 @@ fit_svs(
 )
 }
 \arguments{
-\item{metab}{path or mrs_data object containing MRS metabolite data.}
+\item{input}{path or mrs_data object containing MRS data.}
 
 \item{w_ref}{path or mrs_data object containing MRS water reference data.}
 

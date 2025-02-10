@@ -2,7 +2,7 @@
 #' 
 #' Note this function is still under development and liable to changes.
 #' 
-#' @param metab path or mrs_data object containing MRS metabolite data.
+#' @param input path or mrs_data object containing MRS data.
 #' @param w_ref path or mrs_data object containing MRS water reference data.
 #' @param output_dir directory path to output fitting results.
 #' @param external_basis precompiled basis set object to use for analysis.
@@ -78,7 +78,7 @@
 #' fit_result <- fit_svs(metab, w_ref, out_dir)
 #' }
 #' @export
-fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
+fit_svs <- function(input, w_ref = NULL, output_dir = NULL,
                     external_basis = NULL, p_vols = NULL, format = NULL,
                     pul_seq = NULL, TE = NULL, TR = NULL, TE1 = NULL,
                     TE2 = NULL, TE3 = NULL, TM = NULL, append_basis = NULL,
@@ -90,7 +90,9 @@ fit_svs <- function(metab, w_ref = NULL, output_dir = NULL,
                     dyn_av_block_size = NULL, dyn_av_scheme = NULL,
                     lcm_bin_path = NULL, verbose = FALSE) {
   
-  argg <- c(as.list(environment()))
+  argg  <- c(as.list(environment()))
+  
+  metab <- input
   
   if (!is.null(external_basis) & !is.null(append_basis)) {
     stop("external_basis and append_basis options cannot both be set. Use one or the other.")
