@@ -51,16 +51,16 @@ parser <- add_option(parser, c("-a", "--append_basis"), action = "store",
 parser <- add_option(parser, c("-r", "--remove_basis"), action = "store",
                      help="grep expression to match names of signals to remove from the\n\t\tbasis. For example: use \"*\" to remove all signals, \"^mm|^lip\"\n\t\tto remove all macromolecular and lipid signals, \"^lac\" to remove\n\t\tlactate. This operation is performed before signals are added\n\t\twith append_basis. Cannot be used with precompiled basis sets.")
 
-parser <- add_option(parser, c("--pre_align"), action = "store",
+parser <- add_option(parser, c("--pre_align"), action = "store", default = TRUE,
                      help="Perform simple frequency alignment to known reference peaks.")
 
-parser <- add_option(parser, c("--dfp_corr"), action = "store",
+parser <- add_option(parser, c("--dfp_corr"), action = "store", default = TRUE,
                      help="Perform dynamic frequency and phase correction using the RATS\n\t\tmethod.")
 
 parser <- add_option(parser, c("--output-ratio"), action = "store",
                      help="String to specify a metabolite ratio to output. Defaults to\n\t\t\"tCr\". Multiple metabolites may be specified for multiple\n\t\toutputs. Set to NA to omit.")
 
-parser <- add_option(parser, c("--ecc"), action = "store",
+parser <- add_option(parser, c("--ecc"), action = "store", default = FALSE,
                      help="Option to perform water reference based eddy current correction,\n\t\tdefaults to FALSE.")
 
 parser <- add_option(parser, c("--hsvd_width"), action = "store",
@@ -75,16 +75,16 @@ parser <- add_option(parser, c("--fit_opts"), action = "store",
 parser <- add_option(parser, c("--fit_subset"), action = "store",
                      help="Specify a subset of dynamics to analyse, for example 1:16 would\n\t\tonly fit the first 16 dynamic scans.")
 
-parser <- add_option(parser, c("--legacy_ws"), action = "store",
+parser <- add_option(parser, c("--legacy_ws"), action = "store", default = FALSE,
                      help="Perform and output legacy water scaling compatible with default\n\t\tLCModel and TARQUIN behaviour. See w_att and w_conc arguments\n\t\tto change the default assumptions. Default value is FALSE.")
 
-parser <- add_option(parser, c("--w_att"), action = "store",
+parser <- add_option(parser, c("--w_att"), action = "store", default = 0.7,
                      help="Water attenuation factor (default = 0.7) for legacy water\n\t\tscaling. Assumes water T2 of 80ms and a TE = 30 ms.\n\t\texp(-30ms / 80ms) ~ 0.7.")
 
-parser <- add_option(parser, c("--w_conc"), action = "store",
+parser <- add_option(parser, c("--w_conc"), action = "store", default = 35880,
                      help="Assumed water concentration (default = 35880) for legacy water\n\t\tscaling. Default value corresponds to typical white matter.\n\t\tSet to 43300 for gray matter, and 55556 for phantom\n\t\tmeasurements.")
 
-parser <- add_option(parser, c("--use_basis_cache"), action = "store",
+parser <- add_option(parser, c("--use_basis_cache"), action = "store", default = "auto",
                      help="Pre-cache basis sets to reduce analysis speed. Can be one of\n\t\tthe following : \"auto\", \"all\" or \"none\". The default value of\n\t\t\"auto\" will only use the cache for 3T PRESS - which generally\n\t\trequires more detailed simulation due to high CSD.")
 
 parser <- add_option(parser, c("--summary_measures"), action = "store",
@@ -99,7 +99,7 @@ parser <- add_option(parser, c("--dyn_av_scheme"), action = "store",
 parser <- add_option(parser, c("--lcm_bin_path"), action = "store",
                      help="Set the path to LCModel binary.")
 
-parser <- add_option(parser, c("-v", "--verbose"), action = "store",
+parser <- add_option(parser, c("-v", "--verbose"), action = "store", default = FALSE,
                      help="Output potentially useful information.")
 
 opt <- parse_args(parser)
@@ -109,6 +109,35 @@ if (is.null(opt$input)) {
     stop("Input MRS file needed, specify with -i or --input arguments.")
 }
 
-fit_res <- fit_svs(input = opt$input, w_ref = opt$w_ref,
-                   output_dir = opt$output_dir, pul_seq = opt$pul_seq,
-                   fit_method = opt$fit_method)
+fit_res <- fit_svs(input = opt$input,
+                   w_ref = opt$w_ref,
+                   output_dir = opt$output_dir,
+                   external_basis = opt$external_basis,
+                   p_vols = opt$p_vols,
+                   format = opt$format,
+                   pul_seq = opt$pul_seq,
+                   TE = opt$TE,
+                   TR = opt$TR,
+                   TE1 = opt$TE1,
+                   TE2 = opt$TE2,
+                   TE3 = opt$TE3,
+                   TM = opt$TM,
+                   append_basis = opt$append_basis,
+                   remove_basis = opt$remove_basis,
+                   pre_align = opt$pre_align,
+                   dfp_corr = opt$dfp_corr,
+                   output_ratio = opt$output_ratio,
+                   ecc = opt$ecc,
+                   hsvd_width = opt$hsvd_width,
+                   fit_method = opt$fit_method,
+                   fit_opts = opt$fit_opts,
+                   fit_subset = opt$fit_subset,
+                   legacy_ws = opt$legacy_ws,
+                   w_att = opt$w_att,
+                   w_conc = opt$w_conc,
+                   use_basis_cache = opt$use_basis_cache,
+                   summary_measures = opt$summary_measures,
+                   dyn_av_block_size = opt$dyn_av_block_size,
+                   dyn_av_scheme = opt$dyn_av_scheme,
+                   lcm_bin_path = opt$lcm_bin_path,
+                   verbose = opt$verbose)
