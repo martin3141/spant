@@ -6,49 +6,49 @@ suppressPackageStartupMessages(library(optparse))
 parser <- OptionParser(prog = "spant_fit_svs", description = "Command-line interface for the fit_svs function in the spant R package",
                        formatter = IndentedHelpFormatter)
 
-parser <- add_option(parser, c("-i", "--input"), action = "store",
+parser <- add_option(parser, c("-i", "--input"), action = "store", type = "character",
                      help="Path to input MRS data file (required).")
 
-parser <- add_option(parser, c("-w", "--w_ref"), action = "store",
+parser <- add_option(parser, c("-w", "--w_ref"), action = "store", type = "character",
                      help="Path to input MRS water reference data file.")
 
-parser <- add_option(parser, c("-o", "--output_dir"), action = "store",
+parser <- add_option(parser, c("-o", "--output_dir"), action = "store", type = "character",
                      help="Path to output directory.")
 
-parser <- add_option(parser, c("-b", "--external_basis"), action = "store",
+parser <- add_option(parser, c("-b", "--external_basis"), action = "store", type = "character",
                      help="Precompiled basis set to use for analysis.")
 
-parser <- add_option(parser, c("-p", "--p_vols"), action = "store",
+parser <- add_option(parser, c("-p", "--p_vols"), action = "store", type = "double",
                      help="A numeric vector of partial volumes expressed as percentages.\n\t\tDefaults to 100% white matter. A voxel containing 100% gray\n\t\tmatter tissue would use : p_vols = c(WM = 0, GM = 100, CSF = 0).")
 
-parser <- add_option(parser, c("--format"), action = "store",
+parser <- add_option(parser, c("--format"), action = "store", type = "character",
                      help="String describing the data format. Must be one of the\n\t\tfollowing : \"spar_sdat\", \"rda\", \"dicom\", \"twix\", \"pfile\",\n\t\t\"list_data\", \"paravis\", \"dpt\", \"lcm_raw\", \"rds\", \"nifti\",\n\t\t\"varian\", \"jmrui_txt\". If not specified, the format will be\n\t\tguessed from the filename extension, or will be assumed to be a\n\t\tSiemens ima dynamic data if the path is a directory.")
 
-parser <- add_option(parser, c("-s", "--pul_seq"), action = "store",
+parser <- add_option(parser, c("-s", "--pul_seq"), action = "store", type = "character",
                      help="Pulse sequence type for simulating the basis set. Can be one\n\t\tof : 'press', 'press_ideal', 'press_shaped', 'steam' or\n\t\t'slaser'.")
 
-parser <- add_option(parser, c("--TE"), action = "store",
+parser <- add_option(parser, c("--TE"), action = "store", type = "double",
                      help="Metabolite mrs data echo time in seconds. If not supplied this\n\t\twill be guessed from the metabolite data file.")
 
-parser <- add_option(parser, c("--TR"), action = "store",
+parser <- add_option(parser, c("--TR"), action = "store", type = "double",
                      help="Metabolite mrs data repetition time in seconds. If not supplied\n\t\tthis will be guessed from the metab data file.")
 
-parser <- add_option(parser, c("--TE1"), action = "store",
+parser <- add_option(parser, c("--TE1"), action = "store", type = "double",
                      help="PRESS or sLASER sequence timing parameter in seconds.")
 
-parser <- add_option(parser, c("--TE2"), action = "store",
+parser <- add_option(parser, c("--TE2"), action = "store", type = "double",
                      help="PRESS or sLASER sequence timing parameter in seconds.")
 
-parser <- add_option(parser, c("--TE3"), action = "store",
+parser <- add_option(parser, c("--TE3"), action = "store", type = "double",
                      help="sLASER sequence timing parameter in seconds.")
 
-parser <- add_option(parser, c("--TM"), action = "store",
+parser <- add_option(parser, c("--TM"), action = "store", type = "double",
                      help="STEAM mixing time parameter in seconds.")
 
-parser <- add_option(parser, c("-a", "--append_basis"), action = "store",
+parser <- add_option(parser, c("-a", "--append_basis"), action = "store", type = "character",
                      help="Names of extra signals to add to the default basis. Eg\n\t\tappend_basis = c(\"peth\", \"cit\"). Cannot be used with precompiled\n\t\tbasis sets.")
 
-parser <- add_option(parser, c("-r", "--remove_basis"), action = "store",
+parser <- add_option(parser, c("-r", "--remove_basis"), action = "store", type = "character",
                      help="grep expression to match names of signals to remove from the\n\t\tbasis. For example: use \"*\" to remove all signals, \"^mm|^lip\"\n\t\tto remove all macromolecular and lipid signals, \"^lac\" to remove\n\t\tlactate. This operation is performed before signals are added\n\t\twith append_basis. Cannot be used with precompiled basis sets.")
 
 parser <- add_option(parser, c("--pre_align"), action = "store", default = TRUE,
@@ -57,46 +57,46 @@ parser <- add_option(parser, c("--pre_align"), action = "store", default = TRUE,
 parser <- add_option(parser, c("--dfp_corr"), action = "store", default = TRUE,
                      help="Perform dynamic frequency and phase correction using the RATS\n\t\tmethod.")
 
-parser <- add_option(parser, c("--output-ratio"), action = "store",
+parser <- add_option(parser, c("--output-ratio"), action = "store", type = "character",
                      help="String to specify a metabolite ratio to output. Defaults to\n\t\t\"tCr\". Multiple metabolites may be specified for multiple\n\t\toutputs. Set to NA to omit.")
 
 parser <- add_option(parser, c("--ecc"), action = "store", default = FALSE,
                      help="Option to perform water reference based eddy current correction,\n\t\tdefaults to FALSE.")
 
-parser <- add_option(parser, c("--hsvd_width"), action = "store",
+parser <- add_option(parser, c("--hsvd_width"), action = "store", type = "double",
                      help="Set the width of the HSVD filter in Hz. Note the applied width\n\t\tis between -width and +width Hz, with 0 Hz being defined at the\n\t\tcentre of the spectral width. Default is disabled (set to NULL),\n\t\t30 Hz is a reasonable value.")
 
-parser <- add_option(parser, c("-f", "--fit_method"), action = "store",
+parser <- add_option(parser, c("-f", "--fit_method"), action = "store", type = "character",
                      help="Fitting method, can be 'ABFIT-REG' or 'LCMODEL'. Defaults to\n\t\t'ABFIT-REG'.")
 
-parser <- add_option(parser, c("--fit_opts"), action = "store",
+parser <- add_option(parser, c("--fit_opts"), action = "store", type = "character",
                      help="Options to pass to the fitting method.")
 
-parser <- add_option(parser, c("--fit_subset"), action = "store",
+parser <- add_option(parser, c("--fit_subset"), action = "store", type = "integer",
                      help="Specify a subset of dynamics to analyse, for example 1:16 would\n\t\tonly fit the first 16 dynamic scans.")
 
 parser <- add_option(parser, c("--legacy_ws"), action = "store", default = FALSE,
                      help="Perform and output legacy water scaling compatible with default\n\t\tLCModel and TARQUIN behaviour. See w_att and w_conc arguments\n\t\tto change the default assumptions. Default value is FALSE.")
 
-parser <- add_option(parser, c("--w_att"), action = "store", default = 0.7,
+parser <- add_option(parser, c("--w_att"), action = "store", default = 0.7, type = "double",
                      help="Water attenuation factor (default = 0.7) for legacy water\n\t\tscaling. Assumes water T2 of 80ms and a TE = 30 ms.\n\t\texp(-30ms / 80ms) ~ 0.7.")
 
-parser <- add_option(parser, c("--w_conc"), action = "store", default = 35880,
+parser <- add_option(parser, c("--w_conc"), action = "store", default = 35880, type = "double",
                      help="Assumed water concentration (default = 35880) for legacy water\n\t\tscaling. Default value corresponds to typical white matter.\n\t\tSet to 43300 for gray matter, and 55556 for phantom\n\t\tmeasurements.")
 
-parser <- add_option(parser, c("--use_basis_cache"), action = "store", default = "auto",
+parser <- add_option(parser, c("--use_basis_cache"), action = "store", default = "auto", type = "character",
                      help="Pre-cache basis sets to reduce analysis speed. Can be one of\n\t\tthe following : \"auto\", \"all\" or \"none\". The default value of\n\t\t\"auto\" will only use the cache for 3T PRESS - which generally\n\t\trequires more detailed simulation due to high CSD.")
 
-parser <- add_option(parser, c("--summary_measures"), action = "store",
+parser <- add_option(parser, c("--summary_measures"), action = "store", type = "character",
                      help="Output an additional table with a subset of metabolite levels,\n\t\teg c(\"tNAA\", \"tNAA/tCr\", \"tNAA/tCho\", \"Lac/tNAA\").")
 
-parser <- add_option(parser, c("--dyn_av_block_size"), action = "store",
+parser <- add_option(parser, c("--dyn_av_block_size"), action = "store", type = "integer",
                      help="Perform temporal averaging with the specified block size.\n\t\tDefaults to NULL, eg average across all dynamic scans.")
 
-parser <- add_option(parser, c("--dyn_av_scheme"), action = "store",
+parser <- add_option(parser, c("--dyn_av_scheme"), action = "store", type = "integer",
                      help="A numeric vector of sequential integers starting at 1,\n\t\twith the same length as the number of dynamic scans in the\n\t\tmetabolite data. For example: c(1, 1, 2, 1, 1, 3, 1, 1).")
 
-parser <- add_option(parser, c("--lcm_bin_path"), action = "store",
+parser <- add_option(parser, c("--lcm_bin_path"), action = "store", type = "character",
                      help="Set the path to LCModel binary.")
 
 parser <- add_option(parser, c("-v", "--verbose"), action = "store", default = FALSE,
