@@ -6,6 +6,7 @@ params:
   argg: ""
   w_ref_available: ""
   w_ref: ""
+  output_ratio: ""
   res_tab_unscaled: ""
   res_tab_ratio: ""    
   res_tab_legacy: ""

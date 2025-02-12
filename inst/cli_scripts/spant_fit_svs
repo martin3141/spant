@@ -18,7 +18,7 @@ parser <- add_option(parser, c("-o", "--output_dir"), action = "store", type = "
 parser <- add_option(parser, c("-b", "--external_basis"), action = "store", type = "character",
                      help="Precompiled basis set to use for analysis.")
 
-parser <- add_option(parser, c("-p", "--p_vols"), action = "store", type = "double",
+parser <- add_option(parser, c("-p", "--p_vols"), action = "store", type = "character",
                      help="A numeric vector of partial volumes expressed as percentages.\n\t\tDefaults to 100% white matter. A voxel containing 100% gray\n\t\tmatter tissue would use : p_vols = c(WM = 0, GM = 100, CSF = 0).")
 
 parser <- add_option(parser, c("--format"), action = "store", type = "character",
@@ -72,7 +72,7 @@ parser <- add_option(parser, c("-f", "--fit_method"), action = "store", type = "
 parser <- add_option(parser, c("--fit_opts"), action = "store", type = "character",
                      help="Options to pass to the fitting method.")
 
-parser <- add_option(parser, c("--fit_subset"), action = "store", type = "integer",
+parser <- add_option(parser, c("--fit_subset"), action = "store", type = "character",
                      help="Specify a subset of dynamics to analyse, for example 1:16 would\n\t\tonly fit the first 16 dynamic scans.")
 
 parser <- add_option(parser, c("--legacy_ws"), action = "store", default = FALSE,
@@ -93,7 +93,7 @@ parser <- add_option(parser, c("--summary_measures"), action = "store", type = "
 parser <- add_option(parser, c("--dyn_av_block_size"), action = "store", type = "integer",
                      help="Perform temporal averaging with the specified block size.\n\t\tDefaults to NULL, eg average across all dynamic scans.")
 
-parser <- add_option(parser, c("--dyn_av_scheme"), action = "store", type = "integer",
+parser <- add_option(parser, c("--dyn_av_scheme"), action = "store", type = "character",
                      help="A numeric vector of sequential integers starting at 1,\n\t\twith the same length as the number of dynamic scans in the\n\t\tmetabolite data. For example: c(1, 1, 2, 1, 1, 3, 1, 1).")
 
 parser <- add_option(parser, c("--lcm_bin_path"), action = "store", type = "character",
@@ -107,6 +107,21 @@ opt <- parse_args(parser)
 if (is.null(opt$input)) {
     print_help(parser)
     stop("Input MRS file needed, specify with -i or --input arguments.")
+}
+
+# convert p_vols to numeric vector
+if (!is.null(opt$p_vols)) {
+  opt$p_vols <- eval(parse(text = opt$p_vols))
+}
+
+# convert fit_subset to numeric vector
+if (!is.null(opt$fit_subset)) {
+  opt$fit_subset <- eval(parse(text = opt$fit_subset))
+}
+
+# convert dyn_av_scheme to numeric vector
+if (!is.null(opt$dyn_av_scheme)) {
+  opt$dyn_av_scheme <- eval(parse(text = opt$dyn_av_scheme))
 }
 
 fit_res <- fit_svs(input = opt$input,
