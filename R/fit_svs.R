@@ -67,6 +67,8 @@
 #' with the same length as the number of dynamic scans in the metabolite data.
 #' For example: c(1, 1, 2, 1, 1, 3, 1, 1).
 #' @param lcm_bin_path set the path to LCModel binary.
+#' @param plot_ppm_xlim plotting ppm axis limits in the html results.
+#' results.
 #' @param verbose output potentially useful information.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
@@ -88,7 +90,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL,
                     legacy_ws = FALSE, w_att = 0.7, w_conc = 35880,
                     use_basis_cache = "auto", summary_measures = NULL,
                     dyn_av_block_size = NULL, dyn_av_scheme = NULL,
-                    lcm_bin_path = NULL, verbose = FALSE) {
+                    lcm_bin_path = NULL, plot_ppm_xlim = NULL,
+                    verbose = FALSE) {
   
   argg  <- c(as.list(environment()))
   
@@ -494,7 +497,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL,
                   res_tab_molal = res_tab_molal,
                   dyn_data_uncorr = dyn_data_uncorr,
                   dyn_data_corr = dyn_data_corr,
-                  summary_tab = summary_tab) 
+                  summary_tab = summary_tab,
+                  plot_ppm_xlim = plot_ppm_xlim)
   
   if (Ndyns(metab) == 1) {
     rmd_file <- system.file("rmd", "svs_report.Rmd", package = "spant")

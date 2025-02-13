@@ -14,6 +14,7 @@ params:
   dyn_data_uncorr: ""
   dyn_data_corr: ""
   summary_tab: ""
+  plot_ppm_xlim: ""
 ---
 
 ```{r setup, include=FALSE}
@@ -27,12 +28,13 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ### Standard
 ```{r fitplot, fig.width=7, fig.height=6}
-plot(params$fit_res)
+plot(params$fit_res, xlim = plot_ppm_xlim)
 ```
 
 ### Stackplot
 ```{r stackplot, fig.width=7, fig.height=8}
-stackplot(params$fit_res, y_offset = 3, combine_lipmm = TRUE, labels = TRUE)
+stackplot(params$fit_res, y_offset = 3, combine_lipmm = TRUE, labels = TRUE,
+          xlim = params$plot_ppm_xlim)
 ```
 
 ```{r basisplot, results = 'asis', fig.width=7, fig.height=6}
@@ -41,7 +43,8 @@ basis_names <- colnames(params$fit_res$fits[[1]][-1:-4])
 for (n in 1:length(basis_names)) {
   #if (basis_names[n] %in% colnames(params$fit_res$fits[[1]])) {
   cat("\n### ", basis_names[n], "\n", sep = "")
-  plot(params$fit_res, plot_sigs = basis_names[n], main = basis_names[n])
+  plot(params$fit_res, plot_sigs = basis_names[n], main = basis_names[n], 
+       xlim = params$plot_ppm_xlim)
   cat("\n")
   #}
 }
@@ -129,10 +132,18 @@ if (!is.null(dyn_data_uncorr)) {
   cat("## Dynamic plots {.tabset}\n")
   if (!is.null(dyn_data_corr)) {
     cat("### Spectrogram with dynamic correction\n")
-    image(dyn_data_corr, xlim = c(4, 0.5))
+    if (is.null(params$plot_ppm_xlim)) {
+      image(dyn_data_corr, xlim = c(4, 0.5))
+    } else {
+      image(dyn_data_corr, xlim = params$plot_ppm_xlim)
+    }
   }
   cat("\n\n### Spectrogram without dynamic correction\n")
-  image(dyn_data_uncorr, xlim = c(4, 0.5))
+  if (is.null(params$plot_ppm_xlim)) {
+    image(dyn_data_uncorr, xlim = c(4, 0.5))
+  } else {
+    image(dyn_data_uncorr, xlim = params$plot_ppm_xlim)
+  }
 }
 ```
 
@@ -162,7 +173,12 @@ proc_spec <- params$fit_res$data
 proc_spec <- phase(proc_spec, phase_offset, phi1_offset)
 proc_spec <- shift(proc_spec, shift_offset, units = "ppm")
 proc_spec <- zf(proc_spec)
-plot(proc_spec, xlim = c(4, 0.2))
+
+if (is.null(params$plot_ppm_xlim)) {
+  plot(proc_spec, xlim = c(4, 0.2))
+} else {
+  plot(proc_spec, xlim = params$plot_ppm_xlim)
+}
 ```
 
 ### Processed full

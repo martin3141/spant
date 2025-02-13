@@ -99,6 +99,9 @@ parser <- add_option(parser, c("--dyn_av_scheme"), action = "store", type = "cha
 parser <- add_option(parser, c("--lcm_bin_path"), action = "store", type = "character",
                      help="Set the path to LCModel binary.")
 
+parser <- add_option(parser, c("--plot_ppm_xlim"), action = "store", type = "character",
+                     help="Plotting ppm axis limits in the html results.")
+
 parser <- add_option(parser, c("-v", "--verbose"), action = "store", default = FALSE,
                      help="Output potentially useful information.")
 
@@ -122,6 +125,11 @@ if (!is.null(opt$fit_subset)) {
 # convert dyn_av_scheme to numeric vector
 if (!is.null(opt$dyn_av_scheme)) {
   opt$dyn_av_scheme <- eval(parse(text = opt$dyn_av_scheme))
+}
+
+# convert plot_ppm_xlim to numeric vector
+if (!is.null(opt$plot_ppm_xlim)) {
+  opt$plot_ppm_xlim <- eval(parse(text = opt$plot_ppm_xlim))
 }
 
 fit_res <- fit_svs(input = opt$input,
@@ -155,4 +163,5 @@ fit_res <- fit_svs(input = opt$input,
                    dyn_av_block_size = opt$dyn_av_block_size,
                    dyn_av_scheme = opt$dyn_av_scheme,
                    lcm_bin_path = opt$lcm_bin_path,
+                   plot_ppm_xlim = opt$plot_ppm_xlim,
                    verbose = opt$verbose)

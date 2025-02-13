@@ -36,6 +36,7 @@ fit_svs(
   dyn_av_block_size = NULL,
   dyn_av_scheme = NULL,
   lcm_bin_path = NULL,
+  plot_ppm_xlim = NULL,
   verbose = FALSE
 )
 }
@@ -135,6 +136,9 @@ with the same length as the number of dynamic scans in the metabolite data.
 For example: c(1, 1, 2, 1, 1, 3, 1, 1).}
 
 \item{lcm_bin_path}{set the path to LCModel binary.}
+
+\item{plot_ppm_xlim}{plotting ppm axis limits in the html results.
+results.}
 
 \item{verbose}{output potentially useful information.}
 }

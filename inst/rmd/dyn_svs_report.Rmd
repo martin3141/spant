@@ -14,6 +14,7 @@ params:
   dyn_data_uncorr: ""
   dyn_data_corr: ""
   summary_tab: ""
+  plot_ppm_xlim: ""
 ---
 
 ```{r setup, include=FALSE}
@@ -28,7 +29,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r, results = 'asis', fig.width=7, fig.height=6}
 for (n in 1:Ndyns(params$fit_res$data)) {
   cat("\n### ", n, "\n", sep = "")
-  plot(params$fit_res, dyn = n)
+  plot(params$fit_res, dyn = n, xlim = params$plot_ppm_xlim)
   cat("\n")
 }
 ```
@@ -38,10 +39,18 @@ if (!is.null(dyn_data_uncorr)) {
   cat("## Dynamic plots {.tabset}\n")
   if (!is.null(dyn_data_corr)) {
     cat("### Spectrogram with dynamic correction\n")
-    image(dyn_data_corr, xlim = c(4, 0.5))
+    if (is.null(params$plot_ppm_xlim)) {
+      image(dyn_data_corr, xlim = c(4, 0.5))
+    } else {
+      image(dyn_data_corr, xlim = params$plot_ppm_xlim)
+    }
   }
   cat("\n\n### Spectrogram without dynamic correction\n")
-  image(dyn_data_uncorr, xlim = c(4, 0.5))
+  if (is.null(params$plot_ppm_xlim)) {
+    image(dyn_data_uncorr, xlim = c(4, 0.5))
+  } else {
+    image(dyn_data_uncorr, xlim = params$plot_ppm_xlim)
+  }
 }
 ```
 
@@ -54,7 +63,12 @@ shift_offset <- params$fit_res$res_tab$shift
 proc_spec <- phase(mean_dyns(params$fit_res$data), mean(phase_offset))
 proc_spec <- shift(proc_spec, mean(shift_offset), units = "ppm")
 proc_spec <- zf(proc_spec)
-plot(proc_spec, xlim = c(4, 0.5))
+
+if (is.null(params$plot_ppm_xlim)) {
+  plot(proc_spec, xlim = c(4, 0.2))
+} else {
+  plot(proc_spec, xlim = params$plot_ppm_xlim)
+}
 ```
 
 ### Mean processed full
