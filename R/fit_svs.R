@@ -234,8 +234,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL,
     metab <- mean_dyn_blocks(metab, dyn_av_block_size)
   } else if (!is.null(dyn_av_scheme)) {
     if (length(dyn_av_scheme) != Ndyns(metab)) {
-      stop(paste0("dyn_av_scheme is the wrong length, should be : ",
-                  Ndyns(metab)))
+      stop(paste0("dyn_av_scheme is the wrong length. Currently : ",
+                  length(dyn_av_scheme),", should be : ", Ndyns(metab)))
     }
     dyn_av_scheme <- as.integer(dyn_av_scheme)
     max_dyn       <- max(dyn_av_scheme)
