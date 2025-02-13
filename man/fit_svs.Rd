@@ -35,6 +35,7 @@ fit_svs(
   summary_measures = NULL,
   dyn_av_block_size = NULL,
   dyn_av_scheme = NULL,
+  dyn_av_scheme_file = NULL,
   lcm_bin_path = NULL,
   plot_ppm_xlim = NULL,
   verbose = FALSE
@@ -131,9 +132,14 @@ metabolite levels, eg c("tNAA", "tNAA/tCr", "tNAA/tCho", "Lac/tNAA").}
 \item{dyn_av_block_size}{perform temporal averaging with the specified block
 size. Defaults to NULL, eg average across all dynamic scans.}
 
-\item{dyn_av_scheme}{a numeric vector of sequential integers starting at 1,
+\item{dyn_av_scheme}{a numeric vector of sequential integers (starting at 1),
 with the same length as the number of dynamic scans in the metabolite data.
 For example: c(1, 1, 2, 1, 1, 3, 1, 1).}
+
+\item{dyn_av_scheme_file}{a file path containing a single column of
+sequential integers (starting at 1) with the same length as the number of
+dynamic scans in the metabolite data. File can be formatted as .xlsx, text or
+csv format.}
 
 \item{lcm_bin_path}{set the path to LCModel binary.}
 

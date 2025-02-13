@@ -53,6 +53,7 @@ Suggests:
     doParallel,
     parallel,
     digest,
+    readxl,
     car
 VignetteBuilder:
     knitr

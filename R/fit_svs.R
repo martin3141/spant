@@ -63,9 +63,13 @@
 #' metabolite levels, eg c("tNAA", "tNAA/tCr", "tNAA/tCho", "Lac/tNAA").
 #' @param dyn_av_block_size perform temporal averaging with the specified block
 #' size. Defaults to NULL, eg average across all dynamic scans.
-#' @param dyn_av_scheme a numeric vector of sequential integers starting at 1,
+#' @param dyn_av_scheme a numeric vector of sequential integers (starting at 1),
 #' with the same length as the number of dynamic scans in the metabolite data.
 #' For example: c(1, 1, 2, 1, 1, 3, 1, 1).
+#' @param dyn_av_scheme_file a file path containing a single column of
+#' sequential integers (starting at 1) with the same length as the number of
+#' dynamic scans in the metabolite data. File may be formatted as .xlsx, .xls,
+#' text or csv format.
 #' @param lcm_bin_path set the path to LCModel binary.
 #' @param plot_ppm_xlim plotting ppm axis limits in the html results.
 #' results.
@@ -90,12 +94,16 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL,
                     legacy_ws = FALSE, w_att = 0.7, w_conc = 35880,
                     use_basis_cache = "auto", summary_measures = NULL,
                     dyn_av_block_size = NULL, dyn_av_scheme = NULL,
-                    lcm_bin_path = NULL, plot_ppm_xlim = NULL,
-                    verbose = FALSE) {
+                    dyn_av_scheme_file = NULL, lcm_bin_path = NULL,
+                    plot_ppm_xlim = NULL, verbose = FALSE) {
   
   argg  <- c(as.list(environment()))
   
   metab <- input
+  
+  if (!is.null(dyn_av_scheme) & !is.null(dyn_av_scheme_file)) {
+    stop("dyn_av_scheme and dyn_av_scheme_file options cannot both be set. Use one or the other.")
+  }
   
   if (!is.null(external_basis) & !is.null(append_basis)) {
     stop("external_basis and append_basis options cannot both be set. Use one or the other.")
@@ -107,6 +115,10 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL,
   
   if (!is.null(dyn_av_block_size) & !is.null(dyn_av_scheme)) {
     stop("dyn_av_block_size and dyn_av_scheme options cannot both be set. Use one or the other.")
+  }
+  
+  if (!is.null(dyn_av_block_size) & !is.null(dyn_av_scheme_file)) {
+    stop("dyn_av_block_size and dyn_av_scheme_file options cannot both be set. Use one or the other.")
   }
   
   # read the data file if not already an mrs_data object
@@ -201,6 +213,19 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL,
   }
   
   if (!exists("metab_post_dfp_corr")) metab_post_dfp_corr <- NULL
+  
+  # read the dynamic averaging scheme from a file if specified
+  if (!is.null(dyn_av_scheme_file)) {
+    file_ext <- tools::file_ext(dyn_av_scheme_file)
+    if (file_ext == "xls" | file_ext == "xlsx") {
+      scheme_tab <- readxl::read_excel(dyn_av_scheme_file, col_names = FALSE,
+                                       col_types = "numeric")
+      dyn_av_scheme <- as.integer(scheme_tab[[1]])
+    } else {
+      dyn_av_scheme <- as.integer(read.csv(dyn_av_scheme_file,
+                                           header = FALSE)[[1]])
+    }
+  }
   
   # take the mean of the metabolite data
   if (!is.null(dyn_av_block_size)) {

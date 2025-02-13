@@ -96,6 +96,9 @@ parser <- add_option(parser, c("--dyn_av_block_size"), action = "store", type = 
 parser <- add_option(parser, c("--dyn_av_scheme"), action = "store", type = "character",
                      help="A numeric vector of sequential integers starting at 1,\n\t\twith the same length as the number of dynamic scans in the\n\t\tmetabolite data. For example: c(1, 1, 2, 1, 1, 3, 1, 1).")
 
+parser <- add_option(parser, c("--dyn_av_scheme_file"), action = "store", type = "character",
+                       help="A file path containing a single column of sequential integers\n\t\t(starting at 1) with the same length as the number of dynamic\n\t\tscans in the metabolite data. File may be formatted as .xlsx,\n\t\t.xls, text or csv format.")
+
 parser <- add_option(parser, c("--lcm_bin_path"), action = "store", type = "character",
                      help="Set the path to LCModel binary.")
 
@@ -162,6 +165,7 @@ fit_res <- fit_svs(input = opt$input,
                    summary_measures = opt$summary_measures,
                    dyn_av_block_size = opt$dyn_av_block_size,
                    dyn_av_scheme = opt$dyn_av_scheme,
+                   dyn_av_scheme_file = opt$dyn_av_scheme_file,
                    lcm_bin_path = opt$lcm_bin_path,
                    plot_ppm_xlim = opt$plot_ppm_xlim,
                    verbose = opt$verbose)
