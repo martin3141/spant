@@ -126,8 +126,8 @@ if (!is.null(opt$fit_subset)) {
 }
 
 # convert dyn_av_scheme to numeric vector
-if (!is.null(opt$dyn_av_scheme)) {
-  opt$dyn_av_scheme <- eval(parse(text = opt$dyn_av_scheme))
+if (!is.null(opt[["dyn_av_scheme"]])) {
+  opt[["dyn_av_scheme"]] <- eval(parse(text = opt[["dyn_av_scheme"]]))
 }
 
 # convert plot_ppm_xlim to numeric vector
@@ -164,7 +164,7 @@ fit_res <- fit_svs(input = opt$input,
                    use_basis_cache = opt$use_basis_cache,
                    summary_measures = opt$summary_measures,
                    dyn_av_block_size = opt$dyn_av_block_size,
-                   dyn_av_scheme = opt$dyn_av_scheme,
+                   dyn_av_scheme = opt[['dyn_av_scheme']],
                    dyn_av_scheme_file = opt$dyn_av_scheme_file,
                    lcm_bin_path = opt$lcm_bin_path,
                    plot_ppm_xlim = opt$plot_ppm_xlim,

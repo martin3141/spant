@@ -138,8 +138,8 @@ For example: c(1, 1, 2, 1, 1, 3, 1, 1).}
 
 \item{dyn_av_scheme_file}{a file path containing a single column of
 sequential integers (starting at 1) with the same length as the number of
-dynamic scans in the metabolite data. File can be formatted as .xlsx, text or
-csv format.}
+dynamic scans in the metabolite data. File may be formatted as .xlsx, .xls,
+text or csv format.}
 
 \item{lcm_bin_path}{set the path to LCModel binary.}
 

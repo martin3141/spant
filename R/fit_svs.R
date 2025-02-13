@@ -102,6 +102,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL,
   metab <- input
   
   if (!is.null(dyn_av_scheme) & !is.null(dyn_av_scheme_file)) {
+    print(dyn_av_scheme)
+    print(dyn_av_scheme_file)
     stop("dyn_av_scheme and dyn_av_scheme_file options cannot both be set. Use one or the other.")
   }
   
@@ -218,12 +220,12 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL,
   if (!is.null(dyn_av_scheme_file)) {
     file_ext <- tools::file_ext(dyn_av_scheme_file)
     if (file_ext == "xls" | file_ext == "xlsx") {
-      scheme_tab <- readxl::read_excel(dyn_av_scheme_file, col_names = FALSE,
-                                       col_types = "numeric")
+      scheme_tab <- suppressMessages(readxl::read_excel(dyn_av_scheme_file,
+                                     col_names = FALSE, col_types = "numeric"))
       dyn_av_scheme <- as.integer(scheme_tab[[1]])
     } else {
-      dyn_av_scheme <- as.integer(read.csv(dyn_av_scheme_file,
-                                           header = FALSE)[[1]])
+      dyn_av_scheme <- as.integer(utils::read.csv(dyn_av_scheme_file,
+                                                  header = FALSE)[[1]])
     }
   }
   
