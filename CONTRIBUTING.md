@@ -10,7 +10,7 @@ When filing an issue, the most important thing is to include a minimal reproduci
 
 ## Documentation
 
-If you would like to help new users with a particular apect of MRS data processing or analysis please consider contributing a short document in R markdown format to be added to the package. For examples please see the doc folder in the main GitHub repository.
+If you would like to help new users with a particular aspect of MRS data processing or analysis please consider contributing a short document in R markdown format to be added to the package. For examples please see the doc folder in the main GitHub repository.
 
 Function reference documentation is derived from roxygen2 code comments and are best contributed via a pull request, as described below.
 

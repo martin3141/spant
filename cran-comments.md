@@ -1,6 +1,6 @@
 ## Test environments
 
-* Windows 10, R 4.1.2
+* MacOS , R 4.4.1
 
 ## R CMD check results
 
