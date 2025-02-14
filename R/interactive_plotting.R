@@ -198,7 +198,7 @@ plot_slice_map_inter <- function(mrs_data, map = NULL, xlim = NULL, slice = 1,
 #' @param bg plot background colour.
 #' @param mar plot margins.
 #' @param smallplot smallplot option for positioning the colourbar.
-#' @param legend_axis_cex fornt expansion factor for the legend axis text.
+#' @param legend_axis_cex font expansion factor for the legend axis text.
 #' @export
 ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
                    zlim_ol = NULL, alpha = 0.7,

@@ -54,7 +54,7 @@ ortho3(
 
 \item{smallplot}{smallplot option for positioning the colourbar.}
 
-\item{legend_axis_cex}{fornt expansion factor for the legend axis text.}
+\item{legend_axis_cex}{font expansion factor for the legend axis text.}
 }
 \description{
 Display an orthographic projection plot of a nifti object.

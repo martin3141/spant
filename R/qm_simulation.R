@@ -616,7 +616,7 @@ get_mol_para_list_names <- function(mol_para_list) {
 #' @param auto_scale scale the basis based on the intensity of a singlet
 #' resonance. Needed for sequences with spatial simulation.
 #' @param use_basis_cache create and use a cache of simulated basis sets stored
-#' in the "spant_basis_cache" folder in the users home directory. Defults to
+#' in the "spant_basis_cache" folder in the users home directory. Defaults to
 #' FALSE.
 #' @param verbose output simulation progress and timings.
 #' @param ... extra parameters to pass to the pulse sequence function.

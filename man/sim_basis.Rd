@@ -31,7 +31,7 @@ get_mol_names function for a full list of molecules.}
 resonance. Needed for sequences with spatial simulation.}
 
 \item{use_basis_cache}{create and use a cache of simulated basis sets stored
-in the "spant_basis_cache" folder in the users home directory. Defults to
+in the "spant_basis_cache" folder in the users home directory. Defaults to
 FALSE.}
 
 \item{verbose}{output simulation progress and timings.}

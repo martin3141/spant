@@ -502,7 +502,7 @@ get_fit_map <- function(fit_res, name) {
 #' Export a one-page pdf of a single fit result
 #' @param fit_res \code{fit_result} object.
 #' @param pdf_out_path path to the exported pdf file.
-#' @param title ouptut title.
+#' @param title output title.
 #' @export
 one_page_pdf <- function(fit_res, pdf_out_path, title = NULL) {
   grDevices::pdf(pdf_out_path, paper = "a4r", width = 11, height = 7)

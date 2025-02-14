@@ -11,7 +11,7 @@ one_page_pdf(fit_res, pdf_out_path, title = NULL)
 
 \item{pdf_out_path}{path to the exported pdf file.}
 
-\item{title}{ouptut title.}
+\item{title}{output title.}
 }
 \description{
 Export a one-page pdf of a single fit result
