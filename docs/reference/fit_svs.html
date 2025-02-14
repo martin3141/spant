@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.0</span>
       </span>
     </div>
 
@@ -79,7 +79,7 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fit_svs</span><span class="op">(</span></span>
-<span>  <span class="va">metab</span>,</span>
+<span>  <span class="va">input</span>,</span>
 <span>  w_ref <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  external_basis <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -96,9 +96,10 @@
 <span>  remove_basis <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pre_align <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  dfp_corr <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  output_ratio <span class="op">=</span> <span class="st">"tCr"</span>,</span>
+<span>  output_ratio <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ecc <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  hsvd_width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fit_method <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fit_opts <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fit_subset <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  legacy_ws <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -108,6 +109,9 @@
 <span>  summary_measures <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dyn_av_block_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dyn_av_scheme <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dyn_av_scheme_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lcm_bin_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  plot_ppm_xlim <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -116,8 +120,8 @@
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-metab">metab<a class="anchor" aria-label="anchor" href="#arg-metab"></a></dt>
-<dd><p>path or mrs_data object containing MRS metabolite data.</p></dd>
+<dl><dt id="arg-input">input<a class="anchor" aria-label="anchor" href="#arg-input"></a></dt>
+<dd><p>path or mrs_data object containing MRS data.</p></dd>
 
 
 <dt id="arg-w-ref">w_ref<a class="anchor" aria-label="anchor" href="#arg-w-ref"></a></dt>
@@ -201,8 +205,8 @@ method.</p></dd>
 
 <dt id="arg-output-ratio">output_ratio<a class="anchor" aria-label="anchor" href="#arg-output-ratio"></a></dt>
 <dd><p>optional string to specify a metabolite ratio to output.
-Defaults to "tCr" and multiple metabolites may be specified for multiple
-outputs. Set as NULL to omit.</p></dd>
+Defaults to "tCr". Multiple metabolites may be specified for multiple
+outputs. Set to NA to omit.</p></dd>
 
 
 <dt id="arg-ecc">ecc<a class="anchor" aria-label="anchor" href="#arg-ecc"></a></dt>
@@ -217,8 +221,12 @@ of the spectral width. Default is disabled (set to NULL), 30 Hz is a
 reasonable value.</p></dd>
 
 
+<dt id="arg-fit-method">fit_method<a class="anchor" aria-label="anchor" href="#arg-fit-method"></a></dt>
+<dd><p>can be "ABFIT-REG" or "LCMODEL. Defaults to "ABFIT-REG".</p></dd>
+
+
 <dt id="arg-fit-opts">fit_opts<a class="anchor" aria-label="anchor" href="#arg-fit-opts"></a></dt>
-<dd><p>options to pass to ABfit.</p></dd>
+<dd><p>options to pass to the fitting method.</p></dd>
 
 
 <dt id="arg-fit-subset">fit_subset<a class="anchor" aria-label="anchor" href="#arg-fit-subset"></a></dt>
@@ -261,9 +269,25 @@ size. Defaults to NULL, eg average across all dynamic scans.</p></dd>
 
 
 <dt id="arg-dyn-av-scheme">dyn_av_scheme<a class="anchor" aria-label="anchor" href="#arg-dyn-av-scheme"></a></dt>
-<dd><p>a numerical vector of sequential integers starting at 1,
+<dd><p>a numeric vector of sequential integers (starting at 1),
 with the same length as the number of dynamic scans in the metabolite data.
 For example: c(1, 1, 2, 1, 1, 3, 1, 1).</p></dd>
+
+
+<dt id="arg-dyn-av-scheme-file">dyn_av_scheme_file<a class="anchor" aria-label="anchor" href="#arg-dyn-av-scheme-file"></a></dt>
+<dd><p>a file path containing a single column of
+sequential integers (starting at 1) with the same length as the number of
+dynamic scans in the metabolite data. File may be formatted as .xlsx, .xls,
+text or csv format.</p></dd>
+
+
+<dt id="arg-lcm-bin-path">lcm_bin_path<a class="anchor" aria-label="anchor" href="#arg-lcm-bin-path"></a></dt>
+<dd><p>set the path to LCModel binary.</p></dd>
+
+
+<dt id="arg-plot-ppm-xlim">plot_ppm_xlim<a class="anchor" aria-label="anchor" href="#arg-plot-ppm-xlim"></a></dt>
+<dd><p>plotting ppm axis limits in the html results.
+results.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -277,8 +301,9 @@ For example: c(1, 1, 2, 1, 1, 3, 1, 1).</p></dd>
 <span class="r-in"><span>                     package <span class="op">=</span> <span class="st">"spant"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">w_ref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"philips_spar_sdat_W.SDAT"</span>,</span></span>
 <span class="r-in"><span>                     package <span class="op">=</span> <span class="st">"spant"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">out_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"~"</span>, <span class="st">"fit_svs_result"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="va">fit_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="svs_1h_brain_analysis.html">svs_1h_brain_analysis</a></span><span class="op">(</span><span class="va">metab</span>, <span class="va">w_ref</span>, <span class="st">"fit_res_dir"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit_result</span> <span class="op">&lt;-</span> <span class="fu">fit_svs</span><span class="op">(</span><span class="va">metab</span>, <span class="va">w_ref</span>, <span class="va">out_dir</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

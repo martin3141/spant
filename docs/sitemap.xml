@@ -166,6 +166,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/get_fp.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/get_guassian_pulse.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/get_head_dyns.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/get_hrf.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/get_lcm_cmd.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/get_metab.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/get_mol_names.html</loc></url>
@@ -207,6 +208,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/image.mrs_data.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/img2kspace_xy.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/index.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/install_cli.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/int_spec.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/interleave_dyns.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/inv_even_dyns.html</loc></url>

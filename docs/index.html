@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.0</span>
       </span>
     </div>
 
@@ -102,7 +102,7 @@
 <div class="section level1">
 <div class="page-header"><h1 id="spectroscopy-analysis-tools-spant-">Spectroscopy Analysis Tools (spant) <img src="reference/figures/logo.png" align="right" width="130/"><a class="anchor" aria-label="anchor" href="#spectroscopy-analysis-tools-spant-"></a>
 </h1></div>
-<p><a href="https://github.com/martin3141/spant/actions" class="external-link"><img src="https://github.com/martin3141/spant/workflows/R-CMD-check/badge.svg" alt="R build status"></a> <a href="https://doi.org/10.21105/joss.03646" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.03646/status.svg" alt="DOI"></a> <a href="http://cran.rstudio.com/web/packages/spant/index.html" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/spant"></a> <a href="https://cran.r-project.org/package=spant" class="external-link"><img src="http://www.r-pkg.org/badges/version/spant" alt="CRAN_Status_Badge"></a> <a href="https://coveralls.io/github/martin3141/spant?branch=master" class="external-link"><img src="https://coveralls.io/repos/github/martin3141/spant/badge.svg?branch=master" alt="Coverage Status"></a></p>
+<p><a href="https://github.com/martin3141/spant/actions" class="external-link"><img src="https://github.com/martin3141/spant/workflows/R-CMD-check/badge.svg" alt="R_build_status"></a> <a href="https://doi.org/10.21105/joss.03646" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.03646/status.svg" alt="DOI"></a> <a href="https://cran.r-project.org/package=spant" class="external-link"><img src="https://www.r-pkg.org/badges/version/spant" alt="CRAN_status_badge"></a> <a href="https://cran.r-project.org/package=spant" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/last-month/spant" alt="Downloads"></a></p>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -142,75 +142,6 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"martin3141/spant"</span>, ref <span class="op">=</span> <span class="st">"devel"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="ubuntu-2004-installation">Ubuntu 20.04 installation<a class="anchor" aria-label="anchor" href="#ubuntu-2004-installation"></a>
-</h2>
-<p>CRAN packages need to be compiled on Linux, and therefore you may need to ensure some additional system libraries are installed. spant may be installed from a clean installation of Ubuntu 20.04 with the following commands pasted into the terminal:</p>
-<pre class="ubuntu"><code>sudo apt install -y r-base libcurl4-openssl-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libtiff5-dev
-mkdir -p ~/R/x86_64-pc-linux-gnu-library/3.6
-Rscript -e 'install.packages("spant", dependencies = TRUE)'</code></pre>
-</div>
-<div class="section level2">
-<h2 id="ubuntu-2110-installation">Ubuntu 21.10 installation<a class="anchor" aria-label="anchor" href="#ubuntu-2110-installation"></a>
-</h2>
-<pre class="ubuntu"><code>sudo apt install -y r-base libcurl4-openssl-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libtiff5-dev
-mkdir -p ~/R/x86_64-pc-linux-gnu-library/4.0
-Rscript -e 'install.packages("spant", dependencies = TRUE)'</code></pre>
-</div>
-<div class="section level2">
-<h2 id="anaconda-environment-installation">Anaconda environment installation<a class="anchor" aria-label="anchor" href="#anaconda-environment-installation"></a>
-</h2>
-<p>Firstly install Anaconda in the standard way for your platform: <a href="https://docs.anaconda.com/anaconda/install/index.html" class="external-link uri">https://docs.anaconda.com/anaconda/install/index.html</a>.</p>
-<p>Create a text file, called <code>spant_requirements.yml</code>, containing the following:</p>
-<pre class="conda"><code><span><span class="va">name</span><span class="op">:</span> <span class="va">spant</span></span>
-<span><span class="va">channels</span><span class="op">:</span></span>
-<span>    <span class="op">-</span> <span class="va">conda</span><span class="op">-</span><span class="va">forge</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span></span>
-<span><span class="va">dependencies</span><span class="op">:</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">base</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">essentials</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">abind</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">plyr</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">foreach</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">pracma</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">stringr</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">signal</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">matrixcalc</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">minpack.lm</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">nnls</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">r.utils</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">graphicsqc</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">expm</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">smoother</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">readr</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">magrittr</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">ptw</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">mmand</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">RNifti</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">RNiftyReg</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">fields</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">MASS</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">numDeriv</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">nloptr</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">irlba</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">tibble</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">jsonlite</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">viridisLite</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">shiny</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">miniUI</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">knitr</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">rmarkdown</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">testthat</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">ragg</span></span>
-<span>    <span class="op">-</span> <span class="va">r</span><span class="op">-</span><span class="va">doParallel</span></span></code></pre>
-<p>Create and activate the environment:</p>
-<pre class="conda"><code>conda env create -f spant_requirements.yml
-conda activate spant</code></pre>
-<p>Start R and install spant in the usual way:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"spant"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>Big thanks to <a href="https://github.com/joaomcteixeira" class="external-link">João M.C. Teixeira</a> for figuring out this method of install.</p>
 </div>
 </div>
   </div>
