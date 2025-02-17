@@ -246,9 +246,16 @@ plot_voi_overlay_seg <- function(mri_seg, voi, export_path = NULL, ...) {
   check_geom(voi, mri_seg)
   
   pvs <- get_voi_seg(voi, mri_seg)
-  table <- paste("WM\t\t=  ", sprintf("%.1f", pvs[["WM"]]), "%\nGM\t\t=  ", 
-                 sprintf("%.1f", pvs[["GM"]]), "%\nCSF\t=  ", 
-                 sprintf("%.1f", pvs[["CSF"]]), "%\nOther\t=  ", 
+  
+  # tabs stopped working at some point
+  # table <- paste("WM\t\t=  ", sprintf("%.1f", pvs[["WM"]]), "%\nGM\t\t=  ", 
+  #                sprintf("%.1f", pvs[["GM"]]), "%\nCSF\t=  ", 
+  #                sprintf("%.1f", pvs[["CSF"]]), "%\nOther\t=  ", 
+  #                sprintf("%.1f", pvs[["Other"]]),'%', sep = "")
+  
+  table <- paste("WM = ", sprintf("%.1f", pvs[["WM"]]), "%\nGM = ", 
+                 sprintf("%.1f", pvs[["GM"]]), "%\nCSF = ", 
+                 sprintf("%.1f", pvs[["CSF"]]), "%\nOther = ", 
                  sprintf("%.1f", pvs[["Other"]]),'%', sep = "")
   
   plot_col <- add_alpha(grDevices::heat.colors(10), 0.4)

@@ -5,6 +5,8 @@
 #' @param input path or mrs_data object containing MRS data.
 #' @param w_ref path or mrs_data object containing MRS water reference data.
 #' @param output_dir directory path to output fitting results.
+#' @param mri filepath or nifti object containing anatomical MRI data.
+#' @param mri_seg filepath or nifti object containing segmented MRI data.
 #' @param external_basis precompiled basis set object to use for analysis.
 #' @param p_vols a numeric vector of partial volumes expressed as percentages.
 #' Defaults to 100% white matter. A voxel containing 100% gray matter tissue
@@ -84,18 +86,19 @@
 #' fit_result <- fit_svs(metab, w_ref, out_dir)
 #' }
 #' @export
-fit_svs <- function(input, w_ref = NULL, output_dir = NULL,
-                    external_basis = NULL, p_vols = NULL, format = NULL,
-                    pul_seq = NULL, TE = NULL, TR = NULL, TE1 = NULL,
-                    TE2 = NULL, TE3 = NULL, TM = NULL, append_basis = NULL,
-                    remove_basis = NULL, pre_align = TRUE, dfp_corr = TRUE,
-                    output_ratio = NULL, ecc = FALSE, hsvd_width = NULL,
-                    fit_method = NULL, fit_opts = NULL, fit_subset = NULL,
-                    legacy_ws = FALSE, w_att = 0.7, w_conc = 35880,
-                    use_basis_cache = "auto", summary_measures = NULL,
-                    dyn_av_block_size = NULL, dyn_av_scheme = NULL,
-                    dyn_av_scheme_file = NULL, lcm_bin_path = NULL,
-                    plot_ppm_xlim = NULL, verbose = FALSE) {
+fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
+                    mri_seg = NULL, external_basis = NULL, p_vols = NULL,
+                    format = NULL, pul_seq = NULL, TE = NULL, TR = NULL,
+                    TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
+                    append_basis = NULL, remove_basis = NULL, pre_align = TRUE,
+                    dfp_corr = TRUE, output_ratio = NULL, ecc = FALSE,
+                    hsvd_width = NULL, fit_method = NULL, fit_opts = NULL, 
+                    fit_subset = NULL, legacy_ws = FALSE, w_att = 0.7,
+                    w_conc = 35880, use_basis_cache = "auto",
+                    summary_measures = NULL, dyn_av_block_size = NULL,
+                    dyn_av_scheme = NULL, dyn_av_scheme_file = NULL,
+                    lcm_bin_path = NULL, plot_ppm_xlim = NULL,
+                    verbose = FALSE) {
   
   argg  <- c(as.list(environment()))
   
@@ -123,6 +126,10 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL,
     stop("dyn_av_block_size and dyn_av_scheme_file options cannot both be set. Use one or the other.")
   }
   
+  if (!is.null(mri_seg) & !is.null(p_vols)) {
+    warning("mri_seg and pvols options have both been set. Only p_vols will be used for partial volume correction calculation.")
+  }
+  
   # read the data file if not already an mrs_data object
   if (class(metab)[[1]] == "mrs_data") {
     if (is.null(output_dir)) {
@@ -134,6 +141,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL,
     metab      <- read_mrs(metab, format = format)
     if (is.null(output_dir)) {
       output_dir <- gsub("\\.", "_", basename(metab_path))
+      output_dir <- gsub("#", "_", output_dir)
       output_dir <- paste0(output_dir, "_results")
     }
   }
@@ -173,6 +181,22 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL,
   } else {
     warning(paste0("Output directory already exists : ", output_dir))
   }
+  
+  # check the mri data if specified 
+  if (is.def(mri) & (!("niftiImage" %in% class(mri)))) {
+    mri <- readNifti(mri)
+  }
+  
+  # reorientate mri
+  if (is.def(mri)) RNifti::orientation(mri) <- "RAS"
+
+  # check the mri_seg data if specified 
+  if (is.def(mri_seg) & (!("niftiImage" %in% class(mri_seg)))) {
+    mri_seg <- readNifti(mri_seg)
+  }
+  
+  # reorientate mri_seg
+  if (is.def(mri_seg)) RNifti::orientation(mri_seg) <- "RAS"
   
   # try to get TE and TR parameters from the data if not passed in
   if (is.null(TR)) TR <- tr(metab)
@@ -433,7 +457,17 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL,
   
   if (w_ref_available) {
     # assume 100% white matter unless told otherwise
-    if (is.null(p_vols)) p_vols <- c(WM = 100, GM = 0, CSF = 0)
+    if (is.null(p_vols) & is.null(mri_seg)) {
+      p_vols <- c(WM = 100, GM = 0, CSF = 0)
+    }
+    
+    if (is.null(p_vols) & !is.null(mri_seg)) {
+      # generate the svs voi in the segmented image space
+      voi_seg <- get_svs_voi(metab, mri_seg)   
+      
+      # calculate partial volumes
+      p_vols <- get_voi_seg(voi_seg, mri_seg)
+    }
     
     if (fit_method != "LCMODEL") {
       fit_res_molal <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, TE, TR)
@@ -525,7 +559,10 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL,
                   dyn_data_uncorr = dyn_data_uncorr,
                   dyn_data_corr = dyn_data_corr,
                   summary_tab = summary_tab,
-                  plot_ppm_xlim = plot_ppm_xlim)
+                  plot_ppm_xlim = plot_ppm_xlim,
+                  mri = mri,
+                  mri_seg = mri_seg,
+                  p_vols = p_vols)
   
   if (Ndyns(metab) == 1) {
     rmd_file <- system.file("rmd", "svs_report.Rmd", package = "spant")

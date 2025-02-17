@@ -15,6 +15,12 @@ parser <- add_option(parser, c("-w", "--w_ref"), action = "store", type = "chara
 parser <- add_option(parser, c("-o", "--output_dir"), action = "store", type = "character",
                      help="Path to output directory.")
 
+parser <- add_option(parser, c("--mri"), action = "store", type = "character",
+                     help="Filepath containing anatomical MRI data.")
+
+parser <- add_option(parser, c("--mri_seg"), action = "store", type = "character",
+                     help="Filepath containing segmented MRI data.")
+
 parser <- add_option(parser, c("-b", "--external_basis"), action = "store", type = "character",
                      help="Precompiled basis set to use for analysis.")
 
@@ -110,19 +116,19 @@ parser <- add_option(parser, c("-v", "--verbose"), action = "store", default = F
 
 opt <- parse_args(parser)
 
-if (is.null(opt$input)) {
+if (is.null(opt[["input"]])) {
     print_help(parser)
     stop("Input MRS file needed, specify with -i or --input arguments.")
 }
 
 # convert p_vols to numeric vector
-if (!is.null(opt$p_vols)) {
-  opt$p_vols <- eval(parse(text = opt$p_vols))
+if (!is.null(opt[["p_vols"]])) {
+  opt[["p_vols"]] <- eval(parse(text = opt[["p_vols"]]))
 }
 
 # convert fit_subset to numeric vector
-if (!is.null(opt$fit_subset)) {
-  opt$fit_subset <- eval(parse(text = opt$fit_subset))
+if (!is.null(opt[["fit_subset"]])) {
+  opt[["fit_subset"]] <- eval(parse(text = opt[["fit_subset"]]))
 }
 
 # convert dyn_av_scheme to numeric vector
@@ -133,41 +139,43 @@ if (!is.null(opt[["dyn_av_scheme"]])) {
 }
 
 # convert plot_ppm_xlim to numeric vector
-if (!is.null(opt$plot_ppm_xlim)) {
-  opt$plot_ppm_xlim <- eval(parse(text = opt$plot_ppm_xlim))
+if (!is.null(opt[["plot_ppm_xlim"]])) {
+  opt[["plot_ppm_xlim"]] <- eval(parse(text = opt[["plot_ppm_xlim"]]))
 }
 
-fit_res <- fit_svs(input = opt$input,
-                   w_ref = opt$w_ref,
-                   output_dir = opt$output_dir,
-                   external_basis = opt$external_basis,
-                   p_vols = opt$p_vols,
-                   format = opt$format,
-                   pul_seq = opt$pul_seq,
-                   TE = opt$TE,
-                   TR = opt$TR,
-                   TE1 = opt$TE1,
-                   TE2 = opt$TE2,
-                   TE3 = opt$TE3,
-                   TM = opt$TM,
-                   append_basis = opt$append_basis,
-                   remove_basis = opt$remove_basis,
-                   pre_align = opt$pre_align,
-                   dfp_corr = opt$dfp_corr,
-                   output_ratio = opt$output_ratio,
-                   ecc = opt$ecc,
-                   hsvd_width = opt$hsvd_width,
-                   fit_method = opt$fit_method,
-                   fit_opts = opt$fit_opts,
-                   fit_subset = opt$fit_subset,
-                   legacy_ws = opt$legacy_ws,
-                   w_att = opt$w_att,
-                   w_conc = opt$w_conc,
-                   use_basis_cache = opt$use_basis_cache,
-                   summary_measures = opt$summary_measures,
-                   dyn_av_block_size = opt$dyn_av_block_size,
+fit_res <- fit_svs(input = opt[["input"]],
+                   w_ref = opt[["w_ref"]],
+                   output_dir = opt[["output_dir"]],
+                   mri = opt[["mri"]],
+                   mri_seg = opt[["mri_seg"]],
+                   external_basis = opt[["external_basis"]],
+                   p_vols = opt[["p_vols"]],
+                   format = opt[["format"]],
+                   pul_seq = opt[["pul_seq"]],
+                   TE = opt[["TE"]],
+                   TR = opt[["TR"]],
+                   TE1 = opt[["TE1"]],
+                   TE2 = opt[["TE2"]],
+                   TE3 = opt[["TE3"]],
+                   TM = opt[["TM"]],
+                   append_basis = opt[["append_basis"]],
+                   remove_basis = opt[["remove_basis"]],
+                   pre_align = opt[["pre_align"]],
+                   dfp_corr = opt[["dfp_corr"]],
+                   output_ratio = opt[["output_ratio"]],
+                   ecc = opt[["ecc"]],
+                   hsvd_width = opt[["hsvd_width"]],
+                   fit_method = opt[["fit_method"]],
+                   fit_opts = opt[["fit_opts"]],
+                   fit_subset = opt[["fit_subset"]],
+                   legacy_ws = opt[["legacy_ws"]],
+                   w_att = opt[["w_att"]],
+                   w_conc = opt[["w_conc"]],
+                   use_basis_cache = opt[["use_basis_cache"]],
+                   summary_measures = opt[["summary_measures"]],
+                   dyn_av_block_size = opt[["dyn_av_block_size"]],
                    dyn_av_scheme = opt[["dyn_av_scheme"]],
-                   dyn_av_scheme_file = opt$dyn_av_scheme_file,
-                   lcm_bin_path = opt$lcm_bin_path,
-                   plot_ppm_xlim = opt$plot_ppm_xlim,
-                   verbose = opt$verbose)
+                   dyn_av_scheme_file = opt[["dyn_av_scheme_file"]],
+                   lcm_bin_path = opt[["lcm_bin_path"]],
+                   plot_ppm_xlim = opt[["plot_ppm_xlim"]],
+                   verbose = opt[["verbose"]])

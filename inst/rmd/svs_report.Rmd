@@ -15,6 +15,9 @@ params:
   dyn_data_corr: ""
   summary_tab: ""
   plot_ppm_xlim: ""
+  mri: ""
+  mri_seg: ""
+  p_vols: ""
 ---
 
 ```{r setup, include=FALSE}
@@ -147,6 +150,28 @@ if (!is.null(dyn_data_uncorr)) {
 }
 ```
 
+```{r, results = 'asis', fig.width=7, fig.height=7}
+if (!is.null(params$mri) | !is.null(params$mri_seg)) {
+  cat("## MRI {.tabset}\n")
+}
+```
+
+```{r, results = 'asis', fig.width=7, fig.height=7}
+if (!is.null(params$mri)) {
+  cat("### Voxel position\n")
+  voi <- get_svs_voi(params$fit_res$data, params$mri)
+  plot_voi_overlay(params$mri, voi)
+}
+```
+
+```{r, results = 'asis', fig.width=7, fig.height=7}
+if (!is.null(params$mri_seg)) {
+  cat("### Voxel segmetation\n")
+  voi <- get_svs_voi(params$fit_res$data, params$mri_seg)
+  seg_vols <- plot_voi_overlay_seg(params$mri_seg, voi)
+}
+```
+
 ## Spectral plots {.tabset}
 
 ### Processed cropped
@@ -196,8 +221,8 @@ if (params$w_ref_available) {
 }
 ```
 
-## Diagnostics table
-```{r}
+## Diagnostics
+```{r, results = 'asis'}
 name  <- NULL
 value <- NULL
 
@@ -281,6 +306,18 @@ kableExtra::kable_styling(kableExtra::kbl(diag_tab, align = c("l", "r"),
                                           col.names = c("Name", "Value")),
                           full_width = FALSE, position = "left",
                           bootstrap_options = boot_opts)
+
+if (!is.null(params$p_vols)) {
+  cat("### Partial volume measures\n")
+  perc_vols  <- c(params$p_vols[["WM"]], params$p_vols[["GM"]],
+                  params$p_vols[["CSF"]])
+  p_vols_tab <- data.frame(type = c("WM", "GM", "CSF"), perc = perc_vols)
+  kableExtra::kable_styling(kableExtra::kbl(p_vols_tab, align = c("l", "r"),
+                                            col.names = c("Type", "% volume")),
+                            full_width = FALSE, position = "left",
+                            bootstrap_options = boot_opts)
+}
+
 ```
 
 ## Provenance

@@ -15,6 +15,9 @@ params:
   dyn_data_corr: ""
   summary_tab: ""
   plot_ppm_xlim: ""
+  mri: ""
+  mri_seg: ""
+  p_vols: ""
 ---
 
 ```{r setup, include=FALSE}

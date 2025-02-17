@@ -8,6 +8,8 @@ fit_svs(
   input,
   w_ref = NULL,
   output_dir = NULL,
+  mri = NULL,
+  mri_seg = NULL,
   external_basis = NULL,
   p_vols = NULL,
   format = NULL,
@@ -47,6 +49,10 @@ fit_svs(
 \item{w_ref}{path or mrs_data object containing MRS water reference data.}
 
 \item{output_dir}{directory path to output fitting results.}
+
+\item{mri}{filepath or nifti object containing anatomical MRI data.}
+
+\item{mri_seg}{filepath or nifti object containing segmented MRI data.}
 
 \item{external_basis}{precompiled basis set object to use for analysis.}
 
