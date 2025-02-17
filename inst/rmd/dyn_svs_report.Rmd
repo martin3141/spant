@@ -57,6 +57,28 @@ if (!is.null(dyn_data_uncorr)) {
 }
 ```
 
+```{r, results = 'asis', fig.width=7, fig.height=7}
+if (!is.null(params$mri) | !is.null(params$mri_seg)) {
+  cat("## MRI {.tabset}\n")
+}
+```
+
+```{r, results = 'asis', fig.width=7, fig.height=7}
+if (!is.null(params$mri)) {
+  cat("### Voxel position\n")
+  voi <- get_svs_voi(params$fit_res$data, params$mri)
+  plot_voi_overlay(params$mri, voi)
+}
+```
+
+```{r, results = 'asis', fig.width=7, fig.height=7}
+if (!is.null(params$mri_seg)) {
+  cat("### Voxel segmetation\n")
+  voi <- get_svs_voi(params$fit_res$data, params$mri_seg)
+  seg_vols <- plot_voi_overlay_seg(params$mri_seg, voi)
+}
+```
+
 ## Spectral plots {.tabset}
 
 ### Mean processed cropped
