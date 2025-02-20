@@ -438,12 +438,30 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   # keep unscaled results
   res_tab_unscaled <- fit_res$res_tab
+  
+  # assume 100% white matter unless told otherwise
+  if (is.null(p_vols) & is.null(mri_seg)) {
+    p_vols <- c(WM = 100, GM = 0, CSF = 0)
+  }
+  
+  if (is.null(p_vols) & !is.null(mri_seg)) {
+    # generate the svs voi in the segmented image space
+    voi_seg <- get_svs_voi(metab, mri_seg)   
+    
+    # calculate partial volumes
+    p_vols <- get_voi_seg(voi_seg, mri_seg)
+  }
+  
+  # add an "Other" component to p_vols if missing (to keep things consistent)
+  if (!is.null(p_vols)) if (!("Other" %in% names(p_vols))) p_vols["Other"] <- 0
  
   # output ratio results if requested 
   if (!is.null(output_ratio)) {
     for (output_ratio_element in output_ratio) {
       fit_res_rat <- scale_amp_ratio(fit_res, output_ratio_element,
                                      use_mean_value = TRUE)
+      
+      fit_res_rat$res_tab <- append_p_vols(fit_res_rat$res_tab, p_vols)
       
       res_tab_ratio <- fit_res_rat$res_tab
       file_out <- file.path(output_dir, paste0("fit_res_", output_ratio_element,
@@ -455,20 +473,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     res_tab_ratio <- NULL  
   }
   
+  # perform water reference amplitude scaling
   if (w_ref_available) {
-    # assume 100% white matter unless told otherwise
-    if (is.null(p_vols) & is.null(mri_seg)) {
-      p_vols <- c(WM = 100, GM = 0, CSF = 0)
-    }
-    
-    if (is.null(p_vols) & !is.null(mri_seg)) {
-      # generate the svs voi in the segmented image space
-      voi_seg <- get_svs_voi(metab, mri_seg)   
-      
-      # calculate partial volumes
-      p_vols <- get_voi_seg(voi_seg, mri_seg)
-    }
-    
     if (fit_method != "LCMODEL") {
       fit_res_molal <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, TE, TR)
       res_tab_molal <- fit_res_molal$res_tab
@@ -494,14 +500,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     res_tab_molal  <- NULL 
   }
   
-  # add water amplitude and PVC info to the unscaled output
-  if (w_ref_available & (fit_method != "LCMODEL")) {
-    res_tab_unscaled <- cbind(res_tab_unscaled, w_amp = res_tab_molal$w_amp,
-                              GM_vol = res_tab_molal$GM_vol,
-                              WM_vol = res_tab_molal$WM_vol,
-                              CSF_vol = res_tab_molal$CSF_vol,
-                              GM_frac = res_tab_molal$GM_frac)
-  }
+  # add PVC info to the unscaled output
+  res_tab_unscaled <- append_p_vols(res_tab_unscaled, p_vols)
   
   if (fit_method != "LCMODEL") {
     utils::write.csv(res_tab_unscaled, file.path(output_dir,
