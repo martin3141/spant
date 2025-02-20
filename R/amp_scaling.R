@@ -50,23 +50,28 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr, ...){
   
   fit_result$res_tab$w_amp <- w_amp
   
-  fit_result$res_tab$GM_vol    <- p_vols[["GM"]]
-  fit_result$res_tab$WM_vol    <- p_vols[["WM"]]
-  fit_result$res_tab$CSF_vol   <- p_vols[["CSF"]]
-  if ("Other" %in% names(p_vols)) {
-    fit_result$res_tab$Other_vol <- p_vols[["Other"]]
-  }
-  fit_result$res_tab$GM_frac   <- p_vols[["GM"]] / 
-                                 (p_vols[["GM"]] + p_vols[["WM"]])
+  fit_result$res_tab <- append_p_vols(fit_result$res_tab, p_vols)
   
-  fit_result$res_tab_unscaled$GM_vol    <- p_vols[["GM"]]
-  fit_result$res_tab_unscaled$WM_vol    <- p_vols[["WM"]]
-  fit_result$res_tab_unscaled$CSF_vol   <- p_vols[["CSF"]]
-  if ("Other" %in% names(p_vols)) {
-    fit_result$res_tab_unscaled$Other_vol <- p_vols[["Other"]]
-  }
-  fit_result$res_tab_unscaled$GM_frac   <- p_vols[["GM"]] / 
-                                          (p_vols[["GM"]] + p_vols[["WM"]])
+  # fit_result$res_tab$GM_vol    <- p_vols[["GM"]]
+  # fit_result$res_tab$WM_vol    <- p_vols[["WM"]]
+  # fit_result$res_tab$CSF_vol   <- p_vols[["CSF"]]
+  # if ("Other" %in% names(p_vols)) {
+  #   fit_result$res_tab$Other_vol <- p_vols[["Other"]]
+  # }
+  # fit_result$res_tab$GM_frac   <- p_vols[["GM"]] / 
+  #                                (p_vols[["GM"]] + p_vols[["WM"]])
+  
+  fit_result$res_tab_unscaled <- append_p_vols(fit_result$res_tab_unscaled,
+                                               p_vols)
+  
+  # fit_result$res_tab_unscaled$GM_vol    <- p_vols[["GM"]]
+  # fit_result$res_tab_unscaled$WM_vol    <- p_vols[["WM"]]
+  # fit_result$res_tab_unscaled$CSF_vol   <- p_vols[["CSF"]]
+  # if ("Other" %in% names(p_vols)) {
+  #   fit_result$res_tab_unscaled$Other_vol <- p_vols[["Other"]]
+  # }
+  # fit_result$res_tab_unscaled$GM_frac   <- p_vols[["GM"]] / 
+  #                                         (p_vols[["GM"]] + p_vols[["WM"]])
   
   # append tables with %GM, %WM, %CSF and %Other
   pvc_cols <- 6:(5 + amp_cols * 2)
@@ -74,6 +79,18 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr, ...){
                                     corr_factor / w_amp
   
   return(fit_result)
+}
+
+# append the p_vol coloumns to a results table
+append_p_vols <- function(res_tab, p_vols) {
+  
+  res_tab$GM_vol    <- p_vols[["GM"]]
+  res_tab$WM_vol    <- p_vols[["WM"]]
+  res_tab$CSF_vol   <- p_vols[["CSF"]]
+  if ("Other" %in% names(p_vols)) res_tab$Other_vol <- p_vols[["Other"]]
+  res_tab$GM_frac   <- p_vols[["GM"]] / (p_vols[["GM"]] + p_vols[["WM"]])
+  
+  return(res_tab)
 }
 
 #' Apply water reference scaling to a fitting results object to yield metabolite 
