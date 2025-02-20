@@ -311,7 +311,8 @@ if (!is.null(params$p_vols)) {
   cat("### Partial volume measures\n")
   perc_vols  <- c(params$p_vols[["WM"]], params$p_vols[["GM"]],
                   params$p_vols[["CSF"]], params$p_vols[["Other"]])
-  p_vols_tab <- data.frame(type = c("WM", "GM", "CSF"), perc = perc_vols)
+  p_vols_tab <- data.frame(type = c("WM", "GM", "CSF", "Other"),
+                           perc = perc_vols)
   kableExtra::kable_styling(kableExtra::kbl(p_vols_tab, align = c("l", "r"),
                                             col.names = c("Type", "% volume")),
                             full_width = FALSE, position = "left",

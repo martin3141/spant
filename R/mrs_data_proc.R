@@ -4839,7 +4839,7 @@ comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256,
       comb_mat[n, ] <- precomp_mat %*% drop(get_dyns(ref, n)$data)
     }
   
-    mrs_data_temp <- mat2mrs_data(comb_mat)
+    mrs_data_temp <- mat2mrs_data(comb_mat, mrs_data = ref)
     ref$data      <- mrs_data_temp$data
     
     return(list(metab = metab, ref = ref)) 
