@@ -586,7 +586,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   return(fit_res)
 }
 
-check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM) {
+check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM,
+                            press_TE1_guess = 0.0126) {
   
   # try to guess the pulse sequence from the MRS data if not specified
   if (is.null(pul_seq)) {
@@ -614,7 +615,7 @@ check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM) {
   
   if (pul_seq == "press_ideal") {
     if (is.null(TE1)) {
-      TE1 <- 0.0126
+      TE1 <- press_TE1_guess
       # warning("TE1 assumed to be 0.0126s. Provide the TE1 argument to stop this warning.")
     }
     if (is.null(TE2)) TE2 <- TE - TE1
@@ -626,7 +627,7 @@ check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM) {
     return(list(pul_seq = pul_seq, TE1 = TE1, TE2 = TE2))
   } else if (pul_seq == "press_shaped") {
     if (is.null(TE1)) {
-      TE1 <- 0.0126
+      TE1 <- press_TE1_guess
       # warning("TE1 assumed to be 0.0126s.")
     }
     if (is.null(TE2)) TE2 <- TE - TE1
