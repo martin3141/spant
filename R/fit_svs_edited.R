@@ -1,4 +1,4 @@
-#' Standard SVS 1H brain analysis pipeline.
+#' Edited SVS 1H brain analysis pipeline.
 #' 
 #' Note this function is still under development and liable to changes.
 #' 
@@ -45,7 +45,6 @@
 #' width is between -width and +width Hz, with 0 Hz being defined at the centre
 #' of the spectral width. Default is disabled (set to NULL), 30 Hz is a
 #' reasonable value.
-#' @param fit_method can be "ABFIT-REG" or "LCMODEL. Defaults to "ABFIT-REG".
 #' @param fit_opts options to pass to the fitting method.
 #' @param fit_subset specify a subset of dynamics to analyse, for example
 #' 1:16 would only fit the first 16 dynamic scans.
@@ -72,7 +71,6 @@
 #' sequential integers (starting at 1) with the same length as the number of
 #' dynamic scans in the metabolite data. File may be formatted as .xlsx, .xls,
 #' text or csv format.
-#' @param lcm_bin_path set the path to LCModel binary.
 #' @param plot_ppm_xlim plotting ppm axis limits in the html results.
 #' results.
 #' @param verbose output potentially useful information.
@@ -86,19 +84,19 @@
 #' fit_result <- fit_svs(metab, w_ref, out_dir)
 #' }
 #' @export
-fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
-                    mri_seg = NULL, external_basis = NULL, p_vols = NULL,
-                    format = NULL, pul_seq = NULL, TE = NULL, TR = NULL,
-                    TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
-                    append_basis = NULL, remove_basis = NULL, pre_align = TRUE,
-                    dfp_corr = TRUE, output_ratio = NULL, ecc = FALSE,
-                    hsvd_width = NULL, fit_method = NULL, fit_opts = NULL, 
-                    fit_subset = NULL, legacy_ws = FALSE, w_att = 0.7,
-                    w_conc = 35880, use_basis_cache = "auto",
-                    summary_measures = NULL, dyn_av_block_size = NULL,
-                    dyn_av_scheme = NULL, dyn_av_scheme_file = NULL,
-                    lcm_bin_path = NULL, plot_ppm_xlim = NULL,
-                    verbose = FALSE) {
+fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
+                           mri_seg = NULL, external_basis = NULL, p_vols = NULL,
+                           format = NULL, pul_seq = NULL, TE = NULL, TR = NULL,
+                           TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
+                           append_basis = NULL, remove_basis = NULL, pre_align = TRUE,
+                           dfp_corr = TRUE, output_ratio = NULL, ecc = FALSE,
+                           hsvd_width = NULL, fit_opts = NULL, 
+                           fit_subset = NULL, legacy_ws = FALSE, w_att = 0.7,
+                           w_conc = 35880, use_basis_cache = "auto",
+                           summary_measures = NULL, dyn_av_block_size = NULL,
+                           dyn_av_scheme = NULL, dyn_av_scheme_file = NULL,
+                           plot_ppm_xlim = NULL,
+                           verbose = FALSE) {
   
   argg  <- c(as.list(environment()))
   
@@ -380,36 +378,10 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     basis <- external_basis
   }
   
-  # check the fit_method is sane
-  if (!is.null(fit_method)) {
-    fit_method <- toupper(fit_method)
-    allowed <- c("ABFIT-REG", "LCMODEL")
-    if (!(fit_method %in% allowed)) {
-      print(allowed)
-      stop("Error, incorrect fit method, must be one of the above.")
-    }
-  }
+  if (is.null(fit_opts)) fit_opts <- abfit_reg_opts()
   
-  if (is.null(fit_method)) {
-    fit_method <- "ABFIT"
-    if (is.null(fit_opts)) fit_opts <- abfit_reg_opts()
-  } else {
-    if (fit_method == "ABFIT-REG") {
-      fit_method <- "ABFIT"
-      if (is.null(fit_opts)) fit_opts <- abfit_reg_opts()
-    }
-  }
   
-  # ask LCModel not to simulate any additional signals by defaults
-  if (fit_method == "LCMODEL" & is.null(fit_opts)) fit_opts <- c("NSIMUL=0")
-  
-  if (is.null(output_ratio)) {
-    if (fit_method == "LCMODEL") {
-      output_ratio <- "Cr.PCr"
-    } else {
-      output_ratio <- "tCr"
-    }
-  }
+  if (is.null(output_ratio)) output_ratio <- "tCr"
   
   # output_ratio of NA means we only want unscaled values
   if (anyNA(output_ratio)) output_ratio <- NULL
@@ -420,20 +392,9 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     metab <- hsvd_filt(metab, xlim = c(-hsvd_width, hsvd_width))
   }
   
-  # set path to the LCModel binary
-  if (!is.null(lcm_bin_path)) set_lcm_cmd(lcm_bin_path)
-  
-  # water referencing is performed internally by LCModel
-  if (fit_method == "LCMODEL" & w_ref_available) {
-    w_ref_fit <- w_ref 
-  } else {
-    w_ref_fit <- NULL
-  }
-  
   # fitting
   if (verbose) cat("Starting fitting.\n")
-  fit_res <- fit_mrs(metab = metab, basis = basis, method = fit_method,
-                     w_ref = w_ref_fit, opts = fit_opts)
+  fit_res <- fit_mrs(metab = metab, basis = basis, opts = fit_opts)
   if (verbose) cat("Fitting complete.\n")
     
   phase_offset <- fit_res$res_tab$phase
@@ -480,25 +441,17 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   # perform water reference amplitude scaling
   if (w_ref_available) {
-    if (fit_method != "LCMODEL") {
-      fit_res_molal <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, TE, TR)
-      res_tab_molal <- fit_res_molal$res_tab
-      file_out <- file.path(output_dir, "fit_res_molal_conc.csv")
-      utils::write.csv(res_tab_molal, file_out)
-      if (legacy_ws) {
-        fit_res_legacy <- scale_amp_legacy(fit_res, w_ref, w_att, w_conc)
-        res_tab_legacy <- fit_res_legacy$res_tab
-        file_out <- file.path(output_dir, "fit_res_legacy_conc.csv")
-        utils::write.csv(res_tab_legacy, file_out)
-      } else {
-        res_tab_legacy <- NULL
-      }
+    fit_res_molal <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, TE, TR)
+    res_tab_molal <- fit_res_molal$res_tab
+    file_out <- file.path(output_dir, "fit_res_molal_conc.csv")
+    utils::write.csv(res_tab_molal, file_out)
+    if (legacy_ws) {
+      fit_res_legacy <- scale_amp_legacy(fit_res, w_ref, w_att, w_conc)
+      res_tab_legacy <- fit_res_legacy$res_tab
+      file_out <- file.path(output_dir, "fit_res_legacy_conc.csv")
+      utils::write.csv(res_tab_legacy, file_out)
     } else {
-      fit_res_molal <- scale_amp_molar2molal_pvc(fit_res, p_vols, TE, TR)
-      res_tab_molal <- fit_res_molal$res_tab
-      file_out <- file.path(output_dir, "fit_res_molal_conc.csv")
-      utils::write.csv(res_tab_molal, file_out)
-      res_tab_legacy <- NULL 
+      res_tab_legacy <- NULL
     }
   } else {
     res_tab_legacy <- NULL 
@@ -508,10 +461,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   # add PVC info to the unscaled output
   res_tab_unscaled <- append_p_vols(res_tab_unscaled, p_vols)
   
-  if (fit_method != "LCMODEL") {
-    utils::write.csv(res_tab_unscaled, file.path(output_dir,
-                                                 "fit_res_unscaled.csv"))
-  }
+  utils::write.csv(res_tab_unscaled, file.path(output_dir,
+                                               "fit_res_unscaled.csv"))
   
   # prepare dynamic data for plotting
   if (Ndyns(metab_pre_dfp_corr) > 1) {
@@ -585,249 +536,3 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   return(fit_res)
 }
-
-check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM) {
-  
-  # try to guess the pulse sequence from the MRS data if not specified
-  if (is.null(pul_seq)) {
-    if (!is.null(metab$meta$PulseSequenceType)){
-      pul_seq <- metab$meta$PulseSequenceType
-    } else {
-      warning(paste0("Could not determine the pulse sequence, so assuming\n",
-                     "PRESS. Provide the pul_seq argument to stop this ",
-                     "warning."))
-      pul_seq <- "press"
-    }
-  }
-  
-  # force lowercase
-  pul_seq <- tolower(pul_seq)
-  
-  if (pul_seq == "press") {
-    B0 <- round(metab$ft / 42.58e6, 1)
-    if (B0 > 2.8) {
-      pul_seq <- "press_shaped"
-    } else {
-      pul_seq <- "press_ideal"
-    }
-  }
-  
-  if (pul_seq == "press_ideal") {
-    if (is.null(TE1)) {
-      TE1 <- 0.0126
-      # warning("TE1 assumed to be 0.0126s. Provide the TE1 argument to stop this warning.")
-    }
-    if (is.null(TE2)) TE2 <- TE - TE1
-    
-    if (!isTRUE(all.equal(TE1 + TE2, TE))) {
-      warning("TE, TE1 and TE2 do not match.")
-    }
-    
-    return(list(pul_seq = pul_seq, TE1 = TE1, TE2 = TE2))
-  } else if (pul_seq == "press_shaped") {
-    if (is.null(TE1)) {
-      TE1 <- 0.0126
-      # warning("TE1 assumed to be 0.0126s.")
-    }
-    if (is.null(TE2)) TE2 <- TE - TE1
-    
-    if (!isTRUE(all.equal(TE1 + TE2, TE))) {
-      warning("TE, TE1 and TE2 do not match.")
-    }
-      
-    return(list(pul_seq = pul_seq, TE1 = TE1, TE2 = TE2))
-  } else if (pul_seq == "steam") {
-    if (is.null(TM)) {
-      TM <- 0.01
-      warning("TM assumed to be 0.01s.")
-    }
-    return(list(pul_seq = pul_seq, TE = TE, TM = TM))
-  } else if (pul_seq == "slaser") {
-    if (is.null(TE1)) {
-      if (!is.null(metab$meta$TE1)) {
-        TE1 <- metab$meta$TE1
-      } else {
-        TE1 <- 0.0008
-        warning("TE1 assumed to be 0.0008s.")
-      }
-    }
-    if (is.null(TE2)) {
-      if (!is.null(metab$meta$TE2)) {
-        TE2 <- metab$meta$TE2
-      } else {
-        TE2 <- 0.0011
-        warning("TE2 assumed to be 0.0011s.")
-      }
-    }
-    if (is.null(TE3)) {
-      if (!is.null(metab$meta$TE3)) {
-        TE3 <- metab$meta$TE3
-      } else {
-        TE3 <- 0.0009
-        warning("TE3 assumed to be 0.0009s.")
-      }
-    }
-    if (!isTRUE(all.equal(TE1 + TE2 + TE3, TE))) {
-      warning("TE, TE1, TE2 and TE3 do not match.")
-    }
-    return(list(pul_seq = pul_seq, TE1 = TE1, TE2 = TE2, TE3 = TE3))
-  } else {
-    stop(paste0("pul_seq not supported : ", pul_seq))
-  }
-}
-
-parse_summary <- function(measures, fit_res, units) {
-  res_names <- colnames(fit_res$res_tab)
-  val_num   <- length(measures)
-  values    <- rep(NA, val_num)
-  
-  for (n in 1:val_num) {
-    measure <- gsub(" ", "", measures[n])
-
-    if (length(grep("/", measure)) > 0) {
-      # looks like a ratio
-      numerator   <- strsplit(measure, "/")[[1]][1]
-      denominator <- strsplit(measure, "/")[[1]][2]
-      values[n]   <- as.numeric(fit_res$res_tab[numerator] / 
-                                  fit_res$res_tab[denominator])
-      measures[n] <- measure
-    } else {
-      # looks like a single value
-      values[n]   <- as.numeric(fit_res$res_tab[measure])
-      measures[n] <- paste0(measure, units)
-    }
-  }
-  return(data.frame(measures = measures, values = values)) 
-}
-
-#' GUI interface for the standard SVS 1H brain analysis pipeline, this is a 
-#' work in progress, and not ready for serious use.
-fit_svs_gui <-function() {
-  
-  run_fit <- function() {
-    pb <- tcltk::tkProgressBar("running analysis...")
-    tcltk::setTkProgressBar(pb, 0)
-    
-    print(tcltk::tkget(wsup_path))
-    
-    fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
-                         package = "spant")
-    svs <- read_mrs(fname)
-    basis <- sim_basis_1h_brain_press(svs)
-    fit_result <- fit_mrs(svs, basis)
-    tcltk::setTkProgressBar(pb, 100)
-    close(pb)
-    response <- tcltk::tk_messageBox("yesno", "Analysis completed, run another?")
-    if (response == "no") tcltk::tkdestroy(tt) 
-  }
-  
-  wsup_file_chooser <- function() {
-    wsup_path_str <- tcltk::tk_choose.files()
-    
-    if (!identical(wsup_path_str, character())) {
-      tcltk::tkconfigure(wsup_path, textvariable = tcltk::tclVar(wsup_path_str))
-      
-      # change output dir if not set
-      if (identical(as.character(tcltk::tkget(output_path)), character())) {
-        tcltk::tkconfigure(output_path,
-                           textvariable = tcltk::tclVar(dirname(wsup_path_str)))
-      }
-    }
-  }
-  
-  wsup_dir_chooser <- function() {
-    wsup_path_str <- tcltk::tk_choose.dir()
-    
-    if (!identical(wsup_path_str, character())) {
-      tcltk::tkconfigure(wsup_path, textvariable = tcltk::tclVar(wsup_path_str))
-      
-      # change output dir if not set
-      if (identical(as.character(tcltk::tkget(output_path)), character())) {
-        tcltk::tkconfigure(output_path,
-                           textvariable = tcltk::tclVar(wsup_path_str))
-      }
-    }
-  }
-  
-  wref_file_chooser <- function() {
-    wref_path_str <- tcltk::tk_choose.files()
-    
-    if (!identical(wref_path_str, character())) {
-      tcltk::tkconfigure(wref_path, textvariable = tcltk::tclVar(wref_path_str))
-    }
-  }
-  
-  wref_dir_chooser <- function() {
-    wref_path_str <- tcltk::tk_choose.dir()
-    
-    if (!identical(wref_path_str, character())) {
-      tcltk::tkconfigure(wref_path, textvariable = tcltk::tclVar(wref_path_str))
-    }
-  }
-  
-  output_dir_chooser <- function() {
-    output_path_str <- tcltk::tk_choose.dir()
-    
-    if (!identical(output_path_str, character())) {
-      tcltk::tkconfigure(output_path,
-                         textvariable = tcltk::tclVar(output_path_str))
-    }
-  }
-  
-  clear <- function() {
-    tcltk::tkconfigure(wsup_path,   textvariable = tcltk::tclVar(""))
-    tcltk::tkconfigure(wref_path,   textvariable = tcltk::tclVar(""))
-    tcltk::tkconfigure(output_path, textvariable = tcltk::tclVar(""))
-  }
-  
-  tt <- tcltk::tktoplevel()
-  tcltk::tktitle(tt) <- "spant GUI"
-  
-  heading <- tcltk::tklabel(tt, text = "spant SVS MRS analysis")
- 
-  wsup_lab          <- tcltk::tklabel(tt, text = "Water supressed data")
-  wsup_file_button  <- tcltk::tkbutton(tt, text = "choose file",
-                                       command = wsup_file_chooser)
-  
-  wsup_dir_button   <- tcltk::tkbutton(tt, text = "choose dir",
-                                       command = wsup_dir_chooser)
-  
-  wsup_path         <- tcltk::tkentry(tt, width = 60)
-  
-  wref_lab          <- tcltk::tklabel(tt, text = "Water reference data")
-  wref_file_button  <- tcltk::tkbutton(tt, text = "choose file",
-                                       command = wref_file_chooser)
-  
-  wref_dir_button   <- tcltk::tkbutton(tt, text = "choose dir",
-                                       command = wref_dir_chooser)
-  
-  wref_path         <- tcltk::tkentry(tt, width = 60)
-  
-  output_lab        <- tcltk::tklabel(tt, text = "Output directory")
-  output_path       <- tcltk::tkentry(tt, width = 60)
-  
-  output_dir_button <- tcltk::tkbutton(tt, text = "choose dir",
-                                       command = output_dir_chooser)
-  
-  run_button <- tcltk::tkbutton(tt, text = "run analysis", width = 20,
-                                height = 2, command = run_fit)
-  
-  exit_button <- tcltk::tkbutton(tt, text = "exit",
-                                 command = function() tcltk::tkdestroy(tt))
-  
-  clear_button <- tcltk::tkbutton(tt, text = "clear paths", command = clear)
-  
-  dummy_lab    <- tcltk::tklabel(tt, text = "")
-  
-  tcltk::tkgrid(heading, columnspan = 4, pady = 10)
-  tcltk::tkgrid(wsup_lab, wsup_path, wsup_file_button, wsup_dir_button)
-  tcltk::tkgrid(wref_lab, wref_path, wref_file_button, wref_dir_button)
-  tcltk::tkgrid(output_lab, output_path, dummy_lab, output_dir_button)
-  tcltk::tkgrid(run_button, columnspan = 3, pady = 10)
-  tcltk::tkgrid(clear_button, exit_button, columnspan = 3, pady = 20)
-  
-  tcltk::tkgrid.configure(wsup_lab, wref_lab, output_lab, sticky = "e")
-  tcltk::tkgrid.configure(clear_button, exit_button, sticky = "e")
-  
-}
-
