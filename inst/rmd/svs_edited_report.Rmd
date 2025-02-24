@@ -39,7 +39,7 @@ plot(params$fit_res_ed, xlim = params$plot_ppm_xlim)
 
 ### Stackplot
 ```{r edstackplot, fig.width=7, fig.height=8}
-stackplot(params$fit_res_ed, y_offset = 0.5, combine_lipmm = TRUE, labels = TRUE,
+stackplot(params$fit_res_ed, y_offset = 0.5, combine_lipmm = FALSE, labels = TRUE,
           xlim = params$plot_ppm_xlim)
 ```
 
@@ -96,7 +96,7 @@ if (!is.null(params$summary_tab)) {
 }
 ```
 
-## Results table
+## Edit-off results table
 ```{r}
 # ratio_str   <- params$argg$output_ratio
 ratio_str   <- params$output_ratio[1]

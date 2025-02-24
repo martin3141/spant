@@ -411,7 +411,9 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   # align ed_on and ed_off based on the residual water signal
   ed_on  <- rats(ed_on, ed_off, xlim = c(4.8, 4.5))
-  edited <- ed_on - ed_off
+  
+  # take the mean rather than just straight subtraction
+  edited <- (ed_on - ed_off) / 2
   
   # filter residual water
   if (!is.null(hsvd_width)) {
@@ -426,14 +428,16 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (verbose) cat("Edit-off fitting complete.\n")
   
   # edited fitting
-  mol_list <- list(get_uncoupled_mol("MM09",   0.92, "1H",   1, 12, 1),
-                   get_uncoupled_mol("NAA",    2.01, "1H",  -3,  3, 0),
-                   get_uncoupled_mol("Glx_A",  2.31, "1H",   1,  3, 0),
-                   get_uncoupled_mol("Glx_B",  2.40, "1H",   1,  3, 0),
-                   get_uncoupled_mol("GABA_A", 2.95, "1H",   1, 12, 1),
-                   get_uncoupled_mol("GABA_B", 3.04, "1H",   1, 12, 1),
-                   get_uncoupled_mol("Glx_C",  3.72, "1H",   1,  3, 0),
-                   get_uncoupled_mol("Glx_D",  3.8,  "1H",   1,  3, 0))
+  # NAA is 1.5 (rather than 3) because it is zero in the edited data due to the 
+  # GABA editing pulse
+  mol_list <- list(get_uncoupled_mol("MM09",   0.92, "1H",   1,   12, 1),
+                   get_uncoupled_mol("NAA",    2.01, "1H",  -1.5,  3, 0),
+                   get_uncoupled_mol("Glx_A",  2.31, "1H",   1,    3, 0),
+                   get_uncoupled_mol("Glx_B",  2.40, "1H",   1,    3, 0),
+                   get_uncoupled_mol("GABA_A", 2.95, "1H",   1,   12, 1),
+                   get_uncoupled_mol("GABA_B", 3.04, "1H",   1,   12, 1),
+                   get_uncoupled_mol("Glx_C",  3.72, "1H",   1,    3, 0),
+                   get_uncoupled_mol("Glx_D",  3.8,  "1H",   1,    3, 0))
 
   basis_ed <- sim_basis(mol_list, acq_paras = edited)
   
@@ -447,7 +451,8 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (w_ref_available) fit_res$res_tab$ws_eff <- ws_efficiency
   
   # keep unscaled results
-  res_tab_unscaled <- fit_res$res_tab
+  res_tab_unscaled    <- fit_res$res_tab
+  res_tab_unscaled_ed <- fit_res_ed$res_tab
   
   # assume 100% white matter unless told otherwise
   if (is.null(p_vols) & is.null(mri_seg)) {
@@ -468,45 +473,77 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   # output ratio results if requested 
   if (!is.null(output_ratio)) {
     for (output_ratio_element in output_ratio) {
-      fit_res_rat <- scale_amp_ratio(fit_res, output_ratio_element,
-                                     use_mean_value = TRUE)
+      
+      value <- mean(as.numeric(fit_res$res_tab[[output_ratio_element]]))
+      fit_res_rat <- scale_amp_ratio_value(fit_res, value)
       
       fit_res_rat$res_tab <- append_p_vols(fit_res_rat$res_tab, p_vols)
       
       res_tab_ratio <- fit_res_rat$res_tab
-      file_out <- file.path(output_dir, paste0("fit_res_", output_ratio_element,
-                                               "_ratio.csv"))
-      
+      file_out <- file.path(output_dir, paste0("fit_res_edit_off_",
+                                        output_ratio_element, "_ratio.csv"))
       utils::write.csv(res_tab_ratio, file_out)
+      
+      # edited ratio
+      fit_res_ed_rat <- scale_amp_ratio_value(fit_res_ed, value)
+      
+      fit_res_ed_rat$res_tab <- append_p_vols(fit_res_ed_rat$res_tab, p_vols)
+      
+      res_tab_ed_ratio <- fit_res_ed_rat$res_tab
+      file_out <- file.path(output_dir, paste0("fit_res_edited_",
+                                        output_ratio_element, "_ratio.csv"))
+      utils::write.csv(res_tab_ed_ratio, file_out)
     }
   } else {
-    res_tab_ratio <- NULL  
+    res_tab_ratio    <- NULL
+    res_tab_ed_ratio <- NULL
   }
   
   # perform water reference amplitude scaling
   if (w_ref_available) {
+    
+    # edit off
     fit_res_molal <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, TE, TR)
     res_tab_molal <- fit_res_molal$res_tab
-    file_out <- file.path(output_dir, "fit_res_molal_conc.csv")
+    file_out <- file.path(output_dir, "fit_res_edit_off_molal_conc.csv")
     utils::write.csv(res_tab_molal, file_out)
+    
+    # edited
+    fit_res_ed_molal <- scale_amp_molal_pvc(fit_res_ed, w_ref, p_vols, TE, TR)
+    res_tab_ed_molal <- fit_res_ed_molal$res_tab
+    file_out <- file.path(output_dir, "fit_res_edited_molal_conc.csv")
+    utils::write.csv(res_tab_ed_molal, file_out)
+    
     if (legacy_ws) {
+      # edit off
       fit_res_legacy <- scale_amp_legacy(fit_res, w_ref, w_att, w_conc)
       res_tab_legacy <- fit_res_legacy$res_tab
-      file_out <- file.path(output_dir, "fit_res_legacy_conc.csv")
+      file_out <- file.path(output_dir, "fit_res_edit_off_legacy_conc.csv")
       utils::write.csv(res_tab_legacy, file_out)
+      
+      # edited
+      fit_res_ed_legacy <- scale_amp_legacy(fit_res_ed, w_ref, w_att, w_conc)
+      res_tab_ed_legacy <- fit_res_ed_legacy$res_tab
+      file_out <- file.path(output_dir, "fit_res_edited_legacy_conc.csv")
+      utils::write.csv(res_tab_ed_legacy, file_out)
     } else {
       res_tab_legacy <- NULL
+      res_tab_ed_legacy <- NULL
     }
   } else {
     res_tab_legacy <- NULL 
     res_tab_molal  <- NULL 
+    res_tab_ed_legacy <- NULL 
+    res_tab_ed_molal  <- NULL 
   }
   
-  # add PVC info to the unscaled output
+  # add PVC info to the unscaled output and write to csv
   res_tab_unscaled <- append_p_vols(res_tab_unscaled, p_vols)
-  
   utils::write.csv(res_tab_unscaled, file.path(output_dir,
-                                               "fit_res_unscaled.csv"))
+                                               "fit_res_edit_off_unscaled.csv"))
+  res_tab_unscaled_ed <- append_p_vols(res_tab_unscaled_ed, p_vols)
+  utils::write.csv(res_tab_unscaled_ed, file.path(output_dir,
+                                               "fit_res_edited_unscaled.csv"))
   
   # prepare dynamic data for plotting
   if (Ndyns(ed_off_pre_dfp_corr) > 1) {
