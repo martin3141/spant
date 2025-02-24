@@ -1,0 +1,346 @@
+---
+title: "spant SVS analysis results"
+output: html_document
+params:
+  fit_res: ""
+  argg: ""
+  w_ref_available: ""
+  w_ref: ""
+  output_ratio: ""
+  res_tab_unscaled: ""
+  res_tab_ratio: ""    
+  res_tab_legacy: ""
+  res_tab_molal: ""
+  dyn_data_uncorr: ""
+  dyn_data_corr: ""
+  summary_tab: ""
+  plot_ppm_xlim: ""
+  mri: ""
+  mri_seg: ""
+  p_vols: ""
+---
+
+```{r setup, include=FALSE}
+library(spant)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# {.tabset}
+
+## Fit plots {.tabset}
+
+### Standard
+```{r fitplot, fig.width=7, fig.height=6}
+plot(params$fit_res, xlim = plot_ppm_xlim)
+```
+
+### Stackplot
+```{r stackplot, fig.width=7, fig.height=8}
+stackplot(params$fit_res, y_offset = 3, combine_lipmm = TRUE, labels = TRUE,
+          xlim = params$plot_ppm_xlim)
+```
+
+```{r basisplot, results = 'asis', fig.width=7, fig.height=6}
+# basis_names <- params$fit_res$basis$names
+basis_names <- colnames(params$fit_res$fits[[1]][-1:-4])
+for (n in 1:length(basis_names)) {
+  #if (basis_names[n] %in% colnames(params$fit_res$fits[[1]])) {
+  cat("\n### ", basis_names[n], "\n", sep = "")
+  plot(params$fit_res, plot_sigs = basis_names[n], main = basis_names[n], 
+       xlim = params$plot_ppm_xlim)
+  cat("\n")
+  #}
+}
+```
+
+```{r, results = 'asis'}
+if (!is.null(params$summary_tab)) {
+  cat("## Summary table\n")
+  
+  col.names <- c("Name", "Value")
+  kable_table <- kableExtra::kbl(params$summary_tab, col.names = col.names,
+                                 align = c("l", "r"))
+  
+  boot_opts <- c("striped", "hover", "condensed")
+  kableExtra::kable_styling(kable_table, full_width = FALSE, position = "left",
+                            bootstrap_options = boot_opts)
+}
+```
+
+## Results table
+```{r}
+# ratio_str   <- params$argg$output_ratio
+ratio_str   <- params$output_ratio[1]
+if (params$w_ref_available) {
+  col_names <- c("amps", "CI95")
+  res_tab   <- sv_res_table(params$res_tab_molal, format_out = TRUE)
+  out_tab   <- res_tab[col_names]
+  col.names <- c("Name", "Amp. (mmol/kg)", "95% CI (mmol/kg)")
+  
+  if (!is.null(params$res_tab_legacy)) {
+    res_tab   <- sv_res_table(params$res_tab_legacy, format_out = TRUE)
+    out_tab   <- cbind(out_tab, res_tab[col_names])
+    col.names <- c(col.names, "Amp. (mmol/kg)", "95% CI (mmol/kg)")
+  }
+  
+  if (!is.null(ratio_str)) {
+    res_tab   <- sv_res_table(params$res_tab_ratio, format_out = TRUE)
+    out_tab   <- cbind(out_tab, res_tab[col_names])
+    col.names <- c(col.names, paste0("Amp. (/", ratio_str, ")"),
+                              paste0("95% CI (/", ratio_str, ")"))
+  }
+  out_tab   <- cbind(out_tab, res_tab["sds_perc"])
+  col.names <- c(col.names, "SD %")
+} else {
+  col_names <- c("amps", "CI95", "sds_perc")
+  if (is.null(ratio_str)) {
+    res_tab   <- sv_res_table(params$res_tab_unscaled, format_out = TRUE)
+    out_tab   <- res_tab[col_names]
+    col.names <- c("Name", "Amp. (a.u.)", "95% CI (a.u.)", "SD %")
+  } else {
+    res_tab   <- sv_res_table(params$res_tab_ratio, format_out = TRUE)
+    out_tab   <- res_tab[col_names]
+    col.names <- c("Name", paste0("Amp. (/", ratio_str, ")"),
+                   paste0("95% CI (/", ratio_str, ")"), "SD %")
+  }
+}
+
+boot_opts <- c("striped", "hover", "condensed")
+
+kable_table <- kableExtra::kbl(out_tab, col.names = col.names,
+                               align = rep("r", 10))
+
+if (params$w_ref_available & !is.null(params$res_tab_legacy)) {
+  extra_cols  <- ifelse(is.null(ratio_str), 1, 3)
+  header_str  <- c(" " = 1, "standard concentration scaling" = 2,
+                   "legacy concentration scaling" = 2, " " = extra_cols)
+  
+  kable_table <- kableExtra::add_header_above(kable_table, header_str)
+}
+
+kableExtra::kable_styling(kable_table, full_width = FALSE, position = "left",
+                          bootstrap_options = boot_opts)
+```
+
+```{r, results = 'asis'}
+if (params$w_ref_available) {
+cat("See the [spant User Guide](https://spantdoc.wilsonlab.co.uk/water_scaling) for details on water scaling.\n")
+#  cat("^1^ Concentrations listed in molal units: moles of solute / mass of solvent. See the following papers for details :\n\nGasparovic C, Chen H, Mullins PG. Errors in 1H-MRS estimates of brain metabolite concentrations caused by failing to take into account tissue-specific signal relaxation. NMR Biomed. 2018 Jun;31(6):e3914. https://doi.org/10.1002/nbm.3914\n\nGasparovic C, Song T, Devier D, Bockholt HJ, Caprihan A, Mullins PG, Posse S, Jung RE, Morrison LA. Use of tissue water as a concentration reference for proton spectroscopic imaging. Magn Reson Med. 2006 Jun;55(6):1219-26. https://doi.org/10.1002/mrm.20901\n\n")  
+#  cat("^2^ Concentrations listed in pseduo-molar units: moles of solute / (mass of solvent + mass of tissue). These values are included for legacy puposes, for example to directly compare results from the default scaling method used by LCModel and TARQUIN. See sections 1.3 and 10.2 of the [LCModel manual](http://s-provencher.com/pub/LCModel/manual/manual.pdf) for details.")
+}
+```
+
+```{r, results = 'asis', fig.width=7, fig.height=7}
+if (!is.null(dyn_data_uncorr)) {
+  cat("## Dynamic plots {.tabset}\n")
+  if (!is.null(dyn_data_corr)) {
+    cat("### Spectrogram with dynamic correction\n")
+    if (is.null(params$plot_ppm_xlim)) {
+      image(dyn_data_corr, xlim = c(4, 0.5))
+    } else {
+      image(dyn_data_corr, xlim = params$plot_ppm_xlim)
+    }
+  }
+  cat("\n\n### Spectrogram without dynamic correction\n")
+  if (is.null(params$plot_ppm_xlim)) {
+    image(dyn_data_uncorr, xlim = c(4, 0.5))
+  } else {
+    image(dyn_data_uncorr, xlim = params$plot_ppm_xlim)
+  }
+}
+```
+
+```{r, results = 'asis', fig.width=7, fig.height=7}
+if (!is.null(params$mri) | !is.null(params$mri_seg)) {
+  cat("## MRI {.tabset}\n")
+}
+```
+
+```{r, results = 'asis', fig.width=7, fig.height=7}
+if (!is.null(params$mri)) {
+  cat("### Voxel position\n")
+  voi <- get_svs_voi(params$fit_res$data, params$mri)
+  plot_voi_overlay(params$mri, voi)
+}
+```
+
+```{r, results = 'asis', fig.width=7, fig.height=7}
+if (!is.null(params$mri_seg)) {
+  cat("### Voxel segmetation\n")
+  voi <- get_svs_voi(params$fit_res$data, params$mri_seg)
+  seg_vols <- plot_voi_overlay_seg(params$mri_seg, voi)
+}
+```
+
+## Spectral plots {.tabset}
+
+### Processed cropped
+```{r, fig.width=7, fig.height=6}
+if (!is.null(params$fit_res$res_tab$phase)) {
+  phase_offset <- params$fit_res$res_tab$phase
+} else {
+  phase_offset <- 0
+}
+
+if (!is.null(params$fit_res$res_tab$phi1)) {
+  phi1_offset <- params$fit_res$res_tab$phi1
+} else {
+  phi1_offset <- 0
+}
+
+if (!is.null(params$fit_res$res_tab$shift)) {
+  shift_offset <- params$fit_res$res_tab$shift
+} else {
+  shift_offset <- 0
+}
+
+proc_spec <- params$fit_res$data
+proc_spec <- phase(proc_spec, phase_offset, phi1_offset)
+proc_spec <- shift(proc_spec, shift_offset, units = "ppm")
+proc_spec <- zf(proc_spec)
+
+if (is.null(params$plot_ppm_xlim)) {
+  plot(proc_spec, xlim = c(4, 0.2))
+} else {
+  plot(proc_spec, xlim = params$plot_ppm_xlim)
+}
+```
+
+### Processed full
+```{r, fig.width=7, fig.height=6}
+plot(proc_spec)
+```
+
+```{r, results = 'asis', fig.width=7, fig.height=6}
+if (params$w_ref_available) {
+  cat("### Water reference resonance\n")
+  # w_ref_proc <- shift(w_ref, shift_offset, units = "ppm")
+  w_ref_proc <- auto_phase(w_ref, xlim = c(5.3, 4))
+  w_ref_proc <- zf(w_ref_proc)
+  plot(w_ref_proc, xlim = c(5.3, 4))
+}
+```
+
+## Diagnostics
+```{r, results = 'asis'}
+name  <- NULL
+value <- NULL
+
+if (!is.null(params$fit_res$res_tab$SNR)) {
+  name  <- c(name, "Spectral signal to noise ratio")
+  value <- c(value, round_dp(params$fit_res$res_tab$SNR, 2))
+}
+
+if (!is.null(params$fit_res$res_tab$SRR)) {
+  name  <- c(name, "Spectral signal to residual ratio")
+  value <- c(value, round_dp(params$fit_res$res_tab$SRR, 2))
+}
+
+if (!is.null(params$fit_res$res_tab$FWHM)) {
+  name  <- c(name, "Spectral linewidth (ppm)")
+  value <- c(value, round_dp(params$fit_res$res_tab$FWHM, 4))
+}
+
+if (!is.null(params$fit_res$res_tab$tNAA_lw)) {
+  name  <- c(name, "tNAA linewidth (ppm)")
+  value <- c(value, round_dp(params$fit_res$res_tab$tNAA_lw, 4))
+}
+
+if (!is.null(params$fit_res$res_tab$NAA_lw)) {
+  name  <- c(name, "NAA linewidth (ppm)")
+  value <- c(value, round_dp(params$fit_res$res_tab$NAA_lw, 4))
+}
+
+if (!is.null(params$fit_res$res_tab$tCho_lw)) {
+  name  <- c(name, "tCho linewidth (ppm)")
+  value <- c(value, round_dp(params$fit_res$res_tab$tCho_lw, 4))
+}
+
+if (!is.null(params$fit_res$res_tab$Cho_lw)) {
+  name  <- c(name, "Cho linewidth (ppm)")
+  value <- c(value, round_dp(params$fit_res$res_tab$Cho_lw, 4))
+}
+
+if (!is.null(params$fit_res$res_tab$tCr_lw)) {
+  name  <- c(name, "tCr linewidth (ppm)")
+  value <- c(value, round_dp(params$fit_res$res_tab$tCr_lw, 4))
+}
+
+if (!is.null(params$fit_res$res_tab$Cr_lw)) {
+  name  <- c(name, "Cr linewidth (ppm)")
+  value <- c(value, round_dp(params$fit_res$res_tab$Cr_lw, 4))
+}
+
+if (!is.null(params$fit_res$res_tab$phase)) {
+  name  <- c(name, "Zero-order phase (degrees)")
+  value <- c(value, round_dp(params$fit_res$res_tab$phase, 1))
+}
+
+if (!is.null(params$fit_res$res_tab$phi1)) {
+  name  <- c(name, "First-order phase (ms)")
+  value <- c(value, round_dp(params$fit_res$res_tab$phi1, 3))
+}
+
+if (!is.null(params$fit_res$res_tab$shift)) {
+  name  <- c(name, "Frequency offset (ppm)")
+  value <- c(value, round_dp(params$fit_res$res_tab$shift, 4))
+}
+
+if (params$w_ref_available) {
+  name  <- c(name,  "Water amplitude", "Water suppression efficiency (%)")
+  value <- c(value, format(params$res_tab_molal$w_amp),
+             round_dp(params$res_tab_molal$ws_eff, 3))
+}
+
+if (params$fit_res$method == "ABFIT") {
+  name  <- c(name, "Fit quality number (FQN)",
+             "Baseline effective d.f. per ppm",
+             "Lineshape asymmetry")
+  value <- c(value, round_dp(params$fit_res$res_tab$FQN, 2),
+             round_dp(params$fit_res$res_tab$bl_ed_pppm, 2),
+             round_dp(params$fit_res$res_tab$asym, 2))
+}
+
+diag_tab <- data.frame(name, value)
+kableExtra::kable_styling(kableExtra::kbl(diag_tab, align = c("l", "r"),
+                                          col.names = c("Name", "Value")),
+                          full_width = FALSE, position = "left",
+                          bootstrap_options = boot_opts)
+
+if (!is.null(params$p_vols)) {
+  cat("### Partial volume measures\n")
+  perc_vols  <- c(params$p_vols[["WM"]], params$p_vols[["GM"]],
+                  params$p_vols[["CSF"]], params$p_vols[["Other"]])
+  p_vols_tab <- data.frame(type = c("WM", "GM", "CSF", "Other"),
+                           perc = perc_vols)
+  kableExtra::kable_styling(kableExtra::kbl(p_vols_tab, align = c("l", "r"),
+                                            col.names = c("Type", "% volume")),
+                            full_width = FALSE, position = "left",
+                            bootstrap_options = boot_opts)
+}
+
+```
+
+## Provenance
+```{r, echo = TRUE}
+packageVersion("spant")
+Sys.time()
+print(params$fit_res$data, full = TRUE)
+print(params$w_ref, full = TRUE)
+print(argg)
+```
+
+# {-}
+
+**Please cite the following if you found ABfit and spant useful in your research:**
+
+Wilson M. Adaptive baseline fitting for 1H MR spectroscopy analysis. Magn Reson 
+Med. 2021 Jan;85(1):13-29. https://doi.org/10.1002/mrm.28385
+
+Wilson, M. spant: An R package for magnetic resonance spectroscopy 
+analysis. Journal of Open Source Software. 2021 6(67), 3646. 
+https://doi.org/10.21105/joss.03646
+
+Wilson M. Robust retrospective frequency and phase correction for single-voxel 
+MR spectroscopy. Magn Reson Med. 2019 May;81(5):2878-2886. 
+https://doi.org/10.1002/mrm.27605

@@ -88,8 +88,9 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                            mri_seg = NULL, external_basis = NULL, p_vols = NULL,
                            format = NULL, pul_seq = NULL, TE = NULL, TR = NULL,
                            TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
-                           append_basis = NULL, remove_basis = NULL, pre_align = TRUE,
-                           dfp_corr = TRUE, output_ratio = NULL, ecc = FALSE,
+                           append_basis = NULL, remove_basis = NULL,
+                           pre_align = TRUE, dfp_corr = TRUE,
+                           output_ratio = NULL, ecc = FALSE,
                            hsvd_width = NULL, fit_opts = NULL, 
                            fit_subset = NULL, legacy_ws = FALSE, w_att = 0.7,
                            w_conc = 35880, use_basis_cache = "auto",
@@ -206,6 +207,14 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     if (is.null(TE)) stop("Please provide seqeuence TE argument for water concentration scaling.")
   }
   
+  # determine edit-on / edit-off scans, likely to be vendor and sequence
+  # dependant
+  ed_on  <- get_even_dyns(metab)
+  ed_off <- get_odd_dyns(metab)
+  
+  # reorganise dynamics into two blocks
+  metab <- append_dyns(ed_on, ed_off)
+  
   # combine coils if needed
   if (Ncoils(metab) > 1) {
     coil_comb_res <- comb_coils_svs_gls(metab, w_ref) # may not want to use
@@ -217,26 +226,36 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     }
   }
   
-  # extract a subset of dynamic scans if specified
-  if (!is.null(fit_subset)) {
-    metab <- get_dyns(metab, fit_subset) 
-  }
+  ed_on  <- get_fh_dyns(metab)
+  ed_off <- get_sh_dyns(metab)
   
-  metab_pre_dfp_corr <- metab
+  # edited <- ed_on - ed_off
+  
+  # extract a subset of dynamic scans if specified
+  if (!is.null(fit_subset)) ed_off <- get_dyns(ed_off, fit_subset) 
+  if (!is.null(fit_subset)) ed_on  <- get_dyns(ed_on,  fit_subset) 
+  
+  ed_off_pre_dfp_corr <- ed_off
   
   # pre-alignment
   if (pre_align) {
-    metab <- align(metab, c(2.01, 3.03, 3.22), max_shift = 40)
-    if (Ndyns(metab) > 1) metab_post_dfp_corr <- metab
+    ed_off <- align(ed_off, c(2.01, 3.03, 3.22), max_shift = 40)
+    if (Ndyns(ed_off) > 1) ed_off_post_dfp_corr <- ed_off
+    # TODO this is GABA editing specific
+    ed_on <- align(ed_on, c(3.03, 3.22), max_shift = 40)
+    if (Ndyns(ed_on) > 1) ed_on_post_dfp_corr <- ed_on
   }
   
   # rats correction
-  if (dfp_corr & (Ndyns(metab) > 1)) {
-    metab <- rats(metab, zero_freq_shift_t0 = TRUE, xlim = c(4, 1.8))
-    metab_post_dfp_corr <- metab
+  if (dfp_corr & (Ndyns(ed_off) > 1)) {
+    ed_off <- rats(ed_off, zero_freq_shift_t0 = TRUE, xlim = c(4, 1.8))
+    ed_off_post_dfp_corr <- ed_off
+    ed_on  <- rats(ed_on, zero_freq_shift_t0 = TRUE, xlim = c(4, 1.8))
+    ed_on_post_dfp_corr <- ed_on
   }
   
-  if (!exists("metab_post_dfp_corr")) metab_post_dfp_corr <- NULL
+  if (!exists("ed_off_post_dfp_corr")) ed_off_post_dfp_corr <- NULL
+  if (!exists("ed_on_post_dfp_corr"))  ed_on_post_dfp_corr <- NULL
   
   # read the dynamic averaging scheme from a file if specified
   if (!is.null(dyn_av_scheme_file)) {
@@ -253,22 +272,25 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   # take the mean of the metabolite data
   if (!is.null(dyn_av_block_size)) {
-    metab <- mean_dyn_blocks(metab, dyn_av_block_size)
+    ed_off <- mean_dyn_blocks(ed_off, dyn_av_block_size)
+    ed_on  <- mean_dyn_blocks(ed_on,  dyn_av_block_size)
   } else if (!is.null(dyn_av_scheme)) {
-    if (length(dyn_av_scheme) != Ndyns(metab)) {
+    # TODO not implemented for ed_on
+    if (length(dyn_av_scheme) != Ndyns(ed_off)) {
       stop(paste0("dyn_av_scheme is the wrong length. Currently : ",
-                  length(dyn_av_scheme),", should be : ", Ndyns(metab)))
+                  length(dyn_av_scheme),", should be : ", Ndyns(ed_off)))
     }
     dyn_av_scheme <- as.integer(dyn_av_scheme)
     max_dyn       <- max(dyn_av_scheme)
     metab_list    <- vector("list", length = max_dyn)
     for (n in 1:max_dyn) {
       subset <- which(dyn_av_scheme == n) 
-      metab_list[[n]] <- mean_dyns(get_dyns(metab, subset))
+      ed_off_list[[n]] <- mean_dyns(get_dyns(ed_off, subset))
     }
-    metab <- append_dyns(metab_list)
+    ed_off <- append_dyns(ed_off_list)
   } else {
-    metab <- mean_dyns(metab)
+    ed_off <- mean_dyns(ed_off)
+    ed_on  <- mean_dyns(ed_on)
   }
  
   # take the mean of the water reference data
@@ -287,13 +309,16 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     w_ref_height <- w_ref_peak$height[1]
     w_ref_freq   <- w_ref_peak$freq_ppm[1]
     x_range      <- c(w_ref_freq - 0.2, w_ref_freq + 0.2)
-    metab_water_height <- spec_op(metab, xlim = x_range, operator = "max",
+    ed_off_water_height <- spec_op(ed_off, xlim = x_range, operator = "max",
                                   mode = "mod")[1]
-    ws_efficiency <- metab_water_height / w_ref_height * 100
+    ws_efficiency <- ed_off_water_height / w_ref_height * 100
   }
   
   # eddy current correction
-  if (ecc & w_ref_available) metab <- ecc(metab, w_ref)
+  if (ecc & w_ref_available) {
+    ed_off <- ecc(ed_off, w_ref)
+    ed_on  <- ecc(ed_on,  w_ref)
+  }
   
   # simulate a basis if needed
   if (is.null(external_basis)) {
@@ -324,10 +349,10 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     if (is.null(mol_list_chars)) stop("No basis signals named for simulation.")
     
     # get the parameters
-    mol_list <- get_mol_paras(mol_list_chars, ft = metab$ft)
+    mol_list <- get_mol_paras(mol_list_chars, ft = ed_off$ft)
     
     # check parameters are consistent and infer any missing values
-    sim_paras <- check_sim_paras(pul_seq, metab, TE1, TE2, TE3, TE, TM)
+    sim_paras <- check_sim_paras(pul_seq, ed_off, TE1, TE2, TE3, TE, TM)
     
     # determine if basis caching should be used
     if (use_basis_cache == "always") {
@@ -346,7 +371,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     
     if (sim_paras$pul_seq == "press_ideal") {
       if (verbose) cat("Simulating ideal PRESS sequence.\n")
-      basis <- sim_basis(mol_list, acq_paras = metab,
+      basis <- sim_basis(mol_list, acq_paras = ed_off,
                          pul_seq = seq_press_ideal, TE1 = sim_paras$TE1,
                          TE2 = sim_paras$TE2, use_basis_cache = use_basis_cache,
                          verbose = verbose)
@@ -354,7 +379,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       if (verbose) cat("Simulating shaped PRESS sequence.\n")
       pulse_file <- system.file("extdata", "press_refocus.pta",
                                 package = "spant")
-      basis <- sim_basis(mol_list, acq_paras = metab,
+      basis <- sim_basis(mol_list, acq_paras = ed_off,
                          pul_seq = seq_press_2d_shaped, TE1 = sim_paras$TE1,
                          TE2 = sim_paras$TE2, use_basis_cache = use_basis_cache,
                          verbose = verbose, pulse_file = pulse_file,
@@ -362,13 +387,13 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                          auto_scale = TRUE)
     } else if (sim_paras$pul_seq == "steam") {
       if (verbose) cat("Simulating STEAM sequence.\n")
-      basis <- sim_basis(mol_list, acq_paras = metab,
+      basis <- sim_basis(mol_list, acq_paras = ed_off,
                          pul_seq = seq_steam_ideal_cof, TE = sim_paras$TE,
                          TM = sim_paras$TM, use_basis_cache = use_basis_cache,
                          verbose = verbose)
     } else if (sim_paras$pul_seq == "slaser") {
       if (verbose) cat("Simulating sLASER sequence.\n")
-      basis <- sim_basis(mol_list, acq_paras = metab,
+      basis <- sim_basis(mol_list, acq_paras = ed_off,
                          pul_seq = seq_slaser_ideal, TE1 = sim_paras$TE1,
                          TE2 = sim_paras$TE2, TE3 = sim_paras$TE3,
                          use_basis_cache = use_basis_cache, verbose = verbose)
@@ -380,22 +405,42 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   if (is.null(fit_opts)) fit_opts <- abfit_reg_opts()
   
-  
   if (is.null(output_ratio)) output_ratio <- "tCr"
   
   # output_ratio of NA means we only want unscaled values
   if (anyNA(output_ratio)) output_ratio <- NULL
   
+  # align ed_on and ed_off based on the residual water signal
+  ed_on  <- rats(ed_on, ed_off, xlim = c(4.8, 4.5))
+  edited <- ed_on - ed_off
+  
   # filter residual water
   if (!is.null(hsvd_width)) {
     if (verbose) cat("Applying HSVD filter.\n")
-    metab <- hsvd_filt(metab, xlim = c(-hsvd_width, hsvd_width))
+    ed_off <- hsvd_filt(ed_off, xlim = c(-hsvd_width, hsvd_width))
+    ed_on  <- hsvd_filt(ed_on,  xlim = c(-hsvd_width, hsvd_width))
   }
   
-  # fitting
-  if (verbose) cat("Starting fitting.\n")
-  fit_res <- fit_mrs(metab = metab, basis = basis, opts = fit_opts)
-  if (verbose) cat("Fitting complete.\n")
+  # edit-off fitting
+  if (verbose) cat("Starting edit-off fitting.\n")
+  fit_res <- fit_mrs(metab = ed_off, basis = basis, opts = fit_opts)
+  if (verbose) cat("Edit-off fitting complete.\n")
+  
+  # edited fitting
+  mol_list <- list(get_uncoupled_mol("MM09",   0.92, "1H",   1, 12, 1),
+                   get_uncoupled_mol("NAA",    2.01, "1H",  -3,  3, 0),
+                   get_uncoupled_mol("Glx_A",  2.31, "1H",   1,  3, 0),
+                   get_uncoupled_mol("Glx_B",  2.40, "1H",   1,  3, 0),
+                   get_uncoupled_mol("GABA_A", 2.95, "1H",   1, 12, 1),
+                   get_uncoupled_mol("GABA_B", 3.04, "1H",   1, 12, 1),
+                   get_uncoupled_mol("Glx_C",  3.72, "1H",   1,  3, 0),
+                   get_uncoupled_mol("Glx_D",  3.8,  "1H",   1,  3, 0))
+
+  basis_ed <- sim_basis(mol_list, acq_paras = edited)
+  
+  if (verbose) cat("Starting edited fitting.\n")
+  fit_res_ed <- fit_mrs(metab = edited, basis = basis_ed, opts = fit_opts)
+  if (verbose) cat("Edited fitting complete.\n")
     
   phase_offset <- fit_res$res_tab$phase
   shift_offset <- fit_res$res_tab$shift
@@ -465,18 +510,18 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                                                "fit_res_unscaled.csv"))
   
   # prepare dynamic data for plotting
-  if (Ndyns(metab_pre_dfp_corr) > 1) {
+  if (Ndyns(ed_off_pre_dfp_corr) > 1) {
     # phase according to the fit results
-    dyn_data_uncorr <- phase(metab_pre_dfp_corr, mean(fit_res$res_tab$phase))
+    dyn_data_uncorr <- phase(ed_off_pre_dfp_corr, mean(fit_res$res_tab$phase))
     # correct chem. shift scale according to the fit results
     dyn_data_uncorr <- shift(dyn_data_uncorr, mean(fit_res$res_tab$shift),
                              units = "ppm")
     # add 2 Hz LB
     dyn_data_uncorr <- lb(dyn_data_uncorr, 2)
     
-    if (!is.null(metab_post_dfp_corr)) {
+    if (!is.null(ed_off_post_dfp_corr)) {
       # phase according to the fit results
-      dyn_data_corr <- phase(metab_post_dfp_corr, mean(fit_res$res_tab$phase))
+      dyn_data_corr <- phase(ed_off_post_dfp_corr, mean(fit_res$res_tab$phase))
       # correct chem. shift scale according to the fit results
       dyn_data_corr <- shift(dyn_data_corr, mean(fit_res$res_tab$shift),
                              units = "ppm")
@@ -520,11 +565,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                   mri_seg = mri_seg,
                   p_vols = p_vols)
   
-  if (Ndyns(metab) == 1) {
-    rmd_file <- system.file("rmd", "svs_report.Rmd", package = "spant")
-  } else {
-    rmd_file <- system.file("rmd", "dyn_svs_report.Rmd", package = "spant")
-  }
+  rmd_file <- system.file("rmd", "svs_edited_report.Rmd", package = "spant")
   
   rmd_out_f <- file.path(tools::file_path_as_absolute(output_dir), "report")
   
@@ -534,5 +575,5 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   if (verbose) cat("fit_svs finished.\n")
   
-  return(fit_res)
+  return(fit_res_ed)
 }
