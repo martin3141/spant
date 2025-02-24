@@ -229,13 +229,12 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   ed_on  <- get_fh_dyns(metab)
   ed_off <- get_sh_dyns(metab)
   
-  # edited <- ed_on - ed_off
-  
   # extract a subset of dynamic scans if specified
   if (!is.null(fit_subset)) ed_off <- get_dyns(ed_off, fit_subset) 
   if (!is.null(fit_subset)) ed_on  <- get_dyns(ed_on,  fit_subset) 
   
   ed_off_pre_dfp_corr <- ed_off
+  ed_on_pre_dfp_corr  <- ed_on
   
   # pre-alignment
   if (pre_align) {
@@ -512,27 +511,57 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   # prepare dynamic data for plotting
   if (Ndyns(ed_off_pre_dfp_corr) > 1) {
     # phase according to the fit results
-    dyn_data_uncorr <- phase(ed_off_pre_dfp_corr, mean(fit_res$res_tab$phase))
+    dyn_data_uncorr_ed_off <- phase(ed_off_pre_dfp_corr,
+                                    mean(fit_res$res_tab$phase))
     # correct chem. shift scale according to the fit results
-    dyn_data_uncorr <- shift(dyn_data_uncorr, mean(fit_res$res_tab$shift),
-                             units = "ppm")
+    dyn_data_uncorr_ed_off <- shift(dyn_data_uncorr_ed_off,
+                                    mean(fit_res$res_tab$shift), units = "ppm")
     # add 2 Hz LB
-    dyn_data_uncorr <- lb(dyn_data_uncorr, 2)
+    dyn_data_uncorr_ed_off <- lb(dyn_data_uncorr_ed_off, 2)
     
     if (!is.null(ed_off_post_dfp_corr)) {
       # phase according to the fit results
-      dyn_data_corr <- phase(ed_off_post_dfp_corr, mean(fit_res$res_tab$phase))
+      dyn_data_corr_ed_off <- phase(ed_off_post_dfp_corr,
+                                    mean(fit_res$res_tab$phase))
       # correct chem. shift scale according to the fit results
-      dyn_data_corr <- shift(dyn_data_corr, mean(fit_res$res_tab$shift),
-                             units = "ppm")
+      dyn_data_corr_ed_off <- shift(dyn_data_corr_ed_off,
+                                    mean(fit_res$res_tab$shift),
+                                    units = "ppm")
       # add 2 Hz LB
-      dyn_data_corr <- lb(dyn_data_corr, 2)
+      dyn_data_corr_ed_off <- lb(dyn_data_corr_ed_off, 2)
     } else {
-      dyn_data_corr <- NULL
+      dyn_data_corr_ed_off <- NULL
     }
   } else {
-    dyn_data_uncorr <- NULL
-    dyn_data_corr   <- NULL
+    dyn_data_uncorr_ed_off <- NULL
+    dyn_data_corr_ed_off   <- NULL
+  }
+  if (Ndyns(ed_on_pre_dfp_corr) > 1) {
+    # phase according to the fit results
+    dyn_data_uncorr_ed_on <- phase(ed_on_pre_dfp_corr,
+                                   mean(fit_res$res_tab$phase))
+    # correct chem. shift scale according to the fit results
+    dyn_data_uncorr_ed_on <- shift(dyn_data_uncorr_ed_on,
+                                   mean(fit_res$res_tab$shift), units = "ppm")
+    # add 2 Hz LB
+    dyn_data_uncorr_ed_on <- lb(dyn_data_uncorr_ed_on, 2)
+    
+    if (!is.null(ed_on_post_dfp_corr)) {
+      # phase according to the fit results
+      dyn_data_corr_ed_on <- phase(ed_on_post_dfp_corr,
+                                    mean(fit_res$res_tab$phase))
+      # correct chem. shift scale according to the fit results
+      dyn_data_corr_ed_on <- shift(dyn_data_corr_ed_on,
+                                   mean(fit_res$res_tab$shift),
+                                  units = "ppm")
+      # add 2 Hz LB
+      dyn_data_corr_ed_on <- lb(dyn_data_corr_ed_on, 2)
+    } else {
+      dyn_data_corr_ed_on <- NULL
+    }
+  } else {
+    dyn_data_uncorr_ed_on <- NULL
+    dyn_data_corr_ed_on   <- NULL
   }
   
   # generate a summary table
@@ -549,7 +578,9 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   }
   
   # data needed to produce the output html report
-  results <- list(fit_res = fit_res, argg = argg,
+  results <- list(fit_res = fit_res,
+                  fit_res_ed = fit_res_ed,
+                  argg = argg,
                   w_ref_available = w_ref_available,
                   w_ref = w_ref,
                   output_ratio = output_ratio,
@@ -557,8 +588,10 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                   res_tab_ratio = res_tab_ratio,
                   res_tab_legacy = res_tab_legacy,
                   res_tab_molal = res_tab_molal,
-                  dyn_data_uncorr = dyn_data_uncorr,
-                  dyn_data_corr = dyn_data_corr,
+                  dyn_data_uncorr_ed_off = dyn_data_uncorr_ed_off,
+                  dyn_data_corr_ed_off = dyn_data_corr_ed_off,
+                  dyn_data_uncorr_ed_on = dyn_data_uncorr_ed_on,
+                  dyn_data_corr_ed_on = dyn_data_corr_ed_on,
                   summary_tab = summary_tab,
                   plot_ppm_xlim = plot_ppm_xlim,
                   mri = mri,

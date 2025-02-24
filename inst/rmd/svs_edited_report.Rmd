@@ -1,8 +1,9 @@
 ---
-title: "spant SVS analysis results"
+title: "spant edited SVS analysis results"
 output: html_document
 params:
   fit_res: ""
+  fit_res_ed: ""
   argg: ""
   w_ref_available: ""
   w_ref: ""
@@ -11,8 +12,10 @@ params:
   res_tab_ratio: ""    
   res_tab_legacy: ""
   res_tab_molal: ""
-  dyn_data_uncorr: ""
-  dyn_data_corr: ""
+  dyn_data_uncorr_ed_off: ""
+  dyn_data_corr_ed_off: ""
+  dyn_data_uncorr_ed_on: ""
+  dyn_data_corr_ed_on: ""
   summary_tab: ""
   plot_ppm_xlim: ""
   mri: ""
@@ -27,11 +30,37 @@ knitr::opts_chunk$set(echo = FALSE)
 
 # {.tabset}
 
-## Fit plots {.tabset}
+## Edited fit plots {.tabset}
+
+### Standard
+```{r edfitplot, fig.width=7, fig.height=6}
+plot(params$fit_res_ed, xlim = params$plot_ppm_xlim)
+```
+
+### Stackplot
+```{r edstackplot, fig.width=7, fig.height=8}
+stackplot(params$fit_res_ed, y_offset = 0.5, combine_lipmm = TRUE, labels = TRUE,
+          xlim = params$plot_ppm_xlim)
+```
+
+```{r edbasisplot, results = 'asis', fig.width=7, fig.height=6}
+# basis_names <- params$fit_res$basis$names
+basis_names <- colnames(params$fit_res_ed$fits[[1]][-1:-4])
+for (n in 1:length(basis_names)) {
+  #if (basis_names[n] %in% colnames(params$fit_res$fits[[1]])) {
+  cat("\n### ", basis_names[n], "\n", sep = "")
+  plot(params$fit_res_ed, plot_sigs = basis_names[n], main = basis_names[n], 
+       xlim = params$plot_ppm_xlim)
+  cat("\n")
+  #}
+}
+```
+
+## Edit-off fit plots {.tabset}
 
 ### Standard
 ```{r fitplot, fig.width=7, fig.height=6}
-plot(params$fit_res, xlim = plot_ppm_xlim)
+plot(params$fit_res, xlim = params$plot_ppm_xlim)
 ```
 
 ### Stackplot
@@ -131,21 +160,35 @@ cat("See the [spant User Guide](https://spantdoc.wilsonlab.co.uk/water_scaling) 
 ```
 
 ```{r, results = 'asis', fig.width=7, fig.height=7}
-if (!is.null(dyn_data_uncorr)) {
+if (!is.null(dyn_data_uncorr_ed_off)) {
   cat("## Dynamic plots {.tabset}\n")
-  if (!is.null(dyn_data_corr)) {
-    cat("### Spectrogram with dynamic correction\n")
+  if (!is.null(dyn_data_corr_ed_off)) {
+    cat("### Edit-off with dyn. correction\n")
     if (is.null(params$plot_ppm_xlim)) {
-      image(dyn_data_corr, xlim = c(4, 0.5))
+      image(dyn_data_corr_ed_off, xlim = c(4, 0.5))
     } else {
-      image(dyn_data_corr, xlim = params$plot_ppm_xlim)
+      image(dyn_data_corr_ed_off, xlim = params$plot_ppm_xlim)
     }
   }
-  cat("\n\n### Spectrogram without dynamic correction\n")
+  if (!is.null(dyn_data_corr_ed_on)) {
+    cat("\n\n### Edit-on with dyn. correction\n")
+    if (is.null(params$plot_ppm_xlim)) {
+      image(dyn_data_corr_ed_on, xlim = c(4, 0.5))
+    } else {
+      image(dyn_data_corr_ed_on, xlim = params$plot_ppm_xlim)
+    }
+  }
+  cat("\n\n### Edit-off without dyn. correction\n")
   if (is.null(params$plot_ppm_xlim)) {
-    image(dyn_data_uncorr, xlim = c(4, 0.5))
+    image(dyn_data_uncorr_ed_off, xlim = c(4, 0.5))
   } else {
-    image(dyn_data_uncorr, xlim = params$plot_ppm_xlim)
+    image(dyn_data_uncorr_ed_off, xlim = params$plot_ppm_xlim)
+  }
+  cat("\n\n### Edit-on without dyn. correction\n")
+  if (is.null(params$plot_ppm_xlim)) {
+    image(dyn_data_uncorr_ed_on, xlim = c(4, 0.5))
+  } else {
+    image(dyn_data_uncorr_ed_on, xlim = params$plot_ppm_xlim)
   }
 }
 ```
