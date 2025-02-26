@@ -302,19 +302,21 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     ed_off <- mean_dyn_blocks(ed_off, dyn_av_block_size)
     ed_on  <- mean_dyn_blocks(ed_on,  dyn_av_block_size)
   } else if (!is.null(dyn_av_scheme)) {
-    # TODO not implemented for ed_on
     if (length(dyn_av_scheme) != Ndyns(ed_off)) {
       stop(paste0("dyn_av_scheme is the wrong length. Currently : ",
                   length(dyn_av_scheme),", should be : ", Ndyns(ed_off)))
     }
     dyn_av_scheme <- as.integer(dyn_av_scheme)
     max_dyn       <- max(dyn_av_scheme)
-    metab_list    <- vector("list", length = max_dyn)
+    ed_off_list   <- vector("list", length = max_dyn)
+    ed_on_list    <- vector("list", length = max_dyn)
     for (n in 1:max_dyn) {
       subset <- which(dyn_av_scheme == n) 
       ed_off_list[[n]] <- mean_dyns(get_dyns(ed_off, subset))
+      ed_on_list[[n]]  <- mean_dyns(get_dyns(ed_on,  subset))
     }
     ed_off <- append_dyns(ed_off_list)
+    ed_on  <- append_dyns(ed_on_list)
   } else {
     ed_off <- mean_dyns(ed_off)
     ed_on  <- mean_dyns(ed_on)
@@ -337,7 +339,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     w_ref_freq   <- w_ref_peak$freq_ppm[1]
     x_range      <- c(w_ref_freq - 0.2, w_ref_freq + 0.2)
     ed_off_water_height <- spec_op(ed_off, xlim = x_range, operator = "max",
-                                  mode = "mod")[1]
+                                   mode = "mod")[1]
     ws_efficiency <- ed_off_water_height / w_ref_height * 100
   }
   
