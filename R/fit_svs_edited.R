@@ -440,7 +440,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (anyNA(output_ratio)) output_ratio <- NULL
   
   # align ed_on and ed_off based on the residual water signal
-  ed_on  <- rats(ed_on, ed_off, xlim = c(4.8, 4.5))
+  ed_on  <- rats(ed_on, mean_dyns(ed_off), xlim = c(4.8, 4.5))
   
   # take the mean rather than just straight subtraction
   edited <- (ed_on - ed_off) / 2
@@ -518,6 +518,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       fit_res_ed_rat <- scale_amp_ratio_value(fit_res_ed, value)
       
       fit_res_ed_rat$res_tab <- append_p_vols(fit_res_ed_rat$res_tab, p_vols)
+      fit_res_ed_rat$res_tab <- append_mpress_gaba(fit_res_ed_rat$res_tab)
       
       res_tab_ed_ratio <- fit_res_ed_rat$res_tab
       file_out <- file.path(output_dir, paste0("fit_res_edited_",
@@ -540,6 +541,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     
     # edited
     fit_res_ed_molal <- scale_amp_molal_pvc(fit_res_ed, w_ref, p_vols, TE, TR)
+    fit_res_ed_molal$res_tab <- append_mpress_gaba(fit_res_ed_molal$res_tab)
     res_tab_ed_molal <- fit_res_ed_molal$res_tab
     file_out <- file.path(output_dir, "fit_res_edited_molal_conc.csv")
     utils::write.csv(res_tab_ed_molal, file_out)
@@ -553,6 +555,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       
       # edited
       fit_res_ed_legacy <- scale_amp_legacy(fit_res_ed, w_ref, w_att, w_conc)
+      fit_res_ed_legacy$res_tab <- append_mpress_gaba(fit_res_ed_legacy$res_tab)
       res_tab_ed_legacy <- fit_res_ed_legacy$res_tab
       file_out <- file.path(output_dir, "fit_res_edited_legacy_conc.csv")
       utils::write.csv(res_tab_ed_legacy, file_out)
@@ -572,6 +575,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   utils::write.csv(res_tab_unscaled, file.path(output_dir,
                                                "fit_res_edit_off_unscaled.csv"))
   res_tab_unscaled_ed <- append_p_vols(res_tab_unscaled_ed, p_vols)
+  res_tab_unscaled_ed <- append_mpress_gaba(res_tab_unscaled_ed)
   utils::write.csv(res_tab_unscaled_ed, file.path(output_dir,
                                                "fit_res_edited_unscaled.csv"))
   
@@ -676,4 +680,11 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (verbose) cat("fit_svs finished.\n")
   
   return(list(fit_res_ed, fit_res))
+}
+
+
+append_mpress_gaba <- function(res_tab) {
+  res_tab["GABA"] <- res_tab["GABA_A"] + res_tab["GABA_B"]
+  res_tab["Glx"]  <- res_tab["Glx_C"]  + res_tab["Glx_D"]
+  return(res_tab)
 }
