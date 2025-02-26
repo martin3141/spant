@@ -13,6 +13,11 @@
 #' would use : p_vols = c(WM = 0, GM = 100, CSF = 0).
 #' @param format Override automatic data format detection. See format argument
 #' in [read_mrs()] for permitted values.
+#' @param editing_scheme describes the dynamic data ordering. Can be one of:
+#' 'on-off-blocks', 'on-off-interleaved', 'off-on-blocks' or
+#' 'off-on-interleaved'.
+#' @param invert_edit_on set to TRUE to invert the edit-on sub-spectra.
+#' @param invert_edit_off set to TRUE to invert the edit-off sub-spectra.
 #' @param pul_seq Pulse sequence to use for basis simulation. Can be one of the
 #' following values : "press", "press_ideal", "press_shaped", "steam" or
 #' "slaser". If "press" then "press_ideal" will be assumed unless the magnetic
@@ -86,7 +91,9 @@
 #' @export
 fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                            mri_seg = NULL, external_basis = NULL, p_vols = NULL,
-                           format = NULL, pul_seq = NULL, TE = NULL, TR = NULL,
+                           format = NULL, editing_scheme = NULL,
+                           invert_edit_on = NULL, invert_edit_off = NULL,
+                           pul_seq = NULL, TE = NULL, TR = NULL,
                            TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
                            append_basis = NULL, remove_basis = NULL,
                            pre_align = TRUE, dfp_corr = TRUE,
@@ -209,8 +216,29 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   # determine edit-on / edit-off scans, likely to be vendor and sequence
   # dependant
-  ed_on  <- get_even_dyns(metab)
-  ed_off <- get_odd_dyns(metab)
+  if (is.null(editing_scheme))  editing_scheme  <- "off-on-interleaved"
+  if (is.null(invert_edit_on))  invert_edit_on  <- FALSE
+  if (is.null(invert_edit_off)) invert_edit_off <- FALSE
+  
+  if (editing_scheme == "off-on-interleaved") {
+    ed_off <- get_odd_dyns(metab)
+    ed_on  <- get_even_dyns(metab)
+  } else if (editing_scheme == "on-off-interleaved") {
+    ed_on  <- get_odd_dyns(metab)
+    ed_off <- get_even_dyns(metab)
+  } else if (editing_scheme == "off-on-blocks") {
+    ed_off <- get_fh_dyns(metab)
+    ed_on  <- get_sh_dyns(metab)
+  } else if (editing_scheme == "on-off-blocks") {
+    ed_on  <- get_fh_dyns(metab)
+    ed_off <- get_sh_dyns(metab)
+  } else {
+    print(editing_scheme)
+    stop("Incorrect editing_scheme string.")
+  }
+  
+  if (invert_edit_off) ed_off <- phase(ed_off, 180)
+  if (invert_edit_on)  ed_on  <- phase(ed_on,  180)
   
   # reorganise dynamics into two blocks
   metab <- append_dyns(ed_on, ed_off)
@@ -645,5 +673,5 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   if (verbose) cat("fit_svs finished.\n")
   
-  return(fit_res_ed)
+  return(list(fit_res_ed, fit_res))
 }

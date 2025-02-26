@@ -13,6 +13,9 @@ fit_svs_edited(
   external_basis = NULL,
   p_vols = NULL,
   format = NULL,
+  editing_scheme = NULL,
+  invert_edit_on = NULL,
+  invert_edit_off = NULL,
   pul_seq = NULL,
   TE = NULL,
   TR = NULL,
@@ -60,6 +63,14 @@ would use : p_vols = c(WM = 0, GM = 100, CSF = 0).}
 
 \item{format}{Override automatic data format detection. See format argument
 in \code{\link[=read_mrs]{read_mrs()}} for permitted values.}
+
+\item{editing_scheme}{describes the dynamic data ordering. Can be one of:
+'on-off-blocks', 'on-off-interleaved', 'off-on-blocks' or
+'off-on-interleaved'.}
+
+\item{invert_edit_on}{set to TRUE to invert the edit-on sub-spectra.}
+
+\item{invert_edit_off}{set to TRUE to invert the edit-off sub-spectra.}
 
 \item{pul_seq}{Pulse sequence to use for basis simulation. Can be one of the
 following values : "press", "press_ideal", "press_shaped", "steam" or
