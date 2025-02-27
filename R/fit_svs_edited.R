@@ -31,13 +31,14 @@
 #' @param TE2 PRESS or sLASER sequence timing parameter in seconds.
 #' @param TE3 sLASER sequence timing parameter in seconds.
 #' @param TM STEAM mixing time parameter in seconds.
-#' @param append_basis names of extra signals to add to the default basis. Eg 
-#' append_basis = c("peth", "cit"). Cannot be used with precompiled basis sets.
-#' @param remove_basis grep expression to match names of signals to remove from
-#' the basis. For example: use "*" to remove all signals, "^mm|^lip" to remove
-#' all macromolecular and lipid signals, "^lac" to remove lactate. This operation
-#' is performed before signals are added with append_basis. Cannot be used with
+#' @param append_basis_ed_off names of extra signals to add to the default
+#' basis. Eg append_basis_ed_off = c("peth", "cit"). Cannot be used with
 #' precompiled basis sets.
+#' @param remove_basis_ed_off grep expression to match names of signals to
+#' remove from the basis. For example: use "*" to remove all signals, "^mm|^lip"
+#' to remove all macromolecular and lipid signals, "^lac" to remove lactate.
+#' This operation is performed before signals are added with
+#' append_basis_ed_off. Cannot be used with precompiled basis sets.
 #' @param pre_align perform simple frequency alignment to known reference peaks.
 #' @param dfp_corr perform dynamic frequency and phase correction using the RATS
 #' method.
@@ -98,7 +99,8 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                            invert_edit_on = NULL, invert_edit_off = NULL,
                            pul_seq = NULL, TE = NULL, TR = NULL,
                            TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
-                           append_basis = NULL, remove_basis = NULL,
+                           append_basis_ed_off = NULL,
+                           remove_basis_ed_off = NULL,
                            pre_align = TRUE, dfp_corr = TRUE,
                            output_ratio = NULL, ecc = FALSE,
                            hsvd_width = NULL, fit_opts_edited = NULL,
@@ -120,12 +122,12 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     stop("dyn_av_scheme and dyn_av_scheme_file options cannot both be set. Use one or the other.")
   }
   
-  if (!is.null(external_basis) & !is.null(append_basis)) {
-    stop("external_basis and append_basis options cannot both be set. Use one or the other.")
+  if (!is.null(external_basis) & !is.null(append_basis_ed_off)) {
+    stop("external_basis and append_basis_ed_off options cannot both be set. Use one or the other.")
   }
   
-  if (!is.null(external_basis) & !is.null(remove_basis)) {
-    stop("external_basis and remove_basis options cannot both be set. Use one or the other.")
+  if (!is.null(external_basis) & !is.null(remove_basis_ed_off)) {
+    stop("external_basis and remove_basis_ed_off options cannot both be set. Use one or the other.")
   }
   
   if (!is.null(dyn_av_block_size) & !is.null(dyn_av_scheme)) {
@@ -365,20 +367,20 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                         "mm20", "naa", "naag", "pch", "pcr", "sins", "tau")
     
     # option to remove signals
-    if (!is.null(remove_basis)) {
-        inds <- grep(remove_basis, mol_list_chars)
+    if (!is.null(remove_basis_ed_off)) {
+        inds <- grep(remove_basis_ed_off, mol_list_chars)
         if (length(inds) == 0) {
           print(mol_list_chars)
-          stop("No signals (as listed above) matching remove_basis found.")
+          stop("No signals (as listed above) matching remove_basis_ed_off found.")
         }
         mol_list_chars <- mol_list_chars[-inds]
     }
     
     # option to append signals
-    if (!is.null(append_basis)) mol_list_chars <- c(mol_list_chars,
-                                                    append_basis)
+    if (!is.null(append_basis_ed_off)) mol_list_chars <- c(mol_list_chars,
+                                                           append_basis_ed_off)
     
-    # probably set remove_basis to * and forgot to use append_basis
+    # probably set remove_basis_ed_off to * and forgot to use append_basis_ed_off
     if (is.null(mol_list_chars)) stop("No basis signals named for simulation.")
     
     # get the parameters

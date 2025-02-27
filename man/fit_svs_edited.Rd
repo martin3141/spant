@@ -23,8 +23,8 @@ fit_svs_edited(
   TE2 = NULL,
   TE3 = NULL,
   TM = NULL,
-  append_basis = NULL,
-  remove_basis = NULL,
+  append_basis_ed_off = NULL,
+  remove_basis_ed_off = NULL,
   pre_align = TRUE,
   dfp_corr = TRUE,
   output_ratio = NULL,
@@ -93,14 +93,15 @@ this will be guessed from the metab data file.}
 
 \item{TM}{STEAM mixing time parameter in seconds.}
 
-\item{append_basis}{names of extra signals to add to the default basis. Eg
-append_basis = c("peth", "cit"). Cannot be used with precompiled basis sets.}
-
-\item{remove_basis}{grep expression to match names of signals to remove from
-the basis. For example: use "*" to remove all signals, "^mm|^lip" to remove
-all macromolecular and lipid signals, "^lac" to remove lactate. This operation
-is performed before signals are added with append_basis. Cannot be used with
+\item{append_basis_ed_off}{names of extra signals to add to the default
+basis. Eg append_basis_ed_off = c("peth", "cit"). Cannot be used with
 precompiled basis sets.}
+
+\item{remove_basis_ed_off}{grep expression to match names of signals to
+remove from the basis. For example: use "*" to remove all signals, "^mm|^lip"
+to remove all macromolecular and lipid signals, "^lac" to remove lactate.
+This operation is performed before signals are added with
+append_basis_ed_off. Cannot be used with precompiled basis sets.}
 
 \item{pre_align}{perform simple frequency alignment to known reference peaks.}
 
