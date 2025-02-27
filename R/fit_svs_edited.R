@@ -490,7 +490,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   # keep unscaled results
   res_tab_unscaled    <- fit_res$res_tab
-  res_tab_unscaled_ed <- fit_res_ed$res_tab
+  res_tab_ed_unscaled <- fit_res_ed$res_tab
   
   # assume 100% white matter unless told otherwise
   if (is.null(p_vols) & is.null(mri_seg)) {
@@ -582,9 +582,9 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   res_tab_unscaled <- append_p_vols(res_tab_unscaled, p_vols)
   utils::write.csv(res_tab_unscaled, file.path(output_dir,
                                                "fit_res_edit_off_unscaled.csv"))
-  res_tab_unscaled_ed <- append_p_vols(res_tab_unscaled_ed, p_vols)
-  res_tab_unscaled_ed <- append_mpress_gaba(res_tab_unscaled_ed)
-  utils::write.csv(res_tab_unscaled_ed, file.path(output_dir,
+  res_tab_ed_unscaled <- append_p_vols(res_tab_ed_unscaled, p_vols)
+  res_tab_ed_unscaled <- append_mpress_gaba(res_tab_ed_unscaled)
+  utils::write.csv(res_tab_ed_unscaled, file.path(output_dir,
                                                "fit_res_edited_unscaled.csv"))
   
   # prepare dynamic data for plotting
@@ -667,6 +667,10 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                   res_tab_ratio = res_tab_ratio,
                   res_tab_legacy = res_tab_legacy,
                   res_tab_molal = res_tab_molal,
+                  res_tab_ed_unscaled = res_tab_ed_unscaled,
+                  res_tab_ed_ratio = res_tab_ed_ratio,
+                  res_tab_ed_legacy = res_tab_ed_legacy,
+                  res_tab_ed_molal = res_tab_ed_molal,
                   dyn_data_uncorr_ed_off = dyn_data_uncorr_ed_off,
                   dyn_data_corr_ed_off = dyn_data_corr_ed_off,
                   dyn_data_uncorr_ed_on = dyn_data_uncorr_ed_on,
