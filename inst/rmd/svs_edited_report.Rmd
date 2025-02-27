@@ -301,7 +301,7 @@ if (params$w_ref_available) {
 }
 ```
 
-## Diagnostics
+## Edit-off diagnostics
 ```{r, results = 'asis'}
 name  <- NULL
 value <- NULL

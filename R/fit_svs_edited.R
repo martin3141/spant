@@ -50,7 +50,10 @@
 #' width is between -width and +width Hz, with 0 Hz being defined at the centre
 #' of the spectral width. Default is disabled (set to NULL), 30 Hz is a
 #' reasonable value.
-#' @param fit_opts options to pass to the fitting method.
+#' @param fit_opts_edited options to pass to the fitting method for the 
+#' edited spectrum.
+#' @param fit_opts_ed_off options to pass to the fitting method for the
+#' edit-off spectrum.
 #' @param fit_subset specify a subset of dynamics to analyse, for example
 #' 1:16 would only fit the first 16 dynamic scans.
 #' @param legacy_ws perform and output legacy water scaling compatible with
@@ -98,7 +101,8 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                            append_basis = NULL, remove_basis = NULL,
                            pre_align = TRUE, dfp_corr = TRUE,
                            output_ratio = NULL, ecc = FALSE,
-                           hsvd_width = NULL, fit_opts = NULL, 
+                           hsvd_width = NULL, fit_opts_edited = NULL,
+                           fit_opts_ed_off = NULL, 
                            fit_subset = NULL, legacy_ws = FALSE, w_att = 0.7,
                            w_conc = 35880, use_basis_cache = "auto",
                            summary_measures = NULL, dyn_av_block_size = NULL,
@@ -432,7 +436,8 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     basis <- external_basis
   }
   
-  if (is.null(fit_opts)) fit_opts <- abfit_reg_opts()
+  if (is.null(fit_opts_edited)) fit_opts_edited <- abfit_reg_opts()
+  if (is.null(fit_opts_ed_off)) fit_opts_ed_off <- abfit_reg_opts()
   
   if (is.null(output_ratio)) output_ratio <- "tCr"
   
@@ -454,7 +459,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   # edit-off fitting
   if (verbose) cat("Starting edit-off fitting.\n")
-  fit_res <- fit_mrs(metab = ed_off, basis = basis, opts = fit_opts)
+  fit_res <- fit_mrs(metab = ed_off, basis = basis, opts = fit_opts_ed_off)
   if (verbose) cat("Edit-off fitting complete.\n")
   
   # edited fitting
@@ -472,7 +477,8 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   basis_ed <- sim_basis(mol_list, acq_paras = edited)
   
   if (verbose) cat("Starting edited fitting.\n")
-  fit_res_ed <- fit_mrs(metab = edited, basis = basis_ed, opts = fit_opts)
+  fit_res_ed <- fit_mrs(metab = edited, basis = basis_ed,
+                        opts = fit_opts_edited)
   if (verbose) cat("Edited fitting complete.\n")
     
   phase_offset <- fit_res$res_tab$phase

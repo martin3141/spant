@@ -30,7 +30,8 @@ fit_svs_edited(
   output_ratio = NULL,
   ecc = FALSE,
   hsvd_width = NULL,
-  fit_opts = NULL,
+  fit_opts_edited = NULL,
+  fit_opts_ed_off = NULL,
   fit_subset = NULL,
   legacy_ws = FALSE,
   w_att = 0.7,
@@ -118,7 +119,11 @@ width is between -width and +width Hz, with 0 Hz being defined at the centre
 of the spectral width. Default is disabled (set to NULL), 30 Hz is a
 reasonable value.}
 
-\item{fit_opts}{options to pass to the fitting method.}
+\item{fit_opts_edited}{options to pass to the fitting method for the
+edited spectrum.}
+
+\item{fit_opts_ed_off}{options to pass to the fitting method for the
+edit-off spectrum.}
 
 \item{fit_subset}{specify a subset of dynamics to analyse, for example
 1:16 would only fit the first 16 dynamic scans.}
