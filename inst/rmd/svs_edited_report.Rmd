@@ -217,7 +217,39 @@ if (!is.null(params$mri_seg)) {
 
 ## Spectral plots {.tabset}
 
-### Processed cropped
+### Edited cropped
+```{r, fig.width=7, fig.height=6}
+if (!is.null(params$fit_res_ed$res_tab$phase)) {
+  phase_offset <- params$fit_res_ed$res_tab$phase
+} else {
+  phase_offset <- 0
+}
+
+if (!is.null(params$fit_res_ed$res_tab$phi1)) {
+  phi1_offset <- params$fit_res_ed$res_tab$phi1
+} else {
+  phi1_offset <- 0
+}
+
+if (!is.null(params$fit_res_ed$res_tab$shift)) {
+  shift_offset <- params$fit_res_ed$res_tab$shift
+} else {
+  shift_offset <- 0
+}
+
+proc_spec_ed <- params$fit_res_ed$data
+proc_spec_ed <- phase(proc_spec_ed, phase_offset, phi1_offset)
+proc_spec_ed <- shift(proc_spec_ed, shift_offset, units = "ppm")
+proc_spec_ed <- zf(proc_spec_ed)
+
+if (is.null(params$plot_ppm_xlim)) {
+  plot(proc_spec_ed, xlim = c(4, 0.2))
+} else {
+  plot(proc_spec_ed, xlim = params$plot_ppm_xlim)
+}
+```
+
+### Edit-off cropped
 ```{r, fig.width=7, fig.height=6}
 if (!is.null(params$fit_res$res_tab$phase)) {
   phase_offset <- params$fit_res$res_tab$phase
@@ -249,7 +281,12 @@ if (is.null(params$plot_ppm_xlim)) {
 }
 ```
 
-### Processed full
+### Edited full
+```{r, fig.width=7, fig.height=6}
+plot(proc_spec_ed)
+```
+
+### Edit-off full
 ```{r, fig.width=7, fig.height=6}
 plot(proc_spec)
 ```
