@@ -526,7 +526,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       fit_res_ed_rat <- scale_amp_ratio_value(fit_res_ed, value)
       
       fit_res_ed_rat$res_tab <- append_p_vols(fit_res_ed_rat$res_tab, p_vols)
-      fit_res_ed_rat$res_tab <- append_mpress_gaba(fit_res_ed_rat$res_tab)
+      # fit_res_ed_rat$res_tab <- append_mpress_gaba(fit_res_ed_rat$res_tab)
       
       res_tab_ed_ratio <- fit_res_ed_rat$res_tab
       file_out <- file.path(output_dir, paste0("fit_res_edited_",
@@ -549,7 +549,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     
     # edited
     fit_res_ed_molal <- scale_amp_molal_pvc(fit_res_ed, w_ref, p_vols, TE, TR)
-    fit_res_ed_molal$res_tab <- append_mpress_gaba(fit_res_ed_molal$res_tab)
+    # fit_res_ed_molal$res_tab <- append_mpress_gaba(fit_res_ed_molal$res_tab)
     res_tab_ed_molal <- fit_res_ed_molal$res_tab
     file_out <- file.path(output_dir, "fit_res_edited_molal_conc.csv")
     utils::write.csv(res_tab_ed_molal, file_out)
@@ -563,7 +563,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       
       # edited
       fit_res_ed_legacy <- scale_amp_legacy(fit_res_ed, w_ref, w_att, w_conc)
-      fit_res_ed_legacy$res_tab <- append_mpress_gaba(fit_res_ed_legacy$res_tab)
+      # fit_res_ed_legacy$res_tab <- append_mpress_gaba(fit_res_ed_legacy$res_tab)
       res_tab_ed_legacy <- fit_res_ed_legacy$res_tab
       file_out <- file.path(output_dir, "fit_res_edited_legacy_conc.csv")
       utils::write.csv(res_tab_ed_legacy, file_out)
@@ -583,7 +583,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   utils::write.csv(res_tab_unscaled, file.path(output_dir,
                                                "fit_res_edit_off_unscaled.csv"))
   res_tab_ed_unscaled <- append_p_vols(res_tab_ed_unscaled, p_vols)
-  res_tab_ed_unscaled <- append_mpress_gaba(res_tab_ed_unscaled)
+  # res_tab_ed_unscaled <- append_mpress_gaba(res_tab_ed_unscaled)
   utils::write.csv(res_tab_ed_unscaled, file.path(output_dir,
                                                "fit_res_edited_unscaled.csv"))
   

@@ -803,6 +803,22 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     D_cut$Gln <- NULL
   }
   
+  if (("GABA_A" %in% colnames(amps)) & ("GABA_B" %in% colnames(amps))) {
+    amps['GABAplus'] <- amps['GABA_A'] + amps['GABA_B']
+    comb_sigs <- comb_sigs + 1
+    D_cut$GABAplus <- D_cut$GABA_A + D_cut$GABA_B
+    D_cut$GABA_A <- NULL
+    D_cut$GABA_B <- NULL
+  }
+  
+  if (("Glx_C" %in% colnames(amps)) & ("Glx_D" %in% colnames(amps))) {
+    amps['Glx'] <- amps['Glx_C'] + amps['Glx_D']
+    comb_sigs <- comb_sigs + 1
+    D_cut$Glx <- D_cut$Glx_C + D_cut$Glx_D
+    D_cut$Glx_C <- NULL
+    D_cut$Glx_D <- NULL
+  }
+  
   if (("Lip09" %in% colnames(amps)) & ("MM09" %in% colnames(amps))) {
     amps['tLM09'] <- amps['Lip09'] + amps['MM09']
     comb_sigs <- comb_sigs + 1
