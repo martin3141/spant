@@ -35,7 +35,6 @@ Imports:
     mmand,
     RNifti,
     RNiftyReg,
-    fslr,
     fields,
     numDeriv,
     nloptr,
@@ -55,6 +54,7 @@ Suggests:
     parallel,
     digest,
     readxl,
+    fslr,
     car
 VignetteBuilder:
     knitr
