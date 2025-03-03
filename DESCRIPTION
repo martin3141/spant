@@ -35,6 +35,7 @@ Imports:
     mmand,
     RNifti,
     RNiftyReg,
+    fslr,
     fields,
     numDeriv,
     nloptr,
