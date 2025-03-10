@@ -438,7 +438,12 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     basis <- external_basis
   }
   
-  if (is.null(fit_opts_edited)) fit_opts_edited <- abfit_reg_opts()
+  # if (is.null(fit_opts_edited)) fit_opts_edited <- abfit_reg_opts()
+  
+  if (is.null(fit_opts_edited)) {
+    fit_opts_edited <- abfit_reg_opts(auto_bl_flex = FALSE, bl_ed_pppm = 3)
+  }
+  
   if (is.null(fit_opts_ed_off)) fit_opts_ed_off <- abfit_reg_opts()
   
   if (is.null(output_ratio)) output_ratio <- "tCr"
@@ -471,10 +476,13 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                    get_uncoupled_mol("NAA",    2.01, "1H",  -1.5,  3, 0),
                    get_uncoupled_mol("Glx_A",  2.31, "1H",   1,    3, 0),
                    get_uncoupled_mol("Glx_B",  2.40, "1H",   1,    3, 0),
-                   get_uncoupled_mol("GABA_A", 2.95, "1H",   1,   12, 1),
-                   get_uncoupled_mol("GABA_B", 3.04, "1H",   1,   12, 1),
-                   get_uncoupled_mol("Glx_C",  3.72, "1H",   1,    3, 0),
-                   get_uncoupled_mol("Glx_D",  3.8,  "1H",   1,    3, 0))
+                   # 2 Gaus model
+                   get_uncoupled_mol("GABA_A", 2.95, "1H",   1.5,   12, 1),
+                   get_uncoupled_mol("GABA_B", 3.04, "1H",   1.5,   12, 1),
+                   # 1 Gaus model
+                   # get_uncoupled_mol("GABA",   3.00, "1H",   3,    22, 1),
+                   get_uncoupled_mol("Glx_C",  3.72, "1H",   1,   2.5, 0),
+                   get_uncoupled_mol("Glx_D",  3.8,  "1H",   1,   2.5, 0))
 
   basis_ed <- sim_basis(mol_list, acq_paras = edited)
   
