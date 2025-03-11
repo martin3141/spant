@@ -348,6 +348,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
                               TE1 = vars$te1,
                               TE2 = vars$te2,
                               TE3 = vars$te3))
+    meta$TE <- TE1 + TE2 + TE3
   }
 
   mrs_data <- mrs_data(data = data, ft = vars$ft, resolution = paras$res,
@@ -538,10 +539,10 @@ read_siemens_txt_hdr <- function(input, version = "vd", verbose = FALSE,
       vars$te  <- (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
       vars$te1 <- (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
     } else if (startsWith(line, "alTE[1]")) {
-      vars$te  <- vars$te + (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
+      # vars$te  <- vars$te + (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
       vars$te2 <- (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
     } else if (startsWith(line, "alTE[2]")) {
-      vars$te  <- vars$te + (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
+      # vars$te  <- vars$te + (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
       vars$te3 <- (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
     } else if (startsWith(line, "alTR[0]")) {
       vars$tr <- (as.numeric(strsplit(line, "=")[[1]][2])) / 1e6
