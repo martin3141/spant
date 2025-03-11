@@ -348,7 +348,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
                               TE1 = vars$te1,
                               TE2 = vars$te2,
                               TE3 = vars$te3))
-    meta$TE <- TE1 + TE2 + TE3
+    meta$EchoTime <- vars$te1 + vars$te2 + vars$te3
   }
 
   mrs_data <- mrs_data(data = data, ft = vars$ft, resolution = paras$res,
