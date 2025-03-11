@@ -189,7 +189,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   # create the output dir if it doesn't exist
   if(!dir.exists(output_dir)) {
-    dir.create(output_dir)
+    dir.create(output_dir, recursive = TRUE)
   } else {
     warning(paste0("Output directory already exists : ", output_dir))
   }
