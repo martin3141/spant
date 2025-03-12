@@ -356,6 +356,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       if (verbose) cat("Simulating shaped PRESS sequence.\n")
       pulse_file <- system.file("extdata", "press_refocus.pta",
                                 package = "spant")
+      # round B0 to 5 s.f. for effective basis caching
+      metab$ft <- signif(metab$ft, 5)
       basis <- sim_basis(mol_list, acq_paras = metab,
                          pul_seq = seq_press_2d_shaped, TE1 = sim_paras$TE1,
                          TE2 = sim_paras$TE2, use_basis_cache = use_basis_cache,
