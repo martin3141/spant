@@ -590,6 +590,9 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (extra_output) {
     if (verbose) cat("Writing extra output files.\n")
     saveRDS(results, file = file.path(output_dir, "fit_res_data.rds"))
+    utils::write.csv(results$fit_res$fits[[1]],
+                     file = file.path(output_dir, "fit_plot_data.csv"),
+                     row.names = FALSE)
   }
   
   if (verbose) cat("fit_svs finished.\n")
