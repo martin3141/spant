@@ -111,6 +111,9 @@ parser <- add_option(parser, c("--lcm_bin_path"), action = "store", type = "char
 parser <- add_option(parser, c("--plot_ppm_xlim"), action = "store", type = "character",
                      help="Plotting ppm axis limits in the html results.")
 
+parser <- add_option(parser, c("--extra_ouput"), action = "store", default = FALSE,
+                     help="Write extra output files for generating custom plots. Defaults\n\t\tto FALSE.")
+
 parser <- add_option(parser, c("-v", "--verbose"), action = "store", default = FALSE,
                      help="Output potentially useful information.")
 
@@ -178,4 +181,5 @@ fit_res <- fit_svs(input = opt[["input"]],
                    dyn_av_scheme_file = opt[["dyn_av_scheme_file"]],
                    lcm_bin_path = opt[["lcm_bin_path"]],
                    plot_ppm_xlim = opt[["plot_ppm_xlim"]],
+                   extra_output = opt[["extra_output"]],
                    verbose = opt[["verbose"]])

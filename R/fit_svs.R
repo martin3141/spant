@@ -76,6 +76,7 @@
 #' @param plot_ppm_xlim plotting ppm axis limits in the html results.
 #' results.
 #' @param extra_output write extra output files for generating custom plots.
+#' Defaults to FALSE.
 #' @param verbose output potentially useful information.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
