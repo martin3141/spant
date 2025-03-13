@@ -40,6 +40,7 @@ fit_svs(
   dyn_av_scheme_file = NULL,
   lcm_bin_path = NULL,
   plot_ppm_xlim = NULL,
+  extra_output = FALSE,
   verbose = FALSE
 )
 }
@@ -151,6 +152,8 @@ text or csv format.}
 
 \item{plot_ppm_xlim}{plotting ppm axis limits in the html results.
 results.}
+
+\item{extra_output}{write extra output files for generating custom plots.}
 
 \item{verbose}{output potentially useful information.}
 }

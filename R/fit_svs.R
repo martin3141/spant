@@ -75,6 +75,7 @@
 #' @param lcm_bin_path set the path to LCModel binary.
 #' @param plot_ppm_xlim plotting ppm axis limits in the html results.
 #' results.
+#' @param extra_output write extra output files for generating custom plots.
 #' @param verbose output potentially useful information.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
@@ -98,7 +99,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                     summary_measures = NULL, dyn_av_block_size = NULL,
                     dyn_av_scheme = NULL, dyn_av_scheme_file = NULL,
                     lcm_bin_path = NULL, plot_ppm_xlim = NULL,
-                    verbose = FALSE) {
+                    extra_output = FALSE, verbose = FALSE) {
   
   argg  <- c(as.list(environment()))
   
@@ -584,6 +585,11 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (verbose) cat("Generating html report.\n")
   rmarkdown::render(rmd_file, params = results, output_file = rmd_out_f,
                     quiet = !verbose)
+  
+  if (extra_output) {
+    if (verbose) cat("Writing extra output files.\n")
+    saveRDS(results, file = file.path(output_dir, "fit_res_data.rds"))
+  }
   
   if (verbose) cat("fit_svs finished.\n")
   
