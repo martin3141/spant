@@ -153,7 +153,8 @@ text or csv format.}
 \item{plot_ppm_xlim}{plotting ppm axis limits in the html results.
 results.}
 
-\item{extra_output}{write extra output files for generating custom plots.}
+\item{extra_output}{write extra output files for generating custom plots.
+Defaults to FALSE.}
 
 \item{verbose}{output potentially useful information.}
 }
