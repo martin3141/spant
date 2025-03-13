@@ -2,7 +2,8 @@
 * Added voxel render on MRI images to fit_svs.
 * Added voxel segmentation render and support to fit_svs.
 * Bug fix for TE parameter determination from Siemens TWIX files.
-* Added extra_output option to fit_svs.
+* Added extra_output option to fit_svs to output raw fitting results in rda
+format and fitting data points in csv format for producing custom plots.
 
 # spant 3.2.0
 * Individual metabolite plots in the html report are now labelled to workaround
