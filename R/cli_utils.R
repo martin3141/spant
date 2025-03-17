@@ -15,12 +15,14 @@ install_cli <- function(path = NULL) {
   package_fit_svs_path <- system.file('cli_scripts', 'spant_fit_svs',
                                       package = 'spant')
   
-  # copy script from package directory
-  file.copy(package_fit_svs_path, fit_svs_path, overwrite = TRUE)
+  # embed the spant version number into the cli script
+  script_txt <- readLines(package_fit_svs_path)
+  ver_line <- paste0("ver <- \"", utils::packageVersion("spant"), "\"")
+  script_txt <- c("#!/usr/bin/env Rscript --vanilla", "", ver_line, "",
+                  script_txt)
   
-  # append the spant version number
-  ver_line <- paste("\n#", utils::packageVersion("spant"))
-  write(ver_line, file = fit_svs_path, append = TRUE)
+  # write to filesystem
+  write(script_txt, file = fit_svs_path)
   
   # make executable
   Sys.chmod(fit_svs_path, mode = "755")

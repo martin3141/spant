@@ -1,7 +1,9 @@
-#!/usr/bin/env Rscript --vanilla
-
 suppressPackageStartupMessages(library(spant))
 suppressPackageStartupMessages(library(optparse))
+
+if (ver != utils::packageVersion("spant")) {
+  warning("c/l script and spant version missmatch. Reinstall the c/l scripts with : sudo Rscript -e \"spant::install_cli()\"")
+}
 
 parser <- OptionParser(prog = "spant_fit_svs", description = "Command-line interface for the fit_svs function in the spant R package",
                        formatter = IndentedHelpFormatter)
