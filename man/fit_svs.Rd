@@ -27,6 +27,8 @@ fit_svs(
   output_ratio = NULL,
   ecc = FALSE,
   hsvd_width = NULL,
+  decimate = FALSE,
+  trunc_fid_pts = NULL,
   fit_method = NULL,
   fit_opts = NULL,
   fit_subset = NULL,
@@ -109,6 +111,14 @@ defaults to FALSE.}
 width is between -width and +width Hz, with 0 Hz being defined at the centre
 of the spectral width. Default is disabled (set to NULL), 30 Hz is a
 reasonable value.}
+
+\item{decimate}{option on decimate the data by a factor of 2 before analysis.
+Defaults to FALSE.}
+
+\item{trunc_fid_pts}{number of points to truncate the input data by in the
+time-domain. E.g. setting to 1024 will ensure data with more time-domain
+points will be truncated to a length of 1024. Defaults to NULL, where
+truncation is not performed.}
 
 \item{fit_method}{can be "ABFIT-REG" or "LCMODEL. Defaults to "ABFIT-REG".}
 

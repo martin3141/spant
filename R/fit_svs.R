@@ -45,6 +45,12 @@
 #' width is between -width and +width Hz, with 0 Hz being defined at the centre
 #' of the spectral width. Default is disabled (set to NULL), 30 Hz is a
 #' reasonable value.
+#' @param decimate option on decimate the data by a factor of 2 before analysis.
+#' Defaults to FALSE.
+#' @param trunc_fid_pts number of points to truncate the input data by in the
+#' time-domain. E.g. setting to 1024 will ensure data with more time-domain
+#' points will be truncated to a length of 1024. Defaults to NULL, where
+#' truncation is not performed.
 #' @param fit_method can be "ABFIT-REG" or "LCMODEL. Defaults to "ABFIT-REG".
 #' @param fit_opts options to pass to the fitting method.
 #' @param fit_subset specify a subset of dynamics to analyse, for example
@@ -94,13 +100,14 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                     TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
                     append_basis = NULL, remove_basis = NULL, pre_align = TRUE,
                     dfp_corr = TRUE, output_ratio = NULL, ecc = FALSE,
-                    hsvd_width = NULL, fit_method = NULL, fit_opts = NULL, 
-                    fit_subset = NULL, legacy_ws = FALSE, w_att = 0.7,
-                    w_conc = 35880, use_basis_cache = "auto",
-                    summary_measures = NULL, dyn_av_block_size = NULL,
-                    dyn_av_scheme = NULL, dyn_av_scheme_file = NULL,
-                    lcm_bin_path = NULL, plot_ppm_xlim = NULL,
-                    extra_output = FALSE, verbose = FALSE) {
+                    hsvd_width = NULL, decimate = FALSE, trunc_fid_pts = NULL,
+                    fit_method = NULL, fit_opts = NULL, fit_subset = NULL,
+                    legacy_ws = FALSE, w_att = 0.7, w_conc = 35880,
+                    use_basis_cache = "auto", summary_measures = NULL,
+                    dyn_av_block_size = NULL, dyn_av_scheme = NULL,
+                    dyn_av_scheme_file = NULL, lcm_bin_path = NULL,
+                    plot_ppm_xlim = NULL, extra_output = FALSE,
+                    verbose = FALSE) {
   
   argg  <- c(as.list(environment()))
   
@@ -219,6 +226,12 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       metab <- coil_comb_res$metab
       w_ref <- coil_comb_res$ref
     }
+  }
+  
+  # decimate if specified
+  if (decimate) {
+    if (verbose) cat("Decimating data.\n")
+    metab <- decimate_mrs_fd(metab)
   }
   
   # extract a subset of dynamic scans if specified
@@ -424,6 +437,14 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (!is.null(hsvd_width)) {
     if (verbose) cat("Applying HSVD filter.\n")
     metab <- hsvd_filt(metab, xlim = c(-hsvd_width, hsvd_width))
+  }
+  
+  # truncate the FID if option is set
+  if (!is.null(trunc_fid_pts)) {
+    if (verbose) cat("Truncating FID.\n")
+    metab <- crop_td_pts(metab, end = trunc_fid_pts)
+    basis_mrs <- crop_td_pts(basis2mrs_data(basis), end = trunc_fid_pts)
+    basis <- mrs_data2basis(basis_mrs, names = basis$names)
   }
   
   # set path to the LCModel binary

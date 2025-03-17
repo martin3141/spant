@@ -232,30 +232,38 @@ if (!is.null(dyn_data_uncorr_ed_off)) {
   if (!is.null(dyn_data_corr_ed_off)) {
     cat("### Edit-off with dyn. correction\n")
     if (is.null(params$plot_ppm_xlim)) {
-      image(dyn_data_corr_ed_off, xlim = c(4, 0.5))
+      image(dyn_data_corr_ed_off, xlim = c(4, 0.5), vline = 2.01,
+            vline_col = "black")
     } else {
-      image(dyn_data_corr_ed_off, xlim = params$plot_ppm_xlim)
+      image(dyn_data_corr_ed_off, xlim = params$plot_ppm_xlim, vline = 2.01,
+            vline_col = "black")
     }
   }
   if (!is.null(dyn_data_corr_ed_on)) {
     cat("\n\n### Edit-on with dyn. correction\n")
     if (is.null(params$plot_ppm_xlim)) {
-      image(dyn_data_corr_ed_on, xlim = c(4, 0.5))
+      image(dyn_data_corr_ed_on, xlim = c(4, 0.5), vline = 3.03,
+            vline_col = "black")
     } else {
-      image(dyn_data_corr_ed_on, xlim = params$plot_ppm_xlim)
+      image(dyn_data_corr_ed_on, xlim = params$plot_ppm_xlim, vline = 3.03,
+            vline_col = "black")
     }
   }
   cat("\n\n### Edit-off without dyn. correction\n")
   if (is.null(params$plot_ppm_xlim)) {
-    image(dyn_data_uncorr_ed_off, xlim = c(4, 0.5))
+    image(dyn_data_uncorr_ed_off, xlim = c(4, 0.5), vline = 2.01,
+          vline_col = "black")
   } else {
-    image(dyn_data_uncorr_ed_off, xlim = params$plot_ppm_xlim)
+    image(dyn_data_uncorr_ed_off, xlim = params$plot_ppm_xlim, vline = 2.01,
+          vline_col = "black")
   }
   cat("\n\n### Edit-on without dyn. correction\n")
   if (is.null(params$plot_ppm_xlim)) {
-    image(dyn_data_uncorr_ed_on, xlim = c(4, 0.5))
+    image(dyn_data_uncorr_ed_on, xlim = c(4, 0.5), vline = 3.03,
+          vline_col = "black")
   } else {
-    image(dyn_data_uncorr_ed_on, xlim = params$plot_ppm_xlim)
+    image(dyn_data_uncorr_ed_on, xlim = params$plot_ppm_xlim, vline = 3.03,
+          vline_col = "black")
   }
 }
 ```

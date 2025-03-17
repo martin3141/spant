@@ -132,20 +132,25 @@ cat("See the [spant User Guide](https://spantdoc.wilsonlab.co.uk/water_scaling) 
 
 ```{r, results = 'asis', fig.width=7, fig.height=7}
 if (!is.null(dyn_data_uncorr)) {
+  vline <- 2.01
   cat("## Dynamic plots {.tabset}\n")
   if (!is.null(dyn_data_corr)) {
     cat("### Spectrogram with dynamic correction\n")
     if (is.null(params$plot_ppm_xlim)) {
-      image(dyn_data_corr, xlim = c(4, 0.5))
+      image(dyn_data_corr, xlim = c(4, 0.5), vline = vline,
+            vline_col = "black")
     } else {
-      image(dyn_data_corr, xlim = params$plot_ppm_xlim)
+      image(dyn_data_corr, xlim = params$plot_ppm_xlim, vline = vline,
+            vline_col = "black")
     }
   }
   cat("\n\n### Spectrogram without dynamic correction\n")
   if (is.null(params$plot_ppm_xlim)) {
-    image(dyn_data_uncorr, xlim = c(4, 0.5))
+    image(dyn_data_uncorr, xlim = c(4, 0.5), vline = vline,
+          vline_col = "black")
   } else {
-    image(dyn_data_uncorr, xlim = params$plot_ppm_xlim)
+    image(dyn_data_uncorr, xlim = params$plot_ppm_xlim, vline = vline, 
+          vline_col = "black")
   }
 }
 ```

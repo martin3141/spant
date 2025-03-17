@@ -30,6 +30,8 @@ fit_svs_edited(
   output_ratio = NULL,
   ecc = FALSE,
   hsvd_width = NULL,
+  decimate = FALSE,
+  trunc_fid_pts = NULL,
   fit_opts_edited = NULL,
   fit_opts_ed_off = NULL,
   fit_subset = NULL,
@@ -120,6 +122,14 @@ defaults to FALSE.}
 width is between -width and +width Hz, with 0 Hz being defined at the centre
 of the spectral width. Default is disabled (set to NULL), 30 Hz is a
 reasonable value.}
+
+\item{decimate}{option on decimate the data by a factor of 2 before analysis.
+Defaults to FALSE.}
+
+\item{trunc_fid_pts}{number of points to truncate the input data by in the
+time-domain. E.g. setting to 1024 will ensure data with more time-domain
+points will be truncated to a length of 1024. Defaults to NULL, where
+truncation is not performed.}
 
 \item{fit_opts_edited}{options to pass to the fitting method for the
 edited spectrum.}

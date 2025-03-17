@@ -51,6 +51,12 @@
 #' width is between -width and +width Hz, with 0 Hz being defined at the centre
 #' of the spectral width. Default is disabled (set to NULL), 30 Hz is a
 #' reasonable value.
+#' @param decimate option on decimate the data by a factor of 2 before analysis.
+#' Defaults to FALSE.
+#' @param trunc_fid_pts number of points to truncate the input data by in the
+#' time-domain. E.g. setting to 1024 will ensure data with more time-domain
+#' points will be truncated to a length of 1024. Defaults to NULL, where
+#' truncation is not performed.
 #' @param fit_opts_edited options to pass to the fitting method for the 
 #' edited spectrum.
 #' @param fit_opts_ed_off options to pass to the fitting method for the
@@ -104,8 +110,9 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                            remove_basis_ed_off = NULL,
                            pre_align = TRUE, dfp_corr = TRUE,
                            output_ratio = NULL, ecc = FALSE,
-                           hsvd_width = NULL, fit_opts_edited = NULL,
-                           fit_opts_ed_off = NULL, 
+                           hsvd_width = NULL, decimate = FALSE,
+                           trunc_fid_pts = NULL, fit_opts_edited = NULL,
+                           fit_opts_ed_off = NULL,
                            fit_subset = NULL, legacy_ws = FALSE, w_att = 0.7,
                            w_conc = 35880, use_basis_cache = "auto",
                            summary_measures = NULL, dyn_av_block_size = NULL,
@@ -261,6 +268,12 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       metab <- coil_comb_res$metab
       w_ref <- coil_comb_res$ref
     }
+  }
+  
+  # decimate if specified
+  if (decimate) {
+    if (verbose) cat("Decimating data.\n")
+    metab <- decimate_mrs_fd(metab)
   }
   
   ed_on  <- get_fh_dyns(metab)
@@ -469,6 +482,17 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     if (verbose) cat("Applying HSVD filter.\n")
     ed_off <- hsvd_filt(ed_off, xlim = c(-hsvd_width, hsvd_width))
     ed_on  <- hsvd_filt(ed_on,  xlim = c(-hsvd_width, hsvd_width))
+    edited <- hsvd_filt(edited, xlim = c(-hsvd_width, hsvd_width))
+  }
+  
+  # truncate the FID if option is set
+  if (!is.null(trunc_fid_pts)) {
+    if (verbose) cat("Truncating FID.\n")
+    ed_off <- crop_td_pts(ed_off, end = trunc_fid_pts)
+    ed_on  <- crop_td_pts(ed_on,  end = trunc_fid_pts)
+    edited <- crop_td_pts(edited, end = trunc_fid_pts)
+    basis_mrs <- crop_td_pts(basis2mrs_data(basis), end = trunc_fid_pts)
+    basis <- mrs_data2basis(basis_mrs, names = basis$names)
   }
   
   # edit-off fitting
