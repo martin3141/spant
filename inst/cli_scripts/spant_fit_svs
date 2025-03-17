@@ -72,6 +72,12 @@ parser <- add_option(parser, c("--ecc"), action = "store", default = FALSE,
 parser <- add_option(parser, c("--hsvd_width"), action = "store", type = "double",
                      help="Set the width of the HSVD filter in Hz. Note the applied width\n\t\tis between -width and +width Hz, with 0 Hz being defined at the\n\t\tcentre of the spectral width. Default is disabled (set to NULL),\n\t\t30 Hz is a reasonable value.")
 
+parser <- add_option(parser, c("--decimate"), action = "store", default = FALSE,
+                     help="Option on decimate the data by a factor of 2 before analysis. Defaults to FALSE.")
+
+parser <- add_option(parser, c("--trunc_fid_pts"), action = "store", type = "integer",
+                     help="Number of points to truncate the input data by in the time-domain. E.g. setting to 1024 will ensure data with more time-domain points will be truncated to a length of 1024. Defaults to NULL, where truncation is not performed.")
+
 parser <- add_option(parser, c("-f", "--fit_method"), action = "store", type = "character",
                      help="Fitting method, can be 'ABFIT-REG' or 'LCMODEL'. Defaults to\n\t\t'ABFIT-REG'.")
 
@@ -168,6 +174,8 @@ fit_res <- fit_svs(input = opt[["input"]],
                    output_ratio = opt[["output_ratio"]],
                    ecc = opt[["ecc"]],
                    hsvd_width = opt[["hsvd_width"]],
+                   decimate = opt[["decimate"]],
+                   trunc_fid_pts = opt[["trunc_fid_pts"]],
                    fit_method = opt[["fit_method"]],
                    fit_opts = opt[["fit_opts"]],
                    fit_subset = opt[["fit_subset"]],
