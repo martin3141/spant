@@ -102,9 +102,9 @@ stackplot.basis_set <- function(x, ...) {
 read_basis <- function(basis_file, ref = def_ref(), sort_basis = TRUE) {
   
   # open the file
-  con  <- file(basis_file, open = "r")
+  con   <- file(basis_file, open = "r")
   names <- vector()
-  data <- vector()
+  data  <- vector()
   
   while (length(line <- readLines(con, n = 1, warn = FALSE)) > 0) {
     # reading main header
@@ -142,7 +142,12 @@ read_basis <- function(basis_file, ref = def_ref(), sort_basis = TRUE) {
           
           # ifftshift
           data_pts <- pracma::ifftshift(data_pts)
-          data     <- cbind(data, data_pts) # slow?
+          data <- cbind(data, data_pts) # slow?
+          # if (class(data) == "logical") {
+          #   data < t(as.matrix(data_pts)) 
+          # } else {
+          #   data <- cbind(data, data_pts) # slow?
+          # }
           break
         }
       }
@@ -158,6 +163,11 @@ read_basis <- function(basis_file, ref = def_ref(), sort_basis = TRUE) {
   if (sort_basis) basis_set <- sort_basis(basis_set)
   
   dimnames(basis_set$data) <- NULL
+  
+  # case when only one signal in basis file
+  if (class(basis_set$data) == "complex") {
+    basis_set$data <- as.matrix(basis_set$data)
+  }
   
   return(basis_set)
 }
