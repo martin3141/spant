@@ -11,6 +11,7 @@ fit_svs(
   mri = NULL,
   mri_seg = NULL,
   external_basis = NULL,
+  append_external_basis = FALSE,
   p_vols = NULL,
   format = NULL,
   pul_seq = NULL,
@@ -58,6 +59,11 @@ fit_svs(
 \item{mri_seg}{filepath or nifti object containing segmented MRI data.}
 
 \item{external_basis}{precompiled basis set object to use for analysis.}
+
+\item{append_external_basis}{append the external basis with the internally
+generated one. Useful for adding experimentally acquired baseline signals to
+internally simulated basis sets. Defaults to FALSE - meaning only signals
+from the external basis will be used in analysis.}
 
 \item{p_vols}{a numeric vector of partial volumes expressed as percentages.
 Defaults to 100\% white matter. A voxel containing 100\% gray matter tissue

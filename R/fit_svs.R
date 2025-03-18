@@ -8,6 +8,10 @@
 #' @param mri filepath or nifti object containing anatomical MRI data.
 #' @param mri_seg filepath or nifti object containing segmented MRI data.
 #' @param external_basis precompiled basis set object to use for analysis.
+#' @param append_external_basis append the external basis with the internally
+#' generated one. Useful for adding experimentally acquired baseline signals to
+#' internally simulated basis sets. Defaults to FALSE - meaning only signals 
+#' from the external basis will be used in analysis.
 #' @param p_vols a numeric vector of partial volumes expressed as percentages.
 #' Defaults to 100% white matter. A voxel containing 100% gray matter tissue
 #' would use : p_vols = c(WM = 0, GM = 100, CSF = 0).
@@ -95,7 +99,8 @@
 #' }
 #' @export
 fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
-                    mri_seg = NULL, external_basis = NULL, p_vols = NULL,
+                    mri_seg = NULL, external_basis = NULL,
+                    append_external_basis = FALSE, p_vols = NULL,
                     format = NULL, pul_seq = NULL, TE = NULL, TR = NULL,
                     TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
                     append_basis = NULL, remove_basis = NULL, pre_align = TRUE,
@@ -119,11 +124,11 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     stop("dyn_av_scheme and dyn_av_scheme_file options cannot both be set. Use one or the other.")
   }
   
-  if (!is.null(external_basis) & !is.null(append_basis)) {
+  if (!is.null(external_basis) & !is.null(append_basis) & !append_external_basis) {
     stop("external_basis and append_basis options cannot both be set. Use one or the other.")
   }
   
-  if (!is.null(external_basis) & !is.null(remove_basis)) {
+  if (!is.null(external_basis) & !is.null(remove_basis) & !append_external_basis) {
     stop("external_basis and remove_basis options cannot both be set. Use one or the other.")
   }
   
@@ -313,7 +318,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (ecc & w_ref_available) metab <- ecc(metab, w_ref)
   
   # simulate a basis if needed
-  if (is.null(external_basis)) {
+  if (is.null(external_basis) | append_external_basis) {
     
     if (is.null(TE)) stop("Could not determine the sequence echo time. Please provide the TE argument.")
     
@@ -395,8 +400,14 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                          use_basis_cache = use_basis_cache, verbose = verbose)
     }
     if (verbose) print(basis)
-  } else {
-    basis <- external_basis
+  }
+  
+  if (!is.null(external_basis)) {
+    if (append_external_basis) {
+      basis <- append_basis(basis, resample_basis(external_basis, metab))
+    } else {
+      basis <- resample_basis(external_basis, metab)
+    }
   }
   
   # check the fit_method is sane

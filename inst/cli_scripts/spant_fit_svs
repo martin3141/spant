@@ -26,6 +26,9 @@ parser <- add_option(parser, c("--mri_seg"), action = "store", type = "character
 parser <- add_option(parser, c("-b", "--external_basis"), action = "store", type = "character",
                      help="Precompiled basis set to use for analysis.")
 
+parser <- add_option(parser, c("--append_external_basis"), action = "store", default = FALSE,
+                     help="Append the external basis with the internally generated one.\n\t\tUseful for adding experimentally acquired baseline signals to\n\t\tinternally simulated basis sets. Defaults to FALSE - meaning\n\t\tonly signals from the external basis will be used in analysis.")
+
 parser <- add_option(parser, c("-p", "--p_vols"), action = "store", type = "character",
                      help="A numeric vector of partial volumes expressed as percentages.\n\t\tDefaults to 100% white matter. A voxel containing 100% gray\n\t\tmatter tissue would use : p_vols = c(WM = 0, GM = 100, CSF = 0).")
 
@@ -75,10 +78,10 @@ parser <- add_option(parser, c("--hsvd_width"), action = "store", type = "double
                      help="Set the width of the HSVD filter in Hz. Note the applied width\n\t\tis between -width and +width Hz, with 0 Hz being defined at the\n\t\tcentre of the spectral width. Default is disabled (set to NULL),\n\t\t30 Hz is a reasonable value.")
 
 parser <- add_option(parser, c("--decimate"), action = "store", default = FALSE,
-                     help="Option on decimate the data by a factor of 2 before analysis. Defaults to FALSE.")
+                     help="Option on decimate the data by a factor of 2 before analysis.\n\t\tDefaults to FALSE.")
 
 parser <- add_option(parser, c("--trunc_fid_pts"), action = "store", type = "integer",
-                     help="Number of points to truncate the input data by in the time-domain. E.g. setting to 1024 will ensure data with more time-domain points will be truncated to a length of 1024. Defaults to NULL, where truncation is not performed.")
+                     help="Number of points to truncate the input data by in the\n\t\ttime-domain. E.g. setting to 1024 will ensure data with more\n\t\ttime-domain points will be truncated to a length of 1024.\n\t\tDefaults to NULL, where truncation is not performed.")
 
 parser <- add_option(parser, c("-f", "--fit_method"), action = "store", type = "character",
                      help="Fitting method, can be 'ABFIT-REG' or 'LCMODEL'. Defaults to\n\t\t'ABFIT-REG'.")
@@ -119,7 +122,7 @@ parser <- add_option(parser, c("--lcm_bin_path"), action = "store", type = "char
 parser <- add_option(parser, c("--plot_ppm_xlim"), action = "store", type = "character",
                      help="Plotting ppm axis limits in the html results.")
 
-parser <- add_option(parser, c("--extra_ouput"), action = "store", default = FALSE,
+parser <- add_option(parser, c("--extra_output"), action = "store", default = FALSE,
                      help="Write extra output files for generating custom plots. Defaults\n\t\tto FALSE.")
 
 parser <- add_option(parser, c("-v", "--verbose"), action = "store", default = FALSE,
@@ -160,6 +163,7 @@ fit_res <- fit_svs(input = opt[["input"]],
                    mri = opt[["mri"]],
                    mri_seg = opt[["mri_seg"]],
                    external_basis = opt[["external_basis"]],
+                   append_external_basis = opt[["append_external_basis"]],
                    p_vols = opt[["p_vols"]],
                    format = opt[["format"]],
                    pul_seq = opt[["pul_seq"]],
