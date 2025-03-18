@@ -165,7 +165,7 @@ read_basis <- function(basis_file, ref = def_ref(), sort_basis = TRUE) {
   dimnames(basis_set$data) <- NULL
   
   # case when only one signal in basis file
-  if (class(basis_set$data) == "complex") {
+  if (inherits(basis_set$data, "complex")) {
     basis_set$data <- as.matrix(basis_set$data)
   }
   

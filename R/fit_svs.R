@@ -404,8 +404,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   if (!is.null(external_basis)) {
     
-    if (class(external_basis) != "basis_set") {
-      if (class(external_basis) == "character") {
+    if (!inherits(external_basis, "basis_set")) {
+      if (inherits(external_basis, "character")) {
         # TODO - could make this a bit more flexible, eg read a directory of
         # NIfTI MRS files if a dir name is passed, assume an MRS data file if
         # extension isn't .BASIS or .basis...
