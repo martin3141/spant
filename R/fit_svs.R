@@ -237,6 +237,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (decimate) {
     if (verbose) cat("Decimating data.\n")
     metab <- decimate_mrs_fd(metab)
+    if (w_ref_available) w_ref <- decimate_mrs_fd(w_ref)
   }
   
   # extract a subset of dynamic scans if specified
@@ -467,6 +468,9 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (!is.null(trunc_fid_pts)) {
     if (verbose) cat("Truncating FID.\n")
     metab <- crop_td_pts(metab, end = trunc_fid_pts)
+    
+    if (w_ref_available) w_ref <- crop_td_pts(w_ref, end = trunc_fid_pts)
+    
     basis_mrs <- crop_td_pts(basis2mrs_data(basis), end = trunc_fid_pts)
     basis <- mrs_data2basis(basis_mrs, names = basis$names)
   }
