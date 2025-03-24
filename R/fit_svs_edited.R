@@ -562,7 +562,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       res_tab_ratio <- fit_res_rat$res_tab
       file_out <- file.path(output_dir, paste0("fit_res_edit_off_",
                                         output_ratio_element, "_ratio.csv"))
-      utils::write.csv(res_tab_ratio, file_out)
+      utils::write.csv(res_tab_ratio, file_out, row.names = FALSE)
       
       # edited ratio
       fit_res_ed_rat <- scale_amp_ratio_value(fit_res_ed, value)
@@ -573,7 +573,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       res_tab_ed_ratio <- fit_res_ed_rat$res_tab
       file_out <- file.path(output_dir, paste0("fit_res_edited_",
                                         output_ratio_element, "_ratio.csv"))
-      utils::write.csv(res_tab_ed_ratio, file_out)
+      utils::write.csv(res_tab_ed_ratio, file_out, row.names = FALSE)
     }
   } else {
     res_tab_ratio    <- NULL
@@ -587,28 +587,28 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     fit_res_molal <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, TE, TR)
     res_tab_molal <- fit_res_molal$res_tab
     file_out <- file.path(output_dir, "fit_res_edit_off_molal_conc.csv")
-    utils::write.csv(res_tab_molal, file_out)
+    utils::write.csv(res_tab_molal, file_out, row.names = FALSE)
     
     # edited
     fit_res_ed_molal <- scale_amp_molal_pvc(fit_res_ed, w_ref, p_vols, TE, TR)
     # fit_res_ed_molal$res_tab <- append_mpress_gaba(fit_res_ed_molal$res_tab)
     res_tab_ed_molal <- fit_res_ed_molal$res_tab
     file_out <- file.path(output_dir, "fit_res_edited_molal_conc.csv")
-    utils::write.csv(res_tab_ed_molal, file_out)
+    utils::write.csv(res_tab_ed_molal, file_out, row.names = FALSE)
     
     if (legacy_ws) {
       # edit off
       fit_res_legacy <- scale_amp_legacy(fit_res, w_ref, w_att, w_conc)
       res_tab_legacy <- fit_res_legacy$res_tab
       file_out <- file.path(output_dir, "fit_res_edit_off_legacy_conc.csv")
-      utils::write.csv(res_tab_legacy, file_out)
+      utils::write.csv(res_tab_legacy, file_out, row.names = FALSE)
       
       # edited
       fit_res_ed_legacy <- scale_amp_legacy(fit_res_ed, w_ref, w_att, w_conc)
       # fit_res_ed_legacy$res_tab <- append_mpress_gaba(fit_res_ed_legacy$res_tab)
       res_tab_ed_legacy <- fit_res_ed_legacy$res_tab
       file_out <- file.path(output_dir, "fit_res_edited_legacy_conc.csv")
-      utils::write.csv(res_tab_ed_legacy, file_out)
+      utils::write.csv(res_tab_ed_legacy, file_out, row.names = FALSE)
     } else {
       res_tab_legacy <- NULL
       res_tab_ed_legacy <- NULL
@@ -623,11 +623,13 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   # add PVC info to the unscaled output and write to csv
   res_tab_unscaled <- append_p_vols(res_tab_unscaled, p_vols)
   utils::write.csv(res_tab_unscaled, file.path(output_dir,
-                                               "fit_res_edit_off_unscaled.csv"))
+                                               "fit_res_edit_off_unscaled.csv"),
+                   row.names = FALSE)
   res_tab_ed_unscaled <- append_p_vols(res_tab_ed_unscaled, p_vols)
   # res_tab_ed_unscaled <- append_mpress_gaba(res_tab_ed_unscaled)
   utils::write.csv(res_tab_ed_unscaled, file.path(output_dir,
-                                               "fit_res_edited_unscaled.csv"))
+                                               "fit_res_edited_unscaled.csv"),
+                   row.names = FALSE)
   
   # prepare dynamic data for plotting
   if (Ndyns(ed_off_pre_dfp_corr) > 1) {

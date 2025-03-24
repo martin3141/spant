@@ -527,7 +527,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       file_out <- file.path(output_dir, paste0("fit_res_", output_ratio_element,
                                                "_ratio.csv"))
       
-      utils::write.csv(res_tab_ratio, file_out)
+      utils::write.csv(res_tab_ratio, file_out, row.names = FALSE)
     }
   } else {
     res_tab_ratio <- NULL  
@@ -539,12 +539,12 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       fit_res_molal <- scale_amp_molal_pvc(fit_res, w_ref, p_vols, TE, TR)
       res_tab_molal <- fit_res_molal$res_tab
       file_out <- file.path(output_dir, "fit_res_molal_conc.csv")
-      utils::write.csv(res_tab_molal, file_out)
+      utils::write.csv(res_tab_molal, file_out, row.names = FALSE)
       if (legacy_ws) {
         fit_res_legacy <- scale_amp_legacy(fit_res, w_ref, w_att, w_conc)
         res_tab_legacy <- fit_res_legacy$res_tab
         file_out <- file.path(output_dir, "fit_res_legacy_conc.csv")
-        utils::write.csv(res_tab_legacy, file_out)
+        utils::write.csv(res_tab_legacy, file_out, row.names = FALSE)
       } else {
         res_tab_legacy <- NULL
       }
@@ -552,7 +552,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       fit_res_molal <- scale_amp_molar2molal_pvc(fit_res, p_vols, TE, TR)
       res_tab_molal <- fit_res_molal$res_tab
       file_out <- file.path(output_dir, "fit_res_molal_conc.csv")
-      utils::write.csv(res_tab_molal, file_out)
+      utils::write.csv(res_tab_molal, file_out, row.names = FALSE)
       res_tab_legacy <- NULL 
     }
   } else {
@@ -565,7 +565,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   if (fit_method != "LCMODEL") {
     utils::write.csv(res_tab_unscaled, file.path(output_dir,
-                                                 "fit_res_unscaled.csv"))
+                                                 "fit_res_unscaled.csv"),
+                     row.names = FALSE)
   }
   
   # prepare dynamic data for plotting
@@ -689,7 +690,7 @@ fit_svs_group_results <- function(search_path,
   
   file_out <- file.path(output_dir, paste0("fit_res_group_molal_conc.csv"))
   
-  utils::write.csv(res_tab, file_out)
+  utils::write.csv(res_tab, file_out, row.names = FALSE)
 }
 
 check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM,
