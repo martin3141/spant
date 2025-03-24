@@ -44,7 +44,7 @@ fit_svs_edited(
   dyn_av_scheme = NULL,
   dyn_av_scheme_file = NULL,
   plot_ppm_xlim = NULL,
-  extra_output = TRUE,
+  extra_output = FALSE,
   verbose = FALSE
 )
 }
@@ -175,7 +175,7 @@ text or csv format.}
 results.}
 
 \item{extra_output}{write extra output files for generating custom plots.
-Defaults to TRUE.}
+Defaults to FALSE.}
 
 \item{verbose}{output potentially useful information.}
 }

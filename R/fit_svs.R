@@ -86,7 +86,7 @@
 #' @param plot_ppm_xlim plotting ppm axis limits in the html results.
 #' results.
 #' @param extra_output write extra output files for generating custom plots.
-#' Defaults to TRUE.
+#' Defaults to FALSE.
 #' @param verbose output potentially useful information.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
@@ -111,7 +111,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                     use_basis_cache = "auto", summary_measures = NULL,
                     dyn_av_block_size = NULL, dyn_av_scheme = NULL,
                     dyn_av_scheme_file = NULL, lcm_bin_path = NULL,
-                    plot_ppm_xlim = NULL, extra_output = TRUE,
+                    plot_ppm_xlim = NULL, extra_output = FALSE,
                     verbose = FALSE) {
   
   argg  <- c(as.list(environment()))
@@ -635,10 +635,13 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (verbose) cat("Generating html report.\n")
   rmarkdown::render(rmd_file, params = results, output_file = rmd_out_f,
                     quiet = !verbose)
+    
+  saveRDS(results, file = file.path(output_dir, "fit_res_data.rds"))
   
   if (extra_output) {
     if (verbose) cat("Writing extra output files.\n")
-    saveRDS(results, file = file.path(output_dir, "fit_res_data.rds"))
+    
+    warning("extra_output doesn't do anything at the moment...")
     
     # below doesn't really work for dynamic MRS, probably need to create a
     # folder containing files : fit_plot_data/001.csv, fit_plot_data/002.csv...
