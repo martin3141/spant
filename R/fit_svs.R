@@ -636,7 +636,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   rmarkdown::render(rmd_file, params = results, output_file = rmd_out_f,
                     quiet = !verbose)
     
-  saveRDS(results, file = file.path(output_dir, "fit_svs_data.rds"))
+  saveRDS(results, file = file.path(output_dir, "spant_fit_svs_data.rds"))
   
   if (extra_output) {
     if (verbose) cat("Writing extra output files.\n")
