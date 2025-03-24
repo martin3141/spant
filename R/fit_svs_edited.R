@@ -89,6 +89,7 @@
 #' @param plot_ppm_xlim plotting ppm axis limits in the html results.
 #' results.
 #' @param extra_output write extra output files for generating custom plots.
+#' Defaults to TRUE.
 #' @param verbose output potentially useful information.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
@@ -117,7 +118,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                            w_conc = 35880, use_basis_cache = "auto",
                            summary_measures = NULL, dyn_av_block_size = NULL,
                            dyn_av_scheme = NULL, dyn_av_scheme_file = NULL,
-                           plot_ppm_xlim = NULL, extra_output = FALSE,
+                           plot_ppm_xlim = NULL, extra_output = TRUE,
                            verbose = FALSE) {
   
   warning("fit_svs_exited is under active development and liable to significant changes.")

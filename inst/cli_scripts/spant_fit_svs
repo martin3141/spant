@@ -122,8 +122,8 @@ parser <- add_option(parser, c("--lcm_bin_path"), action = "store", type = "char
 parser <- add_option(parser, c("--plot_ppm_xlim"), action = "store", type = "character",
                      help="Plotting ppm axis limits in the html results.")
 
-parser <- add_option(parser, c("--extra_output"), action = "store", default = FALSE,
-                     help="Write extra output files for generating custom plots. Defaults\n\t\tto FALSE.")
+parser <- add_option(parser, c("--extra_output"), action = "store", default = TRUE,
+                     help="Write extra output files for generating custom plots. Defaults\n\t\tto TRUE.")
 
 parser <- add_option(parser, c("-v", "--verbose"), action = "store", default = FALSE,
                      help="Output potentially useful information.")

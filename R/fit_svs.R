@@ -86,7 +86,7 @@
 #' @param plot_ppm_xlim plotting ppm axis limits in the html results.
 #' results.
 #' @param extra_output write extra output files for generating custom plots.
-#' Defaults to FALSE.
+#' Defaults to TRUE.
 #' @param verbose output potentially useful information.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
@@ -111,7 +111,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                     use_basis_cache = "auto", summary_measures = NULL,
                     dyn_av_block_size = NULL, dyn_av_scheme = NULL,
                     dyn_av_scheme_file = NULL, lcm_bin_path = NULL,
-                    plot_ppm_xlim = NULL, extra_output = FALSE,
+                    plot_ppm_xlim = NULL, extra_output = TRUE,
                     verbose = FALSE) {
   
   argg  <- c(as.list(environment()))
@@ -639,9 +639,13 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (extra_output) {
     if (verbose) cat("Writing extra output files.\n")
     saveRDS(results, file = file.path(output_dir, "fit_res_data.rds"))
-    utils::write.csv(results$fit_res$fits[[1]],
-                     file = file.path(output_dir, "fit_plot_data.csv"),
-                     row.names = FALSE)
+    
+    # below doesn't really work for dynamic MRS, probably need to create a
+    # folder containing files : fit_plot_data/001.csv, fit_plot_data/002.csv...
+    # 
+    # utils::write.csv(results$fit_res$fits[[1]],
+    #                  file = file.path(output_dir, "fit_plot_data.csv"),
+    #                  row.names = FALSE)
   }
   
   if (verbose) cat("fit_svs finished.\n")

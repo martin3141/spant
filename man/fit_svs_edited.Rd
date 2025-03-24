@@ -44,7 +44,7 @@ fit_svs_edited(
   dyn_av_scheme = NULL,
   dyn_av_scheme_file = NULL,
   plot_ppm_xlim = NULL,
-  extra_output = FALSE,
+  extra_output = TRUE,
   verbose = FALSE
 )
 }
@@ -174,7 +174,8 @@ text or csv format.}
 \item{plot_ppm_xlim}{plotting ppm axis limits in the html results.
 results.}
 
-\item{extra_output}{write extra output files for generating custom plots.}
+\item{extra_output}{write extra output files for generating custom plots.
+Defaults to TRUE.}
 
 \item{verbose}{output potentially useful information.}
 }
