@@ -656,6 +656,42 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   return(fit_res)
 }
 
+#' Combine fitting results for group analysis.
+#' @param search_path path to start recursive search for fitting results.
+#' @param output_dir directory path to store group results.
+#' @export
+fit_svs_group_results <- function(search_path,
+                                  output_dir = "fit_svs_group_results") {
+  
+  paths <- list.files(path = search_path, pattern = "spant_fit_svs_data.rds",
+                      recursive = TRUE, full.names = TRUE)
+  
+  if (length(paths) == 0) stop("No result files found.")
+  
+  # create the output dir if it doesn't exist
+  if(!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE)
+  } else {
+    warning(paste0("Output directory already exists : ", output_dir))
+  }
+  
+  paths_dir <- dirname(paths)
+  results_n <- length(paths)
+  res_tab_list <- vector(mode = "list", length = results_n)
+  
+  for (n in 1:results_n) {
+    res_tab_list[[n]] <- readRDS(paths[n])$res_tab_molal
+  }
+  
+  res_tab <- do.call("rbind", res_tab_list)
+  
+  res_tab <- cbind(path = paths, res_tab)
+  
+  file_out <- file.path(output_dir, paste0("fit_res_group_molal_conc.csv"))
+  
+  utils::write.csv(res_tab, file_out)
+}
+
 check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM,
                             press_TE1_guess = 0.0126) {
   
