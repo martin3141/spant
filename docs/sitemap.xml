@@ -121,6 +121,8 @@
 <url><loc>https://martin3141.github.io/spant/reference/fit_mrs.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_res2csv.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_svs.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/fit_svs_edited.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/fit_svs_group_results.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_svs_gui.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_t1_ti_array.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_t1_tr_array.html</loc></url>
@@ -326,6 +328,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/sd.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/sd.mrs_data.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/seconds.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/segment_t1_fsl.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/seq_cpmg_ideal.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/seq_mega_press_ideal.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/seq_press_2d_shaped.html</loc></url>

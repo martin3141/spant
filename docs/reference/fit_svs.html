@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -82,7 +82,10 @@
 <span>  <span class="va">input</span>,</span>
 <span>  w_ref <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mri <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mri_seg <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  external_basis <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  append_external_basis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  p_vols <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  format <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pul_seq <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -99,6 +102,8 @@
 <span>  output_ratio <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ecc <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  hsvd_width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  decimate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  trunc_fid_pts <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fit_method <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fit_opts <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fit_subset <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -112,6 +117,7 @@
 <span>  dyn_av_scheme_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lcm_bin_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  plot_ppm_xlim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  extra_output <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -132,8 +138,23 @@
 <dd><p>directory path to output fitting results.</p></dd>
 
 
+<dt id="arg-mri">mri<a class="anchor" aria-label="anchor" href="#arg-mri"></a></dt>
+<dd><p>filepath or nifti object containing anatomical MRI data.</p></dd>
+
+
+<dt id="arg-mri-seg">mri_seg<a class="anchor" aria-label="anchor" href="#arg-mri-seg"></a></dt>
+<dd><p>filepath or nifti object containing segmented MRI data.</p></dd>
+
+
 <dt id="arg-external-basis">external_basis<a class="anchor" aria-label="anchor" href="#arg-external-basis"></a></dt>
 <dd><p>precompiled basis set object to use for analysis.</p></dd>
+
+
+<dt id="arg-append-external-basis">append_external_basis<a class="anchor" aria-label="anchor" href="#arg-append-external-basis"></a></dt>
+<dd><p>append the external basis with the internally
+generated one. Useful for adding experimentally acquired baseline signals to
+internally simulated basis sets. Defaults to FALSE - meaning only signals
+from the external basis will be used in analysis.</p></dd>
 
 
 <dt id="arg-p-vols">p_vols<a class="anchor" aria-label="anchor" href="#arg-p-vols"></a></dt>
@@ -221,6 +242,18 @@ of the spectral width. Default is disabled (set to NULL), 30 Hz is a
 reasonable value.</p></dd>
 
 
+<dt id="arg-decimate">decimate<a class="anchor" aria-label="anchor" href="#arg-decimate"></a></dt>
+<dd><p>option on decimate the data by a factor of 2 before analysis.
+Defaults to FALSE.</p></dd>
+
+
+<dt id="arg-trunc-fid-pts">trunc_fid_pts<a class="anchor" aria-label="anchor" href="#arg-trunc-fid-pts"></a></dt>
+<dd><p>number of points to truncate the input data by in the
+time-domain. E.g. setting to 1024 will ensure data with more time-domain
+points will be truncated to a length of 1024. Defaults to NULL, where
+truncation is not performed.</p></dd>
+
+
 <dt id="arg-fit-method">fit_method<a class="anchor" aria-label="anchor" href="#arg-fit-method"></a></dt>
 <dd><p>can be "ABFIT-REG" or "LCMODEL. Defaults to "ABFIT-REG".</p></dd>
 
@@ -288,6 +321,11 @@ text or csv format.</p></dd>
 <dt id="arg-plot-ppm-xlim">plot_ppm_xlim<a class="anchor" aria-label="anchor" href="#arg-plot-ppm-xlim"></a></dt>
 <dd><p>plotting ppm axis limits in the html results.
 results.</p></dd>
+
+
+<dt id="arg-extra-output">extra_output<a class="anchor" aria-label="anchor" href="#arg-extra-output"></a></dt>
+<dd><p>write extra output files for generating custom plots.
+Defaults to FALSE.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
