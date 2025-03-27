@@ -676,21 +676,63 @@ fit_svs_group_results <- function(search_path,
     warning(paste0("Output directory already exists : ", output_dir))
   }
   
-  paths_dir <- dirname(paths)
-  results_n <- length(paths)
-  res_tab_list <- vector(mode = "list", length = results_n)
+  paths_dir    <- dirname(paths)
+  results_n    <- length(paths)
+  
+  res_tab_unscaled_list <- vector(mode = "list", length = results_n)
+  res_tab_molal_list    <- vector(mode = "list", length = results_n)
+  res_tab_ratio_list    <- vector(mode = "list", length = results_n)
+  res_tab_legacy_list   <- vector(mode = "list", length = results_n)
+  ratio_str_list        <- vector(mode = "list", length = results_n)
   
   for (n in 1:results_n) {
-    res_tab_list[[n]] <- readRDS(paths[n])$res_tab_molal
+    results <- readRDS(paths[n])
+    
+    if (n == 1) {
+      unscaled  <- ifelse(is.null(results$res_tab_unscaled), FALSE, TRUE)
+      molal     <- ifelse(is.null(results$res_tab_molal),    FALSE, TRUE)
+      ratio     <- ifelse(is.null(results$res_tab_ratio),    FALSE, TRUE)
+      legacy    <- ifelse(is.null(results$res_tab_legacy),   FALSE, TRUE)
+    }
+    
+    if (unscaled) res_tab_unscaled_list[[n]] <- results$res_tab_unscaled
+    if (molal)    res_tab_molal_list[[n]]    <- results$res_tab_molal
+    if (legacy)   res_tab_legacy_list[[n]]   <- results$res_tab_legacy
+    if (ratio) {
+      res_tab_ratio_list[[n]] <- results$res_tab_ratio
+      ratio_str_list[[n]]     <- results$output_ratio
+    }
   }
   
-  res_tab <- do.call("rbind", res_tab_list)
+  if (unscaled) {
+    res_tab_unscaled_df <- do.call("rbind", res_tab_unscaled_list)
+    res_tab_unscaled_df <- cbind(path = paths, res_tab_unscaled_df)
+    file_out <- file.path(output_dir, paste0("fit_res_group_unscaled_conc.csv"))
+    utils::write.csv(res_tab_unscaled_df, file_out, row.names = FALSE)
+  }
   
-  res_tab <- cbind(path = paths, res_tab)
+  if (molal) {
+    res_tab_molal_df <- do.call("rbind", res_tab_molal_list)
+    res_tab_molal_df <- cbind(path = paths, res_tab_molal_df)
+    file_out <- file.path(output_dir, paste0("fit_res_group_molal_conc.csv"))
+    utils::write.csv(res_tab_molal_df, file_out, row.names = FALSE)
+  }
   
-  file_out <- file.path(output_dir, paste0("fit_res_group_molal_conc.csv"))
+  if (ratio) {
+    res_tab_ratio_df <- do.call("rbind", res_tab_ratio_list)
+    res_tab_ratio_df <- cbind(path = paths, ratio = unlist(ratio_str_list),
+                              res_tab_ratio_df)
+    file_out <- file.path(output_dir, paste0("fit_res_group_ratio_conc.csv"))
+    utils::write.csv(res_tab_ratio_df, file_out, row.names = FALSE)
+  }
   
-  utils::write.csv(res_tab, file_out, row.names = FALSE)
+  if (legacy) {
+    res_tab_legacy_df <- do.call("rbind", res_tab_legacy_list)
+    res_tab_legacy_df <- cbind(path = paths, res_tab_legacy_df)
+    file_out <- file.path(output_dir, paste0("fit_res_group_legacy_conc.csv"))
+    utils::write.csv(res_tab_legacy_df, file_out, row.names = FALSE)
+  }
+  
 }
 
 check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM,
