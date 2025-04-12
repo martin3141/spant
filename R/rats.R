@@ -21,6 +21,9 @@
 #' @param ret_corr_only return the corrected mrs_data object only.
 #' @param zero_freq_shift_t0 perform a linear fit to the frequency shifts and
 #' set the (linearly modeled) shift to be 0 Hz for the first dynamic scan.
+#' @param list_mean_ref is ref is not specified and a list is provided, use the
+#' list mean scan as reference. Otherwise use the mean of each list element as
+#' it's own reference.
 #' @param remove_freq_outliers remove dynamics based on their frequency shift.
 #' @param freq_outlier_thresh threshold to remove frequency outliers.
 #' @param remove_phase_outliers remove dynamics based on their phase shift.
@@ -34,18 +37,17 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
                  p_deg = 2, sp_N = 2, sp_deg = 3, max_t = 0.2,
                  basis_type = "poly", rescale_output = TRUE,
                  phase_corr = TRUE, ret_corr_only = TRUE,
-                 zero_freq_shift_t0 = FALSE, remove_freq_outliers = FALSE,
-                 freq_outlier_thresh = 3, remove_phase_outliers = FALSE,
-                 phase_outlier_thresh = 3, remove_amp_outliers = FALSE,
-                 amp_outlier_thresh = 3) {
+                 zero_freq_shift_t0 = FALSE, list_mean_ref = TRUE,
+                 remove_freq_outliers = FALSE, freq_outlier_thresh = 3,
+                 remove_phase_outliers = FALSE, phase_outlier_thresh = 3,
+                 remove_amp_outliers = FALSE, amp_outlier_thresh = 3) {
   
   if (inherits(mrs_data, "list")) {
     
     # take the mean over the list and dataset if ref is not given 
-    if (is.null(ref)) {
+    if (is.null(ref) & list_mean_ref) {
       ref <- mean_mrs_list(mrs_data)
       ref <- mean(ref, na.rm = TRUE)
-      # ref <- NULL use this when list mean is FALSE
     } 
     
     res <- lapply(mrs_data, rats, ref = ref, xlim = xlim, max_shift = max_shift,
@@ -53,6 +55,7 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
                   basis_type = basis_type, rescale_output = rescale_output,
                   phase_corr = phase_corr, ret_corr_only = ret_corr_only,
                   zero_freq_shift_t0 = zero_freq_shift_t0,
+                  list_mean_ref = list_mean_ref,
                   remove_freq_outliers = remove_freq_outliers,
                   freq_outlier_thresh = freq_outlier_thresh,
                   remove_phase_outliers = remove_phase_outliers,
@@ -267,6 +270,11 @@ rats_obj_fn <- function(par, x, ref, t, inds, basis) {
 #' @export
 phase_ref_1h_brain <- function(mrs_data, mean_ref = FALSE,
                                ret_corr_only = TRUE) {
+  
+  if (inherits(mrs_data, "list")) {
+    return(lapply(mrs_data, phase_ref_1h_brain, mean_ref = mean_ref,
+                  ret_corr_only = ret_corr_only))
+  }
   
   ref <- sim_resonances(acq_paras = mrs_data, freq = c(2.01, 3.03, 3.22),
                         amp = 1, lw = 4, lg = 0)

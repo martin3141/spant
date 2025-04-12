@@ -18,6 +18,7 @@ rats(
   phase_corr = TRUE,
   ret_corr_only = TRUE,
   zero_freq_shift_t0 = FALSE,
+  list_mean_ref = TRUE,
   remove_freq_outliers = FALSE,
   freq_outlier_thresh = 3,
   remove_phase_outliers = FALSE,
@@ -60,6 +61,10 @@ default.}
 
 \item{zero_freq_shift_t0}{perform a linear fit to the frequency shifts and
 set the (linearly modeled) shift to be 0 Hz for the first dynamic scan.}
+
+\item{list_mean_ref}{is ref is not specified and a list is provided, use the
+list mean scan as reference. Otherwise use the mean of each list element as
+it's own reference.}
 
 \item{remove_freq_outliers}{remove dynamics based on their frequency shift.}
 
