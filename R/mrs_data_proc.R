@@ -451,6 +451,12 @@ sim_zero <- function(fs = def_fs(), ft = def_ft(), N = def_N(),
 #' @export
 apply_mrs <- function(mrs_data, dims, fun, ..., data_only = FALSE) {
   
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, apply_mrs, dims = dims, fun = fun, ... = ...,
+                  data_only = data_only)
+    return(res)
+  }
+  
   # check the input
   check_mrs_data(mrs_data) 
   
@@ -2211,6 +2217,9 @@ get_tail_dyns <- function(mrs_data, n = 1) {
 #' @return first half of the dynamic series.
 #' @export
 get_fh_dyns <- function(mrs_data) {
+  
+  if (inherits(mrs_data, "list")) return(lapply(mrs_data, get_fh_dyns))
+  
   fh <- 1:(Ndyns(mrs_data) / 2)
   get_dyns(mrs_data, fh)
 }
@@ -2220,6 +2229,9 @@ get_fh_dyns <- function(mrs_data) {
 #' @return second half of the dynamic series.
 #' @export
 get_sh_dyns <- function(mrs_data) {
+  
+  if (inherits(mrs_data, "list")) return(lapply(mrs_data, get_sh_dyns))
+  
   sh <- (Ndyns(mrs_data) / 2 + 1):Ndyns(mrs_data)
   get_dyns(mrs_data, sh)
 }
@@ -2229,6 +2241,9 @@ get_sh_dyns <- function(mrs_data) {
 #' @return dynamic MRS data containing odd numbered scans.
 #' @export
 get_odd_dyns <- function(mrs_data) {
+  
+  if (inherits(mrs_data, "list")) return(lapply(mrs_data, get_odd_dyns))
+  
   subset <- seq(1, Ndyns(mrs_data), 2)
   get_dyns(mrs_data, subset)
 }
@@ -2238,6 +2253,9 @@ get_odd_dyns <- function(mrs_data) {
 #' @return dynamic MRS data containing even numbered scans.
 #' @export
 get_even_dyns <- function(mrs_data) {
+  
+  if (inherits(mrs_data, "list")) return(lapply(mrs_data, get_even_dyns))
+  
   subset <- seq(2, Ndyns(mrs_data), 2)
   get_dyns(mrs_data, subset)
 }
@@ -2740,18 +2758,31 @@ mean.list <- function(x, ...) {
   return(lapply(x, mean, ...))
 }
 
+#' @rdname sd
+#' @export
+sd.list <- function(x, na.rm = FALSE) {
+  res <- lapply(x, sd, na.rm = na.rm)
+  return(res)
+}
+
 #' Calculate the standard deviation spectrum from an mrs_data object.
 #' @param x object of class mrs_data.
 #' @param na.rm remove NA values.
 #' @return sd mrs_data object.
 #' @export
 sd.mrs_data <- function(x, na.rm = FALSE) {
+  
+  if (inherits(x, "list")) return(lapply(x, sd, na.rm = na.rm))
+  
+  if (!is_fd(x)) x <- td2fd(x) 
+  
   data_pts <- x$data
   data_N <- Npts(x)
   dim(data_pts) <- c(length(data_pts) / data_N, data_N)
-  x$data <- colSdColMeans(data_pts, na.rm)
+  x$data <- colSdColMeans(Re(data_pts), na.rm) + 
+            1i * colSdColMeans(Im(data_pts), na.rm)
   dim(x$data) <- c(1, 1, 1, 1, 1, 1, data_N)
-  x
+  return(x)
 }
 
 ## make an S3 generic for sd (cos R Core don't do this for some reason!)

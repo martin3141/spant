@@ -45,6 +45,7 @@ rats <- function(mrs_data, ref = NULL, xlim = c(4, 0.5), max_shift = 20,
     if (is.null(ref)) {
       ref <- mean_mrs_list(mrs_data)
       ref <- mean(ref, na.rm = TRUE)
+      # ref <- NULL use this when list mean is FALSE
     } 
     
     res <- lapply(mrs_data, rats, ref = ref, xlim = xlim, max_shift = max_shift,
