@@ -797,24 +797,24 @@ check_sim_paras <- function(pul_seq, metab, TE1, TE2, TE3, TE, TM,
       if (!is.null(metab$meta$TE1)) {
         TE1 <- metab$meta$TE1
       } else {
-        TE1 <- 0.0008
-        warning("TE1 assumed to be 0.0008s.")
+        TE1 <- 0.008
+        warning("TE1 assumed to be 0.008s.")
       }
     }
     if (is.null(TE2)) {
       if (!is.null(metab$meta$TE2)) {
         TE2 <- metab$meta$TE2
       } else {
-        TE2 <- 0.0011
-        warning("TE2 assumed to be 0.0011s.")
+        TE2 <- 0.011
+        warning("TE2 assumed to be 0.011s.")
       }
     }
     if (is.null(TE3)) {
       if (!is.null(metab$meta$TE3)) {
         TE3 <- metab$meta$TE3
       } else {
-        TE3 <- 0.0009
-        warning("TE3 assumed to be 0.0009s.")
+        TE3 <- 0.009
+        warning("TE3 assumed to be 0.009s.")
       }
     }
     if (!isTRUE(all.equal(TE1 + TE2 + TE3, TE))) {
