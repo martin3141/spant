@@ -489,13 +489,17 @@ print(argg)
 
 **Please cite the following if you found ABfit and spant useful in your research:**
 
-Wilson M. Adaptive baseline fitting for 1H MR spectroscopy analysis. Magn Reson 
+Wilson, M. Adaptive baseline fitting for 1H MR spectroscopy analysis. Magn Reson 
 Med. 2021 Jan;85(1):13-29. https://doi.org/10.1002/mrm.28385
+
+Wilson, M. Chemical shift and relaxation regularization improve the accuracy of
+1H MR spectroscopy analysis. Magn Reson Med. 2025 Jun;93(6):2287-2296.
+https://doi.org/10.1002/mrm.30462
 
 Wilson, M. spant: An R package for magnetic resonance spectroscopy 
 analysis. Journal of Open Source Software. 2021 6(67), 3646. 
 https://doi.org/10.21105/joss.03646
 
-Wilson M. Robust retrospective frequency and phase correction for single-voxel 
+Wilson, M. Robust retrospective frequency and phase correction for single-voxel 
 MR spectroscopy. Magn Reson Med. 2019 May;81(5):2878-2886. 
 https://doi.org/10.1002/mrm.27605

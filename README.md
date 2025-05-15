@@ -15,7 +15,8 @@ pipelines for Magnetic Resonance Spectroscopy (MRS) data. The following
 features and algorithms are included:
 
 - Advanced fully-automated metabolite fitting algorithm - ABfit
-  <https://onlinelibrary.wiley.com/doi/10.1002/mrm.28385>.
+  <https://onlinelibrary.wiley.com/doi/10.1002/mrm.28385>,
+  <https://onlinelibrary.wiley.com/doi/10.1002/mrm.30462>.
 - Robust retrospective frequency and phase correction - RATS
   <https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.27605>.
 - Support for common MRS data formats including read / write NIfTI MRS -

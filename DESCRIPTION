@@ -10,8 +10,8 @@ Authors@R: c(
     person("John", "Muschelli", role = "ctb"))
 Description: Tools for reading, visualising and processing Magnetic Resonance
     Spectroscopy data. The package includes methods for spectral fitting: Wilson
-    (2021) <DOI:10.1002/mrm.28385> and spectral alignment: Wilson (2018)
-    <DOI:10.1002/mrm.27605>. 
+    (2021) <DOI:10.1002/mrm.28385>, Wilson (2025) <DOI:10.1002/mrm.30462> and
+    spectral alignment: Wilson (2018) <DOI:10.1002/mrm.27605>. 
 BugReports: https://github.com/martin3141/spant/issues/
 License: GPL-3
 RoxygenNote: 7.3.2

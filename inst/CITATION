@@ -15,7 +15,7 @@ bibentry(
 )
 
 bibentry(
-  header   = "To cite the ABfit method in publications use:",
+  header   = "To cite the ABfit method in publications use the following two references:",
   bibtype  = "Article",
   title    = "Adaptive baseline fitting for 1H MR spectroscopy analysis",
   author   = "Martin Wilson",
@@ -26,6 +26,20 @@ bibentry(
   pages    = "13--29",
   doi      = "10.1002/mrm.28385",
   textVersion = "Martin Wilson, Adaptive baseline fitting for 1H MR spectroscopy analysis, MRM 2021 85(1):13-29."
+)
+
+bibentry(
+  bibtype  = "Article",
+  title    = "Chemical shift and relaxation regularization improve the accuracy
+              of {1H} {MR} spectroscopy analysis",
+  author   = "Martin Wilson",
+  journal  = "Magn Reson Med",
+  year     = "2025",
+  volume   = "93",
+  number   = "6",
+  pages    = "2287--2296",
+  doi      = "10.1002/mrm.30462",
+  textVersion = "Martin Wilson, Chemical shift and relaxation regularization improve the accuracy of 1H MR spectroscopy analysis, MRM 2025 93(6):2287-2296."
 )
 
 bibentry(
