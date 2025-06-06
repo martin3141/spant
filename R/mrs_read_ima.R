@@ -135,6 +135,8 @@ read_ima_dyn_dir <- function(dir, extra = NULL, verbose = FALSE) {
       startsWith(seq_name_upper, "%CUSTOMERSEQ%\\DKD_SVS_SLASER")) {
     if (mrs_data$meta$NumberOfTransients == Ndyns(mrs_data)) {
       return(mrs_data)
+    } else if (mrs_data$meta$NumberOfTransients * 2 == Ndyns(mrs_data)) {
+      return(mrs_data)
     } else {
       return(extract_dkd_wref_scans(mrs_data))
     }
