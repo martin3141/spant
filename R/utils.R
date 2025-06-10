@@ -881,17 +881,24 @@ read_dkd_moco_log <- function(path, date, end_time) {
   n <- 0
   repeat {
     line <- lines[data_start + n]
+    if (is.na(line)) break
     if (line == "") break
     n <- n + 1
   }
   
   data_end <- data_start + n - 1
   
+  cnames <- trimws(gsub("[]\\[#;]", "", lines[data_start-2]))
+  cnames <- gsub("Shim_DACunit:", "", cnames)
+  cnames <- strsplit(cnames, " ")[[1]]
+  
   data <- utils::read.table(textConnection(lines[data_start:data_end]))
   
-  moco_params <- data.frame(transX_mm = data$V2, transY_mm = data$V3,
-                            transZ_mm = data$V4, quat1 = data$V6,
-                            quat2 = data$V7, quat3 = data$V8, quatr = data$V9)
+  # remove weird characters
+  rem_cols <- c(which(data[1,] == ";"), which(data[1,] == "["),
+                which(data[1,] == "]"))
   
-  return(moco_params)
+  data <- data[, -rem_cols]
+  colnames(data) <- cnames
+  return(data)
 }
