@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.4.0</span>
       </span>
     </div>
 
@@ -92,6 +92,7 @@
 <span>  phase_corr <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  ret_corr_only <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  zero_freq_shift_t0 <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  list_mean_ref <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  remove_freq_outliers <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  freq_outlier_thresh <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  remove_phase_outliers <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -163,6 +164,12 @@ default.</p></dd>
 <dt id="arg-zero-freq-shift-t-">zero_freq_shift_t0<a class="anchor" aria-label="anchor" href="#arg-zero-freq-shift-t-"></a></dt>
 <dd><p>perform a linear fit to the frequency shifts and
 set the (linearly modeled) shift to be 0 Hz for the first dynamic scan.</p></dd>
+
+
+<dt id="arg-list-mean-ref">list_mean_ref<a class="anchor" aria-label="anchor" href="#arg-list-mean-ref"></a></dt>
+<dd><p>is ref is not specified and a list is provided, use the
+list mean scan as reference. Otherwise use the mean of each list element as
+it's own reference.</p></dd>
 
 
 <dt id="arg-remove-freq-outliers">remove_freq_outliers<a class="anchor" aria-label="anchor" href="#arg-remove-freq-outliers"></a></dt>
