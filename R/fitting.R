@@ -401,7 +401,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
     proc_time <- NULL
   }
   
-  out <- list(res_tab = res_tab, fits = fits,  data = metab, basis = basis,
+  out <- list(res_tab = res_tab, fits = fits, data = metab, basis = basis,
               amp_cols = ncol(amps), proc_time = proc_time, method = method,
               opts = opts, extra = extra)
   
