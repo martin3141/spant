@@ -2356,6 +2356,23 @@ append_coils <- function(...) {
   first_dataset
 }
 
+#' Split MRS data containing multiple spectra into a list of single spectra
+#' datasets.
+#' @param mrs_data input MRS dataset
+#' @return list of MRS datasets
+#' @export
+mrs_data2list <- function(mrs_data) {
+  data_mat <- mrs_data2mat(mrs_data)
+  mrs_list <- vector(mode = "list", length = nrow(mrs_data))
+  temp_mrs <- get_subset(mrs_data, 1, 1, 1, 1, 1)
+  temp_mrs$data
+  for (n in 1:nrow(data_mat)) {
+    temp_mrs$data[1, 1, 1, 1, 1, 1,] <- data_mat[n, ]
+    mrs_list[[n]] <- temp_mrs
+  }
+  return(mrs_list)
+} 
+
 #' Append MRS data across the dynamic dimension, assumes they matched across the
 #' other dimensions.
 #' @param ... MRS data objects as arguments, or a list of MRS data objects.
