@@ -894,3 +894,41 @@ comb_fit_list_result_tables <- function(fit_list, add_extra = TRUE,
   
   return(out)
 }
+
+#' Combine a list of fit results into a single fit result object across the
+#' dynamic dimension.
+#' @param fit_list a list of fit_result objects.
+#' @param dyn_basis_sets save all basis sets separately  as a list, defaults to 
+#' FALSE.
+#' @return fit result object.
+#' @export
+comb_fit_list_dyns <- function(fit_list, dyn_basis_sets = FALSE) {
+  
+  res_tab <- comb_fit_list_result_tables(fit_list, add_extra = FALSE,
+                                         add_res_id = FALSE)
+  
+  res_tab$Dynamic <- as.numeric(1:length(res_tab$Dynamic))
+  
+  if (dyn_basis_sets) {
+    basis <- lapply(fit_list, \(x) x$basis)
+  } else {
+    basis <- fit_list[[1]]$basis
+  }
+  
+  fits <- lapply(fit_list, \(x) x$fits[[1]])  
+  
+  names(fits) <- paste(1:nrow(res_tab), ".fit", sep = "")
+  
+  data    <- append_dyns(lapply(fit_list, \(x) x$data))
+  
+  proc_time <- Reduce("+", lapply(fit_list, \(x) x$proc_time))
+  
+  out <- list(res_tab = res_tab, fits = fits, data = data, basis = basis,
+              amp_cols = fit_list[[1]]$amp_cols, proc_time = proc_time,
+              method = fit_list[[1]]$method, opts = fit_list[[1]]$opts,
+              extra = fit_list[[1]]$extra)
+  
+  class(out) <- "fit_result"
+  
+  return(out)
+}
