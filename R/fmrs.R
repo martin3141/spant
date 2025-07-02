@@ -871,6 +871,285 @@ mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
   }
 }
 
+#' Create a BIDS file structure from a vector of data paths or list of
+#' mri/mrs data objects.
+#' @param mr_data vector of data paths or list of mri/mrs objects.
+#' @param suffix vector of file suffixes, eg : c("svs", "mrsi", "T1w).
+#' @param output_dir the base directory to create the BIDS structure.
+#' @param sub optional vector of subject labels. If not specified, these will be
+#' automatically generated as a series of increasing zero-padded integer values
+#' corresponding to the mrs_data input indices.
+#' @param ses optional vector of session labels.
+#' @param task optional vector of task labels.
+#' @param acq optional vector of acquisition labels.
+#' @param nuc optional vector of nucleus labels.
+#' @param voi optional vector of volume of interest labels.
+#' @param rec optional vector of reconstruction labels.
+#' @param run optional vector of run indices.
+#' @param echo optional vector of echo time indices.
+#' @param inv optional vector of inversion indices.
+#' @param skip_existing skip any data files that have already been converted.
+#' Defaults to TRUE, set to FALSE to force an overwrite of any existing data
+#' files.
+#' @export
+mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
+                         ses = NULL, task = NULL, acq = NULL, nuc = NULL,
+                         voi = NULL, rec = NULL, run = NULL, echo = NULL,
+                         inv = NULL, skip_existing = TRUE) {
+  
+  Nscans <- length(mr_data)
+  
+  if (length(suffix) != Nscans) {
+    if (length(suffix) == 1) {
+      suffix <- rep(suffix, Nscans)
+    } else {
+      stop("suffix length does not match.")
+    }
+  } 
+  
+  mrs_suffix  <- c("svs", "mrsi", "unloc", "mrsref")
+  func_suffix <- c("bold", "cbv")
+  anat_suffix <- c("FLAIR", "PDT2", "PDw", "T1w", "T2starw", "T2w", "UNIT1",
+                   "angio", "inplaneT1", "inplaneT2")
+  
+  allowed <- c(mrs_suffix, func_suffix, anat_suffix)
+  
+  wrong <- !(suffix %in% allowed)
+  if (any(wrong)) stop(paste0("one or more suffix labels are invalid,",
+                              " must be one of : ", 
+                              paste(allowed, collapse = ", ")))
+  
+  if (is.null(sub)) sub <- auto_pad_seq(1:Nscans)
+  
+  if (length(sub) != Nscans) stop("sub length does not match.")
+  
+  if (!is.null(ses)) {
+    if (length(ses) == 1) ses <- rep(ses, Nscans)
+    if (length(ses) != Nscans) stop("ses length does not match.")
+  }
+  
+  if (!is.null(acq)) {
+    if (length(acq) == 1) acq <- rep(acq, Nscans)
+    if (length(acq) != Nscans) stop("acq length does not match.")
+  }
+  
+  if (!is.null(nuc)) {
+    if (length(nuc) == 1) nuc <- rep(nuc, Nscans)
+    if (length(nuc) != Nscans) stop("nuc length does not match.")
+  }
+  
+  if (!is.null(voi)) {
+    if (length(voi) == 1) voi <- rep(voi, Nscans)
+    if (length(voi) != Nscans) stop("voi length does not match.")
+  }
+  
+  if (!is.null(rec)) {
+    if (length(rec) == 1) rec <- rep(rec, Nscans)
+    if (length(rec) != Nscans) stop("rec length does not match.")
+  }
+  
+  if (!is.null(run)) {
+    if (length(run) == 1) run <- rep(run, Nscans)
+    if (length(run) != Nscans) stop("run length does not match.")
+    run <- as.integer(run)
+    if (any(is.na(run))) stop("non integer run")
+  }
+  
+  if (!is.null(echo)) {
+    if (length(echo) == 1) echo <- rep(echo, Nscans)
+    if (length(echo) != Nscans) stop("echo length does not match.")
+    echo <- as.integer(echo)
+    if (any(is.na(echo))) stop("non integer echo")
+  }
+  
+  if (!is.null(inv)) {
+    if (length(inv) == 1) inv <- rep(inv, Nscans)
+    if (length(inv) != Nscans) stop("inv length does not match.")
+    inv <- as.integer(inv)
+    if (any(is.na(inv))) stop("non integer inv")
+  }
+  
+  for (n in 1:Nscans) {
+    
+    sub_lab <- paste0("sub-", sub[n])
+    
+    if (!is.null(ses)) ses_lab <- paste0("ses-", ses[n])
+    
+    # determine the image type
+    
+    if (suffix[n] %in% mrs_suffix) {
+      image_type <- "mrs"
+    } else if (suffix[n] %in% anat_suffix) {
+      image_type <- "anat"
+    } else if (suffix[n] %in% func_suffix) {
+      image_type <- "func"
+    } else {
+      stop("image type not found for given suffix")
+    }
+    
+    # generate the directory structure
+    if (is.null(ses)) {
+      dir <- file.path(output_dir, sub_lab, image_type)
+    } else {
+      dir <- file.path(output_dir, sub_lab, ses_lab, image_type)
+    }
+    
+    if (is.character(mr_data[n])) {
+      
+      # skip if possible and we already know the suffix
+      if (skip_existing & !is.null(suffix)) {
+        
+        # construct the filename
+        fname <- paste0(sub_lab)
+        if (!is.null(ses))  fname <- paste0(fname, "_", ses_lab)
+        if (!is.null(task)) fname <- paste0(fname, "_task-", task[n])
+        if (!is.null(acq))  fname <- paste0(fname, "_acq-", acq[n])
+        if (!is.null(nuc))  fname <- paste0(fname, "_nuc-", nuc[n])
+        if (!is.null(voi))  fname <- paste0(fname, "_voi-", voi[n])
+        if (!is.null(rec))  fname <- paste0(fname, "_rec-", rec[n])
+        if (!is.null(run))  fname <- paste0(fname, "_run-", run[n])
+        if (!is.null(echo)) fname <- paste0(fname, "_echo-", echo[n])
+        if (!is.null(inv))  fname <- paste0(fname, "_inv-", inv[n])
+        
+        # suffix 
+        fname_main <- paste0(fname, "_", suffix[n], ".nii.gz")
+        
+        # construct the full path
+        full_path_main <- file.path(dir, fname_main)
+        
+        if (file.exists(full_path_main)) {
+          cat("Skipping dataset ", n," of ", Nscans, " : ", full_path_main,
+              "\n", sep = "")
+          next
+        }
+      }
+      
+      mrs_n <- read_mrs(mr_data[n])
+    } else {
+      mrs_n <- mr_data[[n]]
+    }
+    
+    if (identical(class(mrs_n), c("list", "mrs_data"))) {
+      main    <- mrs_n$metab
+      ref     <- mrs_n$ref
+      ref_ecc <- mrs_n$ref_ecc
+    } else {
+      main    <- mrs_n
+      ref     <- NULL
+      ref_ecc <- NULL
+    }
+    
+    # create the directory
+    dir.create(dir, recursive = TRUE, showWarnings = FALSE)
+    
+    # construct the filename
+    fname <- paste0(sub_lab)
+    if (!is.null(ses))  fname <- paste0(fname, "_", ses_lab)
+    if (!is.null(task)) fname <- paste0(fname, "_task-", task[n])
+    if (!is.null(acq))  fname <- paste0(fname, "_acq-", acq[n])
+    if (!is.null(nuc))  fname <- paste0(fname, "_nuc-", nuc[n])
+    if (!is.null(voi))  fname <- paste0(fname, "_voi-", voi[n])
+    if (!is.null(rec))  fname <- paste0(fname, "_rec-", rec[n])
+    if (!is.null(run))  fname <- paste0(fname, "_run-", run[n])
+    if (!is.null(echo)) fname <- paste0(fname, "_echo-", echo[n])
+    if (!is.null(inv))  fname <- paste0(fname, "_inv-", inv[n])
+    
+    # suffix 
+    fname_main <- paste0(fname, "_", suffix[n], ".nii.gz")
+    
+    # construct the full path
+    full_path_main <- file.path(dir, fname_main)
+    
+    if (skip_existing & file.exists(full_path_main)) {
+      cat("Skipping dataset ", n," of ", Nscans, " : ", full_path_main, "\n",
+          sep = "")
+    } else {
+      cat("Writing dataset ", n," of ", Nscans, " : ", full_path_main, "\n",
+          sep = "")
+      # write the data
+      write_mrs(main, fname = full_path_main, format = "nifti", force = TRUE)
+    }
+    
+    # just one ref file
+    if (!is.null(ref) & is.null(ref_ecc)) {
+      fname_ref <- paste0(fname, "_", "mrsref", ".nii.gz")
+      
+      # construct the full path
+      full_path_ref <- file.path(dir, fname_ref)
+      
+      if (skip_existing & file.exists(full_path_ref)) {
+        cat("Skipping dataset ", n," of ", Nscans, " : ", full_path_ref, "\n",
+            sep = "")
+      } else {
+        cat("Writing dataset ", n," of ", Nscans, " : ", full_path_ref, "\n",
+            sep = "")
+        write_mrs(ref, fname = full_path_ref, format = "nifti", force = TRUE)
+      }
+    }
+    
+    # both conc and ecc ref files
+    if (!is.null(ref) & !is.null(ref_ecc)) {
+      
+      # conc filename
+      if (is.null(acq)) {
+        acq_lab <- paste0("_acq-conc")
+      } else {
+        acq_lab <- paste0("_acq-", acq[n], "conc")
+      }
+      fname <- paste0(sub_lab)
+      if (!is.null(ses))  fname <- paste0(fname, "_", ses_lab)
+      if (!is.null(task)) fname <- paste0(fname, "_task-", task[n])
+      fname <- paste0(fname, acq_lab)
+      if (!is.null(nuc))  fname <- paste0(fname, "_nuc-", nuc[n])
+      if (!is.null(voi))  fname <- paste0(fname, "_voi-", voi[n])
+      if (!is.null(rec))  fname <- paste0(fname, "_rec-", rec[n])
+      if (!is.null(run))  fname <- paste0(fname, "_run-", run[n])
+      if (!is.null(echo)) fname <- paste0(fname, "_echo-", echo[n])
+      if (!is.null(inv))  fname <- paste0(fname, "_inv-", inv[n])
+      fname_ref_conc <- paste0(fname, "_", "mrsref", ".nii.gz")
+      full_path_conc <- file.path(dir, fname_ref_conc)
+      
+      if (skip_existing & file.exists(full_path_conc)) {
+        cat("Skipping dataset ", n," of ", Nscans, " : ", full_path_conc, "\n",
+            sep = "")
+      } else {
+        cat("Writing dataset ", n," of ", Nscans, " : ", full_path_conc, "\n",
+            sep = "")
+        write_mrs(ref, fname = full_path_conc, format = "nifti", force = TRUE)
+      }
+      
+      # ecc filename
+      if (is.null(acq)) {
+        acq_lab <- paste0("_acq-ecc")
+      } else {
+        acq_lab <- paste0("_acq-", acq[n], "ecc")
+      }
+      fname <- paste0(sub_lab)
+      if (!is.null(ses))  fname <- paste0(fname, "_", ses_lab)
+      if (!is.null(task)) fname <- paste0(fname, "_task-", task[n])
+      fname <- paste0(fname, acq_lab)
+      if (!is.null(nuc))  fname <- paste0(fname, "_nuc-", nuc[n])
+      if (!is.null(voi))  fname <- paste0(fname, "_voi-", voi[n])
+      if (!is.null(rec))  fname <- paste0(fname, "_rec-", rec[n])
+      if (!is.null(run))  fname <- paste0(fname, "_run-", run[n])
+      if (!is.null(echo)) fname <- paste0(fname, "_echo-", echo[n])
+      if (!is.null(inv))  fname <- paste0(fname, "_inv-", inv[n])
+      fname_ref_ecc <- paste0(fname, "_", "mrsref", ".nii.gz")
+      full_path_ecc <- file.path(dir, fname_ref_ecc)
+      
+      if (skip_existing & file.exists(full_path_ecc)) {
+        cat("Skipping dataset ", n," of ", Nscans, " : ", full_path_ecc, "\n",
+            sep = "")
+      } else {
+        cat("Writing dataset ", n," of ", Nscans, " : ", full_path_ecc, "\n",
+            sep = "")
+        write_mrs(ref_ecc, fname = full_path_ecc, format = "nifti",
+                  force = TRUE)
+      }
+    }
+  }
+}
+
 auto_pad_seq <- function(x, min_pad = 2) {
   x_int <- sprintf("%d", x)
   pad_n <- max(nchar(x_int))

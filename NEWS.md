@@ -1,3 +1,6 @@
+# spant 3.5.0
+* Added a function to help bids sorting of MRS and MRI data : mr_data2bids.
+
 # spant 3.4.0
 * Added a function to read DKD's sLASER MoCo log file.
 * Bug fix for TE parameter determination from Siemens IMA files.
