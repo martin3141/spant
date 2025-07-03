@@ -1021,17 +1021,26 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
         }
       }
       
-      mrs_n <- read_mrs(mr_data[n])
+      if (image_type == "mrs") {
+        mr_n <- read_mrs(mr_data[n])
+      } else {
+        mr_n <- readNifti(mr_data[n], json = "read")
+      }
+       
     } else {
-      mrs_n <- mr_data[[n]]
+      mr_n <- mr_data[[n]]
     }
     
-    if (identical(class(mrs_n), c("list", "mrs_data"))) {
-      main    <- mrs_n$metab
-      ref     <- mrs_n$ref
-      ref_ecc <- mrs_n$ref_ecc
+    if (identical(class(mr_n), c("list", "mrs_data"))) {
+      main    <- mr_n$metab
+      ref     <- mr_n$ref
+      ref_ecc <- mr_n$ref_ecc
+    } else if (identical(class(mr_n), c("mrs_data"))) {
+      main    <- mr_n
+      ref     <- NULL
+      ref_ecc <- NULL
     } else {
-      main    <- mrs_n
+      main    <- mr_n
       ref     <- NULL
       ref_ecc <- NULL
     }
@@ -1057,8 +1066,14 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
       cat("Writing dataset ", n," of ", Nscans, " : ", full_path_main, "\n",
           sep = "")
       # write the data
-      write_mrs(main, fname = full_path_main, format = "nifti", force = TRUE)
+      if (image_type == "mrs") {
+        write_mrs(main, fname = full_path_main, format = "nifti", force = TRUE)
+      } else {
+        writeNifti(main, file = full_path_main, json = TRUE)
+      }
     }
+    
+    # the following only applies to MRS data
     
     # just one ref file
     if (!is.null(ref) & is.null(ref_ecc)) {
@@ -1073,10 +1088,10 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
       } else {
         cat("Writing dataset ", n," of ", Nscans, " : ", full_path_ref, "\n",
             sep = "")
-        write_mrs(ref, fname = full_path_ref, format = "nifti", force = TRUE)
+        write_mrs(ref, fname = full_path_ref, format = "nifti", force = TRUE)  
       }
     }
-    
+        
     # both conc and ecc ref files
     if (!is.null(ref) & !is.null(ref_ecc)) {
       
