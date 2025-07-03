@@ -973,7 +973,11 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
     
     sub_lab <- paste0("sub-", sub[n])
     
-    if (!is.null(ses)) ses_lab <- paste0("ses-", ses[n])
+    if (!is.null(ses)) {
+      ses_lab <- paste0("ses-", ses[n])
+    } else {
+      ses_lab <- NULL
+    }
     
     # determine the image type
     
@@ -1001,15 +1005,8 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
         
         # construct the filename
         fname <- paste0(sub_lab)
-        if (!is.null(ses))  fname <- paste0(fname, "_", ses_lab)
-        if (!is.null(task)) fname <- paste0(fname, "_task-", task[n])
-        if (!is.null(acq))  fname <- paste0(fname, "_acq-", acq[n])
-        if (!is.null(nuc))  fname <- paste0(fname, "_nuc-", nuc[n])
-        if (!is.null(voi))  fname <- paste0(fname, "_voi-", voi[n])
-        if (!is.null(rec))  fname <- paste0(fname, "_rec-", rec[n])
-        if (!is.null(run))  fname <- paste0(fname, "_run-", run[n])
-        if (!is.null(echo)) fname <- paste0(fname, "_echo-", echo[n])
-        if (!is.null(inv))  fname <- paste0(fname, "_inv-", inv[n])
+        fname <- paste0(fname, build_bids_fname(ses_lab, task, acq, nuc, voi,
+                                                rec, run, echo, inv, n))
         
         # suffix 
         fname_main <- paste0(fname, "_", suffix[n], ".nii.gz")
@@ -1044,15 +1041,8 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
     
     # construct the filename
     fname <- paste0(sub_lab)
-    if (!is.null(ses))  fname <- paste0(fname, "_", ses_lab)
-    if (!is.null(task)) fname <- paste0(fname, "_task-", task[n])
-    if (!is.null(acq))  fname <- paste0(fname, "_acq-", acq[n])
-    if (!is.null(nuc))  fname <- paste0(fname, "_nuc-", nuc[n])
-    if (!is.null(voi))  fname <- paste0(fname, "_voi-", voi[n])
-    if (!is.null(rec))  fname <- paste0(fname, "_rec-", rec[n])
-    if (!is.null(run))  fname <- paste0(fname, "_run-", run[n])
-    if (!is.null(echo)) fname <- paste0(fname, "_echo-", echo[n])
-    if (!is.null(inv))  fname <- paste0(fname, "_inv-", inv[n])
+    fname <- paste0(fname, build_bids_fname(ses_lab, task, acq, nuc, voi, rec, 
+                                            run, echo, inv, n))
     
     # suffix 
     fname_main <- paste0(fname, "_", suffix[n], ".nii.gz")
@@ -1092,20 +1082,15 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
       
       # conc filename
       if (is.null(acq)) {
-        acq_lab <- paste0("_acq-conc")
+        acq_lab <- paste0("conc")
       } else {
-        acq_lab <- paste0("_acq-", acq[n], "conc")
+        acq_lab <- paste0(acq[n], "conc")
       }
+      
       fname <- paste0(sub_lab)
-      if (!is.null(ses))  fname <- paste0(fname, "_", ses_lab)
-      if (!is.null(task)) fname <- paste0(fname, "_task-", task[n])
-      fname <- paste0(fname, acq_lab)
-      if (!is.null(nuc))  fname <- paste0(fname, "_nuc-", nuc[n])
-      if (!is.null(voi))  fname <- paste0(fname, "_voi-", voi[n])
-      if (!is.null(rec))  fname <- paste0(fname, "_rec-", rec[n])
-      if (!is.null(run))  fname <- paste0(fname, "_run-", run[n])
-      if (!is.null(echo)) fname <- paste0(fname, "_echo-", echo[n])
-      if (!is.null(inv))  fname <- paste0(fname, "_inv-", inv[n])
+      fname <- paste0(fname, build_bids_fname(ses_lab, task, acq_lab, nuc, voi,
+                                              rec, run, echo, inv, n))                    
+                          
       fname_ref_conc <- paste0(fname, "_", "mrsref", ".nii.gz")
       full_path_conc <- file.path(dir, fname_ref_conc)
       
@@ -1120,20 +1105,15 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
       
       # ecc filename
       if (is.null(acq)) {
-        acq_lab <- paste0("_acq-ecc")
+        acq_lab <- paste0("ecc")
       } else {
-        acq_lab <- paste0("_acq-", acq[n], "ecc")
+        acq_lab <- paste0(acq[n], "ecc")
       }
+      
       fname <- paste0(sub_lab)
-      if (!is.null(ses))  fname <- paste0(fname, "_", ses_lab)
-      if (!is.null(task)) fname <- paste0(fname, "_task-", task[n])
-      fname <- paste0(fname, acq_lab)
-      if (!is.null(nuc))  fname <- paste0(fname, "_nuc-", nuc[n])
-      if (!is.null(voi))  fname <- paste0(fname, "_voi-", voi[n])
-      if (!is.null(rec))  fname <- paste0(fname, "_rec-", rec[n])
-      if (!is.null(run))  fname <- paste0(fname, "_run-", run[n])
-      if (!is.null(echo)) fname <- paste0(fname, "_echo-", echo[n])
-      if (!is.null(inv))  fname <- paste0(fname, "_inv-", inv[n])
+      fname <- paste0(fname, build_bids_fname(ses_lab, task, acq_lab, nuc, voi,
+                                              rec, run, echo, inv, n))               
+                          
       fname_ref_ecc <- paste0(fname, "_", "mrsref", ".nii.gz")
       full_path_ecc <- file.path(dir, fname_ref_ecc)
       
@@ -1148,6 +1128,32 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
       }
     }
   }
+}
+
+build_bids_fname <- function(ses, task, acq, nuc, voi, rec, run, echo, inv, n) {
+  
+  if (!is.null(ses))  ses  <- ifelse(length(ses)  == n, ses[n],  ses)
+  if (!is.null(task)) task <- ifelse(length(task) == n, task[n], task)
+  if (!is.null(acq))  acq  <- ifelse(length(acq)  == n, acq[n],  acq)
+  if (!is.null(nuc))  nuc  <- ifelse(length(nuc)  == n, nuc[n],  nuc)
+  if (!is.null(voi))  voi  <- ifelse(length(voi)  == n, voi[n],  voi)
+  if (!is.null(rec))  rec  <- ifelse(length(rec)  == n, rec[n],  rec)
+  if (!is.null(run))  run  <- ifelse(length(run)  == n, run[n],  run)
+  if (!is.null(echo)) echo <- ifelse(length(echo) == n, echo[n], echo)
+  if (!is.null(inv))  inv  <- ifelse(length(inv)  == n, inv[n],  inv)
+  
+  fname <- ""
+  if (!is.null(ses))  fname <- paste0(fname, "_",      ses)
+  if (!is.null(task)) fname <- paste0(fname, "_task-", task)
+  if (!is.null(acq))  fname <- paste0(fname, "_acq-",  acq)
+  if (!is.null(nuc))  fname <- paste0(fname, "_nuc-",  nuc)
+  if (!is.null(voi))  fname <- paste0(fname, "_voi-",  voi)
+  if (!is.null(rec))  fname <- paste0(fname, "_rec-",  rec)
+  if (!is.null(run))  fname <- paste0(fname, "_run-",  run)
+  if (!is.null(echo)) fname <- paste0(fname, "_echo-", echo)
+  if (!is.null(inv))  fname <- paste0(fname, "_inv-",  inv)
+  
+  return(fname)
 }
 
 auto_pad_seq <- function(x, min_pad = 2) {
