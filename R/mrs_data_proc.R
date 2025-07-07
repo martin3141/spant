@@ -3291,6 +3291,12 @@ hsvd_vec <- function(y, fs, comps = 40, irlba = TRUE, max_damp = 0) {
 auto_phase <- function(mrs_data, xlim = c(4, 1.8), smo_ppm_sd = 0.05,
                        ret_phase = FALSE) {
   
+  if (inherits(mrs_data, "list")) {
+    res <- lapply(mrs_data, auto_phase, xlim = xlim, smo_ppm_sd = smo_ppm_sd,
+                  ret_phase = ret_phase)
+    return(res)
+  }
+  
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
   mrs_data_proc <- mrs_data
