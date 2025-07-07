@@ -623,6 +623,8 @@ mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
                           voi = NULL, rec = NULL, run = NULL, echo = NULL,
                           inv = NULL, skip_existing = TRUE) {
   
+  warning("mrs_data2bids is deprecated, use mr_data2bids instead")
+  
   Nscans <- length(mrs_data)
   
   if (!is.null(suffix)) {
