@@ -19,7 +19,9 @@ mr_data2bids(
   run = NULL,
   echo = NULL,
   inv = NULL,
-  skip_existing = TRUE
+  skip_existing = TRUE,
+  mri_format = "nifti",
+  deface_mri = FALSE
 )
 }
 \arguments{
@@ -54,6 +56,12 @@ corresponding to the mrs_data input indices.}
 \item{skip_existing}{skip any data files that have already been converted.
 Defaults to TRUE, set to FALSE to force an overwrite of any existing data
 files.}
+
+\item{mri_format}{defaults to "nifti", can also be "dicom" provided the
+divest packages is installed.}
+
+\item{deface_mri}{option to apply fsl_deface to the mri as a preprocessing
+step. Defaults to FALSE, requires the fslr package to be installed when TRUE.}
 }
 \description{
 Create a BIDS file structure from a vector of data paths or list of

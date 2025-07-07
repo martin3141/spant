@@ -891,11 +891,18 @@ mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
 #' @param skip_existing skip any data files that have already been converted.
 #' Defaults to TRUE, set to FALSE to force an overwrite of any existing data
 #' files.
+#' @param mri_format defaults to "nifti", can also be "dicom" provided the 
+#' divest packages is installed.
+#' @param deface_mri option to apply fsl_deface to the mri as a preprocessing
+#' step. Defaults to FALSE, requires the fslr package to be installed when TRUE.
 #' @export
 mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
                          ses = NULL, task = NULL, acq = NULL, nuc = NULL,
                          voi = NULL, rec = NULL, run = NULL, echo = NULL,
-                         inv = NULL, skip_existing = TRUE) {
+                         inv = NULL, skip_existing = TRUE, 
+                         mri_format = "nifti", deface_mri = FALSE) {
+  
+  if (!identical(class(mr_data), "list")) mr_data <- list(mr_data)
   
   Nscans <- length(mr_data)
   
@@ -998,7 +1005,7 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
       dir <- file.path(output_dir, sub_lab, ses_lab, image_type)
     }
     
-    if (is.character(mr_data[n])) {
+    if (identical(class(mr_data[[n]]), "character")) {
       
       # skip if possible and we already know the suffix
       if (skip_existing & !is.null(suffix)) {
@@ -1022,9 +1029,24 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
       }
       
       if (image_type == "mrs") {
-        mr_n <- read_mrs(mr_data[n])
+        mr_n <- read_mrs(mr_data[[n]])
       } else {
-        mr_n <- readNifti(mr_data[n], json = "read")
+        if (mri_format == "nifti") {
+          mr_n <- readNifti(mr_data[[n]], json = "read")  
+        } else if (mri_format == "dicom") {
+          mr_n <- divest::readDicom(mr_data[[n]], interactive = FALSE,
+                                    verbosity = -1)[[1]]
+        } else {
+          stop("Incorrect mri_format.")
+        }
+        
+        if (deface_mri) {
+          deface_fsl <- fslr::fsl_deface(mr_n, verbose = FALSE)
+          deface     <- RNifti::asNifti(deface_fsl$outfile)
+          # copy the image meta data from the original mri
+          RNifti::imageAttributes(deface) <- RNifti::imageAttributes(mr_n)
+          mr_n <- deface
+        }
       }
        
     } else {
