@@ -71,7 +71,7 @@ gen_trap_reg <- function(onset, duration, trial_type = NULL, mrs_data = NULL,
     
     # loop over stims of the same trial type
     for (n in 1:length(stim_frame_trial$onset)) {
-      stim_seg <- t_fine > stim_frame$onset[n] & t_fine <= stim_frame$end[n]
+      stim_seg <- t_fine > stim_frame_trial$onset[n] & t_fine <= stim_frame_trial$end[n]
       stim_bool[stim_seg] <- TRUE
     }
     
