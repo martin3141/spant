@@ -11,6 +11,7 @@ glm_spec_fmrs_fl(
   labels = NULL,
   xlim = c(4, 0.2),
   vline = c(1.35, 1.28, 2.35, 2.29),
+  lb = 4,
   return_results = FALSE
 )
 }
@@ -29,6 +30,8 @@ data.}
 \item{xlim}{spectral range to include in the analysis.}
 
 \item{vline}{vertical lines to add to the plot.}
+
+\item{lb}{linebroading to add in Hz before GLM analysis.}
 
 \item{return_results}{function will return key outputs, defaults to FALSE.}
 }

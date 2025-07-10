@@ -5,7 +5,15 @@
 \title{Corrected zero order phase and chemical shift offset in 1H MRS data from the
 brain.}
 \usage{
-phase_ref_1h_brain(mrs_data, mean_ref = FALSE, ret_corr_only = TRUE)
+phase_ref_1h_brain(
+  mrs_data,
+  mean_ref = FALSE,
+  ret_corr_only = TRUE,
+  xlim = c(4, 1.9),
+  p_deg = 3,
+  sp_N = 2,
+  basis_type = "poly"
+)
 }
 \arguments{
 \item{mrs_data}{MRS data to be corrected.}
@@ -14,6 +22,15 @@ phase_ref_1h_brain(mrs_data, mean_ref = FALSE, ret_corr_only = TRUE)
 others. Default is FALSE.}
 
 \item{ret_corr_only}{return the corrected data only.}
+
+\item{xlim}{frequency range in ppm to consider.}
+
+\item{p_deg}{polynomial baseline order.}
+
+\item{sp_N}{number of spline functions, note the true number will be sp_N +
+sp_deg.}
+
+\item{basis_type}{may be one of "poly" or "spline".}
 }
 \value{
 corrected MRS data.
