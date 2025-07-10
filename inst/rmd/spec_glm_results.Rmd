@@ -27,6 +27,15 @@ plot(params$mrs_data_plot, xlim = xlim, restore_def_par = FALSE,
      vline = params$vline)
 ```
 
+### Processed spectrum
+```{r, fig.width=10}
+par(mfcol = c(1, 2))
+plot(mean_dyns(params$data$mrs_data), xlim = xlim, restore_def_par = FALSE,
+     vline = params$vline, main = "mean")
+plot(get_dyns(params$data$mrs_data, 1), xlim = xlim, restore_def_par = FALSE,
+     vline = params$vline, main = "first dynamic")
+```
+
 ```{r, fig.width=10, results='asis'}
 Nregressors <- ncol(params$regressor_df) - 1
 
