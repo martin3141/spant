@@ -266,10 +266,16 @@ rats_obj_fn <- function(par, x, ref, t, inds, basis) {
 #' @param mean_ref apply the phase and offset of the mean spectrum to all
 #' others. Default is FALSE.
 #' @param ret_corr_only return the corrected data only.
+#' @param xlim frequency range in ppm to consider.
+#' @param p_deg polynomial baseline order.
+#' @param sp_N number of spline functions, note the true number will be sp_N + 
+#' sp_deg.
+#' @param basis_type may be one of "poly" or "spline".
 #' @return corrected MRS data.
 #' @export
 phase_ref_1h_brain <- function(mrs_data, mean_ref = FALSE,
-                               ret_corr_only = TRUE) {
+                               ret_corr_only = TRUE, xlim = c(4, 1.9),
+                               p_deg = 3, sp_N = 2, basis_type = "poly") {
   
   if (inherits(mrs_data, "list")) {
     return(lapply(mrs_data, phase_ref_1h_brain, mean_ref = mean_ref,
@@ -278,9 +284,6 @@ phase_ref_1h_brain <- function(mrs_data, mean_ref = FALSE,
   
   ref <- sim_resonances(acq_paras = mrs_data, freq = c(2.01, 3.03, 3.22),
                         amp = 1, lw = 4, lg = 0)
-  
-  p_deg <- 3
-  xlim  <- c(4, 1.9)
  
   if (mean_ref) {
     mean_mrs_data <- mean(mrs_data)
@@ -295,8 +298,8 @@ phase_ref_1h_brain <- function(mrs_data, mean_ref = FALSE,
     
     res$corrected <- mrs_corr
   } else {
-    res <- rats(mrs_data, ref, xlim = xlim, p_deg = p_deg,
-                ret_corr_only = FALSE)
+    res <- rats(mrs_data, ref, xlim = xlim, p_deg = p_deg, sp_N = sp_N,
+                ret_corr_only = FALSE, basis_type = basis_type)
   }
   
   if (ret_corr_only) {
