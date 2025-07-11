@@ -1336,16 +1336,21 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL,
   # perform simple baseline offset corrected based on a noisy spectral region
   mrs_rats$corrected <- bc_constant(mrs_rats$corrected, xlim = c(-0.5, -2.5))
   
-  mean_mrs  <- mean_dyns(mrs_rats$corrected)
+  mean_mrs <- mean_dyns(mrs_rats$corrected)
     
   # frequency and phase correct the mean spectrum
   res <- phase_ref_1h_brain(mean_mrs, ret_corr_only = FALSE)
+  
+  # improve upon the above
+  res_ap_bl <- auto_phase_bl(mean_mrs, ret_phase = TRUE)
+  res$phases    <- -res_ap_bl$phase
+  res$corrected <- res_ap_bl$mrs_data
   
   # apply mean spectrum phase and shift to the single shots
   mrs_proc <- phase(mrs_rats$corrected, -as.numeric(res$phases))
   mrs_proc <- shift(mrs_proc, -as.numeric(res$shifts), units = "hz")
   
-  mrs_uncorr <-  phase(mrs_data,   -as.numeric(res$phases))
+  mrs_uncorr <-  phase(mrs_data, -as.numeric(res$phases))
   mrs_uncorr <-  shift(mrs_uncorr,
                        -as.numeric(res$shifts) - mean(mrs_rats$shifts),
                        units = "hz")

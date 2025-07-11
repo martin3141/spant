@@ -8,7 +8,8 @@ auto_phase_bl(
   mrs_data,
   ppm_start = c(0.5, 4),
   ppm_end = c(0, 4.2),
-  xlim = c(1.8, 4)
+  xlim = c(1.8, 4),
+  ret_phase = FALSE
 )
 }
 \arguments{
@@ -20,6 +21,8 @@ auto_phase_bl(
 
 \item{xlim}{region containing signal of interest, eg strong metabolite
 resonances.}
+
+\item{ret_phase}{return phase values (logical).}
 }
 \value{
 MRS data object with corrected phase.

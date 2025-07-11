@@ -12,6 +12,38 @@ knitr::opts_chunk$set(echo = FALSE)
 theme_set(theme_bw())
 ```
 
+## Spectra
+
+### Dynamic mean
+```{r, fig.width=5.5, fig.height=5}
+plot_labs <- params$data$summary$labels[rev(1:length(params$data$summary$labels))]
+proc_list <- params$data$res_list |> lapply(\(x) x$mean_corr)
+proc_list <- proc_list[rev(1:length(proc_list))]
+proc_list |> zf() |> stackplot(xlim = c(4, 0.5), y_offset = 50,
+                               labels = plot_labs,
+                               mar = c(3.5, 1, 1, 6), bl_lty = 2)
+```
+
+### First dynamic
+```{r, fig.width=5.5, fig.height=5}
+proc_list <- params$data$res_list |> lapply(\(x) x$corrected)
+proc_list <- proc_list[rev(1:length(proc_list))]
+proc_list |> get_dyns(1) |> zf() |> stackplot(xlim = c(4, 0.5), y_offset = 50,
+                                    labels = plot_labs,
+                                    mar = c(3.5, 1, 1, 6), bl_lty = 2)
+```
+
+### Last dynamic
+```{r, fig.width=5.5, fig.height=5}
+proc_list <- params$data$res_list |> lapply(\(x) x$corrected)
+proc_list <- proc_list[rev(1:length(proc_list))]
+last_dyn  <- proc_list[[1]] |> Ndyns()
+proc_list |> get_dyns(last_dyn) |> zf() |> stackplot(xlim = c(4, 0.5),
+                                           y_offset = 50,
+                                           labels = plot_labs,
+                                           mar = c(3.5, 1, 1, 6), bl_lty = 2)
+```
+
 ## Summary metrics
 
 ### Dynamic frequency shifts range

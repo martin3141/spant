@@ -1851,7 +1851,11 @@ shift_hz <- function(fid_in, shifts, t) {
 #' @return MRS data containing the subset of requested dynamics.
 #' @export
 get_dyns <- function(mrs_data, subset) {
-  
+
+  if (inherits(mrs_data, "list")) {
+    return(lapply(mrs_data, get_dyns, subset = subset))
+  }
+    
   # check the input
   check_mrs_data(mrs_data) 
   
@@ -4996,10 +5000,12 @@ comb_coils_mrsi_gls <- function(metab, noise_pts = 30, noise_mrs = NULL) {
 #' @param ppm_end a vectors of ppm values designating baseline regions.
 #' @param xlim region containing signal of interest, eg strong metabolite
 #' resonances.
+#' @param ret_phase return phase values (logical).
 #' @return MRS data object with corrected phase.
 #' @export
 auto_phase_bl <- function(mrs_data, ppm_start = c(0.5, 4.0),
-                          ppm_end = c(0.0, 4.2), xlim = c(1.8, 4)) {
+                          ppm_end = c(0.0, 4.2), xlim = c(1.8, 4),
+                          ret_phase = FALSE) {
   
   # must be freq domain
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
@@ -5024,12 +5030,18 @@ auto_phase_bl <- function(mrs_data, ppm_start = c(0.5, 4.0),
   mrs_data <- phase(mrs_data, phases)
   
   # correct any phase flips
-  mrs_data <- corr_phase_inversion(mrs_data, xlim = xlim)
+  phase_corr <- corr_phase_inversion(mrs_data, xlim = xlim, ret_phase = TRUE)
   
-  return(mrs_data)
+  if (ret_phase) {
+    return(list(mrs_data = phase_corr$mrs_data,
+                phase = phases + phase_corr$phase))
+  } else {
+    return(phase_corr$mrs_data)
+  }
 }
 
-corr_phase_inversion <- function(mrs_data, xlim = c(1.8, 4)) {
+corr_phase_inversion <- function(mrs_data, xlim = c(1.8, 4),
+                                 ret_phase = FALSE) {
   
   max_val_orig <- spec_op(mrs_data, xlim = xlim, operator = "max", mode = "re")
   mrs_data_inv <- mrs_data
@@ -5037,11 +5049,15 @@ corr_phase_inversion <- function(mrs_data, xlim = c(1.8, 4)) {
   max_val_inv <- spec_op(mrs_data_inv, xlim = xlim, operator = "max",
                          mode = "re")
   inv_phases <- (max_val_inv > max_val_orig)
-  phase      <- ifelse(inv_phases, 180, 0)
-  if (length(phase) == 1) phase <- as.numeric(phase)
-  mrs_data   <- phase(mrs_data, phase)
+  phase_vals <- ifelse(inv_phases, 180, 0)
+  if (length(phase_vals) == 1) phase_vals <- as.numeric(phase_vals)
+  mrs_data   <- phase(mrs_data, phase_vals)
   
-  return(mrs_data)
+  if (ret_phase) {
+    return(list(mrs_data = mrs_data, phase = phase_vals))
+  } else {
+    return(mrs_data)
+  }
 }
 
 auto_phase_bl_vec <- function(vec, ind_list) {
