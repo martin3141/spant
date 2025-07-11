@@ -4990,3 +4990,71 @@ comb_coils_mrsi_gls <- function(metab, noise_pts = 30, noise_mrs = NULL) {
  return(comb_data)
 }
 
+#' Perform zeroth-order phase correction based on expected baseline regions.
+#' @param mrs_data an object of class \code{mrs_data}.
+#' @param ppm_start a vector of ppm values designating baseline regions.
+#' @param ppm_end a vectors of ppm values designating baseline regions.
+#' @param xlim region containing signal of interest, eg strong metabolite
+#' resonances.
+#' @return MRS data object with corrected phase.
+#' @export
+auto_phase_bl <- function(mrs_data, ppm_start = c(0.5, 4.0),
+                          ppm_end = c(0.0, 4.2), xlim = c(1.8, 4)) {
+  
+  # must be freq domain
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  # get the ppm scale
+  x_scale <- ppm(mrs_data)
+  
+  # number of regions
+  regions <- length(ppm_start)
+  
+  ind_list <- vector("list", regions)
+  
+  for (n in 1:regions) {
+    ind_list[[n]] <- get_seg_ind(x_scale, ppm_start[n], ppm_end[n])
+  }
+  
+  phases <- apply_mrs(mrs_data, 7, auto_phase_bl_vec, data_only = TRUE,
+                      ind_list = ind_list)
+  
+  if (length(phases) == 1) phases <- as.numeric(phases)
+  
+  mrs_data <- phase(mrs_data, phases)
+  
+  # correct any phase flips
+  mrs_data <- corr_phase_inversion(mrs_data, xlim = xlim)
+  
+  return(mrs_data)
+}
+
+corr_phase_inversion <- function(mrs_data, xlim = c(1.8, 4)) {
+  
+  max_val_orig <- spec_op(mrs_data, xlim = xlim, operator = "max", mode = "re")
+  mrs_data_inv <- mrs_data
+  mrs_data_inv$data <- -1 * mrs_data_inv$data
+  max_val_inv <- spec_op(mrs_data_inv, xlim = xlim, operator = "max",
+                         mode = "re")
+  inv_phases <- (max_val_inv > max_val_orig)
+  phase      <- ifelse(inv_phases, 180, 0)
+  if (length(phase) == 1) phase <- as.numeric(phase)
+  mrs_data   <- phase(mrs_data, phase)
+  
+  return(mrs_data)
+}
+
+auto_phase_bl_vec <- function(vec, ind_list) {
+  
+  res <- stats::optim(0, phase_bl_obj_fn, gr = NULL, vec, ind_list,
+                      method = "Brent", lower = -180, upper = 180)
+  
+  return(res$par)
+}
+
+phase_bl_obj_fn <- function(phi, vec, ind_list) {
+  vec <- Re(vec * exp(1i * phi / 180 * pi))
+  areas <- rep(NA, length(ind_list))
+  for (n in 1:length(ind_list)) areas[n] <- sum(vec[ind_list[[n]]])
+  return(sum((areas - mean(areas)) ^ 2))
+}
