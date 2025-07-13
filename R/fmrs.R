@@ -1342,15 +1342,15 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL,
   mean_mrs_fc <- align(mean_mrs, c(2.01, 3.03, 3.22), ret_df = TRUE)
  
   # auto phase 
-  res_ap_bl   <-  auto_phase_bl(mean_mrs_fc$data, ret_phase = TRUE)
+  res_ap_bl   <- auto_phase_bl(mean_mrs_fc$data, ret_phase = TRUE)
   
   # apply mean spectrum phase and shift to the single shots
-  mrs_proc <- phase(mrs_rats$corrected, -as.numeric(-res_ap_bl$phase))
-  mrs_proc <- shift(mrs_proc, -as.numeric(mean_mrs_fc$shifts), units = "hz")
+  mrs_proc <- phase(mrs_rats$corrected, as.numeric(res_ap_bl$phase))
+  mrs_proc <- shift(mrs_proc, as.numeric(mean_mrs_fc$shifts), units = "hz")
   
-  mrs_uncorr <-  phase(mrs_data, -as.numeric(-res_ap_bl$phase))
+  mrs_uncorr <-  phase(mrs_data, as.numeric(res_ap_bl$phase))
   mrs_uncorr <-  shift(mrs_uncorr,
-                      -as.numeric(mean_mrs_fc$shifts) - mean(mrs_rats$shifts),
+                       as.numeric(mean_mrs_fc$shifts) - mean(mrs_rats$shifts),
                        units = "hz")
   
   mean_uncorr <- mean_dyns(mrs_uncorr)
