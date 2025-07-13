@@ -1338,21 +1338,19 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL,
   
   mean_mrs <- mean_dyns(mrs_rats$corrected)
     
-  # frequency and phase correct the mean spectrum
-  res <- phase_ref_1h_brain(mean_mrs, ret_corr_only = FALSE)
-  
-  # improve upon the above
-  res_ap_bl <- auto_phase_bl(mean_mrs, ret_phase = TRUE)
-  res$phases    <- -res_ap_bl$phase
-  res$corrected <- res_ap_bl$mrs_data
+  # frequency correct
+  mean_mrs_fc <- align(mean_mrs, c(2.01, 3.03, 3.22), ret_df = TRUE)
+ 
+  # auto phase 
+  res_ap_bl   <-  auto_phase_bl(mean_mrs_fc$data, ret_phase = TRUE)
   
   # apply mean spectrum phase and shift to the single shots
-  mrs_proc <- phase(mrs_rats$corrected, -as.numeric(res$phases))
-  mrs_proc <- shift(mrs_proc, -as.numeric(res$shifts), units = "hz")
+  mrs_proc <- phase(mrs_rats$corrected, -as.numeric(-res_ap_bl$phase))
+  mrs_proc <- shift(mrs_proc, -as.numeric(mean_mrs_fc$shifts), units = "hz")
   
-  mrs_uncorr <-  phase(mrs_data, -as.numeric(res$phases))
+  mrs_uncorr <-  phase(mrs_data, -as.numeric(-res_ap_bl$phase))
   mrs_uncorr <-  shift(mrs_uncorr,
-                       -as.numeric(res$shifts) - mean(mrs_rats$shifts),
+                      -as.numeric(mean_mrs_fc$shifts) - mean(mrs_rats$shifts),
                        units = "hz")
   
   mean_uncorr <- mean_dyns(mrs_uncorr)
@@ -1380,16 +1378,17 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL,
                            lw_ppm_smo = lw_ppm_smo, tnaa_height = tnaa_height)
   
   # scale data to the tCr peak
-  amp <- spec_op(zf(res$corrected), xlim = c(2.9, 3.1), operator = "max-min")
+  amp <- spec_op(zf(res_ap_bl$mrs_data), xlim = c(2.9, 3.1),
+                 operator = "max-min")
   amp <- as.numeric(amp)
-  mrs_proc      <- scale_mrs_amp(mrs_proc, 1 / amp)
-  mrs_uncorr    <- scale_mrs_amp(mrs_uncorr, 1 / amp)
-  res$corrected <- scale_mrs_amp(res$corrected, 1 / amp)
-  mean_uncorr   <- scale_mrs_amp(mean_uncorr, 1 / amp)
+  mrs_proc           <- scale_mrs_amp(mrs_proc, 1 / amp)
+  mrs_uncorr         <- scale_mrs_amp(mrs_uncorr, 1 / amp)
+  res_ap_bl$mrs_data <- scale_mrs_amp(res_ap_bl$mrs_data, 1 / amp)
+  mean_uncorr        <- scale_mrs_amp(mean_uncorr, 1 / amp)
   
   # mean spec SNR and LW
-  mean_corr_spec_snr   <- calc_spec_snr(res$corrected)
-  corr_peak_info       <- peak_info(res$corrected, xlim = c(1.8, 2.2))
+  mean_corr_spec_snr   <- calc_spec_snr(res_ap_bl$mrs_data)
+  corr_peak_info       <- peak_info(res_ap_bl$mrs_data, xlim = c(1.8, 2.2))
   mean_corr_spec_lw    <- corr_peak_info$fwhm_ppm 
   mean_uncorr_spec_snr <- calc_spec_snr(mean_uncorr)
   uncorr_peak_info     <- peak_info(bc_constant(mean_uncorr,
@@ -1419,7 +1418,7 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL,
                      dfr = dfr, dlfr = dlfr)
   
   res <- list(corrected = mrs_proc, uncorrected = mrs_uncorr,
-              mean_corr = res$corrected, mean_uncorr = mean_uncorr,
+              mean_corr = res_ap_bl$mrs_data, mean_uncorr = mean_uncorr,
               diag_table = diag_table, summary_diags = summary_diags,
               mrs_mean_sub = mrs_mean_sub, mrs_mean_sub_bc = mrs_mean_sub_bc)
   
