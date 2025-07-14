@@ -5000,12 +5000,20 @@ comb_coils_mrsi_gls <- function(metab, noise_pts = 30, noise_mrs = NULL) {
 #' @param ppm_end a vectors of ppm values designating baseline regions.
 #' @param xlim region containing signal of interest, eg strong metabolite
 #' resonances.
+#' @param mean_dyns phase the mean spectrum and apply the same value to each
+#' dynamic.
 #' @param ret_phase return phase values (logical).
 #' @return MRS data object with corrected phase.
 #' @export
 auto_phase_bl <- function(mrs_data, ppm_start = c(0.5, 4.0),
                           ppm_end = c(0.0, 4.2), xlim = c(1.8, 4),
-                          ret_phase = FALSE) {
+                          mean_dyns = FALSE, ret_phase = FALSE) {
+  
+  if (inherits(mrs_data, "list")) {
+    return(lapply(mrs_data, auto_phase_bl, ppm_start = ppm_start,
+                  ppm_end = ppm_end, xlim = xlim, mean_dyns = mean_dyns,
+                  ret_phase = ret_phase))
+  }
   
   # must be freq domain
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
@@ -5022,6 +5030,11 @@ auto_phase_bl <- function(mrs_data, ppm_start = c(0.5, 4.0),
     ind_list[[n]] <- get_seg_ind(x_scale, ppm_start[n], ppm_end[n])
   }
   
+  if (mean_dyns) {
+    mrs_data_orig <- mrs_data
+    mrs_data <- mean_dyns(mrs_data)
+  }
+  
   phases <- apply_mrs(mrs_data, 7, auto_phase_bl_vec, data_only = TRUE,
                       ind_list = ind_list)
   
@@ -5031,6 +5044,11 @@ auto_phase_bl <- function(mrs_data, ppm_start = c(0.5, 4.0),
   
   # correct any phase flips
   phase_corr <- corr_phase_inversion(mrs_data, xlim = xlim, ret_phase = TRUE)
+  
+  # apply same phase to individual dynamics
+  if (mean_dyns) {
+    phase_corr$mrs_data <- phase(mrs_data_orig, phases + phase_corr$phase)
+  }
   
   if (ret_phase) {
     return(list(mrs_data = phase_corr$mrs_data,
