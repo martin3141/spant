@@ -9,6 +9,7 @@ auto_phase_bl(
   ppm_start = c(0.5, 4),
   ppm_end = c(0, 4.2),
   xlim = c(1.8, 4),
+  mean_dyns = FALSE,
   ret_phase = FALSE
 )
 }
@@ -21,6 +22,9 @@ auto_phase_bl(
 
 \item{xlim}{region containing signal of interest, eg strong metabolite
 resonances.}
+
+\item{mean_dyns}{phase the mean spectrum and apply the same value to each
+dynamic.}
 
 \item{ret_phase}{return phase values (logical).}
 }
