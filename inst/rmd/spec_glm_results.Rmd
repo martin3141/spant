@@ -21,22 +21,22 @@ theme_set(theme_bw())
 ## `r params$label`
 
 ### Mean spectrum
-```{r, fig.width=10}
+```{r, fig.width=12}
 par(mfcol = c(1, 2))
 plot(params$mrs_data_plot, xlim = xlim, restore_def_par = FALSE,
-     vline = params$vline)
+     vline = params$vline, y_scale = TRUE)
 ```
 
 ### Processed spectrum
-```{r, fig.width=10}
+```{r, fig.width=12}
 par(mfcol = c(1, 2))
 plot(mean_dyns(params$data$mrs_data), xlim = xlim, restore_def_par = FALSE,
-     vline = params$vline, main = "mean")
+     vline = params$vline, main = "mean", y_scale = TRUE)
 plot(get_dyns(params$data$mrs_data, 1), xlim = xlim, restore_def_par = FALSE,
-     vline = params$vline, main = "first dynamic")
+     vline = params$vline, main = "first dynamic", y_scale = TRUE)
 ```
 
-```{r, fig.width=10, results='asis'}
+```{r, fig.width=12, results='asis'}
 Nregressors <- ncol(params$regressor_df) - 1
 
 for (n in 1:Nregressors) {
