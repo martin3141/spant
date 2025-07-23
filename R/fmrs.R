@@ -411,7 +411,33 @@ gen_baseline_reg <- function(mrs_data = NULL, tr = NULL, Ndyns = NULL,
                                Ntrans = NULL) {
     
   time   <- dyn_acq_times(mrs_data, tr, Ndyns, Ntrans)
-  reg_df <- data.frame(time = time, baseline = rep(1, length(t)))
+  reg_df <- data.frame(time = time, baseline = rep(1, length(time)))
+  return(reg_df)
+}
+
+#' Generate a regressor from a numeric vector.
+#' @param in_vec a numeric input vector the same length as the number of stored
+#' dynamic scans.
+#' @param name a character vector representing the regressor name.
+#' @param mrs_data mrs_data object for timing information.
+#' @param tr repetition time.
+#' @param Ndyns number of dynamic scans stored, potentially less than Ntrans
+#' if block averaging has been performed.
+#' @param Ntrans number of dynamic scans acquired.
+#' @return a single baseline regressor with value of 1.
+#' @export
+gen_numeric_reg <- function(in_vec, name, mrs_data = NULL, tr = NULL,
+                            Ndyns = NULL, Ntrans = NULL) {
+    
+  time <- dyn_acq_times(mrs_data, tr, Ndyns, Ntrans)
+  
+  if (length(in_vec) != length(time)) {
+    stop("input vector is an incorrect length")
+  }
+  
+  reg_df <- data.frame(time = time)
+  reg_df[name] <- in_vec
+  
   return(reg_df)
 }
 
@@ -1626,11 +1652,10 @@ preproc_svs_dataset <- function(paths, labels = NULL,
 #' @param return_results function will return key outputs, defaults to FALSE.
 #' @export
 glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
-                             exclude_labels = NULL, labels = NULL,
-                             xlim = c(4, 0.2),
+                             output_dir = "spec_glm", exclude_labels = NULL,
+                             labels = NULL, xlim = c(4, 0.2),
                              vline = c(1.35, 1.28, 2.35, 2.29),
-                             lb = 4,
-                             return_results = FALSE) {
+                             lb = 4, return_results = FALSE) {
   
   # TODO add optional arguments for datasets to preserve original
   # ordering if needed
@@ -1665,11 +1690,11 @@ glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
   }
   
   # directory for spec glm html reports 
-  spec_glm_dir <- file.path(analysis_dir, "spec_glm", "first_level")
+  spec_glm_dir <- file.path(analysis_dir, output_dir, "first_level")
   if (!dir.exists(spec_glm_dir)) dir.create(spec_glm_dir, recursive = TRUE)
   
   # directory for processed spectra
-  spec_glm_mrs_dir <- file.path(analysis_dir, "spec_glm", "proc_fmrs")
+  spec_glm_mrs_dir <- file.path(analysis_dir, output_dir, "proc_fmrs")
   if (!dir.exists(spec_glm_mrs_dir)) dir.create(spec_glm_mrs_dir)
   
   # read preprocessed results
@@ -1691,7 +1716,8 @@ glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
   for (n in 1:Nscans) {
     mrs_data_glm <- preproc_res_list[[n]]$corrected
     glm_spec_res_list[[n]] <- gen_glm_spec_report(mrs_data_glm, regressor_df,
-                                                  labels[n], analysis_dir, xlim,
+                                                  labels[n], analysis_dir, 
+                                                  output_dir, xlim,
                                                   vline, lb = lb)
     
     # write processed data 
@@ -1714,7 +1740,7 @@ glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
   
   # run glm spec on the mean dataset
   glm_spec_mean_res <- gen_glm_spec_report(mean_dataset, regressor_df,
-                          "dataset_mean", analysis_dir,
+                          "dataset_mean", analysis_dir, output_dir,
                            xlim, vline, exclude_labels, lb = lb)
   
   if (return_results) {
@@ -1723,7 +1749,8 @@ glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
 }
 
 gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
-                                xlim, vline, exclude_labels = NULL, lb) {
+                                output_dir, xlim, vline, exclude_labels = NULL,
+                                lb) {
   
   # process the data
   mrs_data_glm <- lb(mrs_data, lb)
@@ -1744,7 +1771,7 @@ gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
   # write output
   rmd_file <- system.file("rmd", "spec_glm_results.Rmd", package = "spant")
   
-  rmd_out_f <- file.path(tools::file_path_as_absolute(analysis_dir), "spec_glm",
+  rmd_out_f <- file.path(tools::file_path_as_absolute(analysis_dir), output_dir,
                          "first_level", label)
   
   rmarkdown::render(rmd_file, params = list(data = glm_spec_res, 
