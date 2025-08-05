@@ -40,6 +40,9 @@
 #' @param pre_align perform simple frequency alignment to known reference peaks.
 #' @param dfp_corr perform dynamic frequency and phase correction using the RATS
 #' method.
+#' @param dfp_corr_ref_subset specify a subset of dynamics to use as reference
+#' scans for dynamic frequency and phase correction. For example, 1:16 would use
+#' the mean of the first 16 dynamic scans as a reference spectrum.
 #' @param output_ratio optional string to specify a metabolite ratio to output.
 #' Defaults to "tCr". Multiple metabolites may be specified for multiple
 #' outputs. Set to NA to omit.
@@ -59,6 +62,10 @@
 #' @param fit_opts options to pass to the fitting method.
 #' @param fit_subset specify a subset of dynamics to analyse, for example
 #' 1:16 would only fit the first 16 dynamic scans.
+#' @param w_ref_subset specify a subset of dynamics to use as water reference
+#' following rats alignment and averaging. For example c(1, 2) would only use
+#' the average of the first two dynamic water reference scans. Default value of
+#' NULL uses all available water reference scans.
 #' @param legacy_ws perform and output legacy water scaling compatible with
 #' default LCModel and TARQUIN behaviour. See w_att and w_conc arguments to 
 #' change the default assumptions. Default value is FALSE.
@@ -104,15 +111,16 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                     format = NULL, pul_seq = NULL, TE = NULL, TR = NULL,
                     TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
                     append_basis = NULL, remove_basis = NULL, pre_align = TRUE,
-                    dfp_corr = TRUE, output_ratio = NULL, ecc = FALSE,
-                    hsvd_width = NULL, decimate = FALSE, trunc_fid_pts = NULL,
+                    dfp_corr = TRUE, dfp_corr_ref_subset = NULL,
+                    output_ratio = NULL, ecc = FALSE, hsvd_width = NULL,
+                    decimate = FALSE, trunc_fid_pts = NULL,
                     fit_method = NULL, fit_opts = NULL, fit_subset = NULL,
-                    legacy_ws = FALSE, w_att = 0.7, w_conc = 35880,
-                    use_basis_cache = "auto", summary_measures = NULL,
-                    dyn_av_block_size = NULL, dyn_av_scheme = NULL,
-                    dyn_av_scheme_file = NULL, lcm_bin_path = NULL,
-                    plot_ppm_xlim = NULL, extra_output = FALSE,
-                    verbose = FALSE) {
+                    w_ref_subset = NULL, legacy_ws = FALSE, w_att = 0.7,
+                    w_conc = 35880, use_basis_cache = "auto",
+                    summary_measures = NULL, dyn_av_block_size = NULL,
+                    dyn_av_scheme = NULL, dyn_av_scheme_file = NULL,
+                    lcm_bin_path = NULL, plot_ppm_xlim = NULL,
+                    extra_output = FALSE, verbose = FALSE) {
   
   argg  <- c(as.list(environment()))
   
@@ -241,8 +249,11 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   }
   
   # extract a subset of dynamic scans if specified
-  if (!is.null(fit_subset)) {
-    metab <- get_dyns(metab, fit_subset) 
+  if (!is.null(fit_subset)) metab <- get_dyns(metab, fit_subset) 
+  
+  # extract a subset of dynamic water ref scans if specified
+  if (w_ref_available & (!is.null(w_ref_subset))) {
+    w_ref <- get_dyns(w_ref, w_ref_subset) 
   }
   
   metab_pre_dfp_corr <- metab
@@ -255,7 +266,14 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   # rats correction
   if (dfp_corr & (Ndyns(metab) > 1)) {
-    metab <- rats(metab, zero_freq_shift_t0 = TRUE, xlim = c(4, 1.8))
+    if (!is.null(dfp_corr_ref_subset)) {
+      metab_ref_subset <- mean_dyns(metab, dfp_corr_ref_subset) 
+      print(metab_ref_subset)
+      metab <- rats(metab, ref = metab_ref_subset, zero_freq_shift_t0 = TRUE,
+                    xlim = c(4, 1.8))
+    } else {
+      metab <- rats(metab, zero_freq_shift_t0 = TRUE, xlim = c(4, 1.8))
+    }
     metab_post_dfp_corr <- metab
   }
   
@@ -294,13 +312,20 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     metab <- mean_dyns(metab)
   }
  
-  # take the mean of the water reference data
-  # if (w_ref_available) w_ref <- mean_dyns(w_ref)
+  # align dynamic water reference scans to the first dynamic using rats and take
+  # the mean
+  if (w_ref_available) {
+    if (Ndyns(w_ref) > 1) {
+      w_ref_ref <- get_dyns(w_ref, 1)
+      w_ref <- rats(w_ref, xlim = c(5.3, 4), ref = w_ref_ref)
+      w_ref <- mean_dyns(w_ref)
+    }
+  }
   
   # extract the first dynamic of the water reference data
   # better for Dinesh sLASER where the water peak can shift before and after
   # the metabolite data collection
-  if (w_ref_available) w_ref <- get_dyns(w_ref, 1)
+  # if (w_ref_available) w_ref <- get_dyns(w_ref, 1)
   
   # calculate the water suppression efficiency
   # the ratio of the residual water peak height

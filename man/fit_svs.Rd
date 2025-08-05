@@ -25,6 +25,7 @@ fit_svs(
   remove_basis = NULL,
   pre_align = TRUE,
   dfp_corr = TRUE,
+  dfp_corr_ref_subset = NULL,
   output_ratio = NULL,
   ecc = FALSE,
   hsvd_width = NULL,
@@ -33,6 +34,7 @@ fit_svs(
   fit_method = NULL,
   fit_opts = NULL,
   fit_subset = NULL,
+  w_ref_subset = NULL,
   legacy_ws = FALSE,
   w_att = 0.7,
   w_conc = 35880,
@@ -106,6 +108,10 @@ precompiled basis sets.}
 \item{dfp_corr}{perform dynamic frequency and phase correction using the RATS
 method.}
 
+\item{dfp_corr_ref_subset}{specify a subset of dynamics to use as reference
+scans for dynamic frequency and phase correction. For example, 1:16 would use
+the mean of the first 16 dynamic scans as a reference spectrum.}
+
 \item{output_ratio}{optional string to specify a metabolite ratio to output.
 Defaults to "tCr". Multiple metabolites may be specified for multiple
 outputs. Set to NA to omit.}
@@ -132,6 +138,11 @@ truncation is not performed.}
 
 \item{fit_subset}{specify a subset of dynamics to analyse, for example
 1:16 would only fit the first 16 dynamic scans.}
+
+\item{w_ref_subset}{specify a subset of dynamics to use as water reference
+following rats alignment and averaging. For example c(1, 2) would only use
+the average of the first two dynamic water reference scans. Default value of
+NULL uses all available water reference scans.}
 
 \item{legacy_ws}{perform and output legacy water scaling compatible with
 default LCModel and TARQUIN behaviour. See w_att and w_conc arguments to

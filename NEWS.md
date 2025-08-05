@@ -1,6 +1,9 @@
 # spant 3.5.0
 * Added a function to help bids sorting of MRS and MRI data : mr_data2bids.
-* TODO
+* Extra options to fit_svs : dfp_corr_ref_subset and w_ref_subset.
+* fit_svs default now uses the mean of all availalbe water reference scans,
+rather than just the first dynamic. Set w_ref_subset = 1 to reproduce previous
+results.
 
 # spant 3.4.0
 * Added a function to read DKD's sLASER MoCo log file.
