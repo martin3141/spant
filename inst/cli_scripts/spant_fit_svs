@@ -69,7 +69,7 @@ parser <- add_option(parser, c("--dfp_corr"), action = "store", default = TRUE,
                      help="Perform dynamic frequency and phase correction using the RATS\n\t\tmethod.")
 
 parser <- add_option(parser, c("--dfp_corr_ref_subset"), action = "store", type = "character",
-                     help="Specify a subset of dynamics to use as reference scans for dynamic frequency and phase correction. For example, 1:16 would use the mean of the first 16 dynamic scans as a reference spectrum.")
+                     help="Specify a subset of dynamics to use as reference scans for\n\t\tdynamic frequency and phase correction. For example, 1:16 would\n\t\tuse the mean of the first 16 dynamic scans as a reference\n\t\tspectrum.")
                      
 parser <- add_option(parser, c("--output-ratio"), action = "store", type = "character",
                      help="String to specify a metabolite ratio to output. Defaults to\n\t\t\"tCr\". Multiple metabolites may be specified for multiple\n\t\toutputs. Set to NA to omit.")
@@ -96,7 +96,7 @@ parser <- add_option(parser, c("--fit_subset"), action = "store", type = "charac
                      help="Specify a subset of dynamics to analyse, for example 1:16 would\n\t\tonly fit the first 16 dynamic scans.")
 
 parser <- add_option(parser, c("--w_ref_subset"), action = "store", type = "character",
-                     help="specify a subset of dynamics to use as water reference following rats alignment and averaging. For example c(1, 2) would only use the average of the first two dynamic water reference scans. Default value of NULL uses all available water reference scans")
+                     help="specify a subset of dynamics to use as water reference following\n\t\trats alignment and averaging. For example c(1, 2) would only use\n\t\tthe average of the first two dynamic water reference scans.\n\t\tDefault value of NULL uses all available water reference scans.")
 
 parser <- add_option(parser, c("--legacy_ws"), action = "store", default = FALSE,
                      help="Perform and output legacy water scaling compatible with default\n\t\tLCModel and TARQUIN behaviour. See w_att and w_conc arguments\n\t\tto change the default assumptions. Default value is FALSE.")
