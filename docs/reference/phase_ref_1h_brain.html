@@ -18,7 +18,7 @@ brain."><meta property="og:image" content="https://martin3141.github.io/spant/lo
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.5.0</span>
       </span>
     </div>
 
@@ -80,7 +80,15 @@ brain.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">phase_ref_1h_brain</span><span class="op">(</span><span class="va">mrs_data</span>, mean_ref <span class="op">=</span> <span class="cn">FALSE</span>, ret_corr_only <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">phase_ref_1h_brain</span><span class="op">(</span></span>
+<span>  <span class="va">mrs_data</span>,</span>
+<span>  mean_ref <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ret_corr_only <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">1.9</span><span class="op">)</span>,</span>
+<span>  p_deg <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  sp_N <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  basis_type <span class="op">=</span> <span class="st">"poly"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -98,6 +106,23 @@ others. Default is FALSE.</p></dd>
 
 <dt id="arg-ret-corr-only">ret_corr_only<a class="anchor" aria-label="anchor" href="#arg-ret-corr-only"></a></dt>
 <dd><p>return the corrected data only.</p></dd>
+
+
+<dt id="arg-xlim">xlim<a class="anchor" aria-label="anchor" href="#arg-xlim"></a></dt>
+<dd><p>frequency range in ppm to consider.</p></dd>
+
+
+<dt id="arg-p-deg">p_deg<a class="anchor" aria-label="anchor" href="#arg-p-deg"></a></dt>
+<dd><p>polynomial baseline order.</p></dd>
+
+
+<dt id="arg-sp-n">sp_N<a class="anchor" aria-label="anchor" href="#arg-sp-n"></a></dt>
+<dd><p>number of spline functions, note the true number will be sp_N +
+sp_deg.</p></dd>
+
+
+<dt id="arg-basis-type">basis_type<a class="anchor" aria-label="anchor" href="#arg-basis-type"></a></dt>
+<dd><p>may be one of "poly" or "spline".</p></dd>
 
 </dl></div>
     <div id="value">

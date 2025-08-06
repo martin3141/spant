@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.5.0</span>
       </span>
     </div>
 
@@ -99,6 +99,7 @@
 <span>  remove_basis <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pre_align <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  dfp_corr <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  dfp_corr_ref_subset <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_ratio <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ecc <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  hsvd_width <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -107,6 +108,7 @@
 <span>  fit_method <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fit_opts <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fit_subset <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  w_ref_subset <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  legacy_ws <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  w_att <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>  w_conc <span class="op">=</span> <span class="fl">35880</span>,</span>
@@ -224,6 +226,12 @@ precompiled basis sets.</p></dd>
 method.</p></dd>
 
 
+<dt id="arg-dfp-corr-ref-subset">dfp_corr_ref_subset<a class="anchor" aria-label="anchor" href="#arg-dfp-corr-ref-subset"></a></dt>
+<dd><p>specify a subset of dynamics to use as reference
+scans for dynamic frequency and phase correction. For example, 1:16 would use
+the mean of the first 16 dynamic scans as a reference spectrum.</p></dd>
+
+
 <dt id="arg-output-ratio">output_ratio<a class="anchor" aria-label="anchor" href="#arg-output-ratio"></a></dt>
 <dd><p>optional string to specify a metabolite ratio to output.
 Defaults to "tCr". Multiple metabolites may be specified for multiple
@@ -265,6 +273,13 @@ truncation is not performed.</p></dd>
 <dt id="arg-fit-subset">fit_subset<a class="anchor" aria-label="anchor" href="#arg-fit-subset"></a></dt>
 <dd><p>specify a subset of dynamics to analyse, for example
 1:16 would only fit the first 16 dynamic scans.</p></dd>
+
+
+<dt id="arg-w-ref-subset">w_ref_subset<a class="anchor" aria-label="anchor" href="#arg-w-ref-subset"></a></dt>
+<dd><p>specify a subset of dynamics to use as water reference
+following rats alignment and averaging. For example c(1, 2) would only use
+the average of the first two dynamic water reference scans. Default value of
+NULL uses all available water reference scans.</p></dd>
 
 
 <dt id="arg-legacy-ws">legacy_ws<a class="anchor" aria-label="anchor" href="#arg-legacy-ws"></a></dt>

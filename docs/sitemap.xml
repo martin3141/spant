@@ -44,6 +44,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/apply_pvc.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/array2mrs_data.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/auto_phase.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/auto_phase_bl.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/back_extrap.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/back_extrap_ar.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/basis2dyn_mrs_data.html</loc></url>
@@ -77,6 +78,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/comb_coils_mrsi_gls.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/comb_coils_svs_gls.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/comb_csv_results.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/comb_fit_list_dyns.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/comb_fit_list_fit_tables.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/comb_fit_list_result_tables.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/comb_fit_tables.html</loc></url>
@@ -147,6 +149,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/gen_conv_reg.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/gen_group_reg.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/gen_impulse_reg.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/gen_numeric_reg.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/gen_poly_reg.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/gen_trap_reg.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/gen_trap_rf.html</loc></url>
@@ -243,8 +246,10 @@
 <url><loc>https://martin3141.github.io/spant/reference/mean_vec_blocks.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/median_dyns.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/mod_td.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/mr_data2bids.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/mrs_data2basis.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/mrs_data2bids.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/mrs_data2list.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/mrs_data2mat.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/mrs_data2spec_mat.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/mrs_data2vec.html</loc></url>
