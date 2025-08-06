@@ -68,6 +68,9 @@ parser <- add_option(parser, c("--pre_align"), action = "store", default = TRUE,
 parser <- add_option(parser, c("--dfp_corr"), action = "store", default = TRUE,
                      help="Perform dynamic frequency and phase correction using the RATS\n\t\tmethod.")
 
+parser <- add_option(parser, c("--dfp_corr_ref_subset"), action = "store", type - "character",
+                     help="Specify a subset of dynamics to use as reference scans for dynamic frequency and phase correction. For example, 1:16 would use the mean of the first 16 dynamic scans as a reference spectrum.")
+                     
 parser <- add_option(parser, c("--output-ratio"), action = "store", type = "character",
                      help="String to specify a metabolite ratio to output. Defaults to\n\t\t\"tCr\". Multiple metabolites may be specified for multiple\n\t\toutputs. Set to NA to omit.")
 
@@ -91,6 +94,9 @@ parser <- add_option(parser, c("--fit_opts"), action = "store", type = "characte
 
 parser <- add_option(parser, c("--fit_subset"), action = "store", type = "character",
                      help="Specify a subset of dynamics to analyse, for example 1:16 would\n\t\tonly fit the first 16 dynamic scans.")
+
+parser <- add_option(parser, c("--w_ref_subset"), action = "store", type = "character",
+                     help="specify a subset of dynamics to use as water reference following rats alignment and averaging. For example c(1, 2) would only use the average of the first two dynamic water reference scans. Default value of NULL uses all available water reference scans")
 
 parser <- add_option(parser, c("--legacy_ws"), action = "store", default = FALSE,
                      help="Perform and output legacy water scaling compatible with default\n\t\tLCModel and TARQUIN behaviour. See w_att and w_conc arguments\n\t\tto change the default assumptions. Default value is FALSE.")
@@ -177,6 +183,7 @@ fit_res <- fit_svs(input = opt[["input"]],
                    remove_basis = opt[["remove_basis"]],
                    pre_align = opt[["pre_align"]],
                    dfp_corr = opt[["dfp_corr"]],
+                   dfp_corr_ref_subset = opt[["dfp_corr_ref_subset"]],
                    output_ratio = opt[["output_ratio"]],
                    ecc = opt[["ecc"]],
                    hsvd_width = opt[["hsvd_width"]],
@@ -185,6 +192,7 @@ fit_res <- fit_svs(input = opt[["input"]],
                    fit_method = opt[["fit_method"]],
                    fit_opts = opt[["fit_opts"]],
                    fit_subset = opt[["fit_subset"]],
+                   w_ref_subset = opt[["w_ref_subset"]],
                    legacy_ws = opt[["legacy_ws"]],
                    w_att = opt[["w_att"]],
                    w_conc = opt[["w_conc"]],
