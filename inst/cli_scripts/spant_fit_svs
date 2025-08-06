@@ -68,7 +68,7 @@ parser <- add_option(parser, c("--pre_align"), action = "store", default = TRUE,
 parser <- add_option(parser, c("--dfp_corr"), action = "store", default = TRUE,
                      help="Perform dynamic frequency and phase correction using the RATS\n\t\tmethod.")
 
-parser <- add_option(parser, c("--dfp_corr_ref_subset"), action = "store", type - "character",
+parser <- add_option(parser, c("--dfp_corr_ref_subset"), action = "store", type = "character",
                      help="Specify a subset of dynamics to use as reference scans for dynamic frequency and phase correction. For example, 1:16 would use the mean of the first 16 dynamic scans as a reference spectrum.")
                      
 parser <- add_option(parser, c("--output-ratio"), action = "store", type = "character",
