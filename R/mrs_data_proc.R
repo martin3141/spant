@@ -4996,7 +4996,7 @@ comb_coils_mrsi_gls <- function(metab, noise_pts = 30, noise_mrs = NULL) {
 
 #' Perform zeroth-order phase correction based on expected baseline regions.
 #'
-#' Default values are appropriate for water suppressed 1H MRS of the brain.
+#' Default arguments are appropriate for water suppressed 1H MRS of the brain.
 #' The following options are suitable for a water signal at 4.65 ppm:
 #' ppm_start = c(5.2, 4.0), ppm_end = c(5.3, 4.1), xlim = c(5.2, 4.1)
 #'
