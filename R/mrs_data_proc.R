@@ -4629,6 +4629,7 @@ mean_mrs_list <- function(mrs_list) {
 #' @return sum \code{mrs_data} object.
 #' @export
 sum_mrs_list <- function(mrs_list) {
+  if (length(mrs_list) == 1) return(mrs_list[[1]])
   sum_mrs <- mrs_list[[1]]
   for (n in (2:length(mrs_list))) sum_mrs <- sum_mrs(sum_mrs, mrs_list[[n]])
   return(sum_mrs)
