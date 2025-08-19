@@ -1863,6 +1863,45 @@ get_dyns <- function(mrs_data, subset) {
   return(mrs_data)
 }
 
+#' Average sets of dynamics according to a scheme vector.
+#' @param mrs_data dynamic MRS data.
+#' @param av_scheme vector containing consecutive integer values (starting at 1)
+#' representing sets of dynamics to average. This vector must have the same
+#' length as the number of dynamic scans in mrs_data. Any elements set to NA
+#' will not contribute to averaging.
+#' @return Dynamic MRS data set containing the averaged dynamic sets.
+#' @export
+get_dyn_av_scheme <- function(mrs_data, av_scheme) {
+  
+  if (length(av_scheme) != Ndyns(mrs_data)) {
+    stop(paste0("scheme is the wrong length. Currently : ",
+                length(av_scheme),", should be : ", Ndyns(mrs_data)))
+  }
+  
+  av_scheme <- as.integer(av_scheme)
+  
+  if (min(av_scheme, na.rm = TRUE) != 1L) {
+    stop("minimum av_scheme value is not 1")
+  }
+  
+  max_dyn <- max(av_scheme, na.rm = TRUE)
+  
+  av_scheme_unique <- as.vector(stats::na.omit(unique(av_scheme)))
+  
+  if (!identical(sort(av_scheme_unique), (1:max_dyn))) {
+    print(sort(av_scheme_unique))
+    stop("av_scheme values are not consecutive integers")
+  }
+  
+  metab_list <- vector("list", length = max_dyn)
+  for (n in 1:max_dyn) {
+    subset <- which(av_scheme == n) 
+    metab_list[[n]] <- mean_dyns(get_dyns(mrs_data, subset))
+  }
+  
+  return(append_dyns(metab_list))
+}
+
 #' Interleave the first and second half of a dynamic series.
 #' @param mrs_data dynamic MRS data.
 #' @return interleaved data.

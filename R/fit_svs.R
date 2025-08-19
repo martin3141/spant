@@ -296,18 +296,20 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (!is.null(dyn_av_block_size)) {
     metab <- mean_dyn_blocks(metab, dyn_av_block_size)
   } else if (!is.null(dyn_av_scheme)) {
-    if (length(dyn_av_scheme) != Ndyns(metab)) {
-      stop(paste0("dyn_av_scheme is the wrong length. Currently : ",
-                  length(dyn_av_scheme),", should be : ", Ndyns(metab)))
-    }
-    dyn_av_scheme <- as.integer(dyn_av_scheme)
-    max_dyn       <- max(dyn_av_scheme)
-    metab_list    <- vector("list", length = max_dyn)
-    for (n in 1:max_dyn) {
-      subset <- which(dyn_av_scheme == n) 
-      metab_list[[n]] <- mean_dyns(get_dyns(metab, subset))
-    }
-    metab <- append_dyns(metab_list)
+    # if (length(dyn_av_scheme) != Ndyns(metab)) {
+    #   stop(paste0("dyn_av_scheme is the wrong length. Currently : ",
+    #               length(dyn_av_scheme),", should be : ", Ndyns(metab)))
+    # }
+    # dyn_av_scheme <- as.integer(dyn_av_scheme)
+    # max_dyn       <- max(dyn_av_scheme)
+    # metab_list    <- vector("list", length = max_dyn)
+    # for (n in 1:max_dyn) {
+    #   subset <- which(dyn_av_scheme == n) 
+    #   metab_list[[n]] <- mean_dyns(get_dyns(metab, subset))
+    # }
+    # metab <- append_dyns(metab_list)
+    
+    metab <- get_dyn_av_scheme(metab, dyn_av_scheme)
   } else {
     metab <- mean_dyns(metab)
   }

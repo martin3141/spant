@@ -1,3 +1,6 @@
+# spant 3.6.0
+* Added get_dyn_av_scheme function.
+
 # spant 3.5.0
 * Added a function to help bids sorting of MRS and MRI data : mr_data2bids.
 * Extra options to fit_svs : dfp_corr_ref_subset and w_ref_subset.
