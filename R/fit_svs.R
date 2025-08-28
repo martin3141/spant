@@ -309,7 +309,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     # }
     # metab <- append_dyns(metab_list)
     
-    metab <- get_dyn_av_scheme(metab, dyn_av_scheme)
+    metab <- mean_dyns_scheme(metab, dyn_av_scheme)
   } else {
     metab <- mean_dyns(metab)
   }

@@ -1871,7 +1871,7 @@ get_dyns <- function(mrs_data, subset) {
 #' will not contribute to averaging.
 #' @return Dynamic MRS data set containing the averaged dynamic sets.
 #' @export
-get_dyn_av_scheme <- function(mrs_data, av_scheme) {
+mean_dyns_scheme <- function(mrs_data, av_scheme) {
   
   if (length(av_scheme) != Ndyns(mrs_data)) {
     stop(paste0("scheme is the wrong length. Currently : ",
