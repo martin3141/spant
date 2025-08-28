@@ -2313,6 +2313,26 @@ inv_odd_dyns <- function(mrs_data) {
   return(mrs_data)
 }
 
+#' Subtract the odd dynamic scans from the even dynamic scans.
+#' @param mrs_data dynamic MRS data.
+#' @return subtracted result.
+#' @export
+sub_odd_from_even_dyns <- function(mrs_data) {
+  odd  <- get_odd_dyns(mrs_data) 
+  even <- get_even_dyns(mrs_data) 
+  return(even - odd)
+}
+
+#' Subtract the even dynamic scans from the odd dynamic scans.
+#' @param mrs_data dynamic MRS data.
+#' @return subtracted result.
+#' @export
+sub_even_from_odd_dyns <- function(mrs_data) {
+  odd  <- get_odd_dyns(mrs_data) 
+  even <- get_even_dyns(mrs_data) 
+  return(odd - even)
+}
+
 #' Invert even numbered dynamic scans starting from 1 (2,4,6...).
 #' @param mrs_data dynamic MRS data.
 #' @return dynamic MRS data with inverted even numbered scans.
