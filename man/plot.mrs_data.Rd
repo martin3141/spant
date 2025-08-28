@@ -60,7 +60,7 @@
 (logical).}
 
 \item{x_units}{the units to use for the x-axis, can be one of: "ppm", "hz",
-"points" or "seconds".}
+"points", "seconds" or "ms".}
 
 \item{xlim}{the range of values to display on the x-axis, eg xlim = c(4,1).}
 

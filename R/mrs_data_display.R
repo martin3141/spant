@@ -95,7 +95,7 @@ print.mrs_data <- function(x, full = FALSE, ...) {
 #' @param fd display data in the frequency-domain (default), or time-domain 
 #' (logical).
 #' @param x_units the units to use for the x-axis, can be one of: "ppm", "hz", 
-#' "points" or "seconds".
+#' "points", "seconds" or "ms".
 #' @param xlim the range of values to display on the x-axis, eg xlim = c(4,1).
 #' @param y_scale option to display the y-axis values (logical).
 #' @param x_ax option to display the x-axis values (logical).
@@ -200,8 +200,11 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
   } else if (x_units == "seconds") {
     x_scale <- seconds(x)
     xlab <- paste(xlab, "(s)")
+  } else if (x_units == "ms") {
+    x_scale <- seconds(x) * 1000
+    xlab <- paste(xlab, "(ms)")
   } else {
-    stop("Invalid x_units option, should be one of : 'ppm', 'hz', 'points' or 'seconds'") 
+    stop("Invalid x_units option, should be one of : 'ppm', 'hz', 'points', 'seconds' or 'ms'") 
   }
   
   if (!is.null(xaxis_lab)) xlab <- xaxis_lab
