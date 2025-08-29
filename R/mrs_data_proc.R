@@ -732,6 +732,47 @@ lb.basis_set <- function(x, lb, lg = 1) {
   mrs_data2basis(lb(basis2mrs_data(x), lb, lg), x$names)
 }
 
+
+match_ls_optim_fn <- function(par, mrs_data, ref, xlim) {
+  resid_mrs <- ref - td2fd(lb(mrs_data, par[1], par[2]))
+  resid     <- spec_op(resid_mrs, xlim = xlim, mode = "mod", operator = "l2")
+  return(resid)
+}
+
+#' Apply Voigt line-broadening to match a reference spectrum.
+#' @param mrs_data data to be broadened, note the linewidth of this spectrum
+#' must be narrower than the ref spectrum.
+#' @param ref reference data to match.
+#' @param xlim spectral region to match, eg c(5.2, 4.1) could be used to match
+#' two water resonances.
+#' @param init_lb initial value for the amount of line-broadening to apply (Hz).
+#' @param init_lg initial value for the Lorentz-Gauss lineshape parameter.
+#' @param min_lb minimum value for the amount of line-broadening to apply (Hz).
+#' @param max_lb maximum value for the amount of line-broadening to apply (Hz).
+#' @param min_lg minimum value for the Lorentz-Gauss lineshape parameter.
+#' @param max_lg maximum value for the Lorentz-Gauss lineshape parameter.
+#' @return a list containing the matched mrs_data, difference spectrum and
+#' optimisation results.
+#' @export
+match_lineshape <- function(mrs_data, ref, xlim, init_lb = 0.2, init_lg = 0.5,
+                            min_lb = 0, max_lb = Inf, min_lg = 0, max_lg = 1) {
+  
+  if (!is_fd(ref)) ref <- td2fd(ref)
+  
+  # init broadening in Hz, LG factor
+  start_vals <- c(init_lb, init_lg)
+  
+  res <- stats::optim(start_vals, match_ls_optim_fn, mrs_data = mrs_data,
+                      ref = ref, xlim = xlim, method = "L-BFGS-B",
+                      lower = c(min_lb, min_lg), upper = c(max_lb, max_lg))
+  
+  matched <- td2fd(lb(mrs_data, res$par[1], res$par[2]))
+  diff    <- ref - matched
+  
+  return(list(matched = matched, diff = diff, lb = res$par[1], lg = res$par[2],
+              optim_res = res))
+}
+
 #' Apply a weighting to the FID to enhance spectral resolution.
 #' @param mrs_data data to be enhanced.
 #' @param re resolution enhancement factor (rising exponential factor).
