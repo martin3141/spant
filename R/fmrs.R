@@ -1306,16 +1306,50 @@ find_bids_mrs <- function(path, output_full_path = FALSE) {
 }
 
 #' Preprocess and perform quality assessment of a single SVS data set.
-#' @param path path to the fMRS data file or IMA directory.
+#' @param path path to the MRS data file or IMA directory.
 #' @param label a label to describe the data set.
 #' @param output_dir output directory.
 #' @param ref_inds a vector of 1-based indices for any water reference dynamic
 #' scans.
+#' @param dyn_water_ref_path path to interleaved water reference data file or
+#' IMA directory.
 #' @export
 preproc_svs <- function(path, label = NULL, output_dir = NULL,
-                        ref_inds = NULL) {
+                        ref_inds = NULL, dyn_water_ref_path = NULL) {
   
   # TODO deal with GE style data with wref included in the same file
+  
+  
+  # process dynamic water reference data
+  if (!is.null(dyn_water_ref_path)) {
+    
+    if (dir.exists(dyn_water_ref_path)) {
+      dyn_water_ref <- read_ima_dyn_dir(dyn_water_ref_path)
+    } else {
+      dyn_water_ref <- read_mrs(dyn_water_ref_path)
+    }
+    
+    # combine coils if needed
+    if (Ncoils(dyn_water_ref) > 1) {
+      dyn_water_ref <- comb_coils_svs_gls(dyn_water_ref)
+    }
+    
+    dyn_water_ref_corr <- align(dyn_water_ref, ref_freq = 4.65)
+    
+    dyn_water_ref_corr <- rats(dyn_water_ref_corr, xlim = c(4.1, 5.2))
+    
+    dyn_water_ref_corr <- auto_phase_bl(dyn_water_ref_corr,
+                                        ppm_start = c(5.2, 4.0),
+                                        ppm_end = c(5.3, 4.1),
+                                        xlim = c(5.2, 4.1), mean_dyns = TRUE)
+    
+    dyn_water_ref_corr <- scale_spec(dyn_water_ref_corr, xlim = c(4.1, 5.2),
+                                     mean_dyns = TRUE, mode = "mod",
+                                     operator = "sum")
+    
+    # TODO
+    
+  }
   
   if (dir.exists(path)) {
     mrs_data <- read_ima_dyn_dir(path)
@@ -1460,7 +1494,7 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL,
 }
 
 #' Preprocess and perform quality assessment of one or more SVS data sets.
-#' @param paths paths to the fMRS data file or IMA directory.
+#' @param paths paths to the MRS data file or IMA directory.
 #' @param labels labels to describe each data set.
 #' @param output_dir output directory.
 #' @param exclude_labels vector of labels of scans to exclude, eg poor quality
@@ -1468,12 +1502,14 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL,
 #' @param overwrite overwrite saved results, defaults to FALSE.
 #' @param ref_inds a vector of 1-based indices for any water reference dynamic
 #' scans.
+#' @param dyn_water_ref_paths paths to interleaved water reference scans. 
 #' @param return_results function will return key outputs, defaults to FALSE.
 #' @export
 preproc_svs_dataset <- function(paths, labels = NULL,
                                 output_dir = "spant_analysis",
                                 exclude_labels = NULL, overwrite = FALSE,
-                                ref_inds = NULL, return_results = FALSE) {
+                                ref_inds = NULL, dyn_water_ref_paths = NULL,
+                                return_results = FALSE) {
   
   # TODO print warning if there are more preprocessed results than input
   # paths
@@ -1542,7 +1578,8 @@ preproc_svs_dataset <- function(paths, labels = NULL,
     }
     
     preproc_res_list[[n]] <- preproc_svs(paths[n], labels[n],
-                                         file.path(output_dir, "qa"), ref_inds)
+                                         file.path(output_dir, "qa"), ref_inds,
+                                         dyn_water_ref_paths[n])
     
     saveRDS(preproc_res_list[[n]], preproc_rds)
     

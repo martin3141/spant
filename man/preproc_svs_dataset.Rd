@@ -11,11 +11,12 @@ preproc_svs_dataset(
   exclude_labels = NULL,
   overwrite = FALSE,
   ref_inds = NULL,
+  dyn_water_ref_paths = NULL,
   return_results = FALSE
 )
 }
 \arguments{
-\item{paths}{paths to the fMRS data file or IMA directory.}
+\item{paths}{paths to the MRS data file or IMA directory.}
 
 \item{labels}{labels to describe each data set.}
 
@@ -28,6 +29,8 @@ data.}
 
 \item{ref_inds}{a vector of 1-based indices for any water reference dynamic
 scans.}
+
+\item{dyn_water_ref_paths}{paths to interleaved water reference scans.}
 
 \item{return_results}{function will return key outputs, defaults to FALSE.}
 }
