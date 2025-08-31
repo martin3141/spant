@@ -1346,9 +1346,8 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL,
     dyn_water_ref_corr <- scale_spec(dyn_water_ref_corr, xlim = c(4.1, 5.2),
                                      mean_dyns = TRUE, mode = "mod",
                                      operator = "sum")
-    
-    # TODO
-    
+  } else {
+    dyn_water_ref_corr <- NULL
   }
   
   if (dir.exists(path)) {
@@ -1477,10 +1476,28 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL,
                      shift_hz_range = diff(range(diag_table$shifts_hz)),
                      dfr = dfr, dlfr = dlfr)
   
+  if (!is.null(dyn_water_ref_path)) {
+    water_info   <- peak_info(dyn_water_ref_corr, xlim = c(4.1, 5.2))
+    water_fwhm   <- as.numeric(water_info$fwhm_hz)
+    water_area   <- as.numeric(int_spec(zf(dyn_water_ref_corr),
+                                        xlim = c(4.1, 5.2)))
+    water_height <- as.numeric(water_info$height)
+    water_height <- (water_height / mean(water_height)) * 100
+    water_area   <- (water_area   / mean(water_area))   * 100
+    
+    dyn_wref_table <- data.frame(time_sec = dyn_acq_times(dyn_water_ref_corr),
+                                 water_fwhm   = water_fwhm,
+                                 water_area   = water_area,
+                                 water_height = water_height)
+  } else {
+    dyn_wref_table <- NULL
+  }
+  
   res <- list(corrected = mrs_proc, uncorrected = mrs_uncorr,
               mean_corr = res_ap_bl$mrs_data, mean_uncorr = mean_uncorr,
               diag_table = diag_table, summary_diags = summary_diags,
-              mrs_mean_sub = mrs_mean_sub, mrs_mean_sub_bc = mrs_mean_sub_bc)
+              dyn_wref_table = dyn_wref_table, mrs_mean_sub = mrs_mean_sub,
+              mrs_mean_sub_bc = mrs_mean_sub_bc)
   
   rmd_file <- system.file("rmd", "single_scan_svs_qa.Rmd",
                           package = "spant")
