@@ -1478,7 +1478,7 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL,
   
   if (!is.null(dyn_water_ref_path)) {
     water_info   <- peak_info(dyn_water_ref_corr, xlim = c(4.1, 5.2))
-    water_fwhm   <- as.numeric(water_info$fwhm_hz)
+    water_fwhm   <- as.numeric(water_info$fwhm_ppm)
     water_area   <- as.numeric(int_spec(zf(dyn_water_ref_corr),
                                         xlim = c(4.1, 5.2)))
     water_height <- as.numeric(water_info$height)
