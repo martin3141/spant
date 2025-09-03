@@ -25,5 +25,7 @@ sim_asy_pvoigt(
 \code{\link{def_acq_paras}}}
 }
 \description{
-Generate an asymmetric pseudo-Voigt resonance in the frequency domain.
+Method is described in detail by Stancik AL and Brauns EB: "A simple
+asymmetric lineshape for fitting infrared absorption spectra." Vib Spectrosc.
+2008; 47: 66-69.
 }

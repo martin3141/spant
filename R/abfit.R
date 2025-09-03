@@ -1673,6 +1673,9 @@ G <- function(freq, fwhm, f0 = 0) {
 }
 
 # Lorentzian lineshape
+# the equation in the Stancik paper has several errors, corrected version is:
+# 2 / fwhm / pi / (1 + (2 * (freq - f0) / fwhm) ^ 2)
+# the below formulation gives the exact same result, but is more widely used
 L <- function(freq, fwhm, f0 = 0) {
   fwhm / (2 * pi) / ((fwhm / 2) ^ 2 + (freq - f0) ^ 2)
 }

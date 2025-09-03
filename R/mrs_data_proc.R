@@ -178,6 +178,11 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
 }
 
 #' Generate an asymmetric pseudo-Voigt resonance in the frequency domain.
+#' 
+#' Method is described in detail by Stancik AL and Brauns EB: "A simple
+#' asymmetric lineshape for fitting infrared absorption spectra." Vib Spectrosc. 
+#' 2008; 47: 66-69.
+#' 
 #' @param freq resonance frequency in ppm.
 #' @param fwhm resonance FWHM.
 #' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1).
