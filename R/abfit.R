@@ -1668,18 +1668,18 @@ bbase <- function(N, number, deg = 3) {
 }
 
 # Gaussian lineshape
-G <- function(freq, fwhm) {
-  sqrt(4 * log(2) / pi / fwhm ^ 2) * exp(-4 * log(2) * (freq / fwhm) ^ 2)
+G <- function(freq, fwhm, f0 = 0) {
+  sqrt(4 * log(2) / pi / fwhm ^ 2) * exp(-4 * log(2) * ((freq - f0) / fwhm) ^ 2)
 }
 
 # Lorentzian lineshape
-L <- function(freq, fwhm) {
-  fwhm / (2 * pi) / ((fwhm / 2) ^ 2 + freq ^ 2)
+L <- function(freq, fwhm, f0 = 0) {
+  fwhm / (2 * pi) / ((fwhm / 2) ^ 2 + (freq - f0) ^ 2)
 }
 
 # Asymmetric lineshape function
-asy_fwhm_fn <- function(freq, fwhm, asy) {
-  asy_fwhm <- 2 * fwhm / (1 + exp(-asy * freq))
+asy_fwhm_fn <- function(freq, fwhm, asy, f0 = 0) {
+  asy_fwhm <- 2 * fwhm / (1 + exp(-asy * (freq - f0)))
   asy_fwhm[asy_fwhm < .Machine$double.eps] <- .Machine$double.eps
   asy_fwhm
 }

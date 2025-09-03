@@ -177,6 +177,31 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
   return(mrs_data)
 }
 
+#' Generate an asymmetric pseudo-Voigt resonance in the frequency domain.
+#' @param freq resonance frequency in ppm.
+#' @param fwhm resonance FWHM.
+#' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1).
+#' @param asy asymmetry parameter.
+#' @param acq_paras list of acquisition parameters. See
+#' \code{\link{def_acq_paras}}
+#' @export
+sim_asy_pvoigt <- function(freq = 0, fwhm = 0, lg = 0, asy = 0,
+                           acq_paras = def_acq_paras()) {
+  
+  if (inherits(acq_paras, "mrs_data")) acq_paras <- get_acq_paras(acq_paras)
+  
+  # convert ppm to Hz
+  freq <- ppm2hz(freq, acq_paras$ft, acq_paras$ref)
+  freq_scale <- hz(fs  = acq_paras$fs, N = acq_paras$N)
+  asy_fwhm   <- asy_fwhm_fn(freq_scale, fwhm, asy, freq)
+  fd <- lg * G(freq_scale, asy_fwhm, freq) + (1 - lg) *
+             L(freq_scale, asy_fwhm, freq)
+  
+  mrs_data <- vec2mrs_data(fd, fs = acq_paras$fs, ft = acq_paras$ft,
+                           ref = acq_paras$ref, nuc = acq_paras$nuc, fd = TRUE)
+  return(mrs_data)
+}
+
 #' Convert a vector into a mrs_data object.
 #' @param vec the data vector.
 #' @param mrs_data example data to copy acquisition parameters from.
