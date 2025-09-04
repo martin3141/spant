@@ -189,21 +189,47 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
 #' @param asy asymmetry parameter.
 #' @param acq_paras list of acquisition parameters. See
 #' \code{\link{def_acq_paras}}
+#' @param gen_im_pts option to generate imaginary data points, defaults to
+#' FALSE.
 #' @export
 sim_asy_pvoigt <- function(freq = 0, fwhm = 0, lg = 0, asy = 0,
-                           acq_paras = def_acq_paras()) {
+                           acq_paras = def_acq_paras(), gen_im_pts = FALSE) {
   
   if (inherits(acq_paras, "mrs_data")) acq_paras <- get_acq_paras(acq_paras)
   
+  # oversample to generate imaginary data points
+  if (gen_im_pts) acq_paras$N <- acq_paras$N * 2
+  
   # convert ppm to Hz
-  freq <- ppm2hz(freq, acq_paras$ft, acq_paras$ref)
+  freq       <- ppm2hz(freq, acq_paras$ft, acq_paras$ref)
   freq_scale <- hz(fs  = acq_paras$fs, N = acq_paras$N)
   asy_fwhm   <- asy_fwhm_fn(freq_scale, fwhm, asy, freq)
   fd <- lg * G(freq_scale, asy_fwhm, freq) + (1 - lg) *
              L(freq_scale, asy_fwhm, freq)
   
+  if (gen_im_pts) {
+    td <- pracma::ifft(pracma::ifftshift(fd))[1:(acq_paras$N / 2)]
+    
+    # this scaling keeps consistency with the sum of the resonance in the
+    # frequency-domain being unity
+    td <- td * acq_paras$N
+    td[1] <- td[1] / 2
+    
+    # for small fwhm values the td curve can remain constant when using the ifft
+    # method above - this is a fix
+    if (identical(unique(Re(td)), 1) && (fwhm != 0)) {
+      t <- seq(from = 0, to = (acq_paras$N - 1) / acq_paras$fs,
+               by = 1 / acq_paras$fs)
+      beta <- lw2beta(fwhm)
+      td <- exp(-(t ^ 2) * beta) + 0i
+    }
+    
+    fd <- ft_shift(td) / acq_paras$N * 2
+  }
+  
   mrs_data <- vec2mrs_data(fd, fs = acq_paras$fs, ft = acq_paras$ft,
                            ref = acq_paras$ref, nuc = acq_paras$nuc, fd = TRUE)
+  
   return(mrs_data)
 }
 

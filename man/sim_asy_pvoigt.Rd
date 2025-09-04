@@ -9,7 +9,8 @@ sim_asy_pvoigt(
   fwhm = 0,
   lg = 0,
   asy = 0,
-  acq_paras = def_acq_paras()
+  acq_paras = def_acq_paras(),
+  gen_im_pts = FALSE
 )
 }
 \arguments{
@@ -23,6 +24,9 @@ sim_asy_pvoigt(
 
 \item{acq_paras}{list of acquisition parameters. See
 \code{\link{def_acq_paras}}}
+
+\item{gen_im_pts}{option to generate imaginary data points, defaults to
+FALSE.}
 }
 \description{
 Method is described in detail by Stancik AL and Brauns EB: "A simple
