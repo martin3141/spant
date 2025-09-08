@@ -23,6 +23,7 @@ Depends:
 Imports:
     abind,
     plyr,
+    pbapply,
     pracma,
     stringr,
     expm (>= 1.0-0),

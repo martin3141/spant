@@ -1,6 +1,8 @@
 # spant 3.6.0
 * Added mean_dyns_scheme function.
 * Millisecond option added to plot x scale.
+* Started moving over to pbapply library for improved progress output while
+waiting for fitting jobs to complete.
 
 # spant 3.5.0
 * Added a function to help bids sorting of MRS and MRI data : mr_data2bids.
