@@ -332,9 +332,16 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
     if (is.character(basis)) {
       basis_file <- basis  
     } else {
-      # write basis object (if specified) to file
-      basis_file <- tempfile(fileext = ".basis")
-      write_basis(basis, basis_file)
+      if (dyn_basis) {
+        basis_file <- vector("list", length(basis))
+        for (n in 1:length(basis)) {
+          basis_file[[n]] <- tempfile(fileext = ".basis")
+          write_basis(basis[[n]], basis_file[[n]])
+        }
+      } else {
+        basis_file <- tempfile(fileext = ".basis")
+        write_basis(basis, basis_file)
+      }
     }
     
     temp_mrs <- metab
@@ -342,12 +349,34 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
     dim(temp_mrs$data) <- c(1, 1, 1, 1, 1, 1, length(temp_mrs$data))
     
     if (!parallel) {
-      result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6), lcmodel_fit,
-                                 temp_mrs, basis_file, opts,
-                                 .parallel = parallel,
-                                 .paropts = list(.inorder = TRUE,
-                                                 .packages = "spant"),
-                                 .progress = progress, .inform = FALSE)
+      if (dyn_basis) {
+        # convert data into a list of vectors for .mapply to work
+        data_mat      <- metab$data
+        data_N        <- Npts(metab)
+        dim(data_mat) <- c(length(data_mat) / data_N, data_N)
+        data_list     <- asplit(data_mat, 1)
+        data_list     <- lapply(data_list, as.complex)
+        dots_list     <- list(element = data_list, basis_file = basis_file)
+        MoreArgs_list <- list(temp_mrs = temp_mrs, opts = opts)
+        result_list   <- pbapply::pb.mapply(lcmodel_fit, dots = dots_list,
+                                            MoreArgs = MoreArgs_list)
+        attr(result_list, "dim") <- NULL
+        names(result_list) <- seq_len(length(data_list))
+        attr(result_list, "split_type") <- "array"
+        labs <- which(array(TRUE, dim(metab$data)[2:6]), arr.ind = TRUE)
+        labs <- as.data.frame(labs)
+        labs[] <- lapply(labs, factor)
+        colnames(labs) <- paste0("X", 1:5)
+        rownames(labs) <- 1:nrow(labs)
+        attr(result_list, "split_labels") <- labs
+      } else {
+        result_list <- plyr::alply(metab$data, c(2, 3, 4, 5, 6), lcmodel_fit,
+                                   temp_mrs, basis_file, opts,
+                                   .parallel = parallel,
+                                   .paropts = list(.inorder = TRUE,
+                                                   .packages = "spant"),
+                                   .progress = progress, .inform = FALSE)
+      }
     } else {
       if (is.null(cl)) stop("pass cl argument to fit_mrs for parallel analyses")
       result_list <- parallel::parApply(cl, metab$data, c(2, 3, 4, 5, 6),
