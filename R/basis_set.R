@@ -172,6 +172,35 @@ read_basis <- function(basis_file, ref = def_ref(), sort_basis = TRUE) {
   return(basis_set)
 }
 
+#' Write a basis object to folder containing one NIfTI MRS file for each basis
+#' element.
+#' @param basis basis object to be exported.
+#' @param basis_dir directory for basis files to be written.
+#' @export
+write_basis_niidir <- function(basis, basis_dir) {
+  
+  # create the basis dir if it doesn't exist
+  if(!dir.exists(basis_dir)) dir.create(basis_dir, recursive = TRUE)
+  paths <- file.path(basis_dir, paste0(basis$names, ".nii.gz"))
+  
+  mrs_data      <- basis2mrs_data(basis)
+  mrs_data_list <- mrs_data2list(mrs_data)
+  res <- .mapply(write_mrs_nifti, list(mrs_data = mrs_data_list, fname = paths),
+                 NULL)
+}
+
+#' Read a basis folder containing one NIfTI MRS file for each basis element.
+#' @param basis_dir directory of basis files.
+#' @return a basis_set object.
+#' @export
+read_basis_niidir <- function(basis_dir) {
+  files <- sort(Sys.glob(file.path("test", "*.nii.gz")))
+  names <- sub(".nii.gz", "", basename(files))
+  mrs_list <- lapply(files, read_mrs_nifti)
+  mrs_dyn  <- append_dyns(mrs_list)
+  return(mrs_data2basis(mrs_dyn, names))
+}
+
 #' Write a basis object to an LCModel .basis formatted file.
 #' @param basis basis object to be exported.
 #' @param basis_file path to basis file to be generated.

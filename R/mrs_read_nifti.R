@@ -1,4 +1,4 @@
-read_mrs_nifti <- function(fname, extra, verbose) {
+read_mrs_nifti <- function(fname, extra = NULL, verbose = FALSE) {
   
   fname_low <- tolower(fname)
   
