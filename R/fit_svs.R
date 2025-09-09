@@ -89,6 +89,9 @@
 #' sequential integers (starting at 1) with the same length as the number of
 #' dynamic scans in the metabolite data. File may be formatted as .xlsx, .xls,
 #' text or csv format.
+#' @param dyn_basis_lb dynamic basis line-broadening to apply in Hz.
+#' @param dyn_basis_lg dynamic basis Lorentz-Gauss lineshape factor between 0
+#' and 1.
 #' @param lcm_bin_path set the path to LCModel binary.
 #' @param plot_ppm_xlim plotting ppm axis limits in the html results.
 #' results.
@@ -119,6 +122,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                     w_conc = 35880, use_basis_cache = "auto",
                     summary_measures = NULL, dyn_av_block_size = NULL,
                     dyn_av_scheme = NULL, dyn_av_scheme_file = NULL,
+                    dyn_basis_lb = NULL, dyn_basis_lg = NULL,
                     lcm_bin_path = NULL, plot_ppm_xlim = NULL,
                     extra_output = FALSE, verbose = FALSE) {
   
@@ -510,6 +514,25 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     w_ref_fit <- w_ref 
   } else {
     w_ref_fit <- NULL
+  }
+  
+  if (!is.null(dyn_basis_lb)) {
+    
+    # check lengths are ok
+    if (is.null(dyn_basis_lg)) dyn_basis_lg <- 0
+    
+    if (Ndyns(metab) != length(dyn_basis_lb)) {
+      stop("dyn_basis_lb length does not match data")
+    }
+    
+    if (length(dyn_basis_lg) == 1) {
+      dyn_basis_lg <- rep(dyn_basis_lg, Ndyns(metab))
+    }
+    
+    # generate list of basis sets and apply lb/lg
+    basis <- rep(list(basis), Ndyns(metab))
+    basis <- .mapply(lb, dots =list(x = basis, lb = dyn_basis_lb,
+                                    lg = dyn_basis_lg), MoreArgs = NULL)
   }
   
   # fitting

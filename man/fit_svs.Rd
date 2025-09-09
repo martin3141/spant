@@ -43,6 +43,8 @@ fit_svs(
   dyn_av_block_size = NULL,
   dyn_av_scheme = NULL,
   dyn_av_scheme_file = NULL,
+  dyn_basis_lb = NULL,
+  dyn_basis_lg = NULL,
   lcm_bin_path = NULL,
   plot_ppm_xlim = NULL,
   extra_output = FALSE,
@@ -174,6 +176,11 @@ For example: c(1, 1, 2, 1, 1, 3, 1, 1).}
 sequential integers (starting at 1) with the same length as the number of
 dynamic scans in the metabolite data. File may be formatted as .xlsx, .xls,
 text or csv format.}
+
+\item{dyn_basis_lb}{dynamic basis line-broadening to apply in Hz.}
+
+\item{dyn_basis_lg}{dynamic basis Lorentz-Gauss lineshape factor between 0
+and 1.}
 
 \item{lcm_bin_path}{set the path to LCModel binary.}
 
