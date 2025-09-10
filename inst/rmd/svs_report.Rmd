@@ -135,7 +135,7 @@ if (!is.null(dyn_data_uncorr)) {
   vline <- 2.01
   cat("## Dynamic plots {.tabset}\n")
   if (!is.null(dyn_data_corr)) {
-    cat("### Spectrogram with dynamic correction\n")
+    cat("### Spectrogram with correction\n")
     if (is.null(params$plot_ppm_xlim)) {
       image(dyn_data_corr, xlim = c(4, 0.5), vline = vline,
             vline_col = "black")
@@ -144,13 +144,23 @@ if (!is.null(dyn_data_uncorr)) {
             vline_col = "black")
     }
   }
-  cat("\n\n### Spectrogram without dynamic correction\n")
+  cat("\n\n### Spectrogram without correction\n")
   if (is.null(params$plot_ppm_xlim)) {
     image(dyn_data_uncorr, xlim = c(4, 0.5), vline = vline,
           vline_col = "black")
   } else {
     image(dyn_data_uncorr, xlim = params$plot_ppm_xlim, vline = vline, 
           vline_col = "black")
+  }
+  if (!is.null(dyn_data_corr)) {
+    cat("\n\n### Mean subtracted spectrogram\n")
+    if (is.null(params$plot_ppm_xlim)) {
+      image(sub_mean_dyns(dyn_data_corr), xlim = c(4, 0.5), vline = vline,
+            vline_col = "black")
+    } else {
+      image(sub_mean_dyns(dyn_data_corr), xlim = params$plot_ppm_xlim,
+            vline = vline, vline_col = "black")
+    }
   }
 }
 ```
