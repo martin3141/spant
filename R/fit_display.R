@@ -396,10 +396,19 @@ print.fit_result <- function(x, ...) {
   cat("Number of spectra : ", length(stats::na.omit(x$res_tab[,6])),"\n",
       sep = "")
   if (!is.character(x$basis)) {
-    cat("Basis elements    : ", dim(x$basis$data)[2], "\n\n", sep = "")
-    cat("Basis names\n", sep = "")
-    cat("-------------------------------\n")
-    cat(x$basis$names, sep = ",", fill = 31)
+    if (identical(class(x$basis), "list")) {
+      if (identical(class(x$basis[[1]]), "basis_set")) {
+        cat("Basis elements    : ", dim(x$basis[[1]]$data)[2], "\n\n", sep = "")
+        cat("Basis names\n", sep = "")
+        cat("-------------------------------\n")
+        cat(x$basis[[1]]$names, sep = ",", fill = 31)
+      } 
+    } else {
+      cat("Basis elements    : ", dim(x$basis$data)[2], "\n\n", sep = "")
+      cat("Basis names\n", sep = "")
+      cat("-------------------------------\n")
+      cat(x$basis$names, sep = ",", fill = 31)
+    }
   }
 }
 

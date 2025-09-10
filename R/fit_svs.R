@@ -531,8 +531,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     
     # generate list of basis sets and apply lb/lg
     basis <- rep(list(basis), Ndyns(metab))
-    basis <- .mapply(lb, dots =list(x = basis, lb = dyn_basis_lb,
-                                    lg = dyn_basis_lg), MoreArgs = NULL)
+    basis <- .mapply(lb, dots = list(x = basis, lb = dyn_basis_lb,
+                                     lg = dyn_basis_lg), MoreArgs = NULL)
   }
   
   # fitting
