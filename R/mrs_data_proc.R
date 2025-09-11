@@ -841,6 +841,7 @@ match_lineshape <- function(mrs_data, ref, xlim, init_lb = 0.2, init_lg = 0.5,
 #' @param xlim spectral region to match, eg c(2.11, 1.91) for tNAA region.
 #' @return a list containing the matched mrs_data, difference spectra and
 #' optimisation results.
+#' @export
 subtract_rest_task <- function(mrs_data, task_vec, xlim = c(2.11, 1.91)) {
   
   if (length(task_vec) != Ndyns(mrs_data)) {
