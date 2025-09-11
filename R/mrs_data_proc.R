@@ -788,7 +788,6 @@ lb.basis_set <- function(x, lb, lg = 1) {
   mrs_data2basis(lb(basis2mrs_data(x), lb, lg), x$names)
 }
 
-
 match_ls_optim_fn <- function(par, mrs_data, ref, xlim) {
   resid_mrs <- ref - td2fd(lb(mrs_data, par[1], par[2]))
   resid     <- spec_op(resid_mrs, xlim = xlim, mode = "mod", operator = "l2")
@@ -807,7 +806,7 @@ match_ls_optim_fn <- function(par, mrs_data, ref, xlim) {
 #' @param max_lb maximum value for the amount of line-broadening to apply (Hz).
 #' @param min_lg minimum value for the Lorentz-Gauss lineshape parameter.
 #' @param max_lg maximum value for the Lorentz-Gauss lineshape parameter.
-#' @return a list containing the matched mrs_data, difference spectrum and
+#' @return a list containing the matched mrs_data, difference spectra and
 #' optimisation results.
 #' @export
 match_lineshape <- function(mrs_data, ref, xlim, init_lb = 0.2, init_lg = 0.5,
@@ -823,10 +822,37 @@ match_lineshape <- function(mrs_data, ref, xlim, init_lb = 0.2, init_lg = 0.5,
                       lower = c(min_lb, min_lg), upper = c(max_lb, max_lg))
   
   matched <- td2fd(lb(mrs_data, res$par[1], res$par[2]))
-  diff    <- ref - matched
+  diff    <- matched - ref
   
-  return(list(matched = matched, diff = diff, lb = res$par[1], lg = res$par[2],
-              optim_res = res))
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  diff_no_match <- mrs_data - ref
+  
+  return(list(matched = matched, diff = diff, diff_no_match = diff_no_match,
+              lb = res$par[1], lg = res$par[2], optim_res = res))
+}
+
+#' Subtract mean rest spectrum from mean task spectrum after applying optimal
+#' linebroadening to the mean task spectrum. Usually used to correct for the
+#' BOLD lineshape narrowing effect in 1H fMRS data.
+#' @param mrs_data dynamic MRS data.
+#' @param task_vec a logical vector with the same length and dynamic scans.
+#' Elements set to TRUE and FALSE will be assigned to task and rest
+#' respectively.
+#' @param xlim spectral region to match, eg c(2.11, 1.91) for tNAA region.
+#' @return a list containing the matched mrs_data, difference spectra and
+#' optimisation results.
+subtract_rest_task <- function(mrs_data, task_vec, xlim = c(2.11, 1.91)) {
+  
+  if (length(task_vec) != Ndyns(mrs_data)) {
+    stop("task_vec length does not match mrs_data")
+  }
+  
+  task_data <- mean_dyns(get_dyns(mrs_data, task_vec))
+  rest_data <- mean_dyns(get_dyns(mrs_data, !task_vec))
+  
+  match_res <- match_lineshape(task_data, rest_data, xlim = xlim)
+  
+  return(match_res)
 }
 
 #' Apply a weighting to the FID to enhance spectral resolution.

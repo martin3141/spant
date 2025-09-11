@@ -38,7 +38,7 @@ two water resonances.}
 \item{max_lg}{maximum value for the Lorentz-Gauss lineshape parameter.}
 }
 \value{
-a list containing the matched mrs_data, difference spectrum and
+a list containing the matched mrs_data, difference spectra and
 optimisation results.
 }
 \description{
