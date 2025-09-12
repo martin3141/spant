@@ -306,7 +306,7 @@ fit_asy_pvoigt <- function(mrs_data, freq_ppm = 4.65, xlim = c(5.2, 4.1)) {
   return(list(mrs_data_crop = mrs_data_crop, model = model,
               optim_res = optim_res, peak_amp = lm_res$coefficients[1],
               bl_amp = lm_res$coefficients[2], freq_ppm = optim_res$par[1],
-              fhwm_hz = optim_res$par[2], lg = optim_res$par[3],
+              fwhm_hz = optim_res$par[2], lg = optim_res$par[3],
               asy = optim_res$par[4], phase = optim_res$par[5]))
 }
 
