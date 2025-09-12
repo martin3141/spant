@@ -274,15 +274,15 @@ fit_asy_pvoigt <- function(mrs_data, freq_ppm = 4.65, xlim = c(5.2, 4.1)) {
   lower <- c(    -Inf,          0,        0,     -0.01,        -180)
   upper <- c(    +Inf,       +Inf,        1,     +0.01,        +180)
   optim_res <- stats::optim(par = par, fn = fit_asy_pvoigt_obj_fn, gr = NULL,
-                     mrs_data = mrs_data_crop, method = "L-BFGS-B",
-                     lower = lower, upper = upper)
+                            mrs_data = mrs_data_crop, method = "L-BFGS-B",
+                            lower = lower, upper = upper)
   
   # run again with better starting vals and more asy freedom
   lower <- c(    -Inf,          0,        0,      -Inf,        -180)
   upper <- c(    +Inf,       +Inf,        1,      +Inf,        +180)
-  optim_res <- stats::optim(par = optim_res$par, fn = fit_asy_pvoigt_obj_fn, gr = NULL,
-                     mrs_data = mrs_data_crop, method = "L-BFGS-B",
-                     lower = lower, upper = upper)
+  optim_res <- stats::optim(par = optim_res$par, fn = fit_asy_pvoigt_obj_fn,
+                            gr = NULL, mrs_data = mrs_data_crop,
+                            method = "L-BFGS-B", lower = lower, upper = upper)
   
   model <- sim_asy_pvoigt(freq = optim_res$par[1], fwhm = optim_res$par[2],
                           lg = optim_res$par[3], asy = optim_res$par[4],
