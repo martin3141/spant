@@ -233,6 +233,83 @@ sim_asy_pvoigt <- function(freq = 0, fwhm = 0, lg = 0, asy = 0,
   return(mrs_data)
 }
 
+fit_asy_pvoigt_obj_fn <- function(par, mrs_data) {
+  
+  model <- sim_asy_pvoigt(freq = par[1], fwhm = par[2], lg = par[3],
+                          asy = par[4], acq_paras = mrs_data,
+                          gen_im_pts = FALSE)
+  
+  mrs_data <- phase(mrs_data, par[5])
+  
+  model_pts <- as.numeric(Re(model$data))
+  bl_pts    <- rep(1, length(model_pts))
+  data_pts  <- as.numeric(Re(mrs_data$data))
+  lm_res    <- stats::.lm.fit(cbind(model_pts, bl_pts), data_pts)
+  res       <- sum(lm_res$residuals ^ 2)
+  
+  return(res)
+}
+
+#' Fit a single asymmetric pseudo-Voigt resonance in the frequency domain.
+#' @param mrs_data data containing the resonance to be fit.
+#' @param freq_ppm frequency estimate (in ppm) for the resonance to be fitted.
+#' @param xlim spectral range (in ppm) where the fit will be evaluated.
+#' @return list of fitting results and parameters.
+#' @export
+fit_asy_pvoigt <- function(mrs_data, freq_ppm = 4.65, xlim = c(5.2, 4.1)) {
+  
+  # needs to be a FD operation
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  # crop the spectrum
+  mrs_data_crop <- crop_spec(mrs_data, xlim = xlim)
+  
+  fwhm_start  <- 8
+  lg_start    <- 0.5
+  asy_start   <- 0
+  phase_start <- 0
+  
+  # rough fit without asy freedom
+  par   <- c(freq_ppm, fwhm_start, lg_start, asy_start, phase_start)
+  lower <- c(    -Inf,          0,        0,     -0.01,        -180)
+  upper <- c(    +Inf,       +Inf,        1,     +0.01,        +180)
+  optim_res <- stats::optim(par = par, fn = fit_asy_pvoigt_obj_fn, gr = NULL,
+                     mrs_data = mrs_data_crop, method = "L-BFGS-B",
+                     lower = lower, upper = upper)
+  
+  # run again with better starting vals and more asy freedom
+  lower <- c(    -Inf,          0,        0,      -Inf,        -180)
+  upper <- c(    +Inf,       +Inf,        1,      +Inf,        +180)
+  optim_res <- stats::optim(par = optim_res$par, fn = fit_asy_pvoigt_obj_fn, gr = NULL,
+                     mrs_data = mrs_data_crop, method = "L-BFGS-B",
+                     lower = lower, upper = upper)
+  
+  model <- sim_asy_pvoigt(freq = optim_res$par[1], fwhm = optim_res$par[2],
+                          lg = optim_res$par[3], asy = optim_res$par[4],
+                          acq_paras = mrs_data_crop, gen_im_pts = FALSE)
+  
+  mrs_data_crop <- phase(mrs_data_crop, optim_res$par[5])
+  model_pts     <- as.numeric(Re(model$data))
+  bl_pts        <- rep(1, length(model_pts))
+  data_pts      <- as.numeric(Re(mrs_data_crop$data))
+  lm_res        <- stats::.lm.fit(cbind(model_pts, bl_pts), data_pts)
+  yhat          <- cbind(model_pts, bl_pts) %*% lm_res$coefficients
+  model         <- vec2mrs_data(yhat, model, fd = TRUE)
+  
+  if (lm_res$coefficients[1] < 0) {
+    model <- -model
+    mrs_data_crop <- phase(mrs_data_crop, 180)
+    lm_res$coefficients <- -lm_res$coefficients
+    optim_res$par[5] <- optim_res$par[5] - 180
+  }
+  
+  return(list(mrs_data_crop = mrs_data_crop, model = model,
+              optim_res = optim_res, peak_amp = lm_res$coefficients[1],
+              bl_amp = lm_res$coefficients[2], freq_ppm = optim_res$par[1],
+              fhwm_hz = optim_res$par[2], lg = optim_res$par[3],
+              asy = optim_res$par[4], phase = optim_res$par[5]))
+}
+
 #' Convert a vector into a mrs_data object.
 #' @param vec the data vector.
 #' @param mrs_data example data to copy acquisition parameters from.
