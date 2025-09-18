@@ -4,7 +4,12 @@
 \alias{fit_asy_pvoigt}
 \title{Fit a single asymmetric pseudo-Voigt resonance in the frequency domain.}
 \usage{
-fit_asy_pvoigt(mrs_data, freq_ppm = 4.65, xlim = c(5.2, 4.1))
+fit_asy_pvoigt(
+  mrs_data,
+  freq_ppm = 4.65,
+  xlim = c(5.2, 4.1),
+  lg_limits = c(0, 1)
+)
 }
 \arguments{
 \item{mrs_data}{data containing the resonance to be fit.}
@@ -12,6 +17,8 @@ fit_asy_pvoigt(mrs_data, freq_ppm = 4.65, xlim = c(5.2, 4.1))
 \item{freq_ppm}{frequency estimate (in ppm) for the resonance to be fitted.}
 
 \item{xlim}{spectral range (in ppm) where the fit will be evaluated.}
+
+\item{lg_limits}{lg lineshape parameter limits.}
 }
 \value{
 list of fitting results and parameters.

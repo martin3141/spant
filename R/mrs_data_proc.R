@@ -254,9 +254,11 @@ fit_asy_pvoigt_obj_fn <- function(par, mrs_data) {
 #' @param mrs_data data containing the resonance to be fit.
 #' @param freq_ppm frequency estimate (in ppm) for the resonance to be fitted.
 #' @param xlim spectral range (in ppm) where the fit will be evaluated.
+#' @param lg_limits lg lineshape parameter limits.
 #' @return list of fitting results and parameters.
 #' @export
-fit_asy_pvoigt <- function(mrs_data, freq_ppm = 4.65, xlim = c(5.2, 4.1)) {
+fit_asy_pvoigt <- function(mrs_data, freq_ppm = 4.65, xlim = c(5.2, 4.1),
+                           lg_limits = c(0, 1)) {
   
   # needs to be a FD operation
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
@@ -265,21 +267,22 @@ fit_asy_pvoigt <- function(mrs_data, freq_ppm = 4.65, xlim = c(5.2, 4.1)) {
   mrs_data_crop <- crop_spec(mrs_data, xlim = xlim)
   
   fwhm_start  <- 8
-  lg_start    <- 0.5
+  lg_start    <- mean(lg_limits)
   asy_start   <- 0
   phase_start <- 0
   
   # rough fit without asy freedom
-  par   <- c(freq_ppm, fwhm_start, lg_start, asy_start, phase_start)
-  lower <- c(    -Inf,          0,        0,     -0.01,        -180)
-  upper <- c(    +Inf,       +Inf,        1,     +0.01,        +180)
+  par   <- c(freq_ppm, fwhm_start,     lg_start, asy_start, phase_start)
+  lower <- c(    -Inf,          0, lg_limits[1],     -0.01,        -180)
+  upper <- c(    +Inf,       +Inf, lg_limits[2],     +0.01,        +180)
+  
   optim_res <- stats::optim(par = par, fn = fit_asy_pvoigt_obj_fn, gr = NULL,
                             mrs_data = mrs_data_crop, method = "L-BFGS-B",
                             lower = lower, upper = upper)
   
   # run again with better starting vals and more asy freedom
-  lower <- c(    -Inf,          0,        0,      -Inf,        -180)
-  upper <- c(    +Inf,       +Inf,        1,      +Inf,        +180)
+  lower <- c(    -Inf,          0, lg_limits[1],      -Inf,        -180)
+  upper <- c(    +Inf,       +Inf, lg_limits[2],      +Inf,        +180)
   optim_res <- stats::optim(par = optim_res$par, fn = fit_asy_pvoigt_obj_fn,
                             gr = NULL, mrs_data = mrs_data_crop,
                             method = "L-BFGS-B", lower = lower, upper = upper)
