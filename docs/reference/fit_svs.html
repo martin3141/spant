@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.6.0</span>
       </span>
     </div>
 
@@ -117,6 +117,8 @@
 <span>  dyn_av_block_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dyn_av_scheme <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dyn_av_scheme_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dyn_basis_lb <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dyn_basis_lg <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lcm_bin_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  plot_ppm_xlim <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  extra_output <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -327,6 +329,15 @@ For example: c(1, 1, 2, 1, 1, 3, 1, 1).</p></dd>
 sequential integers (starting at 1) with the same length as the number of
 dynamic scans in the metabolite data. File may be formatted as .xlsx, .xls,
 text or csv format.</p></dd>
+
+
+<dt id="arg-dyn-basis-lb">dyn_basis_lb<a class="anchor" aria-label="anchor" href="#arg-dyn-basis-lb"></a></dt>
+<dd><p>dynamic basis line-broadening to apply in Hz.</p></dd>
+
+
+<dt id="arg-dyn-basis-lg">dyn_basis_lg<a class="anchor" aria-label="anchor" href="#arg-dyn-basis-lg"></a></dt>
+<dd><p>dynamic basis Lorentz-Gauss lineshape factor between 0
+and 1.</p></dd>
 
 
 <dt id="arg-lcm-bin-path">lcm_bin_path<a class="anchor" aria-label="anchor" href="#arg-lcm-bin-path"></a></dt>

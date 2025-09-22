@@ -1,4 +1,4 @@
-pandoc: '3.2'
+pandoc: 3.6.3
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
@@ -7,7 +7,7 @@ articles:
   spant-intro: spant-intro.html
   spant-metabolite-simulation: spant-metabolite-simulation.html
   spant-preprocessing: spant-preprocessing.html
-last_built: 2025-08-18T08:36Z
+last_built: 2025-09-22T13:26Z
 urls:
   reference: https://martin3141.github.io/spant/reference
   article: https://martin3141.github.io/spant/articles

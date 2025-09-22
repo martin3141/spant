@@ -119,6 +119,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/find_bids_mrs.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/find_mrs_files.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_amps.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/fit_asy_pvoigt.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_diags.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_mrs.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_res2csv.html</loc></url>
@@ -234,6 +235,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/mask_xy_ellipse.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/mask_xy_mat.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/mat2mrs_data.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/match_lineshape.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/matexp.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/max_mrs.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/max_mrs_interp.html</loc></url>
@@ -242,6 +244,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/mean_dyn_blocks.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/mean_dyn_pairs.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/mean_dyns.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/mean_dyns_scheme.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/mean_mrs_list.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/mean_vec_blocks.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/median_dyns.html</loc></url>
@@ -291,6 +294,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/re_weighting.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/read_basis.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/read_basis_ac.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/read_basis_niidir.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/read_dkd_moco_log.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/read_ima_coil_dir.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/read_ima_dyn_dir.html</loc></url>
@@ -361,6 +365,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/set_tr.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/shift.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/shift_basis.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/sim_asy_pvoigt.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/sim_basis.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/sim_basis_1h_brain.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/sim_basis_1h_brain_press.html</loc></url>
@@ -387,9 +392,12 @@
 <url><loc>https://martin3141.github.io/spant/reference/stackplot.fit_result.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/stackplot.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/stackplot.mrs_data.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/sub_even_from_odd_dyns.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/sub_first_dyn.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/sub_mean_dyns.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/sub_median_dyns.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/sub_odd_from_even_dyns.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/subtract_rest_task.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/sum_coils.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/sum_dyns.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/sum_mrs.html</loc></url>
@@ -409,6 +417,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/varpro_opts.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/vec2mrs_data.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/write_basis.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/write_basis_niidir.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/write_basis_tqn.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/write_mrs.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/write_mrs_dpt_v2.html</loc></url>

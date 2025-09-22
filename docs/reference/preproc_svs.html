@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.6.0</span>
       </span>
     </div>
 
@@ -78,7 +78,13 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">preproc_svs</span><span class="op">(</span><span class="va">path</span>, label <span class="op">=</span> <span class="cn">NULL</span>, output_dir <span class="op">=</span> <span class="cn">NULL</span>, ref_inds <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">preproc_svs</span><span class="op">(</span></span>
+<span>  <span class="va">path</span>,</span>
+<span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ref_inds <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dyn_water_ref_path <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -86,7 +92,7 @@
 
 
 <dl><dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
-<dd><p>path to the fMRS data file or IMA directory.</p></dd>
+<dd><p>path to the MRS data file or IMA directory.</p></dd>
 
 
 <dt id="arg-label">label<a class="anchor" aria-label="anchor" href="#arg-label"></a></dt>
@@ -100,6 +106,11 @@
 <dt id="arg-ref-inds">ref_inds<a class="anchor" aria-label="anchor" href="#arg-ref-inds"></a></dt>
 <dd><p>a vector of 1-based indices for any water reference dynamic
 scans.</p></dd>
+
+
+<dt id="arg-dyn-water-ref-path">dyn_water_ref_path<a class="anchor" aria-label="anchor" href="#arg-dyn-water-ref-path"></a></dt>
+<dd><p>path to interleaved water reference data file or
+IMA directory.</p></dd>
 
 </dl></div>
 
