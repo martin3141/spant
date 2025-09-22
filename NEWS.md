@@ -3,8 +3,6 @@
 * Millisecond option added to plot x scale.
 * Added read_basis_niidir and write_basis_niidir functions for import/export
 of basis sets stored as a group of NIfTI MRS files.
-* Started moving over to pbapply library for improved progress output while
-waiting for fitting jobs to complete.
 
 # spant 3.5.0
 * Added a function to help bids sorting of MRS and MRI data : mr_data2bids.
