@@ -155,11 +155,9 @@ if (!is.null(dyn_data_uncorr)) {
   if (!is.null(dyn_data_corr)) {
     cat("\n\n### Mean subtracted spectrogram\n")
     if (is.null(params$plot_ppm_xlim)) {
-      image(sub_mean_dyns(dyn_data_corr), xlim = c(4, 0.5), vline = vline,
-            vline_col = "black")
+      image(sub_mean_dyns(dyn_data_corr), xlim = c(4, 0.5))
     } else {
-      image(sub_mean_dyns(dyn_data_corr), xlim = params$plot_ppm_xlim,
-            vline = vline, vline_col = "black")
+      image(sub_mean_dyns(dyn_data_corr), xlim = params$plot_ppm_xlim)
     }
   }
 }
