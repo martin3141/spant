@@ -7,6 +7,7 @@ params:
   argg: ""
   w_ref_available: ""
   w_ref: ""
+  ed_on: ""
   output_ratio: ""
   res_tab_unscaled: ""
   res_tab_ratio: ""    
@@ -344,15 +345,47 @@ if (!is.null(params$fit_res$res_tab$shift)) {
   shift_offset <- 0
 }
 
-proc_spec <- params$fit_res$data
-proc_spec <- phase(proc_spec, phase_offset, phi1_offset)
-proc_spec <- shift(proc_spec, shift_offset, units = "ppm")
-proc_spec <- zf(proc_spec)
+proc_spec_off <- params$fit_res$data
+proc_spec_off <- phase(proc_spec_off, phase_offset, phi1_offset)
+proc_spec_off <- shift(proc_spec_off, shift_offset, units = "ppm")
+proc_spec_off <- zf(proc_spec_off)
 
 if (is.null(params$plot_ppm_xlim)) {
-  plot(proc_spec, xlim = c(4, 0.2))
+  plot(proc_spec_off, xlim = c(4, 0.2))
 } else {
-  plot(proc_spec, xlim = params$plot_ppm_xlim)
+  plot(proc_spec_off, xlim = params$plot_ppm_xlim)
+}
+```
+
+### Edit-on cropped
+```{r, fig.width=7, fig.height=6}
+if (!is.null(params$fit_res$res_tab$phase)) {
+  phase_offset <- params$fit_res$res_tab$phase
+} else {
+  phase_offset <- 0
+}
+
+if (!is.null(params$fit_res$res_tab$phi1)) {
+  phi1_offset <- params$fit_res$res_tab$phi1
+} else {
+  phi1_offset <- 0
+}
+
+if (!is.null(params$fit_res$res_tab$shift)) {
+  shift_offset <- params$fit_res$res_tab$shift
+} else {
+  shift_offset <- 0
+}
+
+proc_spec_on <- params$ed_on
+proc_spec_on <- phase(proc_spec_on, phase_offset, phi1_offset)
+proc_spec_on <- shift(proc_spec_on, shift_offset, units = "ppm")
+proc_spec_on <- zf(proc_spec_on)
+
+if (is.null(params$plot_ppm_xlim)) {
+  plot(proc_spec_on, xlim = c(4, 0.2))
+} else {
+  plot(proc_spec_on, xlim = params$plot_ppm_xlim)
 }
 ```
 
@@ -363,7 +396,12 @@ plot(proc_spec_ed)
 
 ### Edit-off full
 ```{r, fig.width=7, fig.height=6}
-plot(proc_spec)
+plot(proc_spec_off)
+```
+
+### Edit-on full
+```{r, fig.width=7, fig.height=6}
+plot(proc_spec_on)
 ```
 
 ```{r, results = 'asis', fig.width=7, fig.height=6}
