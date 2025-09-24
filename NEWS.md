@@ -1,3 +1,5 @@
+# spant 3.7.0
+
 # spant 3.6.0
 * Added mean_dyns_scheme function.
 * Millisecond option added to plot x scale.

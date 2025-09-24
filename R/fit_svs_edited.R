@@ -349,10 +349,20 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   # take the mean of the water reference data
   # if (w_ref_available) w_ref <- mean_dyns(w_ref)
   
+  # align dynamic water reference scans to the first dynamic using rats and take
+  # the mean
+  if (w_ref_available) {
+    if (Ndyns(w_ref) > 1) {
+      w_ref_ref <- get_dyns(w_ref, 1)
+      w_ref <- rats(w_ref, xlim = c(5.3, 4), ref = w_ref_ref)
+      w_ref <- mean_dyns(w_ref)
+    }
+  }
+  
   # extract the first dynamic of the water reference data
   # better for Dinesh sLASER where the water peak can shift before and after
   # the metabolite data collection
-  if (w_ref_available) w_ref <- get_dyns(w_ref, 1)
+  # if (w_ref_available) w_ref <- get_dyns(w_ref, 1)
   
   # calculate the water suppression efficiency
   # the ratio of the residual water peak height
