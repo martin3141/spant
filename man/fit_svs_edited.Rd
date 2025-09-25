@@ -13,6 +13,7 @@ fit_svs_edited(
   external_basis = NULL,
   p_vols = NULL,
   format = NULL,
+  editing_type = "gaba_1.9",
   editing_scheme = NULL,
   invert_edit_on = NULL,
   invert_edit_off = NULL,
@@ -67,6 +68,9 @@ would use : p_vols = c(WM = 0, GM = 100, CSF = 0).}
 
 \item{format}{Override automatic data format detection. See format argument
 in \code{\link[=read_mrs]{read_mrs()}} for permitted values.}
+
+\item{editing_type}{can be one of : "gaba_1.9" or "gsh_4.54". Defaults to
+"gaba_1.9".}
 
 \item{editing_scheme}{describes the dynamic data ordering. Can be one of:
 'on-off-blocks', 'on-off-interleaved', 'off-on-blocks' or

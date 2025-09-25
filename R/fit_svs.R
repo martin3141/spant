@@ -425,7 +425,12 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                          TM = sim_paras$TM, use_basis_cache = use_basis_cache,
                          verbose = verbose)
     } else if (sim_paras$pul_seq == "slaser") {
-      if (verbose) cat("Simulating sLASER sequence.\n")
+      if (verbose) {
+        cat("Simulating sLASER sequence.\n")
+        cat("TE1=", sim_paras$TE1, "\n")
+        cat("TE2=", sim_paras$TE2, "\n")
+        cat("TE3=", sim_paras$TE3, "\n")
+      }
       basis <- sim_basis(mol_list, acq_paras = metab,
                          pul_seq = seq_slaser_ideal, TE1 = sim_paras$TE1,
                          TE2 = sim_paras$TE2, TE3 = sim_paras$TE3,

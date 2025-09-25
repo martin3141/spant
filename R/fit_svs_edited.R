@@ -13,6 +13,8 @@
 #' would use : p_vols = c(WM = 0, GM = 100, CSF = 0).
 #' @param format Override automatic data format detection. See format argument
 #' in [read_mrs()] for permitted values.
+#' @param editing_type can be one of : "gaba_1.9" or "gsh_4.54". Defaults to 
+#' "gaba_1.9".
 #' @param editing_scheme describes the dynamic data ordering. Can be one of:
 #' 'on-off-blocks', 'on-off-interleaved', 'off-on-blocks' or
 #' 'off-on-interleaved'.
@@ -103,7 +105,8 @@
 #' @export
 fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                            mri_seg = NULL, external_basis = NULL, p_vols = NULL,
-                           format = NULL, editing_scheme = NULL,
+                           format = NULL, editing_type = "gaba_1.9",
+                           editing_scheme = NULL,
                            invert_edit_on = NULL, invert_edit_off = NULL,
                            pul_seq = NULL, TE = NULL, TR = NULL,
                            TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
@@ -252,6 +255,12 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   } else {
     print(editing_scheme)
     stop("Incorrect editing_scheme string.")
+  }
+  
+  editing_types <- c("gaba_1.9", "gsh_4.54")
+  if (!(editing_type %in% editing_types)) {
+    print(editing_types)
+    stop("editing_type not recognised, should be one of the above.")
   }
   
   if (invert_edit_off) ed_off <- phase(ed_off, 180)
@@ -483,8 +492,13 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   # output_ratio of NA means we only want unscaled values
   if (anyNA(output_ratio)) output_ratio <- NULL
   
-  # align ed_on and ed_off based on the residual water signal
-  ed_on  <- rats(ed_on, mean_dyns(ed_off), xlim = c(4.8, 4.5))
+  if (editing_type == "gaba_1.9") {
+    # align ed_on and ed_off based on the residual water signal
+    ed_on  <- rats(ed_on, mean_dyns(ed_off), xlim = c(4.8, 4.5))
+  } else if (editing_type == "gsh_4.54") {
+    # align ed_on and ed_off based on the residual tNAA
+    ed_on  <- rats(ed_on, mean_dyns(ed_off), xlim = c(1.9, 2.1))
+  }
   
   # take the mean rather than just straight subtraction
   edited <- (ed_on - ed_off) / 2
@@ -513,21 +527,37 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   fit_res <- fit_mrs(metab = ed_off, basis = basis, opts = fit_opts_ed_off)
   if (verbose) cat("Edit-off fitting complete.\n")
   
-  # edited fitting
-  # NAA is 1.5 (rather than 3) because it is zero in the edited data due to the 
-  # GABA editing pulse
-  mol_list <- list(get_uncoupled_mol("MM09",   0.92, "1H",   1,   12, 1),
-                   get_uncoupled_mol("NAA",    2.01, "1H",  -1.5,  3, 0),
-                   get_uncoupled_mol("Glx_A",  2.31, "1H",   1,    3, 0),
-                   get_uncoupled_mol("Glx_B",  2.40, "1H",   1,    3, 0),
-                   # 2 Gaus model
-                   get_uncoupled_mol("GABA_A", 2.95, "1H",   1.5,   12, 1),
-                   get_uncoupled_mol("GABA_B", 3.04, "1H",   1.5,   12, 1),
-                   # 1 Gaus model
-                   # get_uncoupled_mol("GABA",   3.00, "1H",   3,    22, 1),
-                   get_uncoupled_mol("Glx_C",  3.72, "1H",   1,   2.5, 0),
-                   get_uncoupled_mol("Glx_D",  3.8,  "1H",   1,   2.5, 0))
-
+  if (editing_type == "gaba_1.9") {
+    # edited fitting
+    # NAA is 1.5 (rather than 3) because it is zero in the edited data due to
+    # the GABA editing pulse
+    mol_list <- list(get_uncoupled_mol("MM09",   0.92, "1H",   1,   12, 1),
+                     get_uncoupled_mol("NAA",    2.01, "1H",  -1.5,  3, 0),
+                     get_uncoupled_mol("Glx_A",  2.31, "1H",   1,    3, 0),
+                     get_uncoupled_mol("Glx_B",  2.40, "1H",   1,    3, 0),
+                     # 2 Gaus model
+                     get_uncoupled_mol("GABA_A", 2.95, "1H",   1.5,   12, 1),
+                     get_uncoupled_mol("GABA_B", 3.04, "1H",   1.5,   12, 1),
+                     # 1 Gaus model
+                     # get_uncoupled_mol("GABA",   3.00, "1H",   3,    22, 1),
+                     get_uncoupled_mol("Glx_C",  3.72, "1H",   1,   2.5, 0),
+                     get_uncoupled_mol("Glx_D",  3.8,  "1H",   1,   2.5, 0))
+  } else if (editing_type == "gsh_4.54") {
+    ang <- 1i / 180 * pi
+    damp_adj <- 0.7
+    mol_list <- list(get_uncoupled_mol("GSH",  2.960, "1H", 1, 9, 0),
+                     get_uncoupled_mol("P237", 2.372, "1H", exp(23 * ang),
+                                       4.0 - damp_adj, 0),
+                     get_uncoupled_mol("P246", 2.455, "1H", exp(-5 * ang),
+                                       6.7 - damp_adj, 0),
+                     get_uncoupled_mol("P257", 2.570, "1H", exp(-68 * ang),
+                                       4.8 - damp_adj, 0),
+                     get_uncoupled_mol("P265", 2.649, "1H", exp(76 * ang),
+                                       5.5 - damp_adj, 0),
+                     get_uncoupled_mol("P275", 2.746, "1H", exp(-12 * ang),
+                                       5.8 - damp_adj, 0))
+  }
+  
   basis_ed <- sim_basis(mol_list, acq_paras = edited)
   
   if (verbose) cat("Starting edited fitting.\n")
