@@ -779,7 +779,8 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                   plot_ppm_xlim = plot_ppm_xlim,
                   mri = mri,
                   mri_seg = mri_seg,
-                  p_vols = p_vols)
+                  p_vols = p_vols,
+                  editing_type = editing_type)
   
   rmd_file <- system.file("rmd", "svs_edited_report.Rmd", package = "spant")
   

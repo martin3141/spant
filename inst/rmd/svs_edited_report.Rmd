@@ -26,6 +26,7 @@ params:
   mri: ""
   mri_seg: ""
   p_vols: ""
+  editing_type: ""
 ---
 
 ```{r setup, include=FALSE}
@@ -242,11 +243,18 @@ if (!is.null(dyn_data_uncorr_ed_off)) {
   }
   if (!is.null(dyn_data_corr_ed_on)) {
     cat("\n\n### Edit-on with dyn. correction\n")
+    
+    if (params$editing_type == "gaba_1.9") {
+      vline_f <- 3.03
+    } else {
+      vline_f <- 2.01
+    }
+      
     if (is.null(params$plot_ppm_xlim)) {
-      image(dyn_data_corr_ed_on, xlim = c(4, 0.5), vline = 3.03,
+      image(dyn_data_corr_ed_on, xlim = c(4, 0.5), vline = vline_f,
             vline_col = "black")
     } else {
-      image(dyn_data_corr_ed_on, xlim = params$plot_ppm_xlim, vline = 3.03,
+      image(dyn_data_corr_ed_on, xlim = params$plot_ppm_xlim, vline = vline_f,
             vline_col = "black")
     }
   }
@@ -260,10 +268,10 @@ if (!is.null(dyn_data_uncorr_ed_off)) {
   }
   cat("\n\n### Edit-on without dyn. correction\n")
   if (is.null(params$plot_ppm_xlim)) {
-    image(dyn_data_uncorr_ed_on, xlim = c(4, 0.5), vline = 3.03,
+    image(dyn_data_uncorr_ed_on, xlim = c(4, 0.5), vline = vline_f,
           vline_col = "black")
   } else {
-    image(dyn_data_uncorr_ed_on, xlim = params$plot_ppm_xlim, vline = 3.03,
+    image(dyn_data_uncorr_ed_on, xlim = params$plot_ppm_xlim, vline = vline_f,
           vline_col = "black")
   }
 }
