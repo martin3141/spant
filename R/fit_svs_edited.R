@@ -301,8 +301,13 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (pre_align) {
     ed_off <- align(ed_off, c(2.01, 3.03, 3.22), max_shift = 40)
     if (Ndyns(ed_off) > 1) ed_off_post_dfp_corr <- ed_off
-    # TODO this is GABA editing specific
-    ed_on <- align(ed_on, c(3.03, 3.22), max_shift = 40)
+    
+    if (editing_type == "gaba_1.9") {
+      ed_on <- align(ed_on, c(3.03, 3.22), max_shift = 40)
+    } else {
+      ed_on <- align(ed_on, c(2.01, 3.03, 3.22), max_shift = 40)
+    }
+    
     if (Ndyns(ed_on) > 1) ed_on_post_dfp_corr <- ed_on
   }
   
@@ -482,7 +487,14 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   # if (is.null(fit_opts_edited)) fit_opts_edited <- abfit_reg_opts()
   
   if (is.null(fit_opts_edited)) {
-    fit_opts_edited <- abfit_reg_opts(auto_bl_flex = FALSE, bl_ed_pppm = 3)
+    if (editing_type == "gsh_4.54") {
+      fit_opts_edited <- abfit_reg_opts(auto_bl_flex = FALSE, bl_ed_pppm = 3,
+                                        ppm_left = 3.5, ppm_right = 1.8,
+                                        pre_align = FALSE)
+    } else {
+      fit_opts_edited <- abfit_reg_opts(auto_bl_flex = FALSE, bl_ed_pppm = 3,
+                                        pre_align = FALSE)
+    }
   }
   
   if (is.null(fit_opts_ed_off)) fit_opts_ed_off <- abfit_reg_opts()
@@ -545,7 +557,8 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   } else if (editing_type == "gsh_4.54") {
     ang <- 1i / 180 * pi
     damp_adj <- 0.7
-    mol_list <- list(get_uncoupled_mol("GSH",  2.960, "1H", 1, 9, 0),
+    # mol_list <- list(get_uncoupled_mol("GSH",  2.960, "1H", 1, 9, 0),
+    mol_list <- list(get_uncoupled_mol("GSH",  2.960, "1H", 1, 14, 1),
                      get_uncoupled_mol("P237", 2.372, "1H", exp(23 * ang),
                                        4.0 - damp_adj, 0),
                      get_uncoupled_mol("P246", 2.455, "1H", exp(-5 * ang),
@@ -554,7 +567,9 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                                        4.8 - damp_adj, 0),
                      get_uncoupled_mol("P265", 2.649, "1H", exp(76 * ang),
                                        5.5 - damp_adj, 0),
-                     get_uncoupled_mol("P275", 2.746, "1H", exp(-12 * ang),
+                     # get_uncoupled_mol("P275", 2.746, "1H", exp(-12 * ang),
+                     #                   5.8 - damp_adj, 0))
+                     get_uncoupled_mol("P275", 2.746, "1H", exp(-5 * ang),
                                        5.8 - damp_adj, 0))
   }
   
