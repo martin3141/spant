@@ -124,8 +124,6 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                            plot_ppm_xlim = NULL, extra_output = FALSE,
                            verbose = FALSE) {
   
-  warning("fit_svs_exited is under active development and liable to significant changes.")
-  
   argg  <- c(as.list(environment()))
   
   metab <- input
