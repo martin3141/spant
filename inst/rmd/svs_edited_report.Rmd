@@ -422,6 +422,106 @@ if (params$w_ref_available) {
 }
 ```
 
+## Edited diagnostics
+```{r, results = 'asis'}
+name  <- NULL
+value <- NULL
+
+if (!is.null(params$fit_res_ed$res_tab$SNR)) {
+  name  <- c(name, "Spectral signal to noise ratio")
+  value <- c(value, round_dp(params$fit_res_ed$res_tab$SNR, 2))
+}
+
+if (!is.null(params$fit_res_ed$res_tab$SRR)) {
+  name  <- c(name, "Spectral signal to residual ratio")
+  value <- c(value, round_dp(params$fit_res_ed$res_tab$SRR, 2))
+}
+
+if (!is.null(params$fit_res_ed$res_tab$FWHM)) {
+  name  <- c(name, "Spectral linewidth (ppm)")
+  value <- c(value, round_dp(params$fit_res_ed$res_tab$FWHM, 4))
+}
+
+if (!is.null(params$fit_res_ed$res_tab$tNAA_lw)) {
+  name  <- c(name, "tNAA linewidth (ppm)")
+  value <- c(value, round_dp(params$fit_res_ed$res_tab$tNAA_lw, 4))
+}
+
+if (!is.null(params$fit_res_ed$res_tab$NAA_lw)) {
+  name  <- c(name, "NAA linewidth (ppm)")
+  value <- c(value, round_dp(params$fit_res_ed$res_tab$NAA_lw, 4))
+}
+
+if (!is.null(params$fit_res_ed$res_tab$tCho_lw)) {
+  name  <- c(name, "tCho linewidth (ppm)")
+  value <- c(value, round_dp(params$fit_res_ed$res_tab$tCho_lw, 4))
+}
+
+if (!is.null(params$fit_res_ed$res_tab$Cho_lw)) {
+  name  <- c(name, "Cho linewidth (ppm)")
+  value <- c(value, round_dp(params$fit_res_ed$res_tab$Cho_lw, 4))
+}
+
+if (!is.null(params$fit_res_ed$res_tab$tCr_lw)) {
+  name  <- c(name, "tCr linewidth (ppm)")
+  value <- c(value, round_dp(params$fit_res_ed$res_tab$tCr_lw, 4))
+}
+
+if (!is.null(params$fit_res_ed$res_tab$Cr_lw)) {
+  name  <- c(name, "Cr linewidth (ppm)")
+  value <- c(value, round_dp(params$fit_res_ed$res_tab$Cr_lw, 4))
+}
+
+if (!is.null(params$fit_res_ed$res_tab$phase)) {
+  name  <- c(name, "Zero-order phase (degrees)")
+  value <- c(value, round_dp(params$fit_res_ed$res_tab$phase, 1))
+}
+
+if (!is.null(params$fit_res_ed$res_tab$phi1)) {
+  name  <- c(name, "First-order phase (ms)")
+  value <- c(value, round_dp(params$fit_res_ed$res_tab$phi1, 3))
+}
+
+if (!is.null(params$fit_res_ed$res_tab$shift)) {
+  name  <- c(name, "Frequency offset (ppm)")
+  value <- c(value, round_dp(params$fit_res_ed$res_tab$shift, 4))
+}
+
+if (params$w_ref_available) {
+  name  <- c(name,  "Water amplitude", "Water suppression efficiency (%)")
+  value <- c(value, format(params$res_tab_molal$w_amp),
+             round_dp(params$res_tab_molal$ws_eff, 3))
+}
+
+if (params$fit_res_ed$method == "ABFIT") {
+  name  <- c(name, "Fit quality number (FQN)",
+                   "Baseline effective d.f. per ppm",
+                   "Lineshape asymmetry")
+  value <- c(value, round_dp(params$fit_res_ed$res_tab$FQN, 2),
+             round_dp(params$fit_res_ed$res_tab$bl_ed_pppm, 2),
+             round_dp(params$fit_res_ed$res_tab$asym, 2))
+}
+
+diag_tab <- data.frame(name, value)
+kableExtra::kable_styling(kableExtra::kbl(diag_tab, align = c("l", "r"),
+                                          col.names = c("Name", "Value")),
+                          full_width = FALSE, position = "left",
+                          bootstrap_options = boot_opts)
+
+if (!is.null(params$p_vols)) {
+  cat("### Partial volume measures\n")
+  perc_vols  <- c(params$p_vols[["WM"]], params$p_vols[["GM"]],
+                  params$p_vols[["CSF"]], params$p_vols[["Other"]])
+  p_vols_tab <- data.frame(type = c("WM", "GM", "CSF", "Other"),
+                           perc = perc_vols)
+  kableExtra::kable_styling(kableExtra::kbl(p_vols_tab, align = c("l", "r"),
+                                            col.names = c("Type", "% volume")),
+                            full_width = FALSE, position = "left",
+                            bootstrap_options = boot_opts)
+}
+
+```
+
 ## Edit-off diagnostics
 ```{r, results = 'asis'}
 name  <- NULL
