@@ -93,6 +93,7 @@
 #' @param extra_output write extra output files for generating custom plots.
 #' Defaults to FALSE.
 #' @param verbose output potentially useful information.
+#' @param return_fit return a fit object, defaults to FALSE.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
 #'                      package = "spant")
@@ -122,7 +123,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                            summary_measures = NULL, dyn_av_block_size = NULL,
                            dyn_av_scheme = NULL, dyn_av_scheme_file = NULL,
                            plot_ppm_xlim = NULL, extra_output = FALSE,
-                           verbose = FALSE) {
+                           verbose = FALSE, return_fit = FALSE) {
   
   argg  <- c(as.list(environment()))
   
@@ -784,9 +785,11 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   rmd_out_f <- file.path(tools::file_path_as_absolute(output_dir), "report")
   
+  # nb intermediates_dir is needed to avoid collisions when parallel
   if (verbose) cat("Generating html report.\n")
   rmarkdown::render(rmd_file, params = results, output_file = rmd_out_f,
-                    quiet = !verbose)
+                  quiet = !verbose,
+                  intermediates_dir = tools::file_path_as_absolute(output_dir))
   
   saveRDS(results, file = file.path(output_dir,
                                     "spant_fit_svs_edited_data.rds"))
@@ -806,7 +809,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   if (verbose) cat("fit_svs_edited finished.\n")
   
-  return(list(fit_res_ed, fit_res))
+  if (return_fit) return(list(fit_res_ed, fit_res))
 }
 
 

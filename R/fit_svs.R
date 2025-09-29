@@ -98,6 +98,7 @@
 #' @param extra_output write extra output files for generating custom plots.
 #' Defaults to FALSE.
 #' @param verbose output potentially useful information.
+#' @param return_fit return a fit object, defaults to FALSE.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
 #'                      package = "spant")
@@ -124,7 +125,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                     dyn_av_scheme = NULL, dyn_av_scheme_file = NULL,
                     dyn_basis_lb = NULL, dyn_basis_lg = NULL,
                     lcm_bin_path = NULL, plot_ppm_xlim = NULL,
-                    extra_output = FALSE, verbose = FALSE) {
+                    extra_output = FALSE, verbose = FALSE, return_fit = FALSE) {
   
   argg  <- c(as.list(environment()))
   
@@ -688,6 +689,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   rmd_out_f <- file.path(tools::file_path_as_absolute(output_dir), "report")
   
+  # nb intermediates_dir is needed to avoid collisions when parallel
   if (verbose) cat("Generating html report.\n")
   rmarkdown::render(rmd_file, params = results, output_file = rmd_out_f,
                   quiet = !verbose,
@@ -710,7 +712,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   if (verbose) cat("fit_svs finished.\n")
   
-  return(fit_res)
+  if (return_fit) return(fit_res)
 }
 
 #' Combine fitting results for group analysis.

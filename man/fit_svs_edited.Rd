@@ -46,7 +46,8 @@ fit_svs_edited(
   dyn_av_scheme_file = NULL,
   plot_ppm_xlim = NULL,
   extra_output = FALSE,
-  verbose = FALSE
+  verbose = FALSE,
+  return_fit = FALSE
 )
 }
 \arguments{
@@ -182,6 +183,8 @@ results.}
 Defaults to FALSE.}
 
 \item{verbose}{output potentially useful information.}
+
+\item{return_fit}{return a fit object, defaults to FALSE.}
 }
 \description{
 Note this function is still under development and liable to changes.
