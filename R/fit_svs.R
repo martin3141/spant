@@ -690,7 +690,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   if (verbose) cat("Generating html report.\n")
   rmarkdown::render(rmd_file, params = results, output_file = rmd_out_f,
-                    quiet = !verbose)
+                  quiet = !verbose,
+                  intermediates_dir = tools::file_path_as_absolute(output_dir))
     
   saveRDS(results, file = file.path(output_dir, "spant_fit_svs_data.rds"))
   
