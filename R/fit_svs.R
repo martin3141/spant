@@ -718,9 +718,11 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
 #' Combine fitting results for group analysis.
 #' @param search_path path to start recursive search for fitting results.
 #' @param output_dir directory path to store group results.
+#' @param verbose verbose, defaults to TRUE.
 #' @export
 fit_svs_group_results <- function(search_path,
-                                  output_dir = "fit_svs_group_results") {
+                                  output_dir = "fit_svs_group_results",
+                                  verbose = TRUE) {
   
   paths <- list.files(path = search_path, pattern = "spant_fit_svs_data.rds",
                       recursive = TRUE, full.names = TRUE)
@@ -744,6 +746,9 @@ fit_svs_group_results <- function(search_path,
   ratio_str_list        <- vector(mode = "list", length = results_n)
   
   for (n in 1:results_n) {
+    
+    if (verbose) cat(paste0(n, " of ", results_n, ", reading : ", paths[n], "\n"))
+    
     results <- readRDS(paths[n])
     
     if (n == 1) {

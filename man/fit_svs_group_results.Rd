@@ -4,12 +4,18 @@
 \alias{fit_svs_group_results}
 \title{Combine fitting results for group analysis.}
 \usage{
-fit_svs_group_results(search_path, output_dir = "fit_svs_group_results")
+fit_svs_group_results(
+  search_path,
+  output_dir = "fit_svs_group_results",
+  verbose = TRUE
+)
 }
 \arguments{
 \item{search_path}{path to start recursive search for fitting results.}
 
 \item{output_dir}{directory path to store group results.}
+
+\item{verbose}{verbose, defaults to TRUE.}
 }
 \description{
 Combine fitting results for group analysis.
