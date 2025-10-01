@@ -717,15 +717,26 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
 
 #' Combine fitting results for group analysis.
 #' @param search_path path to start recursive search for fitting results.
+#' Cannot be used together with the paths argument.
+#' @param paths a set of paths to spant output files, usually named : 
+#' "spant_fit_svs_data.rds". Cannot be used together with the search_path
+#' argument.
 #' @param output_dir directory path to store group results.
 #' @param verbose verbose, defaults to TRUE.
 #' @export
-fit_svs_group_results <- function(search_path,
+fit_svs_group_results <- function(search_path = NULL, paths = NULL,
                                   output_dir = "fit_svs_group_results",
                                   verbose = TRUE) {
   
-  paths <- list.files(path = search_path, pattern = "spant_fit_svs_data.rds",
-                      recursive = TRUE, full.names = TRUE)
+  # check inputs
+  e_message <- "Need to specify search_path or paths argument."
+  if (!xor(is.null(search_path), is.null(paths))) stop(e_message)
+  
+  if (!is.null(search_path)) {
+    paths <- list.files(path = search_path, pattern = "spant_fit_svs_data.rds",
+                        recursive = TRUE, full.names = TRUE)
+    paths <- sort(paths)
+  }
   
   if (length(paths) == 0) stop("No result files found.")
   
