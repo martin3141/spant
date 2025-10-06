@@ -869,7 +869,11 @@ lb.basis_set <- function(x, lb, lg = 1) {
 }
 
 match_ls_optim_fn <- function(par, mrs_data, ref, xlim) {
-  resid_mrs <- ref - td2fd(lb(mrs_data, par[1], par[2]))
+  if (length(par) == 2) {
+    resid_mrs <- ref - td2fd(lb(mrs_data, par[1], par[2]))
+  } else {
+    resid_mrs <- ref - td2fd(lb(mrs_data, par[1], par[2])) * par[3]
+  }
   resid     <- spec_op(resid_mrs, xlim = xlim, mode = "mod", operator = "l2")
   return(resid)
 }
@@ -882,33 +886,60 @@ match_ls_optim_fn <- function(par, mrs_data, ref, xlim) {
 #' two water resonances.
 #' @param init_lb initial value for the amount of line-broadening to apply (Hz).
 #' @param init_lg initial value for the Lorentz-Gauss lineshape parameter.
+#' @param init_amp initial value for the amplitude parameter.
 #' @param min_lb minimum value for the amount of line-broadening to apply (Hz).
 #' @param max_lb maximum value for the amount of line-broadening to apply (Hz).
 #' @param min_lg minimum value for the Lorentz-Gauss lineshape parameter.
 #' @param max_lg maximum value for the Lorentz-Gauss lineshape parameter.
+#' @param min_amp minimum value for the amplitude parameter.
+#' @param max_amp maximum value for the amplitude parameter.
+#' @param amp_optim flag to include amplitude adjustment in the optimisation
+#' procedure. Defaults to TRUE.
 #' @return a list containing the matched mrs_data, difference spectra and
 #' optimisation results.
 #' @export
 match_lineshape <- function(mrs_data, ref, xlim, init_lb = 0.2, init_lg = 0.5,
-                            min_lb = 0, max_lb = Inf, min_lg = 0, max_lg = 1) {
+                            init_amp = 1, min_lb = 0, max_lb = Inf, min_lg = 0, 
+                            max_lg = 1, min_amp = 0.1, max_amp = 2.0, 
+                            amp_optim = TRUE) {
   
   if (!is_fd(ref)) ref <- td2fd(ref)
   
-  # init broadening in Hz, LG factor
-  start_vals <- c(init_lb, init_lg)
-  
-  res <- stats::optim(start_vals, match_ls_optim_fn, mrs_data = mrs_data,
-                      ref = ref, xlim = xlim, method = "L-BFGS-B",
-                      lower = c(min_lb, min_lg), upper = c(max_lb, max_lg))
-  
-  matched <- td2fd(lb(mrs_data, res$par[1], res$par[2]))
-  diff    <- matched - ref
-  
-  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
-  diff_no_match <- mrs_data - ref
-  
-  return(list(matched = matched, diff = diff, diff_no_match = diff_no_match,
-              lb = res$par[1], lg = res$par[2], optim_res = res))
+  if (amp_optim) {
+    # init broadening in Hz, LG factor
+    start_vals <- c(init_lb, init_lg, init_amp)
+    
+    res <- stats::optim(start_vals, match_ls_optim_fn, mrs_data = mrs_data,
+                        ref = ref, xlim = xlim, method = "L-BFGS-B",
+                        lower = c(min_lb, min_lg, min_amp),
+                        upper = c(max_lb, max_lg, max_amp))
+    
+    matched <- td2fd(lb(mrs_data, res$par[1], res$par[2]))
+    diff    <- scale_mrs_amp(matched, res$par[3]) - ref
+    
+    if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+    diff_no_match <- mrs_data - ref
+    
+    return(list(matched = matched, diff = diff, diff_no_match = diff_no_match,
+                lb = res$par[1], lg = res$par[2], amp = res$par[3],
+                optim_res = res))
+  } else {
+    # init broadening in Hz, LG factor
+    start_vals <- c(init_lb, init_lg)
+    
+    res <- stats::optim(start_vals, match_ls_optim_fn, mrs_data = mrs_data,
+                        ref = ref, xlim = xlim, method = "L-BFGS-B",
+                        lower = c(min_lb, min_lg), upper = c(max_lb, max_lg))
+    
+    matched <- td2fd(lb(mrs_data, res$par[1], res$par[2]))
+    diff    <- matched - ref
+    
+    if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+    diff_no_match <- mrs_data - ref
+    
+    return(list(matched = matched, diff = diff, diff_no_match = diff_no_match,
+                lb = res$par[1], lg = res$par[2], optim_res = res))
+  }
 }
 
 #' Subtract mean rest spectrum from mean task spectrum after applying optimal

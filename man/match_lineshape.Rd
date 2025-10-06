@@ -10,10 +10,14 @@ match_lineshape(
   xlim,
   init_lb = 0.2,
   init_lg = 0.5,
+  init_amp = 1,
   min_lb = 0,
   max_lb = Inf,
   min_lg = 0,
-  max_lg = 1
+  max_lg = 1,
+  min_amp = 0.1,
+  max_amp = 2,
+  amp_optim = TRUE
 )
 }
 \arguments{
@@ -29,6 +33,8 @@ two water resonances.}
 
 \item{init_lg}{initial value for the Lorentz-Gauss lineshape parameter.}
 
+\item{init_amp}{initial value for the amplitude parameter.}
+
 \item{min_lb}{minimum value for the amount of line-broadening to apply (Hz).}
 
 \item{max_lb}{maximum value for the amount of line-broadening to apply (Hz).}
@@ -36,6 +42,13 @@ two water resonances.}
 \item{min_lg}{minimum value for the Lorentz-Gauss lineshape parameter.}
 
 \item{max_lg}{maximum value for the Lorentz-Gauss lineshape parameter.}
+
+\item{min_amp}{minimum value for the amplitude parameter.}
+
+\item{max_amp}{maximum value for the amplitude parameter.}
+
+\item{amp_optim}{flag to include amplitude adjustment in the optimisation
+procedure. Defaults to TRUE.}
 }
 \value{
 a list containing the matched mrs_data, difference spectra and

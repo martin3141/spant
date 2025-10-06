@@ -466,6 +466,7 @@ stackplot.list <- function(x, ...) {
 #' @param lab_cex label size.
 #' @param bl_lty linetype for the y = 0 baseline trace. A default value NULL
 #' results in no baseline being plotted.
+#' @param bl_lwd linewith for the y = 0 baseline trace. Defaults to 0.5.
 #' @param restore_def_par restore default plotting par values after the plot has 
 #' been made.
 #' @param show_grid plot gridlines behind the data (logical). Defaults to TRUE.
@@ -486,7 +487,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                                x_offset = 0, y_offset = 0, plot_dim = NULL,
                                x_pos = NULL, y_pos = NULL, z_pos = NULL,
                                dyn = 1, coil = 1, bty = NULL, labels = NULL,
-                               lab_cex = 1, bl_lty = NULL,
+                               lab_cex = 1, bl_lty = NULL, bl_lwd = 0.5,
                                restore_def_par = TRUE, show_grid = NULL,
                                grid_nx = NULL, grid_ny = NA, lwd = NULL,
                                vline = NULL, vline_lty = 2, vline_col = "red",
@@ -663,13 +664,27 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   
   if ( x_units == "ppm" ) xlim <- rev(xlim)
   
+
+  
   graphics::matplot(x_scale_mat[length(subset):1,],
                     plot_data[length(subset):1,], type = "l", 
                     lty = lty, col = col, xlab = xlab, ylab = "",
                     yaxt = "n", xaxt = "n", xlim = xlim,
-                    bty = bty, lwd = lwd, panel.first = {if (show_grid)
-                                                   graphics::grid(nx = grid_nx,
-                                                   ny = grid_ny)}, ...)
+                    bty = bty, lwd = lwd,
+                    panel.first = {
+                      # draw baseline(s)
+                      if (!is.null(bl_lty)) {
+                        # only need one baseline trace if y_offset is zero
+                        if (y_offset == 0) {
+                          graphics::abline(h = 0, lty = bl_lty, lwd = bl_lwd)
+                        } else {
+                          for (offset in y_offset_vec) {
+                            graphics::abline(h = offset, lty = bl_lty, lwd = bl_lwd)
+                          }
+                        }
+                      }
+                      if(show_grid) graphics::grid(nx = grid_nx, ny = grid_ny)
+                    } , ...)
   
   graphics::axis(1, lwd = 0, lwd.ticks = 1, at = pretty(xlim_labs, 6))
   
@@ -698,16 +713,16 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   }
   
   # draw baseline(s)
-  if (!is.null(bl_lty)) {
-    # only need one baseline trace if y_offset is zero
-    if (y_offset == 0) {
-      graphics::abline(h = 0, lty = bl_lty, lwd = 0.5)
-    } else {
-      for (offset in y_offset_vec) {
-        graphics::abline(h = offset, lty = bl_lty, lwd = 0.5)
-      }
-    }
-  }
+  # if (!is.null(bl_lty)) {
+  #   # only need one baseline trace if y_offset is zero
+  #   if (y_offset == 0) {
+  #     graphics::abline(h = 0, lty = bl_lty, lwd = bl_lwd)
+  #   } else {
+  #     for (offset in y_offset_vec) {
+  #       graphics::abline(h = offset, lty = bl_lty, lwd = bl_lwd)
+  #     }
+  #   }
+  # }
   
   # if (show_grid) graphics::grid(nx = grid_nx, ny = grid_ny)
   
