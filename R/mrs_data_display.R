@@ -480,6 +480,7 @@ stackplot.list <- function(x, ...) {
 #' @param vline_lty linetype for the vertical line.
 #' @param vline_col colour for the vertical line.
 #' @param mar option to adjust the plot margins. See ?par.
+#' @param y_scale option to display the y-axis values (logical).
 #' @param ... other arguments to pass to the matplot method.
 #' @export
 stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
@@ -491,7 +492,7 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
                                restore_def_par = TRUE, show_grid = NULL,
                                grid_nx = NULL, grid_ny = NA, lwd = NULL,
                                vline = NULL, vline_lty = 2, vline_col = "red",
-                               mar = NULL, ...) {
+                               mar = NULL, y_scale = FALSE, ...) {
   
   .pardefault <- graphics::par(no.readonly = T)
   
@@ -517,7 +518,8 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   # if alpha is specified, override the default value in col
   if (!is.null(alpha)) col <- add_alpha(col, alpha)
   
-  if (is.null(bty)) bty <- "n"
+  if (is.null(bty) && !y_scale) bty <- "n"
+  if (is.null(bty) && y_scale)  bty <- "l"
   
   if (is.null(lwd)) lwd <- 2.0
   
@@ -525,8 +527,13 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   graphics::par("xaxs" = "i") # tight axes limits
   graphics::par(mgp = c(1.8, 0.5, 0)) # distance between axes and labels
   
-  if (is.null(mar) && is.null(labels))  mar <- c(3.5, 1, 1, 1)
-  if (is.null(mar) && !is.null(labels)) mar <- c(3.5, 1, 1, 4)
+  if (y_scale) {
+    if (is.null(mar) && is.null(labels))  mar <- c(3.5, 3.5, 1, 1)
+    if (is.null(mar) && !is.null(labels)) mar <- c(3.5, 3.5, 1, 4)
+  } else {
+    if (is.null(mar) && is.null(labels))  mar <- c(3.5, 1, 1, 1)
+    if (is.null(mar) && !is.null(labels)) mar <- c(3.5, 1, 1, 4)
+  }
   
   graphics::par(mar = mar) # margins
   
@@ -556,6 +563,12 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
     xlab <- paste(xlab, "(s)")
   } else {
     stop("Invalid x_units option, should be one of : 'ppm', 'hz', 'points' or 'seconds'") 
+  }
+  
+  if (y_scale) {
+    ylab <- "Intensity (au)"
+  } else {
+    ylab <- ""
   }
   
   if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[Npts(x)])
@@ -664,27 +677,30 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   
   if ( x_units == "ppm" ) xlim <- rev(xlim)
   
+  pan_first_fn <- function() {
+    if (!is.null(bl_lty)) {
+      # only need one baseline trace if y_offset is zero
+      if (y_offset == 0) {
+        graphics::abline(h = 0, lty = bl_lty, lwd = bl_lwd)
+      } else {
+        for (offset in y_offset_vec) {
+          graphics::abline(h = offset, lty = bl_lty, lwd = bl_lwd)
+        }
+      }
+    }
+    if(show_grid) graphics::grid(nx = grid_nx, ny = grid_ny)
+  }
+  
   graphics::matplot(x_scale_mat[length(subset):1,],
                     plot_data[length(subset):1,], type = "l", 
-                    lty = lty, col = col, xlab = xlab, ylab = "",
+                    lty = lty, col = col, xlab = xlab, ylab = ylab,
                     yaxt = "n", xaxt = "n", xlim = xlim,
                     bty = bty, lwd = lwd,
-                    panel.first = {
-                      # draw baseline(s)
-                      if (!is.null(bl_lty)) {
-                        # only need one baseline trace if y_offset is zero
-                        if (y_offset == 0) {
-                          graphics::abline(h = 0, lty = bl_lty, lwd = bl_lwd)
-                        } else {
-                          for (offset in y_offset_vec) {
-                            graphics::abline(h = offset, lty = bl_lty, lwd = bl_lwd)
-                          }
-                        }
-                      }
-                      if(show_grid) graphics::grid(nx = grid_nx, ny = grid_ny)
-                    } , ...)
+                    panel.first = {pan_first_fn()}, ...)
   
   graphics::axis(1, lwd = 0, lwd.ticks = 1, at = pretty(xlim_labs, 6))
+  
+  if (y_scale) graphics::axis(2)
   
   if (bty == "n") graphics::lines(xlim_labs, c(graphics::par("usr")[3],
                                                graphics::par("usr")[3]))

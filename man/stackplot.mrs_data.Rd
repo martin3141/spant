@@ -34,6 +34,7 @@
   vline_lty = 2,
   vline_col = "red",
   mar = NULL,
+  y_scale = FALSE,
   ...
 )
 }
@@ -107,6 +108,8 @@ corresponding direction.}
 \item{vline_col}{colour for the vertical line.}
 
 \item{mar}{option to adjust the plot margins. See ?par.}
+
+\item{y_scale}{option to display the y-axis values (logical).}
 
 \item{...}{other arguments to pass to the matplot method.}
 }
