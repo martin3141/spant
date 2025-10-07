@@ -16,7 +16,7 @@ sim_asy_pvoigt(
 \arguments{
 \item{freq}{resonance frequency in ppm.}
 
-\item{fwhm}{resonance FWHM.}
+\item{fwhm}{resonance FWHM in Hz.}
 
 \item{lg}{Lorentz-Gauss lineshape parameter (between 0 and 1).}
 

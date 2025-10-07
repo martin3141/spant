@@ -184,7 +184,7 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
 #' 2008; 47: 66-69.
 #' 
 #' @param freq resonance frequency in ppm.
-#' @param fwhm resonance FWHM.
+#' @param fwhm resonance FWHM in Hz.
 #' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1).
 #' @param asy asymmetry parameter.
 #' @param acq_paras list of acquisition parameters. See
@@ -202,7 +202,7 @@ sim_asy_pvoigt <- function(freq = 0, fwhm = 0, lg = 0, asy = 0,
   
   # convert ppm to Hz
   freq       <- ppm2hz(freq, acq_paras$ft, acq_paras$ref)
-  freq_scale <- hz(fs  = acq_paras$fs, N = acq_paras$N)
+  freq_scale <- hz(fs = acq_paras$fs, N = acq_paras$N)
   asy_fwhm   <- asy_fwhm_fn(freq_scale, fwhm, asy, freq)
   fd <- lg * G(freq_scale, asy_fwhm, freq) + (1 - lg) *
              L(freq_scale, asy_fwhm, freq)
@@ -226,6 +226,10 @@ sim_asy_pvoigt <- function(freq = 0, fwhm = 0, lg = 0, asy = 0,
     
     fd <- ft_shift(td) / acq_paras$N * 2
   }
+  
+  # scale so that intensity=1 (or 0.5) when t=0 for amplitude of 1
+  # to be consistent with sim_resonances
+  fd <- fd * acq_paras$fs / 2
   
   mrs_data <- vec2mrs_data(fd, fs = acq_paras$fs, ft = acq_paras$ft,
                            ref = acq_paras$ref, nuc = acq_paras$nuc, fd = TRUE)

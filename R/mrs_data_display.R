@@ -664,8 +664,6 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
   
   if ( x_units == "ppm" ) xlim <- rev(xlim)
   
-
-  
   graphics::matplot(x_scale_mat[length(subset):1,],
                     plot_data[length(subset):1,], type = "l", 
                     lty = lty, col = col, xlab = xlab, ylab = "",
