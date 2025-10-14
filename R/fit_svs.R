@@ -769,10 +769,24 @@ fit_svs_group_results <- function(search_path = NULL, paths = NULL,
       legacy    <- ifelse(is.null(results$res_tab_legacy),   FALSE, TRUE)
     }
     
-    if (unscaled) res_tab_unscaled_list[[n]] <- results$res_tab_unscaled
-    if (molal)    res_tab_molal_list[[n]]    <- results$res_tab_molal
-    if (legacy)   res_tab_legacy_list[[n]]   <- results$res_tab_legacy
+    if (unscaled) {
+      results$res_tab_unscaled <- cbind(path = paths[n],
+                                        results$res_tab_unscaled)
+      res_tab_unscaled_list[[n]] <- results$res_tab_unscaled
+    }
+    
+    if (molal) {
+      results$res_tab_molal   <- cbind(path = paths[n], results$res_tab_molal)
+      res_tab_molal_list[[n]] <- results$res_tab_molal
+    }
+    
+    if (legacy) {
+      results$res_tab_legacy   <- cbind(path = paths[n], results$res_tab_legacy)
+      res_tab_legacy_list[[n]] <- results$res_tab_legacy
+    }
+    
     if (ratio) {
+      results$res_tab_ratio   <- cbind(path = paths[n], results$res_tab_ratio)
       res_tab_ratio_list[[n]] <- results$res_tab_ratio
       ratio_str_list[[n]]     <- results$output_ratio
     }
@@ -780,29 +794,30 @@ fit_svs_group_results <- function(search_path = NULL, paths = NULL,
   
   if (unscaled) {
     res_tab_unscaled_df <- do.call("rbind", res_tab_unscaled_list)
-    res_tab_unscaled_df <- cbind(path = paths, res_tab_unscaled_df)
+    # res_tab_unscaled_df <- cbind(path = paths, res_tab_unscaled_df)
     file_out <- file.path(output_dir, paste0("fit_res_group_unscaled_conc.csv"))
     utils::write.csv(res_tab_unscaled_df, file_out, row.names = FALSE)
   }
   
   if (molal) {
     res_tab_molal_df <- do.call("rbind", res_tab_molal_list)
-    res_tab_molal_df <- cbind(path = paths, res_tab_molal_df)
+    # res_tab_molal_df <- cbind(path = paths, res_tab_molal_df)
     file_out <- file.path(output_dir, paste0("fit_res_group_molal_conc.csv"))
     utils::write.csv(res_tab_molal_df, file_out, row.names = FALSE)
   }
   
   if (ratio) {
     res_tab_ratio_df <- do.call("rbind", res_tab_ratio_list)
-    res_tab_ratio_df <- cbind(path = paths, ratio = unlist(ratio_str_list),
-                              res_tab_ratio_df)
+    # res_tab_ratio_df <- cbind(path = paths, ratio = unlist(ratio_str_list),
+    #                           res_tab_ratio_df)
+    res_tab_ratio_df <- cbind(ratio = unlist(ratio_str_list), res_tab_ratio_df)
     file_out <- file.path(output_dir, paste0("fit_res_group_ratio_conc.csv"))
     utils::write.csv(res_tab_ratio_df, file_out, row.names = FALSE)
   }
   
   if (legacy) {
     res_tab_legacy_df <- do.call("rbind", res_tab_legacy_list)
-    res_tab_legacy_df <- cbind(path = paths, res_tab_legacy_df)
+    # res_tab_legacy_df <- cbind(path = paths, res_tab_legacy_df)
     file_out <- file.path(output_dir, paste0("fit_res_group_legacy_conc.csv"))
     utils::write.csv(res_tab_legacy_df, file_out, row.names = FALSE)
   }
