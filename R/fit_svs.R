@@ -91,7 +91,7 @@
 #' text or csv format.
 #' @param dyn_basis_lb dynamic basis line-broadening to apply in Hz.
 #' @param dyn_basis_lg dynamic basis Lorentz-Gauss lineshape factor between 0
-#' and 1.
+#' and 1. Defaults to 0, pure Lorentzian.
 #' @param lcm_bin_path set the path to LCModel binary.
 #' @param plot_ppm_xlim plotting ppm axis limits in the html results.
 #' results.
