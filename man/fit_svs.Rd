@@ -181,7 +181,7 @@ text or csv format.}
 \item{dyn_basis_lb}{dynamic basis line-broadening to apply in Hz.}
 
 \item{dyn_basis_lg}{dynamic basis Lorentz-Gauss lineshape factor between 0
-and 1.}
+and 1. Defaults to 0, pure Lorentzian.}
 
 \item{lcm_bin_path}{set the path to LCModel binary.}
 
