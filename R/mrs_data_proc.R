@@ -533,20 +533,24 @@ add_noise <- function(mrs_data, sd = 0.1, fd = TRUE) {
 #' Add noise to an mrs_data object to match a given SNR.
 #' @param mrs_data data to add noise to.
 #' @param target_snr desired spectral SNR, note this assumes the input data is
-#' noise-free, eg simulated data. Note the SNR is estimated from the first 
-#' scan in the dataset and the same noise level is added to all spectra.
+#' noise-free, eg simulated data (unless noise_free_input is set to FALSE). Note 
+#' the SNR is estimated from the first scan in the dataset and the same noise
+#' level is added to all spectra.
 #' @param sig_region spectral limits to search for the strongest spectral data
 #' point.
 #' @param ref_data measure the signal from the first scan in this reference data
 #' and apply the same target noise level to mrs_data.
+#' @param noise_free_input accounts for the reference data already containing
+#' noise when set to FALSE. Defaults to TRUE.
 #' @return mrs_data object with additive normally distributed noise.
 #' @export
 add_noise_spec_snr <- function(mrs_data, target_snr, sig_region = c(4, 0.5),
-                               ref_data = NULL) {
+                               ref_data = NULL, noise_free_input = TRUE) {
   
   if (inherits(mrs_data, "list")) {
     res <- lapply(mrs_data, add_noise_spec_snr, target_snr = target_snr,
-                  sig_region = sig_region, ref_data = ref_data)
+                  sig_region = sig_region, ref_data = ref_data,
+                  noise_free_input = noise_free_input)
     return(res)
   }
   
@@ -557,10 +561,20 @@ add_noise_spec_snr <- function(mrs_data, target_snr, sig_region = c(4, 0.5),
   }
   
   # measure max signal from the first scan and add noise
-  peak_height <- calc_spec_snr(ref_data, sig_region = sig_region,
-                               full_output = TRUE)$max_sig
-  noise_sd    <- peak_height / target_snr
-  mrs_data    <- add_noise(mrs_data, noise_sd)
+  ref_spec_snr <- calc_spec_snr(ref_data, sig_region = sig_region,
+                                full_output = TRUE)
+  
+  peak_height  <- ref_spec_snr$max_sig
+  if (noise_free_input) {
+    noise_sd     <- peak_height / target_snr
+    mrs_data     <- add_noise(mrs_data, noise_sd)
+  } else {
+    target_sd    <- peak_height / target_snr
+    current_sd   <- ref_spec_snr$noise_sd
+    noise_sd     <- (target_sd ^ 2 - current_sd ^ 2) ^ 0.5
+    
+    mrs_data     <- add_noise(mrs_data, noise_sd)
+  }
   return(mrs_data)
 }
 
