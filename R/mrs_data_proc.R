@@ -2172,6 +2172,18 @@ set_dyns <- function(mrs_data, subset, mrs_data_in) {
   return(mrs_data)
 }
 
+#' Overwrite a subset of dynamic scans.
+#' @param mrs_data dynamic MRS data to be updated.
+#' @param subset vector containing indices to the dynamic scans to be 
+#' assigned.
+#' @param mrs_data_new dynamic MRS data with new values.
+#' @return MRS data with updated dynamics.
+#' @export
+assign_dyns <- function(mrs_data, subset, mrs_data_new) {
+  mrs_data$data[,,,, subset,,] = mrs_data_new$data[,,,,,,]
+  return(mrs_data)
+}
+
 #' Remove a subset of dynamic scans.
 #' @param mrs_data dynamic MRS data.
 #' @param subset vector containing indices to the dynamic scans to be 
@@ -5409,4 +5421,57 @@ phase_bl_obj_fn <- function(phi, vec, ind_list) {
   areas <- rep(NA, length(ind_list))
   for (n in 1:length(ind_list)) areas[n] <- sum(vec[ind_list[[n]]])
   return(sum((areas - mean(areas)) ^ 2))
+}
+
+#' Apply line-broadening to dynamic MRS data and degrade the SNR to reverse any
+#' improvement.
+#' @param mrs_data data to be broadened.
+#' @param lb amount of line-broadening in Hz.
+#' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1). Defaults to 0.
+#' @return line-broadened data.
+#' @export
+lb_degrade_snr <- function(mrs_data, lb, lg = NULL) {
+  
+  # do checks on lb
+  if (length(lb) != Ndyns(mrs_data)) {
+    stop("lb and Ndyns do not match")
+  }
+  
+  # do checks on lg
+  if (is.null(lg)) {
+    lg <- rep(0, length(lb))
+  } else {
+    if (length(lg) != length(lb)) stop("lb and lg lengths do not match")
+  }
+  
+  # must be freq domain
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  for (n in 1:Ndyns(mrs_data)) {
+    
+    # skip to the next spectrum if lb == 0
+    if (lb[n] == 0) next
+    
+    mrs_data_n <- get_dyns(mrs_data, n)
+    
+    # get original SNR
+    orig_spec_snr <- calc_spec_snr(mrs_data_n, full_output = TRUE)
+    
+    # apply linebroadening
+    mrs_data_n <- lb(mrs_data_n, lb[n], lg[n]) 
+    
+    # get new SNR
+    new_spec_snr <- calc_spec_snr(mrs_data_n, full_output = TRUE)
+    
+    # add noise
+    noise_target <- orig_spec_snr$snr * new_spec_snr$max_sig / 
+      orig_spec_snr$max_sig
+    
+    mrs_data_n <- add_noise_spec_snr(mrs_data_n, noise_target)
+    
+    # overwrite original
+    mrs_data <- assign_dyns(mrs_data, n, mrs_data_n)
+  }
+  
+  return(mrs_data)
 }
