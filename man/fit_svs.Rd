@@ -49,7 +49,8 @@ fit_svs(
   plot_ppm_xlim = NULL,
   extra_output = FALSE,
   verbose = FALSE,
-  return_fit = FALSE
+  return_fit = FALSE,
+  write_preproc_metab_path = NULL
 )
 }
 \arguments{
@@ -194,6 +195,9 @@ Defaults to FALSE.}
 \item{verbose}{output potentially useful information.}
 
 \item{return_fit}{return a fit object, defaults to FALSE.}
+
+\item{write_preproc_metab_path}{path to write the preprocessed metabolite
+data in NIfTI format.}
 }
 \description{
 Note this function is still under development and liable to changes.

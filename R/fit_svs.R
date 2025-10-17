@@ -99,6 +99,8 @@
 #' Defaults to FALSE.
 #' @param verbose output potentially useful information.
 #' @param return_fit return a fit object, defaults to FALSE.
+#' @param write_preproc_metab_path path to write the preprocessed metabolite
+#' data in NIfTI format.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
 #'                      package = "spant")
@@ -125,7 +127,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                     dyn_av_scheme = NULL, dyn_av_scheme_file = NULL,
                     dyn_basis_lb = NULL, dyn_basis_lg = NULL,
                     lcm_bin_path = NULL, plot_ppm_xlim = NULL,
-                    extra_output = FALSE, verbose = FALSE, return_fit = FALSE) {
+                    extra_output = FALSE, verbose = FALSE, return_fit = FALSE,
+                    write_preproc_metab_path = NULL) {
   
   argg  <- c(as.list(environment()))
   
@@ -539,6 +542,13 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     basis <- rep(list(basis), Ndyns(metab))
     basis <- .mapply(lb, dots = list(x = basis, lb = dyn_basis_lb,
                                      lg = dyn_basis_lg), MoreArgs = NULL)
+  }
+  
+  # write metab data
+  if (!is.null(write_preproc_metab_path)) {
+    dir.create(dirname(write_preproc_metab_path), recursive = TRUE,
+               showWarnings = FALSE)
+    write_mrs_nifti(metab, write_preproc_metab_path) 
   }
   
   # fitting
