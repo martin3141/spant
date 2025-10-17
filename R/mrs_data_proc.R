@@ -5465,7 +5465,7 @@ lb_degrade_snr <- function(mrs_data, lb, lg = NULL) {
     
     # add noise
     noise_target <- orig_spec_snr$snr * new_spec_snr$max_sig / 
-      orig_spec_snr$max_sig
+                    orig_spec_snr$max_sig
     
     mrs_data_n <- add_noise_spec_snr(mrs_data_n, noise_target)
     
