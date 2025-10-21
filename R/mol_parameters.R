@@ -556,7 +556,7 @@ get_lys_paras <- function(lw = NULL, lg = 0, ...) {
                        j_coupling_mat = j_coupling_mat, scale_factor = 1,
                        lw = lw, lg = lg)
   
-  source <- "Deelchand DK, Marjańska M, Henry PG, Terpstra M. MEGA-PRESS of GABA+: Influences of acquisition parameters. NMR Biomed. 2021 May;34(5):e4199. doi: 10.1002/nbm.4199. Epub 2019 Oct 28. PMID: 31658398; PMCID: PMC7186154."
+  source <- "Deelchand DK, Marjanska M, Henry PG, Terpstra M. MEGA-PRESS of GABA+: Influences of acquisition parameters. NMR Biomed. 2021 May;34(5):e4199. doi: 10.1002/nbm.4199. Epub 2019 Oct 28. PMID: 31658398; PMCID: PMC7186154."
   
   paras <- list(spin_groups = list(spin_group_a), name = "Lys",
                 source = source, full_name = "Lysine")
