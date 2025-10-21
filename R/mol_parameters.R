@@ -526,6 +526,44 @@ get_ins_paras <- function(lw = NULL, lg = 0, ...) {
   paras
 }
 
+get_lys_paras <- function(lw = NULL, lg = 0, ...) {
+  if (is.null(lw)) lw = 2
+  nucleus <- rep("1H", 9)
+  #               2      3      3'     4      4'      5      5'     6      6'
+  #               1      2      3      4      5       6      7      8      9
+  chem_shift <- c(3.746, 1.881, 1.898, 1.431, 1.4929, 1.712, 1.713, 3.018, 3.0198)
+  j_coupling_mat <- matrix(0, 9, 9)
+  j_coupling_mat[2,1] <- 6.09
+  j_coupling_mat[3,1] <- 6.09
+  j_coupling_mat[3,2] <- -15.27
+  j_coupling_mat[4,2] <- 5.67
+  j_coupling_mat[5,2] <- 10.51
+  j_coupling_mat[4,3] <- 10.13
+  j_coupling_mat[5,3] <- 6.1
+  j_coupling_mat[5,4] <- -12
+  j_coupling_mat[6,4] <- 6
+  j_coupling_mat[7,4] <- 8
+  j_coupling_mat[6,5] <- 10
+  j_coupling_mat[7,5] <- 6
+  j_coupling_mat[7,6] <- -12
+  j_coupling_mat[8,6] <- 6
+  j_coupling_mat[9,6] <- 8
+  j_coupling_mat[8,7] <- 10
+  j_coupling_mat[9,7] <- 6.5
+  j_coupling_mat[9,8] <- -10
+  
+  spin_group_a <- list(nucleus = nucleus, chem_shift = chem_shift, 
+                       j_coupling_mat = j_coupling_mat, scale_factor = 1,
+                       lw = lw, lg = lg)
+  
+  source <- "Deelchand DK, Marjańska M, Henry PG, Terpstra M. MEGA-PRESS of GABA+: Influences of acquisition parameters. NMR Biomed. 2021 May;34(5):e4199. doi: 10.1002/nbm.4199. Epub 2019 Oct 28. PMID: 31658398; PMCID: PMC7186154."
+  
+  paras <- list(spin_groups = list(spin_group_a), name = "Lys",
+                source = source, full_name = "Lysine")
+  class(paras) <- "mol_parameters"
+  paras
+}
+
 get_ins_rt_paras <- function(lw = NULL, lg = 0, ...) {
   if (is.null(lw)) lw = 0
   nucleus <- rep("1H", 6)
