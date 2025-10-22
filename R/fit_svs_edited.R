@@ -256,7 +256,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     stop("Incorrect editing_scheme string.")
   }
   
-  editing_types <- c("gaba_1.9", "gsh_4.54")
+  editing_types <- c("gaba_1.9", "gaba_1.9_gannet", "gsh_4.54")
   if (!(editing_type %in% editing_types)) {
     print(editing_types)
     stop("editing_type not recognised, should be one of the above.")
@@ -301,7 +301,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     ed_off <- align(ed_off, c(2.01, 3.03, 3.22), max_shift = 40)
     if (Ndyns(ed_off) > 1) ed_off_post_dfp_corr <- ed_off
     
-    if (editing_type == "gaba_1.9") {
+    if (editing_type %in% c("gaba_1.9", "gaba_1.9_gannet")) {
       ed_on <- align(ed_on, c(3.03, 3.22), max_shift = 40)
     } else {
       ed_on <- align(ed_on, c(2.01, 3.03, 3.22), max_shift = 40)
@@ -503,7 +503,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   # output_ratio of NA means we only want unscaled values
   if (anyNA(output_ratio)) output_ratio <- NULL
   
-  if (editing_type == "gaba_1.9") {
+  if (editing_type %in% c("gaba_1.9", "gaba_1.9_gannet")) {
     # align ed_on and ed_off based on the residual water signal
     ed_on  <- rats(ed_on, mean_dyns(ed_off), xlim = c(4.8, 4.5))
   } else if (editing_type == "gsh_4.54") {
@@ -546,13 +546,20 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                      get_uncoupled_mol("NAA",    2.01, "1H",  -1.5,  3, 0),
                      get_uncoupled_mol("Glx_A",  2.31, "1H",   1,    3, 0),
                      get_uncoupled_mol("Glx_B",  2.40, "1H",   1,    3, 0),
-                     # 2 Gaus model
-                     get_uncoupled_mol("GABA_A", 2.95, "1H",   1.5,   12, 1),
-                     get_uncoupled_mol("GABA_B", 3.04, "1H",   1.5,   12, 1),
-                     # 1 Gaus model
-                     # get_uncoupled_mol("GABA",   3.00, "1H",   3,    22, 1),
+                     # 2 Gaus GABA model
+                     get_uncoupled_mol("GABA_A", 2.95, "1H",   1.5,  12, 1),
+                     get_uncoupled_mol("GABA_B", 3.04, "1H",   1.5,  12, 1),
                      get_uncoupled_mol("Glx_C",  3.72, "1H",   1,   2.5, 0),
                      get_uncoupled_mol("Glx_D",  3.8,  "1H",   1,   2.5, 0))
+  } else if (editing_type == "gaba_1.9_gannet") {
+    mol_list <- list(get_uncoupled_mol("MM09",   0.92, "1H",   1,   12, 1),
+                     get_uncoupled_mol("NAA",    2.01, "1H",  -1,    3, 0),
+                     get_uncoupled_mol("Glx_A",  2.31, "1H",   1,    3, 0),
+                     get_uncoupled_mol("Glx_B",  2.40, "1H",   1,    3, 0),
+                     # 1 Gaus GABA+ model
+                     get_uncoupled_mol("GABAplus", 3.00, "1H",   1,  27, 1),
+                     get_uncoupled_mol("Glx_C",    3.72, "1H",   1, 3.5, 1),
+                     get_uncoupled_mol("Glx_D",    3.8,  "1H",   1, 3.5, 1))
   } else if (editing_type == "gsh_4.54") {
     ang <- 1i / 180 * pi
     damp_adj <- 0.7
