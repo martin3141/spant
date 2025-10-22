@@ -244,7 +244,7 @@ if (!is.null(dyn_data_uncorr_ed_off)) {
   if (!is.null(dyn_data_corr_ed_on)) {
     cat("\n\n### Edit-on with dyn. correction\n")
     
-    if (params$editing_type == "gaba_1.9") {
+    if (params$editing_type %in% c("gaba_1.9", "gaba_1.9_gannet")) {
       vline_f <- 3.03
     } else {
       vline_f <- 2.01

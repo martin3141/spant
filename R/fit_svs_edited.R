@@ -536,7 +536,11 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   # edit-off fitting
   if (verbose) cat("Starting edit-off fitting.\n")
   fit_res <- fit_mrs(metab = ed_off, basis = basis, opts = fit_opts_ed_off)
+  
   if (verbose) cat("Edit-off fitting complete.\n")
+  
+  # add tCr area
+  # fit_res$res_tab$tCr_area <- fit_res$res_tab$tCr / 3
   
   if (editing_type == "gaba_1.9") {
     # edited fitting
@@ -584,6 +588,8 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (verbose) cat("Starting edited fitting.\n")
   fit_res_ed <- fit_mrs(metab = edited, basis = basis_ed,
                         opts = fit_opts_edited)
+  
+    
   if (verbose) cat("Edited fitting complete.\n")
     
   phase_offset <- fit_res$res_tab$phase
