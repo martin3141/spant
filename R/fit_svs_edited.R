@@ -540,7 +540,9 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (verbose) cat("Edit-off fitting complete.\n")
   
   # add tCr area
-  # fit_res$res_tab$tCr_area <- fit_res$res_tab$tCr / 3
+  fit_res$res_tab <- add_fit_res_tab_amp_sd(fit_res$res_tab, "tCr_area",
+                                            fit_res$res_tab$tCr * 3,
+                                            fit_res$res_tab$tCr.sd * 3)
   
   if (editing_type == "gaba_1.9") {
     # edited fitting

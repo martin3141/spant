@@ -806,7 +806,7 @@ sv_res_table <- function(fit_res, format_out = FALSE) {
   amps     <- as.numeric(fit_res$res_tab[1, amp_indx])
   names    <- colnames(fit_res$res_tab[1, amp_indx])
   sds      <- as.numeric(fit_res$res_tab[1, amp_indx + 
-                                           amp_indx[length(amp_indx)] - 5])
+                                            amp_indx[length(amp_indx)] - 5])
   sds_perc <- sds / amps * 100
   CI95_UB <- amps + sds * 1.96
   CI95_LB <- amps - sds * 1.96
@@ -827,6 +827,29 @@ sv_res_table <- function(fit_res, format_out = FALSE) {
   }
   
   return(df_out)
+}
+
+add_fit_res_tab_amp_sd <- function(res_tab, name, amp_col, sd_col) {
+  first_sig_idx    <- 6
+  first_sig        <- names(res_tab[first_sig_idx])
+  first_sig_sd     <- paste0(first_sig, ".sd")
+  first_sig_sd_idx <- which(names(res_tab) == first_sig_sd)
+  last_sig_idx     <- first_sig_sd_idx - 1
+  sig_idxs         <- first_sig_idx:last_sig_idx
+  last_sig_sd_idx  <- first_sig_sd_idx + length(sig_idxs) - 1
+  sig_sd_idxs      <- first_sig_sd_idx:last_sig_sd_idx
+  
+  new_amp_col <- data.frame(amp_col)
+  colnames(new_amp_col) <- name
+  sd_name <- paste0(name, ".sd")
+  new_sd_col <- data.frame(sd_col)
+  colnames(new_sd_col) <- sd_name
+  
+  res_tab_out <- cbind(res_tab[1:last_sig_idx], new_amp_col,
+                       res_tab[first_sig_sd_idx:last_sig_sd_idx], new_sd_col,
+                       res_tab[(last_sig_sd_idx + 1):ncol(res_tab)])
+  
+  return(res_tab_out)
 }
 
 #' Segment T1 weighted MRI data using FSL FAST and write to file. Runs deface
