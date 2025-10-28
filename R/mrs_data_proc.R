@@ -5467,7 +5467,10 @@ lb_degrade_snr <- function(mrs_data, lb, lg = NULL) {
     noise_target <- orig_spec_snr$snr * new_spec_snr$max_sig / 
                     orig_spec_snr$max_sig
     
-    mrs_data_n <- add_noise_spec_snr(mrs_data_n, noise_target)
+    # mrs_data_n <- add_noise_spec_snr(mrs_data_n, noise_target)
+    
+    mrs_data_n <- add_noise_spec_snr(mrs_data_n, noise_target,
+                                     noise_free_input = FALSE)
     
     # overwrite original
     mrs_data <- assign_dyns(mrs_data, n, mrs_data_n)
