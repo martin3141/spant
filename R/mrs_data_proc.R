@@ -572,7 +572,6 @@ add_noise_spec_snr <- function(mrs_data, target_snr, sig_region = c(4, 0.5),
     target_sd  <- peak_height / target_snr
     current_sd <- ref_spec_snr$noise_sd
     noise_sd   <- (target_sd ^ 2 - current_sd ^ 2) ^ 0.5
-    
     mrs_data   <- add_noise(mrs_data, noise_sd)
   }
   return(mrs_data)
@@ -5439,9 +5438,16 @@ phase_bl_obj_fn <- function(phi, vec, ind_list) {
 #' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1). Defaults to a
 #' fully Lorentzian value of 0. If one value is given, will be recycled to match
 #' the number of dynamics in mrs_data.
+#' @param sig_region a ppm region to define where the maximum signal value
+#' should be estimated.
+#' @param noise_region a ppm region to defined where the noise level should be 
+#' estimated.
+#' @param p_order polynomial order to fit to the noise region before estimating 
+#' the standard deviation.
 #' @return line-broadened and renoised data.
 #' @export
-lb_renoise <- function(mrs_data, lb, lg = NULL) {
+lb_renoise <- function(mrs_data, lb, lg = NULL, sig_region = c(4, 0.5),
+                       noise_region = c(-0.5, -2.5), p_order = 2) {
   
   # do checks on lb
   if (length(lb) != Ndyns(mrs_data)) {
@@ -5466,27 +5472,29 @@ lb_renoise <- function(mrs_data, lb, lg = NULL) {
     mrs_data_n <- get_dyns(mrs_data, n)
     
     # get original SNR
-    orig_spec_snr <- calc_spec_snr(mrs_data_n, full_output = TRUE)
+    orig_spec_snr <- calc_spec_snr(mrs_data_n, full_output = TRUE,
+                                   sig_region = sig_region,
+                                   noise_region = noise_region,
+                                   p_order = p_order)
     
     # apply linebroadening
     mrs_data_n <- lb(mrs_data_n, lb[n], lg[n]) 
     
-    # get new SNR
-    new_spec_snr <- calc_spec_snr(mrs_data_n, full_output = TRUE)
+    # get new SNR post linebroadening
+    new_spec_snr <- calc_spec_snr(mrs_data_n, full_output = TRUE,
+                                  sig_region = sig_region,
+                                  noise_region = noise_region,
+                                  p_order = p_order)
+    
+    # estimate target snr
+    snr_target <- orig_spec_snr$snr * new_spec_snr$max_sig / 
+                  orig_spec_snr$max_sig
     
     # add noise
-    noise_target <- orig_spec_snr$snr * new_spec_snr$max_sig / 
-                    orig_spec_snr$max_sig
-    
-    # mrs_data_n <- add_noise_spec_snr(mrs_data_n, noise_target)
-    
-    # mrs_data_n <- add_noise_spec_snr(mrs_data_n, noise_target,
-    #                                  noise_free_input = FALSE)
-    
-    target_sd    <- new_spec_snr$max_sig / noise_target
-    current_sd   <- new_spec_snr$noise_sd
-    noise_sd     <- (target_sd ^ 2 - current_sd ^ 2) ^ 0.5
-    mrs_data_n   <- add_noise(mrs_data_n, noise_sd)
+    target_sd  <- new_spec_snr$max_sig / snr_target
+    current_sd <- new_spec_snr$noise_sd
+    noise_sd   <- (target_sd ^ 2 - current_sd ^ 2) ^ 0.5
+    mrs_data_n <- add_noise(mrs_data_n, noise_sd)
     
     # overwrite original
     mrs_data <- assign_dyns(mrs_data, n, mrs_data_n)

@@ -5,7 +5,14 @@
 \title{Apply line-broadening to dynamic MRS data and add normally distributed noise
 (renoise) to reverse any associated improvement in SNR.}
 \usage{
-lb_renoise(mrs_data, lb, lg = NULL)
+lb_renoise(
+  mrs_data,
+  lb,
+  lg = NULL,
+  sig_region = c(4, 0.5),
+  noise_region = c(-0.5, -2.5),
+  p_order = 2
+)
 }
 \arguments{
 \item{mrs_data}{data to be broadened.}
@@ -16,6 +23,15 @@ number of dynamics in mrs_data.}
 \item{lg}{Lorentz-Gauss lineshape parameter (between 0 and 1). Defaults to a
 fully Lorentzian value of 0. If one value is given, will be recycled to match
 the number of dynamics in mrs_data.}
+
+\item{sig_region}{a ppm region to define where the maximum signal value
+should be estimated.}
+
+\item{noise_region}{a ppm region to defined where the noise level should be
+estimated.}
+
+\item{p_order}{polynomial order to fit to the noise region before estimating
+the standard deviation.}
 }
 \value{
 line-broadened and renoised data.
