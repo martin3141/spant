@@ -566,14 +566,14 @@ add_noise_spec_snr <- function(mrs_data, target_snr, sig_region = c(4, 0.5),
   
   peak_height  <- ref_spec_snr$max_sig
   if (noise_free_input) {
-    noise_sd     <- peak_height / target_snr
-    mrs_data     <- add_noise(mrs_data, noise_sd)
+    noise_sd   <- peak_height / target_snr
+    mrs_data   <- add_noise(mrs_data, noise_sd)
   } else {
-    target_sd    <- peak_height / target_snr
-    current_sd   <- ref_spec_snr$noise_sd
-    noise_sd     <- (target_sd ^ 2 - current_sd ^ 2) ^ 0.5
+    target_sd  <- peak_height / target_snr
+    current_sd <- ref_spec_snr$noise_sd
+    noise_sd   <- (target_sd ^ 2 - current_sd ^ 2) ^ 0.5
     
-    mrs_data     <- add_noise(mrs_data, noise_sd)
+    mrs_data   <- add_noise(mrs_data, noise_sd)
   }
   return(mrs_data)
 }
@@ -5480,8 +5480,13 @@ lb_renoise <- function(mrs_data, lb, lg = NULL) {
     
     # mrs_data_n <- add_noise_spec_snr(mrs_data_n, noise_target)
     
-    mrs_data_n <- add_noise_spec_snr(mrs_data_n, noise_target,
-                                     noise_free_input = FALSE)
+    # mrs_data_n <- add_noise_spec_snr(mrs_data_n, noise_target,
+    #                                  noise_free_input = FALSE)
+    
+    target_sd    <- new_spec_snr$max_sig / noise_target
+    current_sd   <- new_spec_snr$noise_sd
+    noise_sd     <- (target_sd ^ 2 - current_sd ^ 2) ^ 0.5
+    mrs_data_n   <- add_noise(mrs_data_n, noise_sd)
     
     # overwrite original
     mrs_data <- assign_dyns(mrs_data, n, mrs_data_n)
