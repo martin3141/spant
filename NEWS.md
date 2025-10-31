@@ -1,4 +1,5 @@
 # spant 3.7.0
+* Added lb_renoise function for fMRS analyses.
 
 # spant 3.6.0
 * Added mean_dyns_scheme function.

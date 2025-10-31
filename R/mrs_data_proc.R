@@ -5423,14 +5423,25 @@ phase_bl_obj_fn <- function(phi, vec, ind_list) {
   return(sum((areas - mean(areas)) ^ 2))
 }
 
-#' Apply line-broadening to dynamic MRS data and degrade the SNR to reverse any
-#' improvement.
+#' Apply line-broadening to dynamic MRS data and add normally distributed noise
+#' (renoise) to reverse any associated improvement in SNR.
+#'
+#' This function mimics a strategy used by : "Bednařík P, Tkáč I, Giove F,
+#' DiNuzzo M, Deelchand DK, Emir UE, Eberly LE, Mangia S. Neurochemical and BOLD
+#' responses during neuronal activation measured in the human visual cortex at
+#' 7 Tesla. J Cereb Blood Flow Metab. 2015 Mar 31;35(4):601-10. 
+#' doi: 10.1038/jcbfm.2014.233. PMID: 25564236; PMCID: PMC4420878."
+#' Note that set.seed(XX) should be used for reproducible analyses.
+#'
 #' @param mrs_data data to be broadened.
-#' @param lb amount of line-broadening in Hz.
-#' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1). Defaults to 0.
-#' @return line-broadened data.
+#' @param lb amount of line-broadening in Hz, length should be equal to the
+#' number of dynamics in mrs_data.
+#' @param lg Lorentz-Gauss lineshape parameter (between 0 and 1). Defaults to a
+#' fully Lorentzian value of 0. If one value is given, will be recycled to match
+#' the number of dynamics in mrs_data.
+#' @return line-broadened and renoised data.
 #' @export
-lb_degrade_snr <- function(mrs_data, lb, lg = NULL) {
+lb_renoise <- function(mrs_data, lb, lg = NULL) {
   
   # do checks on lb
   if (length(lb) != Ndyns(mrs_data)) {
