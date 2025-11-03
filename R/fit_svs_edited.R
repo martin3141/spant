@@ -827,6 +827,178 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (return_fit) return(list(fit_res_ed, fit_res))
 }
 
+#' Combine edited fitting results for group analysis.
+#' @param search_path path to start recursive search for fitting results.
+#' Cannot be used together with the paths argument.
+#' @param paths a set of paths to spant output files, usually named : 
+#' "spant_fit_svs_edited_data.rds". Cannot be used together with the search_path
+#' argument.
+#' @param output_dir directory path to store group results.
+#' @param verbose verbose, defaults to TRUE.
+#' @export
+fit_svs_edited_group_results <- function(search_path = NULL, paths = NULL,
+                                    output_dir = "fit_svs_edited_group_results",
+                                    verbose = TRUE) {
+  
+  # check inputs
+  e_message <- "Need to specify search_path or paths argument."
+  if (!xor(is.null(search_path), is.null(paths))) stop(e_message)
+  
+  if (!is.null(search_path)) {
+    paths <- list.files(path = search_path,
+                        pattern = "spant_fit_svs_edited_data.rds",
+                        recursive = TRUE, full.names = TRUE)
+    paths <- sort(paths)
+  }
+  
+  if (length(paths) == 0) stop("No result files found.")
+  
+  # create the output dir if it doesn't exist
+  if(!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE)
+  } else {
+    warning(paste0("Output directory already exists : ", output_dir))
+  }
+  
+  paths_dir    <- dirname(paths)
+  results_n    <- length(paths)
+  
+  res_tab_unscaled_list <- vector(mode = "list", length = results_n)
+  res_tab_molal_list    <- vector(mode = "list", length = results_n)
+  res_tab_ratio_list    <- vector(mode = "list", length = results_n)
+  res_tab_legacy_list   <- vector(mode = "list", length = results_n)
+  res_tab_ed_unscaled_list <- vector(mode = "list", length = results_n)
+  res_tab_ed_molal_list    <- vector(mode = "list", length = results_n)
+  res_tab_ed_ratio_list    <- vector(mode = "list", length = results_n)
+  res_tab_ed_legacy_list   <- vector(mode = "list", length = results_n)
+  ratio_str_list        <- vector(mode = "list", length = results_n)
+  
+  for (n in 1:results_n) {
+    
+    if (verbose) cat(paste0(n, " of ", results_n, ", reading : ", paths[n], "\n"))
+    
+    results <- readRDS(paths[n])
+    
+    if (n == 1) {
+      unscaled <- ifelse(is.null(results$res_tab_unscaled), FALSE, TRUE)
+      molal    <- ifelse(is.null(results$res_tab_molal),    FALSE, TRUE)
+      ratio    <- ifelse(is.null(results$res_tab_ratio),    FALSE, TRUE)
+      legacy   <- ifelse(is.null(results$res_tab_legacy),   FALSE, TRUE)
+      
+      unscaled_ed <- ifelse(is.null(results$res_tab_ed_unscaled), FALSE, TRUE)
+      molal_ed    <- ifelse(is.null(results$res_tab_ed_molal),    FALSE, TRUE)
+      ratio_ed    <- ifelse(is.null(results$res_tab_ed_ratio),    FALSE, TRUE)
+      legacy_ed   <- ifelse(is.null(results$res_tab_ed_legacy),   FALSE, TRUE)
+    }
+    
+    if (unscaled) {
+      results$res_tab_unscaled <- cbind(path = paths[n],
+                                        results$res_tab_unscaled)
+      res_tab_unscaled_list[[n]] <- results$res_tab_unscaled
+    }
+    
+    if (molal) {
+      results$res_tab_molal   <- cbind(path = paths[n], results$res_tab_molal)
+      res_tab_molal_list[[n]] <- results$res_tab_molal
+    }
+    
+    if (legacy) {
+      results$res_tab_legacy   <- cbind(path = paths[n], results$res_tab_legacy)
+      res_tab_legacy_list[[n]] <- results$res_tab_legacy
+    }
+    
+    if (ratio) {
+      results$res_tab_ratio   <- cbind(path = paths[n], results$res_tab_ratio)
+      res_tab_ratio_list[[n]] <- results$res_tab_ratio
+      ratio_str_list[[n]]     <- results$output_ratio
+    }
+    
+    if (unscaled_ed) {
+      results$res_tab_ed_unscaled <- cbind(path = paths[n],
+                                           results$res_tab_ed_unscaled)
+      res_tab_ed_unscaled_list[[n]] <- results$res_tab_ed_unscaled
+    }
+    
+    if (molal_ed) {
+      results$res_tab_ed_molal   <- cbind(path = paths[n],
+                                          results$res_tab_ed_molal)
+      res_tab_ed_molal_list[[n]] <- results$res_tab_ed_molal
+    }
+    
+    if (legacy_ed) {
+      results$res_tab_ed_legacy   <- cbind(path = paths[n],
+                                           results$res_tab_ed_legacy)
+      res_tab_ed_legacy_list[[n]] <- results$res_tab_ed_legacy
+    }
+    
+    if (ratio_ed) {
+      results$res_tab_ed_ratio   <- cbind(path = paths[n],
+                                          results$res_tab_ed_ratio)
+      res_tab_ed_ratio_list[[n]] <- results$res_tab_ed_ratio
+      ratio_str_list[[n]]     <- results$output_ratio
+    }
+  }
+  
+  if (unscaled) {
+    res_tab_unscaled_df <- do.call("rbind", res_tab_unscaled_list)
+    file_out <- file.path(output_dir,
+                          paste0("fit_res_edit_off_group_unscaled_conc.csv"))
+    utils::write.csv(res_tab_unscaled_df, file_out, row.names = FALSE)
+  }
+  
+  if (molal) {
+    res_tab_molal_df <- do.call("rbind", res_tab_molal_list)
+    file_out <- file.path(output_dir,
+                          paste0("fit_res_edit_off_group_molal_conc.csv"))
+    utils::write.csv(res_tab_molal_df, file_out, row.names = FALSE)
+  }
+  
+  if (ratio) {
+    res_tab_ratio_df <- do.call("rbind", res_tab_ratio_list)
+    res_tab_ratio_df <- cbind(ratio = unlist(ratio_str_list), res_tab_ratio_df)
+    file_out <- file.path(output_dir,
+                          paste0("fit_res_edit_off_group_ratio_conc.csv"))
+    utils::write.csv(res_tab_ratio_df, file_out, row.names = FALSE)
+  }
+  
+  if (legacy) {
+    res_tab_legacy_df <- do.call("rbind", res_tab_legacy_list)
+    file_out <- file.path(output_dir,
+                          paste0("fit_res_edit_off_group_legacy_conc.csv"))
+    utils::write.csv(res_tab_legacy_df, file_out, row.names = FALSE)
+  }
+  
+  if (unscaled_ed) {
+    res_tab_ed_unscaled_df <- do.call("rbind", res_tab_ed_unscaled_list)
+    file_out <- file.path(output_dir,
+                          paste0("fit_res_edited_group_unscaled_conc.csv"))
+    utils::write.csv(res_tab_ed_unscaled_df, file_out, row.names = FALSE)
+  }
+  
+  if (molal_ed) {
+    res_tab_ed_molal_df <- do.call("rbind", res_tab_ed_molal_list)
+    file_out <- file.path(output_dir,
+                          paste0("fit_res_edited_group_molal_conc.csv"))
+    utils::write.csv(res_tab_ed_molal_df, file_out, row.names = FALSE)
+  }
+  
+  if (ratio_ed) {
+    res_tab_ed_ratio_df <- do.call("rbind", res_tab_ed_ratio_list)
+    res_tab_ed_ratio_df <- cbind(ratio = unlist(ratio_str_list),
+                                 res_tab_ed_ratio_df)
+    file_out <- file.path(output_dir,
+                          paste0("fit_res_edited_group_ratio_conc.csv"))
+    utils::write.csv(res_tab_ed_ratio_df, file_out, row.names = FALSE)
+  }
+  
+  if (legacy_ed) {
+    res_tab_ed_legacy_df <- do.call("rbind", res_tab_ed_legacy_list)
+    file_out <- file.path(output_dir,
+                          paste0("fit_res_edited_group_legacy_conc.csv"))
+    utils::write.csv(res_tab_ed_legacy_df, file_out, row.names = FALSE)
+  }
+  
+}
 
 append_mpress_gaba <- function(res_tab) {
   res_tab["GABA"] <- res_tab["GABA_A"] + res_tab["GABA_B"]
