@@ -29,14 +29,6 @@ read_mrs_nifti <- function(fname, extra = NULL, verbose = FALSE) {
     dim(data) <- c(dim(data), zero_dims)
   }
   
-  # reorder the dimensions
-  # NIFTI default dimension ordering is X, Y, Z, FID, coil, dynamic, indirect
-  # spant default dimension ordering is (dummy,) X, Y, Z, dynamic, coil, FID 
-  data <- aperm(data, c(1, 2, 3, 6, 5, 4)) 
-  
-  # add a dummy dimension
-  dim(data) <- c(1, dim(data))
-  
   ext_char <- RNifti::extension(readNifti(fname), 44, "character")
   
   if (is.null(ext_char)) stop("NIfTI extension header for MRS not found.")
@@ -59,8 +51,15 @@ read_mrs_nifti <- function(fname, extra = NULL, verbose = FALSE) {
     json_data <- jsonlite::fromJSON(ext_char)
   }
   
+  dyn_dim <- 6 # default
   if (!is.null(json_data$dim_5)) {
-    if (json_data$dim_5 != "DIM_COIL") warning("Unsupported NIfTI MRS dimension 5.")
+    if (json_data$dim_5 != "DIM_COIL") {
+      if (json_data$dim_5 == "DIM_DYN") {
+        dyn_dim <- 5
+      } else {
+        warning("Unsupported NIfTI MRS dimension 5.")
+      }
+    }
   }
   
   if (!is.null(json_data$dim_6)) {
@@ -68,6 +67,18 @@ read_mrs_nifti <- function(fname, extra = NULL, verbose = FALSE) {
   }
   
   if (!is.null(json_data$dim_7)) warning("Unsupported NIfTI MRS dimension 7.")
+  
+  # reorder the dimensions
+  # NIFTI default dimension ordering is X, Y, Z, FID, coil, dynamic, indirect
+  # spant default dimension ordering is (dummy,) X, Y, Z, dynamic, coil, FID 
+  if (dyn_dim == 6) {
+    data <- aperm(data, c(1, 2, 3, 6, 5, 4)) 
+  } else {
+    data <- aperm(data, c(1, 2, 3, 5, 6, 4)) 
+  }
+  
+  # add a dummy dimension
+  dim(data) <- c(1, dim(data))
   
   # read voxel dimensions, dwell time and time between dynamic scans
   res <- c(NA, pixdim[2], pixdim[3], pixdim[4], pixdim[6], NA, pixdim[5])
