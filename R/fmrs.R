@@ -1313,12 +1313,13 @@ find_bids_mrs <- function(path, output_full_path = FALSE) {
 #' scans.
 #' @param dyn_water_ref_path path to interleaved water reference data file or
 #' IMA directory.
+#' @param Ntrans override the number of transients set in the mrs_data file.
 #' @export
 preproc_svs <- function(path, label = NULL, output_dir = NULL,
-                        ref_inds = NULL, dyn_water_ref_path = NULL) {
+                        ref_inds = NULL, dyn_water_ref_path = NULL,
+                        Ntrans = NULL) {
   
   # TODO deal with GE style data with wref included in the same file
-  
   
   # process dynamic water reference data
   if (!is.null(dyn_water_ref_path)) {
@@ -1355,6 +1356,9 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL,
   } else {
     mrs_data <- read_mrs(path)
   }
+  
+  # set the number of transients if specified
+  if (!is.null(Ntrans)) mrs_data <- set_Ntrans(mrs_data, Ntrans)
   
   if (!is.null(ref_inds)) {
     mrs_data <- get_dyns(mrs_data, -ref_inds)
@@ -1520,12 +1524,14 @@ preproc_svs <- function(path, label = NULL, output_dir = NULL,
 #' @param ref_inds a vector of 1-based indices for any water reference dynamic
 #' scans.
 #' @param dyn_water_ref_paths paths to interleaved water reference scans. 
+#' @param Ntrans override the number of transients set in the mrs_data file.
 #' @param return_results function will return key outputs, defaults to FALSE.
 #' @export
 preproc_svs_dataset <- function(paths, labels = NULL,
                                 output_dir = "spant_analysis",
                                 exclude_labels = NULL, overwrite = FALSE,
                                 ref_inds = NULL, dyn_water_ref_paths = NULL,
+                                Ntrans = NULL,
                                 return_results = FALSE) {
   
   # TODO print warning if there are more preprocessed results than input
@@ -1596,7 +1602,7 @@ preproc_svs_dataset <- function(paths, labels = NULL,
     
     preproc_res_list[[n]] <- preproc_svs(paths[n], labels[n],
                                          file.path(output_dir, "qa"), ref_inds,
-                                         dyn_water_ref_paths[n])
+                                         dyn_water_ref_paths[n], Ntrans)
     
     saveRDS(preproc_res_list[[n]], preproc_rds)
     
