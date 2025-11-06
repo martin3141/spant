@@ -13,6 +13,7 @@ preproc_svs_dataset(
   ref_inds = NULL,
   dyn_water_ref_paths = NULL,
   Ntrans = NULL,
+  TR = NULL,
   return_results = FALSE
 )
 }
@@ -34,6 +35,8 @@ scans.}
 \item{dyn_water_ref_paths}{paths to interleaved water reference scans.}
 
 \item{Ntrans}{override the number of transients set in the mrs_data file.}
+
+\item{TR}{override the TR (in seconds) set in the mrs_data file.}
 
 \item{return_results}{function will return key outputs, defaults to FALSE.}
 }
