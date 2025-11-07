@@ -1662,6 +1662,11 @@ preproc_svs_dataset <- function(paths, labels = NULL,
   
   utils::write.csv(preproc_summary, csv_out_f)
   
+  mean_metab_f <- file.path(tools::file_path_as_absolute(output_dir),
+                            "preproc", "metab_mean_dataset.nii.gz")
+    
+  write_mrs_nifti(mean_dataset, mean_metab_f)
+  
   if (!is.null(exclude_labels)) {
     # exclude unwanted scans
     preproc_res_list <- preproc_res_list[-exclude_inds]
@@ -1695,6 +1700,11 @@ preproc_svs_dataset <- function(paths, labels = NULL,
                            "qa_summary_subset.csv")
     
     utils::write.csv(preproc_summary, csv_out_f)
+    
+    mean_metab_f <- file.path(tools::file_path_as_absolute(output_dir),
+                              "preproc", "metab_mean_dataset_subset.nii.gz")
+    
+    write_mrs_nifti(mean_dataset, mean_metab_f)
   }
   
   if (return_results) return(list(preproc_metab_list = corrected_list,
