@@ -56,6 +56,7 @@ read_mrs_nifti <- function(fname, extra = NULL, verbose = FALSE) {
     if (json_data$dim_5 != "DIM_COIL") {
       if (json_data$dim_5 == "DIM_DYN") {
         dyn_dim <- 5
+        json_data$dim_5 <- NULL
       } else {
         warning("Unsupported NIfTI MRS dimension 5.")
       }
