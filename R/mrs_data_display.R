@@ -688,8 +688,12 @@ stackplot.mrs_data <- function(x, xlim = NULL, mode = "re", x_units = NULL,
         }
       }
     }
-    if(show_grid) graphics::grid(nx = grid_nx, ny = grid_ny)
+    if (show_grid) graphics::grid(nx = grid_nx, ny = grid_ny)
   }
+  
+  # ylim <- NULL
+  # if (is.null(ylim)) ylim <- c(min(plot_data[length(subset):1,]),
+  #                              max(plot_data[length(subset):1,]))
   
   graphics::matplot(x_scale_mat[length(subset):1,],
                     plot_data[length(subset):1,], type = "l", 

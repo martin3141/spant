@@ -10,71 +10,77 @@ library(spant)
 library(ggplot2)
 knitr::opts_chunk$set(echo = FALSE)
 theme_set(theme_bw())
+n_spec <- length(params$data$summary$labels)
+spec_fig_h <- max(c(5, n_spec * 0.4))
+bar_fig_h  <- max(c(4, n_spec * 0.2))
 ```
 
 ## Spectra
 
 ### Dynamic mean
-```{r, fig.width=5.5, fig.height=5}
+```{r, fig.width=5.5, fig.height=spec_fig_h}
 plot_labs <- params$data$summary$labels[rev(1:length(params$data$summary$labels))]
 proc_list <- params$data$res_list |> lapply(\(x) x$mean_corr)
 proc_list <- proc_list[rev(1:length(proc_list))]
 proc_list |> zf() |> stackplot(xlim = c(4, 0.5), y_offset = 50,
                                labels = plot_labs,
-                               mar = c(3.5, 1, 1, 6), bl_lty = 2)
+                               mar = c(3.5, 1, 1, 6), bl_lty = 2,
+                               yaxs = "i")
 ```
 
 ### First dynamic
-```{r, fig.width=5.5, fig.height=5}
+```{r, fig.width=5.5, fig.height=spec_fig_h}
 proc_list <- params$data$res_list |> lapply(\(x) x$corrected)
 proc_list <- proc_list[rev(1:length(proc_list))]
 proc_list |> get_dyns(1) |> zf() |> stackplot(xlim = c(4, 0.5), y_offset = 50,
                                     labels = plot_labs,
-                                    mar = c(3.5, 1, 1, 6), bl_lty = 2)
+                                    mar = c(3.5, 1, 1, 6), bl_lty = 2,
+                                    yaxs = "i")
 ```
 
 ### Last dynamic
-```{r, fig.width=5.5, fig.height=5}
+```{r, fig.width=5.5, fig.height=spec_fig_h}
 proc_list <- params$data$res_list |> lapply(\(x) x$corrected)
 proc_list <- proc_list[rev(1:length(proc_list))]
 last_dyn  <- proc_list[[1]] |> Ndyns()
 proc_list |> get_dyns(last_dyn) |> zf() |> stackplot(xlim = c(4, 0.5),
                                            y_offset = 50,
                                            labels = plot_labs,
-                                           mar = c(3.5, 1, 1, 6), bl_lty = 2)
+                                           mar = c(3.5, 1, 1, 6), bl_lty = 2,
+                                           yaxs = "i")
 ```
 
 ## Summary metrics
 
-### Dynamic frequency shifts range
-```{r, fig.width=10}
-ggplot(params$data$summary, aes(x = shift_hz_range, y = labels)) + geom_col() + 
-      ylab("") + xlab("Shift range (Hz)") + scale_y_discrete(limits = rev)
-```
-
-### Smoothed dynamic linewidths range
-```{r, fig.width=10, warning = FALSE, message = FALSE}
-ggplot(params$data$summary, aes(x = lw_ppm_smo_range, y = labels)) + 
-  geom_col() + ylab("") + xlab("Smoothed linewidth range (ppm)") +
-  scale_y_discrete(limits = rev)
-```
-
-### Median single shot SNR
-```{r, fig.width=10}
-ggplot(params$data$summary, aes(x = ss_median_spec_snr, y = labels)) + 
-  geom_col() + ylab("") + xlab("Median single shot SNR") +
-  scale_y_discrete(limits = rev)
-```
-
 ### Dynamic mean corrected spectral linewidths
-```{r, fig.width=10}
+```{r, fig.width=10, fig.height=bar_fig_h}
 ggplot(params$data$summary, aes(x = mean_corr_spec_lw, y = labels)) +
   geom_col() + ylab("") + xlab("Linewidth for mean corrected data (ppm)") +
   scale_y_discrete(limits = rev)
 ```
 
+### Median single shot SNR
+```{r, fig.width=10, fig.height=bar_fig_h}
+ggplot(params$data$summary, aes(x = ss_median_spec_snr, y = labels)) + 
+  geom_col() + ylab("") + xlab("Median single shot SNR") +
+  scale_y_discrete(limits = rev)
+```
+
+### Dynamic frequency shifts range
+```{r, fig.width=10, fig.height=bar_fig_h}
+ggplot(params$data$summary, aes(x = shift_hz_range, y = labels)) + geom_col() + 
+      ylab("") + xlab("Shift range (Hz)") + scale_y_discrete(limits = rev)
+```
+
+### Smoothed dynamic linewidths range
+```{r, fig.width=10, warning = FALSE, message = FALSE, fig.height=bar_fig_h}
+ggplot(params$data$summary, aes(x = lw_ppm_smo_range, y = labels)) + 
+  geom_col() + ylab("") + xlab("Smoothed linewidth range (ppm)") +
+  scale_y_discrete(limits = rev)
+```
+
 ### Dynamic lipid fluctuation range
-```{r, fig.width=10}
+```{r, fig.width=10, fig.height=bar_fig_h}
 ggplot(params$data$summary, aes(x = dlfr * 100, y = labels)) +
   geom_col() + ylab("") + 
   xlab("Dynamic lipid fluctuation range (% tCr intensity)") +
@@ -82,7 +88,7 @@ ggplot(params$data$summary, aes(x = dlfr * 100, y = labels)) +
 ```
 
 ### Dynamic fluctuation range
-```{r, fig.width=10}
+```{r, fig.width=10, fig.height=bar_fig_h}
 ggplot(params$data$summary, aes(x = dfr * 100, y = labels)) +
   geom_col() + ylab("") + xlab("Dynamic fluctuation range (% tCr intensity)") +
   scale_y_discrete(limits = rev)
