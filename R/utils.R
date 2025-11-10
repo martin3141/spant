@@ -793,7 +793,7 @@ mean_vec_blocks <- function(x, block_size) {
 #' @param fit_res input vector.
 #' @param format_out reduce the accuracy of values to aid table formatting.
 #' @return data.frame of values.
-#' @export 
+#' @export
 sv_res_table <- function(fit_res, format_out = FALSE) {
   
   # pretend it's a full fit result if only a table is passed in
@@ -864,7 +864,7 @@ add_fit_res_tab_amp_sd <- function(res_tab, name, amp_col, sd_col) {
 #' @param bet_fit fractional intensity threshold for bet brain extraction.
 #' Values should be between 0 and 1. Defaults to 0.5 with smaller values giving
 #' larger brain estimates.
-#' @export 
+#' @export
 segment_t1_fsl <- function(mri_path, deface = FALSE, bet_fit = 0.5) {
   dir_path <- dirname(mri_path)
   if (deface) {
@@ -887,7 +887,7 @@ segment_t1_fsl <- function(mri_path, deface = FALSE, bet_fit = 0.5) {
 #' @param date scan date, eg "01-01-2025".
 #' @param end_time scan time, eg "14:00".
 #' @return data.frame of moco parameters.
-#' @export 
+#' @export
 read_dkd_moco_log <- function(path, date, end_time) {
   
   lines <- readLines(path)
@@ -924,4 +924,31 @@ read_dkd_moco_log <- function(path, date, end_time) {
   data <- data[, -rem_cols]
   colnames(data) <- cnames
   return(data)
+}
+
+#' Split paths into parts based on backslash, forwardslash and dot characters
+#' and return a data frame of these parts.
+#' @param paths a vector of paths.
+#' @param col_num when set, only the specified column number of the data frame
+#' will be returned.
+#' @param extra_regex extra regular expression for splitting the paths. Example,
+#' "_|-" could be used to additionally split on underscores and hyphen
+#' characters.
+#' @return data.frame of separated path elements.
+#' @export 
+paths2df <- function(paths, col_num = NULL, extra_regex = NULL) {
+  
+  regex_str <- "/|\\\\|\\."
+  
+  if (!is.null(extra_regex)) regex_str <- paste0(regex_str, "|", extra_regex)
+    
+  str_list <- strsplit(paths, regex_str)
+  str_list <- lapply(str_list, \(x) x[x!=""])
+  out_df <- as.data.frame(do.call("rbind", str_list))
+  # out_df <- cbind(paths = paths, out_df)
+  if (is.null(col_num)) {
+    return(out_df)
+  } else {
+    return(out_df[,col_num])
+  }
 }
