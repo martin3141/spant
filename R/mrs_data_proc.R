@@ -5494,7 +5494,8 @@ lb_renoise <- function(mrs_data, lb, lg = NULL, sig_region = c(4, 0.5),
     target_sd  <- new_spec_snr$max_sig / snr_target
     current_sd <- new_spec_snr$noise_sd
     noise_sd   <- (target_sd ^ 2 - current_sd ^ 2) ^ 0.5
-    mrs_data_n <- add_noise(mrs_data_n, noise_sd)
+    
+    if (!is.na(noise_sd)) mrs_data_n <- add_noise(mrs_data_n, noise_sd)
     
     # overwrite original
     mrs_data <- assign_dyns(mrs_data, n, mrs_data_n)
