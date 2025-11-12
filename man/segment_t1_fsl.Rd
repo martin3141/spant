@@ -5,10 +5,13 @@
 \title{Segment T1 weighted MRI data using FSL FAST and write to file. Runs deface
 and bet as preprocessing steps by default.}
 \usage{
-segment_t1_fsl(mri_path, deface = FALSE, bet_fit = 0.5)
+segment_t1_fsl(mri_path, out_dir = NULL, deface = FALSE, bet_fit = 0.5)
 }
 \arguments{
 \item{mri_path}{path to the volumetric T1 data.}
+
+\item{out_dir}{optional output directory. Defaults to the same directory
+as mri_path if not specified.}
 
 \item{deface}{deface the input T1 data before analysis. Defaults to FALSE.}
 

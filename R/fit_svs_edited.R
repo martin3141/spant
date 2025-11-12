@@ -7,6 +7,8 @@
 #' @param output_dir directory path to output fitting results.
 #' @param mri filepath or nifti object containing anatomical MRI data.
 #' @param mri_seg filepath or nifti object containing segmented MRI data.
+#' @param segment_t1 segment the t1 weighted mri file with FSL FAST and use the
+#' results to perform partial volume correction. Defaults to FALSE.
 #' @param external_basis precompiled basis set object to use for analysis.
 #' @param p_vols a numeric vector of partial volumes expressed as percentages.
 #' Defaults to 100% white matter. A voxel containing 100% gray matter tissue
@@ -105,7 +107,8 @@
 #' }
 #' @export
 fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
-                           mri_seg = NULL, external_basis = NULL, p_vols = NULL,
+                           mri_seg = NULL, segment_t1 = FALSE,
+                           external_basis = NULL, p_vols = NULL,
                            format = NULL, editing_type = "gaba_1.9",
                            editing_scheme = NULL,
                            invert_edit_on = NULL, invert_edit_off = NULL,

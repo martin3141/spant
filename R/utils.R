@@ -860,13 +860,23 @@ add_fit_res_tab_amp_sd <- function(res_tab, name, amp_col, sd_col) {
 #' 'options(fsl.path = "/path/to/fsl")'
 #' 
 #' @param mri_path path to the volumetric T1 data.
+#' @param out_dir optional output directory. Defaults to the same directory
+#' as mri_path if not specified.
 #' @param deface deface the input T1 data before analysis. Defaults to FALSE.
 #' @param bet_fit fractional intensity threshold for bet brain extraction.
 #' Values should be between 0 and 1. Defaults to 0.5 with smaller values giving
 #' larger brain estimates.
 #' @export
-segment_t1_fsl <- function(mri_path, deface = FALSE, bet_fit = 0.5) {
-  dir_path <- dirname(mri_path)
+segment_t1_fsl <- function(mri_path, out_dir = NULL, deface = FALSE,
+                           bet_fit = 0.5) {
+  
+  if (is.null(out_dir)) {
+    dir_path <- dirname(mri_path)
+  } else {
+    dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+    dir_path <- out_dir
+  }
+  
   if (deface) {
     deface_path <- file.path(dir_path, "t1_deface")
     fslr::fsl_deface(mri_path, outfile = deface_path, retimg = FALSE,

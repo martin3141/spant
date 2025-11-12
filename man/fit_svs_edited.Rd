@@ -10,6 +10,7 @@ fit_svs_edited(
   output_dir = NULL,
   mri = NULL,
   mri_seg = NULL,
+  segment_t1 = FALSE,
   external_basis = NULL,
   p_vols = NULL,
   format = NULL,
@@ -60,6 +61,9 @@ fit_svs_edited(
 \item{mri}{filepath or nifti object containing anatomical MRI data.}
 
 \item{mri_seg}{filepath or nifti object containing segmented MRI data.}
+
+\item{segment_t1}{segment the t1 weighted mri file with FSL FAST and use the
+results to perform partial volume correction. Defaults to FALSE.}
 
 \item{external_basis}{precompiled basis set object to use for analysis.}
 
