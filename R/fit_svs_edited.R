@@ -226,6 +226,20 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   # reorientate mri_seg
   if (is.def(mri_seg)) RNifti::orientation(mri_seg) <- "RAS"
   
+  # segment the mri data assuming it is t1 weighted
+  if (segment_t1) {
+    if (is.def(mri_seg)) {
+      warning("mri_seg argemnt will be ignored as segment_t1 has been set")
+    }
+    dir.create(file.path(output_dir, "t1_segmentation"), showWarnings = FALSE)
+    t1_path <- file.path(output_dir, "t1_segmentation", "t1.nii.gz")
+    writeNifti(mri, t1_path)
+    segment_t1_fsl(t1_path, out_dir = file.path(output_dir, "t1_segmentation"))
+    mri_seg <- readNifti(file.path(output_dir, "t1_segmentation",
+                                   "t1_seg.nii.gz"))
+    RNifti::orientation(mri_seg) <- "RAS"
+  }
+  
   # try to get TE and TR parameters from the data if not passed in
   if (is.null(TR)) TR <- tr(metab)
   if (is.null(TE)) TE <- te(metab)
