@@ -549,14 +549,14 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     # NAA is 1.5 (rather than 3) because it is zero in the edited data due to
     # the GABA editing pulse
     mol_list <- list(get_uncoupled_mol("MM09",   0.92, "1H",   1,   12, 1),
-                     get_uncoupled_mol("NAA",    2.01, "1H",  -1.5,  3, 0),
+                     get_uncoupled_mol("NAA",    2.01, "1H",  -1,    3, 0),
                      get_uncoupled_mol("Glx_A",  2.31, "1H",   1,    3, 0),
                      get_uncoupled_mol("Glx_B",  2.40, "1H",   1,    3, 0),
                      # 2 Gaus GABA model
-                     get_uncoupled_mol("GABA_A", 2.95, "1H",   1.5,  12, 1),
-                     get_uncoupled_mol("GABA_B", 3.04, "1H",   1.5,  12, 1),
-                     get_uncoupled_mol("Glx_C",  3.72, "1H",   1,   2.5, 0),
-                     get_uncoupled_mol("Glx_D",  3.8,  "1H",   1,   2.5, 0))
+                     get_uncoupled_mol("GABA_A", 2.95, "1H",   1,   12, 1),
+                     get_uncoupled_mol("GABA_B", 3.04, "1H",   1,   12, 1),
+                     get_uncoupled_mol("Glx_C",  3.72, "1H",   1,  2.5, 0),
+                     get_uncoupled_mol("Glx_D",  3.8,  "1H",   1,  2.5, 0))
   } else if (editing_type == "gaba_1.9_gannet") {
     mol_list <- list(get_uncoupled_mol("MM09",   0.92, "1H",   1,   12, 1),
                      get_uncoupled_mol("NAA",    2.01, "1H",  -1,    3, 0),
