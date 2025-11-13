@@ -1,6 +1,8 @@
 # spant 3.7.0
 * Added lb_renoise function for fMRS analyses.
 * Added paths2df function to help extract ID fields from a vector of paths.
+* Added trim_paths and match_files functions to help with filesystem based data 
+discovery.
 
 # spant 3.6.0
 * Added mean_dyns_scheme function.

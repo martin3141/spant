@@ -962,3 +962,44 @@ paths2df <- function(paths, col_num = NULL, extra_regex = NULL) {
     return(out_df[,col_num])
   }
 }
+
+#' Trim a vector of filesystem paths.
+#' @param paths vectors of filesystem paths.
+#' @param dir number of times to apply the base dirname function.
+#' @param char number of characters to trim from the end of each path. Note this
+#' is performed after the dir based trimming.
+#' @return a vector of trimmed paths.
+#' @export 
+trim_paths <- function(paths, dir = 0, char = 0) {
+  
+  for (n in 1:length(paths)) {
+    if (dir > 0) for (m in 1:dir) paths[n] <- dirname(paths[n])
+    if (char > 0) paths[n] <- substr(paths[n], 1, nchar(paths[n]) - char)
+  }
+    
+  return(paths)
+}
+
+#' Match files based on a vector of input paths and a glob pattern. The glob
+#' pattern is appended to each path and should match one file only.
+#' @param paths vectors of filesystem paths.
+#' @param glob pattern to append to each path before passing to Sys.glob.
+#' @return matched files. NA values correspond to either no match or multiple
+#' matches.
+#' @export 
+match_files <- function(paths, glob) {
+  paths_out <- rep(NA, length(paths))
+  for (n in 1:length(paths)) {
+    match <- Sys.glob(paste0(paths[n], glob))
+    if (length(match) == 0) {
+      warning(paste0("no match for : ", paste0(paths[n], glob)))
+    } else if (length(match) > 1) {
+      warning(paste0("multiple matches for : ", paste0(paths[n], glob)))
+    } else if (length(match) == 1) {
+      paths_out[n] <- match
+    } else {
+      stop("I don't belong here")
+    }
+  }
+  return(paths_out)
+}
