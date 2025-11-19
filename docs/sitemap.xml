@@ -43,6 +43,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/apply_pulse.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/apply_pvc.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/array2mrs_data.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/assign_dyns.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/auto_phase.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/auto_phase_bl.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/back_extrap.html</loc></url>
@@ -125,6 +126,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/fit_res2csv.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_svs.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_svs_edited.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/fit_svs_edited_group_results.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_svs_group_results.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_svs_gui.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_t1_ti_array.html</loc></url>
@@ -224,6 +226,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/kspace2img_xy.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/l2_reg.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/lb.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/lb_renoise.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/lofdc.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/lw2alpha.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/lw2beta.html</loc></url>
@@ -235,6 +238,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/mask_xy_ellipse.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/mask_xy_mat.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/mat2mrs_data.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/match_files.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/match_lineshape.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/matexp.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/max_mrs.html</loc></url>
@@ -268,6 +272,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/ortho3.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/ortho3_int.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/ortho3_inter.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/paths2df.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/peak_info.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/pg_extrap_xy.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/phase.html</loc></url>
@@ -412,6 +417,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/tdsr.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/te.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/tr.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/trim_paths.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/varpro_3_para_opts.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/varpro_basic_opts.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/varpro_opts.html</loc></url>

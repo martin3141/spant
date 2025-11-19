@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.7.0</span>
       </span>
     </div>
 
@@ -99,6 +99,7 @@
 <span>  labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lab_cex <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  bl_lty <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  bl_lwd <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  restore_def_par <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  show_grid <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  grid_nx <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -108,6 +109,7 @@
 <span>  vline_lty <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  vline_col <span class="op">=</span> <span class="st">"red"</span>,</span>
 <span>  mar <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  y_scale <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -200,6 +202,10 @@ collapsed into the dynamic dimension and displayed.</p></dd>
 results in no baseline being plotted.</p></dd>
 
 
+<dt id="arg-bl-lwd">bl_lwd<a class="anchor" aria-label="anchor" href="#arg-bl-lwd"></a></dt>
+<dd><p>linewith for the y = 0 baseline trace. Defaults to 0.5.</p></dd>
+
+
 <dt id="arg-restore-def-par">restore_def_par<a class="anchor" aria-label="anchor" href="#arg-restore-def-par"></a></dt>
 <dd><p>restore default plotting par values after the plot has
 been made.</p></dd>
@@ -238,6 +244,10 @@ corresponding direction.</p></dd>
 
 <dt id="arg-mar">mar<a class="anchor" aria-label="anchor" href="#arg-mar"></a></dt>
 <dd><p>option to adjust the plot margins. See ?par.</p></dd>
+
+
+<dt id="arg-y-scale">y_scale<a class="anchor" aria-label="anchor" href="#arg-y-scale"></a></dt>
+<dd><p>option to display the y-axis values (logical).</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

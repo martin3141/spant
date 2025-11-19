@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.7.0</span>
       </span>
     </div>
 
@@ -83,7 +83,9 @@
 <span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ref_inds <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  dyn_water_ref_path <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  dyn_water_ref_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  Ntrans <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  TR <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -111,6 +113,14 @@ scans.</p></dd>
 <dt id="arg-dyn-water-ref-path">dyn_water_ref_path<a class="anchor" aria-label="anchor" href="#arg-dyn-water-ref-path"></a></dt>
 <dd><p>path to interleaved water reference data file or
 IMA directory.</p></dd>
+
+
+<dt id="arg-ntrans">Ntrans<a class="anchor" aria-label="anchor" href="#arg-ntrans"></a></dt>
+<dd><p>override the number of transients set in the mrs_data file.</p></dd>
+
+
+<dt id="arg-tr">TR<a class="anchor" aria-label="anchor" href="#arg-tr"></a></dt>
+<dd><p>override the TR (in seconds) set in the mrs_data file.</p></dd>
 
 </dl></div>
 

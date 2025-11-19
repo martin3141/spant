@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.7.0</span>
       </span>
     </div>
 
@@ -82,7 +82,8 @@
 <span>  <span class="va">mrs_data</span>,</span>
 <span>  <span class="va">target_snr</span>,</span>
 <span>  sig_region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span>,</span>
-<span>  ref_data <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  ref_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  noise_free_input <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -96,8 +97,9 @@
 
 <dt id="arg-target-snr">target_snr<a class="anchor" aria-label="anchor" href="#arg-target-snr"></a></dt>
 <dd><p>desired spectral SNR, note this assumes the input data is
-noise-free, eg simulated data. Note the SNR is estimated from the first
-scan in the dataset and the same noise level is added to all spectra.</p></dd>
+noise-free, eg simulated data (unless noise_free_input is set to FALSE). Note
+the SNR is estimated from the first scan in the dataset and the same noise
+level is added to all spectra.</p></dd>
 
 
 <dt id="arg-sig-region">sig_region<a class="anchor" aria-label="anchor" href="#arg-sig-region"></a></dt>
@@ -108,6 +110,11 @@ point.</p></dd>
 <dt id="arg-ref-data">ref_data<a class="anchor" aria-label="anchor" href="#arg-ref-data"></a></dt>
 <dd><p>measure the signal from the first scan in this reference data
 and apply the same target noise level to mrs_data.</p></dd>
+
+
+<dt id="arg-noise-free-input">noise_free_input<a class="anchor" aria-label="anchor" href="#arg-noise-free-input"></a></dt>
+<dd><p>accounts for the reference data already containing
+noise when set to FALSE. Defaults to TRUE.</p></dd>
 
 </dl></div>
     <div id="value">

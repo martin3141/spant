@@ -19,7 +19,7 @@ package. You may need to specify the fsl install directory, eg:
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.7.0</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@ package. You may need to specify the fsl install directory, eg:
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">segment_t1_fsl</span><span class="op">(</span><span class="va">mri_path</span>, deface <span class="op">=</span> <span class="cn">FALSE</span>, bet_fit <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">segment_t1_fsl</span><span class="op">(</span><span class="va">mri_path</span>, out_dir <span class="op">=</span> <span class="cn">NULL</span>, deface <span class="op">=</span> <span class="cn">FALSE</span>, bet_fit <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -91,6 +91,11 @@ package. You may need to specify the fsl install directory, eg:
 
 <dl><dt id="arg-mri-path">mri_path<a class="anchor" aria-label="anchor" href="#arg-mri-path"></a></dt>
 <dd><p>path to the volumetric T1 data.</p></dd>
+
+
+<dt id="arg-out-dir">out_dir<a class="anchor" aria-label="anchor" href="#arg-out-dir"></a></dt>
+<dd><p>optional output directory. Defaults to the same directory
+as mri_path if not specified.</p></dd>
 
 
 <dt id="arg-deface">deface<a class="anchor" aria-label="anchor" href="#arg-deface"></a></dt>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.7.0</span>
       </span>
     </div>
 
@@ -195,6 +195,10 @@
           <p><code><a href="array2mrs_data.html">array2mrs_data()</a></code> </p>
         </td>
         <td><p>Convert a 7 dimensional array in into a mrs_data object. The array dimensions should be ordered as : dummy, X, Y, Z, dynamic, coil, FID.</p></td>
+      </tr><tr><td>
+          <p><code><a href="assign_dyns.html">assign_dyns()</a></code> </p>
+        </td>
+        <td><p>Overwrite a subset of dynamic scans.</p></td>
       </tr><tr><td>
           <p><code><a href="auto_phase.html">auto_phase()</a></code> </p>
         </td>
@@ -487,6 +491,10 @@
           <p><code><a href="fit_svs_edited.html">fit_svs_edited()</a></code> </p>
         </td>
         <td><p>Edited SVS 1H brain analysis pipeline.</p></td>
+      </tr><tr><td>
+          <p><code><a href="fit_svs_edited_group_results.html">fit_svs_edited_group_results()</a></code> </p>
+        </td>
+        <td><p>Combine edited fitting results for group analysis.</p></td>
       </tr><tr><td>
           <p><code><a href="fit_svs_group_results.html">fit_svs_group_results()</a></code> </p>
         </td>
@@ -856,6 +864,10 @@
         </td>
         <td><p>Apply line-broadening (apodisation) to MRS data or basis object.</p></td>
       </tr><tr><td>
+          <p><code><a href="lb_renoise.html">lb_renoise()</a></code> </p>
+        </td>
+        <td><p>Apply line-broadening to dynamic MRS data and add normally distributed noise (renoise) to reverse any associated improvement in SNR.</p></td>
+      </tr><tr><td>
           <p><code><a href="lofdc.html">lofdc()</a></code> </p>
         </td>
         <td><p>Correct linear frequency drift.</p></td>
@@ -899,6 +911,10 @@
           <p><code><a href="mat2mrs_data.html">mat2mrs_data()</a></code> </p>
         </td>
         <td><p>Convert a matrix (with spectral points in the column dimension and dynamics in the row dimensions) into a mrs_data object.</p></td>
+      </tr><tr><td>
+          <p><code><a href="match_files.html">match_files()</a></code> </p>
+        </td>
+        <td><p>Match files based on a vector of input paths and a glob pattern. The glob pattern is appended to each path and should match one file only.</p></td>
       </tr><tr><td>
           <p><code><a href="match_lineshape.html">match_lineshape()</a></code> </p>
         </td>
@@ -1011,6 +1027,10 @@
           <p><code><a href="ortho3_inter.html">ortho3_inter()</a></code> </p>
         </td>
         <td><p>Display an interactive orthographic projection plot of a nifti object.</p></td>
+      </tr><tr><td>
+          <p><code><a href="paths2df.html">paths2df()</a></code> </p>
+        </td>
+        <td><p>Split paths into parts based on backslash, forwardslash and dot characters and return a data frame of these parts.</p></td>
       </tr><tr><td>
           <p><code><a href="peak_info.html">peak_info()</a></code> </p>
         </td>
@@ -1555,6 +1575,10 @@
           <p><code><a href="tr.html">tr()</a></code> </p>
         </td>
         <td><p>Return the repetition time of an MRS dataset.</p></td>
+      </tr><tr><td>
+          <p><code><a href="trim_paths.html">trim_paths()</a></code> </p>
+        </td>
+        <td><p>Trim a vector of filesystem paths.</p></td>
       </tr><tr><td>
           <p><code><a href="varpro_3_para_opts.html">varpro_3_para_opts()</a></code> </p>
         </td>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.7.0</span>
       </span>
     </div>
 
@@ -84,10 +84,14 @@
 <span>  <span class="va">xlim</span>,</span>
 <span>  init_lb <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  init_lg <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  init_amp <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  min_lb <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  max_lb <span class="op">=</span> <span class="cn">Inf</span>,</span>
 <span>  min_lg <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  max_lg <span class="op">=</span> <span class="fl">1</span></span>
+<span>  max_lg <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  min_amp <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  max_amp <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  amp_optim <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -117,6 +121,10 @@ two water resonances.</p></dd>
 <dd><p>initial value for the Lorentz-Gauss lineshape parameter.</p></dd>
 
 
+<dt id="arg-init-amp">init_amp<a class="anchor" aria-label="anchor" href="#arg-init-amp"></a></dt>
+<dd><p>initial value for the amplitude parameter.</p></dd>
+
+
 <dt id="arg-min-lb">min_lb<a class="anchor" aria-label="anchor" href="#arg-min-lb"></a></dt>
 <dd><p>minimum value for the amount of line-broadening to apply (Hz).</p></dd>
 
@@ -131,6 +139,19 @@ two water resonances.</p></dd>
 
 <dt id="arg-max-lg">max_lg<a class="anchor" aria-label="anchor" href="#arg-max-lg"></a></dt>
 <dd><p>maximum value for the Lorentz-Gauss lineshape parameter.</p></dd>
+
+
+<dt id="arg-min-amp">min_amp<a class="anchor" aria-label="anchor" href="#arg-min-amp"></a></dt>
+<dd><p>minimum value for the amplitude parameter.</p></dd>
+
+
+<dt id="arg-max-amp">max_amp<a class="anchor" aria-label="anchor" href="#arg-max-amp"></a></dt>
+<dd><p>maximum value for the amplitude parameter.</p></dd>
+
+
+<dt id="arg-amp-optim">amp_optim<a class="anchor" aria-label="anchor" href="#arg-amp-optim"></a></dt>
+<dd><p>flag to include amplitude adjustment in the optimisation
+procedure. Defaults to TRUE.</p></dd>
 
 </dl></div>
     <div id="value">

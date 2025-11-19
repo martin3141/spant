@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.7.0</span>
       </span>
     </div>
 
@@ -84,6 +84,7 @@
 <span>  output_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  mri <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  mri_seg <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  segment_t1 <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  external_basis <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  append_external_basis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  p_vols <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -122,7 +123,9 @@
 <span>  lcm_bin_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  plot_ppm_xlim <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  extra_output <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  return_fit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  write_preproc_metab_path <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -148,6 +151,11 @@
 
 <dt id="arg-mri-seg">mri_seg<a class="anchor" aria-label="anchor" href="#arg-mri-seg"></a></dt>
 <dd><p>filepath or nifti object containing segmented MRI data.</p></dd>
+
+
+<dt id="arg-segment-t-">segment_t1<a class="anchor" aria-label="anchor" href="#arg-segment-t-"></a></dt>
+<dd><p>segment the t1 weighted mri file with FSL FAST and use the
+results to perform partial volume correction. Defaults to FALSE.</p></dd>
 
 
 <dt id="arg-external-basis">external_basis<a class="anchor" aria-label="anchor" href="#arg-external-basis"></a></dt>
@@ -337,7 +345,7 @@ text or csv format.</p></dd>
 
 <dt id="arg-dyn-basis-lg">dyn_basis_lg<a class="anchor" aria-label="anchor" href="#arg-dyn-basis-lg"></a></dt>
 <dd><p>dynamic basis Lorentz-Gauss lineshape factor between 0
-and 1.</p></dd>
+and 1. Defaults to 0, pure Lorentzian.</p></dd>
 
 
 <dt id="arg-lcm-bin-path">lcm_bin_path<a class="anchor" aria-label="anchor" href="#arg-lcm-bin-path"></a></dt>
@@ -356,6 +364,15 @@ Defaults to FALSE.</p></dd>
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>output potentially useful information.</p></dd>
+
+
+<dt id="arg-return-fit">return_fit<a class="anchor" aria-label="anchor" href="#arg-return-fit"></a></dt>
+<dd><p>return a fit object, defaults to FALSE.</p></dd>
+
+
+<dt id="arg-write-preproc-metab-path">write_preproc_metab_path<a class="anchor" aria-label="anchor" href="#arg-write-preproc-metab-path"></a></dt>
+<dd><p>path to write the preprocessed metabolite
+data in NIfTI format.</p></dd>
 
 </dl></div>
 
