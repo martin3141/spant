@@ -80,6 +80,6 @@ Or the the development version from GitHub (requires the `devtools`
 package):
 
 ``` r
-install.packages("devtools")
-devtools::install_github("martin3141/spant", ref = "devel", dependencies = TRUE)
+install.packages("remotes")
+remotes::install_github("martin3141/spant", ref = "devel", dependencies = TRUE)
 ```
