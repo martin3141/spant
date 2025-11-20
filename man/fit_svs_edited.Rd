@@ -48,7 +48,8 @@ fit_svs_edited(
   plot_ppm_xlim = NULL,
   extra_output = FALSE,
   verbose = FALSE,
-  return_fit = FALSE
+  return_fit = FALSE,
+  overwrite_output = FALSE
 )
 }
 \arguments{
@@ -189,6 +190,9 @@ Defaults to FALSE.}
 \item{verbose}{output potentially useful information.}
 
 \item{return_fit}{return a fit object, defaults to FALSE.}
+
+\item{overwrite_output}{overwrite existing fitting result files, defaults to
+FALSE.}
 }
 \description{
 Note this function is still under development and liable to changes.

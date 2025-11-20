@@ -103,6 +103,8 @@
 #' @param return_fit return a fit object, defaults to FALSE.
 #' @param write_preproc_metab_path path to write the preprocessed metabolite
 #' data in NIfTI format.
+#' @param overwrite_output overwrite existing fitting result files, defaults to
+#' FALSE.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
 #'                      package = "spant")
@@ -130,7 +132,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                     dyn_basis_lb = NULL, dyn_basis_lg = NULL,
                     lcm_bin_path = NULL, plot_ppm_xlim = NULL,
                     extra_output = FALSE, verbose = FALSE, return_fit = FALSE,
-                    write_preproc_metab_path = NULL) {
+                    write_preproc_metab_path = NULL, overwrite_output = FALSE) {
   
   argg  <- c(as.list(environment()))
   
@@ -211,7 +213,10 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if(!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE)
   } else {
-    warning(paste0("Output directory already exists : ", output_dir))
+    if (!overwrite_output) {
+      stop(paste0("Output directory already exists : ", output_dir,
+           "\nskipping analysis... Set overwrite_output option to TRUE to overwrite."))
+    }
   }
   
   # check the mri data if specified 

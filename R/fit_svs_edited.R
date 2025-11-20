@@ -96,6 +96,8 @@
 #' Defaults to FALSE.
 #' @param verbose output potentially useful information.
 #' @param return_fit return a fit object, defaults to FALSE.
+#' @param overwrite_output overwrite existing fitting result files, defaults to
+#' FALSE.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
 #'                      package = "spant")
@@ -126,7 +128,8 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                            summary_measures = NULL, dyn_av_block_size = NULL,
                            dyn_av_scheme = NULL, dyn_av_scheme_file = NULL,
                            plot_ppm_xlim = NULL, extra_output = FALSE,
-                           verbose = FALSE, return_fit = FALSE) {
+                           verbose = FALSE, return_fit = FALSE,
+                           overwrite_output = FALSE) {
   
   argg  <- c(as.list(environment()))
   

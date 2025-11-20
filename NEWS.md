@@ -1,4 +1,5 @@
 # spant 3.8.0
+* Added overwrite_output option to fit_svs.
 
 # spant 3.7.0
 * Added lb_renoise function for fMRS analyses.
