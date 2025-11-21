@@ -167,11 +167,35 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       mri_seg <- vector(mode = "list", length = length(input))
     }
     
-    more_args <- list()
+    more_args <- list(segment_t1 = segment_t1, external_basis = external_basis,
+                      append_external_basis = append_external_basis,
+                      p_vols = p_vols, format = format, pul_seq = pul_seq,
+                      TE = TE, TR = TR, TE1 = TE1, TE2 = TE2, TE3 = TE3,
+                      TM = TM, append_basis = append_basis,
+                      remove_basis = remove_basis, pre_align = pre_align,
+                      dfp_corr = dfp_corr,
+                      dfp_corr_ref_subset = dfp_corr_ref_subset,
+                      output_ratio = output_ratio, ecc = ecc,
+                      hsvd_width = hsvd_width, decimate = decimate,
+                      trunc_fid_pts = trunc_fid_pts, fit_method = fit_method,
+                      fit_opts = fit_opts, fit_subset = fit_subset,
+                      w_ref_subset = w_ref_subset, legacy_ws = legacy_ws,
+                      w_att = w_att, w_conc = w_conc,
+                      use_basis_cache = use_basis_cache,
+                      summary_measures = summary_measures,
+                      dyn_av_block_size = dyn_av_block_size,
+                      dyn_av_scheme = dyn_av_scheme,
+                      dyn_av_scheme_file = dyn_av_scheme_file,
+                      dyn_basis_lb = dyn_basis_lb, dyn_basis_lg = dyn_basis_lg,
+                      lcm_bin_path = lcm_bin_path, plot_ppm_xlim = lcm_bin_path,
+                      extra_output = extra_output, verbose = verbose,
+                      return_fit = return_fit,
+                      write_preproc_metab_path = write_preproc_metab_path,
+                      overwrite = overwrite)
     
     return(mapply(fit_svs, input = input, output_dir = output_dir,
                   w_ref = w_ref, mri = mri, mri_seg = mri_seg,
-                  SIMPLIFY = FALSE))
+                  MoreArgs = more_args, SIMPLIFY = FALSE))
   }
   
   argg  <- c(as.list(environment()))
