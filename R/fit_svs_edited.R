@@ -131,6 +131,70 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                            verbose = FALSE, return_fit = FALSE,
                            overwrite = FALSE) {
   
+  if (identical(class(input), "character") & (length(input) > 1)) {
+    if (!is.null(output_dir)) {
+      if (length(input) != length(output_dir)) {
+        stop("Missmatch between input length and output_dir length.")
+      }
+    } else {
+      output_dir <- vector(mode = "list", length = length(input))
+    }
+    
+    if (!is.null(w_ref)) {
+      if (length(input) != length(w_ref)) {
+        stop("Missmatch between input length and w_ref length.")
+      }
+    } else {
+      w_ref <- vector(mode = "list", length = length(input))
+    }
+    
+    if (!is.null(mri)) {
+      if (length(input) != length(mri)) {
+        stop("Missmatch between input length and mri length.")
+      }
+    } else {
+      mri <- vector(mode = "list", length = length(input))
+    }
+    
+    if (!is.null(mri_seg)) {
+      if (length(input) != length(mri_seg)) {
+        stop("Missmatch between input length and mri_seg length.")
+      }
+    } else {
+      mri_seg <- vector(mode = "list", length = length(input))
+    }
+    
+    more_args <- list(segment_t1 = segment_t1, 
+                      external_basis = external_basis, p_vols = p_vols,
+                      format = format, editing_type = editing_type,
+                      editing_scheme = editing_scheme,
+                      invert_edit_on = invert_edit_on,
+                      invert_edit_off = invert_edit_off, pul_seq = pul_seq,
+                      TE = TE, TR = TR, TE1 = TE1, TE2 = TE2, TE3 = TE3,
+                      TM = TM, append_basis_ed_off = append_basis_ed_off,
+                      remove_basis_ed_off = remove_basis_ed_off,
+                      pre_align = pre_align, dfp_corr = dfp_corr,
+                      output_ratio = output_ratio, ecc = ecc,
+                      hsvd_width = hsvd_width, decimate = decimate,
+                      trunc_fid_pts = trunc_fid_pts,
+                      fit_opts_edited = fit_opts_edited,
+                      fit_opts_ed_off = fit_opts_ed_off,
+                      fit_subset = fit_subset, legacy_ws = legacy_ws,
+                      w_att = w_att, w_conc = w_conc,
+                      use_basis_cache = use_basis_cache,
+                      summary_measures = summary_measures,
+                      dyn_av_block_size = dyn_av_block_size,
+                      dyn_av_scheme = dyn_av_scheme,
+                      dyn_av_scheme_file = dyn_av_scheme_file,
+                      plot_ppm_xlim = plot_ppm_xlim,
+                      extra_output = extra_output, verbose = verbose,
+                      return_fit = return_fit, overwrite = overwrite)
+    
+    return(mapply(fit_svs, input = input, output_dir = output_dir,
+                  w_ref = w_ref, mri = mri, mri_seg = mri_seg,
+                  MoreArgs = more_args, SIMPLIFY = FALSE))
+  }
+  
   argg  <- c(as.list(environment()))
   
   metab <- input
