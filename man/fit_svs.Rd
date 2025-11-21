@@ -52,7 +52,7 @@ fit_svs(
   verbose = FALSE,
   return_fit = FALSE,
   write_preproc_metab_path = NULL,
-  overwrite_output = FALSE
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -204,7 +204,7 @@ Defaults to FALSE.}
 \item{write_preproc_metab_path}{path to write the preprocessed metabolite
 data in NIfTI format.}
 
-\item{overwrite_output}{overwrite existing fitting result files, defaults to
+\item{overwrite}{overwrite existing fitting result files, defaults to
 FALSE.}
 }
 \description{

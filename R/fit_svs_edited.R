@@ -96,7 +96,7 @@
 #' Defaults to FALSE.
 #' @param verbose output potentially useful information.
 #' @param return_fit return a fit object, defaults to FALSE.
-#' @param overwrite_output overwrite existing fitting result files, defaults to
+#' @param overwrite overwrite existing fitting result files, defaults to
 #' FALSE.
 #' @examples
 #' metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",
@@ -129,7 +129,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                            dyn_av_scheme = NULL, dyn_av_scheme_file = NULL,
                            plot_ppm_xlim = NULL, extra_output = FALSE,
                            verbose = FALSE, return_fit = FALSE,
-                           overwrite_output = FALSE) {
+                           overwrite = FALSE) {
   
   argg  <- c(as.list(environment()))
   
@@ -210,7 +210,12 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if(!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE)
   } else {
-    warning(paste0("Output directory already exists : ", output_dir))
+    if (!overwrite) {
+      cat(paste0("Skipping analysis as output directory already exists : ",
+                 output_dir,
+                 "\nSet overwrite option to TRUE to overwrite.\n"))
+      return(invisible(NULL))
+    }
   }
   
   # check the mri data if specified 

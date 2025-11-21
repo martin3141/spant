@@ -49,7 +49,7 @@ fit_svs_edited(
   extra_output = FALSE,
   verbose = FALSE,
   return_fit = FALSE,
-  overwrite_output = FALSE
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -191,7 +191,7 @@ Defaults to FALSE.}
 
 \item{return_fit}{return a fit object, defaults to FALSE.}
 
-\item{overwrite_output}{overwrite existing fitting result files, defaults to
+\item{overwrite}{overwrite existing fitting result files, defaults to
 FALSE.}
 }
 \description{
