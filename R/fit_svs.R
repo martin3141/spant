@@ -134,6 +134,46 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                     extra_output = FALSE, verbose = FALSE, return_fit = FALSE,
                     write_preproc_metab_path = NULL, overwrite = FALSE) {
   
+  if (identical(class(input), "character") & (length(input) > 1)) {
+    if (!is.null(output_dir)) {
+      if (length(input) != length(output_dir)) {
+        stop("Missmatch between input length and output_dir length.")
+      }
+    } else {
+      output_dir <- vector(mode = "list", length = length(input))
+    }
+    
+    if (!is.null(w_ref)) {
+      if (length(input) != length(w_ref)) {
+        stop("Missmatch between input length and w_ref length.")
+      }
+    } else {
+      w_ref <- vector(mode = "list", length = length(input))
+    }
+    
+    if (!is.null(mri)) {
+      if (length(input) != length(mri)) {
+        stop("Missmatch between input length and mri length.")
+      }
+    } else {
+      mri <- vector(mode = "list", length = length(input))
+    }
+    
+    if (!is.null(mri_seg)) {
+      if (length(input) != length(mri_seg)) {
+        stop("Missmatch between input length and mri_seg length.")
+      }
+    } else {
+      mri_seg <- vector(mode = "list", length = length(input))
+    }
+    
+    more_args <- list()
+    
+    return(mapply(fit_svs, input = input, output_dir = output_dir,
+                  w_ref = w_ref, mri = mri, mri_seg = mri_seg,
+                  SIMPLIFY = FALSE))
+  }
+  
   argg  <- c(as.list(environment()))
   
   metab <- input
