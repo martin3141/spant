@@ -190,7 +190,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                       extra_output = extra_output, verbose = verbose,
                       return_fit = return_fit, overwrite = overwrite)
     
-    return(mapply(fit_svs, input = input, output_dir = output_dir,
+    return(mapply(fit_svs_edited, input = input, output_dir = output_dir,
                   w_ref = w_ref, mri = mri, mri_seg = mri_seg,
                   MoreArgs = more_args, SIMPLIFY = FALSE))
   }
