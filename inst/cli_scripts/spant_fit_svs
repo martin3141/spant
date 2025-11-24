@@ -24,7 +24,7 @@ parser <- add_option(parser, c("--mri_seg"), action = "store", type = "character
                      help="Filepath containing segmented MRI data.")
                      
 parser <- add_option(parser, c("--segment_t1"), action = "store", default = "FALSE",
-                     help="segment the t1 weighted mri file with FSL FAST and use the\n\t\nresults to perform partial volume correction. Defaults to FALSE.")
+                     help="segment the t1 weighted mri file with FSL FAST and use the\n\t\tresults to perform partial volume correction. Defaults to FALSE.")
 
 parser <- add_option(parser, c("-b", "--external_basis"), action = "store", type = "character",
                      help="Precompiled basis set to use for analysis.")
@@ -129,7 +129,7 @@ parser <- add_option(parser, c("--dyn_basis_lb"), action = "store", type = "char
                      help="Dynamic basis line-broadening to apply in Hz.")
 
 parser <- add_option(parser, c("--dyn_basis_lg"), action = "store", type = "character",
-                     help="Dynamic basis Lorentz-Gauss lineshape factor between 0 and 1. Defaults to 0, pure Lorentzian.")
+                     help="Dynamic basis Lorentz-Gauss lineshape factor between 0 and 1.\n\t\tDefaults to 0, pure Lorentzian.")
 
 parser <- add_option(parser, c("--lcm_bin_path"), action = "store", type = "character",
                      help="Set the path to LCModel binary.")
