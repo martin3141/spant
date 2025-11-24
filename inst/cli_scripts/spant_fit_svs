@@ -22,6 +22,9 @@ parser <- add_option(parser, c("--mri"), action = "store", type = "character",
 
 parser <- add_option(parser, c("--mri_seg"), action = "store", type = "character",
                      help="Filepath containing segmented MRI data.")
+                     
+parser <- add_option(parser, c("--segment_t1"), action = "store", default = "FALSE",
+                     help="segment the t1 weighted mri file with FSL FAST and use the\n\t\nresults to perform partial volume correction. Defaults to FALSE.")
 
 parser <- add_option(parser, c("-b", "--external_basis"), action = "store", type = "character",
                      help="Precompiled basis set to use for analysis.")
@@ -121,6 +124,12 @@ parser <- add_option(parser, c("--dyn_av_scheme"), action = "store", type = "cha
 
 parser <- add_option(parser, c("--dyn_av_scheme_file"), action = "store", type = "character",
                        help="A file path containing a single column of sequential integers\n\t\t(starting at 1) with the same length as the number of dynamic\n\t\tscans in the metabolite data. File may be formatted as .xlsx,\n\t\t.xls, text or csv format.")
+                       
+parser <- add_option(parser, c("--dyn_basis_lb"), action = "store", type = "character",
+                     help="Dynamic basis line-broadening to apply in Hz.")
+
+parser <- add_option(parser, c("--dyn_basis_lg"), action = "store", type = "character",
+                     help="Dynamic basis Lorentz-Gauss lineshape factor between 0 and 1. Defaults to 0, pure Lorentzian.")
 
 parser <- add_option(parser, c("--lcm_bin_path"), action = "store", type = "character",
                      help="Set the path to LCModel binary.")
@@ -133,7 +142,13 @@ parser <- add_option(parser, c("--extra_output"), action = "store", default = FA
 
 parser <- add_option(parser, c("-v", "--verbose"), action = "store", default = FALSE,
                      help="Output potentially useful information.")
-
+                     
+parser <- add_option(parser, c("--write_preproc_metab_path"), action = "store", type = "character",
+                     help="Path to write the preprocessed metabolite data in NIfTI format.")
+                     
+parser <- add_option(parser, c("--overwrite"), action = "store", default = FALSE,
+                     help="Overwrite existing fitting result files, defaults to FALSE.")
+                     
 opt <- parse_args(parser)
 
 if (is.null(opt[["input"]])) {
@@ -163,11 +178,22 @@ if (!is.null(opt[["plot_ppm_xlim"]])) {
   opt[["plot_ppm_xlim"]] <- eval(parse(text = opt[["plot_ppm_xlim"]]))
 }
 
+# convert dyn_basis_lb to numeric vector
+if (!is.null(opt[["dyn_av_basis_lb"]])) {
+  opt[["dyn_av_basis_lb"]] <- eval(parse(text = opt[["dyn_av_basis_lb"]]))
+}
+
+# convert dyn_basis_lg to numeric vector
+if (!is.null(opt[["dyn_av_basis_lg"]])) {
+  opt[["dyn_av_basis_lg"]] <- eval(parse(text = opt[["dyn_av_basis_lg"]]))
+}
+
 fit_res <- fit_svs(input = opt[["input"]],
                    w_ref = opt[["w_ref"]],
                    output_dir = opt[["output_dir"]],
                    mri = opt[["mri"]],
                    mri_seg = opt[["mri_seg"]],
+                   segment_t1 = opt[["segment_t1"]],
                    external_basis = opt[["external_basis"]],
                    append_external_basis = opt[["append_external_basis"]],
                    p_vols = opt[["p_vols"]],
@@ -201,7 +227,11 @@ fit_res <- fit_svs(input = opt[["input"]],
                    dyn_av_block_size = opt[["dyn_av_block_size"]],
                    dyn_av_scheme = opt[["dyn_av_scheme"]],
                    dyn_av_scheme_file = opt[["dyn_av_scheme_file"]],
+                   dyn_av_basis_lb = opt[["dyn_av_basis_lb"]],
+                   dyn_av_basis_lg = opt[["dyn_av_basis_lg"]],
                    lcm_bin_path = opt[["lcm_bin_path"]],
                    plot_ppm_xlim = opt[["plot_ppm_xlim"]],
                    extra_output = opt[["extra_output"]],
-                   verbose = opt[["verbose"]])
+                   verbose = opt[["verbose"]],
+                   verbose = opt[["write_preproc_metab_path"]],
+                   verbose = opt[["overwrite"]])
