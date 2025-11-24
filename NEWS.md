@@ -1,5 +1,7 @@
 # spant 3.8.0
 * Added overwrite option to fit_svs.
+* fit_svs and fit_svs_edited now accept vectorised file inputs for batch
+analyses.
 
 # spant 3.7.0
 * Added lb_renoise function for fMRS analyses.
