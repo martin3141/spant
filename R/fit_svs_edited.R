@@ -247,6 +247,16 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if(!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE)
   } else {
+    
+    if (!file.exists(file.path(output_dir, "report.html"))) {
+      warning(paste0(file.path(output_dir, "report.html"), " not found."))
+    }
+    
+    if (!file.exists(file.path(output_dir, "spant_fit_svs_edited_data.rds"))) {
+      warning(paste0(file.path(output_dir, "spant_fit_svs_edited_data.rds"),
+                     " not found."))
+    }
+    
     if (!overwrite) {
       cat(paste0("Skipping analysis as output directory already exists : ",
                  output_dir,
