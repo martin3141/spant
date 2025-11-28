@@ -232,8 +232,8 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     }
   } else {
     metab_path <- metab
-    if (verbose) cat(paste0("Reading MRS input data : ", metab,"\n"))
-    metab      <- read_mrs(metab, format = format)
+    # if (verbose) cat(paste0("Reading MRS input data : ", metab,"\n"))
+    # metab      <- read_mrs(metab, format = format)
     if (is.null(output_dir)) {
       output_dir <- gsub("\\.", "_", basename(metab_path))
       output_dir <- gsub("#", "_", output_dir)
@@ -242,6 +242,23 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   }
   
   if (verbose) cat(paste0("Output directory : ", output_dir, "\n"))
+  
+  # create the output dir if it doesn't exist
+  if(!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE)
+  } else {
+    if (!overwrite) {
+      cat(paste0("Skipping analysis as output directory already exists : ",
+                 output_dir,
+                 "\nSet overwrite option to TRUE to overwrite.\n"))
+      return(invisible(NULL))
+    }
+  }
+  
+  if (class(metab)[[1]] != "mrs_data") {
+    if (verbose) cat(paste0("Reading MRS input data : ", metab,"\n"))
+    metab      <- read_mrs(metab, format = format)
+  }
   
   # read the ref data file if not already an mrs_data object
   if (is.def(w_ref) & (class(w_ref)[[1]] != "mrs_data")) {
@@ -268,18 +285,6 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   } else {
     if (verbose) cat("Water reference data is available.\n")
     w_ref_available = TRUE
-  }
-  
-  # create the output dir if it doesn't exist
-  if(!dir.exists(output_dir)) {
-    dir.create(output_dir, recursive = TRUE)
-  } else {
-    if (!overwrite) {
-      cat(paste0("Skipping analysis as output directory already exists : ",
-                 output_dir,
-                 "\nSet overwrite option to TRUE to overwrite.\n"))
-      return(invisible(NULL))
-    }
   }
   
   # check the mri data if specified 
