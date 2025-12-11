@@ -920,7 +920,7 @@ mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
 #' Defaults to TRUE, set to FALSE to force an overwrite of any existing data
 #' files.
 #' @param mri_format defaults to "nifti", can also be "dicom" provided the 
-#' divest packages is installed.
+#' divest package is installed.
 #' @param deface_mri option to apply fsl_deface to the mri as a preprocessing
 #' step. Defaults to FALSE, requires the fslr package to be installed when TRUE.
 #' @export
@@ -1015,7 +1015,6 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
     }
     
     # determine the image type
-    
     if (suffix[n] %in% mrs_suffix) {
       image_type <- "mrs"
     } else if (suffix[n] %in% anat_suffix) {
