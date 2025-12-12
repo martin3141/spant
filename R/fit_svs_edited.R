@@ -299,7 +299,18 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   # check the mri data if specified 
   if (is.def(mri) & (!("niftiImage" %in% class(mri)))) {
-    mri <- readNifti(mri)
+    if (dir.exists(mri)) {
+      datasets <- divest::readDicom(mri, verbosity = -2, interactive = FALSE)    
+      if (length(datasets) == 1) {
+        mri <- datasets[[1]][,,,]
+      } else if (length(datasets == 0)) {
+        stop("DICOM MRI not found.")
+      } else {
+        stop("Multiple DICOM MRI datasets found when only one was expected.")
+      }
+    } else {
+      mri <- readNifti(mri)
+    }
   }
   
   # reorientate mri

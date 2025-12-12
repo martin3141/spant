@@ -302,7 +302,6 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   # check the mri data if specified 
   if (is.def(mri) & (!("niftiImage" %in% class(mri)))) {
-    
     if (dir.exists(mri)) {
       datasets <- divest::readDicom(mri, verbosity = -2, interactive = FALSE)    
       if (length(datasets) == 1) {
@@ -310,7 +309,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       } else if (length(datasets == 0)) {
         stop("DICOM MRI not found.")
       } else {
-        stop("Mutiple DICOM MRI datasets found when only one was expected.")
+        stop("Multiple DICOM MRI datasets found when only one was expected.")
       }
     } else {
       mri <- readNifti(mri)
