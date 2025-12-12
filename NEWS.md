@@ -1,4 +1,5 @@
 # spant 3.8.0
+* Added deface option to fit_svs.
 * Added overwrite option to fit_svs.
 * fit_svs and fit_svs_edited now accept vectorised file inputs for batch
 analyses.

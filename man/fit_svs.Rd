@@ -10,6 +10,7 @@ fit_svs(
   output_dir = NULL,
   mri = NULL,
   mri_seg = NULL,
+  deface = FALSE,
   segment_t1 = FALSE,
   external_basis = NULL,
   append_external_basis = FALSE,
@@ -65,6 +66,8 @@ fit_svs(
 \item{mri}{filepath or nifti object containing anatomical MRI data.}
 
 \item{mri_seg}{filepath or nifti object containing segmented MRI data.}
+
+\item{deface}{option to apply fsl_deface to the mri input. Defaults to FALSE.}
 
 \item{segment_t1}{segment the t1 weighted mri file with FSL FAST and use the
 results to perform partial volume correction. Defaults to FALSE.}

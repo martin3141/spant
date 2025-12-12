@@ -7,6 +7,7 @@
 #' @param output_dir directory path to output fitting results.
 #' @param mri filepath or nifti object containing anatomical MRI data.
 #' @param mri_seg filepath or nifti object containing segmented MRI data.
+#' @param deface option to apply fsl_deface to the mri input. Defaults to FALSE.
 #' @param segment_t1 segment the t1 weighted mri file with FSL FAST and use the
 #' results to perform partial volume correction. Defaults to FALSE.
 #' @param external_basis precompiled basis set object to use for analysis.
@@ -109,7 +110,7 @@
 #' }
 #' @export
 fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
-                           mri_seg = NULL, segment_t1 = FALSE,
+                           mri_seg = NULL, deface = FALSE, segment_t1 = FALSE,
                            external_basis = NULL, p_vols = NULL,
                            format = NULL, editing_type = "gaba_1.9",
                            editing_scheme = NULL,
@@ -164,7 +165,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       mri_seg <- vector(mode = "list", length = length(input))
     }
     
-    more_args <- list(segment_t1 = segment_t1, 
+    more_args <- list(deface = deface, segment_t1 = segment_t1, 
                       external_basis = external_basis, p_vols = p_vols,
                       format = format, editing_type = editing_type,
                       editing_scheme = editing_scheme,
@@ -311,6 +312,14 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     } else {
       mri <- readNifti(mri)
     }
+  }
+  
+  # deface the mri if specified
+  if (is.def(mri) & deface) {
+    dir.create(file.path(output_dir, "mri_deface"), showWarnings = FALSE)
+    deface_path <- file.path(output_dir, "mri_deface", "mri_deface.nii.gz")
+    fslr::fsl_deface(mri, outfile = deface_path, verbose = FALSE)
+    mri <- readNifti(deface_path)
   }
   
   # reorientate mri
