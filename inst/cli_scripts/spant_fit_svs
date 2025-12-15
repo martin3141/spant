@@ -23,8 +23,11 @@ parser <- add_option(parser, c("--mri"), action = "store", type = "character",
 parser <- add_option(parser, c("--mri_seg"), action = "store", type = "character",
                      help="Filepath containing segmented MRI data.")
                      
+parser <- add_option(parser, c("--deface"), action = "store", default = "FALSE",
+                     help="Apply fsl_deface to the mri input. Defaults to FALSE.")
+                     
 parser <- add_option(parser, c("--segment_t1"), action = "store", default = "FALSE",
-                     help="segment the t1 weighted mri file with FSL FAST and use the\n\t\tresults to perform partial volume correction. Defaults to FALSE.")
+                     help="Segment the t1 weighted mri file with FSL FAST and use the\n\t\tresults to perform partial volume correction. Defaults to FALSE.")
 
 parser <- add_option(parser, c("-b", "--external_basis"), action = "store", type = "character",
                      help="Precompiled basis set to use for analysis.")
@@ -193,6 +196,7 @@ fit_res <- fit_svs(input = opt[["input"]],
                    output_dir = opt[["output_dir"]],
                    mri = opt[["mri"]],
                    mri_seg = opt[["mri_seg"]],
+                   deface = opt[["deface"]],
                    segment_t1 = opt[["segment_t1"]],
                    external_basis = opt[["external_basis"]],
                    append_external_basis = opt[["append_external_basis"]],
