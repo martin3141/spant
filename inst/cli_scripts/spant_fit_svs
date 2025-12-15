@@ -237,5 +237,5 @@ fit_res <- fit_svs(input = opt[["input"]],
                    plot_ppm_xlim = opt[["plot_ppm_xlim"]],
                    extra_output = opt[["extra_output"]],
                    verbose = opt[["verbose"]],
-                   verbose = opt[["write_preproc_metab_path"]],
-                   verbose = opt[["overwrite"]])
+                   write_preproc_metab_path = opt[["write_preproc_metab_path"]],
+                   overwrite = opt[["overwrite"]])
