@@ -23,10 +23,10 @@ parser <- add_option(parser, c("--mri"), action = "store", type = "character",
 parser <- add_option(parser, c("--mri_seg"), action = "store", type = "character",
                      help="Filepath containing segmented MRI data.")
                      
-parser <- add_option(parser, c("--deface"), action = "store", default = "FALSE",
+parser <- add_option(parser, c("--deface"), action = "store", default = FALSE,
                      help="Apply fsl_deface to the mri input. Defaults to FALSE.")
                      
-parser <- add_option(parser, c("--segment_t1"), action = "store", default = "FALSE",
+parser <- add_option(parser, c("--segment_t1"), action = "store", default = FALSE,
                      help="Segment the t1 weighted mri file with FSL FAST and use the\n\t\tresults to perform partial volume correction. Defaults to FALSE.")
 
 parser <- add_option(parser, c("-b", "--external_basis"), action = "store", type = "character",
@@ -182,13 +182,13 @@ if (!is.null(opt[["plot_ppm_xlim"]])) {
 }
 
 # convert dyn_basis_lb to numeric vector
-if (!is.null(opt[["dyn_av_basis_lb"]])) {
-  opt[["dyn_av_basis_lb"]] <- eval(parse(text = opt[["dyn_av_basis_lb"]]))
+if (!is.null(opt[["dyn_basis_lb"]])) {
+  opt[["dyn_basis_lb"]] <- eval(parse(text = opt[["dyn_basis_lb"]]))
 }
 
 # convert dyn_basis_lg to numeric vector
-if (!is.null(opt[["dyn_av_basis_lg"]])) {
-  opt[["dyn_av_basis_lg"]] <- eval(parse(text = opt[["dyn_av_basis_lg"]]))
+if (!is.null(opt[["dyn_basis_lg"]])) {
+  opt[["dyn_basis_lg"]] <- eval(parse(text = opt[["dyn_basis_lg"]]))
 }
 
 fit_res <- fit_svs(input = opt[["input"]],
@@ -231,8 +231,8 @@ fit_res <- fit_svs(input = opt[["input"]],
                    dyn_av_block_size = opt[["dyn_av_block_size"]],
                    dyn_av_scheme = opt[["dyn_av_scheme"]],
                    dyn_av_scheme_file = opt[["dyn_av_scheme_file"]],
-                   dyn_av_basis_lb = opt[["dyn_av_basis_lb"]],
-                   dyn_av_basis_lg = opt[["dyn_av_basis_lg"]],
+                   dyn_basis_lb = opt[["dyn_basis_lb"]],
+                   dyn_basis_lg = opt[["dyn_basis_lg"]],
                    lcm_bin_path = opt[["lcm_bin_path"]],
                    plot_ppm_xlim = opt[["plot_ppm_xlim"]],
                    extra_output = opt[["extra_output"]],
