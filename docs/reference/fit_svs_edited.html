@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.8.0</span>
       </span>
     </div>
 
@@ -84,6 +84,7 @@
 <span>  output_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  mri <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  mri_seg <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  deface <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  segment_t1 <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  external_basis <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  p_vols <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -122,7 +123,8 @@
 <span>  plot_ppm_xlim <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  extra_output <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  return_fit <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  return_fit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -148,6 +150,10 @@
 
 <dt id="arg-mri-seg">mri_seg<a class="anchor" aria-label="anchor" href="#arg-mri-seg"></a></dt>
 <dd><p>filepath or nifti object containing segmented MRI data.</p></dd>
+
+
+<dt id="arg-deface">deface<a class="anchor" aria-label="anchor" href="#arg-deface"></a></dt>
+<dd><p>option to apply fsl_deface to the mri input. Defaults to FALSE.</p></dd>
 
 
 <dt id="arg-segment-t-">segment_t1<a class="anchor" aria-label="anchor" href="#arg-segment-t-"></a></dt>
@@ -354,6 +360,11 @@ Defaults to FALSE.</p></dd>
 
 <dt id="arg-return-fit">return_fit<a class="anchor" aria-label="anchor" href="#arg-return-fit"></a></dt>
 <dd><p>return a fit object, defaults to FALSE.</p></dd>
+
+
+<dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
+<dd><p>overwrite existing fitting result files, defaults to
+FALSE.</p></dd>
 
 </dl></div>
 
