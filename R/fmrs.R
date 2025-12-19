@@ -528,7 +528,8 @@ glm_spec <- function(mrs_data, regressor_df, full_output = FALSE) {
   row.names(t_value)     <- NULL
   row.names(p_value)     <- NULL
   
-  p_value_bh  <- as.data.frame(apply(p_value, 2, p.adjust, method = "BH"))
+  p_value_bh  <- as.data.frame(apply(p_value, 2, stats::p.adjust,
+                                     method = "BH"))
   
   ppm_sc         <-  ppm(mrs_data)
   beta_weight    <-  cbind(ppm = ppm_sc, beta_weight)
