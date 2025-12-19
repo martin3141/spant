@@ -1,3 +1,5 @@
+# spant 3.9.0
+
 # spant 3.8.0
 * Added deface option to fit_svs.
 * Added overwrite option to fit_svs.
