@@ -533,6 +533,15 @@ glm_spec <- function(mrs_data, regressor_df, full_output = FALSE) {
   
   ppm_sc         <-  ppm(mrs_data)
   beta_weight    <-  cbind(ppm = ppm_sc, beta_weight)
+  
+  R <- 4
+  C <- ((4 * log(2)) ^ (1 / 2)) / 2 * pi
+  p_value_rf     <- R * C * exp((-t_value ^ 2) / 2)
+  p_value_rf_log <- -log10(p_value_rf)
+  p_value_rf_log[p_value_rf_log > 300] <- 300
+  p_value_rf     <- cbind(ppm = ppm_sc, p_value_rf)
+  p_value_rf_log <- cbind(ppm = ppm_sc, p_value_rf_log)
+  
   t_value        <-  cbind(ppm = ppm_sc, t_value)
   p_value_log    <- -log10(p_value)
   p_value_log[p_value_log > 300] <- 300
@@ -559,6 +568,14 @@ glm_spec <- function(mrs_data, regressor_df, full_output = FALSE) {
                                   ft = mrs_data$ft, ref = mrs_data$ref,
                                   nuc = mrs_data$nuc, fd = TRUE)
   
+  p_value_rf_log_mrs <- mat2mrs_data(t(p_value_rf_log[, -1]), fs = fs(mrs_data),
+                                  ft = mrs_data$ft, ref = mrs_data$ref,
+                                  nuc = mrs_data$nuc, fd = TRUE)
+  
+  p_value_rf_mrs     <- mat2mrs_data(t(p_value_rf[, -1]), fs = fs(mrs_data),
+                                  ft = mrs_data$ft, ref = mrs_data$ref,
+                                  nuc = mrs_data$nuc, fd = TRUE)
+  
   beta_weight_mrs <- mat2mrs_data(t(beta_weight[, -1]), fs = fs(mrs_data),
                                   ft = mrs_data$ft, ref = mrs_data$ref,
                                   nuc = mrs_data$nuc, fd = TRUE)
@@ -574,6 +591,8 @@ glm_spec <- function(mrs_data, regressor_df, full_output = FALSE) {
                       p_value_bh = p_value_bh, p_value_bh_log = p_value_bh_log,
                       p_value_bh_log_mrs = p_value_bh_log_mrs,
                       p_value_bh_mrs = p_value_bh_mrs,
+                      p_value_rf_log_mrs = p_value_rf_log_mrs,
+                      p_value_rf_mrs = p_value_rf_mrs,
                       beta_weight_mrs = beta_weight_mrs,
                       t_value_mrs = t_value_mrs, lm_res_list = lm_res_list)
   
