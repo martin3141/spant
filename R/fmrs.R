@@ -534,7 +534,7 @@ glm_spec <- function(mrs_data, regressor_df, full_output = FALSE) {
   ppm_sc         <-  ppm(mrs_data)
   beta_weight    <-  cbind(ppm = ppm_sc, beta_weight)
   
-  R <- 4
+  R <- 60 # ~ spectral width / FWHM
   C <- ((4 * log(2)) ^ (1 / 2)) / 2 * pi
   p_value_rf     <- R * C * exp((-t_value ^ 2) / 2)
   p_value_rf_log <- -log10(p_value_rf)
