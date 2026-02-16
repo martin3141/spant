@@ -209,6 +209,7 @@ if (!is.null(params$fit_res$res_tab$shift)) {
 
 proc_spec <- params$fit_res$data
 proc_spec <- phase(proc_spec, phase_offset, phi1_offset)
+proc_spec_no_shift <- zf(proc_spec)
 proc_spec <- shift(proc_spec, shift_offset, units = "ppm")
 proc_spec <- zf(proc_spec)
 
@@ -216,6 +217,15 @@ if (is.null(params$plot_ppm_xlim)) {
   plot(proc_spec, xlim = c(4, 0.2))
 } else {
   plot(proc_spec, xlim = params$plot_ppm_xlim)
+}
+```
+
+### Pre-fitting frequency alignment
+```{r, fig.width=7, fig.height=6}
+if (is.null(params$plot_ppm_xlim)) {
+  plot(proc_spec_no_shift, xlim = c(4, 0.2))
+} else {
+  plot(proc_spec_no_shift, xlim = params$plot_ppm_xlim)
 }
 ```
 
