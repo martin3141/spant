@@ -1,4 +1,5 @@
 # spant 3.9.0
+* Added extra pre_align options to fit_svs.
 
 # spant 3.8.0
 * Added deface option to fit_svs.

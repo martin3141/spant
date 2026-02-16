@@ -41,6 +41,11 @@
 #' is performed before signals are added with append_basis. Cannot be used with
 #' precompiled basis sets.
 #' @param pre_align perform simple frequency alignment to known reference peaks.
+#' @param pre_align_max_shift maximum allowable shift in Hz. Defaults to 40 Hz.
+#' @param pre_align_ref_freq reference frequency in ppm units. More than one
+#' frequency may be specified. Defaults to : c(2.01, 3.03, 3.22).
+#' @param pre_align_ref_amp reference frequency relative amplitudes. Defaults to
+#' 1, corresponding to equal amplitudes.
 #' @param dfp_corr perform dynamic frequency and phase correction using the RATS
 #' method.
 #' @param dfp_corr_ref_subset specify a subset of dynamics to use as reference
@@ -122,8 +127,11 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                     p_vols = NULL, format = NULL, pul_seq = NULL, TE = NULL,
                     TR = NULL, TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
                     append_basis = NULL, remove_basis = NULL, pre_align = TRUE,
-                    dfp_corr = TRUE, dfp_corr_ref_subset = NULL,
-                    output_ratio = NULL, ecc = FALSE, hsvd_width = NULL,
+                    pre_align_max_shift = 40,
+                    pre_align_ref_freq = c(2.01, 3.03, 3.22),
+                    pre_align_ref_amp = 1, dfp_corr = TRUE,
+                    dfp_corr_ref_subset = NULL, output_ratio = NULL,
+                    ecc = FALSE, hsvd_width = NULL,
                     decimate = FALSE, trunc_fid_pts = NULL,
                     fit_method = NULL, fit_opts = NULL, fit_subset = NULL,
                     w_ref_subset = NULL, legacy_ws = FALSE, w_att = 0.7,
@@ -391,7 +399,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   # pre-alignment
   if (pre_align) {
-    metab <- align(metab, c(2.01, 3.03, 3.22), max_shift = 40)
+    metab <- align(mrs_data = metab, ref_freq = pre_align_ref_freq, 
+                   max_shift = pre_align_max_shift, ref_amp = pre_align_ref_amp)
     if (Ndyns(metab) > 1) metab_post_dfp_corr <- metab
   }
   

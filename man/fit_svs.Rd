@@ -26,6 +26,9 @@ fit_svs(
   append_basis = NULL,
   remove_basis = NULL,
   pre_align = TRUE,
+  pre_align_max_shift = 40,
+  pre_align_ref_freq = c(2.01, 3.03, 3.22),
+  pre_align_ref_amp = 1,
   dfp_corr = TRUE,
   dfp_corr_ref_subset = NULL,
   output_ratio = NULL,
@@ -116,6 +119,14 @@ is performed before signals are added with append_basis. Cannot be used with
 precompiled basis sets.}
 
 \item{pre_align}{perform simple frequency alignment to known reference peaks.}
+
+\item{pre_align_max_shift}{maximum allowable shift in Hz. Defaults to 40 Hz.}
+
+\item{pre_align_ref_freq}{reference frequency in ppm units. More than one
+frequency may be specified. Defaults to : c(2.01, 3.03, 3.22).}
+
+\item{pre_align_ref_amp}{reference frequency relative amplitudes. Defaults to
+1, corresponding to equal amplitudes.}
 
 \item{dfp_corr}{perform dynamic frequency and phase correction using the RATS
 method.}
