@@ -4,7 +4,7 @@ Title: MR Spectroscopy Analysis Tools
 Version: 3.9.9000
 Date: 2025-12-16
 Authors@R: c(
-    person("Martin", "Wilson", email = "martin@pipegrep.co.uk",
+    person("Martin", "Wilson", email = "martin.wilson111@gmail.com",
            role = c("cre", "aut"), comment = c(ORCID = "0000-0002-2089-3956")),
     person("Yong", "Wang", role = "ctb"),
     person("John", "Muschelli", role = "ctb"))
