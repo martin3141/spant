@@ -2,7 +2,6 @@
 * Added extra pre_align options to fit_svs.
 * Added extra plot to fit_svs html output to help diagnose frequency alignment
 problems.
-* Just a test.
 
 # spant 3.8.0
 * Added deface option to fit_svs.
