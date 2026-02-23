@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.9.0</span>
       </span>
     </div>
 
@@ -100,6 +100,9 @@
 <span>  append_basis <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  remove_basis <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pre_align <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  pre_align_max_shift <span class="op">=</span> <span class="fl">40</span>,</span>
+<span>  pre_align_ref_freq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.01</span>, <span class="fl">3.03</span>, <span class="fl">3.22</span><span class="op">)</span>,</span>
+<span>  pre_align_ref_amp <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  dfp_corr <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  dfp_corr_ref_subset <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_ratio <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -235,6 +238,20 @@ precompiled basis sets.</p></dd>
 
 <dt id="arg-pre-align">pre_align<a class="anchor" aria-label="anchor" href="#arg-pre-align"></a></dt>
 <dd><p>perform simple frequency alignment to known reference peaks.</p></dd>
+
+
+<dt id="arg-pre-align-max-shift">pre_align_max_shift<a class="anchor" aria-label="anchor" href="#arg-pre-align-max-shift"></a></dt>
+<dd><p>maximum allowable shift in Hz. Defaults to 40 Hz.</p></dd>
+
+
+<dt id="arg-pre-align-ref-freq">pre_align_ref_freq<a class="anchor" aria-label="anchor" href="#arg-pre-align-ref-freq"></a></dt>
+<dd><p>reference frequency in ppm units. More than one
+frequency may be specified. Defaults to : c(2.01, 3.03, 3.22).</p></dd>
+
+
+<dt id="arg-pre-align-ref-amp">pre_align_ref_amp<a class="anchor" aria-label="anchor" href="#arg-pre-align-ref-amp"></a></dt>
+<dd><p>reference frequency relative amplitudes. Defaults to
+1, corresponding to equal amplitudes.</p></dd>
 
 
 <dt id="arg-dfp-corr">dfp_corr<a class="anchor" aria-label="anchor" href="#arg-dfp-corr"></a></dt>

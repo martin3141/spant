@@ -37,7 +37,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Martin Wilson \email{martin@pipegrep.co.uk} (\href{https://orcid.org/0000-0002-2089-3956}{ORCID})
+\strong{Maintainer}: Martin Wilson \email{martin.wilson111@gmail.com} (\href{https://orcid.org/0000-0002-2089-3956}{ORCID})
 
 Other contributors:
 \itemize{
