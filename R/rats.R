@@ -207,7 +207,7 @@ optim_rats <- function(x, ref, t, inds, basis, max_shift) {
   
   # optim step
   res <- stats::optim(c(0), rats_obj_fn, gr = NULL, x, ref, t, inds, basis, 
-               method = "Brent", lower = -max_shift, upper = max_shift)
+                      method = "Brent", lower = -max_shift, upper = max_shift)
   
   # find the phase
   shift <- res$par[1]
@@ -217,22 +217,22 @@ optim_rats <- function(x, ref, t, inds, basis, max_shift) {
   
   if (is.null(basis)) {
     basis_mod <- x
-    ahat <- try(unname(qr.solve(basis_mod, ref)))
+    ahat <- try(unname(qr.solve(basis_mod, ref)), silent = TRUE)
     
     # use ginv if qr.solve fails
     if (inherits(ahat, "try-error")) {
       ahat <- unname(ginv(basis_mod) %*% ref)
-      warning("RATS qr.solve failed, reverted to ginv, check for poor data")
+      # warning("RATS qr.solve failed, reverted to ginv, check for poor data")
     }
     yhat <- basis_mod * ahat
   } else {
     basis_mod <- cbind(x, basis)
-    ahat <- try(unname(qr.solve(basis_mod, ref)))
+    ahat <- try(unname(qr.solve(basis_mod, ref)), silent = TRUE)
     
     # use ginv if qr.solve fails
     if (inherits(ahat, "try-error")) {
       ahat <- unname(ginv(basis_mod) %*% ref)
-      warning("RATS qr.solve failed, reverted to ginv, check for poor data")
+      # warning("RATS qr.solve failed, reverted to ginv, check for poor data")
     }
     yhat <- basis_mod %*% ahat
     bl   <- basis_mod %*% c(0, ahat[2:length(ahat)])
