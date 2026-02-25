@@ -1,3 +1,6 @@
+# spant 3.10.0
+* qr.solve reverts to ginv for rats in rare cases where qr.solve fails.
+
 # spant 3.9.0
 * Added extra pre_align options to fit_svs.
 * Added extra plot to fit_svs html output to help diagnose frequency alignment
