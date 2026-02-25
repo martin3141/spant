@@ -220,7 +220,7 @@ optim_rats <- function(x, ref, t, inds, basis, max_shift) {
     ahat <- try(unname(qr.solve(basis_mod, ref)))
     
     # use ginv if qr.solve fails
-    if (class(ahat) == "try-error") {
+    if (inherits(ahat, "try-error")) {
       ahat <- unname(ginv(basis_mod) %*% ref)
       warning("RATS qr.solve failed, reverted to ginv, check for poor data")
     }
@@ -230,7 +230,7 @@ optim_rats <- function(x, ref, t, inds, basis, max_shift) {
     ahat <- try(unname(qr.solve(basis_mod, ref)))
     
     # use ginv if qr.solve fails
-    if (class(ahat) == "try-error") {
+    if (inherits(ahat, "try-error")) {
       ahat <- unname(ginv(basis_mod) %*% ref)
       warning("RATS qr.solve failed, reverted to ginv, check for poor data")
     }
@@ -258,7 +258,7 @@ rats_obj_fn <- function(par, x, ref, t, inds, basis) {
   ahat <- try(qr.solve(basis_mod, ref), silent = TRUE)
   
   # use ginv if qr.solve fails
-  if (class(ahat) == "try-error") ahat <- ginv(basis_mod) %*% ref
+  if (inherits(ahat, "try-error")) ahat <- ginv(basis_mod) %*% ref
   
   if (is.null(basis)) {
     yhat <- basis_mod * ahat
