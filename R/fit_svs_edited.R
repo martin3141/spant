@@ -37,13 +37,14 @@
 #' @param TE3 sLASER sequence timing parameter in seconds.
 #' @param TM STEAM mixing time parameter in seconds.
 #' @param append_basis_ed_off names of extra signals to add to the default
-#' basis. Eg append_basis_ed_off = c("peth", "cit"). Cannot be used with
-#' precompiled basis sets.
+#' basis. Eg append_basis = c("peth", "cit"). Use get_mol_names() function to
+#' print all available signals. Cannot be used with precompiled basis sets.
 #' @param remove_basis_ed_off grep expression to match names of signals to
-#' remove from the basis. For example: use "*" to remove all signals, "^mm|^lip"
-#' to remove all macromolecular and lipid signals, "^lac" to remove lactate.
-#' This operation is performed before signals are added with
-#' append_basis_ed_off. Cannot be used with precompiled basis sets.
+#' remove from the basis. For example: use "lac|ala" to remove lactate and 
+#' alanine; "*" to remove all signals and "^mm|^lip" to remove all
+#' macromolecular and lipid signals. This operation is performed before signals
+#' are added with append_basis_ed_off. Cannot be used with precompiled basis
+#' sets.
 #' @param pre_align perform simple frequency alignment to known reference peaks.
 #' @param dfp_corr perform dynamic frequency and phase correction using the RATS
 #' method.
@@ -533,12 +534,17 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     
     # option to remove signals
     if (!is.null(remove_basis_ed_off)) {
-        inds <- grep(remove_basis_ed_off, mol_list_chars)
-        if (length(inds) == 0) {
-          print(mol_list_chars)
-          stop("No signals (as listed above) matching remove_basis_ed_off found.")
-        }
-        mol_list_chars <- mol_list_chars[-inds]
+      
+      if (length(remove_basis_ed_off) > 1) {
+        stop("remove_basis_ed_off only accepts a single argument, use '|' to match multiple patterns.")
+      }
+      
+      inds <- grep(remove_basis_ed_off, mol_list_chars)
+      if (length(inds) == 0) {
+        print(mol_list_chars)
+        stop("No signals (as listed above) matching remove_basis_ed_off found.")
+      }
+      mol_list_chars <- mol_list_chars[-inds]
     }
     
     # option to append signals

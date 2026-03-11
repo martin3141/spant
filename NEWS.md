@@ -1,5 +1,6 @@
 # spant 3.10.0
 * qr.solve reverts to ginv for rats in rare cases where qr.solve fails.
+* fit_svs updated to only accept a single argument for remove_basis.
 
 # spant 3.9.0
 * Added extra pre_align options to fit_svs.
