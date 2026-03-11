@@ -66,7 +66,7 @@ parser <- add_option(parser, c("-a", "--append_basis"), action = "store", type =
                      help="Names of extra signals to add to the default basis. Eg\n\t\tappend_basis = c(\"peth\", \"cit\"). Cannot be used with precompiled\n\t\tbasis sets.")
 
 parser <- add_option(parser, c("-r", "--remove_basis"), action = "store", type = "character",
-                     help="grep expression to match names of signals to remove from the\n\t\tbasis. For example: use \"*\" to remove all signals, \"^mm|^lip\"\n\t\tto remove all macromolecular and lipid signals, \"^lac\" to remove\n\t\tlactate. This operation is performed before signals are added\n\t\twith append_basis. Cannot be used with precompiled basis sets.")
+                     help="Grep expression to match names of signals to remove from the\n\t\tbasis. For example: use \"lac|ala\" to remove lactate and alanine;\n\t\t\"*\" to remove all signals and \"^mm|^lip\" to remove all\n\t\tmacromolecular and lipid signals. This operation is performed\n\t\tbefore signals are added with append_basis. Cannot be used with\n\t\tprecompiled basis sets.")
 
 parser <- add_option(parser, c("--pre_align"), action = "store", default = TRUE,
                      help="Perform simple frequency alignment to known reference peaks.")
