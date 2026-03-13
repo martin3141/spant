@@ -66,7 +66,7 @@ fit_svs_edited(
 
 \item{deface}{option to apply fsl_deface to the mri input. Defaults to FALSE.}
 
-\item{segment_t1}{segment the t1 weighted mri file with FSL FAST and use the
+\item{segment_t1}{segment the t1 weighted mri file with ANTs and use the
 results to perform partial volume correction. Defaults to FALSE.}
 
 \item{external_basis}{precompiled basis set object to use for analysis.}

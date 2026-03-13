@@ -2,8 +2,8 @@
 % Please edit documentation in R/utils.R
 \name{segment_t1_fsl}
 \alias{segment_t1_fsl}
-\title{Segment T1 weighted MRI data using FSL FAST and write to file. Runs deface
-and bet as preprocessing steps by default.}
+\title{Segment T1 weighted MRI data using FSL FAST and write to file. Runs bet as a
+preprocessing step by default.}
 \usage{
 segment_t1_fsl(mri_path, out_dir = NULL, deface = FALSE, bet_fit = 0.5)
 }

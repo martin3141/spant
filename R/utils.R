@@ -852,8 +852,8 @@ add_fit_res_tab_amp_sd <- function(res_tab, name, amp_col, sd_col) {
   return(res_tab_out)
 }
 
-#' Segment T1 weighted MRI data using FSL FAST and write to file. Runs deface
-#' and bet as preprocessing steps by default.
+#' Segment T1 weighted MRI data using FSL FAST and write to file. Runs bet as a 
+#' preprocessing step by default.
 #' 
 #' This function requires a working installation of FSL and uses the fslr 
 #' package. You may need to specify the fsl install directory, eg: 
@@ -890,6 +890,55 @@ segment_t1_fsl <- function(mri_path, out_dir = NULL, deface = FALSE,
   seg_prefix <- file.path(dir_path, "t1")
   fslr::fslfast(brain_path, outfile = seg_prefix, retimg = FALSE,
                 verbose = FALSE)
+}
+
+#' Segment T1 weighted MRI data using the rpyANTs interface to ANTs and write to
+#' file.
+#' @param mri_path path to the volumetric T1 data.
+#' @param out_dir optional output directory. Defaults to the same directory
+#' as mri_path if not specified.
+#' @export
+segment_t1_ants <- function(mri_path, out_dir = NULL) {
+  
+  if (is.null(out_dir)) {
+    dir_path <- dirname(mri_path)
+  } else {
+    dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+    dir_path <- out_dir
+  }
+  
+  # antspynet brain extraction step followed by recommended AtroposN4 method
+  # from :
+  # https://github.com/ntustison/antsAtroposN4Example/blob/master/antsAtroposN4Command.R
+  
+  t1      <- rpyANTs::ants$image_read(mri_path)
+  t1_mask <- rpyANTs::antspynet_brain_extraction(t1, modality = "t1")
+  
+  outer_iters <- 5
+  weight_mask <- NULL
+  
+  for (n in 1:outer_iters) {
+    
+    t1_n4 <- rpyANTs::ants$n4_bias_field_correction(t1, t1_mask,
+                                                    weight_mask = weight_mask)
+    atropos_seg <- rpyANTs::ants$atropos(a = t1_n4, x = t1_mask,
+                                         m = '[0.2,1x1x1]')
+    
+    if (n != outer_iters) {
+      # only use gm and wm probabilities for weight mask
+      weight_mask <- atropos_seg$probabilityimages[[1]] *
+        (1 - atropos_seg$probabilityimages[[0]]) *
+        (1 - atropos_seg$probabilityimages[[2]]) +
+        atropos_seg$probabilityimages[[2]] *
+        (1 - atropos_seg$probabilityimages[[0]]) *
+        (1 - atropos_seg$probabilityimages[[1]])
+    }
+  }
+  
+  t1_nii               <- readNifti(mri_path)
+  atropos_n4_seg_out   <- t1_nii
+  atropos_n4_seg_out[] <- atropos_seg$segmentation[]
+  writeNifti(atropos_n4_seg_out, file.path(dir_path, "t1_seg.nii.gz"))
 }
 
 #' Read the log from Dinesh's MoCo sLASER sequence.

@@ -58,7 +58,8 @@ Suggests:
     readxl,
     fslr,
     car,
-    divest
+    divest,
+    rpyANTs
 VignetteBuilder:
     knitr
 Encoding: UTF-8

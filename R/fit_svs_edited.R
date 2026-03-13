@@ -8,7 +8,7 @@
 #' @param mri filepath or nifti object containing anatomical MRI data.
 #' @param mri_seg filepath or nifti object containing segmented MRI data.
 #' @param deface option to apply fsl_deface to the mri input. Defaults to FALSE.
-#' @param segment_t1 segment the t1 weighted mri file with FSL FAST and use the
+#' @param segment_t1 segment the t1 weighted mri file with ANTs and use the
 #' results to perform partial volume correction. Defaults to FALSE.
 #' @param external_basis precompiled basis set object to use for analysis.
 #' @param p_vols a numeric vector of partial volumes expressed as percentages.
@@ -342,7 +342,8 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     dir.create(file.path(output_dir, "t1_segmentation"), showWarnings = FALSE)
     t1_path <- file.path(output_dir, "t1_segmentation", "t1.nii.gz")
     writeNifti(mri, t1_path)
-    segment_t1_fsl(t1_path, out_dir = file.path(output_dir, "t1_segmentation"))
+    # segment_t1_fsl(t1_path, out_dir = file.path(output_dir, "t1_segmentation"))
+    segment_t1_ants(t1_path, out_dir = file.path(output_dir, "t1_segmentation"))
     mri_seg <- readNifti(file.path(output_dir, "t1_segmentation",
                                    "t1_seg.nii.gz"))
     RNifti::orientation(mri_seg) <- "RAS"
