@@ -12,6 +12,7 @@ fit_svs(
   mri_seg = NULL,
   deface = FALSE,
   segment_t1 = FALSE,
+  segment_t1_method = "rpyants",
   external_basis = NULL,
   append_external_basis = FALSE,
   p_vols = NULL,
@@ -74,6 +75,8 @@ fit_svs(
 
 \item{segment_t1}{segment the t1 weighted mri file with ANTs and use the
 results to perform partial volume correction. Defaults to FALSE.}
+
+\item{segment_t1_method}{one of : "rpyants" (default), "antsr" or "fslr".}
 
 \item{external_basis}{precompiled basis set object to use for analysis.}
 
@@ -223,7 +226,7 @@ data in NIfTI format.}
 FALSE.}
 }
 \description{
-Note this function is still under development and liable to changes.
+Note this function is under active development and liable to changes.
 }
 \examples{
 metab <- system.file("extdata", "philips_spar_sdat_WS.SDAT",

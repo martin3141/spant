@@ -343,7 +343,8 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     t1_path <- file.path(output_dir, "t1_segmentation", "t1.nii.gz")
     writeNifti(mri, t1_path)
     # segment_t1_fsl(t1_path, out_dir = file.path(output_dir, "t1_segmentation"))
-    segment_t1_ants(t1_path, out_dir = file.path(output_dir, "t1_segmentation"))
+    segment_t1_rpyants(t1_path, out_dir = file.path(output_dir,
+                                                    "t1_segmentation"))
     mri_seg <- readNifti(file.path(output_dir, "t1_segmentation",
                                    "t1_seg.nii.gz"))
     RNifti::orientation(mri_seg) <- "RAS"

@@ -1,6 +1,6 @@
 #' Standard SVS 1H brain analysis pipeline.
 #' 
-#' Note this function is still under development and liable to changes.
+#' Note this function is under active development and liable to changes.
 #' 
 #' @param input path or mrs_data object containing MRS data.
 #' @param w_ref path or mrs_data object containing MRS water reference data.
@@ -10,6 +10,7 @@
 #' @param deface option to apply fsl_deface to the mri input. Defaults to FALSE.
 #' @param segment_t1 segment the t1 weighted mri file with ANTs and use the
 #' results to perform partial volume correction. Defaults to FALSE.
+#' @param segment_t1_method one of : "rpyants" (default), "antsr" or "fslr".
 #' @param external_basis precompiled basis set object to use for analysis.
 #' @param append_external_basis append the external basis with the internally
 #' generated one. Useful for adding experimentally acquired baseline signals to
@@ -124,6 +125,7 @@
 #' @export
 fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                     mri_seg = NULL, deface = FALSE, segment_t1 = FALSE,
+                    segment_t1_method = "rpyants",
                     external_basis = NULL, append_external_basis = FALSE,
                     p_vols = NULL, format = NULL, pul_seq = NULL, TE = NULL,
                     TR = NULL, TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
@@ -178,6 +180,7 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     }
     
     more_args <- list(deface = deface, segment_t1 = segment_t1,
+                      segment_t1_method = segment_t1_method,
                       external_basis = external_basis,
                       append_external_basis = append_external_basis,
                       p_vols = p_vols, format = format, pul_seq = pul_seq,
@@ -354,8 +357,20 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     dir.create(file.path(output_dir, "t1_segmentation"), showWarnings = FALSE)
     t1_path <- file.path(output_dir, "t1_segmentation", "t1.nii.gz")
     writeNifti(mri, t1_path)
-    # segment_t1_fsl(t1_path, out_dir = file.path(output_dir, "t1_segmentation"))
-    segment_t1_ants(t1_path, out_dir = file.path(output_dir, "t1_segmentation"))
+    
+    if (segment_t1_method == "rypants") {
+      segment_t1_rpyants(t1_path, out_dir = file.path(output_dir,
+                                                      "t1_segmentation"))
+    } else if (segment_t1_method == "antsr") {
+      segment_t1_rpyants(t1_path, out_dir = file.path(output_dir,
+                                                      "t1_segmentation"))
+    } else if (segment_t1_method == "fslr") {
+      segment_t1_fsl(t1_path, out_dir = file.path(output_dir,
+                                                  "t1_segmentation"))
+    } else {
+      stop("Unrecognised T1 segmentation method.")
+    }
+    
     mri_seg <- readNifti(file.path(output_dir, "t1_segmentation",
                                    "t1_seg.nii.gz"))
     RNifti::orientation(mri_seg) <- "RAS"
