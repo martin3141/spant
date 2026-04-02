@@ -153,8 +153,10 @@ read_siemens_dicom <- function(fraw, extra, verbose) {
                slices      = "0018,9159",
                Npt         = "0028,9002",
                te          = "0018,9082",
+               tr          = "0018,0080",
                series_desc = "0008,103E",
-               series_num  = "0020,0011")
+               series_num  = "0020,0011",
+               Ntrans      = "0018,0083")
 
   # read em out
   dcm_res <- dicom_reader(fraw, tags)
@@ -171,6 +173,8 @@ read_siemens_dicom <- function(fraw, extra, verbose) {
   slices <- readBin(dcm_res$slices, "integer", size = 2, signed = FALSE)
   N <- readBin(dcm_res$Npt, "integer")
   te <- readBin(dcm_res$te, "double") / 1e3
+  tr <- as.numeric(rawToChar(dcm_res$tr))
+  ntrans <- as.numeric(rawToChar(dcm_res$Ntrans))
   
   row_ori <- iop[1:3]
   col_ori <- iop[4:6]
@@ -214,10 +218,13 @@ read_siemens_dicom <- function(fraw, extra, verbose) {
   
   affine[1:2,] <- -affine[1:2,]
   
-  meta <- list(EchoTime          = te,
-               Manufacturer      = "Siemens",
-               SeriesDescription = rawToChar(dcm_res$series_desc),
-               SeriesNumber      = as.integer(rawToChar(dcm_res$series_num)))
+  res[5] <- tr / 1000
+  
+  meta <- list(EchoTime           = te,
+               Manufacturer       = "Siemens",
+               SeriesDescription  = rawToChar(dcm_res$series_desc),
+               SeriesNumber       = as.integer(rawToChar(dcm_res$series_num)),
+               NumberOfTransients = ntrans)
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = affine,
