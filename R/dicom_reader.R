@@ -72,7 +72,8 @@ dicom_reader <- function(input, tags = list(sop_class_uid = "0008,0016"),
     # MRS is a special case where we need to check for zero padding
     # 5600,0020 - standard dicom MRS data tag
     # 2005,1270 - Philips private dicom MRS data tag
-    if (tag_str %in% c("5600,0020", "2005,1270", "0065,FF07", "0065,FF08")) {
+    if (tag_str %in% c("5600,0020", "2005,1270", "0065,FF07", "0065,FF08",
+                       "5600,0010")) {
       # check for zero padding
       zp <- is.na(pos[7]) & is.na(pos[8])
       if ((vr %in% c(long_vrs, short_vrs)) & zp) {

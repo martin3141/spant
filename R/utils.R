@@ -965,7 +965,7 @@ segment_t1_antsr <- function(mri_path, out_dir = NULL) {
   tem     <- ANTsR::antsImageRead("~/spant_templates/oasis/T_template0.nii.gz")
   temmask <- ANTsR::antsImageRead("~/spant_templates/oasis/T_template0_BrainCerebellumProbabilityMask.nii.gz")
   
-  brain   <- ANTsR::abpBrainExtraction(img = t1_n4_init, tem = tem,
+  brain   <- ANTsR::abpBrainExtraction(img = t1, tem = tem,
                                        temmask = temmask, regtype = "SyN")
   
   outer_iters <- 5
