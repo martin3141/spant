@@ -93,3 +93,153 @@ get_ants_dir <- function() {
     return(getOption("spant.ants_dir")) 
   }
 }
+
+#' Segment T1 weighted MRI data using the ANTs binaries and write to file.
+#' @param mri_path path to the volumetric T1 data.
+#' @param out_dir optional output directory. Defaults to the same directory
+#' as mri_path if not specified.
+segment_t1_ants <- function(mri_path, out_dir = NULL) {
+  
+  if (is.null(out_dir)) {
+    dir_path <- dirname(mri_path)
+  } else {
+    dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+    dir_path <- out_dir
+  }
+  
+  resources_dir <- get_spant_resources_dir()
+  
+  # check ANTs is available
+  ants_dir <- get_ants_dir()
+  
+  # check Oasis template is available
+  oasis_dir <- file.path(resources_dir, "MICCAI2012-Multi-Atlas-Challenge-Data")
+  
+  if (!dir.exists(oasis_dir)) {
+    stop("Oasis brain template directory not found. Try 'install_oasis_template()' to install.")
+  }
+  
+  temp_path <- tempfile()
+  
+  brain_extraction_template <- file.path(oasis_dir, "T_template0.nii.gz")
+  brain_extraction_probability_mask <- file.path(oasis_dir,
+                            "T_template0_BrainCerebellumProbabilityMask.nii.gz")
+  brain_extraction_registration_mask <- file.path(oasis_dir,
+                           "T_template0_BrainCerebellumRegistrationMask.nii.gz")
+
+  args <- paste0("-d 3 -k 1 -a ", mri_path," -e ", brain_extraction_template,
+                 " -m ", brain_extraction_probability_mask, " -f ",
+                 brain_extraction_registration_mask, " -o ", temp_path)
+  
+  env <- paste0("PATH=", ants_dir,"/bin:/usr/bin:/bin")
+
+  system2(command = "antsBrainExtraction.sh", args = args, env = env)
+  
+  brain <- paste0(temp_path, "BrainExtractionBrain.nii.gz")
+  seg   <- paste0(temp_path, "BrainExtractionSegmentation.nii.gz")
+  
+  file.copy(from = brain, to = file.path(dir_path, "t1_brain.nii.gz"))
+  file.copy(from = seg,   to = file.path(dir_path, "t1_seg.nii.gz"))
+  
+}
+
+#' Segment T1 weighted MRI data using the rpyANTs interface to ANTs and write to
+#' file.
+#' @param mri_path path to the volumetric T1 data.
+#' @param out_dir optional output directory. Defaults to the same directory
+#' as mri_path if not specified.
+#' @export
+segment_t1_rpyants <- function(mri_path, out_dir = NULL) {
+  
+  if (is.null(out_dir)) {
+    dir_path <- dirname(mri_path)
+  } else {
+    dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+    dir_path <- out_dir
+  }
+  
+  # antspynet brain extraction step followed by recommended AtroposN4 method
+  # from :
+  # https://github.com/ntustison/antsAtroposN4Example/blob/master/antsAtroposN4Command.R
+  
+  t1      <- rpyANTs::ants$image_read(mri_path)
+  t1_mask <- rpyANTs::antspynet_brain_extraction(t1, modality = "t1")
+  
+  outer_iters <- 5
+  weight_mask <- NULL
+  
+  for (n in 1:outer_iters) {
+    
+    t1_n4 <- rpyANTs::ants$n4_bias_field_correction(t1, t1_mask,
+                                                    weight_mask = weight_mask)
+    atropos_seg <- rpyANTs::ants$atropos(a = t1_n4, x = t1_mask,
+                                         m = '[0.2,1x1x1]')
+    
+    if (n != outer_iters) {
+      # only use gm and wm probabilities for weight mask
+      weight_mask <- atropos_seg$probabilityimages[[1]] *
+        (1 - atropos_seg$probabilityimages[[0]]) *
+        (1 - atropos_seg$probabilityimages[[2]]) +
+        atropos_seg$probabilityimages[[2]] *
+        (1 - atropos_seg$probabilityimages[[0]]) *
+        (1 - atropos_seg$probabilityimages[[1]])
+    }
+  }
+  
+  t1_nii               <- readNifti(mri_path)
+  atropos_n4_seg_out   <- t1_nii
+  atropos_n4_seg_out[] <- atropos_seg$segmentation[]
+  writeNifti(atropos_n4_seg_out, file.path(dir_path, "t1_seg.nii.gz"))
+}
+
+#' Segment T1 weighted MRI data using the ANTsR interface to ANTs and write to
+#' file.
+#' @param mri_path path to the volumetric T1 data.
+#' @param out_dir optional output directory. Defaults to the same directory
+#' as mri_path if not specified.
+segment_t1_antsr <- function(mri_path, out_dir = NULL) {
+  
+  if (is.null(out_dir)) {
+    dir_path <- dirname(mri_path)
+  } else {
+    dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+    dir_path <- out_dir
+  }
+  
+  # brain extraction step followed by recommended AtroposN4 method from :
+  # https://github.com/ntustison/antsAtroposN4Example/blob/master/antsAtroposN4Command.R
+  
+  t1         <- ANTsR::antsImageRead(mri_path)
+  t1_n4_init <- ANTsR::abpN4(t1)
+  
+  tem     <- ANTsR::antsImageRead("~/spant_templates/oasis/T_template0.nii.gz")
+  temmask <- ANTsR::antsImageRead("~/spant_templates/oasis/T_template0_BrainCerebellumProbabilityMask.nii.gz")
+  
+  brain   <- ANTsR::abpBrainExtraction(img = t1, tem = tem,
+                                       temmask = temmask, regtype = "SyN")
+  
+  outer_iters <- 5
+  weight_mask <- NULL
+  
+  for (n in 1:outer_iters) {
+    
+    t1_n4 <- ANTsR::n4BiasFieldCorrection(t1, mask = brain$bmask,
+                                          weightMask = weight_mask)
+    atropos_seg <- ANTsR::atropos(a = t1_n4, x = brain$bmask, m = '[0.2,1x1x1]')
+    
+    if (n != outer_iters) {
+      # only use gm and wm probabilities for weight mask
+      weight_mask <- atropos_seg$probabilityimages[[2]] *
+        (1 - atropos_seg$probabilityimages[[1]]) *
+        (1 - atropos_seg$probabilityimages[[3]]) +
+        atropos_seg$probabilityimages[[3]] *
+        (1 - atropos_seg$probabilityimages[[1]]) *
+        (1 - atropos_seg$probabilityimages[[2]])
+    }
+  }
+  
+  t1_nii               <- readNifti(mri_path)
+  atropos_n4_seg_out   <- t1_nii
+  atropos_n4_seg_out[] <- atropos_seg$segmentation[]
+  writeNifti(atropos_n4_seg_out, file.path(dir_path, "t1_seg.nii.gz"))
+}
