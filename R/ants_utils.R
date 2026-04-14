@@ -98,6 +98,7 @@ get_ants_dir <- function() {
 #' @param mri_path path to the volumetric T1 data.
 #' @param out_dir optional output directory. Defaults to the same directory
 #' as mri_path if not specified.
+#' @export
 segment_t1_ants <- function(mri_path, out_dir = NULL) {
   
   if (is.null(out_dir)) {
