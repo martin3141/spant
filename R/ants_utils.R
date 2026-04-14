@@ -1,10 +1,18 @@
-#' Check the "spant_deps" directory exists in the users home folder.
+#' Return the spant resources directory.
+#' 
+#' Usually used to store additional software, datasets and templates. An attempt
+#' will be made to create the folder if not found. The default resources
+#' directory is "spant_resources" located in the users HOME directory.
+#' @return full path to the spant resources directory.
 #' @export
-check_spant_deps_dir <- function() {
- deps_dir <- file.path(path.expand("~"), "spant_deps")
+get_spant_resources_dir <- function() {
+  
+ deps_dir <- file.path(path.expand("~"), "spant_resources")
  
- # create if not available
+ # create if doesn't exist
  if (!dir.exists(deps_dir)) dir.create(deps_dir)
+ 
+ return(deps_dir)
 }
 
 #' Install ANTs / ANTsX from : https://github.com/ANTsX/ANTs/releases
@@ -14,21 +22,16 @@ check_spant_deps_dir <- function() {
 #' @export
 install_ants <- function(platform, version = "2.6.5") {
   
-  check_spant_deps_dir()
+  spant_resources <- get_spant_resources_dir()
  
-  dl_file <- file.path(path.expand("~"), "spant_deps",
-                       paste0("ants-",version, ".zip"))
+  dl_file <- file.path(spant_resources, paste0("ants-",version, ".zip"))
   
   url <- paste0("https://github.com/ANTsX/ANTs/releases/download/v",
                  version, "/ants-", version, "-", platform, ".zip")
   utils::download.file(url, destfile = dl_file, mode = "wb")
   
-  # ants_dir <- file.path(path.expand("~"), "spant_deps",
-  #                       paste0("ants-",version))
-  
-  ants_dir <- file.path(path.expand("~"), "spant_deps")
-  
-  utils::unzip(dl_file, exdir = ants_dir)
+  # use unzip rather than internal to preserve execute permissions
+  utils::unzip(dl_file, exdir = spant_resources, unzip = "unzip")
   
   # delete zip file
   file.remove(dl_file)
@@ -39,15 +42,13 @@ install_ants <- function(platform, version = "2.6.5") {
 #' @export
 install_oasis_template <- function() {
   
-  check_spant_deps_dir()
+  spant_resources <- get_spant_resources_dir()
  
-  dl_file <- file.path(path.expand("~"), "spant_deps", "Oasis.zip")
+  dl_file <- file.path(spant_resources, "Oasis.zip")
   url <- "https://ndownloader.figshare.com/files/3133832"
   utils::download.file(url, destfile = dl_file, mode = "wb")
   
-  oasis_dir <- file.path(path.expand("~"), "spant_deps")
-  
-  utils::unzip(dl_file, exdir = oasis_dir)
+  utils::unzip(dl_file, exdir = spant_resources)
   
   # delete zip file
   file.remove(dl_file)
@@ -71,15 +72,15 @@ set_ants_dir <- function(dir) {
 #' Return the ANTs installation directory, or throw an error if not found.
 #' 
 #' Will check and return the "spant.ants_dir" option set by set_ants_dir. If
-#' not set, will search the spant_deps directory for ANTs and return the most 
+#' not set, will search the spant_resources directory for ANTs and return the most 
 #' recent version if multiple are found.
 #' 
 #' @return ANTs installation directory.
 #' @export
 get_ants_dir <- function() {
   if (is.null(getOption("spant.ants_dir"))) {
-    check_spant_deps_dir()
-    ants_dirs <- Sys.glob(file.path("~", "spant_deps", "ants-?.?.?"))
+    spant_resources <- get_spant_resources_dir()
+    ants_dirs <- Sys.glob(file.path(spant_resources, "ants-?.?.?"))
     
     if ((length(ants_dirs)) == 0) {
       stop("ANTs not found, try using set_ants_dir() or install_ants() to rectify.")

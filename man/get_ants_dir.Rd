@@ -11,6 +11,6 @@ ANTs installation directory.
 }
 \description{
 Will check and return the "spant.ants_dir" option set by set_ants_dir. If
-not set, will search the spant_deps directory for ANTs and return the most
+not set, will search the spant_resources directory for ANTs and return the most
 recent version if multiple are found.
 }

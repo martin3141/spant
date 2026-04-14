@@ -883,6 +883,7 @@ segment_t1_fsl <- function(mri_path, out_dir = NULL, deface = FALSE,
                      verbose = FALSE)
     mri_path <- deface_path
   }
+  
   brain_path <- file.path(dir_path, "t1_brain")
   bet_opts <- paste("-B -f", bet_fit)
   fslr::fslbet(mri_path, outfile = brain_path, retimg = FALSE, opts = bet_opts,
@@ -946,7 +947,6 @@ segment_t1_rpyants <- function(mri_path, out_dir = NULL) {
 #' @param mri_path path to the volumetric T1 data.
 #' @param out_dir optional output directory. Defaults to the same directory
 #' as mri_path if not specified.
-#' @export
 segment_t1_antsr <- function(mri_path, out_dir = NULL) {
   
   if (is.null(out_dir)) {
