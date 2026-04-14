@@ -128,20 +128,41 @@ segment_t1_ants <- function(mri_path, out_dir = NULL) {
   brain_extraction_registration_mask <- file.path(oasis_dir,
                            "T_template0_BrainCerebellumRegistrationMask.nii.gz")
 
-  args <- paste0("-d 3 -k 1 -a ", mri_path," -e ", brain_extraction_template,
-                 " -m ", brain_extraction_probability_mask, " -f ",
-                 brain_extraction_registration_mask, " -o ", temp_path)
+  args <- paste0("-d 3 -k 1 -c 3x1x2x3 -a ",
+                 mri_path," -e ",
+                 brain_extraction_template, " -m ",
+                 brain_extraction_probability_mask, " -f ",
+                 brain_extraction_registration_mask, " -o ",
+                 temp_path)
   
   env <- paste0("PATH=", ants_dir,"/bin:/usr/bin:/bin")
 
   system2(command = "antsBrainExtraction.sh", args = args, env = env)
   
   brain <- paste0(temp_path, "BrainExtractionBrain.nii.gz")
-  seg   <- paste0(temp_path, "BrainExtractionSegmentation.nii.gz")
-  
   file.copy(from = brain, to = file.path(dir_path, "t1_brain.nii.gz"))
-  file.copy(from = seg,   to = file.path(dir_path, "t1_seg.nii.gz"))
   
+  csf <- paste0(temp_path, "BrainExtractionCSF.nii.gz")
+  # file.copy(from = csf, to = file.path(dir_path, "t1_csf.nii.gz"))
+  
+  wm  <- paste0(temp_path, "BrainExtractionWM.nii.gz")
+  # file.copy(from = wm, to = file.path(dir_path, "t1_wm.nii.gz"))
+  
+  gm  <- paste0(temp_path, "BrainExtractionGM.nii.gz")
+  # file.copy(from = gm, to = file.path(dir_path, "t1_gm.nii.gz"))
+  
+  # seg  <- paste0(temp_path, "BrainExtractionSegment.nii.gz")
+  # file.copy(from = seg, to = file.path(dir_path, "t1_wm_gm.nii.gz"))
+  
+  # ImageMath 3 Summed_MRI.nii.gz + MRI_1.nii.gz MRI_2.nii.gz
+  
+  # combine CSF, WM and GM into a single volume
+  seg  <- file.path(dir_path, "t1_seg.nii.gz")
+  args <- paste0("3 ", seg, " + ", wm, " ", gm)
+  system2(command = "ImageMath", args = args, env = env)
+  
+  args <- paste0("3 ", seg, " + ", csf, " ", seg)
+  system2(command = "ImageMath", args = args, env = env)
 }
 
 #' Segment T1 weighted MRI data using the rpyANTs interface to ANTs and write to
