@@ -135,7 +135,7 @@ segment_t1_ants <- function(mri_path, out_dir = NULL) {
                  brain_extraction_registration_mask, " -o ",
                  temp_path)
   
-  env <- paste0("PATH=", ants_dir,"/bin:/usr/bin:/bin")
+  env <- paste0("PATH=", ants_dir,"/bin:/usr/bin")
 
   system2(command = "antsBrainExtraction.sh", args = args, env = env)
   
