@@ -37,13 +37,30 @@ install_ants <- function(platform, version = "2.6.5") {
   file.remove(dl_file)
 }
 
+#' Install FaceOff from : https://github.com/srikash/FaceOff, requires ANTs to
+#' be installed to work.
+#' @export
+install_faceoff <- function() {
+  
+  spant_resources <- get_spant_resources_dir()
+ 
+  dl_file <- file.path(spant_resources, "FaceOff-2.0.zip")
+  url <- "https://github.com/srikash/FaceOff/archive/refs/tags/2.0.zip"
+  utils::download.file(url, destfile = dl_file, mode = "wb")
+  
+  utils::unzip(dl_file, exdir = spant_resources, unzip = "unzip")
+  
+  # delete zip file
+  file.remove(dl_file)
+}
+
 #' Install the Oasis brain template from : 
 #' https://doi.org/10.6084/m9.figshare.915436.v2
 #' @export
 install_oasis_template <- function() {
   
   spant_resources <- get_spant_resources_dir()
- 
+  
   dl_file <- file.path(spant_resources, "Oasis.zip")
   url <- "https://ndownloader.figshare.com/files/3133832"
   utils::download.file(url, destfile = dl_file, mode = "wb")
@@ -135,7 +152,7 @@ segment_t1_ants <- function(mri_path, out_dir = NULL) {
                  brain_extraction_registration_mask, " -o ",
                  temp_path)
   
-  env <- paste0("PATH=", ants_dir,"/bin:/usr/bin")
+  env <- paste0("PATH=", ants_dir, "/bin:/usr/bin:/bin")
 
   system2(command = "antsBrainExtraction.sh", args = args, env = env)
   
