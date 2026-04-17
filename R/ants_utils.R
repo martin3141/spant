@@ -282,3 +282,51 @@ segment_t1_antsr <- function(mri_path, out_dir = NULL) {
   atropos_n4_seg_out[] <- atropos_seg$segmentation[]
   writeNifti(atropos_n4_seg_out, file.path(dir_path, "t1_seg.nii.gz"))
 }
+
+#' Deface a T1 weighted head scan using the FaceOff method described in :
+#' https://github.com/srikash/FaceOff. Requires ANTs to be installed.
+#' @param mri_path path to the volumetric T1 data.
+#' @param out_dir optional output directory. Defaults to the same directory
+#' as mri_path if not specified.
+#' @export
+faceoff <- function(mri_path, out_dir = NULL) {
+  
+  if (is.null(out_dir)) {
+    dir_path <- dirname(mri_path)
+  } else {
+    dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+    dir_path <- out_dir
+  }
+  
+  resources_dir <- get_spant_resources_dir()
+  
+  # check ANTs is available
+  ants_dir <- get_ants_dir()
+  
+  # check FaceOff is available
+  faceoff_dir <- file.path(resources_dir, "FaceOff-2.0")
+  
+  if (!dir.exists(faceoff_dir)) {
+    stop("FaceOff directory not found. Try 'install_faceoff()' to install.")
+  }
+  
+  command <- "FaceOff"
+  args    <- paste0("-i ", mri_path)
+  
+  antspath_env <- paste0("ANTSPATH=", ants_dir, "/bin")
+  path_env     <- paste0("PATH=", faceoff_dir, ":", ants_dir,
+                         "/bin:/usr/bin:/bin")
+  
+  env <- c(antspath_env, path_env, "ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1")
+  
+  system2(command = command, args = args, env = env)
+  
+  file_base <- tools::file_path_sans_ext(mri_path, compression = TRUE)
+  
+  defaced_out     <- paste0(file_base, "_defaced.nii.gz")
+  deface_mask_out <- paste0(file_base, "_defaceMask.nii.gz")
+  out_name        <- file.path(dir_path, "t1_deface.nii.gz")
+  
+  file.rename(defaced_out, out_name)
+  file.remove(deface_mask_out)
+}
