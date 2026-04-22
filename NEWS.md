@@ -4,6 +4,9 @@
 * Bug fix for Siemens DICOM reader.
 * Added cross-platform support for T1 tissue segmentation using ANTs via the
 rpyANTs package.
+* Added support for T1 tissue segmentation using binary installation of ANTs.
+* Added support for T1 defacing with the faceoff method : 
+https://github.com/srikash/FaceOff
 
 # spant 3.9.0
 * Added extra pre_align options to fit_svs.

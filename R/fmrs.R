@@ -967,7 +967,7 @@ mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
 #' @param mri_format defaults to "nifti", can also be "dicom" provided the 
 #' divest package is installed.
 #' @param deface_mri option to apply fsl_deface to the mri as a preprocessing
-#' step. Defaults to FALSE, requires the fslr package to be installed when TRUE.
+#' step. Defaults to FALSE, requires ANTs and faceoff to be installed when TRUE.
 #' @export
 mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
                          ses = NULL, task = NULL, acq = NULL, nuc = NULL,
@@ -1112,9 +1112,31 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
           stop("Incorrect mri_format.")
         }
         
+        # fsl method
+        # if (deface_mri) {
+        #   deface_fsl <- fslr::fsl_deface(mr_n, verbose = FALSE)
+        #   deface     <- RNifti::asNifti(deface_fsl$outfile)
+        #   # copy the image meta data from the original mri
+        #   RNifti::imageAttributes(deface) <- RNifti::imageAttributes(mr_n)
+        #   mr_n <- deface
+        # }
+        
+        # faceoff method
         if (deface_mri) {
-          deface_fsl <- fslr::fsl_deface(mr_n, verbose = FALSE)
-          deface     <- RNifti::asNifti(deface_fsl$outfile)
+          
+          temp_path <- tempfile()
+          temp_mri <- paste0(temp_path, "temp_mri.nii.gz")
+          
+          # write mri to a temporary location
+          RNifti::writeNifti(mr_n, temp_mri)
+          
+          # run faceoff
+          faceoff(temp_mri)
+          
+          # read the defaced image back
+          deface_path <- file.path(dirname(temp_path), "t1_deface.nii.gz")
+          deface      <- RNifti::readNifti(deface_path)
+          
           # copy the image meta data from the original mri
           RNifti::imageAttributes(deface) <- RNifti::imageAttributes(mr_n)
           mr_n <- deface
