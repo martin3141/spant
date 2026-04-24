@@ -616,7 +616,7 @@ get_mol_para_list_names <- function(mol_para_list) {
 #' @param auto_scale scale the basis based on the intensity of a singlet
 #' resonance. Needed for sequences with spatial simulation.
 #' @param use_basis_cache create and use a cache of simulated basis sets stored
-#' in the "spant_basis_cache" folder in the users home directory. Defaults to
+#' in the "basis_cache" folder in the spant resources directory. Defaults to
 #' FALSE.
 #' @param verbose output simulation progress and timings.
 #' @param ... extra parameters to pass to the pulse sequence function.
@@ -636,7 +636,9 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
   
   if (use_basis_cache) {
     # make sure the cache directory exists
-    basis_cache_path <- file.path(path.expand('~'), "spant_basis_cache")
+    # basis_cache_path <- file.path(path.expand('~'), "spant_basis_cache")
+    res_dir <- get_spant_resources_dir()
+    basis_cache_path <- file.path(res_dir, "basis_cache")
     dir.create(basis_cache_path, showWarnings = FALSE)
     hash_obj <- list(pul_seq = as.character(substitute(pul_seq)), 
                      ft = round(ft, 1), ref = ref, fs = round(fs, 1), N = N,
