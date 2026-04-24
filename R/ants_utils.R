@@ -232,57 +232,57 @@ segment_t1_rpyants <- function(mri_path, out_dir = NULL) {
   writeNifti(atropos_n4_seg_out, file.path(dir_path, "t1_seg.nii.gz"))
 }
 
-#' Segment T1 weighted MRI data using the ANTsR interface to ANTs and write to
-#' file.
-#' @param mri_path path to the volumetric T1 data.
-#' @param out_dir optional output directory. Defaults to the same directory
-#' as mri_path if not specified.
-segment_t1_antsr <- function(mri_path, out_dir = NULL) {
-  
-  if (is.null(out_dir)) {
-    dir_path <- dirname(mri_path)
-  } else {
-    dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
-    dir_path <- out_dir
-  }
-  
-  # brain extraction step followed by recommended AtroposN4 method from :
-  # https://github.com/ntustison/antsAtroposN4Example/blob/master/antsAtroposN4Command.R
-  
-  t1         <- ANTsR::antsImageRead(mri_path)
-  t1_n4_init <- ANTsR::abpN4(t1)
-  
-  tem     <- ANTsR::antsImageRead("~/spant_templates/oasis/T_template0.nii.gz")
-  temmask <- ANTsR::antsImageRead("~/spant_templates/oasis/T_template0_BrainCerebellumProbabilityMask.nii.gz")
-  
-  brain   <- ANTsR::abpBrainExtraction(img = t1, tem = tem,
-                                       temmask = temmask, regtype = "SyN")
-  
-  outer_iters <- 5
-  weight_mask <- NULL
-  
-  for (n in 1:outer_iters) {
-    
-    t1_n4 <- ANTsR::n4BiasFieldCorrection(t1, mask = brain$bmask,
-                                          weightMask = weight_mask)
-    atropos_seg <- ANTsR::atropos(a = t1_n4, x = brain$bmask, m = '[0.2,1x1x1]')
-    
-    if (n != outer_iters) {
-      # only use gm and wm probabilities for weight mask
-      weight_mask <- atropos_seg$probabilityimages[[2]] *
-        (1 - atropos_seg$probabilityimages[[1]]) *
-        (1 - atropos_seg$probabilityimages[[3]]) +
-        atropos_seg$probabilityimages[[3]] *
-        (1 - atropos_seg$probabilityimages[[1]]) *
-        (1 - atropos_seg$probabilityimages[[2]])
-    }
-  }
-  
-  t1_nii               <- readNifti(mri_path)
-  atropos_n4_seg_out   <- t1_nii
-  atropos_n4_seg_out[] <- atropos_seg$segmentation[]
-  writeNifti(atropos_n4_seg_out, file.path(dir_path, "t1_seg.nii.gz"))
-}
+# #' Segment T1 weighted MRI data using the ANTsR interface to ANTs and write to
+# #' file.
+# #' @param mri_path path to the volumetric T1 data.
+# #' @param out_dir optional output directory. Defaults to the same directory
+# #' as mri_path if not specified.
+# segment_t1_antsr <- function(mri_path, out_dir = NULL) {
+#   
+#   if (is.null(out_dir)) {
+#     dir_path <- dirname(mri_path)
+#   } else {
+#     dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+#     dir_path <- out_dir
+#   }
+#   
+#   # brain extraction step followed by recommended AtroposN4 method from :
+#   # https://github.com/ntustison/antsAtroposN4Example/blob/master/antsAtroposN4Command.R
+#   
+#   t1         <- ANTsR::antsImageRead(mri_path)
+#   t1_n4_init <- ANTsR::abpN4(t1)
+#   
+#   tem     <- ANTsR::antsImageRead("~/spant_templates/oasis/T_template0.nii.gz")
+#   temmask <- ANTsR::antsImageRead("~/spant_templates/oasis/T_template0_BrainCerebellumProbabilityMask.nii.gz")
+#   
+#   brain   <- ANTsR::abpBrainExtraction(img = t1, tem = tem,
+#                                        temmask = temmask, regtype = "SyN")
+#   
+#   outer_iters <- 5
+#   weight_mask <- NULL
+#   
+#   for (n in 1:outer_iters) {
+#     
+#     t1_n4 <- ANTsR::n4BiasFieldCorrection(t1, mask = brain$bmask,
+#                                           weightMask = weight_mask)
+#     atropos_seg <- ANTsR::atropos(a = t1_n4, x = brain$bmask, m = '[0.2,1x1x1]')
+#     
+#     if (n != outer_iters) {
+#       # only use gm and wm probabilities for weight mask
+#       weight_mask <- atropos_seg$probabilityimages[[2]] *
+#         (1 - atropos_seg$probabilityimages[[1]]) *
+#         (1 - atropos_seg$probabilityimages[[3]]) +
+#         atropos_seg$probabilityimages[[3]] *
+#         (1 - atropos_seg$probabilityimages[[1]]) *
+#         (1 - atropos_seg$probabilityimages[[2]])
+#     }
+#   }
+#   
+#   t1_nii               <- readNifti(mri_path)
+#   atropos_n4_seg_out   <- t1_nii
+#   atropos_n4_seg_out[] <- atropos_seg$segmentation[]
+#   writeNifti(atropos_n4_seg_out, file.path(dir_path, "t1_seg.nii.gz"))
+# }
 
 #' Deface a T1 weighted head scan using the FaceOff method described in :
 #' https://github.com/srikash/FaceOff. Requires ANTs to be installed.

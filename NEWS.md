@@ -1,4 +1,4 @@
-# spant 3.10.0
+# spant 4.0.0
 * qr.solve reverts to ginv for rats in rare cases where qr.solve fails.
 * fit_svs updated to only accept a single argument for remove_basis.
 * Bug fix for Siemens DICOM reader.
