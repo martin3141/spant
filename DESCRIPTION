@@ -14,7 +14,6 @@ Description: Tools for reading, visualising and processing Magnetic Resonance
     spectral alignment: Wilson (2018) <DOI:10.1002/mrm.27605>. 
 BugReports: https://github.com/martin3141/spant/issues/
 License: GPL-3
-RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE, roclets = c("rd", "namespace", "collate"))
 NeedsCompilation: yes
 LazyData: yes
@@ -68,3 +67,4 @@ URL:
     https://spantdoc.wilsonlab.co.uk/,
     https://martin3141.github.io/spant/,
     https://github.com/martin3141/spant/
+Config/roxygen2/version: 8.0.0

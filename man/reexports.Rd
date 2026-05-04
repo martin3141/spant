@@ -12,6 +12,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{RNifti}{\code{\link[RNifti]{readNifti}}, \code{\link[RNifti]{writeNifti}}}
+  \item{RNifti}{\code{\link[RNifti:readNifti]{readNifti()}}, \code{\link[RNifti:writeNifti]{writeNifti()}}}
 }}
 
