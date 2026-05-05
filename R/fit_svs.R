@@ -335,8 +335,11 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (is.def(mri) & deface) {
     dir.create(file.path(output_dir, "mri_deface"), showWarnings = FALSE)
     deface_path <- file.path(output_dir, "mri_deface", "mri_deface.nii.gz")
-    faceoff(mri, out_dir = basename(deface_path))
     # fslr::fsl_deface(mri, outfile = deface_path, verbose = FALSE)
+    
+    temp_mri_path <- tempfile(fileext = ".nii.gz")
+    RNifti::writeNifti(mri, temp_mri_path)
+    faceoff(temp_mri_path, out_dir = dirname(deface_path))
     mri <- readNifti(deface_path)
   }
   
