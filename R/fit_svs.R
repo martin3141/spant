@@ -7,10 +7,11 @@
 #' @param output_dir directory path to output fitting results.
 #' @param mri filepath or nifti object containing anatomical MRI data.
 #' @param mri_seg filepath or nifti object containing segmented MRI data.
-#' @param deface option to apply fsl_deface to the mri input. Defaults to FALSE.
+#' @param deface option to apply faceoff to the mri input. Defaults to FALSE.
 #' @param segment_t1 segment the t1 weighted mri file with ANTs and use the
 #' results to perform partial volume correction. Defaults to FALSE.
-#' @param segment_t1_method one of : "rpyants" (default), "antsr" or "fslr".
+#' @param segment_t1_method one of : "ants" (default), "rpyants" or 
+#' "fslr".
 #' @param external_basis precompiled basis set object to use for analysis.
 #' @param append_external_basis append the external basis with the internally
 #' generated one. Useful for adding experimentally acquired baseline signals to
@@ -125,7 +126,7 @@
 #' @export
 fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                     mri_seg = NULL, deface = FALSE, segment_t1 = FALSE,
-                    segment_t1_method = "rpyants",
+                    segment_t1_method = "ants",
                     external_basis = NULL, append_external_basis = FALSE,
                     p_vols = NULL, format = NULL, pul_seq = NULL, TE = NULL,
                     TR = NULL, TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
@@ -334,7 +335,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (is.def(mri) & deface) {
     dir.create(file.path(output_dir, "mri_deface"), showWarnings = FALSE)
     deface_path <- file.path(output_dir, "mri_deface", "mri_deface.nii.gz")
-    fslr::fsl_deface(mri, outfile = deface_path, verbose = FALSE)
+    faceoff(mri, out_dir = basename(deface_path))
+    # fslr::fsl_deface(mri, outfile = deface_path, verbose = FALSE)
     mri <- readNifti(deface_path)
   }
   
@@ -361,8 +363,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     if (segment_t1_method == "rypants") {
       segment_t1_rpyants(t1_path, out_dir = file.path(output_dir,
                                                       "t1_segmentation"))
-    } else if (segment_t1_method == "antsr") {
-      segment_t1_rpyants(t1_path, out_dir = file.path(output_dir,
+    } else if (segment_t1_method == "ants") {
+      segment_t1_ants(t1_path, out_dir = file.path(output_dir,
                                                       "t1_segmentation"))
     } else if (segment_t1_method == "fslr") {
       segment_t1_fsl(t1_path, out_dir = file.path(output_dir,

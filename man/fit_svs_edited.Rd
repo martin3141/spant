@@ -12,6 +12,7 @@ fit_svs_edited(
   mri_seg = NULL,
   deface = FALSE,
   segment_t1 = FALSE,
+  segment_t1_method = "ants",
   external_basis = NULL,
   p_vols = NULL,
   format = NULL,
@@ -64,10 +65,13 @@ fit_svs_edited(
 
 \item{mri_seg}{filepath or nifti object containing segmented MRI data.}
 
-\item{deface}{option to apply fsl_deface to the mri input. Defaults to FALSE.}
+\item{deface}{option to apply faceoff to the mri input. Defaults to FALSE.}
 
 \item{segment_t1}{segment the t1 weighted mri file with ANTs and use the
 results to perform partial volume correction. Defaults to FALSE.}
+
+\item{segment_t1_method}{one of : "ants" (default), "rpyants" or
+"fslr".}
 
 \item{external_basis}{precompiled basis set object to use for analysis.}
 

@@ -7,9 +7,11 @@
 #' @param output_dir directory path to output fitting results.
 #' @param mri filepath or nifti object containing anatomical MRI data.
 #' @param mri_seg filepath or nifti object containing segmented MRI data.
-#' @param deface option to apply fsl_deface to the mri input. Defaults to FALSE.
+#' @param deface option to apply faceoff to the mri input. Defaults to FALSE.
 #' @param segment_t1 segment the t1 weighted mri file with ANTs and use the
 #' results to perform partial volume correction. Defaults to FALSE.
+#' @param segment_t1_method one of : "ants" (default), "rpyants" or 
+#' "fslr".
 #' @param external_basis precompiled basis set object to use for analysis.
 #' @param p_vols a numeric vector of partial volumes expressed as percentages.
 #' Defaults to 100% white matter. A voxel containing 100% gray matter tissue
@@ -112,6 +114,7 @@
 #' @export
 fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                            mri_seg = NULL, deface = FALSE, segment_t1 = FALSE,
+                           segment_t1_method = "ants",
                            external_basis = NULL, p_vols = NULL,
                            format = NULL, editing_type = "gaba_1.9",
                            editing_scheme = NULL,
@@ -167,6 +170,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     }
     
     more_args <- list(deface = deface, segment_t1 = segment_t1, 
+                      segment_t1_method = segment_t1_method,
                       external_basis = external_basis, p_vols = p_vols,
                       format = format, editing_type = editing_type,
                       editing_scheme = editing_scheme,
@@ -319,7 +323,8 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (is.def(mri) & deface) {
     dir.create(file.path(output_dir, "mri_deface"), showWarnings = FALSE)
     deface_path <- file.path(output_dir, "mri_deface", "mri_deface.nii.gz")
-    fslr::fsl_deface(mri, outfile = deface_path, verbose = FALSE)
+    # fslr::fsl_deface(mri, outfile = deface_path, verbose = FALSE)
+    faceoff(mri, out_dir = basename(deface_path))
     mri <- readNifti(deface_path)
   }
   
@@ -342,9 +347,20 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     dir.create(file.path(output_dir, "t1_segmentation"), showWarnings = FALSE)
     t1_path <- file.path(output_dir, "t1_segmentation", "t1.nii.gz")
     writeNifti(mri, t1_path)
-    # segment_t1_fsl(t1_path, out_dir = file.path(output_dir, "t1_segmentation"))
-    segment_t1_rpyants(t1_path, out_dir = file.path(output_dir,
-                                                    "t1_segmentation"))
+    
+    if (segment_t1_method == "rypants") {
+      segment_t1_rpyants(t1_path, out_dir = file.path(output_dir,
+                                                      "t1_segmentation"))
+    } else if (segment_t1_method == "ants") {
+      segment_t1_ants(t1_path, out_dir = file.path(output_dir,
+                                                      "t1_segmentation"))
+    } else if (segment_t1_method == "fslr") {
+      segment_t1_fsl(t1_path, out_dir = file.path(output_dir,
+                                                  "t1_segmentation"))
+    } else {
+      stop("Unrecognised T1 segmentation method.")
+    }
+    
     mri_seg <- readNifti(file.path(output_dir, "t1_segmentation",
                                    "t1_seg.nii.gz"))
     RNifti::orientation(mri_seg) <- "RAS"

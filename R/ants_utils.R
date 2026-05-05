@@ -327,7 +327,7 @@ faceoff <- function(mri_path, out_dir = NULL) {
   
   defaced_out     <- paste0(file_base, "_defaced.nii.gz")
   deface_mask_out <- paste0(file_base, "_defaceMask.nii.gz")
-  out_name        <- file.path(dir_path, "t1_deface.nii.gz")
+  out_name        <- file.path(dir_path, "mri_deface.nii.gz")
   
   file.rename(defaced_out, out_name)
   file.remove(deface_mask_out)
