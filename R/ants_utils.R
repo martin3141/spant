@@ -141,6 +141,9 @@ segment_t1_ants <- function(mri_path, out_dir = NULL) {
   
   temp_path <- tempfile()
   
+  # create an empty file to keep the directory alive
+  file.create(paste0(temp_path, "_temp.txt"))
+  
   brain_extraction_template <- file.path(oasis_dir, "T_template0.nii.gz")
   brain_extraction_probability_mask <- file.path(oasis_dir,
                             "T_template0_BrainCerebellumProbabilityMask.nii.gz")
