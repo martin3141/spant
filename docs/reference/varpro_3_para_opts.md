@@ -1,0 +1,53 @@
+# Return a list of options for VARPRO based fitting with 3 free parameters.
+
+Return a list of options for VARPRO based fitting with 3 free
+parameters.
+
+## Usage
+
+``` r
+varpro_3_para_opts(
+  nstart = 20,
+  init_damping = 2,
+  maxiters = 200,
+  max_shift = 5,
+  max_damping = 5,
+  anal_jac = FALSE,
+  bl_smth_pts = 80
+)
+```
+
+## Arguments
+
+- nstart:
+
+  position in the time-domain to start fitting, units of data points.
+
+- init_damping:
+
+  starting value for the global Gaussian line-broadening term - measured
+  in Hz.
+
+- maxiters:
+
+  maximum number of levmar iterations to perform.
+
+- max_shift:
+
+  maximum global shift allowed, measured in Hz.
+
+- max_damping:
+
+  maximum damping allowed, FWHM measured in Hz.
+
+- anal_jac:
+
+  option to use the analytic or numerical Jacobian (logical).
+
+- bl_smth_pts:
+
+  number of data points to use in the baseline smoothing calculation.
+
+## Value
+
+list of options.

@@ -1,0 +1,85 @@
+# Spectroscopy Analysis Tools (spant)
+
+[![R_build_status](https://github.com/martin3141/spant/workflows/R-CMD-check/badge.svg)](https://github.com/martin3141/spant/actions)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.03646/status.svg)](https://doi.org/10.21105/joss.03646)
+[![CRAN_status_badge](https://www.r-pkg.org/badges/version/spant)](https://cran.r-project.org/package=spant)
+[![Downloads](https://cranlogs.r-pkg.org/badges/last-month/spant)](https://cran.r-project.org/package=spant)
+
+## Overview
+
+spant provides a full suite of tools to build automated analysis
+pipelines for Magnetic Resonance Spectroscopy (MRS) data. The following
+features and algorithms are included:
+
+- Advanced fully-automated metabolite fitting algorithm - ABfit
+  <https://onlinelibrary.wiley.com/doi/10.1002/mrm.28385>,
+  <https://onlinelibrary.wiley.com/doi/10.1002/mrm.30462>.
+- Robust retrospective frequency and phase correction - RATS
+  <https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.27605>.
+- Support for common MRS data formats including read / write NIfTI MRS -
+  <https://onlinelibrary.wiley.com/doi/10.1002/mrm.29418>.
+- Flexible data types to support single voxel, dynamic and spectroscopic
+  imaging.
+- Raw data import from individual coils and dynamic measurements, eg
+  support for importing individual FIDs from Siemens TWIX formatted
+  data.
+- Publication quality plotting.
+- Extensive set of pre-processing steps (phasing, coil-combination,
+  zero-filling, HSVD filtering…).
+- Quantum mechanical based simulation for experimental design and
+  basis-set generation.
+- Set of metabolite, macromolecule and lipid parameters for typical
+  brain analyses.
+- Voxel registration to anatomical images for partial volume
+  concentration corrections.
+
+## Documentation
+
+The [online spant user manual](https://spantdoc.wilsonlab.co.uk/) ([pdf
+version](https://spantdoc.wilsonlab.co.uk/spant-User-Manual.pdf)) is
+written for users with minimal experience in R or MRS processing and is
+the best place to start.
+
+For more advanced users, help developing custom analysis pipeline can be
+found below.
+
+Introduction :
+<https://martin3141.github.io/spant/articles/spant-intro.html>
+
+Short tutorials : <https://martin3141.github.io/spant/articles/>
+
+Function reference : <https://martin3141.github.io/spant/reference/>
+
+Once the spant library has been loaded with
+[`library(spant)`](https://spantdoc.wilsonlab.co.uk/), type
+[`?spant`](https://martin3141.github.io/spant/reference/spant-package.md)
+on the console for instructions on how to access the offline
+documentation. Note that offline help on the available functions can be
+quickly shown in RStudio using `?function_name`, eg
+[`?read_mrs`](https://martin3141.github.io/spant/reference/read_mrs.md).
+
+## Basic installation
+
+Download and install the latest version of R
+(<https://cloud.r-project.org/>), or with your package manager if using
+a recent Linux distribution, eg `sudo apt install r-base`.
+
+It is also strongly recommended to install RStudio Desktop
+(<https://rstudio.com/products/rstudio/download>) to provide a modern
+environment for interactive data analysis.
+
+Once R and RStudio have been installed, open the RStudio application and
+type the following in the Console (lower left panel) to install the
+latest stable version of spant:
+
+``` r
+install.packages("spant", dependencies = TRUE)
+```
+
+Or the the development version from GitHub (requires the `devtools`
+package):
+
+``` r
+install.packages("remotes")
+remotes::install_github("martin3141/spant", ref = "devel", dependencies = TRUE)
+```

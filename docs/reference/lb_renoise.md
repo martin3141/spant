@@ -1,0 +1,56 @@
+# Apply line-broadening to dynamic MRS data and add normally distributed noise (renoise) to reverse any associated improvement in SNR.
+
+This function mimics a strategy used by : "Bednařík P, Tkáč I, Giove F,
+DiNuzzo M, Deelchand DK, Emir UE, Eberly LE, Mangia S. Neurochemical and
+BOLD responses during neuronal activation measured in the human visual
+cortex at 7 Tesla. J Cereb Blood Flow Metab. 2015 Mar 31;35(4):601-10.
+doi: 10.1038/jcbfm.2014.233. PMID: 25564236; PMCID: PMC4420878." Note
+that set.seed(XX) should be used for reproducible analyses.
+
+## Usage
+
+``` r
+lb_renoise(
+  mrs_data,
+  lb,
+  lg = NULL,
+  sig_region = c(4, 0.5),
+  noise_region = c(-0.5, -2.5),
+  p_order = 2
+)
+```
+
+## Arguments
+
+- mrs_data:
+
+  data to be broadened.
+
+- lb:
+
+  amount of line-broadening in Hz, length should be equal to the number
+  of dynamics in mrs_data.
+
+- lg:
+
+  Lorentz-Gauss lineshape parameter (between 0 and 1). Defaults to a
+  fully Lorentzian value of 0. If one value is given, will be recycled
+  to match the number of dynamics in mrs_data.
+
+- sig_region:
+
+  a ppm region to define where the maximum signal value should be
+  estimated.
+
+- noise_region:
+
+  a ppm region to defined where the noise level should be estimated.
+
+- p_order:
+
+  polynomial order to fit to the noise region before estimating the
+  standard deviation.
+
+## Value
+
+line-broadened and renoised data.
