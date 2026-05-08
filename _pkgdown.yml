@@ -1,8 +1,8 @@
 title: Spectroscopy Analysis Tools (spant)
 url: https://martin3141.github.io/spant/
 template:
-  params:
-    bootswatch: flatly
+  bootstrap: 5
+  bootswatch: flatly
   
 navbar:
   components:
