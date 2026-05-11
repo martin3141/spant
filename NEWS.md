@@ -1,3 +1,6 @@
+# spant 4.1.0
+* changed default segmentation method to rpyants for fit_svs.
+
 # spant 4.0.0
 * qr.solve reverts to ginv for rats in rare cases where qr.solve fails.
 * fit_svs updated to only accept a single argument for remove_basis.

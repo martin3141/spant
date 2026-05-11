@@ -12,7 +12,7 @@ fit_svs(
   mri_seg = NULL,
   deface = FALSE,
   segment_t1 = FALSE,
-  segment_t1_method = "ants",
+  segment_t1_method = "rpyants",
   external_basis = NULL,
   append_external_basis = FALSE,
   p_vols = NULL,
@@ -76,7 +76,7 @@ fit_svs(
 \item{segment_t1}{segment the t1 weighted mri file with ANTs and use the
 results to perform partial volume correction. Defaults to FALSE.}
 
-\item{segment_t1_method}{one of : "ants" (default), "rpyants" or
+\item{segment_t1_method}{one of : "rpyants" (default), "ants" or
 "fslr".}
 
 \item{external_basis}{precompiled basis set object to use for analysis.}

@@ -10,7 +10,7 @@
 #' @param deface option to apply faceoff to the mri input. Defaults to FALSE.
 #' @param segment_t1 segment the t1 weighted mri file with ANTs and use the
 #' results to perform partial volume correction. Defaults to FALSE.
-#' @param segment_t1_method one of : "ants" (default), "rpyants" or 
+#' @param segment_t1_method one of : "rpyants" (default), "ants" or 
 #' "fslr".
 #' @param external_basis precompiled basis set object to use for analysis.
 #' @param append_external_basis append the external basis with the internally
@@ -126,7 +126,7 @@
 #' @export
 fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                     mri_seg = NULL, deface = FALSE, segment_t1 = FALSE,
-                    segment_t1_method = "ants",
+                    segment_t1_method = "rpyants",
                     external_basis = NULL, append_external_basis = FALSE,
                     p_vols = NULL, format = NULL, pul_seq = NULL, TE = NULL,
                     TR = NULL, TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
