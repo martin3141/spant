@@ -351,7 +351,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     t1_path <- file.path(output_dir, "t1_segmentation", "t1.nii.gz")
     writeNifti(mri, t1_path)
     
-    if (segment_t1_method == "rypants") {
+    if (segment_t1_method == "rpyants") {
       segment_t1_rpyants(t1_path, out_dir = file.path(output_dir,
                                                       "t1_segmentation"))
     } else if (segment_t1_method == "ants") {
