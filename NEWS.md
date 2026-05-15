@@ -1,5 +1,6 @@
 # spant 4.1.0
-* changed default segmentation method to rpyants for fit_svs.
+* Update to lsei.f to fix a warning produced by GCC 16.
+* Changed the default segmentation method to rpyants for fit_svs.
 
 # spant 4.0.0
 * qr.solve reverts to ginv for rats in rare cases where qr.solve fails.
