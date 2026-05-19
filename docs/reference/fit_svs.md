@@ -13,7 +13,7 @@ fit_svs(
   mri_seg = NULL,
   deface = FALSE,
   segment_t1 = FALSE,
-  segment_t1_method = "ants",
+  segment_t1_method = "rpyants",
   external_basis = NULL,
   append_external_basis = FALSE,
   p_vols = NULL,
@@ -95,7 +95,7 @@ fit_svs(
 
 - segment_t1_method:
 
-  one of : "ants" (default), "rpyants" or "fslr".
+  one of : "rpyants" (default), "ants" or "fslr".
 
 - external_basis:
 

@@ -1,6 +1,13 @@
 # Changelog
 
+## spant 4.1.0
+
+- Update to lsei.f to fix a warning produced by GCC 16.
+- Changed the default segmentation method to rpyants for fit_svs.
+
 ## spant 4.0.0
+
+CRAN release: 2026-05-08
 
 - qr.solve reverts to ginv for rats in rare cases where qr.solve fails.
 - fit_svs updated to only accept a single argument for remove_basis.
