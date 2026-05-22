@@ -396,6 +396,32 @@ append_basis <- function(basis_a, basis_b) {
   return(basis_out)
 }
 
+#' Remove elements from a basis set object.
+#' @param basis input basis.
+#' @param rm_str a grep expression to remove basis elements. Use "|" for
+#' multiple matches, eg to match alanine and lactate only : "^Ala$|^Lac$".
+#' @return basis with elements removed.
+#' @export
+rm_basis_elements <- function(basis, rm_str) {
+  
+  if (length(rm_str) > 1) {
+    stop("rm_str only accepts a single argument, use '|' to match multiple patterns.")
+  }
+  
+  basis_names <- basis$names
+  
+  inds <- grep(rm_str, basis_names)
+  if (length(inds) == 0) {
+    print(basis_names)
+    stop("No signals (as listed above) matching rm_str found.")
+  }
+  
+  basis$data  <- basis$data[,-inds]
+  basis$names <- basis$names[-inds]
+  
+  return(basis)
+}
+
 #' Apply frequency shifts to basis set signals.
 #' @param basis the basis to apply the shift to.
 #' @param shifts a vector of frequency shifts to apply in ppm units. Must be the
