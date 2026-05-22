@@ -42,7 +42,7 @@
 #' the basis. For example: use "lac|ala" to remove lactate and alanine; "*" to
 #' remove all signals and "^mm|^lip" to remove all macromolecular and lipid
 #' signals. This operation is performed before signals are added with
-#' append_basis. Cannot be used with precompiled basis sets.
+#' append_basis.
 #' @param pre_align perform simple frequency alignment to known reference peaks.
 #' @param pre_align_max_shift maximum allowable shift in Hz. Defaults to 40 Hz.
 #' @param pre_align_ref_freq reference frequency in ppm units. More than one
@@ -227,9 +227,9 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     stop("external_basis and append_basis options cannot both be set. Use one or the other.")
   }
   
-  if (!is.null(external_basis) & !is.null(remove_basis) & !append_external_basis) {
-    stop("external_basis and remove_basis options cannot both be set. Use one or the other.")
-  }
+  # if (!is.null(external_basis) & !is.null(remove_basis) & !append_external_basis) {
+  #   stop("external_basis and remove_basis options cannot both be set. Use one or the other.")
+  # }
   
   if (!is.null(dyn_av_block_size) & !is.null(dyn_av_scheme)) {
     stop("dyn_av_block_size and dyn_av_scheme options cannot both be set. Use one or the other.")
@@ -603,7 +603,6 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   }
   
   if (!is.null(external_basis)) {
-    
     if (!inherits(external_basis, "basis_set")) {
       if (inherits(external_basis, "character")) {
         # TODO - could make this a bit more flexible, eg read a directory of
@@ -613,6 +612,10 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       } else {
         stop("Unrecognised exernal_basis object.")
       }
+    }
+    
+    if (!is.null(remove_basis)) {
+      external_basis <- rm_basis_elements(external_basis, remove_basis)  
     }
     
     if (append_external_basis) {

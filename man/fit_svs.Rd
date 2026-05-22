@@ -121,7 +121,7 @@ available signals. Cannot be used with precompiled basis sets.}
 the basis. For example: use "lac|ala" to remove lactate and alanine; "*" to
 remove all signals and "^mm|^lip" to remove all macromolecular and lipid
 signals. This operation is performed before signals are added with
-append_basis. Cannot be used with precompiled basis sets.}
+append_basis.}
 
 \item{pre_align}{perform simple frequency alignment to known reference peaks.}
 
