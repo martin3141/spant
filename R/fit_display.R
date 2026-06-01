@@ -159,6 +159,18 @@ plot.fit_result <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1,
   if (restore_def_par) graphics::par(.pardefault)
 }
 
+#' Plot a TARQUIN fit from a csv formatted file.
+#' @param file csv formatted fit file produced by TARQUIN.
+#' @param ... further arguments to plot method.
+#' @export
+plot_tqn_fit_csv <- function(file, ...) {
+  fit <- read_tqn_fit(file)
+  dummy_fit_res <- NULL
+  dummy_fit_res$fits[[1]] <- fit
+  class(dummy_fit_res) <- "fit_result"
+  plot(dummy_fit_res, n = 1, ...)
+}
+
 #' @export
 summary.fit_result <- function(object, ...) {
   x <- object
