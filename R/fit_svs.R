@@ -39,10 +39,14 @@
 #' append_basis = c("peth", "cit"). Use get_mol_names() function to print all 
 #' available signals. Cannot be used with precompiled basis sets.
 #' @param remove_basis grep expression to match names of signals to remove from
-#' the basis. For example: use "lac|ala" to remove lactate and alanine; "*" to
+#' the basis. For example: use "^lac$|^ala$" to remove lactate and alanine; "*" to
 #' remove all signals and "^mm|^lip" to remove all macromolecular and lipid
 #' signals. This operation is performed before signals are added with
-#' append_basis. Cannot be used with precompiled basis sets.
+#' append_basis. Cannot be used with precompiled/exernal basis sets.
+#' @param remove_external_basis grep expression to match names of signals to
+#' remove from the external basis. For example: use "^Lac$|^Ala$" to remove
+#' lactateand alanine and "^MM|^Lip" to remove all macromolecular and lipid
+#' signals.
 #' @param pre_align perform simple frequency alignment to known reference peaks.
 #' @param pre_align_max_shift maximum allowable shift in Hz. Defaults to 40 Hz.
 #' @param pre_align_ref_freq reference frequency in ppm units. More than one
@@ -130,7 +134,8 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                     external_basis = NULL, append_external_basis = FALSE,
                     p_vols = NULL, format = NULL, pul_seq = NULL, TE = NULL,
                     TR = NULL, TE1 = NULL, TE2 = NULL, TE3 = NULL, TM = NULL,
-                    append_basis = NULL, remove_basis = NULL, pre_align = TRUE,
+                    append_basis = NULL, remove_basis = NULL,
+                    remove_external_basis = NULL, pre_align = TRUE,
                     pre_align_max_shift = 40,
                     pre_align_ref_freq = c(2.01, 3.03, 3.22),
                     pre_align_ref_amp = 1, dfp_corr = TRUE,
@@ -187,8 +192,9 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                       p_vols = p_vols, format = format, pul_seq = pul_seq,
                       TE = TE, TR = TR, TE1 = TE1, TE2 = TE2, TE3 = TE3,
                       TM = TM, append_basis = append_basis,
-                      remove_basis = remove_basis, pre_align = pre_align,
-                      dfp_corr = dfp_corr,
+                      remove_basis = remove_basis, 
+                      remove_external_basis = remove_external_basis, 
+                      pre_align = pre_align, dfp_corr = dfp_corr,
                       dfp_corr_ref_subset = dfp_corr_ref_subset,
                       output_ratio = output_ratio, ecc = ecc,
                       hsvd_width = hsvd_width, decimate = decimate,
@@ -613,6 +619,11 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
       } else {
         stop("Unrecognised exernal_basis object.")
       }
+    }
+    
+    # optionally remove any signals
+    if (!is.null(remove_external_basis)) {
+      external_basis <- rm_basis_elements(external_basis, remove_external_basis) 
     }
     
     if (append_external_basis) {
