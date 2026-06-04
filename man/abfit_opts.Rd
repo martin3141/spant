@@ -58,7 +58,8 @@ abfit_opts(
   lb_init = 0.001,
   lb_init_approx_fit = FALSE,
   zf_offset = NULL,
-  broad_asym = TRUE
+  broad_asym = TRUE,
+  lb_reg_broad = NULL
 )
 }
 \arguments{
@@ -207,6 +208,9 @@ the FID distortion flag is set for the mrs_data.}
 
 \item{broad_asym}{apply asymmetric lineshape parameter to broad signals
 with names starting with Lip or MM.}
+
+\item{lb_reg_broad}{individual line broadening parameter for broad (Lip / MM)
+signals. If NULL then defaults to lb_reg.}
 }
 \value{
 full list of options.

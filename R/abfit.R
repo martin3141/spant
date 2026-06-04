@@ -445,12 +445,18 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     }
     
     if (is.def(opts$lb_reg)) { 
-      lb_reg_scaled <- noise_scale / opts$lb_reg
-      lb_reg_scaled <- rep(lb_reg_scaled, Nbasis)
-      # lb_reg_scaled <- lb_reg_scaled / basis_scale
+      lb_reg_scaled <- rep(opts$lb_reg, Nbasis)
+      
+      if (!is.null(opts$lb_reg_broad)) {
+        lb_reg_scaled[broad_indices] <- opts$lb_reg_broad
+      }
+      
+      lb_reg_scaled <- noise_scale / lb_reg_scaled
     } else {
       lb_reg_scaled <- NULL
     }
+    
+    # print(lb_reg_scaled)
     
     if (is.def(opts$asym_reg)) { 
       asym_reg_scaled <- noise_scale / opts$asym_reg
@@ -995,6 +1001,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' the FID distortion flag is set for the mrs_data.
 #' @param broad_asym apply asymmetric lineshape parameter to broad signals
 #' with names starting with Lip or MM.
+#' @param lb_reg_broad individual line broadening parameter for broad (Lip / MM)
+#' signals. If NULL then defaults to lb_reg.
 #' @examples
 #' opts <- abfit_reg_opts(ppm_left = 4.2, noise_region = c(-1, -3))
 #' @export
@@ -1027,7 +1035,8 @@ abfit_reg_opts <- function(init_damping = 5, maxiters = 128,
                            output_all_paras_raw = FALSE, input_paras_raw = NULL,
                            optim_lw_only = FALSE, optim_lw_only_limit = 20,
                            lb_init = "lcm_compat", lb_init_approx_fit = FALSE,
-                           zf_offset = NULL, broad_asym = TRUE) {
+                           zf_offset = NULL, broad_asym = TRUE,
+                           lb_reg_broad = NULL) {
   
   list(init_damping = init_damping, maxiters = maxiters,
        max_shift_pre = max_shift_pre, max_shift_fine = max_shift_fine,
@@ -1062,7 +1071,7 @@ abfit_reg_opts <- function(init_damping = 5, maxiters = 128,
        input_paras_raw = input_paras_raw, optim_lw_only = optim_lw_only,
        optim_lw_only_limit = optim_lw_only_limit, lb_init = lb_init,
        lb_init_approx_fit = lb_init_approx_fit, zf_offset = zf_offset,
-       broad_asym = broad_asym)
+       broad_asym = broad_asym, lb_reg_broad = lb_reg_broad)
 }
 
 #' Return a list of options for an ABfit analysis.
@@ -1159,6 +1168,8 @@ abfit_reg_opts <- function(init_damping = 5, maxiters = 128,
 #' the FID distortion flag is set for the mrs_data.
 #' @param broad_asym apply asymmetric lineshape parameter to broad signals
 #' with names starting with Lip or MM.
+#' @param lb_reg_broad individual line broadening parameter for broad (Lip / MM)
+#' signals. If NULL then defaults to lb_reg.
 #' @return full list of options.
 #' @examples
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
@@ -1190,7 +1201,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift_pre = 0.078,
                        output_all_paras_raw = FALSE, input_paras_raw = NULL,
                        optim_lw_only = FALSE, optim_lw_only_limit = 20,
                        lb_init = 0.001, lb_init_approx_fit = FALSE,
-                       zf_offset = NULL, broad_asym = TRUE) {
+                       zf_offset = NULL, broad_asym = TRUE,
+                       lb_reg_broad = NULL) {
   
   # TODO append any missing options from abfit_reg_opts - not needed yet
                          
@@ -1227,7 +1239,7 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift_pre = 0.078,
        input_paras_raw = input_paras_raw, optim_lw_only = optim_lw_only,
        optim_lw_only_limit = optim_lw_only_limit, lb_init = lb_init,
        lb_init_approx_fit = lb_init_approx_fit, zf_offset = zf_offset,
-       broad_asym = broad_asym)
+       broad_asym = broad_asym, lb_reg_broad = lb_reg_broad)
 }
 
 #' Return a list of options for an ABfit analysis to maintain comparability with
