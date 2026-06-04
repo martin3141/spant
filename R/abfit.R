@@ -1003,6 +1003,8 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
 #' with names starting with Lip or MM.
 #' @param lb_reg_broad individual line broadening parameter for broad (Lip / MM)
 #' signals. If NULL then defaults to lb_reg.
+#' @param broad_glb apply global linewidth parameter to broad signals with names
+#' starting with Lip or MM.
 #' @examples
 #' opts <- abfit_reg_opts(ppm_left = 4.2, noise_region = c(-1, -3))
 #' @export
@@ -1036,7 +1038,7 @@ abfit_reg_opts <- function(init_damping = 5, maxiters = 128,
                            optim_lw_only = FALSE, optim_lw_only_limit = 20,
                            lb_init = "lcm_compat", lb_init_approx_fit = FALSE,
                            zf_offset = NULL, broad_asym = TRUE,
-                           lb_reg_broad = NULL) {
+                           lb_reg_broad = NULL, broad_glb = TRUE) {
   
   list(init_damping = init_damping, maxiters = maxiters,
        max_shift_pre = max_shift_pre, max_shift_fine = max_shift_fine,
@@ -1071,7 +1073,8 @@ abfit_reg_opts <- function(init_damping = 5, maxiters = 128,
        input_paras_raw = input_paras_raw, optim_lw_only = optim_lw_only,
        optim_lw_only_limit = optim_lw_only_limit, lb_init = lb_init,
        lb_init_approx_fit = lb_init_approx_fit, zf_offset = zf_offset,
-       broad_asym = broad_asym, lb_reg_broad = lb_reg_broad)
+       broad_asym = broad_asym, lb_reg_broad = lb_reg_broad,
+       broad_glb = broad_glb)
 }
 
 #' Return a list of options for an ABfit analysis.
@@ -1170,6 +1173,8 @@ abfit_reg_opts <- function(init_damping = 5, maxiters = 128,
 #' with names starting with Lip or MM.
 #' @param lb_reg_broad individual line broadening parameter for broad (Lip / MM)
 #' signals. If NULL then defaults to lb_reg.
+#' @param broad_glb apply global linewidth parameter to broad signals with names
+#' starting with Lip or MM.
 #' @return full list of options.
 #' @examples
 #' opts <- abfit_opts(ppm_left = 4.2, noise_region = c(-1, -3))
@@ -1202,7 +1207,7 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift_pre = 0.078,
                        optim_lw_only = FALSE, optim_lw_only_limit = 20,
                        lb_init = 0.001, lb_init_approx_fit = FALSE,
                        zf_offset = NULL, broad_asym = TRUE,
-                       lb_reg_broad = NULL) {
+                       lb_reg_broad = NULL, broad_glb = TRUE) {
   
   # TODO append any missing options from abfit_reg_opts - not needed yet
                          
@@ -1239,7 +1244,8 @@ abfit_opts <- function(init_damping = 5, maxiters = 1024, max_shift_pre = 0.078,
        input_paras_raw = input_paras_raw, optim_lw_only = optim_lw_only,
        optim_lw_only_limit = optim_lw_only_limit, lb_init = lb_init,
        lb_init_approx_fit = lb_init_approx_fit, zf_offset = zf_offset,
-       broad_asym = broad_asym, lb_reg_broad = lb_reg_broad)
+       broad_asym = broad_asym, lb_reg_broad = lb_reg_broad,
+       broad_glb = broad_glb)
 }
 
 #' Return a list of options for an ABfit analysis to maintain comparability with

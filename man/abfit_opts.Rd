@@ -59,7 +59,8 @@ abfit_opts(
   lb_init_approx_fit = FALSE,
   zf_offset = NULL,
   broad_asym = TRUE,
-  lb_reg_broad = NULL
+  lb_reg_broad = NULL,
+  broad_glb = TRUE
 )
 }
 \arguments{
@@ -211,6 +212,9 @@ with names starting with Lip or MM.}
 
 \item{lb_reg_broad}{individual line broadening parameter for broad (Lip / MM)
 signals. If NULL then defaults to lb_reg.}
+
+\item{broad_glb}{apply global linewidth parameter to broad signals with names
+starting with Lip or MM.}
 }
 \value{
 full list of options.
