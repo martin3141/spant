@@ -305,6 +305,20 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   }
   
   #### 4 detailed fit ####
+  
+  # find any signals with names starting with Lip or MM as they may have
+  # different parameter limits
+  broad_indices <- c(grep("^Lip", basis$names), grep("^MM", basis$names))
+  
+  # construct a vector of basis elements to optionally exclude from the
+  # lineshape asymetry adjustment
+  if (opts$broad_asym) {
+    omit_ls_asym <- rep(FALSE, length(basis$names))
+  } else {
+    omit_ls_asym <- rep(FALSE, length(basis$names))
+    omit_ls_asym[broad_indices] <- TRUE
+  }
+  
   if (opts$maxiters > 0) {
     
     # estimate the required spine functions based on the auto bl flex
@@ -331,10 +345,6 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     par <- c(res$par[1], res$par[2], res$par[3], asym_init, rep(0, Nbasis),
              rep(opts$lb_init, Nbasis))
    
-    # find any signals with names starting with Lip or MM as they may have
-    # different parameter limits
-    broad_indices <- c(grep("^Lip", basis$names), grep("^MM", basis$names))
-    
     max_basis_shifts <- rep(opts$max_basis_shift, Nbasis) * acq_paras$ft * 1e-6
     
     if (!is.null(opts$max_basis_shift_broad)) {
