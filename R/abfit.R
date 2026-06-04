@@ -557,6 +557,15 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   
   damp_mat <- matrix(damp_vec, nrow = nrow(raw_metab_basis), 
                      ncol = ncol(raw_metab_basis), byrow = F)
+  
+  if (any(omit_ls_asym)) {
+    # overwrite any specified signals with a symmetric lineshape
+    damp_vec_sym <- asy_pvoigt_ls(fs, N, par[2], 1, 0, TRUE)
+    damp_mat[,omit_ls_asym] <- matrix(damp_vec_sym,
+                               nrow = nrow(raw_metab_basis), 
+                               ncol = sum(omit_ls_asym), byrow = F)
+  }
+  
   metab_basis_damped <- raw_metab_basis * damp_mat
   
   # apply shift and lb terms to individual basis signals
@@ -1256,6 +1265,15 @@ abfit_full_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   
   damp_mat <- matrix(damp_vec, nrow = nrow(raw_metab_basis), 
                      ncol = ncol(raw_metab_basis), byrow = F)
+  
+  if (any(omit_ls_asym)) {
+    # overwrite any specified signals with a symmetric lineshape
+    damp_vec_sym <- asy_pvoigt_ls(fs, N, par[2], 1, 0, TRUE)
+    damp_mat[,omit_ls_asym] <- matrix(damp_vec_sym,
+                               nrow = nrow(raw_metab_basis), 
+                               ncol = sum(omit_ls_asym), byrow = F)
+  }
+  
   raw_metab_basis <- raw_metab_basis * damp_mat
   
   # apply shift and lb terms to individual basis signals
@@ -1379,6 +1397,16 @@ abfit_full_anal_jac_test <- function(par, y, raw_metab_basis, bl_basis, t,
   
   damp_mat <- matrix(damp_vec, nrow = nrow(raw_metab_basis), 
                      ncol = ncol(raw_metab_basis), byrow = F)
+  
+  if (any(omit_ls_asym)) {
+    # overwrite any specified signals with a symmetric lineshape
+    damp_vec_sym <- asy_pvoigt_ls(fs, N, par[2], 1, 0, TRUE)
+    damp_mat[,omit_ls_asym] <- matrix(damp_vec_sym,
+                               nrow = nrow(raw_metab_basis), 
+                               ncol = sum(omit_ls_asym), byrow = F)
+  }
+  
+  
   raw_metab_basis <- raw_metab_basis * damp_mat
   raw_metab_basis_orig <- raw_metab_basis
   
@@ -1473,6 +1501,15 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   
   damp_mat <- matrix(damp_vec, nrow = nrow(raw_metab_basis), 
                      ncol = ncol(raw_metab_basis), byrow = F)
+  
+  if (any(omit_ls_asym)) {
+    # overwrite any specified signals with a symmetric lineshape
+    damp_vec_sym <- asy_pvoigt_ls(fs, N, par[2], 1, 0, TRUE)
+    damp_mat[,omit_ls_asym] <- matrix(damp_vec_sym,
+                               nrow = nrow(raw_metab_basis), 
+                               ncol = sum(omit_ls_asym), byrow = F)
+  }
+  
   raw_metab_basis <- raw_metab_basis * damp_mat
   raw_metab_basis_orig <- raw_metab_basis
   
