@@ -585,7 +585,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   if (any(c(omit_ls_asym, omit_glb))) {
     for (m in 1:length(omit_ls_asym)) {
       if (omit_ls_asym[m] & omit_glb[m]) {
-        damp_mat[, m] <- asy_pvoigt_ls(fs, N, 0, 1, 0, TRUE)
+        damp_mat[, m] <- 1 + 0i
       } else if (omit_ls_asym[m] & !omit_glb[m]) {
         damp_mat[, m] <- asy_pvoigt_ls(fs, N, par[2], 1, 0, TRUE)
       } else if (!omit_ls_asym[m] & omit_glb[m]) {
@@ -1318,7 +1318,7 @@ abfit_full_obj <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   if (any(c(omit_ls_asym, omit_glb))) {
     for (m in 1:length(omit_ls_asym)) {
       if (omit_ls_asym[m] & omit_glb[m]) {
-        damp_mat[, m] <- asy_pvoigt_ls(fs, N, 0, 1, 0, TRUE)
+        damp_mat[, m] <- 1 + 0i
       } else if (omit_ls_asym[m] & !omit_glb[m]) {
         damp_mat[, m] <- asy_pvoigt_ls(fs, N, par[2], 1, 0, TRUE)
       } else if (!omit_ls_asym[m] & omit_glb[m]) {
@@ -1465,7 +1465,7 @@ abfit_full_anal_jac_test <- function(par, y, raw_metab_basis, bl_basis, t,
   if (any(c(omit_ls_asym, omit_glb))) {
     for (m in 1:length(omit_ls_asym)) {
       if (omit_ls_asym[m] & omit_glb[m]) {
-        damp_mat[, m] <- asy_pvoigt_ls(fs, N, 0, 1, 0, TRUE)
+        damp_mat[, m] <- 1 + 0i
       } else if (omit_ls_asym[m] & !omit_glb[m]) {
         damp_mat[, m] <- asy_pvoigt_ls(fs, N, par[2], 1, 0, TRUE)
       } else if (!omit_ls_asym[m] & omit_glb[m]) {
@@ -1582,7 +1582,7 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   if (any(c(omit_ls_asym, omit_glb))) {
     for (m in 1:length(omit_ls_asym)) {
       if (omit_ls_asym[m] & omit_glb[m]) {
-        damp_mat[, m] <- asy_pvoigt_ls(fs, N, 0, 1, 0, TRUE)
+        damp_mat[, m] <- 1 + 0i
       } else if (omit_ls_asym[m] & !omit_glb[m]) {
         damp_mat[, m] <- asy_pvoigt_ls(fs, N, par[2], 1, 0, TRUE)
       } else if (!omit_ls_asym[m] & omit_glb[m]) {
