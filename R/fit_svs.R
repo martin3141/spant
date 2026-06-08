@@ -880,14 +880,14 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (extra_output) {
     if (verbose) cat("Writing extra output files.\n")
     
-    warning("extra_output doesn't do anything at the moment...")
+    # warning("extra_output doesn't do anything at the moment...")
     
     # below doesn't really work for dynamic MRS, probably need to create a
     # folder containing files : fit_plot_data/001.csv, fit_plot_data/002.csv...
-    # 
-    # utils::write.csv(results$fit_res$fits[[1]],
-    #                  file = file.path(output_dir, "fit_plot_data.csv"),
-    #                  row.names = FALSE)
+     
+    utils::write.csv(results$fit_res$fits[[1]],
+                     file = file.path(output_dir, "fit_plot_data.csv"),
+                     row.names = FALSE)
   }
   
   if (verbose) cat("fit_svs finished.\n")
