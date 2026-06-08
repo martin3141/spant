@@ -292,9 +292,12 @@ read_mrs_dpt <- function(fname, extra) {
   # defaults
   nuc <- def_nuc()
   
+  meta = list(EchoTime = te)
+  
+  
   mrs_data <- mrs_data(data = data_arr, ft = ft, resolution = res, ref = ref,
                        nuc = nuc, freq_domain = freq_domain, affine = NULL,
-                       meta = NULL, extra = extra)
+                       meta = meta, extra = extra)
   
   return(mrs_data)
 }
