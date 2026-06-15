@@ -10,7 +10,8 @@ comb_coils_svs_gls(
   ref = NULL,
   noise_pts = 256,
   noise_mrs = NULL,
-  use_mean_sens = TRUE
+  use_mean_sens = TRUE,
+  use_ref_sens = FALSE
 )
 }
 \arguments{
@@ -24,6 +25,8 @@ covariance estimation.}
 \item{noise_mrs}{MRS data containing noise information for each coil.}
 
 \item{use_mean_sens}{use the dynamic mean to estimate coil sensitivities.}
+
+\item{use_ref_sens}{use the reference data to estimate coil sensitivities.}
 }
 \value{
 coil combined MRS data.

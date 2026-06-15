@@ -1,6 +1,7 @@
 # spant 4.2.0
 * Added rm_basis_elements function.
 * Added plot_tqn_fit_csv function.
+* Bug fix for comb_coils_svs_gls.
 
 # spant 4.1.0
 * Update to lsei.f to fix a warning produced by GCC 16.

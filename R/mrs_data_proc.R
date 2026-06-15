@@ -5149,10 +5149,12 @@ mod_td <- function(mrs_data) {
 #' covariance estimation.
 #' @param noise_mrs MRS data containing noise information for each coil.
 #' @param use_mean_sens use the dynamic mean to estimate coil sensitivities.
+#' @param use_ref_sens use the reference data to estimate coil sensitivities.
 #' @return coil combined MRS data.
 #' @export
 comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256,
-                               noise_mrs = NULL, use_mean_sens = TRUE) {
+                               noise_mrs = NULL, use_mean_sens = TRUE,
+                               use_ref_sens = FALSE) {
   
   # time-domain operation
   if (is_fd(metab)) metab <- fd2td(metab)
@@ -5170,14 +5172,31 @@ comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256,
   }
   
   noise_mat <- drop(noise_mrs$data)
+  
+  # TODO double check the line below...
   if ((Ndyns(noise_mrs)) == 1) dim(noise_mat) <- c(1, Ncoils(noise_mrs), noise_pts)
-  noise_mat <- aperm(noise_mat, c(2, 3, 1))
+ 
+  # this was the old formulation for versions of spant < 4.2 
+  # seems totally wrong, yet worked for Siemens testing, perhaps by luck
+  # where the number of coils was a multiple of the number of acquisitions
+  # noise_mat <- aperm(noise_mat, c(2, 3, 1))
+  
+  noise_mat <- aperm(noise_mat, c(3, 2, 1))
   dim(noise_mat) <- c(Ncoils(noise_mrs), noise_pts * Ndyns(noise_mrs))
   psi <- noise_mat %*% Conj(t(noise_mat))
   
+  # ideal case below left for testing
+  # psi <- diag(NROW(psi))
+  
   if (use_mean_sens) {
+    
     # use the first point of the mean data to estimate the sensitivity vector
-    phase_ref_data <- mean_dyns(crop_td_pts(metab, end = 1, start = 1))
+    if (use_ref_sens) {
+      phase_ref_data <- mean_dyns(crop_td_pts(ref, end = 1, start = 1))
+    } else  {
+      phase_ref_data <- mean_dyns(crop_td_pts(metab, end = 1, start = 1))
+    }
+    
     S <- drop(phase_ref_data$data)
     
     # construct matrices
