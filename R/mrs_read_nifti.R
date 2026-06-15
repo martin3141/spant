@@ -23,6 +23,12 @@ read_mrs_nifti <- function(fname, extra = NULL, verbose = FALSE) {
   # read array values 
   data <- nii_data[]
   
+  # remove unwanted attributes
+  attr(data, "pixdim") <- NULL
+  attr(data, "pixunits") <- NULL
+  attr(data, ".nifti_image_ptr") <- NULL
+  attr(data, ".nifti_image_ver") <- NULL
+  
   # add any missing dimensions
   if (length(dim(data)) < 6) {
     zero_dims <- rep(1, 6 - length(dim(data)))
