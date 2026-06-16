@@ -5150,11 +5150,16 @@ mod_td <- function(mrs_data) {
 #' @param noise_mrs MRS data containing noise information for each coil.
 #' @param use_mean_sens use the dynamic mean to estimate coil sensitivities.
 #' @param use_ref_sens use the reference data to estimate coil sensitivities.
+#' @param change_order change the order of the noise matrix reshaping, for
+#' testing purposes only.
+#' @param no_noise_corr assume noise is uncorrelated between coils, for testing
+#' purposes only. Defaults to FALSE.
 #' @return coil combined MRS data.
 #' @export
 comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256,
                                noise_mrs = NULL, use_mean_sens = TRUE,
-                               use_ref_sens = FALSE) {
+                               use_ref_sens = FALSE, change_order = NULL,
+                               no_noise_corr = FALSE) {
   
   # time-domain operation
   if (is_fd(metab)) metab <- fd2td(metab)
@@ -5171,23 +5176,31 @@ comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256,
     noise_pts <- Npts(noise_mrs)
   }
   
-  noise_mat <- drop(noise_mrs$data)
-  
-  # TODO double check the line below...
-  if ((Ndyns(noise_mrs)) == 1) dim(noise_mat) <- c(1, Ncoils(noise_mrs), noise_pts)
- 
-  # this was the old formulation for versions of spant < 4.2 
-  # seems totally wrong, yet worked for Siemens testing, perhaps by luck
-  # where the number of coils was a multiple of the number of acquisitions
-  # noise_mat <- aperm(noise_mat, c(2, 3, 1))
-  
-  noise_mat <- aperm(noise_mat, c(2, 1, 3))
-  
-  dim(noise_mat) <- c(Ncoils(noise_mrs), noise_pts * Ndyns(noise_mrs))
-  psi <- noise_mat %*% Conj(t(noise_mat))
-  
-  # ideal case below left for testing
-  # psi <- diag(NROW(psi))
+  if (no_noise_corr) {
+    # testing only
+    psi <- diag(Ncoils(metab))
+  } else {
+    noise_mat <- drop(noise_mrs$data)
+    
+    # noise mat dims should be c(dynamics, coils, noise pts)
+    
+    # TODO double check the line below...
+    if ((Ndyns(noise_mrs)) == 1) {
+      dim(noise_mat) <- c(1, Ncoils(noise_mrs), noise_pts)
+    }
+    
+    if (!is.null(change_order)) {
+      perm_ord <- change_order
+    } else {
+      # perm_ord <- c(2, 3, 1) # old order for spant version 4.1 and below
+      perm_ord <- c(3, 1, 2)   # improved order
+    }
+    
+    noise_mat <- aperm(noise_mat, perm_ord)
+    
+    dim(noise_mat) <- c(Ncoils(noise_mrs), noise_pts * Ndyns(noise_mrs))
+    psi <- noise_mat %*% Conj(t(noise_mat))
+  }
   
   if (use_mean_sens) {
     
