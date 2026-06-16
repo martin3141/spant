@@ -5181,7 +5181,8 @@ comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256,
   # where the number of coils was a multiple of the number of acquisitions
   # noise_mat <- aperm(noise_mat, c(2, 3, 1))
   
-  noise_mat <- aperm(noise_mat, c(3, 2, 1))
+  noise_mat <- aperm(noise_mat, c(2, 1, 3))
+  
   dim(noise_mat) <- c(Ncoils(noise_mrs), noise_pts * Ndyns(noise_mrs))
   psi <- noise_mat %*% Conj(t(noise_mat))
   
