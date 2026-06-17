@@ -33,7 +33,7 @@ fit_svs_edited(
   pre_align = TRUE,
   dfp_corr = TRUE,
   output_ratio = NULL,
-  ecc = FALSE,
+  ecc = NULL,
   hsvd_width = NULL,
   decimate = FALSE,
   trunc_fid_pts = NULL,
@@ -189,7 +189,7 @@ fit_svs_edited(
 - ecc:
 
   option to perform water reference based eddy current correction,
-  defaults to FALSE.
+  default is to not apply unless the is GE format.
 
 - hsvd_width:
 

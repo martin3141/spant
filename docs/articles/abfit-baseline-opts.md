@@ -17,12 +17,14 @@ most common adjustments are demonstrated.
 Load the spant analysis package:
 
 ``` r
+
 library(spant)
 ```
 
 Read an example dataset from file and simulate matching basis set:
 
 ``` r
+
 fname    <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
 mrs_data <- read_mrs(fname, format = "spar_sdat")
 basis    <- sim_basis_1h_brain_press(mrs_data)
@@ -31,6 +33,7 @@ basis    <- sim_basis_1h_brain_press(mrs_data)
 Run a default ABfit analysis and plot the result:
 
 ``` r
+
 fit_res <- fit_mrs(mrs_data, basis)
 plot(fit_res)
 ```
@@ -43,6 +46,7 @@ the automatically determined level of baseline smoothness by inspecting
 the results table in the `fit_res` object:
 
 ``` r
+
 fit_res$res_tab$bl_ed_pppm
 #> [1] 1.969325
 ```
@@ -64,6 +68,7 @@ the desired level. A greater value results in more baseline flexibility,
 let’s try a value of 8 ED ppm:
 
 ``` r
+
 opts    <- abfit_opts(auto_bl_flex = FALSE, bl_ed_pppm = 8)
 fit_res <- fit_mrs(mrs_data, basis, opts = opts)
 plot(fit_res)
@@ -77,6 +82,7 @@ instability from noise, rather than true spectral features. For the next
 analysis let’s investigate 1 ED pppm:
 
 ``` r
+
 opts    <- abfit_opts(auto_bl_flex = FALSE, bl_ed_pppm = 1)
 fit_res <- fit_mrs(mrs_data, basis, opts = opts)
 plot(fit_res)
@@ -93,6 +99,7 @@ be set to a smaller value (default = 5) to encourage more flexible
 baselines, whilst still being adaptive to any broad spectral features:
 
 ``` r
+
 opts    <- abfit_opts(aic_smoothing_factor = 1)
 fit_res <- fit_mrs(mrs_data, basis, opts = opts)
 plot(fit_res)
@@ -104,6 +111,7 @@ It can be informative to visualise the individual spline components used
 for baseline modelling by saving these in the results object:
 
 ``` r
+
 opts    <- abfit_opts(export_sp_fit = TRUE)
 fit_res <- fit_mrs(mrs_data, basis, opts = opts)
 stackplot(fit_res, omit_signals = basis$names)
@@ -115,6 +123,7 @@ The default number of spline functions for ABfit is 15 per PPM which may
 be verified from the above plot. Let’s try increasing to 25:
 
 ``` r
+
 opts    <- abfit_opts(export_sp_fit = TRUE, bl_comps_pppm = 25)
 fit_res <- fit_mrs(mrs_data, basis, opts = opts)
 stackplot(fit_res, omit_signals = basis$names)
@@ -129,6 +138,7 @@ number of baseline modelling spline functions, and rely on a penalty
 factor to encourage smoothness.
 
 ``` r
+
 fit_res$res_tab$bl_ed_pppm
 #> [1] 2.276357
 ```

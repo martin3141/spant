@@ -5,12 +5,14 @@
 Load the spant package:
 
 ``` r
+
 library(spant)
 ```
 
 Output a list of pre-defined molecules available for simulation:
 
 ``` r
+
 get_mol_names()
 #>  [1] "2hg"       "a_glc"     "ace"       "ala"       "asc"       "asp"      
 #>  [7] "atp_31p"   "b_glc"     "bhb"       "cho"       "cho_rt"    "cit"      
@@ -29,6 +31,7 @@ get_mol_names()
 Get and print the spin system for myo-inositol:
 
 ``` r
+
 ins <- get_mol_paras("ins")
 print(ins)
 #> Name        : Ins
@@ -64,6 +67,7 @@ Simulate and plot the simulation at 7 Tesla for a pulse acquire sequence
 (seq_pulse_acquire), apply 2 Hz line-broadening and plot.
 
 ``` r
+
 sim_mol(ins, ft = 300e6, N = 4096) |> lb(2) |> plot(xlim = c(3.8, 3.1))
 ```
 
@@ -76,6 +80,7 @@ chemical shift displacement is negligible. Next we simulate a 30 ms
 spin-echo sequence and plot:
 
 ``` r
+
 ins_sim <- sim_mol(ins, seq_spin_echo_ideal, ft = 300e6, N = 4086, TE = 0.03)
 ins_sim |> lb(2) |> plot(xlim = c(3.8, 3.1))
 ```
@@ -86,6 +91,7 @@ Finally we simulate a range of echo-times and plot all results together
 to see the phase evolution:
 
 ``` r
+
 sim_fn <- function(TE) {
   te_sim <- sim_mol(ins, seq_spin_echo_ideal, ft = 300e6, N = 4086, TE = TE)
   lb(te_sim, 2)
@@ -113,6 +119,7 @@ two broad Gaussian resonances at 1.3 and 1.4 ppm with differing
 amplitudes:
 
 ``` r
+
 get_uncoupled_mol("Lip13", c(1.3, 1.4), c("1H", "1H"), c(2, 1), c(10, 10),
                   c(1, 1)) |> sim_mol() |> plot(xlim = c(2, 0.8))
 ```
@@ -132,6 +139,7 @@ that you expect to see in experimental data, as it is far easier to make
 a resonance broader than narrower.
 
 ``` r
+
 nucleus_a <- rep("1H", 4)
 
 chem_shift_a <- c(4.0974, 1.3142, 1.3142, 1.3142)
@@ -165,6 +173,7 @@ In the next step we output the molecule definition as formatted text and
 plot it.
 
 ``` r
+
 print(custom_mol)
 #> Name        : Cus
 #> Full name   : Custom molecule

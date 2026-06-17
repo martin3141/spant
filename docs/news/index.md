@@ -1,6 +1,14 @@
 # Changelog
 
+## spant 4.2.0
+
+- Added rm_basis_elements function.
+- Added plot_tqn_fit_csv function.
+- Test fix for NIfTI MRS reader.
+
 ## spant 4.1.0
+
+CRAN release: 2026-05-21
 
 - Update to lsei.f to fix a warning produced by GCC 16.
 - Changed the default segmentation method to rpyants for fit_svs.

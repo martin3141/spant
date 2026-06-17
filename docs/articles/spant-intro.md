@@ -5,24 +5,28 @@
 Load the spant package:
 
 ``` r
+
 library(spant)
 ```
 
 Get the path to a data file included with spant:
 
 ``` r
+
 fname <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
 ```
 
 Read the file and save to the workspace as `mrs_data`:
 
 ``` r
+
 mrs_data <- read_mrs(fname)
 ```
 
 Output some basic information about the data:
 
 ``` r
+
 print(mrs_data)
 #> MRS Data Parameters
 #> ----------------------------------
@@ -45,6 +49,7 @@ print(mrs_data)
 Plot the spectral region between 5 and 0.5 ppm:
 
 ``` r
+
 plot(mrs_data, xlim = c(5, 0.5))
 ```
 
@@ -56,6 +61,7 @@ Apply a HSVD filter to the residual water region and align the spectrum
 to the tNAA resonance at 2.01 ppm:
 
 ``` r
+
 mrs_proc <- hsvd_filt(mrs_data)
 mrs_proc <- align(mrs_proc, 2.01)
 plot(mrs_proc, xlim = c(5, 0.5))
@@ -69,6 +75,7 @@ Simulate a typical basis set for short TE brain analysis, print some
 basic information and plot:
 
 ``` r
+
 basis <- sim_basis_1h_brain_press(mrs_proc)
 print(basis)
 #> Basis set parameters
@@ -93,12 +100,14 @@ stackplot(basis, xlim = c(4, 0.5), labels = basis$names, y_offset = 5)
 Perform ABfit analysis of the processed data (`mrs_proc`):
 
 ``` r
+
 fit_res <- fit_mrs(mrs_proc, basis)
 ```
 
 Plot the fit result:
 
 ``` r
+
 plot(fit_res)
 ```
 
@@ -108,6 +117,7 @@ Unscaled amplitudes, CRLB error estimates and other useful fitting
 diagnostics, such as SNR, are given in the `fit_res` results table:
 
 ``` r
+
 fit_res$res_tab
 #>   X Y Z Dynamic Coil X.CrCH2          Ala          Asp           Cr
 #> 1 1 1 1       1    1       0 9.363281e-06 3.329355e-05 4.021879e-05
@@ -158,6 +168,7 @@ the uncertainty (standard deviation) in the metabolite quantity
 estimate. e.g. to calculate the percentage s.d. for tNAA:
 
 ``` r
+
 fit_res$res_tab$tNAA.sd / fit_res$res_tab$tNAA * 100
 #> [1] 0.9394742
 ```
@@ -165,6 +176,7 @@ fit_res$res_tab$tNAA.sd / fit_res$res_tab$tNAA * 100
 Spectral SNR:
 
 ``` r
+
 fit_res$res_tab$SNR
 #> [1] 63.12466
 ```
@@ -172,6 +184,7 @@ fit_res$res_tab$SNR
 Linewidth of the tNAA resonance in PPM:
 
 ``` r
+
 fit_res$res_tab$tNAA_lw
 #> [1] 0.04575392
 ```
@@ -184,6 +197,7 @@ approach for proton-MRS is to simply divide all metabolite values by
 total-creatine:
 
 ``` r
+
 fit_res_tcr_sc <- scale_amp_ratio(fit_res, "tCr")
 amps <- fit_amps(fit_res_tcr_sc)
 print(t(amps))
@@ -231,6 +245,7 @@ use of a separate water-reference acquisition - which can be imported in
 the standard way:
 
 ``` r
+
 fname_wref <- system.file("extdata", "philips_spar_sdat_W.SDAT", package = "spant")
 mrs_data_wref <- read_mrs(fname_wref)
 ```
@@ -241,6 +256,7 @@ water) based on the method described by Gasparovic et al MRM 2006
 55(6):1219-26:
 
 ``` r
+
 p_vols <- c(WM = 100, GM = 0, CSF = 0)
 TE = 0.03
 TR = 2
@@ -255,6 +271,7 @@ manual and references therein (section 10.2). This approach may be
 preferred when comparing results to those obtained LCModel or TARQUIN.
 
 ``` r
+
 fit_res_molar <- scale_amp_molar(fit_res, mrs_data_wref)
 #> Warning in scale_amp_molar(fit_res, mrs_data_wref): Function name
 #> (scale_amp_molar) is missleading and has been replaced with scale_amp_legacy.

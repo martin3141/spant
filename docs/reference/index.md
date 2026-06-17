@@ -906,6 +906,9 @@
 - [`plot_spec_sd()`](https://martin3141.github.io/spant/reference/plot_spec_sd.md)
   : Plot the spectral standard deviation.
 
+- [`plot_tqn_fit_csv()`](https://martin3141.github.io/spant/reference/plot_tqn_fit_csv.md)
+  : Plot a TARQUIN fit from a csv formatted file.
+
 - [`plot_voi_overlay()`](https://martin3141.github.io/spant/reference/plot_voi_overlay.md)
   : Plot a volume as an image overlay.
 
@@ -1030,6 +1033,9 @@
 
 - [`reson_table2mrs_data()`](https://martin3141.github.io/spant/reference/reson_table2mrs_data.md)
   : Generate mrs_data from a table of single Lorentzian resonances.
+
+- [`rm_basis_elements()`](https://martin3141.github.io/spant/reference/rm_basis_elements.md)
+  : Remove elements from a basis set object.
 
 - [`rm_dyns()`](https://martin3141.github.io/spant/reference/rm_dyns.md)
   : Remove a subset of dynamic scans.

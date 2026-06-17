@@ -11,6 +11,7 @@ before following this guide.
 Load the spant package:
 
 ``` r
+
 library(spant)
 ```
 
@@ -20,6 +21,7 @@ relevant information for each signal - such as chemical shifts and
 j-coupling values:
 
 ``` r
+
 mol_list <- list(get_mol_paras("lac"),
                  get_mol_paras("naa"),
                  get_mol_paras("cr"),
@@ -32,6 +34,7 @@ When fitting, the signal parameters (e.g. sampling frequency) and pulse
 sequence (e.g. echo-time) must match the MRS data acquisition protocol.
 
 ``` r
+
 basis <- sim_basis(mol_list, pul_seq = seq_slaser_ideal,
                    acq_paras = def_acq_paras(N = 2048, fs = 2000, ft = 127.8e6),
                    TE1 = 0.008, TE2 = 0.011, TE3 = 0.009)
@@ -45,6 +48,7 @@ In 1H MRS broad resonances from lipids and macromolecules are often
 included in addition to metabolites:
 
 ``` r
+
 mol_list_mm <- append(mol_list, list(get_mol_paras("MM09", ft = 127.8e6)))
 
 basis_mm <- sim_basis(mol_list_mm, pul_seq = seq_slaser_ideal,
@@ -63,6 +67,7 @@ includes the functions `sim_basis_1h_brain` and
 signals:
 
 ``` r
+
 basis <- sim_basis_1h_brain()
 stackplot(basis, xlim = c(4, 0.5), y_offset = 20, labels = basis$names)
 ```
@@ -74,6 +79,7 @@ function, and sim_basis_1h_brain has the option `lcm_compat` to remove
 signals that are usually generated within the LCModel package:
 
 ``` r
+
 lcm_basis <- sim_basis_1h_brain()
 stackplot(lcm_basis, xlim = c(4, 0.5), y_offset = 20, labels = basis$names)
 ```

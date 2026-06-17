@@ -58,7 +58,10 @@ abfit_reg_opts(
   optim_lw_only_limit = 20,
   lb_init = "lcm_compat",
   lb_init_approx_fit = FALSE,
-  zf_offset = NULL
+  zf_offset = NULL,
+  broad_asym = TRUE,
+  lb_reg_broad = NULL,
+  broad_glb = TRUE
 )
 ```
 
@@ -305,9 +308,20 @@ abfit_reg_opts(
   Default is NULL and will automatically set this to 50 points when the
   FID distortion flag is set for the mrs_data.
 
-## Value
+- broad_asym:
 
-full list of options.
+  apply asymmetric lineshape parameter to broad signals with names
+  starting with Lip or MM.
+
+- lb_reg_broad:
+
+  individual line broadening parameter for broad (Lip / MM) signals. If
+  NULL then defaults to lb_reg.
+
+- broad_glb:
+
+  apply global linewidth parameter to broad signals with names starting
+  with Lip or MM.
 
 ## Examples
 
