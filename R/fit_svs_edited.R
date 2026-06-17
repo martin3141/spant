@@ -54,7 +54,7 @@
 #' Defaults to "tCr". Multiple metabolites may be specified for multiple
 #' outputs. Set to NA to omit.
 #' @param ecc option to perform water reference based eddy current correction,
-#' defaults to FALSE.
+#' default is to not apply unless the is GE format.
 #' @param hsvd_width set the width of the HSVD filter in Hz. Note the applied
 #' width is between -width and +width Hz, with 0 Hz being defined at the centre
 #' of the spectral width. Default is disabled (set to NULL), 30 Hz is a
@@ -124,7 +124,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
                            append_basis_ed_off = NULL,
                            remove_basis_ed_off = NULL,
                            pre_align = TRUE, dfp_corr = TRUE,
-                           output_ratio = NULL, ecc = FALSE,
+                           output_ratio = NULL, ecc = NULL,
                            hsvd_width = NULL, decimate = FALSE,
                            trunc_fid_pts = NULL, fit_opts_edited = NULL,
                            fit_opts_ed_off = NULL,
@@ -536,7 +536,29 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     ws_efficiency <- ed_off_water_height / w_ref_height * 100
   }
   
+  # # eddy current correction
+  # if (ecc & w_ref_available) {
+  #   ed_off <- ecc(ed_off, w_ref)
+  #   ed_on  <- ecc(ed_on,  w_ref)
+  # }
+  
   # eddy current correction
+  if (!is.null("metab$meta$Manufacturer")) {
+    is_ge <- metab$meta$Manufacturer == "GE"
+  } else {
+    is_ge <- FALSE
+  }
+  
+  if (is.null(ecc)) {
+    if (w_ref_available & is_ge) {
+      ecc <- TRUE
+    } else {
+      ecc <- FALSE
+    }
+  }
+  
+  if (ecc & !w_ref_available) stop("Cannot perform ecc without water reference data")
+  
   if (ecc & w_ref_available) {
     ed_off <- ecc(ed_off, w_ref)
     ed_on  <- ecc(ed_on,  w_ref)

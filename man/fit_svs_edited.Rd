@@ -32,7 +32,7 @@ fit_svs_edited(
   pre_align = TRUE,
   dfp_corr = TRUE,
   output_ratio = NULL,
-  ecc = FALSE,
+  ecc = NULL,
   hsvd_width = NULL,
   decimate = FALSE,
   trunc_fid_pts = NULL,
@@ -134,7 +134,7 @@ Defaults to "tCr". Multiple metabolites may be specified for multiple
 outputs. Set to NA to omit.}
 
 \item{ecc}{option to perform water reference based eddy current correction,
-defaults to FALSE.}
+default is to not apply unless the is GE format.}
 
 \item{hsvd_width}{set the width of the HSVD filter in Hz. Note the applied
 width is between -width and +width Hz, with 0 Hz being defined at the centre
