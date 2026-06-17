@@ -5192,8 +5192,7 @@ comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256,
     if (!is.null(change_order)) {
       perm_ord <- change_order
     } else {
-      # perm_ord <- c(2, 3, 1) # old order for spant version 4.1 and below
-      perm_ord <- c(3, 1, 2)   # improved order
+      perm_ord <- c(2, 3, 1)
     }
     
     noise_mat <- aperm(noise_mat, perm_ord)

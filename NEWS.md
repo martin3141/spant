@@ -1,7 +1,6 @@
 # spant 4.2.0
 * Added rm_basis_elements function.
 * Added plot_tqn_fit_csv function.
-* Bug fix for comb_coils_svs_gls.
 * Test fix for NIfTI MRS reader.
 
 # spant 4.1.0
