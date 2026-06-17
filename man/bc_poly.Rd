@@ -4,12 +4,15 @@
 \alias{bc_poly}
 \title{Fit and subtract a polynomial to each spectrum in a dataset.}
 \usage{
-bc_poly(mrs_data, p_deg = 1)
+bc_poly(mrs_data, p_deg = 1, fd = TRUE)
 }
 \arguments{
 \item{mrs_data}{mrs_data object.}
 
 \item{p_deg}{polynomial degree.}
+
+\item{fd}{perform correction in the frequency domain if TRUE, or time-domain
+if FALSE. Default is to perform in the frequency domain.}
 }
 \value{
 polynomial subtracted data.

@@ -4373,15 +4373,22 @@ bc_als_vec <- function(vec, lambda, p) {
 #' Fit and subtract a polynomial to each spectrum in a dataset.
 #' @param mrs_data mrs_data object.
 #' @param p_deg polynomial degree.
+#' @param fd perform correction in the frequency domain if TRUE, or time-domain
+#' if FALSE. Default is to perform in the frequency domain.
 #' @return polynomial subtracted data.
 #' @export
-bc_poly <- function(mrs_data, p_deg = 1) {
+bc_poly <- function(mrs_data, p_deg = 1, fd = TRUE) {
   
   if (inherits(mrs_data, "list")) {
-    return(lapply(mrs_data, bc_poly, p_deg = p_deg))
+    return(lapply(mrs_data, bc_poly, p_deg = p_deg, fd = fd))
   }
   
-  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  # convert to correct domain
+  if (fd & !is_fd(mrs_data)) {
+    mrs_data <- td2fd(mrs_data)
+  } else if (!fd & is_fd(mrs_data)) {
+    mrs_data <- fd2td(mrs_data)
+  }
   
   bc_res <- apply_mrs(mrs_data, 7, bc_poly_vec, p_deg)
 
@@ -4394,7 +4401,7 @@ bc_poly_vec <- function(vec, p_deg) {
   else {
     if (p_deg > 0) {
       x <- 1:length(vec)
-      lm_res <-      stats::lm(Re(vec) ~ poly(x, p_deg))$residuals
+      lm_res <-      stats::lm(Re(vec) ~ poly(x, p_deg))$residuals +
                 1i * stats::lm(Im(vec) ~ poly(x, p_deg))$residuals
     } else {
       lm_res <- Re(vec) - mean(Re(vec)) + 1i * (Im(vec) - mean(Im(vec)))
@@ -5154,12 +5161,15 @@ mod_td <- function(mrs_data) {
 #' testing purposes only.
 #' @param no_noise_corr assume noise is uncorrelated between coils, for testing
 #' purposes only. Defaults to FALSE.
+#' @param bc_poly_noise baseline correct the noise samples with a polynomial in
+#' the time-domain. Defaults to 2, which performs a second-order polynomial
+#' correction. Set to NULL to disable.
 #' @return coil combined MRS data.
 #' @export
 comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256,
                                noise_mrs = NULL, use_mean_sens = TRUE,
                                use_ref_sens = FALSE, change_order = NULL,
-                               no_noise_corr = FALSE) {
+                               no_noise_corr = FALSE, bc_poly_noise = 2) {
   
   # time-domain operation
   if (is_fd(metab)) metab <- fd2td(metab)
@@ -5174,6 +5184,10 @@ comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256,
     noise_mrs <- crop_td_pts(metab, start = Npts(metab) - noise_pts + 1)
   } else {
     noise_pts <- Npts(noise_mrs)
+  }
+  
+  if (!is.null(bc_poly_noise)) {
+    noise_mrs <- bc_poly(noise_mrs, p_deg = bc_poly_noise, fd = FALSE)
   }
   
   if (no_noise_corr) {
