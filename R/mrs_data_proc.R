@@ -5287,7 +5287,7 @@ comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256,
 #' the time-domain. Defaults to 2, which performs a second-order polynomial
 #' correction. Set to NULL to disable.
 #' @export
-comb_coils_mrsi_gls <- function(metab, noise_pts = 30, noise_mrs = NULL,
+comb_coils_mrsi_gls <- function(metab, noise_pts = 256, noise_mrs = NULL,
                                 bc_poly_noise = 2) {
   
   # start in the time-domain

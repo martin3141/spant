@@ -5,7 +5,12 @@
 \title{Combine MRSI coil data using the GLS method presented by An et al
 JMRI 37:1445-1450 (2013).}
 \usage{
-comb_coils_mrsi_gls(metab, noise_pts = 30, noise_mrs = NULL, bc_poly_noise = 2)
+comb_coils_mrsi_gls(
+  metab,
+  noise_pts = 256,
+  noise_mrs = NULL,
+  bc_poly_noise = 2
+)
 }
 \arguments{
 \item{metab}{MRSI data containing metabolite data.}
