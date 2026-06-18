@@ -975,7 +975,10 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
                          inv = NULL, skip_existing = TRUE, 
                          mri_format = "nifti", deface_mri = FALSE) {
   
-  if (!identical(class(mr_data), "list")) mr_data <- list(mr_data)
+  if (!identical(class(mr_data), "character")) {
+    # case for only one input dataset
+    if (!identical(class(mr_data), "list")) mr_data <- list(mr_data)
+  }
   
   Nscans <- length(mr_data)
   
@@ -1263,15 +1266,15 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
 
 build_bids_fname <- function(ses, task, acq, nuc, voi, rec, run, echo, inv, n) {
   
-  if (!is.null(ses))  ses  <- ifelse(length(ses)  == n, ses[n],  ses)
-  if (!is.null(task)) task <- ifelse(length(task) == n, task[n], task)
-  if (!is.null(acq))  acq  <- ifelse(length(acq)  == n, acq[n],  acq)
-  if (!is.null(nuc))  nuc  <- ifelse(length(nuc)  == n, nuc[n],  nuc)
-  if (!is.null(voi))  voi  <- ifelse(length(voi)  == n, voi[n],  voi)
-  if (!is.null(rec))  rec  <- ifelse(length(rec)  == n, rec[n],  rec)
-  if (!is.null(run))  run  <- ifelse(length(run)  == n, run[n],  run)
-  if (!is.null(echo)) echo <- ifelse(length(echo) == n, echo[n], echo)
-  if (!is.null(inv))  inv  <- ifelse(length(inv)  == n, inv[n],  inv)
+  if (!is.null(ses))  ses  <- ifelse(length(ses)  > 1, ses[n],  ses)
+  if (!is.null(task)) task <- ifelse(length(task) > 1, task[n], task)
+  if (!is.null(acq))  acq  <- ifelse(length(acq)  > 1, acq[n],  acq)
+  if (!is.null(nuc))  nuc  <- ifelse(length(nuc)  > 1, nuc[n],  nuc)
+  if (!is.null(voi))  voi  <- ifelse(length(voi)  > 1, voi[n],  voi)
+  if (!is.null(rec))  rec  <- ifelse(length(rec)  > 1, rec[n],  rec)
+  if (!is.null(run))  run  <- ifelse(length(run)  > 1, run[n],  run)
+  if (!is.null(echo)) echo <- ifelse(length(echo) > 1, echo[n], echo)
+  if (!is.null(inv))  inv  <- ifelse(length(inv)  > 1, inv[n],  inv)
   
   fname <- ""
   if (!is.null(ses))  fname <- paste0(fname, "_",      ses)
@@ -1287,6 +1290,11 @@ build_bids_fname <- function(ses, task, acq, nuc, voi, rec, run, echo, inv, n) {
   return(fname)
 }
 
+#' Automatically zero pad a numerical vector.
+#' @param x numeric or integer vector.
+#' @param min_pad minimum number of zeros to pad.
+#' @return character vector of zero-padded values.
+#' @export
 auto_pad_seq <- function(x, min_pad = 2) {
   x_int <- sprintf("%d", x)
   pad_n <- max(nchar(x_int))
