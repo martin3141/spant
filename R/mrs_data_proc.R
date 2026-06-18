@@ -5283,8 +5283,12 @@ comb_coils_svs_gls <- function(metab, ref = NULL, noise_pts = 256,
 #' covariance estimation.
 #' @param noise_mrs MRS data containing noise information for each coil.
 #' @return coil combined MRSI data.
+#' @param bc_poly_noise baseline correct the noise samples with a polynomial in
+#' the time-domain. Defaults to 2, which performs a second-order polynomial
+#' correction. Set to NULL to disable.
 #' @export
-comb_coils_mrsi_gls <- function(metab, noise_pts = 30, noise_mrs = NULL) {
+comb_coils_mrsi_gls <- function(metab, noise_pts = 30, noise_mrs = NULL,
+                                bc_poly_noise = 2) {
   
   # start in the time-domain
   if (is_fd(metab)) metab <- fd2td(metab)
@@ -5299,6 +5303,10 @@ comb_coils_mrsi_gls <- function(metab, noise_pts = 30, noise_mrs = NULL) {
     noise_mrs <- crop_td_pts(metab, start = Npts(metab) - noise_pts + 1)
   } else {
     noise_pts <- Npts(noise_mrs)
+  }
+  
+  if (!is.null(bc_poly_noise)) {
+    noise_mrs <- bc_poly(noise_mrs, p_deg = bc_poly_noise, fd = FALSE)
   }
   
   noise_dyns <- Nx(noise_mrs) * Ny(noise_mrs) * Nz(noise_mrs) * Ndyns(noise_mrs)

@@ -5,7 +5,7 @@
 \title{Combine MRSI coil data using the GLS method presented by An et al
 JMRI 37:1445-1450 (2013).}
 \usage{
-comb_coils_mrsi_gls(metab, noise_pts = 30, noise_mrs = NULL)
+comb_coils_mrsi_gls(metab, noise_pts = 30, noise_mrs = NULL, bc_poly_noise = 2)
 }
 \arguments{
 \item{metab}{MRSI data containing metabolite data.}
@@ -14,6 +14,10 @@ comb_coils_mrsi_gls(metab, noise_pts = 30, noise_mrs = NULL)
 covariance estimation.}
 
 \item{noise_mrs}{MRS data containing noise information for each coil.}
+
+\item{bc_poly_noise}{baseline correct the noise samples with a polynomial in
+the time-domain. Defaults to 2, which performs a second-order polynomial
+correction. Set to NULL to disable.}
 }
 \value{
 coil combined MRSI data.
