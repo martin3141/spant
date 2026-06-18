@@ -6,7 +6,12 @@ Combine MRSI coil data using the GLS method presented by An et al JMRI
 ## Usage
 
 ``` r
-comb_coils_mrsi_gls(metab, noise_pts = 30, noise_mrs = NULL)
+comb_coils_mrsi_gls(
+  metab,
+  noise_pts = 256,
+  noise_mrs = NULL,
+  bc_poly_noise = 2
+)
 ```
 
 ## Arguments
@@ -23,6 +28,12 @@ comb_coils_mrsi_gls(metab, noise_pts = 30, noise_mrs = NULL)
 - noise_mrs:
 
   MRS data containing noise information for each coil.
+
+- bc_poly_noise:
+
+  baseline correct the noise samples with a polynomial in the
+  time-domain. Defaults to 2, which performs a second-order polynomial
+  correction. Set to NULL to disable.
 
 ## Value
 
