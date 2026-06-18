@@ -1137,7 +1137,8 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
           faceoff(temp_mri)
           
           # read the defaced image back
-          deface_path <- file.path(dirname(temp_path), "t1_deface.nii.gz")
+          # deface_path <- file.path(dirname(temp_path), "t1_deface.nii.gz")
+          deface_path <- paste0(temp_path, "temp_mri_defaced.nii.gz")
           deface      <- RNifti::readNifti(deface_path)
           
           # copy the image meta data from the original mri
