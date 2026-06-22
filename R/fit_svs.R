@@ -1135,6 +1135,36 @@ parse_summary <- function(measures, fit_res, units) {
   return(data.frame(measures = measures, values = values)) 
 }
 
+#' A simple wrapper of fit_svs with defaults adjusted to improve the analysis
+#' of lower quality brain tumour spectra.
+#' @param append_basis names of extra signals to add to the default basis. Eg 
+#' append_basis = c("peth", "cit"). Use get_mol_names() function to print all 
+#' available signals. Cannot be used with precompiled basis sets.
+#' @param pre_align_ref_freq reference frequency in ppm units. More than one
+#' frequency may be specified. Defaults to : c(4.65).
+#' @param hsvd_width set the width of the HSVD filter in Hz. Note the applied
+#' width is between -width and +width Hz, with 0 Hz being defined at the centre
+#' of the spectral width. Default is set to 50 Hz.
+#' @param fit_opts options to pass to the fitting method.
+#' @param ... other arguments to pass to fit_svs.
+#' @export
+fit_svs_btrg_v1 <- function(append_basis = c("peth", "cit", "gly"),
+                            pre_align_ref_freq = c(4.65),
+                            hsvd_width = 50, fit_opts = NULL, ...) {
+  
+  if (is.null(fit_opts)) {
+    fit_opts <- abfit_reg_opts(
+      pre_align_ref_freqs = c(2.01, 3.03, 3.22, 1.28, 0.9),
+      max_bl_ed_pppm = 3, broad_asym = FALSE, lb_reg_broad = 4,
+      broad_glb = FALSE, init_damping = 2)
+  }
+  
+  fit_svs(..., append_basis = append_basis,
+          pre_align_ref_freq = pre_align_ref_freq, hsvd_width = hsvd_width,
+          fit_opts = fit_opts)
+    
+}
+
 #' GUI interface for the standard SVS 1H brain analysis pipeline, this is a 
 #' work in progress, and not ready for serious use.
 fit_svs_gui <-function() {
