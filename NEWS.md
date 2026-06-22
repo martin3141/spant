@@ -1,5 +1,6 @@
 # spant 4.3.0
 * Bug fix for mr_data2bids function.
+* Bug fix for testing for GE data in fit_svs.
 
 # spant 4.2.0
 * Added rm_basis_elements function.

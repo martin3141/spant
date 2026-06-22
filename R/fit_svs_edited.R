@@ -543,7 +543,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   # }
   
   # eddy current correction
-  if (!is.null("metab$meta$Manufacturer")) {
+  if (!is.null(metab$meta$Manufacturer)) {
     is_ge <- metab$meta$Manufacturer == "GE"
   } else {
     is_ge <- FALSE
