@@ -319,7 +319,8 @@ read_philips_priv_dicom <- function(fraw, extra, verbose) {
   
   # list of tags to pull from the dicom file
   tags <- list(data      = "5600,0020",
-               fs        = "2005,1030",
+               # fs        = "2005,1030",
+               fs        = "2005,1338",
                ft        = "2001,1083",
                te        = "2005,1310",
                Npts      = "0018,9127",
@@ -328,7 +329,7 @@ read_philips_priv_dicom <- function(fraw, extra, verbose) {
   
   dcm_res  <- dicom_reader(fraw, tags)
   
-  fs        <- readBin(dcm_res$fs, "double", size = 4, n = 2)[1]
+  fs        <- 1 / readBin(dcm_res$fs, "double", size = 4, n = 2)[1]
   ft        <- as.numeric(rawToChar(dcm_res$ft)) * 1e6
   te        <- readBin(dcm_res$te, "double", size = 4) / 1e3
   Npts      <- readBin(dcm_res$Npts, "integer")
