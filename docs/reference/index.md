@@ -102,6 +102,9 @@
 - [`assign_dyns()`](https://martin3141.github.io/spant/reference/assign_dyns.md)
   : Overwrite a subset of dynamic scans.
 
+- [`auto_pad_seq()`](https://martin3141.github.io/spant/reference/auto_pad_seq.md)
+  : Automatically zero pad a numerical vector.
+
 - [`auto_phase()`](https://martin3141.github.io/spant/reference/auto_phase.md)
   : Perform zeroth-order phase correction based on the minimisation of
   the squared difference between the real and magnitude components of
@@ -367,6 +370,10 @@
 
 - [`fit_svs()`](https://martin3141.github.io/spant/reference/fit_svs.md)
   : Standard SVS 1H brain analysis pipeline.
+
+- [`fit_svs_btrg_v1()`](https://martin3141.github.io/spant/reference/fit_svs_btrg_v1.md)
+  : A simple wrapper of fit_svs with defaults adjusted to improve the
+  analysis of lower quality brain tumour spectra.
 
 - [`fit_svs_edited()`](https://martin3141.github.io/spant/reference/fit_svs_edited.md)
   : Edited SVS 1H brain analysis pipeline.

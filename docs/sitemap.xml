@@ -44,6 +44,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/apply_pvc.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/array2mrs_data.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/assign_dyns.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/auto_pad_seq.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/auto_phase.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/auto_phase_bl.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/back_extrap.html</loc></url>
@@ -126,6 +127,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/fit_mrs.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_res2csv.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_svs.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/fit_svs_btrg_v1.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_svs_edited.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_svs_edited_group_results.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fit_svs_group_results.html</loc></url>
