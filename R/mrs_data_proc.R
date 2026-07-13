@@ -849,7 +849,8 @@ lb.list <- function(x, lb, lg = 1) {
 #' @export
 lb.mrs_data <- function(x, lb, lg = 1) {
   if (lg > 1 | lg < 0) {
-    cat("Error, lg values not between 0 and 1.")  
+    cat("Error, lg values not between 0 and 1.") 
+    print(lg)
     stop()
   }
   
@@ -886,6 +887,8 @@ lb.basis_set <- function(x, lb, lg = 1) {
 }
 
 match_ls_optim_fn <- function(par, mrs_data, ref, xlim) {
+  if (par[2] > 1) par[2] <- 1
+  if (par[2] < 0) par[2] <- 0
   if (length(par) == 2) {
     resid_mrs <- ref - td2fd(lb(mrs_data, par[1], par[2]))
   } else {
@@ -931,8 +934,13 @@ match_lineshape <- function(mrs_data, ref, xlim, init_lb = 0.2, init_lg = 0.5,
                         lower = c(min_lb, min_lg, min_amp),
                         upper = c(max_lb, max_lg, max_amp))
     
+    if (res$par[2] > 1) res$par[2] <- 1
+    if (res$par[2] < 0) res$par[2] <- 0
+    
     matched <- td2fd(lb(mrs_data, res$par[1], res$par[2]))
     diff    <- scale_mrs_amp(matched, res$par[3]) - ref
+    
+    matched <- scale_mrs_amp(matched, res$par[3])
     
     if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
     diff_no_match <- mrs_data - ref
@@ -947,6 +955,9 @@ match_lineshape <- function(mrs_data, ref, xlim, init_lb = 0.2, init_lg = 0.5,
     res <- stats::optim(start_vals, match_ls_optim_fn, mrs_data = mrs_data,
                         ref = ref, xlim = xlim, method = "L-BFGS-B",
                         lower = c(min_lb, min_lg), upper = c(max_lb, max_lg))
+    
+    if (res$par[2] > 1) res$par[2] <- 1
+    if (res$par[2] < 0) res$par[2] <- 0
     
     matched <- td2fd(lb(mrs_data, res$par[1], res$par[2]))
     diff    <- matched - ref
