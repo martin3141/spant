@@ -465,6 +465,30 @@ gen_poly_reg <- function(degree, mrs_data = NULL, tr = NULL, Ndyns = NULL,
   return(reg_df)
 }
 
+#' Generate spline regressors.
+#' @param number the number of spline functions to generate.
+#' @param mrs_data mrs_data object for timing information.
+#' @param tr repetition time.
+#' @param Ndyns number of dynamic scans stored, potentially less than Ntrans
+#' if block averaging has been performed.
+#' @param Ntrans number of dynamic scans acquired.
+#' @return spline regressors.
+#' @export
+gen_spline_reg <- function(number, mrs_data = NULL, tr = NULL, Ndyns = NULL,
+                           Ntrans = NULL) {
+  
+  time   <- dyn_acq_times(mrs_data, tr, Ndyns, Ntrans)
+  deg    <- 3
+  
+  if (number < 4) stop("number must be greater than 3")
+  
+  sp_mat <- bbase(N = length(time), number = number - deg, deg = deg)
+  reg_df <- data.frame(time = time, spline = sp_mat)
+  colnames(reg_df) <- gsub("\\.", "_", colnames(reg_df)) # dots in names = bad
+ 
+  return(reg_df)
+}
+
 #' Generate a double gamma model of the HRF as used in SPM.
 #' @param end_t last time point to generate in seconds.
 #' @param res_t temporal resolution in seconds, defaults to 10ms.
