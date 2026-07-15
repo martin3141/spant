@@ -925,6 +925,31 @@ match_lineshape <- function(mrs_data, ref, xlim, init_lb = 0.2, init_lg = 0.5,
   
   if (!is_fd(ref)) ref <- td2fd(ref)
   
+  if (Ndyns(mrs_data) > 1) {
+    mrs_data_list <- mrs_data2list(mrs_data)
+    
+    res <- lapply(mrs_data_list, match_lineshape, ref = ref, xlim = xlim,
+                  init_lb = init_lb, init_lg = init_lg, init_amp = init_amp,
+                  min_lb = min_lb, max_lb = max_lb, min_lg = min_lg,
+                  max_lg = max_lg, min_amp = min_amp, max_amp = max_amp,
+                  amp_optim = amp_optim)
+    
+    
+    matched       <- append_dyns(lapply(res, \(x) x$matched))
+    diff          <- append_dyns(lapply(res, \(x) x$diff))
+    diff_no_match <- append_dyns(lapply(res, \(x) x$diff_no_match))
+    lb            <- sapply(res, \(x) x$lb)
+    lg            <- sapply(res, \(x) x$lg)
+    amp           <- sapply(res, \(x) x$amp)
+    optim_res     <- lapply(res, \(x) x$optim_res)
+    
+    res_out <- list(matched = matched, diff = diff,
+                    diff_no_match = diff_no_match, lb = lb, lg = lg, amp = amp,
+                    optim_res = optim_res)
+    
+    return(res_out)
+  }
+  
   if (amp_optim) {
     # init broadening in Hz, LG factor
     start_vals <- c(init_lb, init_lg, init_amp)
@@ -966,7 +991,7 @@ match_lineshape <- function(mrs_data, ref, xlim, init_lb = 0.2, init_lg = 0.5,
     diff_no_match <- mrs_data - ref
     
     return(list(matched = matched, diff = diff, diff_no_match = diff_no_match,
-                lb = res$par[1], lg = res$par[2], optim_res = res))
+                lb = res$par[1], lg = res$par[2], amp = 1, optim_res = res))
   }
 }
 
