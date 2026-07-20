@@ -1,7 +1,3 @@
-# spant 4.4.0
-* Fix for Philips svs spar/sdat voxel geometry.
-* Bug fixes for match_lineshape function.
-
 # spant 4.3.0
 * Bug fix for mr_data2bids function.
 * Bug fix for testing for GE data in fit_svs.

@@ -4,11 +4,6 @@
 #' @return volume data as a nifti object.
 #' @export
 get_svs_voi <- function(mrs_data, target_mri) {
-  
-  if (is.null(mrs_data$affine)) {
-    stop("Geometry information not found for MRS data, please contact the developer to add support.")
-  }
-  
   affine <- get_mrs_affine(mrs_data)
   raw_data <- array(1, c(mrs_data$resolution[2:4]))
   voi <- RNifti::retrieveNifti(raw_data)

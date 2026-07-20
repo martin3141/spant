@@ -21,6 +21,8 @@
 #' 
 "_PACKAGE"
 
+#' @useDynLib spant
+
 .onLoad <- function(libname, pkgname) {
   # set default options unless already set
   # by the user

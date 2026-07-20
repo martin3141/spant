@@ -19,7 +19,6 @@ mr_data2bids(
   run = NULL,
   echo = NULL,
   inv = NULL,
-  acq_ref = NULL,
   skip_existing = TRUE,
   mri_format = "nifti",
   deface_mri = FALSE
@@ -52,9 +51,7 @@ corresponding to the mrs_data input indices.}
 
 \item{echo}{optional vector of echo time indices.}
 
-\item{inv}{optional vector of acquisition indices.}
-
-\item{acq_ref}{optional vector of acquisition labels for MRS reference data.}
+\item{inv}{optional vector of inversion indices.}
 
 \item{skip_existing}{skip any data files that have already been converted.
 Defaults to TRUE, set to FALSE to force an overwrite of any existing data
