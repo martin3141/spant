@@ -15,7 +15,7 @@ Description: Tools for reading, visualising and processing Magnetic Resonance
 BugReports: https://github.com/martin3141/spant/issues/
 License: GPL-3
 Roxygen: list(markdown = TRUE, roclets = c("rd", "namespace", "collate"))
-NeedsCompilation: yes
+NeedsCompilation: no
 LazyData: yes
 Depends:
     R (>= 4.1.0)
@@ -39,6 +39,7 @@ Imports:
     numDeriv,
     nloptr,
     irlba,
+    lsei,
     jsonlite
 Suggests:
     viridisLite,

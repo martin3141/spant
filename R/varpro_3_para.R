@@ -57,7 +57,7 @@ varpro_3_para <- function(y, acq_paras, basis, opts = NULL) {
   basis_real <- rbind(Re(basis_mod[opts$nstart:Npts,]),
                       Im(basis_mod[opts$nstart:Npts,]))
   
-  ahat <- nnls(basis_real, y_real)$x
+  ahat <- lsei::nnls(basis_real, y_real)$x
   
   yhat <- basis_mod %*% ahat
   amat <- matrix(ahat, nrow = Npts, ncol = Nbasis, byrow = TRUE)
@@ -161,7 +161,7 @@ varpro_3_para_obj <- function(par, y, basis, t, nstart, sc_res = FALSE) {
   y_real <- c(Re(y[nstart:Npts]), Im(y[nstart:Npts]))
   basis_real <- rbind(Re(basis_mod[nstart:Npts,]), Im(basis_mod[nstart:Npts,]))
   
-  ahat <- nnls(basis_real, y_real)$x
+  ahat <- lsei::nnls(basis_real, y_real)$x
   res <- y_real - basis_real %*% ahat
   
   if ( sc_res ) {
@@ -213,7 +213,7 @@ varpro_3_para_anal_jac <- function(par, y, basis, t, nstart) {
   t_cut <- c(t[nstart:Npts], t[nstart:Npts])
   y_real <- c(Re(y[nstart:Npts]), Im(y[nstart:Npts]))
   basis_real <- rbind(Re(basis_mod[nstart:Npts,]), Im(basis_mod[nstart:Npts,]))
-  ahat <- nnls(basis_real, y_real)$x
+  ahat <- lsei::nnls(basis_real, y_real)$x
 
   unmod_basis_real <- basis_real %*% ahat
   unmod_basis_cplx <- basis_mod %*% ahat

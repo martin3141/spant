@@ -53,7 +53,7 @@ fd_projection <- function(mrs_data, basis, opts) {
   basis_real <- rbind(Re(basis_fd), Im(basis_fd))
   
   if (opts$nnls) {
-    ahat <- nnls(basis_real, Y_real)$x
+    ahat <- lsei::nnls(basis_real, Y_real)$x
   } else {
     ahat <- stats::.lm.fit(basis_real, Y_real)$coefficients
   }
@@ -101,7 +101,7 @@ fd_re_projection <- function(mrs_data, basis, opts) {
   basis_real <- Re(basis$data)
   
   if (opts$nnls) {
-    ahat <- nnls(basis_real, Y_real)$x
+    ahat <- lsei::nnls(basis_real, Y_real)$x
   } else {
     ahat <- stats::.lm.fit(basis_real, Y_real)$coefficients
   }
@@ -135,7 +135,7 @@ td_projection <- function(mrs_data, basis, opts) {
   basis_real <- rbind(Re(basis_td), Im(basis_td))
   
   if (opts$nnls) {
-    ahat <- nnls(basis_real, y_real)$x
+    ahat <- lsei::nnls(basis_real, y_real)$x
   } else {
     ahat <- stats::.lm.fit(basis_real, y_real)$coefficients
   }
