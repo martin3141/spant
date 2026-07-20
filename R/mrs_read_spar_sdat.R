@@ -120,12 +120,20 @@ read_spar_sdat <- function(fname, extra) {
   # freq domain vector
   freq_domain <- rep(FALSE, 7)
   
+  pos_vec_affine <- pos_vec
+  
+  affine <- cbind(c(row_ori * res[2], 0),
+                  c(col_ori * res[3], 0),
+                  c(sli_vec * res[4], 0),
+                  c(pos_vec_affine, 1))
+  affine[1:2,] <- -affine[1:2,]
+  
   meta <- list(EchoTime = te,
                Manufacturer = "Philips",
                NumberOfTransients = dyns * avs)
   
   mrs_data <- mrs_data(data = data, ft = ft, resolution = res, ref = ref,
-                       nuc = nuc, freq_domain = freq_domain, affine = NULL,
+                       nuc = nuc, freq_domain = freq_domain, affine = affine,
                        meta = meta, extra = extra)
   
   return(mrs_data)

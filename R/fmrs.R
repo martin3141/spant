@@ -465,6 +465,30 @@ gen_poly_reg <- function(degree, mrs_data = NULL, tr = NULL, Ndyns = NULL,
   return(reg_df)
 }
 
+#' Generate spline regressors.
+#' @param number the number of spline functions to generate.
+#' @param mrs_data mrs_data object for timing information.
+#' @param tr repetition time.
+#' @param Ndyns number of dynamic scans stored, potentially less than Ntrans
+#' if block averaging has been performed.
+#' @param Ntrans number of dynamic scans acquired.
+#' @return spline regressors.
+#' @export
+gen_spline_reg <- function(number, mrs_data = NULL, tr = NULL, Ndyns = NULL,
+                           Ntrans = NULL) {
+  
+  time   <- dyn_acq_times(mrs_data, tr, Ndyns, Ntrans)
+  deg    <- 3
+  
+  if (number < 4) stop("number must be greater than 3")
+  
+  sp_mat <- bbase(N = length(time), number = number - deg, deg = deg)
+  reg_df <- data.frame(time = time, spline = sp_mat)
+  colnames(reg_df) <- gsub("\\.", "_", colnames(reg_df)) # dots in names = bad
+ 
+  return(reg_df)
+}
+
 #' Generate a double gamma model of the HRF as used in SPM.
 #' @param end_t last time point to generate in seconds.
 #' @param res_t temporal resolution in seconds, defaults to 10ms.
@@ -960,7 +984,8 @@ mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
 #' @param rec optional vector of reconstruction labels.
 #' @param run optional vector of run indices.
 #' @param echo optional vector of echo time indices.
-#' @param inv optional vector of inversion indices.
+#' @param inv optional vector of acquisition indices.
+#' @param acq_ref optional vector of acquisition labels for MRS reference data.
 #' @param skip_existing skip any data files that have already been converted.
 #' Defaults to TRUE, set to FALSE to force an overwrite of any existing data
 #' files.
@@ -972,7 +997,7 @@ mrs_data2bids <- function(mrs_data, output_dir, suffix = NULL, sub = NULL,
 mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
                          ses = NULL, task = NULL, acq = NULL, nuc = NULL,
                          voi = NULL, rec = NULL, run = NULL, echo = NULL,
-                         inv = NULL, skip_existing = TRUE, 
+                         inv = NULL, acq_ref = NULL, skip_existing = TRUE, 
                          mri_format = "nifti", deface_mri = FALSE) {
   
   if (!identical(class(mr_data), "character")) {
@@ -1014,6 +1039,11 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
   if (!is.null(acq)) {
     if (length(acq) == 1) acq <- rep(acq, Nscans)
     if (length(acq) != Nscans) stop("acq length does not match.")
+  }
+  
+  if (!is.null(acq_ref)) {
+    if (length(acq_ref) == 1) acq_ref <- rep(acq_ref, Nscans)
+    if (length(acq_ref) != Nscans) stop("acq length does not match.")
   }
   
   if (!is.null(nuc)) {
@@ -1197,18 +1227,38 @@ mr_data2bids <- function(mr_data, suffix, output_dir, sub = NULL,
     
     # just one ref file
     if (!is.null(ref) & is.null(ref_ecc)) {
-      fname_ref <- paste0(fname, "_", "mrsref", ".nii.gz")
-      
-      # construct the full path
-      full_path_ref <- file.path(dir, fname_ref)
-      
-      if (skip_existing & file.exists(full_path_ref)) {
-        cat("Skipping dataset ", n," of ", Nscans, " : ", full_path_ref, "\n",
-            sep = "")
+      if (is.null(acq_ref)) {
+        fname_ref <- paste0(fname, "_", "mrsref", ".nii.gz")
+        
+        # construct the full path
+        full_path_ref <- file.path(dir, fname_ref)
+        
+        if (skip_existing & file.exists(full_path_ref)) {
+          cat("Skipping dataset ", n," of ", Nscans, " : ", full_path_ref, "\n",
+              sep = "")
+        } else {
+          cat("Writing dataset ", n," of ", Nscans, " : ", full_path_ref, "\n",
+              sep = "")
+          write_mrs(ref, fname = full_path_ref, format = "nifti", force = TRUE)  
+        }
       } else {
-        cat("Writing dataset ", n," of ", Nscans, " : ", full_path_ref, "\n",
-            sep = "")
-        write_mrs(ref, fname = full_path_ref, format = "nifti", force = TRUE)  
+        acq_lab <- paste0(acq[n], acq_ref[n])
+        
+        fname <- paste0(sub_lab)
+        fname <- paste0(fname, build_bids_fname(ses_lab, task, acq_lab, nuc, voi,
+                                                rec, run, echo, inv, n))                    
+        
+        fname_ref <- paste0(fname, "_", "mrsref", ".nii.gz")
+        full_path_ref <- file.path(dir, fname_ref)
+        
+        if (skip_existing & file.exists(full_path_ref)) {
+          cat("Skipping dataset ", n," of ", Nscans, " : ", full_path_ref, "\n",
+              sep = "")
+        } else {
+          cat("Writing dataset ", n," of ", Nscans, " : ", full_path_ref, "\n",
+              sep = "")
+          write_mrs(ref, fname = full_path_ref, format = "nifti", force = TRUE)
+        }
       }
     }
         
