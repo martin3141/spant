@@ -1,4 +1,5 @@
 # spant 4.4.0
+* Fix for Philips svs spar/sdat voxel geometry.
 * Bug fixes for match_lineshape function.
 
 # spant 4.3.0
