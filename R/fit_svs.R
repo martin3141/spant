@@ -746,10 +746,16 @@ fit_svs <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   phase_offset <- fit_res$res_tab$phase
   shift_offset <- fit_res$res_tab$shift
   
-  if (w_ref_available) fit_res$res_tab$ws_eff <- ws_efficiency
+  if (w_ref_available) {
+    fit_res$res_tab$ws_eff <- ws_efficiency
+  }
   
   # keep unscaled results
   res_tab_unscaled <- fit_res$res_tab
+  
+  if (w_ref_available) {
+    res_tab_unscaled$w_amp <- as.numeric(get_td_amp(w_ref))
+  }
   
   # assume 100% white matter unless told otherwise
   if (is.null(p_vols) & is.null(mri_seg)) {
