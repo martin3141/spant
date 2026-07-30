@@ -5596,10 +5596,13 @@ lb_renoise <- function(mrs_data, lb, lg = NULL, sig_region = c(4, 0.5),
 
 #' Set all spectral data points below a given percentage of the maximum to zero.
 #' @param mrs_data data to be processed.
+#' @param percent_max spectral data points smaller than this percentage value
+#' will be set to zero.
 #' @return mrs_data object with zeroed spectral data points.
 #' @export
 zero_spec_threshold <- function(mrs_data, percent_max) {
   
+  # frequency domain operation
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
   
   mrs_data_out <- apply_mrs(mrs_data, 7, zero_spec_threshold_vec, percent_max)
@@ -5621,4 +5624,35 @@ zero_spec_threshold_vec <- function(vec, percent_max) {
   vec <- re_vec + 1i * im_vec
   
   return(vec)
+}
+
+#' Set spectral data points to a given value.
+#' @param mrs_data data to be processed.
+#' @param xlim spectral region (in ppm) of data points to set. If NULL (default)
+#' all spectral points will be set.
+#' @param value value to set the spectral region. Defaults to zero.
+#' @param invert set all spectral points *outside* the spectral region to the
+#' given value.
+#' @return mrs_data object with modified spectral data points.
+#' @export
+set_spec_values <- function(mrs_data, xlim = NULL, value = 0, invert = FALSE) {
+  
+  # frequency domain operation
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  if (is.null(xlim)) {
+    if (invert) stop("inverting without a spectral range doesn't make sense")
+    mrs_data$data[,,,,,,] <- value
+  } else {
+    scale <- ppm(mrs_data)
+    inds <- get_seg_ind(scale, xlim[1], xlim[2])
+    
+    if (invert) {
+      mrs_data$data[,,,,,,-inds] <- value
+    } else {
+      mrs_data$data[,,,,,,inds] <- value
+    }
+  }
+  
+  return(mrs_data)
 }

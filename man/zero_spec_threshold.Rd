@@ -8,6 +8,9 @@ zero_spec_threshold(mrs_data, percent_max)
 }
 \arguments{
 \item{mrs_data}{data to be processed.}
+
+\item{percent_max}{spectral data points smaller than this percentage value
+will be set to zero.}
 }
 \value{
 mrs_data object with zeroed spectral data points.
