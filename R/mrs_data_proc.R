@@ -5593,3 +5593,32 @@ lb_renoise <- function(mrs_data, lb, lg = NULL, sig_region = c(4, 0.5),
   
   return(mrs_data)
 }
+
+#' Set all spectral data points below a given percentage of the maximum to zero.
+#' @param mrs_data data to be processed.
+#' @return mrs_data object with zeroed spectral data points.
+#' @export
+zero_spec_threshold <- function(mrs_data, percent_max) {
+  
+  if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)
+  
+  mrs_data_out <- apply_mrs(mrs_data, 7, zero_spec_threshold_vec, percent_max)
+  
+  return(mrs_data_out)
+  
+}
+
+zero_spec_threshold_vec <- function(vec, percent_max) {
+  
+  re_vec <- Re(vec)
+  im_vec <- Im(vec)
+  
+  re_max_val <- max(re_vec)
+  re_vec[re_vec < (re_max_val * percent_max / 100)] <- 0
+  im_max_val <- max(im_vec)
+  im_vec[im_vec < (im_max_val * percent_max / 100)] <- 0
+  
+  vec <- re_vec + 1i * im_vec
+  
+  return(vec)
+}
