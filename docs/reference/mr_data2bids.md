@@ -20,6 +20,7 @@ mr_data2bids(
   run = NULL,
   echo = NULL,
   inv = NULL,
+  acq_ref = NULL,
   skip_existing = TRUE,
   mri_format = "nifti",
   deface_mri = FALSE
@@ -80,7 +81,11 @@ mr_data2bids(
 
 - inv:
 
-  optional vector of inversion indices.
+  optional vector of acquisition indices.
+
+- acq_ref:
+
+  optional vector of acquisition labels for MRS reference data.
 
 - skip_existing:
 

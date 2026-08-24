@@ -456,6 +456,9 @@
 - [`gen_poly_reg()`](https://martin3141.github.io/spant/reference/gen_poly_reg.md)
   : Generate polynomial regressors.
 
+- [`gen_spline_reg()`](https://martin3141.github.io/spant/reference/gen_spline_reg.md)
+  : Generate spline regressors.
+
 - [`gen_trap_reg()`](https://martin3141.github.io/spant/reference/gen_trap_reg.md)
   : Generate trapezoidal regressors.
 
@@ -1176,6 +1179,9 @@
 - [`set_ref()`](https://martin3141.github.io/spant/reference/set_ref.md)
   : Set the ppm reference value (eg ppm value at 0Hz).
 
+- [`set_spec_values()`](https://martin3141.github.io/spant/reference/set_spec_values.md)
+  : Set spectral data points to a given value.
+
 - [`set_td_pts()`](https://martin3141.github.io/spant/reference/set_td_pts.md)
   : Set the number of time-domain data points, truncating or
   zero-filling as appropriate.
@@ -1391,6 +1397,10 @@
 
 - [`zero_higher_orders()`](https://martin3141.github.io/spant/reference/zero_higher_orders.md)
   : Zero all coherences including and above a given order.
+
+- [`zero_spec_threshold()`](https://martin3141.github.io/spant/reference/zero_spec_threshold.md)
+  : Set all spectral data points below a given percentage of the maximum
+  to zero.
 
 - [`zero_td_pts_end()`](https://martin3141.github.io/spant/reference/zero_td_pts_end.md)
   :

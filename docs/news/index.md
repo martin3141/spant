@@ -1,6 +1,15 @@
 # Changelog
 
+## spant 4.4.0
+
+- Fix for Philips svs spar/sdat voxel geometry.
+- Bug fixes for match_lineshape function.
+- Added zero_spec_threshold function.
+- Added set_spec_values function.
+
 ## spant 4.3.0
+
+CRAN release: 2026-07-07
 
 - Bug fix for mr_data2bids function.
 - Bug fix for testing for GE data in fit_svs.

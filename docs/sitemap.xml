@@ -157,6 +157,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/gen_impulse_reg.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/gen_numeric_reg.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/gen_poly_reg.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/gen_spline_reg.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/gen_trap_reg.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/gen_trap_rf.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/get_1h_brain_basis_names.html</loc></url>
@@ -378,6 +379,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/set_precomp_mode.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/set_precomp_verbose.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/set_ref.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/set_spec_values.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/set_td_pts.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/set_tqn_cmd.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/set_tr.html</loc></url>
@@ -448,6 +450,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/zero_fade_spec.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/zero_higher_orders.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/zero_nzoc.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/zero_spec_threshold.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/zero_td_pts_end.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/zf.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/zf_xy.html</loc></url>
