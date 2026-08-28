@@ -1,3 +1,7 @@
+# spant 4.5.0
+* Bug fix for read_basis_niidir function.
+* Added read_fslmrs_json_basis_dir function.
+
 # spant 4.4.0
 * Fix for Philips svs spar/sdat voxel geometry.
 * Bug fixes for match_lineshape function.

@@ -194,7 +194,7 @@ write_basis_niidir <- function(basis, basis_dir) {
 #' @return a basis_set object.
 #' @export
 read_basis_niidir <- function(basis_dir) {
-  files <- sort(Sys.glob(file.path("test", "*.nii.gz")))
+  files <- sort(Sys.glob(file.path(basis_dir, "*.nii.gz")))
   names <- sub(".nii.gz", "", basename(files))
   mrs_list <- lapply(files, read_mrs_nifti)
   mrs_dyn  <- append_dyns(mrs_list)
@@ -635,4 +635,59 @@ calc_basis_corr_mat <- function(basis, xlim = c(4, 0.2), zf = TRUE) {
   colnames(corr_mat) <- basis$names
 
   return(corr_mat)
+}
+
+#' Read an FSL-MRS json file containing a basis signal.
+#' @param basis_file path to basis file.
+#' @return basis_set object.
+#' @export
+read_fslmrs_json_basis_file <- function(basis_file) {
+
+  json_basis <- jsonlite::read_json(basis_file)
+  
+  vec <- as.numeric(json_basis$basis$basis_re) - 
+         1i * as.numeric(json_basis$basis$basis_im)
+  
+  mrs_data <- vec2mrs_data(vec, fs = 1 / json_basis$basis$basis_dwell, 
+                           ft = json_basis$basis$basis_centre * 1e6,
+                           ref = 4.65, nuc = "1H", fd = FALSE)
+  
+  return(mrs_data2basis(mrs_data, json_basis$basis$basis_name))
+}
+
+#' Read a basis folder containing one FSL-MRS json file for each basis element.
+#' @param basis_dir path to directory containing json files.
+#' @return a basis_set object.
+#' @export
+read_fslmrs_json_basis_dir <- function(basis_dir) {
+  
+  files <- Sys.glob(file.path(basis_dir, "*.json"))
+  
+  n_files <- length(files)
+  
+  if (n_files == 0) stop("No json files found.")
+  
+  basis <- read_fslmrs_json_basis_file(files[1])
+  
+  if (n_files > 0) {
+    for (n in 2:n_files) {
+      temp_basis <- read_fslmrs_json_basis_file(files[n])
+      basis <- append_basis(basis, temp_basis)
+    }
+  }
+    
+  return(basis)
+}
+
+#' Scale the first time-domain data point in an basis object.
+#' @param basis basis object.
+#' @param scale scaling value, defaults to 0.5.
+#' @return scaled basis object.
+#' @export
+fp_scale_basis <- function(basis, scale = 0.5) {
+  names <- basis$names
+  mrs_data <- basis2mrs_data(basis)
+  mrs_data <- fp_scale(mrs_data, scale)
+  basis <- mrs_data2basis(mrs_data, basis$names)
+  return(basis)
 }
