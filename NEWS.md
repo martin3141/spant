@@ -8,6 +8,9 @@
   pre_align_ref_freq and pre_align_ref_amp options.
 * Added spant_fit_svs_edited command-line wrapper for fit_svs_edited, and
   install_cli now installs both command-line scripts.
+* Fixed the --ecc option in the spant_fit_svs and spant_fit_svs_edited
+  command-line wrappers to default to NULL (auto-detect GE eddy current
+  correction) rather than always forcing FALSE.
 
 # spant 4.4.0
 * Fix for Philips svs spar/sdat voxel geometry.

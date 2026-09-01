@@ -10,17 +10,18 @@ install_cli <- function(path = NULL) {
 
   if (is.null(path)) path <- "/usr/local/bin"
 
-  cli_scripts <- c("spant_fit_svs", "spant_fit_svs_edited")
+  cli_scripts_dir <- system.file('cli_scripts', package = 'spant')
+  cli_scripts <- list.files(cli_scripts_dir)
+
+  ver_line <- paste0("ver <- \"", utils::packageVersion("spant"), "\"")
 
   for (script_name in cli_scripts) {
     script_path <- file.path(path, script_name)
 
-    package_script_path <- system.file('cli_scripts', script_name,
-                                       package = 'spant')
+    package_script_path <- file.path(cli_scripts_dir, script_name)
 
     # embed the spant version number into the cli script
     script_txt <- readLines(package_script_path)
-    ver_line <- paste0("ver <- \"", utils::packageVersion("spant"), "\"")
     script_txt <- c("#!/usr/bin/env Rscript --vanilla", "", ver_line, "",
                     script_txt)
 
