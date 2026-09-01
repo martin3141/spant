@@ -244,7 +244,7 @@ seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89,
   sys$rho <- lhs %*% sys$rho %*% rhs
   
   # apply selective 180
-  pulse <- get_guassian_pulse(180, steps)
+  pulse <- get_gaussian_pulse(180, steps)
   dt <- duration / steps
   
   eig_vec_inv <- solve(sys$H_eig_vecs)

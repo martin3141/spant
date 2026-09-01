@@ -85,7 +85,7 @@ collapsed into the dynamic dimension and displayed.}
 \item{bl_lty}{linetype for the y = 0 baseline trace. A default value NULL
 results in no baseline being plotted.}
 
-\item{bl_lwd}{linewith for the y = 0 baseline trace. Defaults to 0.5.}
+\item{bl_lwd}{linewidth for the y = 0 baseline trace. Defaults to 0.5.}
 
 \item{restore_def_par}{restore default plotting par values after the plot has
 been made.}

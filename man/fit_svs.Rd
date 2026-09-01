@@ -122,11 +122,11 @@ available signals. Cannot be used with precompiled basis sets.}
 the basis. For example: use "^lac$|^ala$" to remove lactate and alanine; "*" to
 remove all signals and "^mm|^lip" to remove all macromolecular and lipid
 signals. This operation is performed before signals are added with
-append_basis. Cannot be used with precompiled/exernal basis sets.}
+append_basis. Cannot be used with precompiled/external basis sets.}
 
 \item{remove_external_basis}{grep expression to match names of signals to
 remove from the external basis. For example: use "^Lac$|^Ala$" to remove
-lactateand alanine and "^MM|^Lip" to remove all macromolecular and lipid
+lactate and alanine and "^MM|^Lip" to remove all macromolecular and lipid
 signals.}
 
 \item{pre_align}{perform simple frequency alignment to known reference peaks.}

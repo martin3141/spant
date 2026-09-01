@@ -1,6 +1,8 @@
 # spant 4.5.0
 * Bug fix for read_basis_niidir function.
 * Added read_fslmrs_json_basis_dir function.
+* Added get_gaussian_pulse function to replace the misspelled
+  get_guassian_pulse, which is now deprecated.
 
 # spant 4.4.0
 * Fix for Philips svs spar/sdat voxel geometry.

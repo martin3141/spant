@@ -2,7 +2,7 @@
 % Please edit documentation in R/abfit.R
 \name{abfit_reg_opts}
 \alias{abfit_reg_opts}
-\title{Return a list of options for an ABfit analysis with regularision.}
+\title{Return a list of options for an ABfit analysis with regularisation.}
 \usage{
 abfit_reg_opts(
   init_damping = 5,
@@ -217,7 +217,7 @@ signals. If NULL then defaults to lb_reg.}
 starting with Lip or MM.}
 }
 \description{
-Return a list of options for an ABfit analysis with regularision.
+Return a list of options for an ABfit analysis with regularisation.
 }
 \examples{
 opts <- abfit_reg_opts(ppm_left = 4.2, noise_region = c(-1, -3))

@@ -34,7 +34,7 @@ data.}
 
 \item{vline}{vertical lines to add to the plot.}
 
-\item{lb}{linebroading to add in Hz before GLM analysis.}
+\item{lb}{linebroadening to add in Hz before GLM analysis.}
 
 \item{return_results}{function will return key outputs, defaults to FALSE.}
 }
