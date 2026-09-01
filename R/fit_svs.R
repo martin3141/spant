@@ -1231,8 +1231,12 @@ fit_svs_gui <- function() {
   )
 
   server <- function(input, output, session) {
-    volumes <- c(Home = path.expand("~"), shinyFiles::getVolumes()())
-    shinyFiles::shinyFileChoose(input, "wsup_btn", roots = volumes, session = session)
+    wd <- getwd()
+    wd_root <- wd
+    names(wd_root) <- wd
+    volumes <- c(wd_root, Home = path.expand("~"), shinyFiles::getVolumes()())
+    shinyFiles::shinyFileChoose(input, "wsup_btn", roots = volumes, session = session,
+                                 defaultRoot = wd)
     shinyFiles::shinyDirChoose(input, "out_btn", roots = volumes, session = session,
                                 allowDirCreate = TRUE)
 
