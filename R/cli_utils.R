@@ -26,7 +26,7 @@ install_cli <- function(path = NULL) {
 
     # embed the spant version number into the cli script
     script_txt <- readLines(package_script_path)
-    script_txt <- c("#!/usr/bin/env Rscript --vanilla", "", ver_line, "",
+    script_txt <- c("#!/usr/bin/env -S Rscript --vanilla", "", ver_line, "",
                     script_txt)
 
     # write to filesystem
