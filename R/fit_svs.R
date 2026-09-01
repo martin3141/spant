@@ -1233,15 +1233,33 @@ fit_svs_gui <- function() {
   server <- function(input, output, session) {
     volumes <- c(Home = path.expand("~"), shinyFiles::getVolumes()())
     shinyFiles::shinyFileChoose(input, "wsup_btn", roots = volumes, session = session)
-    shinyFiles::shinyFileChoose(input, "wref_btn", roots = volumes, session = session)
     shinyFiles::shinyDirChoose(input, "out_btn", roots = volumes, session = session,
                                 allowDirCreate = TRUE)
 
     wsup_path <- shiny::reactive(shinyFiles::parseFilePaths(volumes, input$wsup_btn)$datapath)
-    wref_path <- shiny::reactive(shinyFiles::parseFilePaths(volumes, input$wref_btn)$datapath)
     out_path  <- shiny::reactive(trimws(input$out_path_txt))
 
     output$wsup_path <- shiny::renderText(if (length(wsup_path())) wsup_path() else "")
+
+    # once a water-suppressed file is picked, open the water reference
+    # chooser in the same directory by default
+    wref_roots <- shiny::reactive({
+      if (length(wsup_path()) > 0) {
+        c(volumes, "Water-suppressed dir" = dirname(wsup_path()))
+      } else {
+        volumes
+      }
+    })
+
+    shiny::observeEvent(wsup_path(), {
+      default_root <- if (length(wsup_path()) > 0) "Water-suppressed dir" else "Home"
+      shinyFiles::shinyFileChoose(
+        input, "wref_btn", session = session, roots = wref_roots(),
+        defaultRoot = default_root
+      )
+    })
+
+    wref_path <- shiny::reactive(shinyFiles::parseFilePaths(wref_roots(), input$wref_btn)$datapath)
     output$wref_path <- shiny::renderText(if (length(wref_path())) wref_path() else "")
 
     shiny::observeEvent(input$out_btn, {
