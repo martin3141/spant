@@ -1,0 +1,7 @@
+suppressPackageStartupMessages(library(spant))
+
+if (ver != utils::packageVersion("spant")) {
+  warning("c/l script and spant version missmatch. Reinstall the c/l scripts with : sudo Rscript -e \"spant::install_cli()\"")
+}
+
+fit_svs_gui()
