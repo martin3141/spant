@@ -104,7 +104,8 @@ registration to anatomical images (partial volume correction).
 ### Command-line wrappers
 
 `R/cli_utils.R` provides `install_cli()`, which copies the scripts in
-`inst/cli_scripts/` (e.g. `spant_fit_svs`, `spant_fit_svs_edited`) to a system path
+`inst/cli_scripts/` (e.g. `spant_fit_svs`, `spant_fit_svs_edited`,
+`spant_fit_svs_gui`) to a system path
 (default `/usr/local/bin`), prepending a shebang and the installed package version.
 This lets `fit_svs`/`fit_svs_edited`-based pipelines be invoked directly from the shell
 without an R session. When editing these scripts, remember `install_cli()` embeds the
