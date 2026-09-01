@@ -29,6 +29,10 @@ parser <- add_option(parser, c("--deface"), action = "store", default = FALSE,
 parser <- add_option(parser, c("--segment_t1"), action = "store", default = FALSE,
                      help="Segment the t1 weighted mri file with ANTs and use the\n\t\tresults to perform partial volume correction. Defaults to FALSE.")
 
+parser <- add_option(parser, c("--segment_t1_method"), action = "store", type = "character",
+                     default = "rpyants",
+                     help="One of : \"rpyants\" (default), \"ants\" or \"fslr\".")
+
 parser <- add_option(parser, c("-b", "--external_basis"), action = "store", type = "character",
                      help="Precompiled basis set to use for analysis.")
 
@@ -68,8 +72,23 @@ parser <- add_option(parser, c("-a", "--append_basis"), action = "store", type =
 parser <- add_option(parser, c("-r", "--remove_basis"), action = "store", type = "character",
                      help="Grep expression to match names of signals to remove from the\n\t\tbasis. For example: use \"lac|ala\" to remove lactate and alanine;\n\t\t\"*\" to remove all signals and \"^mm|^lip\" to remove all\n\t\tmacromolecular and lipid signals. This operation is performed\n\t\tbefore signals are added with append_basis. Cannot be used with\n\t\tprecompiled basis sets.")
 
+parser <- add_option(parser, c("--remove_external_basis"), action = "store", type = "character",
+                     help="Grep expression to match names of signals to remove from the\n\t\texternal basis. For example: use \"^Lac$|^Ala$\" to remove lactate\n\t\tand alanine and \"^MM|^Lip\" to remove all macromolecular and\n\t\tlipid signals.")
+
 parser <- add_option(parser, c("--pre_align"), action = "store", default = TRUE,
                      help="Perform simple frequency alignment to known reference peaks.")
+
+parser <- add_option(parser, c("--pre_align_max_shift"), action = "store", type = "double",
+                     default = 40,
+                     help="Maximum allowable shift in Hz for pre_align. Defaults to 40 Hz.")
+
+parser <- add_option(parser, c("--pre_align_ref_freq"), action = "store", type = "character",
+                     default = "c(2.01, 3.03, 3.22)",
+                     help="Reference frequency in ppm units for pre_align. More than one\n\t\tfrequency may be specified. Defaults to : c(2.01, 3.03, 3.22).")
+
+parser <- add_option(parser, c("--pre_align_ref_amp"), action = "store", type = "character",
+                     default = "1",
+                     help="Reference frequency relative amplitudes for pre_align. Defaults\n\t\tto 1, corresponding to equal amplitudes.")
 
 parser <- add_option(parser, c("--dfp_corr"), action = "store", default = TRUE,
                      help="Perform dynamic frequency and phase correction using the RATS\n\t\tmethod.")
@@ -181,6 +200,16 @@ if (!is.null(opt[["plot_ppm_xlim"]])) {
   opt[["plot_ppm_xlim"]] <- eval(parse(text = opt[["plot_ppm_xlim"]]))
 }
 
+# convert pre_align_ref_freq to numeric vector
+if (!is.null(opt[["pre_align_ref_freq"]])) {
+  opt[["pre_align_ref_freq"]] <- eval(parse(text = opt[["pre_align_ref_freq"]]))
+}
+
+# convert pre_align_ref_amp to numeric vector
+if (!is.null(opt[["pre_align_ref_amp"]])) {
+  opt[["pre_align_ref_amp"]] <- eval(parse(text = opt[["pre_align_ref_amp"]]))
+}
+
 # convert dyn_basis_lb to numeric vector
 if (!is.null(opt[["dyn_basis_lb"]])) {
   opt[["dyn_basis_lb"]] <- eval(parse(text = opt[["dyn_basis_lb"]]))
@@ -198,6 +227,7 @@ fit_res <- fit_svs(input = opt[["input"]],
                    mri_seg = opt[["mri_seg"]],
                    deface = opt[["deface"]],
                    segment_t1 = opt[["segment_t1"]],
+                   segment_t1_method = opt[["segment_t1_method"]],
                    external_basis = opt[["external_basis"]],
                    append_external_basis = opt[["append_external_basis"]],
                    p_vols = opt[["p_vols"]],
@@ -211,7 +241,11 @@ fit_res <- fit_svs(input = opt[["input"]],
                    TM = opt[["TM"]],
                    append_basis = opt[["append_basis"]],
                    remove_basis = opt[["remove_basis"]],
+                   remove_external_basis = opt[["remove_external_basis"]],
                    pre_align = opt[["pre_align"]],
+                   pre_align_max_shift = opt[["pre_align_max_shift"]],
+                   pre_align_ref_freq = opt[["pre_align_ref_freq"]],
+                   pre_align_ref_amp = opt[["pre_align_ref_amp"]],
                    dfp_corr = opt[["dfp_corr"]],
                    dfp_corr_ref_subset = opt[["dfp_corr_ref_subset"]],
                    output_ratio = opt[["output_ratio"]],
