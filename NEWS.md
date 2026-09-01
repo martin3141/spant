@@ -6,6 +6,8 @@
 * Synced the spant_fit_svs command-line wrapper with fit_svs, adding
   segment_t1_method, remove_external_basis, pre_align_max_shift,
   pre_align_ref_freq and pre_align_ref_amp options.
+* Added spant_fit_svs_edited command-line wrapper for fit_svs_edited, and
+  install_cli now installs both command-line scripts.
 
 # spant 4.4.0
 * Fix for Philips svs spar/sdat voxel geometry.

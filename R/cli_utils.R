@@ -7,27 +7,31 @@
 #' "/usr/local/bin". 
 #' @export
 install_cli <- function(path = NULL) {
-  
+
   if (is.null(path)) path <- "/usr/local/bin"
-  
-  fit_svs_path <- file.path(path, "spant_fit_svs")
-    
-  package_fit_svs_path <- system.file('cli_scripts', 'spant_fit_svs',
-                                      package = 'spant')
-  
-  # embed the spant version number into the cli script
-  script_txt <- readLines(package_fit_svs_path)
-  ver_line <- paste0("ver <- \"", utils::packageVersion("spant"), "\"")
-  script_txt <- c("#!/usr/bin/env Rscript --vanilla", "", ver_line, "",
-                  script_txt)
-  
-  # write to filesystem
-  write(script_txt, file = fit_svs_path)
-  
-  # make executable
-  Sys.chmod(fit_svs_path, mode = "755")
-  
-  cat("spant_fit_svs successfully installed to : ", path, "\n", sep = "")
+
+  cli_scripts <- c("spant_fit_svs", "spant_fit_svs_edited")
+
+  for (script_name in cli_scripts) {
+    script_path <- file.path(path, script_name)
+
+    package_script_path <- system.file('cli_scripts', script_name,
+                                       package = 'spant')
+
+    # embed the spant version number into the cli script
+    script_txt <- readLines(package_script_path)
+    ver_line <- paste0("ver <- \"", utils::packageVersion("spant"), "\"")
+    script_txt <- c("#!/usr/bin/env Rscript --vanilla", "", ver_line, "",
+                    script_txt)
+
+    # write to filesystem
+    write(script_txt, file = script_path)
+
+    # make executable
+    Sys.chmod(script_path, mode = "755")
+
+    cat(script_name, " successfully installed to : ", path, "\n", sep = "")
+  }
 }
 
 # https://www.r-bloggers.com/2015/06/identifying-the-os-from-r/
