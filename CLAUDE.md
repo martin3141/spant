@@ -101,6 +101,15 @@ and `spant.lcm_cmd` (LCModel). `check_tqn()`/`check_lcm()` verify these are runn
 `R/image_reg.R` and `R/ants_utils.R` integrate with `RNiftyReg`/`rpyANTs` for voxel
 registration to anatomical images (partial volume correction).
 
+### Command-line wrappers
+
+`R/cli_utils.R` provides `install_cli()`, which copies the scripts in
+`inst/cli_scripts/` (e.g. `spant_fit_svs`, `spant_fit_svs_edited`) to a system path
+(default `/usr/local/bin`), prepending a shebang and the installed package version.
+This lets `fit_svs`/`fit_svs_edited`-based pipelines be invoked directly from the shell
+without an R session. When editing these scripts, remember `install_cli()` embeds the
+package version at install time, not at script-authoring time.
+
 ### Other notable files
 
 - `R/precomp.R`: precompiled/cached basis or lookup data handling
