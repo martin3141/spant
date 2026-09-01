@@ -18,7 +18,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   if ((noise_reg_lim[1] < ppm_lim[1]) | (noise_reg_lim[2] > ppm_lim[2])) {
     opts$noise_region <- round(c(ppm_lim[1] + 0.6 + 0.1, ppm_lim[1] + 0.1), 2)
     warning(paste0("The spectral range for the noise region is outside\n",
-                " the data spectral width. Increase the acquistion spectral ",
+                " the data spectral width. Increase the acquisition spectral ",
                 "bandwidth\nor change noise_region in the fitting options.\n",
                 "Automatically adjusting noise region to : ", opts$noise_region[1], ", ", 
                 opts$noise_region[2], " ppm\n"))
@@ -85,7 +85,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   
   Nbasis <- ncol(basis$data)
   
-  # tranform metab basis to time-domain
+  # transform metab basis to time-domain
   raw_metab_basis <- apply(basis$data, 2, ift_shift)
   
   # zero pad metab basis matrix to twice length
@@ -112,7 +112,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   }
   
   #### 2 approx iter fit ####
-  # 3 para pre-fit with flexable bl and no broad signals in basis
+  # 3 para pre-fit with flexible bl and no broad signals in basis
   # to get good starting values
   if (opts$maxiters_pre > 0) {
     
@@ -283,7 +283,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
       }
     }
     
-    # find the optimal flexability 
+    # find the optimal flexibility 
     optim_idx <- which.min(optim_model_vec)
     
     if (optim_idx == 1) {
@@ -311,7 +311,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   broad_indices <- c(grep("^Lip", basis$names), grep("^MM", basis$names))
   
   # construct a vector of basis elements to optionally exclude from the
-  # lineshape asymetry adjustment
+  # lineshape asymmetry adjustment
   if (opts$broad_asym) {
     omit_ls_asym <- rep(FALSE, length(basis$names))
   } else {
@@ -539,7 +539,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
     lambda <- opts$lambda
   }
   
-  #### fit resut ####
+  #### fit result ####
   # apply fit parameters to data and basis and construct fit result object
   
   final_par <- res$par
@@ -682,7 +682,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   
   colnames(basis_frame) <- basis$names
   
-  # turn amplitudes into a matrix to scale invividual splines
+  # turn amplitudes into a matrix to scale individual splines
   spline_amp_mat <- matrix(ahat[(1:sp_bas_final$bl_comps)], 
                           nrow = nrow(sp_bas_final$bl_bas),
                           ncol = ncol(sp_bas_final$bl_bas), byrow = TRUE)
@@ -786,7 +786,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   amp_crlb      <- Re(full_bas)
   
   ## alternate method by generating spline basis with ED components in place of
-  ## the penatly matrix. Gives similar numbers to above method, so kept here as
+  ## the penalty matrix. Gives similar numbers to above method, so kept here as
   ## a reference example for validation.
   ##
   ## ppm_range   <- opts$ppm_left - opts$ppm_right
@@ -929,7 +929,7 @@ abfit <- function(y, acq_paras, basis, opts = NULL) {
   list(amps = amps, crlbs = t(crlbs_out), diags = diags, fit = fit_frame)
 }
 
-#' Return a list of options for an ABfit analysis with regularision.
+#' Return a list of options for an ABfit analysis with regularisation.
 #' 
 #' @param init_damping initial value of the Gaussian global damping parameter
 #' (Hz). Very poorly shimmed or high field data may benefit from a larger value.
@@ -1504,7 +1504,7 @@ abfit_full_anal_jac_test <- function(par, y, raw_metab_basis, bl_basis, t,
   # augment signal with zeros to match basis dimensions
   fit_seg <- c(Y[inds], rep(0, bl_comps - 2))
   
-  # estimtate amplitudes
+  # estimate amplitudes
   ahat <- calc_ahat(Re(full_bas), Re(fit_seg), k = bl_comps, ahat_calc_method)
   
   # multiply by a * 2i * pi * f * t for basis freq shifts
@@ -1629,7 +1629,7 @@ abfit_full_anal_jac <- function(par, y, raw_metab_basis, bl_basis, t, f, inds,
   # augment signal with zeros to match basis dimensions
   fit_seg <- c(Y[inds], rep(0, bl_comps - 2))
   
-  # estimtate amplitudes
+  # estimate amplitudes
   ahat <- calc_ahat(Re(full_bas), Re(fit_seg), k = bl_comps, ahat_calc_method)
   
   # multiply by a * 2i * pi * t for basis freq shifts

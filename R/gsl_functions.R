@@ -118,7 +118,7 @@ fGSLClassOri <- function(dSagComp, dCorComp, dTraComp, DEBUG = FALSE) {
 # *               vectors have a length of 1.0. The biggest component of Gs must
 # *               have a positive sign.
 # *
-# *		Formulas for the rotation around the vektor s:
+# *		Formulas for the rotation around the vector s:
 # *		    (a = cos (dPhi), b = sin (dPhi))
 # *
 # *		    new             old               rotation     base

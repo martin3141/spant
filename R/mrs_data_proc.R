@@ -152,7 +152,7 @@ sim_resonances_fast2 <- function(freq = 0, amp = 1, freq_ppm = TRUE,
   t <- seq(from = 0, to = (N - 1) / fs, by = 1 / fs)
   t_i_omega <- t * 2i * pi
   
-  # TODO should be able to loose a tranpose here
+  # TODO should be able to loose a transpose here
   t_i_omega_mat <- matrix(t_i_omega, nrow = N, ncol = sig_n)
   f_hz_mat <- matrix(f_hz, nrow = N, ncol = sig_n, byrow = TRUE)
   temp <- t_i_omega_mat * f_hz_mat
@@ -1818,7 +1818,7 @@ dyn_acq_times <- function(mrs_data = NULL, tr = NULL, Ndyns = NULL,
   
   t_acq   <- seq(from = 0, by = res$tr, length.out = res$Ntrans)
   
-  # correct for missmatch between n_trans and n_dyns due to temporal averaging 
+  # correct for mismatch between n_trans and n_dyns due to temporal averaging 
   if (res$Ntrans != res$Ndyns) {
     if (res$Ntrans%%res$Ndyns != 0) stop("Dynamics and transients do not match")
     block_size <- res$Ntrans / res$Ndyns
@@ -2023,7 +2023,7 @@ align <- function(mrs_data, ref_freq = 4.65, ref_amp = 1, zf_factor = 2, lb = 2,
   
   if (length(ref_freq) != length(ref_amp)) {
     if (length(ref_amp) > 1) {
-      stop("Length missmatch between ref freqs and amps")
+      stop("Length mismatch between ref freqs and amps")
     } else {
       ref_amp <- rep(ref_amp, length(ref_freq)) 
     }
@@ -3762,7 +3762,7 @@ ecc <- function(metab, ref, rev = FALSE) {
     warning("Using the mean reference signal for ECC.")
   }
   
-  # repeat the refernce signal to match the number of dynamics
+  # repeat the reference signal to match the number of dynamics
   if (Ndyns(metab) > 1) {
     ref <- rep_dyn(ref, Ndyns(metab))
   }
@@ -5138,10 +5138,10 @@ bin_spec <- function(mrs_data, width = 0.05, unit = "ppm") {
     return(res)
   }
   
-  if (Ncoils(mrs_data) > 1) stop("Unsuppored data type for bin_spec function.")
-  if (Nx(mrs_data) > 1) stop("Unsuppored data type for bin_spec function.")
-  if (Ny(mrs_data) > 1) stop("Unsuppored data type for bin_spec function.")
-  if (Nz(mrs_data) > 1) stop("Unsuppored data type for bin_spec function.")
+  if (Ncoils(mrs_data) > 1) stop("Unsupported data type for bin_spec function.")
+  if (Nx(mrs_data) > 1) stop("Unsupported data type for bin_spec function.")
+  if (Ny(mrs_data) > 1) stop("Unsupported data type for bin_spec function.")
+  if (Nz(mrs_data) > 1) stop("Unsupported data type for bin_spec function.")
   
   # need to be a FD operation
   if (!is_fd(mrs_data)) mrs_data <- td2fd(mrs_data)

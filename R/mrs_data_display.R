@@ -466,7 +466,7 @@ stackplot.list <- function(x, ...) {
 #' @param lab_cex label size.
 #' @param bl_lty linetype for the y = 0 baseline trace. A default value NULL
 #' results in no baseline being plotted.
-#' @param bl_lwd linewith for the y = 0 baseline trace. Defaults to 0.5.
+#' @param bl_lwd linewidth for the y = 0 baseline trace. Defaults to 0.5.
 #' @param restore_def_par restore default plotting par values after the plot has 
 #' been made.
 #' @param show_grid plot gridlines behind the data (logical). Defaults to TRUE.

@@ -40,7 +40,7 @@ mrs_data_p180 <- phase(mrs_data, 180)
 plot(mrs_data_p180, xlim = c(4, 0.5))
 ```
 
-Apply 3 Hz Guassian line broadening:
+Apply 3 Hz Gaussian line broadening:
 ```{r}
 mrs_data_lb <- lb(mrs_data, 3)
 plot(mrs_data_lb, xlim = c(4, 0.5))

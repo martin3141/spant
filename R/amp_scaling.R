@@ -81,7 +81,7 @@ scale_amp_molal_pvc <- function(fit_result, ref_data, p_vols, te, tr, ...){
   return(fit_result)
 }
 
-# append the p_vol coloumns to a results table
+# append the p_vol columns to a results table
 append_p_vols <- function(res_tab, p_vols) {
   
   res_tab$GM_vol    <- p_vols[["GM"]]
@@ -240,7 +240,7 @@ scale_amp_molar <- function(fit_result, ref_data, w_att = 0.7, w_conc = 35880,
   #   stop("Mismatch between fit result and reference data dimensions.")
   # }
   
-  warning("Function name (scale_amp_molar) is missleading and has been replaced with scale_amp_legacy.")
+  warning("Function name (scale_amp_molar) is misleading and has been replaced with scale_amp_legacy.")
   
   # check if res_tab_unscaled exists, and if not create it
   if (is.null(fit_result$res_tab_unscaled)) {
@@ -409,7 +409,7 @@ get_corr_factor <- function(te, tr, B0, gm_vol, wm_vol, csf_vol) {
     t2_metab <- 0.141 # Li et al, Table 1
                       # (131+121+170)/3000
   } else {
-    warning("Error. Relaxation values not available for this field strength. Assuming values for 3 Telsa.")
+    warning("Error. Relaxation values not available for this field strength. Assuming values for 3 Tesla.")
   }
   
   # MR-visible water densities

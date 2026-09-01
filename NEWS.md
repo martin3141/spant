@@ -303,7 +303,7 @@ version of RNifti.
 * The complete model signal is now output by the HSVD function.
 * image function x-axis updated to be consistent with other plotting methods.
 * Minor refactor of the simulation code and a dependency swap from complexplus
-to exmp packages.
+to expm packages.
 
 # spant 1.15.0
 * Added a unit test for reading and writing LCM .basis formatted files.

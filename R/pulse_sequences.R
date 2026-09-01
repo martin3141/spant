@@ -201,7 +201,7 @@ seq_mega_press_ideal <- function(spin_params, ft, ref, ed_freq = 1.89,
                                  steps = 50) {
   
   # ed pulse duration 
-  duration <- 1.53 / BW # 180 deg 1% Guass (p245 de Graff)
+  duration <- 1.53 / BW # 180 deg 1% Gauss (p245 de Graff)
   
   sys <- spin_sys(spin_params, ft, ed_freq)
   sys$rho <- -gen_F(sys, "y", "1H")

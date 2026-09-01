@@ -653,14 +653,14 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
     basis_path     <- file.path(hash_base_path, "basis.rds")
     
     if (file.exists(basis_path)) {
-      cat("Using precomputated basis :", basis_path, "\n")
+      cat("Using precomputed basis :", basis_path, "\n")
       basis <- readRDS(basis_path) 
       return(basis)
     } else {
       dir.create(hash_base_path)
-      if (verbose) cat("Precomputated basis not found, calculating...\n")
+      if (verbose) cat("Precomputed basis not found, calculating...\n")
       cat("Cached basis not found, simulation may take a few minutes.\n")
-      cat("Subseqent requests with matched parameters will use precomputed\n")
+      cat("Subsequent requests with matched parameters will use precomputed\n")
       cat("results to save computation time.\n")
     }
   }
@@ -683,7 +683,7 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
   
   for (n in 1:length(mol_list)) {
     if (verbose) {
-      cat(paste0("Simuating ", n, " of ", length(mol_list), " : ",
+      cat(paste0("Simulating ", n, " of ", length(mol_list), " : ",
                  mol_list[[n]]$full_name, "\n"))
       start_time <- Sys.time()
     }
@@ -718,7 +718,7 @@ sim_basis <- function(mol_list, pul_seq = seq_pulse_acquire,
   
   if (use_basis_cache) {
     # if we got here then we need to store the basis for future use
-    if (verbose) cat("Saving precomputated basis :", basis_path, "\n")
+    if (verbose) cat("Saving precomputed basis :", basis_path, "\n")
     saveRDS(basis, basis_path)
     jsonlite::write_json(hash_obj, file.path(hash_base_path,
                                              "basis_paras.json"), pretty = TRUE,
@@ -748,7 +748,7 @@ sim_mol <- function(mol, pul_seq = seq_pulse_acquire, ft = def_ft(),
     res <- pul_seq(group, ft, ref, ...)
     
     if (!is.null(xlim)) {
-      # filter frequences based on xlim
+      # filter frequencies based on xlim
       xlim_hz <- sort(ppm2hz(xlim, ft = ft, ref = ref))
       inds <- c(which(res$freqs < xlim_hz[1]), which(res$freqs > xlim_hz[2]))
       if ( length(inds) > 0 ) {

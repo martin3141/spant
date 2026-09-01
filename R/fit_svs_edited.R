@@ -139,7 +139,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   if (identical(class(input), "character") & (length(input) > 1)) {
     if (!is.null(output_dir)) {
       if (length(input) != length(output_dir)) {
-        stop("Missmatch between input length and output_dir length.")
+        stop("Mismatch between input length and output_dir length.")
       }
     } else {
       output_dir <- vector(mode = "list", length = length(input))
@@ -147,7 +147,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     
     if (!is.null(w_ref)) {
       if (length(input) != length(w_ref)) {
-        stop("Missmatch between input length and w_ref length.")
+        stop("Mismatch between input length and w_ref length.")
       }
     } else {
       w_ref <- vector(mode = "list", length = length(input))
@@ -155,7 +155,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     
     if (!is.null(mri)) {
       if (length(input) != length(mri)) {
-        stop("Missmatch between input length and mri length.")
+        stop("Mismatch between input length and mri length.")
       }
     } else {
       mri <- vector(mode = "list", length = length(input))
@@ -163,7 +163,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
     
     if (!is.null(mri_seg)) {
       if (length(input) != length(mri_seg)) {
-        stop("Missmatch between input length and mri_seg length.")
+        stop("Mismatch between input length and mri_seg length.")
       }
     } else {
       mri_seg <- vector(mode = "list", length = length(input))
@@ -345,7 +345,7 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   # segment the mri data assuming it is t1 weighted
   if (segment_t1) {
     if (is.def(mri_seg)) {
-      warning("mri_seg argemnt will be ignored as segment_t1 has been set")
+      warning("mri_seg argument will be ignored as segment_t1 has been set")
     }
     dir.create(file.path(output_dir, "t1_segmentation"), showWarnings = FALSE)
     t1_path <- file.path(output_dir, "t1_segmentation", "t1.nii.gz")
@@ -375,8 +375,8 @@ fit_svs_edited <- function(input, w_ref = NULL, output_dir = NULL, mri = NULL,
   
   # check we have what's needed for standard water concentration scaling
   if (w_ref_available) {
-    if (is.null(TR)) stop("Please provide seqeuence TR argument for water concentration scaling.")
-    if (is.null(TE)) stop("Please provide seqeuence TE argument for water concentration scaling.")
+    if (is.null(TR)) stop("Please provide sequence TR argument for water concentration scaling.")
+    if (is.null(TE)) stop("Please provide sequence TE argument for water concentration scaling.")
   }
   
   # determine edit-on / edit-off scans, likely to be vendor and sequence

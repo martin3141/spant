@@ -27,7 +27,7 @@ install_cli <- function(path = NULL) {
   # make executable
   Sys.chmod(fit_svs_path, mode = "755")
   
-  cat("spant_fit_svs sucessfully installed to : ", path, "\n", sep = "")
+  cat("spant_fit_svs successfully installed to : ", path, "\n", sep = "")
 }
 
 # https://www.r-bloggers.com/2015/06/identifying-the-os-from-r/

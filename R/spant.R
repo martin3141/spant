@@ -81,7 +81,7 @@ check_tqn <- function() {
 #' @export
 check_lcm <- function() {
   if (file.exists(getOption("spant.lcm_cmd"))) {
-    cat("LCModel program sucessfully found.") 
+    cat("LCModel program successfully found.") 
   } else {
     stop("LCModel program not found in the following location:\n", 
           getOption("spant.lcm_cmd"),

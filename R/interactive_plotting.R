@@ -283,12 +283,12 @@ ortho3 <- function(underlay, overlay = NULL, xyz = NULL, zlim = NULL,
   crosshairs_col <- grDevices::gray(0.5)
 
   if (crosshairs) {
-    # top right verical
+    # top right vertical
     graphics::lines(rep(xcutoff + (img_dim[2] - xyz[2]) / img_dim[2] *
                    (1 - xcutoff), 2), c(ycutoff, 1), col = crosshairs_col,
                    lwd = ch_lwd)
     
-    # upper left horizonal
+    # upper left horizontal
     graphics::lines(c(0, 1), rep(ycutoff + xyz[3] / img_dim[3] *
                                 (1 - ycutoff), 2), col = crosshairs_col,
                     lwd = ch_lwd)

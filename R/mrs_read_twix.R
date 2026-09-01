@@ -413,7 +413,7 @@ read_twix <- function(fname, verbose, full_fid = FALSE,
         start_pt <- ima_kspace_center_column + 1
       }
     } else {
-      warning("TWIX seqeuence not recognised, guessing the echo start point.")
+      warning("TWIX sequence not recognised, guessing the echo start point.")
       cat(vars$seq_fname, "\n")
       warning("Contact the developer if you're not sure if this is a problem.")
       # find the max echo position from the first 50 data points in the FID
@@ -679,7 +679,7 @@ read_uint16 <- function(con) {
 read_uint32 <- function(con) {
   int <- readBin(con, "integer", size = 4L, n = 1, endian = "little")
   raw_bits <- intToBits(int)
-  # warning - R doesn't nativly support unsigned 32 bit integers - so this will
+  # warning - R doesn't natively support unsigned 32 bit integers - so this will
   # be an approximation by converting to double
   sum(2^.subset(0:31, as.logical(raw_bits)))
 }
@@ -687,7 +687,7 @@ read_uint32 <- function(con) {
 read_uint64 <- function(con) {
   intvec <- readBin(con, "integer", size = 4L, n = 2, endian = "little")
   raw_bits <- c(intToBits(intvec[1]), intToBits(intvec[2]))
-  # warning - R doesn't nativly support 64 bit integers - so this will be 
+  # warning - R doesn't natively support 64 bit integers - so this will be 
   # an approximation by converting to double
   sum(2^.subset(0:63, as.logical(raw_bits)))
 }

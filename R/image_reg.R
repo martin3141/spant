@@ -363,7 +363,7 @@ spm_pve2categorical <- function(fname) {
   }
   
   cat("Combining segmentation images...\n")
-  # convert probabilties to catagorical
+  # convert probabilities to categorical
   # combine c4, c5, c6 to improve speed
   combined[,,,4] <- combined[,,,4] + combined[,,,5] + combined[,,,6]
   combined <- combined[,,,1:4]
@@ -425,7 +425,7 @@ check_geom <- function(a, b) {
     print(dim(b))
     print(RNifti::pixdim(a))
     print(RNifti::pixdim(b))
-    stop("Inconsistant image geometry.")
+    stop("Inconsistent image geometry.")
   }
 } 
 

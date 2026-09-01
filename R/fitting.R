@@ -280,7 +280,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
         w_ref <- mean_dyns(w_ref)
         warning("Using the mean reference signal for water scaling.")
       }
-      # repeat the refernce signal to match the number of dynamics
+      # repeat the reference signal to match the number of dynamics
       if (Ndyns(metab) > 1) {
         w_ref <- rep_dyn(w_ref, Ndyns(metab))
       }
@@ -427,7 +427,7 @@ fit_mrs <- function(metab, basis = NULL, method = 'ABFIT', w_ref = NULL,
   
   result_list <- unlist(result_list, recursive = FALSE)
   
-  if (res_n > 4) { # looks like temp files were used, so check for any colisions
+  if (res_n > 4) { # looks like temp files were used, so check for any collisions
     file_list_vec = vector()
     for (n in (5:res_n)) {
       file_list_vec <- c(file_list_vec, 

@@ -70,7 +70,7 @@ write_mrs_nifti <- function(mrs_data, fname) {
   }
   
   # if SVS this doesn't work yet as number of dynamics doesn't always equal
-  # the number of trasients, eg when dealing with averaged data
+  # the number of transients, eg when dealing with averaged data
   # if (is_svs(mrs_data)) {
   #   json_list <- c(json_list, list(NumberOfTransients = Ndyns(mrs_data)))
   # }

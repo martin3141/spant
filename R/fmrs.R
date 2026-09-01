@@ -113,7 +113,7 @@ gen_trap_reg <- function(onset, duration, trial_type = NULL, mrs_data = NULL,
     
     if (normalise) stim_acq <- stim_acq / max(stim_acq)
    
-    # correct for missmatch between n_trans and n_dyns due to temporal averaging 
+    # correct for mismatch between n_trans and n_dyns due to temporal averaging 
     if (n_trans != n_dyns) {
       if (n_trans%%n_dyns != 0) stop("Dynamics and transients do not match")
       
@@ -1847,7 +1847,7 @@ preproc_svs_dataset <- function(paths, labels = NULL,
 #' @param labels labels to describe each data set.
 #' @param xlim spectral range to include in the analysis.
 #' @param vline vertical lines to add to the plot.
-#' @param lb linebroading to add in Hz before GLM analysis.
+#' @param lb linebroadening to add in Hz before GLM analysis.
 #' @param return_results function will return key outputs, defaults to FALSE.
 #' @export
 glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",

@@ -135,7 +135,7 @@ get_asc_paras <- function(lw = NULL, lg = 0, ...) {
                        j_coupling_mat = j_coupling_mat, scale_factor = 1,
                        lw = lw, lg = lg)
   
-  source <- "Detection of an antioxidant profile in the humain brain in vivo via double editing with MEGA-PRESS. MRM. 2006; 56(6):1192-1199."
+  source <- "Detection of an antioxidant profile in the human brain in vivo via double editing with MEGA-PRESS. MRM. 2006; 56(6):1192-1199."
   
   paras <- list(spin_groups = list(spin_group_a), name = "Asc", source = source,
                 full_name = "Ascorbate")
@@ -723,7 +723,7 @@ get_naa_paras <- function(lw = NULL, lg = 0, ...) {
                        j_coupling_mat = j_coupling_mat, scale_factor = 1,
                        lw = lw, lg = lg)
   
-  source <- "Proton NMR chemical shifts and coupling constants for brain metabolites. NMR Biomed. 2000; 13:129-153. Exlcuding the resonance at 7.82 ppm."
+  source <- "Proton NMR chemical shifts and coupling constants for brain metabolites. NMR Biomed. 2000; 13:129-153. Excluding the resonance at 7.82 ppm."
   
   paras <- list(spin_groups = list(spin_group_a,spin_group_b), name = "NAA",
                 source = source, full_name = "N-acetylaspartate")
@@ -750,7 +750,7 @@ get_naa_rt_paras <- function(lw = NULL, lg = 0, ...) {
                        j_coupling_mat = j_coupling_mat, scale_factor = 1,
                        lw = lw, lg = lg)
   
-  source <- "Proton NMR chemical shifts and coupling constants for brain metabolites. NMR Biomed. 2000; 13:129-153. Modified by MW for room temperature phantom scans. Exlcuding the resonance at 7.82 ppm."
+  source <- "Proton NMR chemical shifts and coupling constants for brain metabolites. NMR Biomed. 2000; 13:129-153. Modified by MW for room temperature phantom scans. Excluding the resonance at 7.82 ppm."
   
   paras <- list(spin_groups = list(spin_group_a,spin_group_b), name = "NAA",
                 source = source, full_name = "N-acetylaspartate")
@@ -791,7 +791,7 @@ get_naag_ch3_paras <- function(lw = NULL, lg = 0, ...) {
   paras <- get_uncoupled_mol("NAAG", 2.042, "1H", 3, lw, lg,
                              "N-acetylaspartylglutamate")
   
-  source <- "Proton NMR chemical shifts and coupling constants for brain metabolites. NMR Biomed. 2000; 13:129-153. Note, only the acetyl moiety is simualted."
+  source <- "Proton NMR chemical shifts and coupling constants for brain metabolites. NMR Biomed. 2000; 13:129-153. Note, only the acetyl moiety is simulated."
   
   paras$source <- source
   paras

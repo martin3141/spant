@@ -175,7 +175,7 @@ write_mrs <- function(mrs_data, fname, format = NULL, force = FALSE) {
   # check if any files already exist
   if (!force) {
     if (any(file.exists(fname))) {
-      stop("One or more files already exist. Use the  force argment to
+      stop("One or more files already exist. Use the  force argument to
             overwrite")
     }
   }
