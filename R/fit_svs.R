@@ -1235,8 +1235,40 @@ fit_svs_gui <- function() {
     wd_root <- wd
     names(wd_root) <- wd
     volumes <- c(wd_root, Home = path.expand("~"), shinyFiles::getVolumes()())
+
+    # express a target directory as {root, path} using the *broadest*
+    # available root that contains it (e.g. the filesystem root "/" on
+    # Linux/macOS, or a drive root on Windows) rather than the narrowest
+    # (e.g. the launch directory itself). Anchoring at the broadest root
+    # means the picker still opens at the target directory, but the "up"
+    # navigation button isn't capped there -- shinyFiles refuses to
+    # navigate above whichever root it's given.
+    rel_within_root <- function(dir, root) {
+      if (identical(dir, root)) return("")
+      prefix <- if (identical(root, "/")) "/" else paste0(root, "/")
+      if (startsWith(dir, prefix)) return(substring(dir, nchar(prefix) + 1))
+      NULL
+    }
+
+    broadest_root_for <- function(dir) {
+      best_root <- NULL
+      best_path <- ""
+      for (nm in names(volumes)) {
+        rel <- rel_within_root(dir, volumes[[nm]])
+        if (!is.null(rel) &&
+            (is.null(best_root) ||
+             nchar(volumes[[nm]]) < nchar(volumes[[best_root]]))) {
+          best_root <- nm
+          best_path <- rel
+        }
+      }
+      list(root = best_root, path = best_path)
+    }
+
+    wd_default <- broadest_root_for(wd)
     shinyFiles::shinyFileChoose(input, "wsup_btn", roots = volumes, session = session,
-                                 defaultRoot = wd)
+                                 defaultRoot = wd_default$root,
+                                 defaultPath = wd_default$path)
     shinyFiles::shinyDirChoose(input, "out_btn", roots = volumes, session = session,
                                 allowDirCreate = TRUE)
 
@@ -1246,24 +1278,22 @@ fit_svs_gui <- function() {
     output$wsup_path <- shiny::renderText(if (length(wsup_path())) wsup_path() else "")
 
     # once a water-suppressed file is picked, open the water reference
-    # chooser in the same directory by default
-    wref_roots <- shiny::reactive({
-      if (length(wsup_path()) > 0) {
-        c(volumes, "Water-suppressed dir" = dirname(wsup_path()))
-      } else {
-        volumes
-      }
-    })
+    # chooser in the same directory by default. Registered only once, the
+    # first time the button is clicked, so the defaults below are based on
+    # whatever water-suppressed file (if any) has been picked by then;
+    # re-registering on every wsup_path() change would stack duplicate
+    # observers on the same input and race each other.
+    shiny::observeEvent(input$wref_btn, {
+      target <- if (length(wsup_path()) > 0) dirname(wsup_path()) else wd
+      default <- broadest_root_for(target)
 
-    shiny::observeEvent(wsup_path(), {
-      default_root <- if (length(wsup_path()) > 0) "Water-suppressed dir" else "Home"
       shinyFiles::shinyFileChoose(
-        input, "wref_btn", session = session, roots = wref_roots(),
-        defaultRoot = default_root
+        input, "wref_btn", session = session, roots = volumes,
+        defaultRoot = default$root, defaultPath = default$path
       )
-    })
+    }, once = TRUE, ignoreInit = TRUE)
 
-    wref_path <- shiny::reactive(shinyFiles::parseFilePaths(wref_roots(), input$wref_btn)$datapath)
+    wref_path <- shiny::reactive(shinyFiles::parseFilePaths(volumes, input$wref_btn)$datapath)
     output$wref_path <- shiny::renderText(if (length(wref_path())) wref_path() else "")
 
     shiny::observeEvent(input$out_btn, {
