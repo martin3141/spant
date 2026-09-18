@@ -303,25 +303,30 @@ plot.mrs_data <- function(x, dyn = 1, x_pos = 1, y_pos = 1, z_pos = 1, coil = 1,
 #' @param vline_col colour for the vertical line.
 #' @param legend add a colour bar to the plot using the imagePlot function
 #' from the fields package.
+#' @param mar margins for the plot, in the format expected by the `mar`
+#' argument of `graphics::par`. If NULL (the default) a suitable margin is
+#' chosen automatically based on the `y_ticks` argument.
 #' @param ... other arguments to pass to the plot method.
 #' @export
-image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL, 
+image.mrs_data <- function(x, xlim = NULL, mode = "re", col = NULL,
                            plot_dim = NULL, x_pos = NULL, y_pos = NULL,
                            z_pos = NULL, dyn = 1, coil = 1,
-                           restore_def_par = TRUE, y_ticks = NULL, 
+                           restore_def_par = TRUE, y_ticks = NULL,
                            hline = NULL, hline_lty = 2, hline_col = "white",
                            vline = NULL, vline_lty = 2, vline_col = "white",
-                           legend = FALSE, ...) { 
-  
+                           legend = FALSE, mar = NULL, ...) {
+
   .pardefault <- graphics::par(no.readonly = T)
-  
+
   if (!is_fd(x)) x <- td2fd(x)
-  
+
   x_scale <- ppm(x)
-  
+
   if (is.null(xlim)) xlim <- c(x_scale[1], x_scale[Npts(x)])
-  
-  if (is.null(y_ticks)) {
+
+  if (!is.null(mar)) {
+    graphics::par(mar = mar) # margins
+  } else if (is.null(y_ticks)) {
     graphics::par(mar = c(3.5, 3.5, 1, 1)) # margins
   } else {
     graphics::par(mar = c(3.5, 3.5, 1, 1.5)) # margins

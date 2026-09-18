@@ -24,6 +24,7 @@
   vline_lty = 2,
   vline_col = "white",
   legend = FALSE,
+  mar = NULL,
   ...
 )
 }
@@ -71,6 +72,10 @@ tick marks.}
 
 \item{legend}{add a colour bar to the plot using the imagePlot function
 from the fields package.}
+
+\item{mar}{margins for the plot, in the format expected by the \code{mar}
+argument of \code{graphics::par}. If NULL (the default) a suitable margin is
+chosen automatically based on the \code{y_ticks} argument.}
 
 \item{...}{other arguments to pass to the plot method.}
 }
