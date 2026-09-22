@@ -1,0 +1,4 @@
+## qrpnnls.f calls the LAPACK routines DGEQRF and DORMQR directly, so the
+## LAPACK (and its BLAS dependency) and Fortran runtime libraries need to be
+## linked explicitly.
+PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)

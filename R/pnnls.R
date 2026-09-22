@@ -46,6 +46,7 @@ pnnls = function(a, b, k=0, sum=NULL) {
     m = as.integer(m+1)
   }
   if(length(b) != m) stop("length(b) != ncol(a)")
+  if(m < n) stop("nrow(a) must be >= ncol(a)")
   storage.mode(a) = "double"
   storage.mode(b) = "double"
   x = double(n)                       # only for output
@@ -55,7 +56,15 @@ pnnls = function(a, b, k=0, sum=NULL) {
   index = integer(n)                  # n-vector index, only for output
   mode = integer(1)                   # success-failure flag; = 1, success
   k = as.integer(k)
-  r = .Fortran("pnnls",r=a,m,m,n,b=b,x=x,rnorm=rnorm,w,zz,index=index,
+  # PNNLS does an O(m) Householder update per column examined, which is
+  # wasteful when m >> n (the usual case for spant's fitting problems).
+  # QRPNLS first reduces the m x n problem to an equivalent n x n one via
+  # a QR factorisation (min||ax-b|| == min||Rx-Q'b||, and the NNLS
+  # active-set path only depends on a and b through inner products, so
+  # this is an exact reduction, not an approximation), then calls PNNLS
+  # on the reduced problem. See src/qrpnnls.f for details.
+  fort_fun = if (m > n) "qrpnls" else "pnnls"
+  r = .Fortran(fort_fun,r=a,m,m,n,b=b,x=x,rnorm=rnorm,w,zz,index=index,
       mode=mode,k=k,PACKAGE="spant")
   r$r = r$r[1:min(m,n),]
   if(!is.null(sum)) {

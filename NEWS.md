@@ -1,4 +1,8 @@
 # spant 4.5.0
+* Sped up pnnls (used by ABfit) by reducing overdetermined problems to a
+  smaller triangular system via QR factorisation before running the
+  Lawson-Hanson NNLS solver, giving roughly a 1.3-1.5x speedup for typical
+  ABfit fits.
 * Bug fix for read_basis_niidir function.
 * Added read_fslmrs_json_basis_dir function.
 * Added get_gaussian_pulse function to replace the misspelled
