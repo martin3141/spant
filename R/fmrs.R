@@ -559,7 +559,7 @@ glm_spec <- function(mrs_data, regressor_df, full_output = FALSE) {
   beta_weight    <-  cbind(ppm = ppm_sc, beta_weight)
   
   R <- 60 # ~ spectral width / FWHM
-  C <- ((4 * log(2)) ^ (1 / 2)) / 2 * pi
+  C <- ((4 * log(2)) ^ (1 / 2)) / (2 * pi)
   p_value_rf     <- R * C * exp((-t_value ^ 2) / 2)
   p_value_rf_log <- -log10(p_value_rf)
   p_value_rf_log[p_value_rf_log > 300] <- 300
