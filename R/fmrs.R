@@ -28,6 +28,8 @@ gen_trap_reg <- function(onset, duration, trial_type = NULL, mrs_data = NULL,
   res <- check_dyn_input(mrs_data, tr, Ndyns, Ntrans)  
   
   if (is.null(trial_type)) trial_type <- rep("stim", length(onset))
+
+  if ("time" %in% trial_type) stop("trial_type cannot be \"time\"")
   
   # check everything is the right length 
   input_lengths <- c(length(onset), length(duration), length(trial_type))
@@ -164,6 +166,8 @@ gen_bold_reg <- function(onset, duration = NULL, trial_type = NULL,
   duration[duration < min_dur] <- min_dur
   
   if (is.null(trial_type)) trial_type <- rep("stim_bold", length(onset))
+
+  if ("time" %in% trial_type) stop("trial_type cannot be \"time\"")
   
   # check everything is the right length 
   input_lengths <- c(length(onset), length(duration), length(trial_type))
@@ -274,6 +278,8 @@ gen_conv_reg <- function(onset, duration = NULL, trial_type = NULL,
   duration[duration < min_dur] <- min_dur
   
   if (is.null(trial_type)) trial_type <- rep("stim_conv", length(onset))
+
+  if ("time" %in% trial_type) stop("trial_type cannot be \"time\"")
   
   # check everything is the right length 
   input_lengths <- c(length(onset), length(duration), length(trial_type))
@@ -370,6 +376,8 @@ gen_impulse_reg <- function(onset, trial_type = NULL, mrs_data = NULL,
   time <- dyn_acq_times(mrs_data, tr, Ndyns, Ntrans)
   
   if (is.null(trial_type)) trial_type <- rep("stim_imp", length(onset))
+
+  if ("time" %in% trial_type) stop("trial_type cannot be \"time\"")
   
   trial_types  <- unique(trial_type)
   trial_type_n <- length(trial_types)
