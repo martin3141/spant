@@ -17,6 +17,12 @@
   Shiny/miniUI gadget for running fit_svs interactively, and exported it.
 * Added spant_fit_svs_gui command-line wrapper to launch fit_svs_gui,
   installed alongside the other scripts by install_cli.
+* Fixed gen_numeric_reg silently overwriting the time column when the name
+  argument was missing. It now stops if name is missing, not a single
+  character string, or equal to "time".
+* gen_trap_reg, gen_bold_reg, gen_conv_reg and gen_impulse_reg now stop if
+  trial_type contains "time", which previously created a duplicate time column
+  that was silently dropped by glm_spec.
 
 # spant 4.4.0
 * Fix for Philips svs spar/sdat voxel geometry.
