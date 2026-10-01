@@ -424,10 +424,17 @@ gen_baseline_reg <- function(mrs_data = NULL, tr = NULL, Ndyns = NULL,
 #' @param Ndyns number of dynamic scans stored, potentially less than Ntrans
 #' if block averaging has been performed.
 #' @param Ntrans number of dynamic scans acquired.
-#' @return a single baseline regressor with value of 1.
+#' @return a data frame with a time column and a single regressor column
+#' named according to the name argument.
 #' @export
 gen_numeric_reg <- function(in_vec, name, mrs_data = NULL, tr = NULL,
                             Ndyns = NULL, Ntrans = NULL) {
+  
+  if (missing(name) || !is.character(name) || length(name) != 1) {
+    stop("name must be a single character string")
+  }
+  
+  if (name == "time") stop("name cannot be \"time\"")
     
   time <- dyn_acq_times(mrs_data, tr, Ndyns, Ntrans)
   

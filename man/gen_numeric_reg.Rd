@@ -29,7 +29,8 @@ if block averaging has been performed.}
 \item{Ntrans}{number of dynamic scans acquired.}
 }
 \value{
-a single baseline regressor with value of 1.
+a data frame with a time column and a single regressor column
+named according to the name argument.
 }
 \description{
 Generate a regressor from a numeric vector.
