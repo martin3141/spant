@@ -12,7 +12,7 @@ Description: Tools for reading, visualising and processing Magnetic Resonance
     Spectroscopy data. The package includes methods for spectral fitting: Wilson
     (2021) <DOI:10.1002/mrm.28385>, Wilson (2025) <DOI:10.1002/mrm.30462> and
     spectral alignment: Wilson (2018) <DOI:10.1002/mrm.27605>. 
-BugReports: https://github.com/martin3141/spant/issues/
+BugReports: https://github.com/martin3141/spant/issues
 License: GPL-3
 Roxygen: list(markdown = TRUE, roclets = c("rd", "namespace", "collate"))
 NeedsCompilation: yes
@@ -63,8 +63,5 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 Language: en-GB
-URL:
-    https://spantdoc.wilsonlab.co.uk/,
-    https://martin3141.github.io/spant/,
-    https://github.com/martin3141/spant/
+URL: https://spantdoc.wilsonlab.co.uk/, https://martin3141.github.io/spant/, https://github.com/martin3141/spant/, https://github.com/martin3141/spant
 Config/roxygen2/version: 8.0.0
