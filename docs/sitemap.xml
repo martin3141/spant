@@ -1,5 +1,6 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://martin3141.github.io/spant/404.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/CLAUDE.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/CONTRIBUTING.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/LICENSE-text.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/articles/abfit-baseline-opts.html</loc></url>
@@ -140,6 +141,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/fp_phase.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fp_phase_correct.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fp_scale.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/fp_scale_basis.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/fs.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/ft_dyn.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/ft_dyns.html</loc></url>
@@ -177,6 +179,7 @@
 <url><loc>https://martin3141.github.io/spant/reference/get_fit_map.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/get_fit_table.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/get_fp.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/get_gaussian_pulse.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/get_guassian_pulse.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/get_head_dyns.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/get_hrf.html</loc></url>
@@ -311,6 +314,8 @@
 <url><loc>https://martin3141.github.io/spant/reference/read_basis_ac.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/read_basis_niidir.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/read_dkd_moco_log.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/read_fslmrs_json_basis_dir.html</loc></url>
+<url><loc>https://martin3141.github.io/spant/reference/read_fslmrs_json_basis_file.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/read_ima_coil_dir.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/read_ima_dyn_dir.html</loc></url>
 <url><loc>https://martin3141.github.io/spant/reference/read_lcm_coord.html</loc></url>

@@ -45,4 +45,5 @@ gen_numeric_reg(
 
 ## Value
 
-a single baseline regressor with value of 1.
+a data frame with a time column and a single regressor column named
+according to the name argument.

@@ -1,6 +1,6 @@
-# Return a list of options for an ABfit analysis with regularision.
+# Return a list of options for an ABfit analysis with regularisation.
 
-Return a list of options for an ABfit analysis with regularision.
+Return a list of options for an ABfit analysis with regularisation.
 
 ## Usage
 

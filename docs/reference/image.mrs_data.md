@@ -26,6 +26,7 @@ image(
   vline_lty = 2,
   vline_col = "white",
   legend = FALSE,
+  mar = NULL,
   ...
 )
 ```
@@ -112,6 +113,13 @@ image(
 
   add a colour bar to the plot using the imagePlot function from the
   fields package.
+
+- mar:
+
+  margins for the plot, in the format expected by the `mar` argument of
+  [`graphics::par`](https://rdrr.io/r/graphics/par.html). If NULL (the
+  default) a suitable margin is chosen automatically based on the
+  `y_ticks` argument.
 
 - ...:
 

@@ -16,27 +16,15 @@ most common adjustments are demonstrated.
 
 Load the spant analysis package:
 
-``` r
-
-library(spant)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`spant`](https://spantdoc.wilsonlab.co.uk/)`)`
 
 Read an example dataset from file and simulate matching basis set:
 
-``` r
-
-fname    <- system.file("extdata", "philips_spar_sdat_WS.SDAT", package = "spant")
-mrs_data <- read_mrs(fname, format = "spar_sdat")
-basis    <- sim_basis_1h_brain_press(mrs_data)
-```
+`fname`` ``<-`` `[`system.file`](https://rdrr.io/r/base/system.file.html)`(``"extdata"``, ``"philips_spar_sdat_WS.SDAT"``, package ``=`` ``"spant"``)`` ``mrs_data`` ``<-`` `[`read_mrs`](https://martin3141.github.io/spant/reference/read_mrs.md)`(``fname``, format ``=`` ``"spar_sdat"``)`` ``basis`` ``<-`` `[`sim_basis_1h_brain_press`](https://martin3141.github.io/spant/reference/sim_basis_1h_brain_press.md)`(``mrs_data``)`
 
 Run a default ABfit analysis and plot the result:
 
-``` r
-
-fit_res <- fit_mrs(mrs_data, basis)
-plot(fit_res)
-```
+`fit_res`` ``<-`` `[`fit_mrs`](https://martin3141.github.io/spant/reference/fit_mrs.md)`(``mrs_data``, ``basis``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``fit_res``)`
 
 ![](abfit-baseline-opts_files/figure-html/abfit_default-1.png)
 
@@ -45,11 +33,7 @@ signals in the residual (top trace) above the noise level. We can find
 the automatically determined level of baseline smoothness by inspecting
 the results table in the `fit_res` object:
 
-``` r
-
-fit_res$res_tab$bl_ed_pppm
-#> [1] 1.969325
-```
+`fit_res``$``res_tab``$``bl_ed_pppm`` ``#> [1] 1.969325`
 
 The baseline flexibility was found to be 2 ED per ppm, where ED is the
 effective dimension – analogous to the number of spline functions
@@ -67,12 +51,7 @@ the `auto_bl_flex` option to `FALSE` and set the `bl_ed_pppm` option to
 the desired level. A greater value results in more baseline flexibility,
 let’s try a value of 8 ED ppm:
 
-``` r
-
-opts    <- abfit_opts(auto_bl_flex = FALSE, bl_ed_pppm = 8)
-fit_res <- fit_mrs(mrs_data, basis, opts = opts)
-plot(fit_res)
-```
+`opts`` ``<-`` `[`abfit_opts`](https://martin3141.github.io/spant/reference/abfit_opts.md)`(``auto_bl_flex ``=`` ``FALSE``, bl_ed_pppm ``=`` ``8``)`` ``fit_res`` ``<-`` `[`fit_mrs`](https://martin3141.github.io/spant/reference/fit_mrs.md)`(``mrs_data``, ``basis``, opts ``=`` ``opts``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``fit_res``)`
 
 ![](abfit-baseline-opts_files/figure-html/abfit_flex-1.png)
 
@@ -81,12 +60,7 @@ residual, however some baseline features are likely to be due to
 instability from noise, rather than true spectral features. For the next
 analysis let’s investigate 1 ED pppm:
 
-``` r
-
-opts    <- abfit_opts(auto_bl_flex = FALSE, bl_ed_pppm = 1)
-fit_res <- fit_mrs(mrs_data, basis, opts = opts)
-plot(fit_res)
-```
+`opts`` ``<-`` `[`abfit_opts`](https://martin3141.github.io/spant/reference/abfit_opts.md)`(``auto_bl_flex ``=`` ``FALSE``, bl_ed_pppm ``=`` ``1``)`` ``fit_res`` ``<-`` `[`fit_mrs`](https://martin3141.github.io/spant/reference/fit_mrs.md)`(``mrs_data``, ``basis``, opts ``=`` ``opts``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``fit_res``)`
 
 ![](abfit-baseline-opts_files/figure-html/abfit_stiff-1.png)
 
@@ -98,36 +72,21 @@ criterion used for automated estimation. The `aic_smoothing_factor` can
 be set to a smaller value (default = 5) to encourage more flexible
 baselines, whilst still being adaptive to any broad spectral features:
 
-``` r
-
-opts    <- abfit_opts(aic_smoothing_factor = 1)
-fit_res <- fit_mrs(mrs_data, basis, opts = opts)
-plot(fit_res)
-```
+`opts`` ``<-`` `[`abfit_opts`](https://martin3141.github.io/spant/reference/abfit_opts.md)`(``aic_smoothing_factor ``=`` ``1``)`` ``fit_res`` ``<-`` `[`fit_mrs`](https://martin3141.github.io/spant/reference/fit_mrs.md)`(``mrs_data``, ``basis``, opts ``=`` ``opts``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``fit_res``)`
 
 ![](abfit-baseline-opts_files/figure-html/abfit_aic-1.png)
 
 It can be informative to visualise the individual spline components used
 for baseline modelling by saving these in the results object:
 
-``` r
-
-opts    <- abfit_opts(export_sp_fit = TRUE)
-fit_res <- fit_mrs(mrs_data, basis, opts = opts)
-stackplot(fit_res, omit_signals = basis$names)
-```
+`opts`` ``<-`` `[`abfit_opts`](https://martin3141.github.io/spant/reference/abfit_opts.md)`(``export_sp_fit ``=`` ``TRUE``)`` ``fit_res`` ``<-`` `[`fit_mrs`](https://martin3141.github.io/spant/reference/fit_mrs.md)`(``mrs_data``, ``basis``, opts ``=`` ``opts``)`` `[`stackplot`](https://martin3141.github.io/spant/reference/stackplot.md)`(``fit_res``, omit_signals ``=`` ``basis``$``names``)`
 
 ![](abfit-baseline-opts_files/figure-html/abfit_bspline-1.png)
 
 The default number of spline functions for ABfit is 15 per PPM which may
 be verified from the above plot. Let’s try increasing to 25:
 
-``` r
-
-opts    <- abfit_opts(export_sp_fit = TRUE, bl_comps_pppm = 25)
-fit_res <- fit_mrs(mrs_data, basis, opts = opts)
-stackplot(fit_res, omit_signals = basis$names)
-```
+`opts`` ``<-`` `[`abfit_opts`](https://martin3141.github.io/spant/reference/abfit_opts.md)`(``export_sp_fit ``=`` ``TRUE``, bl_comps_pppm ``=`` ``25``)`` ``fit_res`` ``<-`` `[`fit_mrs`](https://martin3141.github.io/spant/reference/fit_mrs.md)`(``mrs_data``, ``basis``, opts ``=`` ``opts``)`` `[`stackplot`](https://martin3141.github.io/spant/reference/stackplot.md)`(``fit_res``, omit_signals ``=`` ``basis``$``names``)`
 
 ![](abfit-baseline-opts_files/figure-html/abfit_bspline_more-1.png)
 
@@ -137,11 +96,7 @@ principle for ABfit (derived from P-splines) is to over specify the
 number of baseline modelling spline functions, and rely on a penalty
 factor to encourage smoothness.
 
-``` r
-
-fit_res$res_tab$bl_ed_pppm
-#> [1] 2.276357
-```
+`fit_res``$``res_tab``$``bl_ed_pppm`` ``#> [1] 2.276357`
 
 Inspecting the automatically determined level of baseline flexibility
 shows the ED per ppm value remains very close to the default analysis

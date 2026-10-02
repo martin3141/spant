@@ -10,53 +10,28 @@ before following this guide.
 
 Load the spant package:
 
-``` r
-
-library(spant)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`spant`](https://spantdoc.wilsonlab.co.uk/)`)`
 
 A basis set is a collection of signals to be fit to the MRS data. In
 spant we start with a list of molecular definitions containing the
 relevant information for each signal - such as chemical shifts and
 j-coupling values:
 
-``` r
-
-mol_list <- list(get_mol_paras("lac"),
-                 get_mol_paras("naa"),
-                 get_mol_paras("cr"),
-                 get_mol_paras("gpc"))
-```
+`mol_list`` ``<-`` `[`list`](https://rdrr.io/r/base/list.html)`(`[`get_mol_paras`](https://martin3141.github.io/spant/reference/get_mol_paras.md)`(``"lac"``)``,`` `` `[`get_mol_paras`](https://martin3141.github.io/spant/reference/get_mol_paras.md)`(``"naa"``)``,`` `` `[`get_mol_paras`](https://martin3141.github.io/spant/reference/get_mol_paras.md)`(``"cr"``)``,`` `` `[`get_mol_paras`](https://martin3141.github.io/spant/reference/get_mol_paras.md)`(``"gpc"``)``)`
 
 In the next step we convert these chemical properties into a collection
 of signals (a spant `basis_set` object) with the `sim_basis` function.
 When fitting, the signal parameters (e.g. sampling frequency) and pulse
 sequence (e.g. echo-time) must match the MRS data acquisition protocol.
 
-``` r
-
-basis <- sim_basis(mol_list, pul_seq = seq_slaser_ideal,
-                   acq_paras = def_acq_paras(N = 2048, fs = 2000, ft = 127.8e6),
-                   TE1 = 0.008, TE2 = 0.011, TE3 = 0.009)
-
-stackplot(basis, xlim = c(4, 0.5), y_offset = 50, labels = basis$names)
-```
+`basis`` ``<-`` `[`sim_basis`](https://martin3141.github.io/spant/reference/sim_basis.md)`(``mol_list``, pul_seq ``=`` ``seq_slaser_ideal``,`` `` acq_paras ``=`` `[`def_acq_paras`](https://martin3141.github.io/spant/reference/def_acq_paras.md)`(``N ``=`` ``2048``, fs ``=`` ``2000``, ft ``=`` ``127.8e6``)``,`` `` TE1 ``=`` ``0.008``, TE2 ``=`` ``0.011``, TE3 ``=`` ``0.009``)`` `` `[`stackplot`](https://martin3141.github.io/spant/reference/stackplot.md)`(``basis``, xlim ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``4``, ``0.5``)``, y_offset ``=`` ``50``, labels ``=`` ``basis``$``names``)`
 
 ![](spant-basis-simulation_files/figure-html/unnamed-chunk-4-1.png)
 
 In 1H MRS broad resonances from lipids and macromolecules are often
 included in addition to metabolites:
 
-``` r
-
-mol_list_mm <- append(mol_list, list(get_mol_paras("MM09", ft = 127.8e6)))
-
-basis_mm <- sim_basis(mol_list_mm, pul_seq = seq_slaser_ideal,
-                   acq_paras = def_acq_paras(N = 2048, fs = 2000, ft = 127.8e6),
-                   TE1 = 0.008, TE2 = 0.011, TE3 = 0.009)
-
-stackplot(basis_mm, xlim = c(4, 0.5), y_offset = 50, labels = basis_mm$names)
-```
+`mol_list_mm`` ``<-`` `[`append`](https://rdrr.io/r/base/append.html)`(``mol_list``, `[`list`](https://rdrr.io/r/base/list.html)`(`[`get_mol_paras`](https://martin3141.github.io/spant/reference/get_mol_paras.md)`(``"MM09"``, ft ``=`` ``127.8e6``)``)``)`` `` ``basis_mm`` ``<-`` `[`sim_basis`](https://martin3141.github.io/spant/reference/sim_basis.md)`(``mol_list_mm``, pul_seq ``=`` ``seq_slaser_ideal``,`` `` acq_paras ``=`` `[`def_acq_paras`](https://martin3141.github.io/spant/reference/def_acq_paras.md)`(``N ``=`` ``2048``, fs ``=`` ``2000``, ft ``=`` ``127.8e6``)``,`` `` TE1 ``=`` ``0.008``, TE2 ``=`` ``0.011``, TE3 ``=`` ``0.009``)`` `` `[`stackplot`](https://martin3141.github.io/spant/reference/stackplot.md)`(``basis_mm``, xlim ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``4``, ``0.5``)``, y_offset ``=`` ``50``, labels ``=`` ``basis_mm``$``names``)`
 
 ![](spant-basis-simulation_files/figure-html/unnamed-chunk-5-1.png)
 
@@ -66,11 +41,7 @@ includes the functions `sim_basis_1h_brain` and
 `sim_basis_1h_brain_press` to produce commonly used sets of basis
 signals:
 
-``` r
-
-basis <- sim_basis_1h_brain()
-stackplot(basis, xlim = c(4, 0.5), y_offset = 20, labels = basis$names)
-```
+`basis`` ``<-`` `[`sim_basis_1h_brain`](https://martin3141.github.io/spant/reference/sim_basis_1h_brain.md)`(``)`` `[`stackplot`](https://martin3141.github.io/spant/reference/stackplot.md)`(``basis``, xlim ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``4``, ``0.5``)``, y_offset ``=`` ``20``, labels ``=`` ``basis``$``names``)`
 
 ![](spant-basis-simulation_files/figure-html/unnamed-chunk-6-1.png)
 
@@ -78,10 +49,6 @@ Basis sets can be exported for use with LCModel with the `write_basis`
 function, and sim_basis_1h_brain has the option `lcm_compat` to remove
 signals that are usually generated within the LCModel package:
 
-``` r
-
-lcm_basis <- sim_basis_1h_brain()
-stackplot(lcm_basis, xlim = c(4, 0.5), y_offset = 20, labels = basis$names)
-```
+`lcm_basis`` ``<-`` `[`sim_basis_1h_brain`](https://martin3141.github.io/spant/reference/sim_basis_1h_brain.md)`(``)`` `[`stackplot`](https://martin3141.github.io/spant/reference/stackplot.md)`(``lcm_basis``, xlim ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``4``, ``0.5``)``, y_offset ``=`` ``20``, labels ``=`` ``basis``$``names``)`
 
 ![](spant-basis-simulation_files/figure-html/unnamed-chunk-7-1.png)

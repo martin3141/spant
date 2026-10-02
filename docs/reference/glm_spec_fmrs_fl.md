@@ -52,7 +52,7 @@ glm_spec_fmrs_fl(
 
 - lb:
 
-  linebroading to add in Hz before GLM analysis.
+  linebroadening to add in Hz before GLM analysis.
 
 - return_results:
 

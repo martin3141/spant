@@ -54,7 +54,7 @@
   of spant.
 
 - [`abfit_reg_opts()`](https://martin3141.github.io/spant/reference/abfit_reg_opts.md)
-  : Return a list of options for an ABfit analysis with regularision.
+  : Return a list of options for an ABfit analysis with regularisation.
 
 - [`acquire()`](https://martin3141.github.io/spant/reference/acquire.md)
   : Simulate pulse sequence acquisition.
@@ -408,6 +408,9 @@
 - [`fp_scale()`](https://martin3141.github.io/spant/reference/fp_scale.md)
   : Scale the first time-domain data point in an mrs_data object.
 
+- [`fp_scale_basis()`](https://martin3141.github.io/spant/reference/fp_scale_basis.md)
+  : Scale the first time-domain data point in an basis object.
+
 - [`fs()`](https://martin3141.github.io/spant/reference/fs.md) : Return
   the sampling frequency in Hz of an MRS dataset.
 
@@ -526,6 +529,9 @@
 
 - [`get_fp()`](https://martin3141.github.io/spant/reference/get_fp.md) :
   Return the first time-domain data point.
+
+- [`get_gaussian_pulse()`](https://martin3141.github.io/spant/reference/get_gaussian_pulse.md)
+  : Generate a gaussian pulse shape.
 
 - [`get_guassian_pulse()`](https://martin3141.github.io/spant/reference/get_guassian_pulse.md)
   : Generate a gaussian pulse shape.
@@ -965,6 +971,13 @@
 
 - [`read_dkd_moco_log()`](https://martin3141.github.io/spant/reference/read_dkd_moco_log.md)
   : Read the log from Dinesh's MoCo sLASER sequence.
+
+- [`read_fslmrs_json_basis_dir()`](https://martin3141.github.io/spant/reference/read_fslmrs_json_basis_dir.md)
+  : Read a basis folder containing one FSL-MRS json file for each basis
+  element.
+
+- [`read_fslmrs_json_basis_file()`](https://martin3141.github.io/spant/reference/read_fslmrs_json_basis_file.md)
+  : Read an FSL-MRS json file containing a basis signal.
 
 - [`read_ima_coil_dir()`](https://martin3141.github.io/spant/reference/read_ima_coil_dir.md)
   : Read a directory containing Siemens MRS IMA files and combine along

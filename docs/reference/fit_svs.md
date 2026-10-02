@@ -167,12 +167,13 @@ fit_svs(
   For example: use "^lac\$\|^ala\$" to remove lactate and alanine; "\*"
   to remove all signals and "^mm\|^lip" to remove all macromolecular and
   lipid signals. This operation is performed before signals are added
-  with append_basis. Cannot be used with precompiled/exernal basis sets.
+  with append_basis. Cannot be used with precompiled/external basis
+  sets.
 
 - remove_external_basis:
 
   grep expression to match names of signals to remove from the external
-  basis. For example: use "^Lac\$\|^Ala\$" to remove lactateand alanine
+  basis. For example: use "^Lac\$\|^Ala\$" to remove lactate and alanine
   and "^MM\|^Lip" to remove all macromolecular and lipid signals.
 
 - pre_align:

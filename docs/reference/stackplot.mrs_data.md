@@ -129,7 +129,7 @@ stackplot(
 
 - bl_lwd:
 
-  linewith for the y = 0 baseline trace. Defaults to 0.5.
+  linewidth for the y = 0 baseline trace. Defaults to 0.5.
 
 - restore_def_par:
 

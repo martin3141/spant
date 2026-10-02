@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">4.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">4.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,6 +68,7 @@
 <span>  vline_lty <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  vline_col <span class="op">=</span> <span class="st">"white"</span>,</span>
 <span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  mar <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -156,6 +157,12 @@ tick marks.</p></dd>
 <dt id="arg-legend">legend<a class="anchor" aria-label="anchor" href="#arg-legend"></a></dt>
 <dd><p>add a colour bar to the plot using the imagePlot function
 from the fields package.</p></dd>
+
+
+<dt id="arg-mar">mar<a class="anchor" aria-label="anchor" href="#arg-mar"></a></dt>
+<dd><p>margins for the plot, in the format expected by the <code>mar</code>
+argument of <code><a href="https://rdrr.io/r/graphics/par.html" class="external-link">graphics::par</a></code>. If NULL (the default) a suitable margin is
+chosen automatically based on the <code>y_ticks</code> argument.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

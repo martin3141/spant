@@ -24,7 +24,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">Spectroscopy Analysis Tools (spant)</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">4.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">4.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,7 +92,7 @@
 <code class="sourceCode R"><span><span class="va">mrs_data_p180</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phase.html">phase</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="fl">180</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mrs_data_p180</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spant-preprocessing_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="576"></p>
-<p>Apply 3 Hz Guassian line broadening:</p>
+<p>Apply 3 Hz Gaussian line broadening:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mrs_data_lb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lb.html">lb</a></span><span class="op">(</span><span class="va">mrs_data</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mrs_data_lb</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>

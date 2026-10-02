@@ -72,16 +72,9 @@ Once R and RStudio have been installed, open the RStudio application and
 type the following in the Console (lower left panel) to install the
 latest stable version of spant:
 
-``` r
-
-install.packages("spant", dependencies = TRUE)
-```
+[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(``"spant"``, dependencies ``=`` ``TRUE``)`
 
 Or the the development version from GitHub (requires the `devtools`
 package):
 
-``` r
-
-install.packages("remotes")
-remotes::install_github("martin3141/spant", ref = "devel", dependencies = TRUE)
-```
+[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(``"remotes"``)`` ``remotes``::`[`install_github`](https://remotes.r-lib.org/reference/install_github.html)`(``"martin3141/spant"``, ref ``=`` ``"devel"``, dependencies ``=`` ``TRUE``)`
