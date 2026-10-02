@@ -31,8 +31,8 @@ Useful links:
 \itemize{
   \item \url{https://spantdoc.wilsonlab.co.uk/}
   \item \url{https://martin3141.github.io/spant/}
-  \item \url{https://github.com/martin3141/spant/}
-  \item Report bugs at \url{https://github.com/martin3141/spant/issues/}
+  \item \url{https://github.com/martin3141/spant}
+  \item Report bugs at \url{https://github.com/martin3141/spant/issues}
 }
 
 }
