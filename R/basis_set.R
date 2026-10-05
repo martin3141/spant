@@ -639,14 +639,20 @@ calc_basis_corr_mat <- function(basis, xlim = c(4, 0.2), zf = TRUE) {
 
 #' Read an FSL-MRS json file containing a basis signal.
 #' @param basis_file path to basis file.
+#' @param conj conjugate the time-domain data, defaults to FALSE.
 #' @return basis_set object.
 #' @export
-read_fslmrs_json_basis_file <- function(basis_file) {
+read_fslmrs_json_basis_file <- function(basis_file, conj = FALSE) {
 
   json_basis <- jsonlite::read_json(basis_file)
   
-  vec <- as.numeric(json_basis$basis$basis_re) - 
-         1i * as.numeric(json_basis$basis$basis_im)
+  if (conj) {
+    vec <- as.numeric(json_basis$basis$basis_re) +
+      1i * as.numeric(json_basis$basis$basis_im)
+  } else {
+    vec <- as.numeric(json_basis$basis$basis_re) - 
+      1i * as.numeric(json_basis$basis$basis_im)
+  }
   
   mrs_data <- vec2mrs_data(vec, fs = 1 / json_basis$basis$basis_dwell, 
                            ft = json_basis$basis$basis_centre * 1e6,
@@ -657,9 +663,10 @@ read_fslmrs_json_basis_file <- function(basis_file) {
 
 #' Read a basis folder containing one FSL-MRS json file for each basis element.
 #' @param basis_dir path to directory containing json files.
+#' @param conj conjugate the time-domain data, defaults to FALSE.
 #' @return a basis_set object.
 #' @export
-read_fslmrs_json_basis_dir <- function(basis_dir) {
+read_fslmrs_json_basis_dir <- function(basis_dir, conj = FALSE) {
   
   files <- Sys.glob(file.path(basis_dir, "*.json"))
   
@@ -667,11 +674,11 @@ read_fslmrs_json_basis_dir <- function(basis_dir) {
   
   if (n_files == 0) stop("No json files found.")
   
-  basis <- read_fslmrs_json_basis_file(files[1])
+  basis <- read_fslmrs_json_basis_file(files[1], conj)
   
-  if (n_files > 0) {
+  if (n_files > 1) {
     for (n in 2:n_files) {
-      temp_basis <- read_fslmrs_json_basis_file(files[n])
+      temp_basis <- read_fslmrs_json_basis_file(files[n], conj)
       basis <- append_basis(basis, temp_basis)
     }
   }

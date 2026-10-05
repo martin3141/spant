@@ -4,10 +4,12 @@
 \alias{read_fslmrs_json_basis_file}
 \title{Read an FSL-MRS json file containing a basis signal.}
 \usage{
-read_fslmrs_json_basis_file(basis_file)
+read_fslmrs_json_basis_file(basis_file, conj = FALSE)
 }
 \arguments{
 \item{basis_file}{path to basis file.}
+
+\item{conj}{conjugate the time-domain data, defaults to FALSE.}
 }
 \value{
 basis_set object.

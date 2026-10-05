@@ -4,10 +4,12 @@
 \alias{read_fslmrs_json_basis_dir}
 \title{Read a basis folder containing one FSL-MRS json file for each basis element.}
 \usage{
-read_fslmrs_json_basis_dir(basis_dir)
+read_fslmrs_json_basis_dir(basis_dir, conj = FALSE)
 }
 \arguments{
 \item{basis_dir}{path to directory containing json files.}
+
+\item{conj}{conjugate the time-domain data, defaults to FALSE.}
 }
 \value{
 a basis_set object.

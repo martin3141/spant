@@ -1,3 +1,9 @@
+# spant 4.6.0
+* Added a conj argument to read_fslmrs_json_basis_file and
+  read_fslmrs_json_basis_dir to optionally conjugate the basis data.
+* Fixed read_fslmrs_json_basis_dir failing when the directory contains a
+  single json file.
+
 # spant 4.5.0
 * Bug fix for read_basis_niidir function.
 * Added read_fslmrs_json_basis_dir function.
