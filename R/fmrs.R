@@ -1963,6 +1963,10 @@ glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
                                      xlim, vline, exclude_labels, lb = lb,
                                      preproc_fn = preproc_fn)
   
+  # write processed data 
+  preproc_metab <- file.path(spec_glm_mrs_dir, paste0("dataset_mean.nii.gz"))
+  write_mrs(glm_spec_mean_res$mrs_data, preproc_metab, force = TRUE)
+  
   if (return_results) {
     return(list(indiv_res = glm_spec_res_list, mean_res = glm_spec_mean_res))
   }
