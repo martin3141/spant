@@ -13,6 +13,7 @@ glm_spec_fmrs_fl(
   xlim = c(4, 0.2),
   vline = c(1.35, 1.28, 2.35, 2.29),
   lb = 4,
+  preproc_fn = NULL,
   return_results = FALSE
 )
 }
@@ -35,6 +36,9 @@ data.}
 \item{vline}{vertical lines to add to the plot.}
 
 \item{lb}{linebroadening to add in Hz before GLM analysis.}
+
+\item{preproc_fn}{optional preprocessing function to be applied before GLM
+analysis. Supplying this argument means the lb option will be ignored.}
 
 \item{return_results}{function will return key outputs, defaults to FALSE.}
 }

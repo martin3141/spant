@@ -1863,13 +1863,16 @@ preproc_svs_dataset <- function(paths, labels = NULL,
 #' @param xlim spectral range to include in the analysis.
 #' @param vline vertical lines to add to the plot.
 #' @param lb linebroadening to add in Hz before GLM analysis.
+#' @param preproc_fn optional preprocessing function to be applied before GLM
+#' analysis. Supplying this argument means the lb option will be ignored.
 #' @param return_results function will return key outputs, defaults to FALSE.
 #' @export
 glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
                              output_dir = "spec_glm", exclude_labels = NULL,
                              labels = NULL, xlim = c(4, 0.2),
                              vline = c(1.35, 1.28, 2.35, 2.29),
-                             lb = 4, return_results = FALSE) {
+                             lb = 4, preproc_fn = NULL,
+                             return_results = FALSE) {
   
   # TODO add optional arguments for datasets to preserve original
   # ordering if needed
@@ -1929,10 +1932,12 @@ glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
   glm_spec_res_list <- vector(mode = "list", length = Nscans)
   for (n in 1:Nscans) {
     mrs_data_glm <- preproc_res_list[[n]]$corrected
+    
     glm_spec_res_list[[n]] <- gen_glm_spec_report(mrs_data_glm, regressor_df,
                                                   labels[n], analysis_dir, 
                                                   output_dir, xlim,
-                                                  vline, lb = lb)
+                                                  vline, lb = lb,
+                                                  preproc_fn = preproc_fn)
     
     # write processed data 
     preproc_metab <- file.path(spec_glm_mrs_dir, paste0(labels[n], ".nii.gz"))
@@ -1954,8 +1959,9 @@ glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
   
   # run glm spec on the mean dataset
   glm_spec_mean_res <- gen_glm_spec_report(mean_dataset, regressor_df,
-                          "dataset_mean", analysis_dir, output_dir,
-                           xlim, vline, exclude_labels, lb = lb)
+                                     "dataset_mean", analysis_dir, output_dir,
+                                     xlim, vline, exclude_labels, lb = lb,
+                                     preproc_fn = preproc_fn)
   
   if (return_results) {
     return(list(indiv_res = glm_spec_res_list, mean_res = glm_spec_mean_res))
@@ -1964,20 +1970,19 @@ glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
 
 gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
                                 output_dir, xlim, vline, exclude_labels = NULL,
-                                lb) {
+                                lb, preproc_fn) {
   
   # process the data
-  mrs_data_glm <- lb(mrs_data, lb)
-  mrs_data_glm <- zf(mrs_data_glm)
-  mrs_data_glm <- crop_spec(mrs_data_glm, xlim = xlim)
+  if (is.null(preproc_fn)) {
+    mrs_data_glm <- lb(mrs_data, lb)
+    mrs_data_glm <- zf(mrs_data_glm)
+    mrs_data_glm <- crop_spec(mrs_data_glm, xlim = xlim)
+  } else {
+    mrs_data_glm <- preproc_fn(mrs_data)
+  }
   
-  # mrs_data_glm <- bc_poly(mrs_data_glm, 0)
-  # mrs_data_glm <- bc_als(mrs_data_glm, lambda = 10)
-  
+  # for plotting only
   mrs_data_plot <- zf(mean_dyns(mrs_data))
-  
-  # write the processed spectra
-  
   
   # regress
   glm_spec_res <- glm_spec(mrs_data_glm, regressor_df, full_output = TRUE)
