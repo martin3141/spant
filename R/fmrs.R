@@ -1950,11 +1950,16 @@ glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
   # extract just the corrected data
   corrected_list <- lapply(preproc_res_list, \(x) x$corrected)
   
+  # extract the fmrs processed data
+  fmrs_corrected_list <- lapply(glm_spec_res_list, \(x) x$mrs_data)
+  
   # calculate the mean spectrum
   if (Nscans > 1) {
     mean_dataset <- mean_mrs_list(corrected_list)
+    fmrs_proc_mean_dataset <- mean_mrs_list(fmrs_corrected_list)
   } else {
     mean_dataset <- corrected_list[[1]]
+    fmrs_proc_mean_dataset <- fmrs_corrected_list[[1]]
   }
   
   # run glm spec on the mean dataset
@@ -1967,6 +1972,19 @@ glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
   preproc_metab <- file.path(spec_glm_mrs_dir, paste0("dataset_mean.nii.gz"))
   write_mrs(glm_spec_mean_res$mrs_data, preproc_metab, force = TRUE)
   
+  # run glm spec on the mean dataset with fMRS preprocessing
+  dummy_fn <- function(x) x
+  glm_spec_mean_proc_res <- gen_glm_spec_report(fmrs_proc_mean_dataset,
+                                     regressor_df, "dataset_mean_fmrs_proc",
+                                     analysis_dir, output_dir,
+                                     xlim, vline, exclude_labels, lb = lb,
+                                     preproc_fn = dummy_fn, zf_plot = FALSE)
+  
+  # write fMRS processed data 
+  preproc_metab <- file.path(spec_glm_mrs_dir,
+                             paste0("dataset_mean_fmrs_preproc.nii.gz"))
+  write_mrs(glm_spec_mean_proc_res$mrs_data, preproc_metab, force = TRUE)
+  
   if (return_results) {
     return(list(indiv_res = glm_spec_res_list, mean_res = glm_spec_mean_res))
   }
@@ -1974,7 +1992,7 @@ glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
 
 gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
                                 output_dir, xlim, vline, exclude_labels = NULL,
-                                lb, preproc_fn) {
+                                lb, preproc_fn, zf_plot = TRUE) {
   
   # process the data
   if (is.null(preproc_fn)) {
@@ -1986,7 +2004,11 @@ gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
   }
   
   # for plotting only
-  mrs_data_plot <- zf(mean_dyns(mrs_data))
+  if (zf_plot) {
+    mrs_data_plot <- zf(mean_dyns(mrs_data))
+  } else {
+    mrs_data_plot <- mean_dyns(mrs_data)
+  }
   
   # regress
   glm_spec_res <- glm_spec(mrs_data_glm, regressor_df, full_output = TRUE)
