@@ -1866,13 +1866,14 @@ preproc_svs_dataset <- function(paths, labels = NULL,
 #' @param preproc_fn optional preprocessing function to be applied before GLM
 #' analysis. Supplying this argument means the lb option will be ignored.
 #' @param return_results function will return key outputs, defaults to FALSE.
+#' @param ... optional arguments to pass to preproc_fn.
 #' @export
 glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
                              output_dir = "spec_glm", exclude_labels = NULL,
                              labels = NULL, xlim = c(4, 0.2),
                              vline = c(1.35, 1.28, 2.35, 2.29),
                              lb = 4, preproc_fn = NULL,
-                             return_results = FALSE) {
+                             return_results = FALSE, ...) {
   
   # TODO add optional arguments for datasets to preserve original
   # ordering if needed
@@ -1937,7 +1938,8 @@ glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
                                                   labels[n], analysis_dir, 
                                                   output_dir, xlim,
                                                   vline, lb = lb,
-                                                  preproc_fn = preproc_fn)
+                                                  preproc_fn = preproc_fn,
+                                                  ...)
     
     # write processed data 
     preproc_metab <- file.path(spec_glm_mrs_dir, paste0(labels[n], ".nii.gz"))
@@ -1966,7 +1968,7 @@ glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
   glm_spec_mean_res <- gen_glm_spec_report(mean_dataset, regressor_df,
                                      "dataset_mean", analysis_dir, output_dir,
                                      xlim, vline, exclude_labels, lb = lb,
-                                     preproc_fn = preproc_fn)
+                                     preproc_fn = preproc_fn, ...)
   
   # write processed data 
   preproc_metab <- file.path(spec_glm_mrs_dir, paste0("dataset_mean.nii.gz"))
@@ -1978,7 +1980,8 @@ glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
                                      regressor_df, "dataset_mean_fmrs_proc",
                                      analysis_dir, output_dir,
                                      xlim, vline, exclude_labels, lb = lb,
-                                     preproc_fn = dummy_fn, zf_plot = FALSE)
+                                     preproc_fn = dummy_fn, zf_plot = FALSE,
+                                     ...)
   
   # write fMRS processed data 
   preproc_metab <- file.path(spec_glm_mrs_dir,
@@ -1992,7 +1995,7 @@ glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
 
 gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
                                 output_dir, xlim, vline, exclude_labels = NULL,
-                                lb, preproc_fn, zf_plot = TRUE) {
+                                lb, preproc_fn, zf_plot = TRUE, ...) {
   
   # process the data
   if (is.null(preproc_fn)) {
@@ -2000,7 +2003,7 @@ gen_glm_spec_report <- function(mrs_data, regressor_df, label, analysis_dir,
     mrs_data_glm <- zf(mrs_data_glm)
     mrs_data_glm <- crop_spec(mrs_data_glm, xlim = xlim)
   } else {
-    mrs_data_glm <- preproc_fn(mrs_data)
+    mrs_data_glm <- preproc_fn(mrs_data, ...)
   }
   
   # for plotting only

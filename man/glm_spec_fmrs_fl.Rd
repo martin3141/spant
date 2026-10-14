@@ -14,7 +14,8 @@ glm_spec_fmrs_fl(
   vline = c(1.35, 1.28, 2.35, 2.29),
   lb = 4,
   preproc_fn = NULL,
-  return_results = FALSE
+  return_results = FALSE,
+  ...
 )
 }
 \arguments{
@@ -41,6 +42,8 @@ data.}
 analysis. Supplying this argument means the lb option will be ignored.}
 
 \item{return_results}{function will return key outputs, defaults to FALSE.}
+
+\item{...}{optional arguments to pass to preproc_fn.}
 }
 \description{
 Perform first-level spectral GLM analysis of an fMRS dataset.
