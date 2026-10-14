@@ -1980,8 +1980,7 @@ glm_spec_fmrs_fl <- function(regressor_df, analysis_dir = "spant_analysis",
                                      regressor_df, "dataset_mean_fmrs_proc",
                                      analysis_dir, output_dir,
                                      xlim, vline, exclude_labels, lb = lb,
-                                     preproc_fn = dummy_fn, zf_plot = FALSE,
-                                     ...)
+                                     preproc_fn = dummy_fn, zf_plot = FALSE)
   
   # write fMRS processed data 
   preproc_metab <- file.path(spec_glm_mrs_dir,
